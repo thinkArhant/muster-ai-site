@@ -52,7 +52,7 @@ started, Legal, Marketing, deploy. §4's spec-sheet rendering is the second desi
 
 ### Model plan
 
-`claude-opus-4-8` is the default for every step. Premium `claude-fable-5` is founder-approved for
+`claude-opus-5` is the default for every step. Premium `claude-fable-5` is founder-approved for
 exactly two foundation-critical steps: the UI/UX design foundation (authors the token system the whole
 page inherits) and the Content §2 narration (centerpiece voice, judged by the founder's added
 criterion). No other step uses a premium model.
