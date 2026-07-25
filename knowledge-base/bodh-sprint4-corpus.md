@@ -13,19 +13,31 @@ shipped iOS app). Planned to run **fully autonomous** end-to-end under the sprin
 
 ## The autonomous chain — real timeline (2026-07-15, local time; all 8 sessions traced)
 
-| # | Time | Role | Dur | What actually happened | Artifact |
-|---|------|------|-----|------------------------|----------|
-| 1 | 20:38:57 | ui-ux | ~8 m | Production spec + assets: breakpoints, 16 render states, a11y, favicon/PWA/og-image set; toolchain machine-verified | HO-027 |
-| 2 | 20:46:31 | developer | ~13 m | Deployable `web/`: index + /privacy, byte-identical models.json, exact port of the app's rotation logic, PWA/service-worker; rotation parity verified in UTC-positive AND UTC-negative timezones | HO-028 |
-| 3 | 20:59:37 | pm | ~7 m | **Independent re-verify with its own screenshots — never the developer's**: visual parity, rotation, trackers, placeholders. Accepted | — |
-| 4 | 21:06:58 | content | ~5 m | Copy polish: on-voice, ships as-is; one surgical meta-description edit | HO-029 |
-| 5 | 21:11:50 | legal | ~4 m | Privacy verified at **code level**: "Data Not Collected" holds — no cookies/storage/beacons, zero trackers, only same-origin fetch | HO-030 |
-| 6 | 21:16:11 | marketing | ~5 m | OG/share-card copy written — 134 chars, on-voice, no competitor mention | HO-031 |
-| 7 | 21:20:42 | qa | ~14 m | **Full validation: PASS — zero bugs, 11/11 acceptance green.** Rotation independently re-derived (own formula, not the port's) across 24 dates × 3 timezones incl. both DST boundaries; live offline service-worker smoke test (server killed, site still renders); tracker-free; a11y code-level; no visual regression from the copy edits | HO-032 |
-| 8 | 21:35:09 | pm | ~8 m | All handoffs accepted; founder deploy packet assembled; sprint retrospective run. **Run stops itself: `Role: halt` — the deploy gate is the founder's** | — |
+| # | Time | Role | Dur | Calls | $ | What actually happened | Artifact |
+|---|------|------|-----|-------|----|------------------------|----------|
+| 1 | 20:38:57 | ui-ux | ~8 m | 37 | 2.99 | Production spec + assets: breakpoints, 16 render states, a11y, favicon/PWA/og-image set; toolchain machine-verified | HO-027 |
+| 2 | 20:46:31 | developer | ~13 m | 50 | 5.16 | Deployable `web/`: index + /privacy, byte-identical models.json, exact port of the app's rotation logic, PWA/service-worker; rotation parity verified in UTC-positive AND UTC-negative timezones | HO-028 |
+| 3 | 20:59:37 | pm | ~7 m | 40 | 2.61 | **Independent re-verify with its own screenshots — never the developer's**: visual parity, rotation, trackers, placeholders. Accepted | — |
+| 4 | 21:06:58 | content | ~5 m | 21 | 2.10 | Copy polish: on-voice, ships as-is; one surgical meta-description edit | HO-029 |
+| 5 | 21:11:50 | legal | ~4 m | 26 | 2.02 | Privacy verified at **code level**: "Data Not Collected" holds — no cookies/storage/beacons, zero trackers, only same-origin fetch | HO-030 |
+| 6 | 21:16:11 | marketing | ~5 m | 27 | 2.02 | OG/share-card copy written — 134 chars, on-voice, no competitor mention | HO-031 |
+| 7 | 21:20:42 | qa | ~14 m | 45 | 4.04 | **Full validation: PASS — zero bugs, 11/11 acceptance green.** Rotation independently re-derived (own formula, not the port's) across 24 dates × 3 timezones incl. both DST boundaries; live offline service-worker smoke test (server killed, site still renders); tracker-free; a11y code-level; no visual regression from the copy edits | HO-032 |
+| 8 | 21:35:09 | pm | ~8 m | 43 | 3.79 | All handoffs accepted; founder deploy packet assembled; sprint retrospective run. **Run stops itself: `Role: halt` — the deploy gate is the founder's** | — |
 
 **Chain totals (measured from these 8 session traces):** ~64 minutes wall-clock · 289 API calls ·
-**$24.73 at API list price**. Zero revision rounds, zero bugs.
+**$24.73 at API list price**. Per-session Calls and $ columns tile to those totals exactly
+(37+50+40+21+26+27+45+43 = 289; the $ column sums to 24.73). Zero revision rounds, zero bugs.
+
+**Measurement precision notes (from the source traces — settles derivations downstream):**
+- **Chain end, measured to the second: 21:43:15** (session 8's last trace event). Full span
+  20:38:57 → 21:43:15 = **64 m 18 s**. Per-session durations above are rounded to the minute, so any
+  span re-derived from them inherits that rounding; publish "~64 minutes," never a second-precision
+  figure.
+- **Session count vs step count — both are true, different things:** 8 traced sessions = 7 agent
+  work-steps + the PM review/retro session (session 8, where DEC-023 was written — it does not count
+  itself). Copy says "8 sessions" or "7 agent steps plus PM review," never a bare "7" against "8."
+- **Roster vs wave:** terminal line L1's "8 roles standing by" is roster size; **seven roles ran this
+  wave** (research did not). Narration must not imply all eight worked it.
 Deploy: founder swapped the placeholders, connected Cloudflare Pages → **`bodh.day` live 2026-07-18**.
 
 ## Real decision-log lines (quotable)
