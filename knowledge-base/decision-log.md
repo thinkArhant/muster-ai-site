@@ -326,5 +326,38 @@ called complete.
 
 **Touched**: `current-sprint.md`, `triage-log.md`.
 
+### DEC-015 — Rust usage bound by measured contrast; §2 paced as a 60 s comprehension-weighted chain (2026-07-25)
+
+**Decision**: Four design calls settled inside the locked direction while producing the design
+foundation:
+
+1. **Rust usage rules from measured ratios.** The accent measures 3.86–4.35:1 against grounds and the
+   dark surface — below the 4.5:1 small-text floor. Rust is therefore bound to large metric numerals
+   (≥24px, or ≥19px bold), graphical marks, borders, and focus rings; body links render ink with a rust
+   underline; terminal key-beat emphasis is bold ink + a rust mark, not rust words. No thirteenth colour
+   introduced (A-006 holds).
+2. **One rhythm token, one-sided.** All vertical spacing is a multiple of `--rhythm` applied as
+   `margin-block-start` only, so gaps can never stack or double. Section padding 96–168px.
+3. **Replay pacing model.** The §2 chain plays in a fixed 60 s (~64:1 compression), comprehension-
+   weighted rather than real-proportional, every per-beat deviation stated against the real share: the
+   PM-re-verify beat expanded to 20% of screen time (11.4% real), the gate held for 7.5 s of stillness,
+   the deploy line outside the clock. Narration is an eight-slot sync contract with word budgets at
+   3.5 words/s.
+4. **Playback is opacity-only reveal over a complete DOM.** All lines and narration exist in the DOM
+   from load, so reduced-motion, no-JS, and screen-reader paths render the complete transcript by
+   construction — no parallel fallback content to drift.
+
+**Rationale**: 1 is forced by arithmetic once the palette is locked — the alternative (small rust text)
+fails the page's own accessibility claim. 2 pre-empts a known spacing-stacking failure mode. 3 exists
+because real-proportional pacing starves the most important beat (shortest in the chain) and stalls on
+the two longest; the always-visible "condensed from the real build log" label plus real clock stamps on
+every line are what keep non-linear compression honest. 4 makes the completeness requirement structural
+instead of tested-for.
+
+**Impact**: Developer, QA, Content, PM.
+
+**Touched**: `design-specs/web/page-shell.md`, `design-specs/web/section-02-replay.md`,
+`agent-requests.md` (HO-002), `orchestration-queue.md` (Done, Next Step, Founder Decisions).
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

@@ -8,13 +8,74 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-25 HO-002 — Design foundation + §2 replay spec
+**Type:** handoff
+**Producer:** UI/UX
+**Deliverable:** `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending (Wave 1 design review, then founder gate)
+
+**Outcome:** The locked design direction is executed as a complete token system (both themes, every value
+traced to the seed) and the §2 replay is specified to the tenth of a second — pacing is a design
+decision the Developer implements, not a guess.
+
+**Page shell.** Six semantic colour tokens at the seed's twelve exact hex values; raw hex may appear
+only in the token block. Contrast measured and stated per token pair in both themes: body ink 12.15:1
+minimum, muted labels 5.13:1 minimum. The measurement surfaced one real collision and the spec resolves
+it: rust measures 3.86–4.35:1 against grounds/surfaces (dark), below the 4.5 small-text floor — so rust
+is bound to large metric numerals, graphical marks, borders, and focus rings, never small running text;
+body links are ink with a rust underline. Spacing derives from a single rhythm token applied one-sided
+(`margin-block-start` only) so gaps can never stack — section padding 96–168px, spacious as the
+overriding constraint. Motion inventory is closed at the seed's three elements plus the curl cursor,
+each with a complete-content reduced path; the OPERATIONAL pulse is specified to be unmissable
+(double-ring relaunch at 50% phase — never still). Glass excluded explicitly: the reference's blurred
+status bar is replaced by an opaque one.
+
+**§2 replay.** Real intervals from the beat inventory with the v1.1-corrected chain (3858 s, B6 486 s).
+Playback model: fixed 60 s chain, comprehension-weighted, ~64:1 compression, every per-beat deviation
+from real share stated with rationale — the wow beat (PM re-verify) expanded to 20% of screen time from
+11.4% real; the gate hold is 7.5 s of deliberate stillness; L9/L10 and L1/L2 render one 350 ms cadence
+apart (same-instant hazard); L12 sits outside the 60 s clock with the three-days-later fact mandated in
+its caption slot. Narration is a sync contract: eight slots anchored to line reveals with word budgets
+derived at 3.5 words/s — a budget overrun is a spec violation. All 12 lines and all narration live in
+the DOM from load; playback is opacity-only reveal, so reduced-motion, no-JS, and screen-reader paths
+get the complete transcript by construction.
+
+**Would Apple ship this?** Yes — because the system is small and total: six colours, six type steps, one
+rhythm token, three motions, and every number in it is either the seed's or measured. The one place I
+hesitated was the replay's 60 s length; I kept it because comprehension carries the founder's acceptance
+bar, and the spec states exactly how to rescale to 48 s if review judges it slow (one multiplier, not a
+redesign).
+
+**Open questions** (also parked in `orchestration-queue.md` → Founder Decisions):
+1. Confirm the replay is content playback, not a fourth live motion element (interpretation stated in
+   `page-shell.md` §10 scope note).
+2. Theme control in the status bar: recommended include, non-persistent (no storage, A-008). Drop if
+   unwanted — one row.
+3. §2 chain-totals strip is static by design (log evidence, not showpiece). Extend count-up to it if
+   preferred — one attribute.
+
+**Revision log:**
+- 2026-07-25: Filed. Self-review caught: (a) count-up scope ambiguity between shell §10.3 and the
+  replay's static totals strip — reconciled with an explicit scope note; (b) the light-theme vignette at
+  the reference's strength would composite muted labels below 4.5:1 — cap derived and stated (≤5%
+  alpha); (c) rust-at-terminal-size AA failure — resolved via the ink-bold + rust-mark emphasis system
+  rather than inheriting the reference's rust feed words.
+
 ### 2026-07-25 HO-001 — Bodh corpus verified; §2 beat inventory derived
 **Type:** handoff
 **Producer:** Developer
 **Deliverable:** `knowledge-base/design-specs/web/section-02-beat-inventory.md`
 **Status:** in-review
 **Reviewers:**
-- [ ] UI/UX — pending
+- [x] UI/UX — **accepted as pacing input**, 2026-07-25. Reviewed as the consumer: spot-re-derived the
+  beat windows from the corpus session starts (all six tile the chain, each boundary lands on a stated
+  session start) and confirmed the four pacing hazards are real — L9/L10 simultaneity at 21:35:09,
+  B2+B5 carrying ~43% of the clock, B3 as shortest-yet-most-important beat, and L12 outside the
+  timeline. The handle convention (L1–L12, render from corpus only) is exactly what the replay spec
+  needs to avoid a drift path. Will consume with the v1.1 corrections applied inline per the queue's
+  PM note (span 3858 s, B6 = 486 s; B1–B5 unchanged) — shares shift <0.2%, hazards stand.
 - [x] PM — **accepted with one superseded figure**, 2026-07-25. The re-verification is what was asked
   for: every figure re-derived mechanically rather than confirmed by restating the Wave 0 pass, and the
   two caveats it added (the chain end was derived not printed; the 12 s between the two routes is
