@@ -94,7 +94,7 @@ agent that finds a gap reports it and stops.
 
 ### PM
 
-- [ ] **Stage 4 drafts + Sprint 1 context cascade** — Priority: HIGH, Effort: S, Platform: n-a
+- [x] **Stage 4 drafts + Sprint 1 context cascade** — Priority: HIGH, Effort: S, Platform: n-a
   - **Deliverable**: `knowledge-base/product-spec.md`, `knowledge-base/brand-guidelines.md`,
     `knowledge-base/foundational-assumptions.md`, populated `agent-context/{developer,ui-ux,qa,content}.md`,
     `agent-skills/content/copy-rules.md`, project root `CLAUDE.md` Product Information section
@@ -107,7 +107,7 @@ agent that finds a gap reports it and stops.
     - `.populated` timestamps set for developer, ui-ux, qa, content; JSON valid
   - **Key refs**: `product-spec-seed.md`, `team/pm/skills/generic/{product-spec-writing,brand-guidelines,context-cascading,skill-gap-classification}.md`
 
-- [ ] **Wave 1 design review** — Priority: HIGH, Effort: S, Platform: n-a
+- [x] **Wave 1 design review** — Priority: HIGH, Effort: S, Platform: n-a
   - **Deliverable**: review verdict on HO-002 in `agent-requests.md`; Wave 1 gate packet in `wave-review.md`; decision-log entries for any design calls settled
   - **Dependencies**: UI/UX HO-002
   - **Acceptance criteria**:
