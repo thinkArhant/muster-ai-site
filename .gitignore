@@ -1,0 +1,9 @@
+.DS_Store
+*.swp
+*.swo
+*~
+.muster-setup-state.json
+.claude/.muster-bound-role.*
+.claude/.muster-last-role
+.muster-sprint-logs/
+knowledge-base/.muster-bind-log

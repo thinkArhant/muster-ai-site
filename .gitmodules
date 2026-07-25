@@ -1,0 +1,3 @@
+[submodule "muster"]
+	path = muster
+	url = https://github.com/thinkArhant/muster-ai.git
