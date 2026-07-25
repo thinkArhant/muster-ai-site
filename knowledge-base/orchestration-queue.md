@@ -8,12 +8,14 @@
 
 ## Execution Mode (Sprint 1)
 
-**Waves 0–1 run interactive.** The founder executes the UI/UX design-foundation step personally in a
-warm tab; review cycles are expected there, so the Wave 1 PM review step may iterate more than once
-before the gate. Do not launch the autonomous driver during Waves 0–1.
+**Waves 0–1 complete and the Wave 1 founder gate is APPROVED with amendments (2026-07-25).** The
+autonomous run is cleared to launch; the driver starts from the current `## Next Step`.
 
-**The autonomous run launches only after the Wave 1 founder gate, starting at Wave 2.** The driver's
-first step is therefore "Developer (web): Page shell implementation."
+**Wave 2 order matters and is deliberate.** The gate's amendments change `page-shell.md` (the theme
+control is dropped) and `section-02-replay.md` (48 s rescale, B5 rebalance, narration-first mobile), so
+the UI/UX amendment and its PM review run **before** the shell build. Building the shell first would
+build a control that has been dropped, and would leave the spec — not the build — as the thing out of
+date. Order: inventory true-up → spec amendments → PM review → shell build → shell QA.
 
 **Telemetry practice — agents do not measure this build.** Do not run `muster/scripts/muster-meter.py`
 in any session. Build telemetry snapshots are founder-supplied and committed at milestones. Any step
@@ -26,14 +28,10 @@ all page copy until measured at launch (seed rule 4).
 <!-- Format: - [DATE] [Agent]: [Question] -->
 <!-- Autonomous runs: this section is non-halting on its own — observation and scope escalations park here while the loop keeps running. PM is the sole party that summons the founder: only PM (after assessing a block per the Decision Autonomy Matrix) writes the question here AND sets the Next Step block's `Role:` to `halt` (see below). A specialist that hits a block routes it to a `Role: pm` assessment step instead of halting. There is no checkbox convention. -->
 
-- [2026-07-25] UI/UX: Confirm the §2 replay counts as content playback, not a fourth live motion
-  element — interpretation stated in `page-shell.md` §10 scope note; a "no" means the replay needs a
-  fundamentally different (static-first) §2 design.
-- [2026-07-25] UI/UX: Theme control in the status bar — recommended include, non-persistent (no
-  cookies/storage, A-008 holds; resets per visit). Drop if you'd rather the page follow system
-  preference only.
-- [2026-07-25] UI/UX: §2 chain-totals strip is specced static (reads as log evidence, not showpiece).
-  Say the word if you want motion element 3's count-up extended to it.
+*None open.*
+
+<!-- Resolved 2026-07-25 — Wave 1 gate APPROVED with amendments. All three UI/UX questions settled per PM recommendation: (1) the §2 replay is content playback, not a fourth motion element — the budget stays closed at three plus the cursor; (2) the theme control is DROPPED — the page respects prefers-color-scheme and adds no controls the reader didn't ask for; (3) the chain-totals strip stays static. See DEC-015. -->
+<!-- Resolved 2026-07-25 — F1 direction: mobile is NARRATION-FIRST. Terminal is texture on mobile, narration is the payload. Per-viewport visible-line counts; long lines scroll inside the terminal's own container with the page body never scrolling horizontally; the narration card stays in view for the full playback. Plus: replay rescales to 48 s uniform ×0.8, and B5 (QA validation) is restored to ~14.5% funded from the gate hold rather than from QA. See DEC-016. -->
 
 <!-- Resolved 2026-07-24 — Domain: UNDECIDED. `muster.build` is fictional until the founder says otherwise. §6 ships the GitHub raw URL and it is swapped at launch. R12's ban on `muster.build` stands unconditionally for now. See DEC-010; `pre-launch-checklist.md` carries the curl-verification blocker. -->
 <!-- Resolved 2026-07-24 — Measurement posture: partially overruled. Cloudflare Pages server-side request analytics measure visits and VERIFY.md fetches with zero client instrumentation, so the zero-external-requests claim is untouched. Scroll depth and curl-copy remain unmeasured by design. See DEC-011 and `product-spec.md` §7. -->
@@ -48,31 +46,6 @@ all page copy until measured at launch (seed rule 4).
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
-
-### 2026-07-24 Wave 1 Gate — founder review (autonomous run launches here)
-
-```
-Role: halt
-
-**Gate:** Design direction approval before any dev work begins — and the handoff from interactive to
-autonomous execution.
-
-Waves 0–1 ran interactive. Approving this gate launches the autonomous driver starting at Wave 2
-(Developer: page shell). Required by the Solo Founder Model in `sprint-planning.md` — design direction
-is approved before dev, not after.
-
-**Read:** `knowledge-base/wave-review.md` for the verification checklist and write your verdict there.
-**Specs under review:** `knowledge-base/design-specs/web/page-shell.md`,
-`knowledge-base/design-specs/web/section-02-replay.md`,
-`knowledge-base/design-specs/web/section-02-beat-inventory.md`
-
-**Resume:** write your verdict in `knowledge-base/wave-review.md`, then run
-`muster/scripts/muster-sprint-resume.sh` from inside the sprint worktree.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 
 ### 2026-07-25 Developer (web): True up the beat inventory to corpus v1.1
 
@@ -108,6 +81,102 @@ flagged that no second-precision end time existed. v1.1 supplies it: measured en
 
 **On completion:** File HO-009 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
 (`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
+```
+
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
+
+
+### 2026-07-25 UI/UX (web): Gate amendments — narration-first mobile, 48 s chain, B5 rebalance
+
+```
+Role: ui-ux
+Model: claude-opus-5
+
+**Task:** Apply the four Wave 1 gate amendments to your two specs. These are founder rulings, not
+suggestions — implement them. Where a ruling leaves latitude it says so explicitly.
+
+**Inputs:**
+- `knowledge-base/wave-review.md` — the founder's verdict, verbatim
+- `knowledge-base/decision-log.md` — DEC-015 (three settled questions), DEC-016 (the three §2 amendments, with the worked rebalance target and the gate-hold consequence)
+- `knowledge-base/agent-requests.md` — HO-002, PM review block, finding F1 with its full measurement
+- `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md` — your own deliverables
+- `knowledge-base/bodh-sprint4-corpus.md` — the twelve real lines; longest is 74 chars. Read-only
+- `knowledge-base/agent-context/ui-ux.md` — your Current Tasks
+
+**A1 — Drop the theme control** (`page-shell.md` §9, and §15 open question 1). The page respects
+`prefers-color-scheme`; both themes stay first-class; no control ships. Delete the row, not the theme
+system.
+
+**A2 — Confirm and close the motion-budget question** (`page-shell.md` §10 scope note, §15 open
+question 2). The replay is content playback. The budget stays closed at three live elements plus the
+cursor. Convert the scope note from a flagged interpretation to a settled statement.
+
+**A3 — Mobile is narration-first** (resolves F1; `section-02-replay.md` §7, §10, and §5.1).
+**Terminal is texture on mobile; narration is the payload.** The small-viewport reader is exactly the
+non-technical reader narration exists for.
+- §7 moves to **per-viewport visible-line counts** rather than a fixed all-twelve-line terminal
+- Long terminal lines **scroll inside the terminal's own container**; the page body never scrolls horizontally
+- The narration card **stays in view for the full playback** — both layers visible simultaneously at 375×667
+- **§5.1 needs amending too, not just §7 and §10**: "twelve lines fit without scrollback, every revealed line persists" cannot hold under a windowed terminal. Make line persistence a desktop guarantee with a stated small-viewport equivalent
+- Fidelity is untouched: no truncation, no ellipsis, every rendered character still diffs byte-clean against the corpus. Horizontal scroll inside the container is what buys this — soft-wrap plus a fixed height could not
+- State a **mobile height budget** with the numbers and the viewport it assumes, so the Developer can build to it and QA can measure it
+- Re-verify the landscape-phone (667×375) claim §10 currently asserts, using the same measured method — portrait was asserted and did not hold
+
+**A4 — Rescale to 48 s and rebalance B5.** Uniform ×0.8 on §5.1 offsets and §6 word budgets. Beat
+shares change: B3 stays 20%; **B5 (QA validation) restored 10.6% → ~14.5%**; **B6 absorbs the
+difference at ~17.2%**. DEC-016 carries a worked target — treat it as an anchor to verify, not a
+result to copy, and make your dwells tile to exactly 48.00 s.
+- Rationale to preserve in the spec: QA is where "zero bugs" is earned rather than asserted. B5 must carry "re-derived the date math with its own formula, 24 dates × 3 timezones" **and** "11/11 PASS" — two claims, the first making the second credible
+- **Latitude inside B6 is yours.** The internal split is not mandated. Scaling L10's dwell ×0.8 leaves a ~4.14 s gate hold, down 45% from 7.5 s; compressing L10 harder preserves more of it
+- **Push back if warranted**: if the gate hold stops reading as deliberate stillness at its new length, say so in the handoff rather than shipping a pause that reads as a stall. That beat is the product's thesis rendered as pacing
+
+**Deliverable:** revised `page-shell.md` and `section-02-replay.md`; HO-010 in `agent-requests.md`.
+
+**Acceptance criteria:**
+- All four amendments applied; each one's location in the specs named in the handoff
+- Both layers visible simultaneously on a 375×667 portrait viewport during playback — the criterion, not a particular solution
+- A stated mobile height budget with its assumed viewport
+- Dwells tile to exactly 48.00 s; word budgets recomputed at the same 3.5 words/s and stated
+- Fidelity rules intact; reduced-motion and no-JS paths still render the complete transcript
+- Say explicitly whether desktop layout changed; if it did not, say that too
+- Every open question in either spec is now closed or restated with its answer — no stale "flagged for the gate" text survives
+
+**On completion:** File HO-010 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
+(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
+```
+
+### 2026-07-25 PM: Review HO-010 and clear HO-002
+
+```
+Role: pm
+Model: claude-opus-5
+
+**Task:** Review the amended specs, then close out HO-002.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-010, and HO-002 with its unticked PM box
+- `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md`
+- `knowledge-base/decision-log.md` — DEC-015, DEC-016
+- `muster/team/pm/skills/generic/deliverable-review.md`
+- `muster/team/qa/skills/generic/verification-discipline.md`
+
+**Deliverable:** review verdict on HO-010; HO-002's PM reviewer box ticked and Status flipped to `done`
+once F1 is genuinely resolved; both moved to Resolved if complete.
+
+**Acceptance criteria:**
+- **Re-derive, don't re-read**: confirm the dwells tile to exactly 48.00 s and that every word budget equals its window × 3.5 w/s. Arithmetic that was verified once at 60 s is not verified at 48 s
+- Confirm B5 landed in the 14–15% band and that B6 — not B3 or QA — funded it
+- Confirm the mobile height budget is a number against a stated viewport, not a claim that it fits
+- Confirm §5.1's line-persistence rule was amended, not just §7 and §10 — that was the easy one to miss
+- Confirm no stale open-question text survives in either spec
+- If UI/UX pushed back on the gate hold, evaluate it on the merits and route to Founder Decisions if it needs a ruling — do not overrule a design objection silently
+- Do not tick HO-002 unless F1 is actually resolved. An unticked box pending a fix is correct process (founder-confirmed); ticking it early is the rot `muster-requests-lint.sh` exists to catch
+
+**On completion:** Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`). Promote the
+shell build step.
 ```
 
 ### 2026-07-24 Developer (web): Page shell implementation
@@ -170,48 +239,6 @@ advance the queue — re-point `## Next Step` to a `Role: pm` assessment step. R
 Self-Review Checklist (`muster/system-guide.md`) before filing.
 ```
 
-### 2026-07-25 UI/UX (web): Resolve F1 — mobile two-layer simultaneity
-
-```
-Role: ui-ux
-Model: claude-opus-5
-
-**Task:** Resolve HO-002 finding F1 in `section-02-replay.md`. Scoped to §2's mobile layout — do not
-reopen the pacing model, the token system, or anything else in either spec.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-002, PM review block, finding F1 (full measurement)
-- `knowledge-base/wave-review.md` — the founder's verdict, including any stated preference on direction
-- `knowledge-base/design-specs/web/section-02-replay.md` — §7 layout, §10 responsive behavior
-- `knowledge-base/bodh-sprint4-corpus.md` — the twelve real lines; longest is 74 chars. Read-only
-- `knowledge-base/agent-context/ui-ux.md` — your Current Tasks
-
-**The problem, measured.** §7 fixes the terminal to fit all twelve lines with no scrollback; §10 forbids
-truncation and ellipsis and requires soft-wrap with hanging indent. On a 375px viewport those cannot all
-hold: at the spec'd 12px minimum, ~44 chars/row gives 22 rendered rows ≈ 502px of log; with terminal
-chrome, the totals strip and the beat indicator the section core reaches ~646px against a 667px viewport
-— before the narration caption card, the `<h2>` tag, or `--gap-section`'s 96px floor. At 13px it is
-~712px. The narration is therefore off-screen while the terminal plays, which breaks this spec's own
-content hierarchy item 1 and the founder's acceptance criterion: narration is what carries the
-non-technical reader.
-
-**Deliverable:** revised `section-02-replay.md` §7 and §10; HO-010 in `agent-requests.md`.
-
-**Acceptance criteria:**
-- Both layers are visible simultaneously on a 375×667 portrait viewport during playback — the criterion, not a particular solution
-- **A stated mobile height budget** the Developer can build to and QA can measure. A budget, not a claim: give the numbers and the viewport they assume
-- Fidelity rules survive intact — no truncation, no ellipsis, every rendered character still diffs byte-clean against the corpus
-- Reduced-motion and no-JS paths still render the complete transcript
-- If the fix changes the desktop layout at all, say so explicitly; if it does not, say that too
-- Re-verify the claim §10 currently asserts for landscape phone (667×375) with the same measured method, since portrait was asserted and did not hold
-
-**Direction is yours.** A viewport-anchored (sticky-bottom) caption card keeps both layers visible and
-costs no fidelity; a windowed terminal that follows the active line, or an explicitly sequential mobile
-reading model, are also defensible. If the founder stated a preference in `wave-review.md`, follow it.
-
-**On completion:** File HO-010 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
 
 ### 2026-07-24 Content (web): §2 narration script
 
@@ -373,6 +400,15 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
   with two precision caveats and four pacing hazards recorded. One non-blocking founder question parked
   above (8 sessions vs DEC-023's "7 agent steps"). Awaiting review — UI/UX, PM.
 
+- 2026-07-25 — Wave 1 Gate: **APPROVED with amendments** by the founder. Three design questions settled
+  (DEC-015); four §2/shell amendments routed to HO-010 (DEC-016). Autonomous run cleared to launch.
+- 2026-07-25 — Wave 1 Step 3: PM Wave 1 design review. HO-002 reviewed — 16 contrast ratios and the full
+  timing model re-derived independently, all clean; finding F1 (mobile two-layer simultaneity) raised and
+  carried. HO-002 left `needs-revision` with the PM box unticked pending HO-010.
+- 2026-07-25 — Wave 1 Step 2: UI/UX design foundation + §2 replay spec (HO-002). Both themes tokenized
+  with measured contrast, §2 paced to the tenth of a second.
+- 2026-07-25 — Wave 1 Step 1: Developer Bodh corpus verification + beat inventory (HO-001). All six seed
+  beats supported, no gaps, no HALT. Closed to Resolved.
 - 2026-07-24 — Wave 0: PM Stage 4 drafts + Sprint 1 context cascade. Product spec, brand guidelines, and
   9 foundational assumptions written from the founder's seed; `copy-rules.md` project skill created;
   developer/ui-ux/qa/content contexts populated with inlined tasks; root CLAUDE.md filled; DEC-001→009

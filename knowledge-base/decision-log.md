@@ -359,5 +359,91 @@ instead of tested-for.
 **Touched**: `design-specs/web/page-shell.md`, `design-specs/web/section-02-replay.md`,
 `agent-requests.md` (HO-002), `orchestration-queue.md` (Done, Next Step, Founder Decisions).
 
+---
+
+### DEC-015 — Wave 1 gate approved; three design questions settled (2026-07-25)
+
+**Decision**: The design foundation and §2 replay spec are approved with amendments; the autonomous run
+launches at Wave 2. Three open questions settled:
+
+1. **The §2 replay is content playback, not a fourth live motion element.** The seed's "exactly three
+   live elements" governs ambient page motion; the replay is mandated by §2 itself, scroll-triggered,
+   runs once, and holds a complete end state. The motion budget stays closed at three plus the cursor.
+2. **The theme control is dropped.** The page respects `prefers-color-scheme` and adds no controls the
+   reader didn't ask for. `page-shell.md` §9 loses its theme row.
+3. **The §2 chain-totals strip stays static.** It reads as log evidence rather than showpiece, and it is
+   visible mid-playback where a count-up would compete with the replay for the same attention. Count-up
+   (motion element 3) stays scoped to the §1 and §5 readouts.
+
+**Rationale on the theme control**, the one place PM disagreed with UI/UX: the disagreement was scope,
+not execution. The seed never asks for a theme control, and "both themes first-class" is already
+satisfied by `prefers-color-scheme`. On a page whose argument is restraint — one CTA, no badges, no
+community furniture — a control that adds a decision the reader did not ask to make cuts against the
+thesis, and a non-persistent one silently resets every visit. Founder concurred.
+
+**Impact**: UI/UX, Developer, QA.
+
+**Touched**: `wave-review.md`, `orchestration-queue.md`, `agent-context/ui-ux.md`, `current-sprint.md`.
+
+---
+
+### DEC-016 — §2 amendments: narration-first on mobile, 48 s chain, QA beat restored (2026-07-25)
+
+**Decision**: Three founder amendments to `section-02-replay.md`, resolving finding F1 and rebalancing
+the pacing.
+
+**1. Mobile is narration-first (resolves F1).** The small-viewport reader is exactly the non-technical
+reader the narration exists for, so on mobile the terminal is texture and the narration is the payload.
+Mechanically: §7 moves to per-viewport visible-line counts rather than a fixed all-twelve-lines terminal;
+long terminal lines scroll inside the terminal's own container while the page body never scrolls
+horizontally; the narration card stays in view for the full playback.
+
+*Why this direction over the alternatives*: it resolves the constraint collision without touching
+fidelity — horizontal scroll inside the container preserves every character byte-clean, where soft-wrap
+plus a fixed height could not fit. It also inverts the right priority. PM's measurement showed the
+section core reaching ~646px of a 667px viewport at the spec'd 12px minimum, which pushed narration
+off-screen — the layer that carries the reader the founder's acceptance criterion is written for.
+
+*Consequence to carry*: §5.1's "twelve lines fit without scrollback, every revealed line persists" no
+longer holds on mobile and must be amended there too, not only in §7 and §10. Line persistence becomes a
+desktop guarantee with a windowed equivalent on small viewports.
+
+**2. The replay rescales to 48 s**, uniform ×0.8. Structure, beat ratios, hazard handling and the sync
+contract all survive rescaling; §5.1 offsets and §6 word budgets scale by the same factor.
+
+**3. B5 rebalance — the wow beat is funded from the gate hold, not from QA.** B3 stays at 20%. B5 (QA
+full validation) is restored from 10.6% to ~14.5%. B6 absorbs the difference at ~17.2%.
+
+*Rationale*: QA is where "zero bugs" is earned rather than asserted. The beat has to carry "re-derived
+the date math with its own formula, 24 dates × 3 timezones" plus "11/11 PASS" — two distinct claims, and
+the first is what makes the second credible to a skeptical reader. Compressing the proof harder than
+anything else on the page inverted the section's own argument.
+
+*Worked target at 48 s* (UI/UX owns the final schedule; these must tile to exactly 48.00):
+
+| Beat | Old share | New share | Old dwell @60 s | New dwell @48 s |
+|---|---|---|---|---|
+| B1 | 13.3% | 13.3% | 8.00 s | ~6.38 s |
+| B2 | 15.0% | 15.0% | 9.00 s | ~7.20 s |
+| B3 | 20.0% | 20.0% | 12.00 s | ~9.60 s |
+| B4 | 20.0% | 20.0% | 12.00 s | ~9.60 s |
+| B5 | 10.6% | **14.5%** | 6.35 s | **~6.96 s** |
+| B6 | 21.1% | **17.2%** | 12.65 s | **~8.26 s** |
+
+**The rebalance works as intended**: B5 gains absolute time (+0.61 s) despite the chain shortening 20%.
+
+**Consequence stated, accepted**: B6 loses 4.39 s. If L10's dwell simply scales ×0.8 to 4.12 s, the gate
+hold falls from 7.5 s to ~4.14 s — a 45% cut to the beat previously described as the product's thesis
+rendered as pacing. This follows directly from the founder's instruction to fund B3 from the hold, and is
+recorded so it is a known trade rather than a discovered one. **UI/UX has latitude inside B6**: the
+internal split is not mandated, so compressing L10's dwell harder than ×0.8 preserves more of the hold.
+If the hold stops reading as deliberate stillness at its new length, say so rather than shipping a pause
+that reads as a stall.
+
+**Impact**: UI/UX, Content (word budgets scale ×0.8), Developer, QA.
+
+**Touched**: `wave-review.md`, `orchestration-queue.md`, `agent-context/{ui-ux,content}.md`,
+`current-sprint.md`, `agent-requests.md` (HO-002).
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

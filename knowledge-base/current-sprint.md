@@ -59,12 +59,21 @@ criterion). No other step uses a premium model.
 
 ### Wave structure
 
-| Wave | Contents | Gate |
-|---|---|---|
-| 0 | PM: Stage 4 drafts + Sprint 1 context cascade | — (interactive) |
-| 1 | Corpus verification + beat inventory → design foundation spec → PM review | **Founder gate** — approve design direction before dev; approving launches the autonomous run |
-| 2 | Shell build → QA validation | none — output is machine-verifiable against the approved spec |
-| 3 | §2 narration → PM review → replay build → QA validation | **Founder gate** — judge pacing + narration, styling subtracted |
+| Wave | Contents | Gate | Status |
+|---|---|---|---|
+| 0 | PM: Stage 4 drafts + Sprint 1 context cascade | — (interactive) | ✓ done |
+| 1 | Corpus verification + beat inventory → design foundation spec → PM review | **Founder gate** | ✓ **approved with amendments**, 2026-07-25 |
+| 2 | Inventory true-up → spec amendments → PM review → shell build → QA validation | none — output is machine-verifiable against the approved spec | autonomous run cleared to launch |
+| 3 | §2 narration → PM review → replay build → QA validation | **Founder gate** — judge pacing + narration, styling subtracted | |
+
+**Wave 2 order is deliberate.** The gate's amendments change `page-shell.md` (theme control dropped) and
+`section-02-replay.md` (48 s rescale, B5 rebalance, narration-first mobile), so the UI/UX amendment and
+its PM review run **before** the shell build. Building first would build a dropped control and leave the
+spec, rather than the build, as the thing out of date.
+
+**Wave 1 gate outcome** (DEC-015, DEC-016): replay confirmed as content playback; theme control dropped;
+totals strip static; mobile narration-first; chain rescaled to 48 s; B5 restored to ~14.5% funded from
+the gate hold rather than from QA.
 
 Wave 2 carries no founder gate deliberately: every claim it makes is mechanically checkable (contrast
 ratios, cross-engine parity, zero network requests, reduced-motion completeness), and the aesthetic

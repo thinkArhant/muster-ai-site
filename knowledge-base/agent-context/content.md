@@ -76,7 +76,15 @@ because the gate waited on Apple. No copy may imply the deploy closed the chain.
 **Deliverable**: `knowledge-base/design-specs/web/section-02-narration.md` — the narration layer line by
 line, each line keyed to its terminal beat; HO-005 in `agent-requests.md`.
 
-**Dependencies**: beat inventory (Developer, HO-001) and replay spec (UI/UX, HO-002).
+**Dependencies**: beat inventory (Developer, HO-001) and replay spec (UI/UX) — **read the HO-010 amended
+version, not HO-002**. The chain rescaled from 60 s to 48 s, so every word budget in §6 shrank by 20%.
+Budgets are a spec contract, not a style guide: an overrun breaks the pacing the section is judged on.
+
+Two beats changed materially. **B5 (QA validation) gained time** — restored from 10.6% to ~14.5% of the
+chain, and in absolute terms it grew despite the shorter chain. It has to carry two claims, not one:
+QA re-derived the date math *with its own formula* across 24 dates × 3 timezones, **and** 11/11 PASS with
+zero bugs. The first is what makes the second credible to a skeptical reader — that is why the beat was
+given room back. **B6 (the gate hold) lost time**, so SP7's honest-headline slot is tighter than it was.
 
 **Acceptance criteria**:
 - Product voice throughout — §2 is not one of the two first-person places

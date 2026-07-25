@@ -99,6 +99,22 @@ revision.**
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
 <!-- Bug list — PM inserts a fix step per bug, then continues. -->
 
-**Status:** [approve | changes-requested]
+**Status:** approve (with amendments)
 **Findings:**
--
+- **Packet decisions — all three per PM recommendation.** Replay confirmed as content playback, not a
+  motion element. Theme control **dropped**: the page respects `prefers-color-scheme` and adds no
+  controls the reader didn't ask for. Chain-totals strip stays static.
+- **F1 direction — mobile is narration-first.** The small-viewport reader is exactly the non-technical
+  reader narration exists for. Amend §7 to per-viewport visible-line counts; long terminal lines scroll
+  inside the terminal's own container (the page body never scrolls horizontally); the narration card
+  stays in view for the full playback. **Terminal is texture on mobile; narration is the payload.**
+- **Replay rescales to 48 s**, uniform ×0.8.
+- **B5 rebalance.** The wow beat stays at 20%, but fund it from the gate hold, not from QA. Restore the
+  QA validation beat to ~14–15%. QA is where "zero bugs" is earned rather than asserted; it needs room
+  for "re-derived with its own formula, 24 dates × 3 timezones" plus "11/11 PASS."
+- **Process**: the unticked reviewer box on HO-002 pending F1 is correct. Proceed.
+
+<!-- PM processed 2026-07-25. Gate cleared; autonomous run launches at Wave 2. Amendments routed to
+     HO-010 (UI/UX) with a PM review step behind it; see DEC-015 and DEC-016. Worked rebalance target
+     and the gate-hold consequence are in DEC-016. -->
+

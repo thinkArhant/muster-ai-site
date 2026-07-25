@@ -97,4 +97,40 @@ spec is what that judgment lands on.
 (feel only) · `design-specs/web/section-02-beat-inventory.md` ·
 `muster/team/ui-ux/skills/web/{web-design-system,web-screen-specification,web-accessibility,web-marketing-and-conversion-pages}.md`
 
-**Note**: the founder executes this step personally in a warm tab. Expect review cycles.
+**Status**: delivered as HO-002 and approved at the Wave 1 gate with amendments. Superseded by task 2.
+
+---
+
+### 2. Gate amendments — narration-first mobile, 48 s chain, B5 rebalance — Priority: HIGH, Effort: M, Platform: web
+
+**Deliverable**: revised `page-shell.md` and `section-02-replay.md`; HO-010. Full step brief in
+`orchestration-queue.md`; rulings and rationale in `decision-log.md` DEC-015 and DEC-016.
+
+**Dependencies**: none — the rulings are recorded. Runs before the shell build, because A1 changes
+`page-shell.md` and the Developer builds from it.
+
+**The four amendments**:
+- **A1** Drop the theme control (`page-shell.md` §9, §15 q1). Delete the row, not the theme system — both themes stay first-class via `prefers-color-scheme`
+- **A2** Close the motion-budget question (§10 scope note, §15 q2): the replay is content playback; budget stays at three plus the cursor
+- **A3** **Mobile is narration-first** — terminal is texture, narration is the payload. Per-viewport visible-line counts; long lines scroll inside the terminal's own container; page body never scrolls horizontally; narration card stays in view for the full playback. **§5.1 needs amending too** — line persistence becomes a desktop guarantee with a stated small-viewport equivalent
+- **A4** Rescale to 48 s uniform ×0.8; B3 stays 20%, **B5 restored 10.6% → ~14.5%**, B6 absorbs at ~17.2%
+
+**Acceptance criteria**:
+- Both layers visible simultaneously at 375×667 during playback — the criterion, not a particular solution
+- A stated mobile height budget: numbers plus the viewport assumed, not a claim that it fits
+- Dwells tile to exactly 48.00 s; word budgets recomputed at 3.5 w/s
+- Fidelity intact — no truncation, no ellipsis, every character diffs byte-clean against the corpus
+- Reduced-motion and no-JS paths still render the complete transcript
+- No stale "flagged for the gate" text survives in either spec
+
+**Latitude and push-back**: B6's internal split is yours. Scaling L10 ×0.8 leaves a ~4.14 s gate hold,
+down 45% from 7.5 s; compressing L10 harder preserves more. If the hold stops reading as deliberate
+stillness at its new length, say so in the handoff rather than shipping a pause that reads as a stall.
+
+**Why F1 was raised**: measured against the real corpus lines, the section core reached ~646px of a
+667px viewport at the spec'd 12px minimum — pushing the narration card off-screen while the terminal
+played. Narration is what carries the non-technical reader the founder's acceptance criterion is written
+for, so losing it on mobile broke the criterion, not just the layout.
+
+**Key refs**: `wave-review.md` · `decision-log.md` DEC-015/016 · `agent-requests.md` HO-002 finding F1 ·
+`bodh-sprint4-corpus.md` (read-only; longest line 74 chars)
