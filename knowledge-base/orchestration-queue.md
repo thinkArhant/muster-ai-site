@@ -49,41 +49,6 @@ all page copy until measured at launch (seed rule 4).
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 PM: Wave 1 design review
-
-```
-Role: pm
-Model: claude-opus-5
-
-**Task:** Review HO-002 against the seed's locked design direction and prepare the Wave 1 gate packet.
-Runs interactive; may iterate across several review cycles before the gate.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-001, HO-002
-- `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md`
-- `knowledge-base/design-specs/web/section-02-beat-inventory.md` — check the replay's timing against the real intervals
-- `knowledge-base/product-spec-seed.md` → Design direction
-- `muster/team/pm/skills/generic/deliverable-review.md`
-- `muster/team/qa/skills/generic/verification-discipline.md`
-
-**Deliverable:** Review verdict on HO-002 in `agent-requests.md`; Wave 1 gate packet in
-`knowledge-base/wave-review.md`.
-
-**Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
-- Spot-check the claims against the spec files rather than accepting the handoff summary — trust then verify
-- Every hex, type assignment and motif traced to the seed; deviations justified in writing or corrected before the gate
-- Confirm nothing from `direction-reference.html` has been promoted into the spec as a requirement — it is a feel reference and does not ship
-- Gate packet is human-judgment residue only (felt experience, taste, product calls), with machine-verified results attached as already-green evidence, never re-litigated by the founder
-- Gate packet includes a `Notices since last gate` heading listing every `founder-notices.md` entry verbatim, or `none` — required even when empty
-- Gate packet states plainly that approving it launches the autonomous run at Wave 2
-
-**On completion:** Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`). Promote the
-Wave 1 gate step.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-24 Wave 1 Gate — founder review (autonomous run launches here)
 
 ```
@@ -104,6 +69,10 @@ is approved before dev, not after.
 **Resume:** write your verdict in `knowledge-base/wave-review.md`, then run
 `muster/scripts/muster-sprint-resume.sh` from inside the sprint worktree.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
 
 ### 2026-07-25 Developer (web): True up the beat inventory to corpus v1.1
 
@@ -199,6 +168,49 @@ Model: claude-opus-5
 **On completion:** File HO-004 in `agent-requests.md`. If the build is red or any check fails, do NOT
 advance the queue — re-point `## Next Step` to a `Role: pm` assessment step. Run the Pre-Handoff
 Self-Review Checklist (`muster/system-guide.md`) before filing.
+```
+
+### 2026-07-25 UI/UX (web): Resolve F1 — mobile two-layer simultaneity
+
+```
+Role: ui-ux
+Model: claude-opus-5
+
+**Task:** Resolve HO-002 finding F1 in `section-02-replay.md`. Scoped to §2's mobile layout — do not
+reopen the pacing model, the token system, or anything else in either spec.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-002, PM review block, finding F1 (full measurement)
+- `knowledge-base/wave-review.md` — the founder's verdict, including any stated preference on direction
+- `knowledge-base/design-specs/web/section-02-replay.md` — §7 layout, §10 responsive behavior
+- `knowledge-base/bodh-sprint4-corpus.md` — the twelve real lines; longest is 74 chars. Read-only
+- `knowledge-base/agent-context/ui-ux.md` — your Current Tasks
+
+**The problem, measured.** §7 fixes the terminal to fit all twelve lines with no scrollback; §10 forbids
+truncation and ellipsis and requires soft-wrap with hanging indent. On a 375px viewport those cannot all
+hold: at the spec'd 12px minimum, ~44 chars/row gives 22 rendered rows ≈ 502px of log; with terminal
+chrome, the totals strip and the beat indicator the section core reaches ~646px against a 667px viewport
+— before the narration caption card, the `<h2>` tag, or `--gap-section`'s 96px floor. At 13px it is
+~712px. The narration is therefore off-screen while the terminal plays, which breaks this spec's own
+content hierarchy item 1 and the founder's acceptance criterion: narration is what carries the
+non-technical reader.
+
+**Deliverable:** revised `section-02-replay.md` §7 and §10; HO-010 in `agent-requests.md`.
+
+**Acceptance criteria:**
+- Both layers are visible simultaneously on a 375×667 portrait viewport during playback — the criterion, not a particular solution
+- **A stated mobile height budget** the Developer can build to and QA can measure. A budget, not a claim: give the numbers and the viewport they assume
+- Fidelity rules survive intact — no truncation, no ellipsis, every rendered character still diffs byte-clean against the corpus
+- Reduced-motion and no-JS paths still render the complete transcript
+- If the fix changes the desktop layout at all, say so explicitly; if it does not, say that too
+- Re-verify the claim §10 currently asserts for landscape phone (667×375) with the same measured method, since portrait was asserted and did not hold
+
+**Direction is yours.** A viewport-anchored (sticky-bottom) caption card keeps both layers visible and
+costs no fidelity; a windowed terminal that follows the active line, or an explicitly sequential mobile
+reading model, are also defensible. If the founder stated a preference in `wave-review.md`, follow it.
+
+**On completion:** File HO-010 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
+(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
 
 ### 2026-07-24 Content (web): §2 narration script

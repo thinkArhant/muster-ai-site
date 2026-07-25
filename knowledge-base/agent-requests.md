@@ -12,9 +12,60 @@
 **Type:** handoff
 **Producer:** UI/UX
 **Deliverable:** `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md`
-**Status:** in-review
+**Status:** needs-revision
+<!-- Scope of the revision is narrow and named: finding F1 only (§2 mobile layout, §7 + §10). The design
+     direction, token system, and pacing model are accepted and the Wave 2 shell build proceeds from
+     page-shell.md as written. Revision is queued as HO-010 ahead of the §2 build in Wave 3. -->
+**Revision requested:** F1 — mobile two-layer simultaneity (see PM review below). Queued as HO-010.
 **Reviewers:**
-- [ ] PM — pending (Wave 1 design review, then founder gate)
+- [ ] PM — **reviewed 2026-07-25: revision requested (F1). Cleared for the founder gate and for the
+  Wave 2 shell build in the meantime; re-tick when HO-010 lands.** The box stays open because the
+  deliverable still needs a change, not because the review is unfinished — the review is complete and is
+  below. Verified rather than accepted on summary.
+
+  **Re-derived mechanically, all clean.** (a) All sixteen contrast ratios recomputed from the locked hex
+  under WCAG 2.1 — every one matches to two decimals, including the three that fail their floors. The
+  rust-usage rules in §2.3 are therefore derived from real measurements, not asserted, which is the part
+  that mattered: a wrong ratio there would have propagated into every emphasis decision on the page.
+  (b) Beat durations tile the chain at 3858 s against v1.1, with B6 at 486 s — the correction was
+  applied, not just acknowledged. (c) All six real shares and all six design shares reproduce to 0.1%.
+  (d) The playback schedule reconciles: every beat's cumulative dwell lands exactly on its opening
+  line's `t`, and the chain closes at 60.00. (e) All seven finite word budgets equal their window × 3.5
+  w/s. Nothing in the timing is hand-waved.
+
+  **Traceability.** Every hex matches the seed verbatim. Motion inventory is closed at three plus the
+  cursor. The full-ink rule is enforced structurally (muted bound to two label-scoped type tokens), not
+  just stated. §13's three-way provenance split — seed-locked / reference-feel / deliberately-not-inherited
+  — is the strongest part of the deliverable: all four divergences PM fenced off are listed as
+  non-inherited, and it self-reports three more found during the work (`JetBrains Mono`, muted feed text,
+  the blurred status bar). That is the reference being read for feel and not leaking in as spec.
+
+  **Finding F1 — mobile: the two layers cannot be seen together during playback. Blocking for the
+  Developer's §2 step; not blocking for the founder gate or the shell build.**
+  §7 fixes the terminal to fit all twelve lines with no scrollback, and §10 forbids truncation and
+  ellipsis, requiring soft-wrap with hanging indent. Those three rules are individually right and jointly
+  unsatisfiable on a 375px viewport. Measured against the real corpus lines (longest 74 chars): at the
+  spec'd 12px minimum, ~44 chars/row gives 22 rendered rows ≈ 502px of log, and with terminal chrome,
+  the totals strip and the beat indicator the section core reaches ~646px — the whole 667px viewport,
+  before the narration caption card, the `<h2>` tag, or `--gap-section`'s 96px floor. At 13px it is
+  ~712px.
+  The consequence is not cosmetic: the narration caption card sits below the terminal and is therefore
+  off-screen while the terminal plays. That contradicts this spec's own content hierarchy item 1 ("the
+  two layers are one idea at a time") and, more seriously, the founder's acceptance criterion — narration
+  is what carries the non-technical reader, and on mobile they cannot read it while watching the beat it
+  annotates.
+  Not a defect in the pacing model, which is sound; it is the one place where three correct constraints
+  collide and the spec asserts a fit it does not demonstrate ("landscape phone: verified" is claimed, but
+  portrait 375×667 is the harder case and is not). Resolution is a design call for UI/UX, not for PM to
+  make: a viewport-anchored (sticky-bottom) caption card keeps both layers visible at once and costs no
+  fidelity, but a windowed terminal that follows the active line, or an explicitly sequential mobile
+  reading model, are also defensible. Whichever is chosen, mobile height needs a stated budget the
+  Developer can build to and QA can measure.
+
+  **Deferred to their owners, not resolved here:** the three open questions are founder calls and go to
+  the gate packet with PM recommendations (confirm the replay is content playback; drop the theme control;
+  keep the totals strip static). The 60 s duration is a taste call the gate is the right place for — the
+  spec's uniform ×0.8 rescale path means deciding it late costs one multiplier, not a redesign.
 
 **Outcome:** The locked design direction is executed as a complete token system (both themes, every value
 traced to the seed) and the §2 replay is specified to the tenth of a second — pacing is a design
@@ -63,84 +114,11 @@ redesign).
   alpha); (c) rust-at-terminal-size AA failure — resolved via the ink-bold + rust-mark emphasis system
   rather than inheriting the reference's rust feed words.
 
-### 2026-07-25 HO-001 — Bodh corpus verified; §2 beat inventory derived
-**Type:** handoff
-**Producer:** Developer
-**Deliverable:** `knowledge-base/design-specs/web/section-02-beat-inventory.md`
-**Status:** in-review
-**Reviewers:**
-- [x] UI/UX — **accepted as pacing input**, 2026-07-25. Reviewed as the consumer: spot-re-derived the
-  beat windows from the corpus session starts (all six tile the chain, each boundary lands on a stated
-  session start) and confirmed the four pacing hazards are real — L9/L10 simultaneity at 21:35:09,
-  B2+B5 carrying ~43% of the clock, B3 as shortest-yet-most-important beat, and L12 outside the
-  timeline. The handle convention (L1–L12, render from corpus only) is exactly what the replay spec
-  needs to avoid a drift path. Will consume with the v1.1 corrections applied inline per the queue's
-  PM note (span 3858 s, B6 = 486 s; B1–B5 unchanged) — shares shift <0.2%, hazards stand.
-- [x] PM — **accepted with one superseded figure**, 2026-07-25. The re-verification is what was asked
-  for: every figure re-derived mechanically rather than confirmed by restating the Wave 0 pass, and the
-  two caveats it added (the chain end was derived not printed; the 12 s between the two routes is
-  rounding, and bounds idle rather than proving it zero) are both correct and were not in the upstream
-  check. Declining to resolve the 8-versus-7 count by inference was the right call — it was answered at
-  source instead. Spot-checked rather than accepted on summary: the six per-beat durations tile the
-  chain and each boundary lands on a stated session start.
-  **Superseded by corpus v1.1 (`025842c`), through no fault of the deliverable**: the derived chain end
-  `21:43:09` / 3852 s is now measured at `21:43:15` / 3858 s. One beat moves — B6, 480 s → 486 s;
-  B1–B5 are unaffected. Beat shares shift under 0.2 %, so the Pacing hazards section stands. Also now
-  false: "289 calls and $24.73 not independently derivable" — v1.1's per-session columns tile both
-  exactly. Trued up by HO-009; the running UI/UX step carries the corrected figures inline so it is not
-  blocked.
-
-**Outcome:** All six of the seed's §2 beats are supported by the corpus. **No gaps, no HALT.** All twelve
-terminal lines are assigned to a beat; none is unused. The corpus is unmodified (verified with
-`git diff --stat HEAD` against the three founder-authored files — empty).
-
-**Independent re-verification — agreement, with two caveats the Wave 0 pass did not state.** Every figure
-was re-derived mechanically from the corpus timestamps, not confirmed by restating the upstream check.
-Agreement on all four claims: the 8 stated durations sum to 64 min; the span 20:38:57 → 21:43:09 is
-64 m 12 s; the terminal-inventory timestamps match the session table line for line; and sessions 4–6
-(content, legal, marketing) form the seed's step 4. Added rigour:
-- **The chain-end timestamp is derived, not printed.** No second-precision end time exists in the corpus.
-  21:43:09 = session 8 start (stated) + ~8 m (stated). The corpus corroborates it only to the minute
-  (`21:43` on the gate line). Every span figure inherits that one rounding.
-- **The two routes to "64 minutes" differ by 12 s, and that is exactly the rounding.** Stated durations
-  give 3840 s; the measured span gives 3852 s. The 12 s is the accumulated nearest-minute rounding across
-  sessions 1–7. Both routes support "~64 minutes"; neither contradicts the other. Also confirmed
-  back-to-back execution per-session: no gap-versus-duration divergence exceeds 29 s, inside the ±30 s
-  tolerance a `~N m` figure carries. Note this *bounds* idle rather than proving it zero.
-
-**New for downstream:** per-beat durations that tile the chain exactly (454 + 786 + 441 + 824 + 867 + 480
-= 3852 s), their shares of the chain, and four pacing hazards — chiefly that the QA-PASS line and the
-PM-acceptance line are the **same instant** (21:35:09), so they must neither render with a gap nor be
-merged; and that the "wow" beat is the **shortest** in the chain (7m21s), so real-duration pacing gives
-the most important beat the least screen time.
-
-**Build convention established:** the deliverable references terminal lines by handle (`L1`–`L12`, a
-derived index) and does **not** reproduce their text — the corpus stays the single source of every
-rendered character, so there is no drift path between what is verified and what ships. Render from the
-corpus, never from the inventory. The two timestamp precisions are also not interchangeable: the
-minute-precision forms are the ones the corpus marks safe to render; second-precision timestamps are
-pacing input only and must not reach the page.
-
-**Not independently derivable:** 289 API calls and $24.73 are stated chain totals with no per-session
-breakdown. Quotable as supplied; no downstream step should claim arithmetic corroboration.
-
-**One founder question raised** (parked in `orchestration-queue.md` → Founder Decisions, non-blocking):
-the session table carries 8 sessions, DEC-023 reports "7 agent steps."
-
-**Revision log:**
-- 2026-07-25: Filed. Self-review caught one internal contradiction before filing — the shortest beat was
-  described as the second-shortest (B3 at 441 s is shorter than B1 at 454 s); corrected.
-
-**Observations:**
-- OBS-001 — Model plan disagrees across two files   Severity: low
-  Evidence: `current-sprint.md:55` names `claude-opus-4-8` as the sprint default; DEC-004 and every
-  `Model:` line in `orchestration-queue.md` name `claude-opus-5`.
-  Suggested action: PM aligns `current-sprint.md` with DEC-004.
-- OBS-002 — Roster size and roles that ran differ   Severity: med
-  Evidence: corpus terminal line 1 reads "8 roles standing by"; seven distinct roles actually executed
-  (research did not run in this chain).
-  Suggested action: none needed for the inventory — recorded as F2 so copy cannot imply all eight roles
-  worked the wave.
 
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
+
+- 2026-07-25 — HO-001 (Developer): Bodh corpus verified, §2 beat inventory derived. All six seed
+  beats supported, no gaps, no HALT; all twelve terminal lines assigned. Accepted by UI/UX (as pacing
+  input) and PM (with one figure superseded by corpus v1.1 — derived chain end `21:43:09`/3852 s is
+  now measured `21:43:15`/3858 s, moving B6 480→486 s). Trued up by HO-009. Full detail in git history.
