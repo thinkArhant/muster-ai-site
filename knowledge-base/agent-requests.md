@@ -15,7 +15,19 @@
 **Status:** in-review
 **Reviewers:**
 - [ ] UI/UX — pending
-- [ ] PM — pending
+- [x] PM — **accepted with one superseded figure**, 2026-07-25. The re-verification is what was asked
+  for: every figure re-derived mechanically rather than confirmed by restating the Wave 0 pass, and the
+  two caveats it added (the chain end was derived not printed; the 12 s between the two routes is
+  rounding, and bounds idle rather than proving it zero) are both correct and were not in the upstream
+  check. Declining to resolve the 8-versus-7 count by inference was the right call — it was answered at
+  source instead. Spot-checked rather than accepted on summary: the six per-beat durations tile the
+  chain and each boundary lands on a stated session start.
+  **Superseded by corpus v1.1 (`025842c`), through no fault of the deliverable**: the derived chain end
+  `21:43:09` / 3852 s is now measured at `21:43:15` / 3858 s. One beat moves — B6, 480 s → 486 s;
+  B1–B5 are unaffected. Beat shares shift under 0.2 %, so the Pacing hazards section stands. Also now
+  false: "289 calls and $24.73 not independently derivable" — v1.1's per-session columns tile both
+  exactly. Trued up by HO-009; the running UI/UX step carries the corrected figures inline so it is not
+  blocked.
 
 **Outcome:** All six of the seed's §2 beats are supported by the corpus. **No gaps, no HALT.** All twelve
 terminal lines are assigned to a beat; none is unused. The corpus is unmodified (verified with

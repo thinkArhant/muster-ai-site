@@ -268,5 +268,63 @@ not silently generalised to future measurements.
 
 **Touched**: `agent-skills/content/copy-rules.md` (R2), `decision-log.md`.
 
+---
+
+### DEC-013 — Corpus v1.1 supersedes derived figures; session and roster counts settled (2026-07-25)
+
+**Decision**: Corpus v1.1 (founder commit `025842c`) is the current source of truth. Three things it
+settles are now binding:
+
+1. **Chain end is measured, not derived**: `21:43:15`, span **64 m 18 s (3858 s)**. This supersedes
+   HO-001's derived `21:43:09` / 3852 s. Exactly one beat changes — B6, 480 s → 486 s. Publish
+   "~64 minutes" only; second-precision figures are pacing input and never reach the page.
+2. **Sessions versus steps**: 8 traced sessions = 7 agent work-steps + the PM review/retro session
+   (session 8, which wrote DEC-023 and does not count itself). Copy says "8 sessions" or "7 agent steps
+   plus PM review", never a bare "7" against "8".
+3. **Roster versus wave**: L1's "8 roles standing by" is roster size; **seven roles ran this wave** —
+   research did not. "Eight agents, one operator" describes Muster, not this chain.
+
+**Rationale**: The Developer's HO-001 re-verification surfaced both the missing second-precision end time
+and the 8-versus-7 discrepancy, and correctly declined to resolve either by inference — parking the
+question rather than guessing. The founder answered at the source rather than in a decision, which is the
+right layer: the corpus is what every downstream step reads, so a fix there cannot be missed by a step
+that skips the decision log.
+
+**Also resolved**: v1.1 adds per-session Calls and $ columns that tile 289 and $24.73 exactly (verified
+independently: `37+50+40+21+26+27+45+43 = 289`; the $ column sums to `24.73`). HO-001 recorded these
+totals as "not independently derivable" — that is now false, and `copy-rules.md` → R2 marks them
+corroborated rather than merely asserted.
+
+**Mechanism**: the UI/UX step carries the corrected figures inline so the running step is not blocked; a
+Developer amendment step (HO-009) trues up the inventory file itself. PM does not edit the inventory —
+it is a Developer deliverable.
+
+**Impact**: Developer, UI/UX, Content, QA, PM.
+
+**Touched**: `orchestration-queue.md` (Founder Decisions, UI/UX step, new amendment step),
+`agent-skills/content/copy-rules.md` (scope table, R1, R2), `triage-log.md`, `agent-requests.md`
+(HO-001 review note).
+
+---
+
+### DEC-014 — Model plan misalignment corrected in the sprint board (2026-07-25)
+
+**Decision**: `current-sprint.md` → Model plan now names `claude-opus-5`, matching DEC-004 and every
+`Model:` line in the queue.
+
+**Rationale**: PM error. When the founder switched the default from `claude-opus-4-8` to `claude-opus-5`,
+the change was applied to the queue with a targeted `sed` and the verification grep that followed checked
+only the queue file — so the sprint board's prose kept the superseded ID for a day. Caught by the
+Developer as OBS-001, not by PM's own cascade check.
+
+**Process consequence worth keeping**: the Cascade Lag Prevention Protocol's keyword scan says to grep the
+**full repository** for the old term, not the file being edited. A `sed` on one file plus a grep on that
+same file proves nothing about cascade. Future value swaps get the repo-wide grep before the decision is
+called complete.
+
+**Impact**: PM.
+
+**Touched**: `current-sprint.md`, `triage-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

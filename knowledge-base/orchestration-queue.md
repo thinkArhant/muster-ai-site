@@ -26,14 +26,7 @@ all page copy until measured at launch (seed rule 4).
 <!-- Format: - [DATE] [Agent]: [Question] -->
 <!-- Autonomous runs: this section is non-halting on its own — observation and scope escalations park here while the loop keeps running. PM is the sole party that summons the founder: only PM (after assessing a block per the Decision Autonomy Matrix) writes the question here AND sets the Next Step block's `Role:` to `halt` (see below). A specialist that hits a block routes it to a `Role: pm` assessment step instead of halting. There is no checkbox convention. -->
 
-- [2026-07-25] Developer: The Bodh corpus states two counts that a reader could take as inconsistent —
-  the session table carries **8 sessions**, while DEC-023 (the retro) reports **"7 agent steps."** The
-  most defensible reconciliation is that DEC-023 was written inside session 8 and does not count itself
-  (7 executing steps + 1 closeout), but that is inference, not something the corpus states. Which is
-  right? **Non-blocking**: nothing in §2 requires publishing a step count, and both `copy-rules.md` → R2
-  and A-005 already settle on "8 sessions" as the chain's framing, so the safe path is available without
-  an answer. Asking because the page's thesis is numeric honesty and this is the one number in the corpus
-  that two artifacts state differently. See HO-001 → F1.
+*None open.*
 
 <!-- Resolved 2026-07-24 — Domain: UNDECIDED. `muster.build` is fictional until the founder says otherwise. §6 ships the GitHub raw URL and it is swapped at launch. R12's ban on `muster.build` stands unconditionally for now. See DEC-010; `pre-launch-checklist.md` carries the curl-verification blocker. -->
 <!-- Resolved 2026-07-24 — Measurement posture: partially overruled. Cloudflare Pages server-side request analytics measure visits and VERIFY.md fetches with zero client instrumentation, so the zero-external-requests claim is untouched. Scroll depth and curl-copy remain unmeasured by design. See DEC-011 and `product-spec.md` §7. -->
@@ -42,6 +35,7 @@ all page copy until measured at launch (seed rule 4).
 <!-- Resolved 2026-07-24 — Bodh corpus: LANDED at `knowledge-base/bodh-sprint4-corpus.md`. Founder-authored, read-only (DEC-006). Verified internally consistent by PM at Wave 0: 8 session durations sum to 64 min, span 20:38:57→21:43:09 is 64m12s, terminal-inventory timestamps match the session table, 8 sessions map onto the seed's 6 beats with sessions 4–6 forming step 4. Developer verifies + inventories; never reconstructs. -->
 <!-- Resolved 2026-07-24 — Direction reference: LANDED at `knowledge-base/design-specs/direction-reference.html`. Feel only, never ships (DEC-008). Three divergences fenced off in agent-context: `#abae90` is not a locked palette value, `https://muster.build/setup.sh` is not a real host, and the `amber` class aliases the rust accent. -->
 <!-- Resolved 2026-07-24 — Model plan: `claude-opus-5` is the default for every step (founder verified it serves; list price identical to opus-4-8 at $5/$25). Premium `claude-fable-5` approved for exactly two foundation-critical steps: UI/UX design foundation and Content §2 narration. See DEC-004. -->
+<!-- Resolved 2026-07-25 — Sessions vs steps (HO-001 F1): answered at source by corpus v1.1. Both are true and different: 8 traced sessions = 7 agent work-steps + the PM review/retro session (session 8, which wrote DEC-023 and does not count itself). Copy says "8 sessions" or "7 agent steps plus PM review", never a bare "7" against "8". Also settled there: L1's "8 roles standing by" is roster size, but seven roles ran the wave — research did not. See DEC-013. -->
 
 ## Next Step
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
@@ -62,6 +56,8 @@ timing, and narration sync. Founder runs this step personally in a warm tab; exp
 - `knowledge-base/product-spec-seed.md` §2 — the two-layer replay structure and its acceptance bar
 - `knowledge-base/design-specs/direction-reference.html` — founder-supplied direction mockup. **Reference for FEEL ONLY. It is not a build target and none of it ships.** The production version should exceed it with the team's own craft (seed → Design direction). Do not copy its markup, class names, or measurements; read it for mood, density, and rhythm
 - `knowledge-base/design-specs/web/section-02-beat-inventory.md` (HO-001) — the real beats and their measured intervals; pace the replay against these, not against invented timings. Read its Pacing hazards section before setting any timing
+- **Correction to apply while reading the inventory (PM, 2026-07-25).** The inventory predates corpus v1.1 and derived the chain end as `21:43:09` (span 3852 s) because no second-precision end time existed then. v1.1 states the **measured** end: `21:43:15`, span **64 m 18 s = 3858 s**. Exactly one beat changes — **B6: 480 s → 486 s**; B1–B5 are unaffected because they derive from session start times, which did not change. Beat shares shift by under 0.2 %, so the inventory's pacing hazards and proportions stand as written. Use 3858 s and B6 = 486 s. A Developer amendment will true up the file itself; do not edit it yourself (it is a Developer deliverable, and the corpus and inventory are both read-only to you)
+- `knowledge-base/bodh-sprint4-corpus.md` — v1.1. Read the "Measurement precision notes" block: second-precision timestamps are **pacing input only** and must never reach the page; the minute-precision forms are the ones marked safe to render
 - `knowledge-base/design-specs/README.md` — spec file conventions
 - `knowledge-base/agent-context/ui-ux.md` — your Current Tasks
 - `muster/team/ui-ux/skills/web/web-design-system.md`
@@ -138,6 +134,42 @@ is approved before dev, not after.
 
 **Resume:** write your verdict in `knowledge-base/wave-review.md`, then run
 `muster/scripts/muster-sprint-resume.sh` from inside the sprint worktree.
+```
+
+### 2026-07-25 Developer (web): True up the beat inventory to corpus v1.1
+
+```
+Role: developer
+Model: claude-opus-5
+
+**Task:** Amend `section-02-beat-inventory.md` so its derived figures match corpus v1.1's measured ones.
+Mechanical correction, not a re-derivation of the whole inventory.
+
+**Inputs:**
+- `knowledge-base/bodh-sprint4-corpus.md` — v1.1 (founder commit `025842c`). Read "Measurement precision notes"
+- `knowledge-base/design-specs/web/section-02-beat-inventory.md` — your own prior deliverable (HO-001)
+- `knowledge-base/agent-requests.md` — HO-001, including PM's review note
+
+**What changed at source.** HO-001 correctly derived the chain end as `21:43:09` (span 3852 s) and
+flagged that no second-precision end time existed. v1.1 supplies it: measured end `21:43:15`, span
+**64 m 18 s = 3858 s**. Consequences, which you should verify rather than accept:
+- **B6 only**: 480 s → 486 s. B1–B5 derive from session start times, which are unchanged
+- Chain total: 3852 s → 3858 s. Re-check that the six beats still tile the chain exactly
+- Beat shares shift by under 0.2 % — confirm the Pacing hazards section still holds as written, and say so explicitly rather than silently leaving it
+- v1.1 also adds per-session Calls and $ columns that tile 289 and $24.73 exactly. HO-001 recorded these as "not independently derivable" — that is now false. Re-derive both sums and update that line
+- v1.1 settles the two items HO-001 raised: 8 sessions = 7 agent work-steps + the PM review session; and L1's "8 roles standing by" is roster size while seven roles ran the wave
+
+**Deliverable:** amended `knowledge-base/design-specs/web/section-02-beat-inventory.md`; HO-009 in
+`agent-requests.md` (a short amendment handoff, not a restatement of HO-001).
+
+**Acceptance criteria:**
+- Every superseded derived figure replaced with the measured one; no stale 3852 s or 21:43:09 remains anywhere in the file
+- The distinction preserved: which figures are **measured at source** versus **derived here**. v1.1 moved the chain end from the second column to the first — the file should now say so
+- Build convention unchanged: reference terminal lines by handle, never reproduce their text; second-precision timestamps stay pacing input only
+- The corpus stays read-only — you are editing your own deliverable, not the source
+
+**On completion:** File HO-009 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
+(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
 
 ### 2026-07-24 Developer (web): Page shell implementation

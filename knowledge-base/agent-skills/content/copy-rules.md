@@ -14,7 +14,17 @@ Three measurement scopes exist. Mixing two in one claim is the most likely factu
 | Scope label | Span | Numbers |
 |---|---|---|
 | **BODH** | idea → live | 9.3 h active build · $147 · 4.8 h operator attention · 4 commit-days (Jul 11–18) · whole product, incl. the iOS app |
-| **BODH SPRINT-4 WEBSITE WAVE** | the §2 chain, one evening | ~64 min across 8 traced sessions · 289 API calls · $24.73 · 7 agent steps · zero revision rounds · zero bugs · 11/11 QA |
+| **BODH SPRINT-4 WEBSITE WAVE** | the §2 chain, one evening | ~64 min across 8 traced sessions · 289 API calls · $24.73 · zero revision rounds · zero bugs · 11/11 QA |
+
+**Sessions versus steps — both true, different things.** 8 traced sessions = 7 agent work-steps + the PM
+review/retro session (session 8, which wrote DEC-023 and does not count itself). Say **"8 sessions"** or
+**"7 agent steps plus PM review."** Never a bare "7" set against an "8" — that reads as one of them being
+wrong, on a page whose thesis is numeric honesty.
+
+**Roster size is not wave participation.** Terminal line L1 reads "8 roles standing by" — that is the
+roster. **Seven roles ran this wave**; research did not. Narration must not imply all eight worked it.
+"Eight agents, one operator" remains correct as a description of Muster; it is not a description of this
+chain.
 | **THIS SITE** | spec → live | — (measured at launch) |
 
 - Never mix scopes in one claim.
@@ -42,11 +52,19 @@ Three measurement scopes exist. Mixing two in one claim is the most likely factu
 
 **The one resolved tension.** The corpus labels the wave's ~64 minutes "wall-clock," which reads as a
 collision with this rule. It isn't, and here is the reasoning to reuse rather than re-derive: the eight
-session durations sum to 64 min, and the span from 20:38:57 to 21:43:09 is 64 m 12 s. They agree
-because an autonomous chain runs back-to-back with no idle gaps — so for this chain, active build and
-elapsed are the same measurement. The corpus itself sanctions the phrasing "64 minutes of agent work."
+stated session durations sum to 64 min (3840 s), and the measured span 20:38:57 → 21:43:15 is 64 m 18 s
+(3858 s). They agree because an autonomous chain runs back-to-back with no idle gaps — so for this chain,
+active build and elapsed are the same measurement. The 18 s between the two routes is the accumulated
+nearest-minute rounding in the per-session durations, not idle time. The corpus itself sanctions the
+phrasing "64 minutes of agent work."
 
-Permitted: *"64 minutes of agent work across 8 sessions"* · *"one evening"* · *"~64 minutes"*.
+**Never publish a second-precision figure.** `21:43:15`, `64 m 18 s`, and `3858 s` are pacing input for
+the build, not copy. The corpus is explicit: publish "~64 minutes" only. The minute-precision timestamps
+in the terminal-line inventory are the ones marked safe to render.
+
+Permitted: *"64 minutes of agent work across 8 sessions"* · *"one evening"* · *"~64 minutes"* ·
+*"$24.73 across 289 API calls"* (per-session Calls and $ columns tile both totals exactly in corpus
+v1.1, so these are corroborated, not merely asserted).
 Banned: *"built in 64 minutes"* · *"64 minutes from start to live"* · any phrasing attaching 64 min to
 the deploy.
 
