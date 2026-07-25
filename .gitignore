@@ -5,5 +5,5 @@
 .muster-setup-state.json
 .claude/.muster-bound-role.*
 .claude/.muster-last-role
-.muster-sprint-logs/
+.muster-sprint-logs/*.jsonl
 knowledge-base/.muster-bind-log
