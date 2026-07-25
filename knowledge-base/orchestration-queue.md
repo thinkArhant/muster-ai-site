@@ -26,7 +26,14 @@ all page copy until measured at launch (seed rule 4).
 <!-- Format: - [DATE] [Agent]: [Question] -->
 <!-- Autonomous runs: this section is non-halting on its own — observation and scope escalations park here while the loop keeps running. PM is the sole party that summons the founder: only PM (after assessing a block per the Decision Autonomy Matrix) writes the question here AND sets the Next Step block's `Role:` to `halt` (see below). A specialist that hits a block routes it to a `Role: pm` assessment step instead of halting. There is no checkbox convention. -->
 
-*None open.*
+- [2026-07-25] Developer: The Bodh corpus states two counts that a reader could take as inconsistent —
+  the session table carries **8 sessions**, while DEC-023 (the retro) reports **"7 agent steps."** The
+  most defensible reconciliation is that DEC-023 was written inside session 8 and does not count itself
+  (7 executing steps + 1 closeout), but that is inference, not something the corpus states. Which is
+  right? **Non-blocking**: nothing in §2 requires publishing a step count, and both `copy-rules.md` → R2
+  and A-005 already settle on "8 sessions" as the chain's framing, so the safe path is available without
+  an answer. Asking because the page's thesis is numeric honesty and this is the one number in the corpus
+  that two artifacts state differently. See HO-001 → F1.
 
 <!-- Resolved 2026-07-24 — Domain: UNDECIDED. `muster.build` is fictional until the founder says otherwise. §6 ships the GitHub raw URL and it is swapped at launch. R12's ban on `muster.build` stands unconditionally for now. See DEC-010; `pre-launch-checklist.md` carries the curl-verification blocker. -->
 <!-- Resolved 2026-07-24 — Measurement posture: partially overruled. Cloudflare Pages server-side request analytics measure visits and VERIFY.md fetches with zero client instrumentation, so the zero-external-requests claim is untouched. Scroll depth and curl-copy remain unmeasured by design. See DEC-011 and `product-spec.md` §7. -->
@@ -41,58 +48,6 @@ all page copy until measured at launch (seed rule 4).
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 Developer (web): Bodh corpus verification + beat inventory
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Verify the founder-supplied Bodh Sprint-4 corpus and derive the beat inventory that UI/UX and
-Content build their specs against. Verify and inventory only — the corpus is authored material, never
-regenerated.
-
-**Inputs:**
-- `knowledge-base/bodh-sprint4-corpus.md` — founder-authored curated excerpt: real queue, handoff, and decision lines with timestamps, condensed from the real build log. Authoritative source material, on the same footing as `product-spec-seed.md`. **Read-only (DEC-006)**
-- `knowledge-base/product-spec-seed.md` §2 — the six-beat sequence the corpus must cover (queue advance → UI/UX HO-027 → Developer HO-028 → PM independent re-verification → Content/Legal/Marketing HO-029/030/031 → QA HO-032 11/11 → human gate → live)
-- `knowledge-base/agent-context/developer.md` — your Current Tasks and the read-only rules
-- `knowledge-base/decision-log.md` — DEC-006 (read-only source material), DEC-007 (three measurement scopes)
-- `muster/team/developer/skills/generic/plan-first-discipline.md`
-
-**Deliverable:** `knowledge-base/design-specs/web/section-02-beat-inventory.md` — the corpus mapped to
-the seed's six beats: which corpus lines belong to which beat, in order, with timestamps verbatim and
-derived inter-beat intervals. Plus HO-001 in `agent-requests.md`.
-
-**Scope note:** the corpus already ships a "Terminal-line inventory" section. Do NOT duplicate it. Your
-value-add is the beat mapping, the interval arithmetic, and an independent consistency re-verify.
-
-**Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
-- **Read-only on the corpus.** Do not edit, reformat, rewrite, extend, or "clean up" it. Quote; never alter
-- Every corpus terminal line accounted for — assigned to a beat or explicitly listed as unused, so nothing is silently dropped
-- Timestamps preserved verbatim as they appear; derived intervals shown as derived, with the arithmetic visible
-- Coverage report: for each of the seed's six beats, state whether the corpus supports it and with which lines. Gaps are reported, never filled
-- Zero conversation content surfaced — queue lines, handoffs, decisions, timestamps only (seed → Verification)
-
-**Independent re-verify (do not skip because PM already checked).** PM ran a consistency pass at Wave 0
-and found the corpus internally consistent: the 8 session durations sum to 64 min, the span 20:38:57 →
-21:43:09 is 64 m 12 s, the terminal-inventory timestamps match the session table, and the 8 sessions map
-onto the seed's 6 beats with sessions 4–6 (content, legal, marketing) forming the seed's step 4. Re-derive
-all of that yourself and report agreement or disagreement. This mirrors DEC-022 in the corpus itself —
-independent re-verification, never trusting the upstream party's check — which is the behaviour §2 is
-about to advertise. Confirming someone else's arithmetic by restating it would be the wrong deliverable.
-
-**HALT CONDITION (inline, mandatory):** if the coverage report finds a beat the corpus does not support,
-do NOT invent, infer, reconstruct, or approximate any line or timestamp to close the gap. File the
-coverage report as-is, re-point `## Next Step` to a `Role: pm` assessment step naming the unsupported
-beats, and stop. Fabricated lines would refute the page's central claim — a correctness failure, not a
-scheduling one.
-
-**On completion:** File HO-001 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-24 UI/UX (web): Design foundation + §2 replay spec
 
 ```
@@ -106,7 +61,7 @@ timing, and narration sync. Founder runs this step personally in a warm tab; exp
 - `knowledge-base/product-spec-seed.md` → "Design direction (locked — execute with craft, don't re-derive)" — palettes at exact hex, type pairing, texture, the three motion elements, motifs, surface rules, layout
 - `knowledge-base/product-spec-seed.md` §2 — the two-layer replay structure and its acceptance bar
 - `knowledge-base/design-specs/direction-reference.html` — founder-supplied direction mockup. **Reference for FEEL ONLY. It is not a build target and none of it ships.** The production version should exceed it with the team's own craft (seed → Design direction). Do not copy its markup, class names, or measurements; read it for mood, density, and rhythm
-- `knowledge-base/design-specs/web/section-02-beat-inventory.md` (HO-001) — the real beats and their measured intervals; pace the replay against these, not against invented timings
+- `knowledge-base/design-specs/web/section-02-beat-inventory.md` (HO-001) — the real beats and their measured intervals; pace the replay against these, not against invented timings. Read its Pacing hazards section before setting any timing
 - `knowledge-base/design-specs/README.md` — spec file conventions
 - `knowledge-base/agent-context/ui-ux.md` — your Current Tasks
 - `muster/team/ui-ux/skills/web/web-design-system.md`
@@ -127,6 +82,10 @@ timing, and narration sync. Founder runs this step personally in a warm tab; exp
 **On completion:** File HO-002 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
 (`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
 
 ### 2026-07-24 PM: Wave 1 design review
 
@@ -390,6 +349,11 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
+
+- 2026-07-25 — Wave 1: Developer — Bodh corpus verification + beat inventory (HO-001). All six §2 beats
+  supported, all twelve terminal lines assigned, corpus unmodified; arithmetic re-derived independently
+  with two precision caveats and four pacing hazards recorded. One non-blocking founder question parked
+  above (8 sessions vs DEC-023's "7 agent steps"). Awaiting review — UI/UX, PM.
 
 - 2026-07-24 — Wave 0: PM Stage 4 drafts + Sprint 1 context cascade. Product spec, brand guidelines, and
   9 foundational assumptions written from the founder's seed; `copy-rules.md` project skill created;
