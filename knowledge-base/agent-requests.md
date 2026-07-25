@@ -8,6 +8,75 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-25 HO-009 — Beat inventory trued up to corpus v1.1
+**Type:** handoff
+**Producer:** Developer
+**Deliverable:** `knowledge-base/design-specs/web/section-02-beat-inventory.md`
+**Status:** open
+**Reviewers:**
+- [ ] PM — pending
+
+**Outcome:** The inventory's derived figures are now the measured ones, and two things it could
+previously only flag as limits are closed: the chain end is measured at source, and the calls and cost
+totals are corroborated by arithmetic rather than quoted on trust. Every figure in the file was
+re-derived from the corpus, not adjusted from the earlier results.
+
+**What changed, and what did not.** One measurement moved — the chain end, `21:43:15`, span 3858 s.
+Exactly one beat duration follows it: **B6, 480 s → 486 s**. B1–B5 derive from session start times,
+which v1.1 leaves untouched, so their seconds are unchanged. Their *shares* all moved anyway, because
+the denominator moved: B6 by +0.14 points, the other five by 0.02–0.04 points each. Every share is
+under the 0.2-point threshold the amendment step predicted, no beat changes rank, and the six shares
+still sum to 100.00%.
+
+**Verified rather than accepted.** Confirmed independently rather than taking the amendment brief's
+figures: the span is 3858 s from the corpus's own endpoints; the six beats tile it exactly
+(`454 + 786 + 441 + 824 + 867 + 486`); and both totals tile to the unit —
+`37+50+40+21+26+27+45+43 = 289` calls, and the $ column sums to `$24.73` to the cent, no rounding slack.
+
+**Two derivations got stronger, not just corrected.**
+- **D2/D3.** The chain end was previously reconstructed from session 8's stated `~8 m`, which made the
+  span partly a product of a rounded duration. Both endpoints are now measured, so the span contains no
+  rounding at all. The reconstruction was 6 s short — exactly the error a `~N m` figure carries.
+- **D4/D5.** Session 8's duration was the *input* that produced the old end timestamp, so it could not
+  be checked against anything. It now can: D4 gains an eighth row (8m06s measured against a stated
+  ~8 m, agreeing). That also resolves the old D5's circularity — the two routes to "64 minutes" now
+  diverge by 18 s, and every second of it is accounted for by a measured interval (12 s across sessions
+  1–7, 6 s at session 8) rather than partly by construction.
+
+**Pacing hazards hold, stated explicitly rather than left silent.** All four survive the true-up with
+their conclusions intact. Two numbers inside them moved: B5+B2 is 42.85% of the chain (was 42.9%), and
+B3 remains the shortest beat. No hazard was created, retired, or reordered.
+
+**Self-review caught one error, and it was mine, not the corpus's.** Adding a margin to hazard 3, I
+wrote that B3 is 45 s clear of "B6, the next-shortest." B6 is not the next-shortest — **B1 is, at
+454 s**, so the real margin is 13 s. The mechanical check failed on it before filing; the hazard now
+reads that B3's lead over the field is 13 s, which makes the hazard *sharper* than the original
+unquantified claim, not weaker. Worth flagging to whoever paces §2: B3's shortness is a near-tie with
+B1, not a wide gap.
+
+**F1 and F2 are no longer open.** F1 was raised for founder confirmation and is answered at source: 8
+traced sessions = 7 agent work-steps + the PM review/retro session. F2's roster-versus-wave reading is
+confirmed. Both are now stated as settled rules for downstream copy — "8 sessions" or "7 agent steps
+plus PM review," never a bare "7" against an "8."
+
+**No downstream drift.** `section-02-replay.md` already carries 3858 s and B6 at 486 s, and its
+one-decimal shares (11.8 / 20.4 / 11.4 / 21.4 / 22.5 / 12.6) all round correctly from the amended
+figures. The two files agree; nothing in the replay spec needs a follow-up edit from this amendment.
+
+**Scope discipline.** A mechanical correction, not a re-derivation of the whole inventory: the beat
+map, line-to-beat assignment, coverage report, D1/D6/D7/D9 and F3–F5 are untouched. The corpus is
+unmodified (verified via `git status`, and it remains at the founder's commit `025842c`).
+
+**No new decision.** DEC-013 already records this true-up and names HO-009 as its mechanism; this step
+executes that decision rather than adding one.
+
+**Revision log:**
+- 2026-07-25: Filed. Self-review caught (a) the hazard-3 margin error above; (b) three Rule 15
+  violations I had introduced while making the file explain itself — before/after framings ("under
+  v1.0", "42.9% →", a paragraph of superseded arithmetic in D2). The amendment brief asked for the
+  shares shift and the hazards confirmation to be stated explicitly; that belongs in this handoff, not
+  in a durable design spec. The file states current truth; the archaeology is here.
+
 ### 2026-07-25 HO-002 — Design foundation + §2 replay spec
 **Type:** handoff
 **Producer:** UI/UX

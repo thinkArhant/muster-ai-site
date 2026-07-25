@@ -47,48 +47,6 @@ all page copy until measured at launch (seed rule 4).
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-25 Developer (web): True up the beat inventory to corpus v1.1
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Amend `section-02-beat-inventory.md` so its derived figures match corpus v1.1's measured ones.
-Mechanical correction, not a re-derivation of the whole inventory.
-
-**Inputs:**
-- `knowledge-base/bodh-sprint4-corpus.md` — v1.1 (founder commit `025842c`). Read "Measurement precision notes"
-- `knowledge-base/design-specs/web/section-02-beat-inventory.md` — your own prior deliverable (HO-001)
-- `knowledge-base/agent-requests.md` — HO-001, including PM's review note
-
-**What changed at source.** HO-001 correctly derived the chain end as `21:43:09` (span 3852 s) and
-flagged that no second-precision end time existed. v1.1 supplies it: measured end `21:43:15`, span
-**64 m 18 s = 3858 s**. Consequences, which you should verify rather than accept:
-- **B6 only**: 480 s → 486 s. B1–B5 derive from session start times, which are unchanged
-- Chain total: 3852 s → 3858 s. Re-check that the six beats still tile the chain exactly
-- Beat shares shift by under 0.2 % — confirm the Pacing hazards section still holds as written, and say so explicitly rather than silently leaving it
-- v1.1 also adds per-session Calls and $ columns that tile 289 and $24.73 exactly. HO-001 recorded these as "not independently derivable" — that is now false. Re-derive both sums and update that line
-- v1.1 settles the two items HO-001 raised: 8 sessions = 7 agent work-steps + the PM review session; and L1's "8 roles standing by" is roster size while seven roles ran the wave
-
-**Deliverable:** amended `knowledge-base/design-specs/web/section-02-beat-inventory.md`; HO-009 in
-`agent-requests.md` (a short amendment handoff, not a restatement of HO-001).
-
-**Acceptance criteria:**
-- Every superseded derived figure replaced with the measured one; no stale 3852 s or 21:43:09 remains anywhere in the file
-- The distinction preserved: which figures are **measured at source** versus **derived here**. v1.1 moved the chain end from the second column to the first — the file should now say so
-- Build convention unchanged: reference terminal lines by handle, never reproduce their text; second-precision timestamps stay pacing input only
-- The corpus stays read-only — you are editing your own deliverable, not the source
-
-**On completion:** File HO-009 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
-
-
 ### 2026-07-25 UI/UX (web): Gate amendments — narration-first mobile, 48 s chain, B5 rebalance
 
 ```
@@ -147,6 +105,9 @@ result to copy, and make your dwells tile to exactly 48.00 s.
 **On completion:** File HO-010 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
 (`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-25 PM: Review HO-010 and clear HO-002
 
@@ -389,6 +350,12 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
+
+- 2026-07-25 — Wave 2: Developer — Beat inventory trued up to corpus v1.1 (HO-009). Chain end and B6
+  now measured (3858 s / 486 s), calls and cost corroborated by arithmetic, F1/F2 closed. Self-review
+  caught a margin error of mine: B1, not B6, is the second-shortest beat — B3 leads by 13 s, so its
+  "shortest beat" hazard is a near-tie. Downstream replay spec already matched; no drift. Awaiting PM
+  review.
 
 - 2026-07-25 — Wave 1: UI/UX — Design foundation + §2 replay spec (HO-002). Both themes tokenized from
   the seed with contrast measured per pair; §2 paced as a 60 s comprehension-weighted chain against the

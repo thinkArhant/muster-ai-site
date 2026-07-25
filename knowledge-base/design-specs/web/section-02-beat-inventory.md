@@ -17,10 +17,14 @@ would create a drift path between what is verified and what ships.
 **Line handles (`L1`–`L12`) are a derived index, not corpus notation.** The corpus does not number
 its terminal lines. `L1`–`L12` number them top to bottom for reference only.
 
-**Two timestamp precisions exist and are not interchangeable.** The session table carries seconds
-(`20:38:57`); the terminal inventory carries minutes (`20:38`). The minute-precision forms are the
-ones the corpus marks safe to render. Second-precision timestamps are analysis input for pacing —
-they are not display strings and must not appear on the page.
+**Two timestamp precisions exist and are not interchangeable.** The session table and the measured
+chain end carry seconds (`20:38:57`, `21:43:15`); the terminal inventory carries minutes (`20:38`).
+The minute-precision forms are the ones the corpus marks safe to render. Second-precision timestamps
+are analysis input for pacing — they are not display strings and must not appear on the page.
+
+**The same rule applies to the span.** The chain is now measured to the second (3858 s), but the
+per-session durations it is checked against are rounded to the minute. Published copy says
+"~64 minutes" and never a second-precision span. The precise figure is pacing input only.
 
 ## Beat map
 
@@ -33,10 +37,11 @@ Beat numbers are the seed's §2 sequence. Roles named below are Bodh's agents in
 | B3 | PM independently re-verifies with its own screenshots | L4 | 3 | 20:59:37 → 21:06:58 | 7m21s |
 | B4 | Content → Legal → Marketing each validate and hand off | L5, L6, L7 | 4, 5, 6 | 21:06:58 → 21:20:42 | 13m44s |
 | B5 | QA full validation — PASS, zero bugs, 11/11 | L8, L9 | 7 | 21:20:42 → 21:35:09 | 14m27s |
-| B6 | Single human gate → deploy → `bodh.day` live | L10, L11, L12 | 8 | 21:35:09 → 21:43:09 | 8m00s |
+| B6 | Single human gate → deploy → `bodh.day` live | L10, L11, L12 | 8 | 21:35:09 → 21:43:15 | 8m06s |
 
 Beat windows run start-of-first-session to start-of-next-beat, so they tile the chain without gaps or
-overlap. B6 closes at the derived chain end (see Derivations, D2).
+overlap. B6 closes at the measured chain end (see Derivations, D2). Every window in this table is
+derived from timestamps the corpus measures; no window is estimated.
 
 ### Line-to-beat assignment
 
@@ -98,20 +103,28 @@ that order, which is the mapping the seed's structure implies and the timestamps
 
 ## Derivations — the arithmetic, shown
 
-Every figure below is computed from the corpus's own timestamps. Verbatim corpus values are marked
-**stated**; anything computed is marked **derived**.
+Every figure below is computed from the corpus's own timestamps. Values the corpus measures and
+prints are marked **stated**; anything computed here is marked **derived**. The line between the two
+columns is not fixed: the corpus's "Measurement precision notes" moved the chain end from derived to
+stated, and D2, D3, D5 and D10 below record where that boundary now sits.
 
 **D1 — stated durations sum.** `8 + 13 + 7 + 5 + 4 + 5 + 14 + 8 = 64` min. Matches the corpus's stated
 ~64 minutes.
 
-**D2 — the chain end is derived, not printed.** No second-precision end timestamp exists in the corpus.
-Session 8 starts 21:35:09 (stated) and runs ~8 m (stated) → **21:43:09 (derived)**. The corpus
-independently corroborates it to the minute: L11 carries `21:43`. Every span figure below therefore
-inherits the rounding of one stated `~8 m` duration.
+**D2 — the chain end is measured at source, not derived here.** The corpus states it to the second:
+**21:43:15**, session 8's last trace event. It is a **stated** figure, and the corpus corroborates it
+to the minute independently — L11 carries `21:43`.
 
-**D3 — chain span.** `21:43:09 − 20:38:57 = 64m12s` (3852 s), **derived**.
+This matters beyond one timestamp. Because the end is measured rather than reconstructed from session
+8's `~8 m`, that duration is checkable against a measurement instead of being the input that produced
+one (D4, row 8), and the chain span rests on two measurements with no rounded duration inside it (D3).
+
+**D3 — chain span.** `21:43:15 − 20:38:57 = 64m18s` (3858 s). Both endpoints are **stated**, so the
+span is derived from measurements only — no rounded duration enters it. Publish it as "~64 minutes"
+(see "How to use this file").
 
 **D4 — start-to-start gaps versus stated durations.** Each gap is derived; each duration is stated.
+Row 8 has no following session, so it measures session 8 against the chain end instead.
 
 | Sessions | Gap (derived) | Nearest minute | Stated | Agree |
 |---|---|---|---|---|
@@ -122,14 +135,16 @@ inherits the rounding of one stated `~8 m` duration.
 | 5 → 6 | 4m21s | 4 | ~4 m | yes |
 | 6 → 7 | 4m31s | 5 | ~5 m | yes |
 | 7 → 8 | 14m27s | 14 | ~14 m | yes |
+| 8 → end | 8m06s | 8 | ~8 m | yes |
 
-All seven stated durations are the correct nearest-minute rounding of the measured gap. No divergence
-exceeds 29 s, which is inside the ±30 s tolerance a `~N m` figure carries.
+All eight stated durations are the correct nearest-minute rounding of the measured interval. No
+divergence exceeds 29 s, which is inside the ±30 s tolerance a `~N m` figure carries.
 
-**D5 — the two independent routes to 64 minutes agree to 12 seconds.** Summing stated durations gives
-3840 s; measuring the span gives 3852 s. The 12 s divergence is exactly the accumulated rounding from
-D4 (`3372 s` of measured gaps against `3360 s` of stated durations for sessions 1–7). Both routes
-support "~64 minutes"; neither contradicts the other.
+**D5 — the two independent routes to 64 minutes agree to 18 seconds.** Summing stated durations gives
+3840 s; measuring the span gives 3858 s. The 18 s divergence is exactly the accumulated rounding from
+D4: `3372 s` of measured intervals against `3360 s` of stated durations for sessions 1–7, plus 6 s for
+session 8. Every second of the divergence is accounted for by a measured interval; none of it is
+unexplained. Both routes support "~64 minutes"; neither contradicts the other.
 
 **D6 — back-to-back execution.** Each session's stated duration accounts for the entire gap to the next
 session's start, within the rounding tolerance in D4. No gap is large enough to read as idle time. This
@@ -139,17 +154,17 @@ rather than proving it zero, because the durations are stated as approximate.
 **D7 — L9 and L10 are simultaneous.** Session 7 start + its measured 867 s = 21:35:09 = session 8 start.
 QA's PASS line and the PM's acceptance line are the same instant, not a sequence with a gap.
 
-**D8 — beat proportions.** Beat durations tile the chain exactly: `454 + 786 + 441 + 824 + 867 + 480 =
-3852 s`, equal to D3. As shares of the chain:
+**D8 — beat proportions.** Beat durations tile the chain exactly: `454 + 786 + 441 + 824 + 867 + 486 =
+3858 s`, equal to D3. As shares of the chain:
 
 | Beat | Seconds | Share |
 |---|---|---|
-| B1 | 454 | 11.79% |
-| B2 | 786 | 20.40% |
-| B3 | 441 | 11.45% |
-| B4 | 824 | 21.39% |
-| B5 | 867 | 22.51% |
-| B6 | 480 | 12.46% |
+| B1 | 454 | 11.77% |
+| B2 | 786 | 20.37% |
+| B3 | 441 | 11.43% |
+| B4 | 824 | 21.36% |
+| B5 | 867 | 22.47% |
+| B6 | 486 | 12.60% |
 
 Shares sum to 100.00%. These are offered as pacing input, not as a mandate — a replay that preserves
 real proportion under compression stays honest to the run without being bound to it. Beat timing is a
@@ -159,23 +174,30 @@ design decision.
 matching the corpus header's `HO-027→032`. Sessions 3 and 8, both PM, carry no handoff artifact — also
 consistent.
 
-**Not independently derivable:** 289 API calls and $24.73 are stated chain totals with no per-session
-breakdown in the corpus. They are quotable as supplied; this file cannot corroborate them by
-arithmetic, and no downstream step should claim it did.
+**D10 — calls and cost are corroborated, not merely quoted.** The corpus carries per-session Calls and
+$ columns, and both tile their stated totals exactly:
+
+- `37 + 50 + 40 + 21 + 26 + 27 + 45 + 43 = 289` API calls, **derived**, matching the stated 289.
+- `2.99 + 5.16 + 2.61 + 2.10 + 2.02 + 2.02 + 4.04 + 3.79 = 24.73`, **derived**, matching the stated
+  $24.73 at API list price. No rounding slack: the eight values sum to the cent.
+
+Downstream copy may say these totals are checked, not just supplied. Attribution to
+beats follows the beat map without further arithmetic — B4 aggregates sessions 4–6 at 74 calls and
+$6.14; every other beat is a single session. Scope is unchanged: these are the website wave's numbers
+only, never the whole product's.
 
 ## Findings
 
-**F1 — session count and the retro's step count differ, and both are quotable.** The session table
-carries eight sessions; DEC-023 reports "7 agent steps." The most defensible reconciliation is that
-DEC-023 is the retrospective written *inside* session 8 and does not count itself — seven executing
-steps plus one closeout. That reading is consistent but unconfirmed, so it is not asserted here.
-**Safe rule for downstream copy:** neither count is required by the narration. If one is published, use
-the corpus's own framing ("8 sessions" for the chain) and never place it next to DEC-023's "7 agent
-steps" without the founder's reconciliation. Raised for founder confirmation.
+**F1 — session count and step count are both true and different.** The session table carries eight
+sessions; DEC-023 reports "7 agent steps." The corpus states the reconciliation: 8 traced sessions =
+7 agent work-steps + the PM review/retro session, which is session 8 and does not count itself.
+**Rule for downstream copy:** write "8 sessions" or "7 agent steps plus PM review," never a bare "7"
+set against an "8."
 
-**F2 — eight roles stood by; seven ran.** L1's "8 roles standing by" is the roster size. Seven distinct
-roles actually executed: ui-ux, developer, pm (twice), content, legal, marketing, qa. Research did not
-run in this chain. Copy must not imply that all eight roles worked on this wave.
+**F2 — eight roles stood by; seven ran.** L1's "8 roles standing by" is roster size; seven roles
+actually executed this wave — ui-ux, developer, pm (twice), content, legal, marketing, qa. Research did
+not run. Stated at source, and confirmed here against the session table. Copy must not imply that all
+eight roles worked on this wave.
 
 **F3 — "max two rounds" is a bound that was never spent.** DEC-022 specifies a bounded revision loop of
 at most two rounds; the chain totals and DEC-023 report zero revision rounds. The mechanism existed and
@@ -195,11 +217,11 @@ For whoever specs the replay's timing:
 
 1. **L9 and L10 are zero seconds apart** (D7). They must not render with a visible gap, and must not be
    merged — different roles, different facts. Same hazard, lower stakes, for L1 and L2 at `20:38`.
-2. **Two beats carry most of the clock.** B5 (14m27s) and B2 (13m06s) are 42.9% of the chain between
+2. **Two beats carry most of the clock.** B5 (14m27s) and B2 (13m06s) are 42.85% of the chain between
    them. Linear real-time playback stalls there; proportional compression does not.
 3. **B3 is the "wow" beat and the shortest beat in the chain.** At 7m21s (441 s) it is shorter than
-   every other beat. A replay paced purely on real duration gives the most important beat the least
-   screen time.
+   every other beat, though only by 13 s against B1 (454 s), the next-shortest. A replay paced purely
+   on real duration gives the most important beat the least screen time.
 4. **L12 sits outside the timeline** (F4). It is a terminal state, not a timed beat.
 
 ## Verification statement
@@ -207,9 +229,11 @@ For whoever specs the replay's timing:
 The corpus was read only. No part of it was edited, reformatted, extended, or regenerated. Every
 timestamp above is either quoted as it appears or computed from quoted values with the computation
 shown. No line, timestamp, or number was invented, and no gap was closed by inference. All arithmetic
-was re-derived independently rather than confirmed by restatement; the derivations agree with the
-corpus throughout, subject to the two precision caveats in D2 and D5 and the one verification limit
-noted after D9.
+was re-derived independently from the corpus rather than confirmed by restatement.
+
+**One precision caveat applies, and it is the corpus's own:** per-session durations are rounded to the
+minute (D4, D5), so any span reassembled from them inherits that rounding. The chain's own span does
+not — both of its endpoints are measured at source.
 
 Content surfaced here is limited to queue lines, handoff artifacts, decision-log entries and
 timestamps. No conversation content appears.
