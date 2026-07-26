@@ -88,37 +88,172 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Wave 3 Re-gate — founder review
+### 2026-07-26 UI/UX (web): The phone log reads as entries, and the accent sits one way
 
 ```
-Role: halt
+Role: ui-ux
+Model: claude-opus-5
 
-**Gate:** The §2 replay re-judged after the fix wave — SP7's new framing, and the phone without
-horizontal scroll.
+**Task:** Resolve re-gate findings F-R1 and F-R2. Both are mobile-only and both were confirmed in the
+built CSS, not by eye. Requirements are stated as outcomes — you pick the mechanism.
 
-The first gate approved the replay on pacing and narration (passes 1–3) and returned two changes. This
-gate is narrow: does the new thesis line land the operator's arc without reaching, and does the phone
-now read without sideways scrolling.
+**Inputs:**
+- `knowledge-base/wave-review.md` — the founder's re-gate verdict, F-R1 and F-R2 with their measurements
+- `knowledge-base/decision-log.md` — DEC-028, and DEC-025/DEC-026 for what the wrap fix already spent
+- `knowledge-base/design-specs/web/section-02-replay.md` — your own deliverable, §7, §7.1, §9
+- `styles/replay.css` — the built CSS; `.log` (line ~112), `.log__line` (~146), `.narration__entry` (~206)
 
-**Carried from the first gate and still open:** `100dvh` in mobile Safari is unverified on real WebKit.
-The earlier screenshot showed the complete-transcript end state, not live playback. Reload the page,
-let §2 scroll into view fresh, and watch *during* the chain — the terminal should show a short window of
-lines that advances, with the narration card in view the whole time.
+**F-R1 — wrapped lines must group into entries.** At 375px four entries occupy eight rows and nothing
+separates them: `.log__line` has no `margin-block-start`, so an entry's continuation row and the next
+entry's first row are equally spaced. The hanging indent and the absent timestamp are the only cues and
+they need deliberate parsing.
+**Requirement**: entry boundaries visible at a glance at 375 × 553. Vertical separation is the obvious
+lever; a per-entry gap costs ~6px against ~25.4px of slack, so it will likely need funding from
+`--lead-terminal` rather than being added on top. Banding or a continuation glyph are alternatives.
+State the measured budget for whatever you choose.
 
-**Read:** `knowledge-base/wave-review.md` and write your verdict in its `## Verdict` section.
-**Under review:** the live §2 section, `section-02-narration.md`, HO-011 through HO-014.
+**F-R2 — one accent inset, or a stated reason for two.** `.narration__entry` sits in a card with
+`padding: var(--gap-hairline)` = 12px, so its bar is inset and reads as a mark inside the card. `.log`
+is `padding-inline: 0`, so the key-beat tick is flush against the card border and reads as part of the
+frame. The wide-viewport rule restores a gutter and its comment says the phone "cannot afford" it —
+that horizontal room went to the wrap fix.
+**Requirement**: one consistent relationship for the same semantic mark across both cards, or an
+explicit reasoned difference. If the room is genuinely not there, say so and propose the alternative
+rather than shipping the collision.
 
-**Resume:** write your verdict, then run `muster/scripts/muster-sprint-resume.sh` from inside the
-sprint worktree.
+**What you may not spend.** Fidelity (no truncation, no ellipsis, byte-clean) and the
+no-horizontal-scroll guarantee are both closed. The payer is `--lead-terminal`, visible line count, or
+a new budget you state and defend.
+
+**Push back if warranted.** If either requirement cannot be met inside the budget, a reasoned refusal
+with a costed alternative is an acceptable deliverable. Do not ship a compromise silently.
+
+**Deliverable:** revised `section-02-replay.md` (§7, §7.1, §9 as needed); HO-015.
+
+**Acceptance criteria:**
+- Entry boundaries visible at a glance at 375 × 553, with the mechanism and its measured cost stated
+- One accent relationship across both cards, or the difference stated and justified
+- Restated mobile height budget with its numbers and assumed viewport; the core still fits
+- Desktop explicitly addressed — say whether it changed, and if not, say that too
+- Fidelity and no-horizontal-scroll intact; reduced-motion and no-JS still render the complete transcript
+
+**On completion:** File HO-015 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
+(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-<!-- Empty — the re-gate is the sprint's last step. PM plans what follows from the founder's verdict. -->
+### 2026-07-26 PM: Review HO-015 before it builds
+
+```
+Role: pm
+Model: claude-opus-5
+
+**Task:** Review the mobile log-legibility amendment before any of it is built.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-015
+- `knowledge-base/design-specs/web/section-02-replay.md`
+- `knowledge-base/decision-log.md` — DEC-028
+- `muster/team/pm/skills/generic/deliverable-review.md`
+
+**Acceptance criteria:**
+- **Re-derive the budget.** Recompute the mobile core against the stated viewport yourself; a height
+  budget verified before the wrap fix is not verified after it
+- Confirm the entry-separation mechanism is specified precisely enough that the Developer is not
+  guessing, and that its cost is named rather than assumed free
+- Confirm nothing was paid for out of fidelity or the no-horizontal-scroll guarantee — both are closed
+- **Check the same class of miss that produced this round**: the fix satisfied its criterion and broke
+  something the criterion did not name. Ask explicitly what this change could break that F-R1 and F-R2
+  do not mention, and say so
+- If UI/UX refused either requirement, evaluate the reasoning on its merits and route to Founder
+  Decisions rather than overruling a design objection silently
+
+**On completion:** Run the Pre-Handoff Self-Review Checklist. Promote the build step.
+```
+
+### 2026-07-26 Developer (web): Build the phone log legibility fix
+
+```
+Role: developer
+Model: claude-opus-5
+
+**Task:** Implement the approved F-R1 and F-R2 resolutions.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-015 with its PM review
+- `knowledge-base/design-specs/web/section-02-replay.md` — authoritative
+- `styles/replay.css` — `.log`, `.log__line`, `.narration__entry`
+
+**Acceptance criteria:**
+- Entry boundaries visible at a glance at 375 × 553, per the amended spec
+- One accent relationship across both cards, per the amended spec
+- Fidelity unchanged: all twelve lines still diff byte-clean; no line needs horizontal scroll at 375px
+- Reduced-motion and no-JS paths still render the complete transcript
+- Timing, SP7 and every narration string are untouched — not in scope
+- `bash scripts/test.sh` green on both engines; extend the harness rather than adding a second runner
+- **Add a check that would have caught F-R1.** A harness that passes a log nobody can parse is the gap
+  this round exposed; assert the entry-separation property directly
+
+**On completion:** File HO-016 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+```
+
+### 2026-07-26 QA (web): Re-validate the phone log
+
+```
+Role: qa
+Model: claude-opus-5
+
+**Task:** Validate the rebuilt mobile log against the amended spec.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-016
+- `knowledge-base/decision-log.md` — DEC-028
+- `knowledge-base/design-specs/web/section-02-replay.md`
+
+**Acceptance criteria:**
+- Entry separation measured against the spec's stated budget, not eyeballed; report the number
+- Accent inset measured on both cards and reported as a pair
+- Fidelity: twelve lines byte-clean; no horizontal scroll at 375 / 320; body never scrolls horizontally
+- Reduced-motion and no-JS complete; zero runtime network requests; audit still exits zero
+- Cross-engine on WebKit and Blink; state plainly what remains Blink-only
+- Red build: do NOT advance — re-point Next Step to a `Role: pm` assessment step
+
+**On completion:** File HO-017 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+```
+
+### 2026-07-26 Wave 3 Gate 3 — founder review
+
+```
+Role: halt
+
+**Gate:** The phone, third look. Narrow: can you tell at a glance where one log entry ends and the
+next begins, and does the rust mark sit consistently across the two cards.
+
+**Settled and not reopened**: passes 1–3, SP7 (final), the 48.00 s schedule, fidelity, and the
+no-horizontal-scroll guarantee. Do not re-judge them.
+
+**Still carried:** `100dvh` under mobile Safari's dynamic toolbars is the one behaviour no harness here
+can prove. Your last screenshot was live playback at BEAT 03/06, which confirmed the visibility gate
+fires and both layers hold — this gate just needs the same look once more on the rebuilt log.
+
+**Read:** `knowledge-base/wave-review.md` and write your verdict in its `## Verdict` section.
+**Under review:** the live §2 section on a phone, HO-015 through HO-017.
+
+**Resume:** write your verdict, then run `muster/scripts/muster-sprint-resume.sh` from inside the
+sprint worktree.
+```
+
 
 ## Done (Last 10)
 <!-- newest first -->
+
+- 2026-07-26 — Wave 3 Re-gate: **SP7 approved, phone sent back.** The thesis line is final at 15 of 16
+  words. Two blocking mobile findings routed as a second fix round (DEC-028): wrapped log lines do not
+  group into entries, and the rust accent sits flush in the terminal but inset in the narration card.
+  Both were confirmed in the built CSS rather than by eye; both trace to the horizontal and vertical
+  room the wrap fix spent.
 
 - 2026-07-26 — Wave 3 re-validation: QA — §2 re-validated after the fix wave (HO-014). Every criterion
   green and no build defect found; `qa-independent-audit.mjs` **exits zero for the first time** at

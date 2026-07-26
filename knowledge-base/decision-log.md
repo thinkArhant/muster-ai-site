@@ -894,5 +894,45 @@ right is that the alternative was never five lines: at 41 columns a non-wrapping
 `orchestration-queue.md`, `current-sprint.md`, `wave-review.md`, `pre-launch-checklist.md`,
 `founder-notices.md`, `agent-context/{developer,qa,ui-ux,content}.md`.
 
+---
+
+### DEC-028 — SP7 is final; the phone's log needs entry separation and one accent inset (2026-07-26)
+
+**Decision**: At the §2 re-gate the founder approved SP7 as written and sent the phone back. Two
+blocking findings, both visual, both on mobile:
+
+1. **Wrapped log lines must group into visible entries** at 375 × 553. `.log__line` carries no
+   `margin-block-start`, so an entry's continuation row and the next entry's first row are equally
+   spaced and eight rows read as eight things rather than four.
+2. **The rust accent gets one consistent inset** across the terminal and the narration card, or a
+   stated reason why they differ. The narration entry is inset 12px by its card's
+   `padding: var(--gap-hairline)`; `.log` is `padding-inline: 0`, so the key-beat tick is flush against
+   the card border.
+
+**Rationale**: This is the pattern this project keeps catching — a fix that satisfies its stated
+criterion while breaking something the criterion did not name. DEC-025 required that no line need a
+sideways gesture, and the wrap delivered exactly that. Nothing in it measured whether the wrapped
+result was still *readable as a log*, so the regression shipped inside a green harness: every
+fidelity, budget and parity check passed, because none of them can see grouping. The founder read it on
+the device and PM confirmed both causes in the built CSS rather than by eye.
+
+**Both findings trace to the same scarce resource.** The wrap fix spent the terminal's horizontal
+gutter (the wide-viewport rule that insets the tick carries a comment saying the phone "cannot afford"
+it), and it spent most of the vertical slack. So F-R1 and F-R2 are the two edges of the same trade, and
+whoever fixes them is working inside 25.4px of height and no horizontal room. Fidelity and the
+no-horizontal-scroll guarantee are not available to pay — the payer is `--lead-terminal`, visible line
+count, or an explicitly stated new budget.
+
+**Requirements are stated as outcomes, not mechanisms**: entry boundaries visible at a glance; one
+accent relationship across both cards. UI/UX picks the means and states the measured budget; a reasoned
+refusal with an alternative is an acceptable answer for either.
+
+**Settled and not reopened**: SP7 (final at 15 of 16 words), passes 1–3, the 48.00 s schedule,
+fidelity, and the no-horizontal-scroll guarantee.
+
+**Impact**: UI/UX, Developer, QA, PM. Content is done with §2.
+
+**Touched**: `wave-review.md`, `orchestration-queue.md`, `current-sprint.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

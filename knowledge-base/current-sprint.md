@@ -82,7 +82,8 @@ criterion). No other step uses a premium model.
 | 1 | Corpus verification + beat inventory → design foundation spec → PM review | **Founder gate** | ✓ **approved with amendments**, 2026-07-25 |
 | 2 | Inventory true-up → spec amendments → PM review → shell build → QA validation | none — output is machine-verifiable against the approved spec | ✓ done, 2026-07-25 — one founder question raised, no blockers |
 | 3 | §2 narration → PM review → replay build → QA validation | **Founder gate** — judge pacing + narration, styling subtracted | ✓ **approved with one copy fix**, 2026-07-26 |
-| 3b | Mobile no-horizontal-scroll spec → SP7 rewrite → PM review → rebuild → QA re-validate | **Founder re-gate** — narrow: the new thesis line, and the phone | running — both specs accepted, no revision (DEC-027); rebuild is next |
+| 3b | Mobile no-horizontal-scroll spec → SP7 rewrite → PM review → rebuild → QA re-validate | **Founder re-gate** — narrow: the new thesis line, and the phone | ✓ **SP7 approved; phone sent back**, 2026-07-26 |
+| 3c | Phone log legibility spec → PM review → rebuild → QA re-validate | **Founder gate 3** — narrow: entry grouping, accent consistency | running |
 
 **Wave 2 order is deliberate.** The gate's amendments change `page-shell.md` (theme control dropped) and
 `section-02-replay.md` (48 s rescale, B5 rebalance, narration-first mobile), so the UI/UX amendment and

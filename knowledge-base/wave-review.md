@@ -154,7 +154,52 @@ design value.
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
 <!-- Bug list — PM inserts a fix step per bug, then continues. -->
 
-**Status:** _awaiting your verdict — the re-gate_
+**Status:** SP7 APPROVED · PHONE SENT BACK — 2026-07-26
+
+**SP7 lands.** *"The operator planned the sprint, left the agents running, and returns to a
+deploy-ready site."* Approved as written, at 15 of 16 words, with SP6's relief still unspent. The
+reframe is settled and is not reopened in the next round. Content's work on §2 is complete.
+
+**The phone check fails.** The sideways gesture is gone, which was the stated criterion, but
+readability was traded for it in a way the fix did not measure. Both findings were raised by the
+founder from the real device and confirmed by PM against the built CSS, not by eye.
+
+**Findings:**
+
+- **F-R1 — Wrapped log lines do not group into entries. Blocking; this is a regression the fix
+  introduced.** At 375px four entries occupy eight rows, and the vertical gap between an entry's own
+  continuation row and the *next* entry's first row is identical — `.log__line` carries no
+  `margin-block-start`, so nothing separates one entry from the next. Eight rows read as eight things
+  rather than four. The hanging indent (`padding-inline-start: 2ch; text-indent: -2ch`) and the absent
+  timestamp on continuations are the only cues, and parsing them takes deliberate effort instead of
+  happening at a glance.
+  **The requirement is the outcome, not a mechanism**: entry boundaries must be visible at a glance at
+  375 × 553. Vertical separation is the obvious lever and height is the scarce resource — there was
+  25.4px of slack, and a per-entry gap costs roughly 6px each, so it will likely need funding from
+  `--lead-terminal` rather than being added on top. Banding or a continuation glyph are alternatives;
+  UI/UX chooses and states the measured budget. Fidelity and the no-horizontal-scroll guarantee both
+  hold — neither is available to pay for this.
+
+- **F-R2 — The rust accent has two different relationships to its container. Blocking on mobile.**
+  Both the key-beat tick and the active narration bar are built identically (a 2px transparent
+  `border-inline-start` that turns `--accent`), but the narration entry sits inside a card with
+  `padding: var(--gap-hairline)` = **12px**, so its bar is inset and reads as a mark inside the card,
+  while `.log` is explicitly `padding-inline: 0`, so the terminal tick sits at **0px** — flush against
+  the card border, reading as part of the frame.
+  The wide-viewport rule restores a gutter (`calc(var(--gap-hairline) + 2ch)`) and its own comment says
+  the phone "cannot afford" it, which is exactly why desktop reads clean and the phone does not: the
+  horizontal room that inset the tick was spent on the wrap fix. One consistent inset for the same
+  semantic mark across both cards, or a stated reason why the terminal gutter is deliberately different.
+  If the room genuinely is not there, say so and propose the alternative rather than shipping the
+  collision.
+
+**Not reopened**: passes 1–3, SP7, the 48.00 s schedule, fidelity, and the no-horizontal-scroll
+guarantee. The next round is these two visual findings only.
+
+**Still carried**: the live-playback look on real mobile Safari. The founder's latest screenshot *is*
+live playback at BEAT 03/06, which is progress over the end-state shot — it confirms the visibility
+gate fires and both layers hold their place. `100dvh` under Safari's dynamic toolbars remains the
+unproven mechanism and rides to the next gate.
 
 ---
 
