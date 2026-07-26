@@ -495,6 +495,9 @@ packet.
 - `muster/team/pm/skills/generic/deliverable-review.md`
 - `muster/team/qa/skills/generic/verification-discipline.md`
 
+**Deliverable:** review verdicts on HO-018 through HO-025 in `knowledge-base/agent-requests.md`, and the
+Gate A packet written into `knowledge-base/wave-review.md`.
+
 **Run the machine checks BEFORE the packet exists, so the founder never spends attention on them.**
 R4, R5, R6, R10 and R12 are grep-able across all five copy files: no `muster.build`, no cross-scope
 aggregate, scope labels present beside their values, THIS SITE dashed, no rounded numbers, no banned
@@ -720,7 +723,10 @@ Model: claude-opus-5
 
 **Inputs:**
 - `knowledge-base/agent-requests.md` — HO-024 through HO-030
-- Every section spec, and the Gate A verdict in `wave-review.md`
+- Every section spec, and the Gate A verdict in `knowledge-base/wave-review.md`
+
+**Deliverable:** review verdicts on HO-024 through HO-030 in `knowledge-base/agent-requests.md`, and the
+Gate B packet written into `knowledge-base/wave-review.md`.
 
 **Acceptance criteria:**
 - **Re-run both harnesses yourself.** A summary is not evidence
