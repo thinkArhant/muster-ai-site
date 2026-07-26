@@ -104,10 +104,11 @@
   flex: none;
 }
 
-/* The log is the terminal's scroll region: it owns its overflow in both axes so
-   the page body never scrolls horizontally. Lines never wrap and are never
-   truncated — a long line is read by scrolling inside this box, which is what
-   keeps every rendered character byte-identical to the corpus. */
+/* The log is the terminal's scroll region, and on one axis only: lines soft-wrap
+   rather than running off the right edge, so there is no horizontal scroll left
+   to reach. Overflow stays `auto` on both axes rather than `hidden` on one —
+   hiding it would conceal an overflow bug instead of failing on it, and the
+   harness asserts scrollWidth against clientWidth at every phone width. */
 .log {
   flex: 1 1 auto;
   min-block-size: 0;
@@ -128,11 +129,27 @@
   color: var(--ink);
 }
 
+/* `pre-wrap`, not `pre`: it keeps the corpus's own inter-column padding exactly
+   while permitting a break at a space. A soft wrap inserts no character and
+   removes none, so the rendered text still diffs byte-clean — which is why it,
+   and not truncation, is what pays for a phone that never scrolls sideways.
+   The 2ch hanging indent makes a continuation row unmistakably a continuation:
+   no row but an entry's first begins at the left edge. `break-word` is a
+   backstop only — the longest corpus token is 18 characters against a narrowest
+   region of 34, so it never fires.
+
+   No horizontal inset below --bp-wide, and that is load-bearing rather than
+   taste: §7.1's whole budget is derived from a line region of the terminal's
+   full inner width (325px — 41 characters at 375px), and every pixel taken from
+   it here is a pixel that can push a corpus line to a third row and cost the
+   window a whole line. */
 .log__line {
   display: block;
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
   border-inline-start: 2px solid transparent;
-  padding-inline-start: var(--gap-hairline);
+  padding-inline-start: 2ch;
+  text-indent: -2ch;
 }
 
 .log__stamp {
@@ -215,11 +232,15 @@
 /* --------------------------------------------------------------------------
    Chain totals — static by design. These are evidence in a log context, and a
    number that counts up reads as marketing where a flat one reads as measured.
+   Being evidence rather than a layer is also why it lives outside the core on a
+   phone: the two-layer guarantee is about the terminal and the narration, and
+   the 45.0px this buys back is what the soft wrap spends.
    Value scale is per-viewport: at --text-readout a single value line is 24px,
    which alone would bust the phone height budget, so below --bp-wide the strip
    is two --text-micro lines. Tracking, not the copy, is the lever that keeps
    the value line from wrapping to a third: at 0.14em the 43-character string
-   measures ~350px against ~327px of content width at 375px.
+   measures ~350px against ~327px of content width at 375px; at 0.02em it sets
+   ~295px and clears it.
    -------------------------------------------------------------------------- */
 
 .totals {
@@ -345,23 +366,37 @@
 /* --------------------------------------------------------------------------
    Landscape phone — the one place the stacked layout cannot hold. Rotated,
    Safari's toolbars leave roughly 331px of visual viewport against a fixed
-   core of 424.4px, so stacking overflows before a single log line is placed.
-   Narration-first survives the rotation; the stacking does not, so the two
-   layers go side by side with the wider column given to the narration and the
-   totals strip tucked beneath it. This is an orientation query, not a second
-   page-chrome breakpoint: --bp-wide remains the only one.
+   core of 379.4px, so stacking overflows before a single log line is placed.
+   Narration-first survives the rotation as a priority; the stacking does not.
+
+   The column split is set by the wrap rule, not by a rank: the terminal takes
+   the wider column because width is the only thing that decides whether a log
+   line reads without a sideways gesture, whereas narration set narrower simply
+   runs taller — and height is what landscape has to spare. The card is budgeted
+   for seven lines here rather than six for exactly that reason.
+
+   This is an orientation query, not a second page-chrome breakpoint: --bp-wide
+   remains the only one.
    -------------------------------------------------------------------------- */
 
 @media (max-width: 59.999rem) and (orientation: landscape) and (max-height: 30rem) {
-  .replay {
-    --card-lines: 5;
-  }
-
   .replay__core {
     display: grid;
-    grid-template-columns: minmax(0, 42fr) minmax(0, 55fr);
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    /* The terminal's floor is the wrap rule: its line region must hold 41
+       characters, which is 55/96 of the content width at 667px. The narration
+       takes the rest and runs taller, which is what landscape has to spare. */
+    grid-template-columns: minmax(0, 55fr) minmax(0, 41fr);
+    grid-template-rows: auto minmax(0, 1fr);
     column-gap: var(--gap-flow);
+  }
+
+  /* A definite height, not just a ceiling. The two columns are independent
+     here, so with an auto height the row would size to the terminal's content
+     and hand the narration whatever the terminal happened to leave. The card is
+     the payload: it takes the whole column and the terminal's slack goes to it. */
+  .replay[data-state="idle"] .replay__core,
+  .replay[data-state="playing"] .replay__core {
+    block-size: calc(100dvh - 3rem);
   }
 
   .replay__beat {
@@ -370,7 +405,7 @@
 
   .terminal {
     grid-column: 1;
-    grid-row: 2 / 4;
+    grid-row: 2;
   }
 
   .narration {
@@ -379,9 +414,19 @@
     margin-block-start: var(--gap-hairline);
   }
 
-  .totals {
-    grid-column: 2;
-    grid-row: 3;
+  /* The card fills its column instead of holding a fixed line count, and
+     scrolls its own overflow where the column is shorter than the longest slot.
+     Measured rather than derived: the column sets ~26 characters here, not the
+     ~29 the budget assumed, and the worst slot runs to 9 lines. A card fixed at
+     the budgeted seven would spill it off the bottom. Height is still constant
+     across slots — it is the column's, not the copy's — so the card does not
+     reflow between slots. */
+  .replay[data-state] .narration__list {
+    position: absolute;
+    inset: var(--gap-hairline);
+    block-size: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 }
 
@@ -390,6 +435,19 @@
    -------------------------------------------------------------------------- */
 
 @media (min-width: 60rem) {
+  /* The bottom clearance is a phone budget row — there is nothing below the
+     fold to clear here, and the totals strip carries its own --gap-block. */
+  .replay__core {
+    padding-block-end: 0;
+  }
+
+  /* The terminal has ~78 columns of room here against a 74-character longest
+     line, so it can afford the left gutter the phone cannot. The hanging indent
+     stays and is inert: no line reaches the column. */
+  .log__line {
+    padding-inline-start: calc(var(--gap-hairline) + 2ch);
+  }
+
   .replay__layers {
     display: grid;
     /* The terminal column carries a floor, and the rail is what yields to it.

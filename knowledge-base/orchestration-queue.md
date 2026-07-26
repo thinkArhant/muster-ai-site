@@ -88,46 +88,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Developer (web): Rebuild §2 to the amended spec and copy
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Apply the approved mobile-layout change and the revised narration string to the built §2.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md` — authoritative,
-  both final and carrying nothing open
-- `knowledge-base/decision-log.md` — DEC-024, DEC-026, DEC-027
-- `knowledge-base/agent-context/developer.md` — the current-task block carries the numbers and the trap
-- `knowledge-base/bodh-sprint4-corpus.md` — read-only
-
-**Acceptance criteria:**
-- The narration string renders verbatim from the narration file; no retyping
-- No horizontal scroll needed to read a corpus line at 375px, per the amended spec
-- Fidelity unchanged: all twelve lines still diff byte-clean against the corpus
-- Reduced-motion and no-JS paths still render the complete transcript
-- `bash scripts/test.sh` green on both engines; extend it rather than adding a second runner
-- Timing untouched — the 48.00 s schedule is not in scope for this fix
-- **Quantise the terminal window by measurement, not by the 49.4px constant** (DEC-027.4). §7.1's
-  formula is exact at ≥375px and a ceiling below it — at 320px the region is 34 columns and the two
-  longest lines cost three rows, so a literal implementation places a third line and clips it, which
-  §7.1 rule 2 forbids. Rule 3's flex-remainder mechanism is the one to build
-- **Confirm the two derived landscape figures** UI/UX flagged: the chrome bar at a 324px column
-  (budgeted at two lines / 58px, may fall to 41.5px) and the worst-case narration slot at ~29
-  characters per line (budgeted 7 lines / 228.3px). If either exceeds its slack, §7.1's priority order
-  drops the beat indicator first — state what you measured either way
-- The totals value line keeps `0.02em` tracking, not `--track-micro` — at the wide tracking its 43
-  characters set 351.7px against a 327px column and wrap to a third strip row
-
-**On completion:** File HO-013 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
-
 ### 2026-07-26 QA (web): Re-validate §2 and retire the reading-band check
 
 ```
@@ -160,6 +120,9 @@ Model: claude-opus-5
 **On completion:** File HO-014 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
 ### 2026-07-26 Wave 3 Re-gate — founder review
 
 ```
@@ -186,6 +149,16 @@ sprint worktree.
 
 ## Done (Last 10)
 <!-- newest first -->
+
+- 2026-07-26 — Wave 3 rebuild: Developer — §2 rebuilt to the amended spec and copy (HO-013). SP7 renders
+  the operator's arc verbatim (all ten slots now diffed against the narration file, 10/10); the phone
+  terminal wraps with a 2ch hanging indent and shows 3 whole lines at 375 × 553 with the core at 479.52px
+  against 479.54 budgeted; timing untouched at 4 ms worst drift. The 320px trap sprang as predicted and
+  was avoided by measurement. Both landscape figures confirmed: the chrome bar falls to 41.5px, and the
+  worst narration slot lands 2.83px over budget — inside its 14.2px slack, so the beat indicator stays.
+  `scripts/test.sh` green: 146/146 Blink, 13/13 WebKit. **Awaiting review — QA, then PM.** QA also needs
+  to re-base four `qa-independent-audit.mjs` assertions that encode the superseded spec (not build
+  defects; all four are re-asserted correctly in `verify-shell.mjs`).
 
 - 2026-07-26 — Fix wave step 3: PM — both fix-wave deliverables accepted, no revision; the rebuild's
   inputs are closed (DEC-027). Everything re-derived rather than re-read: SP7 recounts to 15 of 16 words

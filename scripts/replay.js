@@ -75,18 +75,37 @@
     replay.dataset.state = state;
   }
 
+  /* The window follows the newest revealed line, not the end of the DOM — all
+     twelve lines occupy their space from load, so scrolling to the bottom would
+     park the window over lines that have not been revealed yet.
+
+     It aligns its TOP to a line boundary rather than parking the newest line's
+     bottom on the fold. Those are the same rule only while every line is one
+     row: once a line wraps to two or three, bottom-alignment leaves the topmost
+     line clipped part-way through its rows, which §7.1 rule 2 forbids. So the
+     window walks back from the newest line while whole lines still fit, and
+     lands on the first one that does. Instant position change, never an
+     animated scroll.
+
+     Positions come from offsetTop, which the reveal's 4px transform does not
+     move; every line shares an offsetParent, so the differences are exact. */
+  function follow(i) {
+    const style = getComputedStyle(log);
+    const view = log.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    const origin = lines[0].offsetTop;
+    const foot = lines[i].offsetTop + lines[i].offsetHeight - origin;
+    let top = i;
+    while (top > 0 && foot - (lines[top - 1].offsetTop - origin) <= view + 0.5) top--;
+    const at = lines[top].offsetTop - origin;
+    log.scrollTop = Math.max(0, Math.min(at, log.scrollHeight - log.clientHeight));
+  }
+
   function revealLine(i, at) {
     const line = lines[i];
     if (line.hasAttribute("data-revealed")) return;
     line.setAttribute("data-revealed", "");
     marks.push({ line: i + 1, at: Math.round(at) });
-    /* The window follows the newest revealed line, not the end of the DOM —
-       all twelve lines occupy their space from load, so scrolling to the bottom
-       would park the window over lines that have not been revealed yet. It
-       advances by whole line boxes, instantly: never an animated scroll. */
-    const pad = parseFloat(getComputedStyle(log).paddingBottom);
-    const overshoot = line.getBoundingClientRect().bottom - (log.getBoundingClientRect().bottom - pad);
-    if (overshoot > 0) log.scrollTop += overshoot;
+    follow(i);
   }
 
   /* `ms` is chain time. A negative value is the pre-roll: nothing is revealed,
@@ -196,18 +215,36 @@
   }
 
   /* --- the mobile core is sized by construction: the terminal window is the
-         flex remainder, quantised down to whole line boxes so a half line never
-         sits at the fold. --- */
+         flex remainder, quantised down to whole WRAPPED lines so a half line
+         never sits at the fold.
+
+         The unit is measured, not §7.1's 49.4px constant. That figure is a
+         budget: exact at 375px and wider, where every corpus line costs two
+         rows, and a ceiling below it — at 320px the region is 34 columns and
+         the two longest lines cost three rows. Taking the constant literally
+         there would place a third line the window then clips, so the count has
+         to fall out of the real row heights instead.
+
+         The terminal-state line is excluded from the unit: it is the one line
+         not set at --text-terminal, it is revealed outside the chain, and
+         §7.1 derives the window from the eleven chain lines. --- */
   function quantiseWindow() {
     log.style.removeProperty("block-size");
     log.style.removeProperty("flex");
     if (wide.matches) return;
     const style = getComputedStyle(log);
-    const box = parseFloat(style.lineHeight); /* one --text-terminal line box */
     const pad = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
-    const fit = Math.max(3, Math.min(12, Math.floor((log.clientHeight - pad) / box)));
+    let unit = 0;
+    for (let i = 0; i < lines.length - 1; i++) {
+      unit = Math.max(unit, lines[i].getBoundingClientRect().height);
+    }
+    if (!unit) return;
+    /* Clamped to [2, 12] per §7.1. The floor is two, not three: below 478.2px
+       of visual viewport the core cannot hold three whole wrapped lines, and a
+       clipped third line is worse than a shorter window. */
+    const fit = Math.max(2, Math.min(12, Math.floor((log.clientHeight - pad) / unit)));
     log.style.flex = "none";
-    log.style.blockSize = fit * box + pad + "px";
+    log.style.blockSize = fit * unit + pad + "px";
   }
 
   /* --- autoplay gate: the section starts when it is properly on screen and

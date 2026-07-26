@@ -110,19 +110,25 @@
         <li class="narration__entry" data-slot="sp4c" data-beat="4"><span class="narration__tag" aria-hidden="true">THREE HANDOFFS</span><span class="narration__text">Marketing writes the share card — 134 characters, no competitor mention.</span></li>
         <li class="narration__entry" data-slot="sp5" data-beat="5"><span class="narration__tag" aria-hidden="true">QA FULL VALIDATION</span><span class="narration__text">QA doesn't re-run the developer's tests — it re-derives the date math with its own formula, across 24 dates and 3 timezones.</span></li>
         <li class="narration__entry" data-slot="sp6" data-beat="6"><span class="narration__tag" aria-hidden="true">THE HUMAN GATE</span><span class="narration__text">PASS — 11/11, zero bugs. The PM accepts, the same instant.</span></li>
-        <li class="narration__entry" data-slot="sp7" data-beat="6"><span class="narration__tag" aria-hidden="true">THE HUMAN GATE</span><span class="narration__text">The run stops itself at the gate. No human touched this until the deploy button.</span></li>
+        <li class="narration__entry" data-slot="sp7" data-beat="6"><span class="narration__tag" aria-hidden="true">THE HUMAN GATE</span><span class="narration__text">The operator planned the sprint, left the agents running, and returns to a deploy-ready site.</span></li>
         <li class="narration__entry" data-slot="sp8"><span class="narration__text">bodh.day, live. The deploy landed three days later — the gate waited on Apple. This wave: 64 minutes of agent work across 8 sessions, 289 API calls, $24.73 at API list price.</span></li>
               </ol>
             </div>
 
           </div>
 
-          <p class="totals">
-            <span class="totals__value">~64 MIN AGENT WORK · 289 API CALLS · $24.73</span>
-            <span class="totals__scope">BODH SPRINT 4 · WEBSITE WAVE ONLY</span>
-          </p>
-
         </div>
+
+        <!-- Outside .replay__core deliberately. The core is what must fit the
+             visual viewport on a phone; the totals strip is static evidence
+             rather than a playback layer, so lifting it out is what buys the
+             height the soft wrap costs (replay spec §7.1 rule 3). Above
+             --bp-wide it sits exactly where it always did, under the two
+             columns. -->
+        <p class="totals">
+          <span class="totals__value">~64 MIN AGENT WORK · 289 API CALLS · $24.73</span>
+          <span class="totals__scope">BODH SPRINT 4 · WEBSITE WAVE ONLY</span>
+        </p>
 
         <!-- Controls are built by scripts/replay.js and only when playback runs:
              with no JS, or at reduced motion, there is nothing to control. -->

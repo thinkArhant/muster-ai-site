@@ -14,10 +14,13 @@
 
    And the §2 replay's own contracts:
 
-     - every rendered log line diffs byte-clean against the corpus on disk
+     - every rendered log line diffs byte-clean against the corpus on disk, and
+       every narration slot against the narration deliverable
      - measured reveal offsets against the replay spec's schedule, watched over
        a real 48-second chain rather than read off the schedule it was given
      - the phone height budget, row by row, at 375 x 553
+     - the soft wrap: no line needs a sideways gesture at any phone width, the
+       window holds whole wrapped lines only, and the wrap costs no character
      - reduced motion and no-JS render the complete transcript, no controls
 
    Usage:  node tests/verify-shell.mjs [--json]
@@ -569,6 +572,27 @@ try {
     return text.slice(at + 2, at + 14);
   })();
 
+  /* Same principle for the narration: the slot strings are Content's, so they
+     are read out of the deliverable rather than copied into this file. Any
+     retyping in the markup — a stale slot, a smart quote, a dropped em dash —
+     shows up as a diff against the source of truth. */
+  const narrationSlots = (() => {
+    const text = readFileSync(
+      join(ROOT, "knowledge-base", "design-specs", "web", "section-02-narration.md"),
+      "utf8"
+    ).split("\n");
+    const slots = [];
+    let inSection = false;
+    for (let i = 0; i < text.length; i++) {
+      if (/^## /.test(text[i])) inSection = /^## 3\. The narration/.test(text[i]);
+      if (!inSection || text[i].trim() !== "```") continue;
+      const end = text.indexOf("```", i + 1);
+      slots.push(text.slice(i + 1, end).join(" ").trim());
+      i = end;
+    }
+    return slots;
+  })();
+
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
   await page.setViewport({ width: 1440, height: 900 });
   await page.goto(PAGE_URL);
@@ -617,6 +641,10 @@ try {
                      weight: css(value, "font-weight") },
       totalsScope: { text: scope.textContent, size: css(scope, "font-size") },
       totalsHeight: Math.round(totals.getBoundingClientRect().height * 100) / 100,
+      totalsBelowLayers: totals.getBoundingClientRect().top >=
+        document.querySelector(".replay__layers").getBoundingClientRect().bottom - 0.5,
+      logLineIndent: css(document.querySelector(".log__line"), "text-indent"),
+      logLineWrap: css(document.querySelector(".log__line"), "white-space"),
       stateLine: { size: css(lines[11], "font-size"), weight: css(lines[11], "font-weight"),
                    detailColor: css(lines[11].querySelector(".log__detail"), "color") },
       keyLines: [3, 8].map((i) => ({
@@ -642,6 +670,10 @@ try {
   check("only minute-precision stamps reach the DOM", !/\d{2}:\d{2}:\d{2}/.test(s2.sectionText), "no second-precision timestamp in §2");
   check("no playback offset renders as content", !/\bt=\s?\d/.test(s2.sectionText) && !/\b48\.00 s\b/.test(s2.sectionText), "no t= offset, no chain duration in §2 copy");
   check("ten narration slots present", s2.entryCount === 10, `${s2.entryCount} entries`);
+  const slotDiff = narrationSlots
+    .map((text, i) => (s2.entryText[i] === text ? null : `slot ${i + 1}`))
+    .filter(Boolean);
+  check("every narration slot renders verbatim from section-02-narration.md", narrationSlots.length === 10 && s2.entryText.length === 10 && slotDiff.length === 0, slotDiff.length ? `differs at ${slotDiff.join(", ")}` : "10/10 identical to the narration deliverable");
   check("no aria-live during playback", s2.ariaLive === 0, `${s2.ariaLive} live regions`);
   check("reveal never hides content from assistive tech", s2.hidden === 0, `${s2.hidden} display:none / visibility:hidden entries`);
   check("terminal log is a named, focusable scroll region", s2.logName === "Build log, condensed from the real build log" && s2.logTabindex === "0" && s2.logOverflow === "auto/auto", `${s2.logTabindex} · ${s2.logOverflow}`);
@@ -654,6 +686,10 @@ try {
   check("the ✓ is a rust graphical mark", s2.glyph === s2.accent, s2.glyph);
   check("chain totals render Content's strings", s2.totalsValue.text === "~64 MIN AGENT WORK · 289 API CALLS · $24.73" && s2.totalsScope.text === "BODH SPRINT 4 · WEBSITE WAVE ONLY", `${s2.totalsValue.text} / ${s2.totalsScope.text}`);
   check("totals value is rust at readout scale above --bp-wide", parseFloat(s2.totalsValue.size) >= 24 && s2.totalsValue.color === s2.accent, `${s2.totalsValue.size} ${s2.totalsValue.color}`);
+  check("desktop: the totals strip sits under the two columns", s2.totalsBelowLayers, `strip top vs layers bottom`);
+  /* The wrap rule is set at every viewport and inert here — no line reaches the
+     column, so it changes nothing on a desktop except that it is ready to. */
+  check("desktop: the wrap rule is present and inert", s2.logLineWrap === "pre-wrap" && parseFloat(s2.logLineIndent) < 0 && s2.logFits.scrollWidth <= s2.logFits.clientWidth, `${s2.logLineWrap}, text-indent ${s2.logLineIndent}, no line wraps`);
   check("one control during playback: skip", s2.controls.length === 1 && s2.controls[0].includes("SHOW FULL LOG"), s2.controls.join(" | "));
 
   /* --- the pacing, measured. The section is judged on this, so the harness
@@ -778,14 +814,58 @@ try {
     log.scrollTop = 40;
     const scrolls = log.scrollTop !== before;
     log.scrollTop = before;
+    /* The wrap, measured rather than assumed. The window's unit is the tallest
+       CHAIN line — L12 is the one line not set at --text-terminal and is
+       revealed outside the chain, so it is not what the window is sized on. */
+    const lines = [...document.querySelectorAll(".log__line")];
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const heights = lines.map((li) => r2(li.getBoundingClientRect().height));
+    const unit = Math.max(...heights.slice(0, 11));
+    const advance = (() => {
+      const p = document.createElement("span");
+      p.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+      ["font-family", "font-size", "letter-spacing"].forEach((prop) =>
+        p.style.setProperty(prop, css(lines[0], prop))
+      );
+      p.textContent = "0";
+      document.body.appendChild(p);
+      const w = p.getBoundingClientRect().width;
+      p.remove();
+      return w;
+    })();
+    const region = lines[0].getBoundingClientRect().width -
+      parseFloat(css(lines[0], "border-inline-start-width"));
+    /* Row starts of a wrapped line: rect per row, min left per row. A
+       continuation row must begin to the RIGHT of its entry's first row. */
+    const rowStarts = (() => {
+      const wrapped = lines.find((li) => li.getBoundingClientRect().height > lineBox * 1.5);
+      if (!wrapped) return null;
+      const range = document.createRange();
+      range.selectNodeContents(wrapped);
+      const rows = new Map();
+      for (const rect of range.getClientRects()) {
+        if (rect.width <= 0) continue;
+        const key = Math.round(rect.top);
+        rows.set(key, Math.min(rows.get(key) ?? Infinity, rect.left));
+      }
+      const sorted = [...rows.entries()].sort((a, b) => a[0] - b[0]).map((e) => r2(e[1]));
+      return { line: wrapped.dataset.line, lefts: sorted };
+    })();
+    const totalsEl = document.querySelector(".totals");
     return {
       gatedOut,
       state: window.MusterReplay.state(),
       core: Math.round(coreRect.height * 100) / 100,
       coreTop: Math.round(coreRect.top), coreBottom: Math.round(coreRect.bottom),
       viewport: innerHeight,
-      visibleLines: Math.round(((log.clientHeight - pad) / lineBox) * 100) / 100,
-      lineBox,
+      visibleLines: r2((log.clientHeight - pad) / unit),
+      lineBox, unit, heights, rows: heights.map((h) => r2(h / lineBox)),
+      advance: r2(advance), region: r2(region), columns: Math.floor(region / advance),
+      rowStarts,
+      hangingIndent: r2(2 * advance),
+      lineOverflow: lines.filter((li) => li.scrollWidth > li.clientWidth).map((li) => li.dataset.line),
+      totalsOutsideCore: !core.contains(totalsEl),
+      totalsBelowCore: totalsEl.getBoundingClientRect().top >= coreRect.bottom - 0.5,
       chrome: box(".terminal__chrome"), card: box(".narration"), totals: box(".totals"),
       indicator: box(".replay__beat"),
       cardLines: Math.round((box(".narration") - 26) / 28.9 * 100) / 100,
@@ -810,13 +890,24 @@ try {
   const seen = Math.max(0, Math.min(phone.coreBottom, phone.viewport) - Math.max(phone.coreTop, 48)) / phone.core;
   check("phone: playback refuses to start with the core under the status bar", phone.gatedOut === "idle", `state ${phone.gatedOut} when centred`);
   check("phone: playback runs only with the core ≥95% in view", phone.state === "playing" && seen >= 0.95, `${Math.round(seen * 1000) / 10}% of the core below the status bar, state ${phone.state}`);
-  check("phone: terminal window shows five whole lines", Math.abs(phone.visibleLines - 5) < 0.05, `${phone.visibleLines} × ${phone.lineBox}px line boxes`);
-  check("phone: the §7.1 fixed rows measure as budgeted", Math.abs(phone.chrome - 41.5) < 0.5 && Math.abs(phone.card - 199.4) < 0.5 && Math.abs(phone.totals - 33) < 0.5 && Math.abs(phone.indicator - 16.5) < 0.5, `chrome ${phone.chrome} · card ${phone.card} · totals ${phone.totals} · indicator ${phone.indicator}`);
+  check("phone: terminal window shows three whole wrapped lines", Math.abs(phone.visibleLines - 3) < 0.05, `${phone.visibleLines} × ${phone.unit}px wrapped lines (${phone.lineBox}px rows)`);
+  /* The constant the whole budget rests on, checked against the render rather
+     than against the spec that asserts it: at 375px every chain line costs
+     exactly two rows, which is what makes 49.4px the window's unit here. */
+  check("phone: every chain line wraps to exactly two rows", phone.rows.slice(0, 11).every((r) => Math.abs(r - 2) < 0.05) && Math.abs(phone.unit - 2 * phone.lineBox) < 0.1, `rows ${phone.rows.slice(0, 11).join("/")} · unit ${phone.unit}`);
+  check("phone: the line region measures 41 columns", phone.columns === 41 && Math.abs(phone.region - 323) < 1, `${phone.region}px / ${phone.advance}px advance = ${phone.columns} columns`);
+  check("phone: continuation rows carry the 2ch hanging indent", phone.rowStarts && phone.rowStarts.lefts.length >= 2 && Math.abs(phone.rowStarts.lefts[1] - phone.rowStarts.lefts[0] - phone.hangingIndent) < 1, phone.rowStarts ? `L${phone.rowStarts.line} rows start at ${phone.rowStarts.lefts.join(", ")} — ${phone.hangingIndent}px expected` : "no wrapped line found");
+  check("phone: the §7.1 fixed rows measure as budgeted", Math.abs(phone.chrome - 41.5) < 0.5 && Math.abs(phone.card - 199.4) < 0.5 && Math.abs(phone.indicator - 16.5) < 0.5, `chrome ${phone.chrome} · card ${phone.card} · indicator ${phone.indicator}`);
+  /* 379.4 is the fixed core INCLUDING the 48px sticky bar, which is not part of
+     the core element; three wrapped lines are what the remainder buys. */
+  check("phone: the core measures its §7.1 budget", Math.abs(phone.core - (379.4 - 48 + 3 * phone.unit)) < 0.5, `${phone.core}px measured vs ${Math.round((379.4 - 48 + 3 * phone.unit) * 100) / 100}px budgeted`);
+  check("phone: the totals strip sits below the core, not inside it", phone.totalsOutsideCore && phone.totalsBelowCore && Math.abs(phone.totals - 33) < 0.5, `outside core: ${phone.totalsOutsideCore}, below it: ${phone.totalsBelowCore}, ${phone.totals}px`);
   check("phone: the chrome label holds one line", Math.abs(phone.labelLines - 1) < 0.1, `${phone.labelLines} lines`);
   check("phone: totals strip is two micro lines, value line unwrapped", parseFloat(phone.totalsValue.size) === 11 && Math.abs(phone.totalsValue.lines - 1) < 0.1, `${phone.totalsValue.size}, ${phone.totalsValue.lines} line(s)`);
   check("phone: the 43-character value line clears the content width", phone.totalsValue.ink <= phone.totalsValue.available, `${phone.totalsValue.ink}px of ${phone.totalsValue.available}px`);
   check("phone: totals value is ink, not rust, at micro size", phone.totalsValue.color === phone.ink, phone.totalsValue.color);
   check("phone: the terminal owns its scroll, the body never does", phone.scrolls && phone.docScroll.s <= phone.docScroll.c, `log scrolls: ${phone.scrolls}, doc ${phone.docScroll.s}/${phone.docScroll.c}`);
+  check("phone: no corpus line needs a sideways gesture to finish", phone.lineOverflow.length === 0, phone.lineOverflow.length ? `L${phone.lineOverflow.join(", L")} overflow their region` : "every line's last character is on screen once its rows are");
   check("phone: .instrument inset is at most 20% of the card", phone.instrument.inset / phone.instrument.width <= 0.2, `${phone.instrument.inset}px of ${phone.instrument.width}px = ${Math.round((phone.instrument.inset / phone.instrument.width) * 1000) / 10}%`);
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-375.png"), await page.screenshot());
 
@@ -824,26 +915,58 @@ try {
      to the end of the DOM would sit over lines that have not been revealed and
      show the reader an empty terminal. The window must follow the newest
      revealed line instead. */
+  /* A whole real chain at phone size, sampled. The guarantee under test is not
+     "the newest line is visible" but "no line is visible in part": a wrapped
+     line is two rows and the window must show both of them or neither. That can
+     only be observed while the window is advancing, so this watches one. */
   const phoneWindow = await page.eval(`(async () => {
     const log = document.querySelector(".log");
     const lines = [...document.querySelectorAll(".log__line")];
-    const shown = () => {
-      const box = log.getBoundingClientRect();
-      return lines.filter((li) => li.hasAttribute("data-revealed"))
-        .filter((li) => {
-          const r = li.getBoundingClientRect();
-          return r.top >= box.top - 1 && r.bottom <= box.bottom + 1;
-        }).length;
+    /* Geometry from offsetTop, not getBoundingClientRect: the reveal's 4px rise
+       is a transform, and a rect taken mid-transition would report a line 4px
+       lower than the box it actually occupies — an animation artefact reading
+       as a clipped line. The layout box is what the window has to hold. */
+    const inspect = () => {
+      const style = getComputedStyle(log);
+      const view = log.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+      const origin = lines[0].offsetTop;
+      const top = log.scrollTop;
+      let whole = 0;
+      const clipped = [];
+      for (const li of lines) {
+        if (!li.hasAttribute("data-revealed")) continue;
+        const head = li.offsetTop - origin;
+        const foot = head + li.offsetHeight;
+        if (head >= top - 1 && foot <= top + view + 1) whole++;
+        else if (foot > top + 1 && head < top + view - 1) clipped.push(li.dataset.line);
+      }
+      return { whole, clipped, revealed: lines.filter((li) => li.hasAttribute("data-revealed")).length };
     };
-    const revealed = () => lines.filter((li) => li.hasAttribute("data-revealed")).length;
-    const early = { revealed: revealed(), inWindow: shown() };
-    window.MusterReplay.finish();
-    await new Promise((r) => setTimeout(r, 100));
+    window.MusterReplay.restart();
+    const samples = [];
+    let clipped = [];
+    const started = performance.now();
+    while (window.MusterReplay.state() !== "end" && performance.now() - started < 60000) {
+      const s = inspect();
+      samples.push(s);
+      clipped = clipped.concat(s.clipped);
+      await new Promise((r) => setTimeout(r, 150));
+    }
+    await new Promise((r) => setTimeout(r, 120));
     const box = log.getBoundingClientRect();
     const last = lines[11].getBoundingClientRect();
-    return { early, endShowsL12: last.bottom <= box.bottom + 1 && last.top >= box.top - 1 };
+    const withLines = samples.filter((s) => s.revealed > 0);
+    return {
+      samples: samples.length,
+      clipped: [...new Set(clipped)],
+      follows: withLines.every((s) => s.whole === Math.min(s.revealed, 3)),
+      worst: Math.max(0, ...withLines.map((s) => s.whole)),
+      endShowsL12: last.bottom <= box.bottom + 1 && last.top >= box.top - 1
+    };
   })()`);
-  check("phone: the window follows the newest revealed line", phoneWindow.early.revealed > 0 && phoneWindow.early.inWindow === Math.min(phoneWindow.early.revealed, 5) && phoneWindow.endShowsL12, JSON.stringify(phoneWindow));
+  evidence.s2PhoneWindow = phoneWindow;
+  check("phone: the window follows the newest revealed line, three at a time", phoneWindow.samples > 20 && phoneWindow.follows && phoneWindow.endShowsL12, `${phoneWindow.samples} samples, max ${phoneWindow.worst} whole lines, L12 in frame at the end: ${phoneWindow.endShowsL12}`);
+  check("phone: the window never clips a wrapped line part-way through its rows", phoneWindow.clipped.length === 0, phoneWindow.clipped.length ? `L${phoneWindow.clipped.join(", L")} half in frame` : `${phoneWindow.samples} samples across a full chain, none partial`);
 
   /* Native keyboard scrolling of the log region — a real key event, not a
      synthetic one, because the behaviour under test is the browser's. */
@@ -873,26 +996,100 @@ try {
   })()`);
   check("1000px: the longest corpus line still fits the terminal", tightWide.sw <= tightWide.cw && tightWide.s <= tightWide.c, `log ${tightWide.sw}/${tightWide.cw}, rail ${tightWide.rail}px`);
 
-  /* --- 320px and landscape --- */
+  /* --- the sideways-gesture sweep: every width a phone reader turns up on.
+         The claim is per LINE, not per page — a body that does not scroll while
+         a log line runs off the right edge would still fail the reader. --- */
+  const SWEEP = [320, 360, 375, 390, 393];
+  const sweep = {};
+  for (const width of SWEEP) {
+    await page.setViewport({ width, height: 700, deviceScaleFactor: 1, mobile: true });
+    await page.goto(PAGE_URL);
+    sweep[width] = await page.eval(`(() => {
+      const r2 = (n) => Math.round(n * 100) / 100;
+      const log = document.querySelector(".log");
+      const lines = [...document.querySelectorAll(".log__line")];
+      const pad = parseFloat(getComputedStyle(log).paddingTop) + parseFloat(getComputedStyle(log).paddingBottom);
+      const unit = Math.max(...lines.slice(0, 11).map((li) => li.getBoundingClientRect().height));
+      return {
+        overflowing: lines.filter((li) => li.scrollWidth > li.clientWidth).map((li) => li.dataset.line),
+        logScroll: log.scrollWidth <= log.clientWidth,
+        doc: document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+        unit: r2(unit),
+        rows: r2(unit / parseFloat(getComputedStyle(log).lineHeight)),
+        windowLines: r2((log.clientHeight - pad) / unit),
+        text: lines.map((li) => li.textContent)
+      };
+    })()`);
+  }
+  evidence.s2Sweep = sweep;
+  const gestured = SWEEP.filter((w) => sweep[w].overflowing.length || !sweep[w].logScroll || !sweep[w].doc);
+  check("no corpus line needs a horizontal gesture at 320 / 360 / 375 / 390 / 393px", gestured.length === 0, gestured.length ? `${gestured.join(", ")}px overflow` : SWEEP.map((w) => `${w}px ✓`).join(" · "));
+  check("soft wrap is not a fidelity cost at any phone width", SWEEP.every((w) => sweep[w].text.every((l, i) => l === corpusLines[i])), "12/12 byte-clean against the corpus at all five widths");
+  /* The trap §7.1 names explicitly: 49.4px is exact at 375px and a CEILING
+     below it. At 320px the region is 34 columns, the longest lines cost three
+     rows, and a window sized on the constant would place a third line and clip
+     it. Sized on the measured row heights, it falls to two. */
+  check("320px: the window is quantised on measured rows, not the 49.4px constant", sweep[320].rows > 2.5 && sweep[320].windowLines >= 2 && Number.isInteger(Math.round(sweep[320].windowLines)) && Math.abs(sweep[320].windowLines - Math.round(sweep[320].windowLines)) < 0.05, `unit ${sweep[320].unit}px = ${sweep[320].rows} rows → ${sweep[320].windowLines} whole lines`);
+
   await page.setViewport({ width: 320, height: 568, deviceScaleFactor: 1, mobile: true });
   await page.goto(PAGE_URL);
-  const narrow = await page.eval(`({ s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth,
-    lines: Math.round(((document.querySelector(".log").clientHeight - 24) / 24.7) * 100) / 100 })`);
-  check("320px: the body still never scrolls horizontally", narrow.s <= narrow.c, `scrollWidth ${narrow.s} vs ${narrow.c}, ${narrow.lines} lines visible`);
+  const narrow = await page.eval(`(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const log = document.querySelector(".log");
+    const lines = [...document.querySelectorAll(".log__line")];
+    const pad = parseFloat(getComputedStyle(log).paddingTop) + parseFloat(getComputedStyle(log).paddingBottom);
+    const unit = Math.max(...lines.slice(0, 11).map((li) => li.getBoundingClientRect().height));
+    return { s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth,
+      lines: r2((log.clientHeight - pad) / unit), unit: r2(unit),
+      core: r2(document.querySelector(".replay__core").getBoundingClientRect().height) };
+  })()`);
+  evidence.s2Narrow = narrow;
+  check("320px: the body still never scrolls horizontally", narrow.s <= narrow.c, `scrollWidth ${narrow.s} vs ${narrow.c}, ${narrow.lines} whole lines of ${narrow.unit}px, core ${narrow.core}px`);
+  check("320 × 568: the window falls to two whole lines, and the core still fits", Math.abs(narrow.lines - 2) < 0.05 && narrow.core <= 568 - 48 + 0.5, `${narrow.lines} lines, core ${narrow.core}px of ${568 - 48}px`);
 
+  /* --- landscape phone --- */
   await page.setViewport({ width: 667, height: 375, deviceScaleFactor: 1, mobile: true });
   await page.goto(PAGE_URL);
   const landscape = await page.eval(`(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const css = (el, p) => getComputedStyle(el).getPropertyValue(p).trim();
     const log = document.querySelector(".log");
+    const lines = [...document.querySelectorAll(".log__line")];
     const term = document.querySelector(".terminal").getBoundingClientRect();
-    const rail = document.querySelector(".narration").getBoundingClientRect();
-    return { lines: Math.round(((log.clientHeight - 24) / 24.7) * 100) / 100,
-      stacked: rail.top >= term.bottom - 1, termWidth: Math.round(term.width), railWidth: Math.round(rail.width),
+    const card = document.querySelector(".narration");
+    const rail = card.getBoundingClientRect();
+    const list = document.querySelector(".narration__list").getBoundingClientRect();
+    const pad = parseFloat(css(log, "padding-top")) + parseFloat(css(log, "padding-bottom"));
+    const unit = Math.max(...lines.slice(0, 11).map((li) => li.getBoundingClientRect().height));
+    const probe = document.createElement("span");
+    probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+    ["font-family", "font-size", "letter-spacing"].forEach((p) => probe.style.setProperty(p, css(lines[0], p)));
+    probe.textContent = "0";
+    document.body.appendChild(probe);
+    const advance = probe.getBoundingClientRect().width;
+    probe.remove();
+    const region = lines[0].getBoundingClientRect().width - parseFloat(css(lines[0], "border-inline-start-width"));
+    const slots = [...document.querySelectorAll(".narration__entry")]
+      .map((e) => ({ slot: e.dataset.slot, h: r2(e.getBoundingClientRect().height) }));
+    const worst = slots.reduce((a, b) => (b.h > a.h ? b : a));
+    return { lines: r2((log.clientHeight - pad) / unit), unit: r2(unit),
+      stacked: rail.top >= term.bottom - 1, termWidth: r2(term.width), railWidth: r2(rail.width),
+      region: r2(region), columns: Math.floor(region / advance),
+      chrome: r2(document.querySelector(".terminal__chrome").getBoundingClientRect().height),
+      chromeLabelRows: r2(document.querySelector(".terminal__label").getBoundingClientRect().height / 16.5),
+      card: r2(rail.height), list: r2(list.height), worst,
+      cardChars: r2(list.width - 14),
+      core: r2(document.querySelector(".replay__core").getBoundingClientRect().height),
+      overflowing: lines.filter((li) => li.scrollWidth > li.clientWidth).map((li) => li.dataset.line),
       s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth };
   })()`);
   evidence.s2Landscape = landscape;
-  check("landscape phone takes two columns, narration in the wider one", !landscape.stacked && landscape.railWidth > landscape.termWidth, `terminal ${landscape.termWidth}px / narration ${landscape.railWidth}px`);
-  check("landscape phone keeps at least seven log lines on screen", landscape.lines >= 7 && landscape.s <= landscape.c, `${landscape.lines} lines visible, doc ${landscape.s}/${landscape.c}`);
+  check("landscape phone takes two columns, terminal in the wider one", !landscape.stacked && landscape.termWidth > landscape.railWidth, `terminal ${landscape.termWidth}px / narration ${landscape.railWidth}px`);
+  check("landscape phone: the terminal column holds at least 41 characters", landscape.columns >= 41 && landscape.overflowing.length === 0 && landscape.s <= landscape.c, `${landscape.region}px = ${landscape.columns} columns, doc ${landscape.s}/${landscape.c}`);
+  check("landscape phone keeps at least three whole log lines on screen", landscape.lines >= 3 && Math.abs(landscape.lines - Math.round(landscape.lines)) < 0.05, `${landscape.lines} whole lines of ${landscape.unit}px`);
+  /* The two figures §7.1 derived rather than measured, reported as measurements. */
+  check("landscape phone: the chrome bar fits its budget", landscape.chrome <= 58.5, `${landscape.chrome}px measured against 58px budgeted — label sets ${landscape.chromeLabelRows} row(s)`);
+  check("landscape phone: the worst narration slot fits its card", landscape.worst.h <= landscape.list + 0.5, `${landscape.worst.slot} sets ${landscape.worst.h}px in a ${landscape.list}px card`);
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-landscape.png"), await page.screenshot());
 
   await page.setViewport({ width: 1440, height: 900 });

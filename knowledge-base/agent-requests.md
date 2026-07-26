@@ -8,6 +8,98 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-013 — §2 rebuilt to the amended spec and copy
+**From**: Developer · **To**: QA (validate), PM (review) · **Date**: 2026-07-26 · **Status**: open
+**Deliverable**: `index.html`, `styles/replay.css`, `scripts/replay.js`, `tests/verify-shell.mjs`
+
+**What changed.** Two things, and only two. Timing is untouched — measured worst drift against §5.1 is
+**4 ms** across all twelve reveals, the 0.35 s pairs land at 350/346 ms, the gate hold is silent, and the
+chain runs 48.16 s wall.
+
+1. **SP7 now renders the operator's arc**, verbatim from `section-02-narration.md`. Not retyped and not
+   trusted: the harness now reads all ten slot strings out of the narration file's §3 fences and diffs
+   them against the DOM — **10/10 identical**. A stale or re-keyed slot cannot pass again.
+2. **The phone terminal wraps and the totals strip moved out of the core.** `white-space: pre-wrap` with
+   a 2ch hanging indent at every viewport, `overflow-wrap: break-word` as an unreachable backstop, and
+   `.totals` lifted out of `.replay__core` in the DOM.
+
+**Measured against the numbers the step named.** Every figure below is a render measurement, not an
+assertion re-stated:
+
+| Item | Budgeted | Measured |
+|---|---|---|
+| Fixed core (less the 48px sticky bar) | 331.4 | **331.4** (core 479.52px against 479.54 budgeted) |
+| One wrapped corpus line at 375px | 49.4 | **49.38** |
+| Whole lines at 375 × 553 | 3 | **3**, all eleven chain lines at exactly two rows |
+| Line region at 375px | 325px / 41 cols | **323px / 41 cols** at a 7.83px advance |
+| Chrome bar · card · indicator | 41.5 · 199.4 · 16.5 | **41.5 · 199.39 · 16.5** |
+| Totals strip | 33.0, below the core | **33.0**, outside `.replay__core` and below it |
+
+**The trap was real, and the constant would have sprung it.** §7.1's `floor((VH − 379.4) / 49.4)` at
+320 × 568 returns 3. Measured, the region is narrower, the two longest lines cost **three** rows, and one
+line is **74.06px** — three lines would not fit and the third would have been clipped mid-rows. The
+window is now quantised on the tallest measured *chain* line (L12 is excluded: it is the one line not set
+at `--text-terminal` and it is revealed outside the chain), so 320px falls to **2 whole lines** on its
+own. The clamp floor moved from 3 to 2 to match §7.1.
+
+**The scroll rule had to change with it, and that is the non-obvious part.** The old window parked the
+newest line's bottom on the fold. That is the same rule as "whole lines only" exactly while every line is
+one row — once a line is two or three rows, bottom-alignment leaves the *topmost* line sliced through its
+rows, which §7.1 rule 2 forbids. The window now walks back from the newest line while whole lines still
+fit and aligns its **top** to that boundary. Proven, not argued: a full 48 s chain at 375 × 553 sampled
+**319 times**, never a partial line, and exactly `min(revealed, 3)` whole lines in frame at every sample.
+
+**The two landscape figures, confirmed as asked.** Both were derivations; both are now measurements at
+667 × 375.
+- **Chrome bar: 41.5px, not the budgeted 58px.** The label sets one row at a 330px column, so the
+  conservative two-line budget does fall to 41.5px exactly as flagged — 16.5px under budget.
+- **Worst narration slot: SP3 at 8 lines / 231.13px, against 7 lines / 228.3px budgeted.** It exceeds the
+  budget by **2.83px** and therefore sits *inside* the 14.2px slack §10 states. **The priority order was
+  not invoked and the beat indicator stays.** The overrun's cause is that the column sets ~27 characters,
+  not the ~29 §10 derived — the derivation omitted the card's own 24px padding and the entry's 14px
+  inset. The card holds it with 29.4px to spare.
+
+**Three deviations, each stated against the file.**
+
+1. **The log line's 12px inset is dropped below `--bp-wide` and kept above it.** §7.1 derives the line
+   region as the terminal's full inner width — 325px / 41 columns at 375px, 78 columns at `--bp-wide` —
+   with no horizontal inset in it, and the whole two-rows-per-line constant rests on that width. Keeping
+   the 12px would leave the longest line one character of margin on its continuation row. Above
+   `--bp-wide` there are ~78 columns against a 74-character longest line, so the gutter is affordable and
+   is kept: **desktop is visually unchanged.** The visible cost is on a phone, where a log line now starts
+   flush against the terminal's border. That is a look judgment, not a measurement, and it is UI/UX's to
+   overrule.
+2. **The 2ch hanging indent is expressed as `padding-inline-start: 2ch; text-indent: -2ch` on the line,
+   which puts the first row at the region's left edge** — matching §7.1's literal CSS. Above `--bp-wide`
+   it becomes `calc(--gap-hairline + 2ch)`, preserving today's gutter. Measured: continuation rows start
+   15.66px right of their first row.
+3. **Landscape is rebuilt rather than adjusted.** §10 now puts the terminal in the wider column, so the
+   split is 55fr/41fr — the terminal's floor is the wrap rule (measured **41 columns**, §10's exact
+   floor), not a share. The core takes a *definite* height there rather than a ceiling: with an auto
+   height the grid row sizes to the terminal's content and hands the narration whatever the terminal
+   happens to leave, which is backwards for a narration-first section. The card now fills its column and
+   scrolls its own overflow where the column is shorter than the longest slot, instead of holding a fixed
+   line count that cannot be right at two viewport heights at once. Terminal shows **4 whole lines**
+   (§7.1 budgets 3 — this is above budget, not below).
+
+**Two items reproduce at 320px and are deferred, not open** (DEC-027.1–2), reported as instructed and not
+touched: SP3 overflows the six-line narration card, and the totals value line wraps to a third strip row
+(49.5px). The value line keeps `0.02em`, not `--track-micro` — measured **294.23px against 327px** of
+content width at 375px, 32.77px clear of a wrap.
+
+**Build state.** `bash scripts/test.sh` **GREEN on both engines: 146/146 Blink, 13/13 WebKit** — extended,
+never forked (DEC-020). Twelve lines byte-clean against the corpus at 320 / 360 / 375 / 390 / 393px, no
+line needing a sideways gesture at any of them, reduced-motion and no-JS carrying the complete transcript,
+zero external requests through playback. Founder-authored files unmodified.
+
+**One thing QA must re-base, and it is not a build defect.** `qa-independent-audit.mjs` is at 95/100. One
+red is the deliberate `64ch` one. **The other four are assertions of the superseded spec, and every one of
+them is now asserted in its corrected direction by `verify-shell.mjs`**: line 1042 wants five whole lines
+(now three), line 1058 wants lines never to wrap (they now must), line 1153 requires the log to scroll
+horizontally (nothing may), line 1166 wants the narration in the wider landscape column (the terminal
+takes it). The RPRT at §10's landscape line count also cites a superseded 7. These are QA's file to
+correct; flagged here so the next session does not spend the time diagnosing a green build.
+
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
 

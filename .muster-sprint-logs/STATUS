@@ -1,6 +1,6 @@
 run: run-20260726-101215-47505
-state: running step 3
-step: 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild
-step started: 2026-07-26 10:43:38
-last completed: 2026-07-26 Content (web): Reframe SP7 to the operator's arc · 38 turns · $7.34 · out 35k · 9m 44s
-totals: 2 attempt(s) · 120 turns · $16.59
+state: running step 4
+step: 2026-07-26 Developer (web): Rebuild §2 to the amended spec and copy
+step started: 2026-07-26 10:59:47
+last completed: 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild · 74 turns · $7.9 · out 62k · 16m 8s
+totals: 3 attempt(s) · 194 turns · $24.49
