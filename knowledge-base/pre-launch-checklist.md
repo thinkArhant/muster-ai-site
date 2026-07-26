@@ -46,8 +46,8 @@
     (QA proved both with committed probes). The residual that matters is `100dvh` inside
     `max-height: calc(100dvh - 3rem)` — `section-02-replay.md` §7.1's entire 379.4px budget rests on it,
     and dynamic viewport units with a showing/hiding toolbar are exactly where mobile Safari diverges.
-    The budget now carries 25.4px of slack at 375 × 553 rather than 5.1px (DEC-026) — real margin
-    against this exact risk, but margin is not proof.
+    The budget now carries 32.6px of slack at 375 × 553 rather than 5.1px (DEC-026, widened by
+    DEC-029's leading split) — real margin against this exact risk, but margin is not proof.
   - Resolution is a device look, not a harness: open §2 on an iPhone in Safari with the toolbars shown
     and confirm both layers stay on screen for the whole playback. Everything else in §2 is machine-
     verified on Blink. See DEC-021.4.

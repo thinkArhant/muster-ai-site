@@ -199,7 +199,11 @@ agent that finds a gap reports it and stops.
 
 - [x] **Design foundation + §2 replay spec** — Priority: HIGH, Effort: L, Platform: web
   - **Done** 2026-07-25 — HO-002 accepted at the Wave 1 gate with amendments; the amendments delivered
-    as HO-010 and accepted 2026-07-25, closing finding F1. Both specs are the Wave 2/3 build inputs
+    as HO-010 and accepted 2026-07-25, closing finding F1. Both specs are the Wave 2/3 build inputs.
+    Two gate-driven fix rounds landed on `section-02-replay.md` since and are both accepted: the phone
+    terminal wraps instead of scrolling sideways (HO-011, DEC-027), and the phone log groups into
+    entries with one 12px accent inset in both layers (HO-015, DEC-030). `page-shell.md` gained one
+    PM ruling — the leading in a component-scoped pairing is the one-row case
   - **Deliverable**: `knowledge-base/design-specs/web/page-shell.md` (tokens, type scale, motifs,
     section chrome, both themes) and `knowledge-base/design-specs/web/section-02-replay.md` (replay
     layout, two-layer structure, annotation placement, beat timing, reduced-motion fallback); HO-002

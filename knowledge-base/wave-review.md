@@ -2,47 +2,59 @@
 <!-- File-mediated I/O contract between the autonomous sprint loop and the founder at a wave gate. PM-owned. Tier-2: read on demand only (at a wave gate / on resume), never a startup read. -->
 <!-- The loop does NOT parse this file. PM writes the Output block at the gate; the founder writes the Verdict block; PM reads the verdict on resume (muster/scripts/muster-sprint-resume.sh). Keeping human feedback here — not in the orchestration queue — is the seam a future remote/mobile bridge plugs into. -->
 
-> **This is the Wave 3 RE-GATE packet.** The first §2 gate approved the replay on pacing and narration
-> (passes 1–3) on 2026-07-26 and returned four findings; all four are ruled and three are built or
-> being built (DEC-023 through DEC-026). That verdict is preserved at the bottom of this file, because
-> this gate is a re-judgement of the same section rather than a new one. **This gate is narrow: two
-> things.** The live numbers remain a **48.00 s** chain and a **4.80 s** gate hold.
+> **This is the Wave 3 GATE 3 packet — the phone, third look.** The first §2 gate approved the replay
+> on pacing and narration (passes 1–3); the re-gate approved SP7 and sent the phone back with two
+> findings. Both prior verdicts are preserved below, because this is a third judgement of the same
+> section rather than a new one. **This gate is narrower than the last: one thing, looked at two ways.**
+> The live numbers remain a **48.00 s** chain and a **4.80 s** gate hold.
 
 ## Current Wave
 
-**Wave:** 3 re-gate — the §2 replay after the fix wave: SP7 reframed, the phone terminal wrapped
+**Wave:** 3, gate 3 — the §2 replay after the second fix round: the phone log grouped into entries and
+the rust mark given one inset in both layers
 **Build at:** the autonomous worktree on `sprint/auto-20260725-163930`. The live page is `index.html`
 in that worktree; `bash scripts/test.sh` re-runs both engines' harnesses from there.
-**Under review:** the live §2 section · `design-specs/web/section-02-narration.md` · HO-011 (UI/UX) ·
-HO-012 (Content) · HO-013 (Developer) · HO-014 (QA)
+**Under review:** the live §2 section · HO-015 (UI/UX) · HO-016 (Developer) · HO-017 (QA)
 
 **Your criterion, restated because it is the whole gate**: the replay must be excellent on run-log
 pacing and plain-English narration **with the styling mentally subtracted**. If it only works dressed,
 that is the signal the seed's Sequencing section wanted in week one, and it is cheaper to hear now
 than after §1 and §3 are built on top of it.
 
-### Notices since the first gate
+### Notices since the re-gate
 
-Two, from `founder-notices.md`, both FYI — neither needs an answer:
+One, and it needs no answer: **both findings you raised were fixed without being paid for.** The log's
+single leading value was doing two jobs — separating rows inside an entry and separating one entry from
+the next with the same number — so it was split into the two values it was standing in for. Entries are
+now separated by roughly **2.85×** the gap between rows inside one, and because the rows themselves
+tighten, the section got **7.2px shorter** rather than taller. The accent mark takes one 12px inset in
+both cards at every viewport.
 
-- **The phone terminal now wraps instead of scrolling sideways, and the price is visible on your
-  iPhone**: 3 log lines instead of 5 at 375 × 553, each readable to its last character where none was
-  before. Paid by moving the totals strip just below the playback core — not from fidelity, not from
-  type size (DEC-026). The totals read the same; they sit a thumb-flick down. Desktop is measurably
-  unchanged, verified at five widths.
-- **The audit no longer exits red.** With `64ch` ruled, the 45–75-character band check is retired to a
-  reported measurement on the QA step, so `qa-independent-audit.mjs` goes back to being a signal.
+**Two things in your own re-gate findings turned out to be wrong, and they are corrected here rather
+than left to be discovered.** Both were found by re-deriving rather than re-reading, and both made the
+fix better:
+
+- **F-R2 was not mobile-only.** A `border-inline-start` sits *outside* padding, so the wide-viewport
+  rule that insets the log's text never moved the tick. The tick was flush at **every** viewport, and
+  desktop's mismatch was the wider of the two — a flush tick against a rail bar sitting 24px in. A
+  phone-only fix would have left the larger version of the same collision on the screen most readers
+  arrive on.
+- **The horizontal room was not already spent.** Simulated against the corpus at every column width,
+  all eleven chain lines hold at two rows down to 37 first-row columns; the section had shipped at 41.
+  The floor had simply never been written down, which is why the room read as unavailable. It is
+  written down now.
 
 **Still true and still unproven:** `100dvh` in mobile Safari is the one §2 behaviour no harness here
-can prove, and §7.1's entire **379.4px** budget rests on it. The wrap change bought real margin —
-25.4px of slack at 375 × 553 where it had 5.1px — but margin is not proof, which is why the
-live-playback look below is worth your 30 seconds.
+can prove, and §7.1's entire **379.4px** budget rests on it. The fix widened the margin again —
+**32.6px** of slack at 375 × 553, up from 25.4px and from 5.1px before that — but margin is not proof,
+which is why the live-playback look below is worth your 30 seconds.
 
 ### Already green — machine-verified, do not re-litigate
 
-Carried forward from the first gate, where each was re-derived by PM rather than read off a handoff.
-The fix wave touched two things — one narration string and the mobile layout — so everything below
-still holds; HO-013 and HO-014 re-measure it on the rebuilt page.
+Carried forward from the earlier gates, where each was re-derived by PM rather than read off a handoff.
+This round touched vertical rhythm and one horizontal gutter — no string, no dwell, no offset — so
+everything below still holds; HO-016 and HO-017 re-measure it on the rebuilt page and QA appends its
+measured entry-separation and accent-pair figures here before this gate fires.
 
 - **The narration fits its contract, measured not eyeballed.** All ten strings re-measured by script,
   twice now: 139 timed words of a 163 ceiling, every slot inside budget *and* inside its read window at
@@ -60,9 +72,10 @@ still holds; HO-013 and HO-014 re-measure it on the rebuilt page.
 - **Fidelity holds at the byte, and structurally.** All 12 lines diff byte-clean against the corpus —
   679 characters, equal codepoint counts. A soft wrap inserts and removes no character, which is
   precisely why wrapping could pay for the fix and truncation could not.
-- **The phone budget is met with more room than before.** The fixed core drops to **379.4px** once the
-  totals strip moves below it, so at 375 × 553 the terminal shows **3 whole wrapped lines** with 25.4px
-  of slack. Before the fix it measured 499.89px with five *clipped* lines and 5.1px of slack.
+- **The phone budget is met with more room than before.** The fixed core is **379.4px** and does not
+  move, so at 375 × 553 the terminal shows **3 whole entries** with **32.6px** of slack. Before the wrap
+  fix it measured 499.89px with five *clipped* lines and 5.1px of slack; the entry split then returned
+  another 7.2px on top. No viewport lost an entry to either change.
 - **The degraded paths are complete, not reduced.** Reduced-motion and no-JS both render the full
   transcript, string-identical to the motion path's end state. Zero non-`file:`/`data:` requests across
   a full 48-second playback, and the page renders complete with the network off.
@@ -76,39 +89,38 @@ why the live-playback look is worth your 30 seconds.
 
 **Passes 1, 2 and 3 are settled and are not re-opened**: the narration alone carried a first-time
 reader, the expanded re-verify beat and the compressed QA beat both read correctly, and the 4.80 s gate
-hold reads as stillness rather than as a stall. You judged all three at the first gate with the styling
-subtracted; nothing in the fix wave touched them — no dwell, no offset, no other slot's words moved.
+hold reads as stillness rather than as a stall. **SP7 is settled too** — you approved it at the re-gate
+at 15 of 16 words, and Content is done with §2. No dwell, no offset and no slot's words moved in this
+round; it touched vertical rhythm and one horizontal gutter, nothing else.
 
-Two checks, plus the look that the first gate could not get.
+Two checks, plus the look no gate has managed to get yet.
 
-- [ ] **SP7, rewritten to your arc, at 15 words**: *"The operator planned the sprint, left the agents
-      running, and returns to a deploy-ready site."* Still 15 words, still 4.29 s of the 4.80 s hold —
-      the reframe cost nothing and SP6's 12 words of relief are still unspent if you want a run-up.
-      **The judgement you asked for**: does it land the arc without reaching? PM's line-by-line found no
-      adjective-as-argument — "deploy-ready" is the packet's recorded state, not praise — and the effect
-      comes from the tense turn landing on a terminal that reads `awaiting operator` at that instant.
-      That is the guardrail satisfied on paper. Whether it *lands* is yours.
+- [ ] **Can you tell where one log entry ends and the next begins, at a glance?** That is the whole of
+      the first check — at a glance, not on inspection. An entry is two rows on your phone; the gap
+      between two entries is now about **2.85×** the gap between the two rows inside one, which is the
+      ratio the eye actually reads. The alternative that was rejected is worth knowing so you can judge
+      against it: banding the entries would have grouped them too, with a new surface colour the palette
+      does not have, and would have made a terminal read as a data table.
 
-- [ ] **The phone, on the thing you complained about.** Every log line should now read to its last
-      character with no sideways gesture, anywhere. **The price is visible and you should look at it
-      with the benefit in view**: the terminal shows **3 whole lines** at 375 × 553 instead of 5, and
-      each sets two rows. The trade was not five-lines-versus-three — at 41 columns a phone that does
-      not wrap shows five *first halves*, and eleven of the twelve corpus lines are longer than the
-      column. Judge whether three lines still reads as a live log rather than as a caption. UI/UX said
-      plainly it would not sign off at two; three is the top of the range and was paid for by moving
-      the totals strip one thumb-flick below the playback, where it reads identically.
+- [ ] **Does the rust mark sit the same way in both cards?** It should be inset the same 12px from the
+      inner edge of the terminal and of the narration card — the same distance, not merely both
+      present. Check it on the phone and, if you are at a desk, on the wide layout too: the desktop
+      mismatch was the larger of the two and it was invisible until it was measured.
 
-### Carried from the first gate: the live-playback look
+**Not up for judgement this round unless something looks broken**: the three whole entries at
+375 × 553. That trade was settled at the re-gate — at 39 columns a phone that does not wrap shows five
+*first halves*, and eleven of the twelve corpus lines are longer than the column.
 
-Still open, and it is the one thing no harness here can produce. Your screenshot last time showed the
-complete-transcript end state — all twelve lines, the beat indicator at `BEAT 06 / 06`, narration
-stacked — which means playback had finished or Reduce Motion was on. Both render correctly, so the
-screenshot is real evidence for the degraded path; it just is not evidence for the guarantee under test.
+### Carried: the live-playback look, now mostly settled
 
-**What to do**: reload, let §2 scroll into view fresh, and watch *during* the chain. The terminal should
-show a short window of lines that advances, with the narration card in view the whole time. `100dvh` in
-mobile Safari is the mechanism the entire height budget rests on, and a real phone is the only
-instrument that settles it.
+**Your last screenshot did the job.** It caught live playback at `BEAT 03 / 06`, which is the state the
+guarantee is actually about — it confirmed the visibility gate fires and that both layers hold on screen
+during the chain. That is the evidence two gates asked for.
+
+What remains is narrower: the same look once more on the rebuilt log, because the entry split changes
+what the window is quantised on. `100dvh` under mobile Safari's dynamic toolbars is still the one
+mechanism no harness here can prove, and a real phone is still the only instrument that settles it.
+Reload, let §2 scroll into view fresh, and watch *during* the chain.
 
 ### Decisions needed from you
 
@@ -133,15 +145,22 @@ on the QA step so the audit stops exiting red on a standard the product has deli
   together in Sprint 2.
 - **The narration rail scrolls its own overflow on desktop** (OBS-001, low).
 - **The section's label id differs from the spec's literal string** (OBS-004). PM moves the spec.
-- **Landscape now shows 3 lines by design, not 8 by accident** (supersedes OBS-005). The column split
-  inverted — the terminal takes the wider column, sized by the 41-character requirement rather than by
-  a share, because width is the only thing that decides whether a line reads without a gesture.
+- **Landscape now shows 3 entries by design, not 8 by accident** (supersedes OBS-005). The column split
+  inverted — the terminal takes the wider column, sized by the wrap rule rather than by a share, because
+  width is the only thing that decides whether a line reads without a gesture. *Three is the number the
+  design derives from Safari's ~331px landscape viewport; an emulator handed the full 375px measures
+  four. Both are right — the derivation is the floor, the measurement is its upper bound — so a
+  screenshot showing four entries is not a miss.*
 
-**Two spec gaps were found by re-deriving the deliverables rather than reading them**, and both were
-the kind that silently re-break a fixed defect later: the totals strip's fit constraint was stated
-without the tracking value that achieves it, and §7.1's line-height constant is exact at 375px but a
-ceiling below it, where a literal implementation would clip a line at 320px. Both now say so in the
-spec and on the build step.
+**Spec gaps keep being found by re-deriving the deliverables rather than reading them**, and they are
+the kind that silently re-break a fixed defect later. Earlier rounds: the totals strip's fit constraint
+stated without the tracking value that achieves it, and §7.1's line-height constant exact at 375px but a
+ceiling below it. This round: "line region" meant two different widths in one file, the accent rule
+stated a number where the invariant is the equality of two numbers, and one checklist item bound at a
+derived figure with under a tenth of a column of headroom — a check that would have gone red on rounding
+against a correct build. All are closed in the spec and on the steps that carry them. **This is the
+third time a check has been caught measuring something adjacent to the claim it was written for**; it is
+recorded as a pattern rather than as three incidents.
 
 **Three deviations from the specs shipped deliberately at the first gate and stand.** The narration
 rail is 22rem rather than a literal `36ch`; the controls sit below the core; the chrome label's tracking

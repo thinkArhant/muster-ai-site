@@ -169,17 +169,32 @@ on a clean build afterwards** — that is the acceptance criterion, not a nicety
 45-character floor in DEC-021: replace a wrong threshold, never loosen it.
 
 **What the mobile change must satisfy** (§12 carries the full checklist; these are the ones that moved):
-3 whole lines at 375 × 553 with both layers visible for the entire playback and measured core height
-≤553px; **no corpus line needs a horizontal gesture to read in full at 320 / 360 / 375 / 390 / 393px**;
-nothing scrolls horizontally anywhere — page body or terminal region — at 375px, 320px and 200% zoom;
-the window never clips a wrapped line part-way through its rows; continuation rows carry the 2ch hanging
-indent and no row but an entry's first begins at the left edge; the totals strip renders below the core
-on mobile and its value line never wraps to a third strip row; desktop measures ≥74 columns at
-`--bp-wide` and above with all twelve lines fitting and no wrap.
+**3 whole entries** at 375 × 553 in 141.0px of line region, with both layers visible for the entire
+playback and measured core height ≤553px; slack is 32.6px and the guarantee floor 469.4px; **entry
+separation measured, not eyeballed — at least 2× the row-to-row gap inside an entry (spec'd 18.5px
+against 6.5px), and report both numbers**; **no corpus line needs a horizontal gesture to read in full
+at 320 / 360 / 375 / 390 / 393px**; nothing scrolls horizontally anywhere — page body or terminal
+region — at 375px, 320px and 200% zoom; the window never clips an entry part-way through its rows and
+never comes to rest inside an inter-entry gap; continuation rows carry the **1ch** hanging indent, which
+is now a second cue rather than the only one — assert it and the separator separately; the accent mark
+measures 12px from its own card's inner edge in **both** layers, reported as a pair, **at 1280px taken
+during playback as well as statically** (the rail's inset has two sources and only one applies while the
+chain runs); the totals strip renders below the core on mobile and its value line never wraps to a third
+strip row; desktop's **first row** measures ≥74 columns at `--bp-wide` and above — assert the row, not
+the 78-column content box — with all twelve lines fitting and no wrap.
 
-**Check the 320px case specifically.** The visible-line formula is a ceiling below 375px, where the two
-longest lines cost three rows rather than two — a build that implements the 49.4px constant literally
-will show a third line and clip it. Two known-carried items live at that width and are **not** yours to
+**Measure the two-row constant at 360 / 375 / 390 / 393 rather than inheriting it.** The horizontal
+floor is 37 first-row columns / 36 continuation, verified against the corpus with no rounding margin at
+the floor, and 360px sits 5.7px above it — under one column. L3's second row carries two of the four
+glyphs that can come from a fallback face, so 360px is the case that has to be measured.
+
+**Report the landscape column count; do not fail it at 40.** §12 binds at the 37 floor. The 55/41 split
+is sized to deliver 40 and the derivation clears it by under a tenth of a column, so a red there would
+be the measuring-something-adjacent failure this project has already paid for three times.
+
+**Check the 320px case specifically.** The visible-entry formula is a ceiling below 375px, where the
+longest lines cost three rows rather than two — a build that implements the 51.0px pitch literally will
+show a third entry and clip it. Two known-carried items live at that width and are **not** yours to
 fix: SP3 overflows the six-line narration card there, and the totals value line wraps (DEC-027.1–2).
 Report them if they reproduce; they are deferred, not open.
 

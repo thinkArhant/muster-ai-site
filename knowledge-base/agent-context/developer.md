@@ -193,27 +193,51 @@ the 4.80 s gate hold are not in scope.
 1. **SP7's string changed** (DEC-024): *"The operator planned the sprint, left the agents running, and
    returns to a deploy-ready site."* Render it verbatim from the narration file — never retyped. The
    built page still carries the superseded line, so the independent audit reds on SP7 until this lands.
-2. **The phone terminal wraps and the totals strip moves** (DEC-026). `white-space: pre-wrap` with a
-   2ch hanging indent (`padding-inline-start: 2ch; text-indent: -2ch`) at **every** viewport — it is
-   inert on desktop, where no line reaches the column. `overflow-wrap: break-word` as a backstop only.
+2. **The phone terminal wraps and the totals strip moves** (DEC-026, amended by DEC-029).
+   `white-space: pre-wrap` with a **1ch** hanging indent (`padding-inline-start: 1ch; text-indent: -1ch`)
+   at **every** viewport — it is inert on desktop, where no line reaches the column. The 12px that used
+   to be the line's other half now sits on the log as the accent gutter, so a first character does not
+   move. `overflow-wrap: break-word` as a backstop only.
    Nothing scrolls horizontally anywhere: not the terminal's region, not the page body, at any width.
    The chain totals strip sits **immediately below** the playback core on mobile, not inside it — that
    is what buys the 45.0px the wrap costs. Desktop keeps it in the two-column core.
 
-**Numbers you will be measured against**: fixed core **379.4px**; one wrapped corpus line is two 24.7px
-line boxes = 49.4px; at 375 × 553 the window is **3 whole lines**, core used 527.6px, slack 25.4px. The
-guarantee floor is 478.2px of visual viewport height.
+**Numbers you will be measured against** (current — the log's leading has split, so every figure that
+used a uniform 24.7px line box is retired): fixed core **379.4px**, unchanged; below `--bp-wide` a row
+inside an entry is **19.5px** (`--text-terminal` × `--lead-micro`), an **entry box is 39.0px**, and the
+**entry pitch — box plus the `--gap-hairline` separator — is 51.0px**. At 375 × 553 the window is
+**3 whole entries** in 141.0px of line region, core used 520.4px, slack **32.6px**. The guarantee floor
+is **469.4px** of visual viewport height. The log carries a 12px accent gutter at every viewport and the
+hanging indent is **1ch**, giving **39 first-row columns / 38 continuation** at 375px. Desktop keeps
+`--lead-terminal` and gains no separator.
 
-**The one trap.** §7.1's `floor((VH − 379.4) / 49.4)` is a *budget* formula: exact at ≥375px, a
-**ceiling** below it, because at 320px the region is 34 columns and the two longest lines cost three
-rows. Implementing the constant literally there places a third line the window then clips mid-rows,
-which §7.1 rule 2 forbids. Build rule 3's mechanism instead — quantise the flex remainder down to whole
-wrapped lines by measurement, so the count falls out of the real row heights.
+**The horizontal floor is 37/36 columns**, not whatever a viewport happens to give — verified by
+simulating the corpus, where all of L1–L11 hold at two rows down to exactly that and L3 (74 characters)
+breaks first below it. The floor has no rounding margin in it, and 360px sits 5.7px above it — under one
+column — so **measure the row count at 360 / 375 / 390 / 393 rather than trusting the table.** If any of
+L1–L11 sets three rows, the gutter yields — in both layers together, so §9.1's single inset survives —
+never fidelity and never the entry count.
+
+**The one trap, wearing a new number.** 51.0px is a *ceiling*, exactly as 49.4px was: L12 sets a
+different box (1.25rem, outside the chain) and below 375px a chain line is three rows. Build §7.1 rule
+4's mechanism — quantise the flex remainder down to whole **entries** by measurement — so the count
+falls out of real heights. The window must come to rest on an entry's own box edge and never inside a
+separator, which would show a fragment of gap at the top and read as a clipped entry.
+
+**Three implementation facts the spec states as outcomes and the stylesheet gets wrong by default.**
+(1) The desktop rail's inset has two sources: `.narration`'s padding *and*
+`.replay[data-state] .narration__list { inset: var(--gap-flow) }`. The second wins while playback runs,
+so changing only the padding fixes the static transcript and leaves the live chain at 24px. (2)
+`--line-box` in `.replay` is `--text-terminal × --lead-terminal` and is wrong below `--bp-wide` the
+moment the leading splits. (3) The continuation indent halves, 2ch → 1ch, as the entry cue strengthens —
+so the indent no longer stands alone and the separator has to be asserted as its own property.
 
 **Two landscape figures in the spec are derived, not measured, and are yours to confirm**: the chrome
 bar at a 324px column (budgeted conservatively at two lines / 58px; it may fall to 41.5px) and the
 worst-case narration slot at ~29 characters per line (budgeted 7 lines / 228.3px). Both have slack above
-them; if either exceeds it, §7.1's priority order drops the beat indicator first.
+them; if either exceeds it, §7.1's priority order drops the beat indicator first. Landscape's first row
+is derived at 40 columns with under a tenth of a column of headroom — §12 binds at the 37 floor and asks
+for the measured number, so a 39 there is margin spent, not a defect.
 
 **The totals strip's tracking is spec, not styling.** `0.02em` on the value line, not `--track-micro` —
 at the wide tracking the 43-character string sets 351.7px against a 327px column and wraps to a third

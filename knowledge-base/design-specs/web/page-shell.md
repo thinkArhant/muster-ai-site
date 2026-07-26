@@ -81,6 +81,8 @@ Type scale — six steps, plus two component-scoped sizes (deliberate; the compo
 | `--text-terminal` | `0.8125rem` (13px) / 1.9 | mono | Terminal log lines (component-scoped) |
 | `--text-readout` | `clamp(1.5rem, 3vw, 1.875rem)` / 1 | mono, tabular-nums | Metric values, `--accent` — floor 24px keeps rust at AA-large |
 
+**The leading in a component-scoped pairing is the one-row case.** `--text-terminal` is scaled for an instrument entry that sets one row, and 1.9 is the leading for that entry. Where a component's entry sets more than one row, a single leading value cannot both separate rows inside an entry and separate one entry from the next — it gives identical whitespace on both sides of an entry boundary, and the entries stop reading as entries. Such a component states its own row pitch and its own entry separator, and the pairing above is the default it departs from. The size never moves and no token is added; only the leading is component-overridable, and only where an entry wraps. `section-02-replay.md` §7.1 rule 2 is the instance.
+
 **Full-ink rule (binding, A-007):** any paragraph meant to be read — body, lead, kicker, narration — is `--ink`. `--muted` is for `--text-label` and `--text-micro` elements only. A muted paragraph is a defect.
 
 Numerals: `font-variant-numeric: tabular-nums` on every metric, timestamp, and count-up target — animated digits must not reflow layout.

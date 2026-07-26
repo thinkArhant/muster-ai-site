@@ -487,3 +487,30 @@
   🧪 bash   sed -n '85,125p' knowledge-base/orchestration-queue.md; echo "=== LINT ==="; bash muster/scripts/muster-queue-lint.sh 2>
   🧪 bash   git show --stat --oneline HEAD | head -20
   🧪 bash   git add -A && git status --porcelain && git commit -q -F - <<'EOF' qa: the independent audit runs green and covers all o
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD 2>&1 | tail -5
+  💬 QA step executed end-to-end. The build is green and the queue now sits on the founder re-gate. **What I validated** (scope derived from `section-02-replay.md` §12 and `section-02-narration.md` directl
+    📖 ×18 · ✏️  ×30 · 🧪 ×59 · ⚠️  ×1
+  ✓ 109 turns · $9.83 · peak ctx 196k/1M 19% · out 55k  (success)
+  ✓ [32;1mQA[0m · [1m41m 23s[0m · advanced → 2026-07-26 Wave 3 Re-gate — founder review · handoff HO-014 filed ✓
+    run so far: 2h 3m · $45.41 · 5 steps
+───────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════
+⛔ HALT — 2026-07-26 Wave 3 Re-gate — founder review   (Role: halt)
+
+   The loop stopped for founder input — nothing is wrong.
+   • Wave gate: review knowledge-base/wave-review.md, write your verdict in its
+     ## Verdict section, then run: bash muster/scripts/muster-sprint-resume.sh
+     (from this worktree).
+   • PM escalation: see '## Founder Decisions' in knowledge-base/orchestration-queue.md, answer, then re-run
+     muster-sprint-run.sh.
+═══════════════════════════════════════════════════════════
+── run summary ────────────────────────────────────────────
+  2026-07-26 UI/UX (web): Mobile termi    82    $9.25   19%    85k 21m 39s
+  2026-07-26 Content (web): Reframe SP    38    $7.34   15%    35k  9m 44s
+  2026-07-26 PM: Review HO-011 and HO-    74     $7.9   18%    62k  16m 8s
+  2026-07-26 Developer (web): Rebuild     85   $11.09   23%    92k 34m 12s
+  2026-07-26 QA (web): Re-validate §2   109    $9.83   19%    55k 41m 23s
+  2026-07-26 Wave 3 Re-gate — founde  halt
+───────────────────────────────────────────────────────────
+  5 steps · 388 turns · $45.41 · out 329k · 2h 3m wall · stopped: halt (2026-07-26 Wave 3 Re-gate — founder review)
+  📣 3 founder notice(s) this run — read knowledge-base/founder-notices.md

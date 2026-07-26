@@ -155,17 +155,27 @@ Content files it.
 
 ## Current state of §2's mobile model (2026-07-26 — supersedes A3 above)
 
-The log soft-wraps at every viewport with a 2ch hanging indent, **nothing scrolls horizontally
+The log soft-wraps at every viewport with a **1ch** hanging indent, **nothing scrolls horizontally
 anywhere**, and §2 claims no WCAG 1.4.10 exception at all. Narration-first still holds — per-viewport
-visible line counts, the card in view for the whole playback.
+visible entry counts, the card in view for the whole playback. Below `--bp-wide` the log's single
+leading value is split in two: rows inside an entry set at `--lead-micro`, entries separated by a
+`--gap-hairline` `margin-block-start`. The accent mark is inset `--gap-hairline` from the inner edge of
+its own card in **both** layers at every viewport — the invariant is the equality of the two insets, and
+12px is its value.
 
 The current numbers, so nothing downstream quotes the retired ones: fixed core **379.4px** (the chain
-totals strip left it, returning 45.0px), one wrapped line 49.4px, **3 whole lines at 375 × 553** with
-25.4px of slack, guarantee floor 478.2px. The line region at 375px is 325px = **41 columns**; eleven of
-the twelve corpus lines exceed it and all of L1–L11 cost exactly two rows there. Landscape inverts the
-column split — the terminal takes the wider column (~54/42), sized by the 41-column requirement rather
-than by a share.
+totals strip left it, returning 45.0px), row **19.5px**, **entry box 39.0px**, **entry pitch 51.0px**,
+**3 whole entries at 375 × 553** in 141.0px of line region with **32.6px** of slack, guarantee floor
+**469.4px**. The line region at 375px is 313.0px, giving **39 first-row columns / 38 continuation**. The
+**horizontal floor is 37/36** — all of L1–L11 hold at two rows down to exactly that, L3 breaks first
+below it, and anything above it is margin. Landscape inverts the column split — the terminal takes the
+wider column (55/41), sized by the wrap rule rather than by a share.
 
-Accepted with no revision (DEC-027). Two items are deferred to Sprint 2 rather than dropped: SP3
-overflows the six-line narration card at 320px (the fix is §7.1's own priority order — the beat
-indicator returns 28.5px against a 28.9px line), and the totals value line wraps at that width.
+Accepted with notes, no revision (DEC-030). Three PM corrections landed in the spec in place and change
+no design value: "line region" now names three widths apart (§7), §9.1 states the equality rather than
+the number as the invariant, and §12's landscape check binds at the 37 floor instead of a derived 40.
+The open item was ruled by amending `page-shell.md` — a component-scoped pairing's leading is the
+one-row case, and a component whose entry wraps states its own row pitch. Two items are deferred to
+Sprint 2 rather than dropped: SP3 overflows the six-line narration card at 320px (the fix is §7.1's own
+priority order — the beat indicator returns 28.5px against a 28.9px line), and the totals value line
+wraps at that width.

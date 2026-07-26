@@ -983,5 +983,82 @@ amendment PM owns.
 
 **Touched**: `design-specs/web/section-02-replay.md`, `agent-requests.md`, `orchestration-queue.md`.
 
+### DEC-030 — HO-015 accepted; the shell records that a wrapping entry sets its own row pitch (2026-07-26)
+
+**Decision**: HO-015 accepted with notes, no revision. Both findings are resolved on the merits and the
+build step is cleared. The one item it left open is ruled by amending the shell, not by ratifying the
+component-scope argument alone.
+
+**The mechanism and the budget were re-derived, not read.** The fixed core sums to 379.4px item by item
+against the stated 375 × 553 visual viewport; an entry box is 39.0px and the pitch 51.0px; every row of
+§7.1's viewport table reproduces at 3 / 5 / 5 / 5 / 5 entries; the 141.0px against 148.2px holds and the
+7.2px it returns is real, moving slack 25.4 → 32.6px and the guarantee floor 478.2 → 469.4px. The 2.85×
+ratio is the whitespace between glyph boxes — 18.5px against 6.5px — where a single leading gives
+11.7px on both sides of an entry boundary, so the absolute entry gap also *rises*, 11.7 → 18.5px, while
+the section gets shorter. That is an unusually clean result and it survives checking.
+
+**The load-bearing claim was checked at the corpus, by simulation, not against its citation.** Greedy
+`pre-wrap` wrapping of L1–L11 at every column width: all eleven hold at two rows down to **37 first-row
+columns / 36 continuation**, and L3 is the first to break below it — exactly as claimed. At the floor L3
+sets 37 characters on row one and 36 on row two, so the floor is an exact fit with no rounding margin in
+it, which is why §7.1's requirement to *measure* at 360px (5.7px of margin, and L3's second row carries
+two of the four fallback-face glyphs) is the right call rather than a formality. At 375px's 39/38 all
+eleven hold; at 320px six of them go to three rows, which is the deferred case.
+
+**Nothing was paid for out of the two closed guarantees.** Soft-wrap inserts and removes no character;
+the type scale does not move; the accent gutter narrows the line region, which can only reduce overflow;
+the `break-word` backstop stays unreachable (longest corpus token 18 characters against 31 columns at
+320px). Fidelity and no-horizontal-scroll are untouched.
+
+**Four things this could break that HO-015 does not name**, found by asking its own forward question of
+it. All four are implementation-facing and ride the build step rather than reopening the spec:
+
+1. **The desktop rail's inset is set in two places.** `.narration` carries `padding: --gap-flow`, but
+   while a playback state is present `.narration__list` is absolutely positioned at `inset: --gap-flow`.
+   Changing only the card's padding fixes the accent inset in the no-JS transcript and leaves it at 24px
+   for the entire live chain — a fix that passes a static check and is wrong on screen.
+2. **The 51.0px pitch is a ceiling, not a constant**, and this is the same trap as the 49.4px line
+   constant flagged one round ago with a new number. L12 sets a different box (1.25rem, outside the
+   chain), and below 375px a chain line is three rows. §7.1 rule 4's "quantised down to whole entries"
+   is a measurement instruction and it governs.
+3. **`--line-box` is `--text-terminal × --lead-terminal`** in the stylesheet and is wrong below
+   `--bp-wide` the moment the leading splits.
+4. **The continuation cue is halved as the entry cue is strengthened** — 2ch → 1ch, ~15.7px → ~7.8px.
+   The trade is right, and it means the indent no longer stands alone: §12 now asserts the indent and
+   the separator as two properties.
+
+**Three corrections applied to the specs rather than returned for revision**, none of which moves a
+design value:
+
+- §7 defined "line region" as the log's content box while §7.1's tables define it as the width *after*
+  the accent gutter, and §7's stated deduction (gutter + hanging indent) does not produce its own
+  correct answer — a hanging indent does not narrow a first row. Three widths are now named apart and
+  each table says which it uses. §12's desktop check now asserts the **first row** at ≥74 columns, which
+  is the width L3 has to fit in, rather than the content box.
+- §9.1 stated 12px "at every viewport" while §7.1 rule 1 lets the gutter yield if measurement demands.
+  §9.1 now states the invariant as the *equality* of the two insets, with 12px as its value and rule 1
+  as the one place the value may move — in both layers together.
+- §12 bound the landscape check at ≥40 first-row characters. The derivation gives 40.04 — under a tenth
+  of a column of headroom — so the check would have gone red on a rounding difference against a correct
+  build. It now binds at §7.1's 37-column floor and *reports* the measured count. This is the failure
+  class that has already cost this project three checks: asserting something adjacent to the claim.
+
+**Ruling on the open item — the shell is amended.** UI/UX's component-scope argument is right and the
+amendment ratifies it rather than overruling it: it moves the permission into the shell instead of
+leaving it implicit. `page-shell.md` now records that the leading in a component-scoped pairing is the
+one-row case, that a component whose entry sets more than one row states its own row pitch and entry
+separator, and that only the leading is overridable — never the size, and no token is added. Leaving the
+shell asserting 1.9 unconditionally would have it stating something untrue of its only consumer on the
+viewport most readers arrive on, and the shell's type table is where the next section spec with a
+wrapping instrument will look. §2 needs no change; it already carries the argument in rule 2.
+
+**Impact**: Developer (builds), QA (validates), UI/UX (spec amended in place), PM.
+
+**Touched**: `design-specs/web/page-shell.md`, `design-specs/web/section-02-replay.md` (§7, §9.1, §12),
+`agent-requests.md`, `orchestration-queue.md`, `current-sprint.md`,
+`agent-context/{developer,qa,ui-ux}.md`.
+
+---
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
