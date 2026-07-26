@@ -152,11 +152,18 @@ Sticky at top, `height: 3rem`, opaque `--ground`, 1px `--hair` bottom rule. Cont
 |---|---|---|
 | Left | Brand wordmark — mono, uppercase, `--ink`, one accent glyph permitted | Content (copy), this spec (treatment) |
 | Right | `⟨pulse dot⟩ OPERATIONAL` — dot per §10.2, word in `--muted` | this spec |
-| Far right | Theme control `THEME · DARK/LIGHT` — flips `data-theme`, no persistence (see Open Questions) | this spec |
+
+**No theme control ships.** Theme selection is the reader's system preference, honoured via
+`prefers-color-scheme` (§2.1). Both themes are first-class, and neither is something the reader is asked
+to choose on arrival: the page's argument is restraint — one CTA, no badges, no furniture — and a control
+that adds a decision nobody asked to make cuts against it. The `:root[data-theme]` escape hatch in §2.1
+stays in the CSS for QA to force either theme; nothing in the UI sets it.
 
 ## 10. Motion — exactly three live elements, plus the curl cursor
 
-The complete motion inventory of the page. **A fourth live element is a deviation (A-007).** Every path is `prefers-reduced-motion`-gated and every reduced path renders complete content. Scope note: the §2 replay is user-facing *content playback* — scroll-triggered, runs once, holds a complete end state — mandated and specified separately in `section-02-replay.md`; it is not an ambient live element and does not occupy a slot here. (Interpretation stated for the review gate, not silently assumed.)
+The complete motion inventory of the page. **A fourth live element is a deviation (A-007).** Every path is `prefers-reduced-motion`-gated and every reduced path renders complete content.
+
+**Scope (settled): the §2 replay is content playback, not a live element.** The "exactly three" budget governs *ambient* page motion — the motion that runs because the page is open. The replay is user-facing content mandated by §2 itself: scroll-triggered, plays once, holds a complete end state, and renders its full transcript with motion off. It is specified in `section-02-replay.md` and occupies no slot here. The budget is closed at three plus the curl cursor.
 
 Motion tokens:
 
@@ -206,7 +213,7 @@ Readout metric values count from 0 to their exact value over `--countup-duration
 - **Heading tree**: one `<h1>` (hero headline) → six `<h2>` (section tags) → `<h3>` only inside components that need it. No skipped levels.
 - **Skip link**: first focusable element, "Skip to content" → `#main`; hidden until focused, then `--surface` card + focus ring at top-left.
 - **Focus**: 2px solid `--accent` outline, 3px offset, on all interactive elements (§2.3.5). Never `outline: none` without this replacement.
-- **Touch targets**: ≥44×44px on coarse pointers — small chrome (chips, theme control) extends its hit area via padding while the visual stays small.
+- **Touch targets**: ≥44×44px on coarse pointers — small chrome (chips, replay controls) extends its hit area via padding while the visual stays small.
 - **Forced colors**: every interactive element carries a real border; icons are inline SVG or glyphs (no background-image icons); state never rides on background colour alone. Verify with `forced-colors: active` emulation.
 - **Colour is never the sole channel**: rust marks pair with glyph shape, weight, or text (e.g. pulse + "OPERATIONAL"; ✓ + "match").
 - **200% zoom** reflows without horizontal scroll or clipped content.
@@ -261,7 +268,4 @@ The direction reference (`design-specs/direction-reference.html`) was read for m
 
 No shared component library exists on this project (static page); patterns above are defined here and built by the Developer directly. `ui-component-requests.md`: no entries required.
 
-## 15. Open questions
-
-1. **Theme control** (Status bar, §9): recommended include — a non-persistent flip (no cookies, no storage — A-008 posture holds; preference resets per visit, system preference is the default). If the founder prefers a single-theme-per-visitor page, delete one row from §9; nothing else depends on it.
-2. **Motion-budget interpretation** (§10, scope note): the §2 replay is read as mandated content playback, not a fourth ambient element. Flagged for explicit confirmation at the design gate.
+Nothing in this file is open. Every value in it is either the seed's or measured here.

@@ -8,6 +8,131 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-25 HO-010 — Gate amendments applied: narration-first mobile, 48 s chain, B5 restored
+**Type:** handoff
+**Producer:** UI/UX
+**Deliverable:** `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md`
+**Status:** open
+**Reviewers:**
+- [ ] PM — pending
+
+**Outcome:** All four gate amendments are in the specs, and F1 — the one that was a real design problem —
+is resolved with a mobile height budget the Developer can build to and QA can measure, rather than with
+another assertion that it fits.
+
+**Where each amendment landed.**
+- **A1 — theme control dropped.** `page-shell.md` §9: the row is gone, replaced by an explicit "no theme
+  control ships" statement so nobody adds one back. The theme *system* is untouched — both palettes,
+  `prefers-color-scheme`, and the `:root[data-theme]` attribute, the last now named as QA's mechanism for
+  forcing a theme in a test. §11's touch-target example no longer cites a control that does not exist.
+- **A2 — motion budget closed.** `page-shell.md` §10: settled statement with its reasoning — the "exactly
+  three" budget governs *ambient* motion, and the replay is mandated content. Closed at three plus cursor.
+- **A3 — narration-first mobile.** New `section-02-replay.md` §7.1, threaded through §3, §5.1, §8, §10,
+  §11, §12.
+- **A4 — 48 s chain, B5 restored.** `section-02-replay.md` §5, §5.1, §6.
+- Both specs' "Open questions" sections are gone — every question is closed in the section that owns it.
+
+**A4 — re-derived, not scaled.** Dwells 6.40 / 7.20 / 9.60 / 9.60 / 6.95 / 8.25 tile to exactly 48.00 s;
+shares 13.33 / 15.00 / 20.00 / 20.00 / **14.48** / **17.19** sum to 100.00%. B5 is inside the 14–15% band
+and gains absolute time (6.35 → 6.95 s) despite the chain losing 20%. B6 funded it (21.1% → 17.19%); B3
+held at 20.00% and QA paid nothing. All seven timed budgets are `floor(window × 3.5)` recomputed from the
+new windows — SP1 ≤21 · SP2 ≤25 · SP3 ≤33 · SP4 ≤33 · SP5 ≤23 · SP6 ≤12 · SP7 ≤16, totalling 163 of a
+168-word ceiling. **SP5 is the only budget that grew (21 → 23)** — a bigger beat with the same word count
+would just be a longer pause.
+
+Two offsets deliberately do **not** scale, both stated in §5.1: the **0.35 s pair separation** (L1/L2,
+L9/L10 are one `--reveal` cadence apart at any chain length — a structural rule about simultaneity, not a
+share of the clock), and consequently **SP1's window is 6.05 s, not ×0.8 of 7.65** — costing SP1 0.07 s
+and one word. Flagged because it is the one row where ×0.8 arithmetic does not reproduce the table.
+
+**A3 — the height budget: 424.4px fixed core against 375 × 553.** The assumed viewport is an iPhone SE in
+mobile Safari *with toolbars shown* — the visual viewport, not the 667px device height. Budgeting against
+device height is how a spec asserts a fit the reader never sees, which is close to how F1 happened. Every
+row derives from a shell token (§7.1). Visible lines = `floor((visual VH − 424.4) / 24.7)`, clamped
+[3, 12]: **5 lines at 375×553** (5.1px slack), 8 at 360×640, 9 at 393×659 / 390×664 / 375×667 (20.3px
+slack). The criterion is met with margin at 375×667 and still met at the stricter 553 case. The guarantee
+holds down to 499px of visual VH; below that §7.1 states the degradation order — totals strip below the
+fold first, narration card last.
+
+Fidelity is preserved by *not wrapping*: `white-space: pre` with `overflow-x: auto` on the terminal's line
+region only, so the page body never scrolls horizontally. At 375px the terminal shows ~38 characters and
+the longest corpus line (L3, 74 chars, ~577px) is reached with ~276px of scroll inside the container — no
+truncation, no ellipsis, byte-clean. And simultaneity is enforced rather than hoped for: §8 gates mobile
+playback on **≥95% core visibility, pausing below 90%**, so a beat cannot play with a layer off-screen.
+
+**§5.1 was amended, not just §7 and §10.** Line persistence is now a desktop guarantee (twelve lines, no
+scrollback, nothing moves once placed) with a stated small-viewport equivalent: every revealed line stays
+in the DOM and rendered for the whole playback and stays reachable in the terminal's own vertical
+overflow, but *simultaneous visibility* of all twelve does not survive, and the file says so plainly.
+
+**The landscape claim did not survive re-verification — a correction, not a confirmation.** Same method:
+Safari's landscape toolbars leave ~331px of visual viewport against the 424.4px core, so the stacked
+layout overflows before a single log line is placed. §10 now specifies **two columns with narration in the
+wider one** (~55% of 667px ≈ 40 chars/line, so the 33-word worst case sets 5 lines ≈ 170px), 7 visible
+terminal lines from `(242.5 − 67.5) / 24.7`, 27px of slack in the narration column. Narration-first
+survives the rotation; the stacking does not. Note the shape of the original error: portrait was asserted
+and failed; landscape was asserted as "verified" and also failed. Both are numbers now.
+
+**Desktop did not change** — two columns, twelve-line terminal, accumulating rail, persistence guarantee,
+all as specified. I added the one measurement that was missing: at 1280px the terminal's inner width is
+~667px against a 577px longest line, so no desktop line wraps or scrolls. That claim is now measured too.
+
+**Two things I found that were not asked for.** (1) The horizontal scroll is a WCAG 1.4.10 exception and
+needs arguing, not assuming — §10 states the argument (an aligned-column log is content requiring
+two-dimensional layout; wrapping destroys the alignment that makes it legible), and §11 adds the
+obligation that comes with it: the container is `tabindex="0"` with its own accessible name so arrow keys
+reach the ends of long lines (WCAG 2.1.1). A keyboard-inaccessible scroll region would have shipped as a
+real defect under a resolved finding. (2) `--text-terminal` now stays 13px on every viewport — the 12px
+step-down existed to make soft-wrapped lines fit, and with scroll doing that job it bought ~3 characters
+at a legibility cost on the screens least able to afford it.
+
+**Push-back on the gate hold — not the version DEC-016 anticipated.** I used the latitude and compressed
+L10's dwell to 3.45 s instead of scaling it to 4.12 s, leaving the hold at **4.80 s rather than ~4.14 s**
+— +0.66 s (+16%), a 36% cut from 7.5 s rather than 45%. SP6 pays 18 → 12 words, which its content fits.
+
+Then I checked whether the hold still reads as deliberate and found something that changes the question.
+**§5.1's claim that the hold was "the longest silence in the replay" was not true at 60 s either.** Ranked
+by interval length it was 4th of 11 at 60 s (behind 12.0, 9.0, 7.65) and is 5th of 11 at 48 s (behind
+9.60, 7.20, 6.60, 6.05). It lost one rank, not a standing it never had. So I removed the claim rather than
+restating a smaller version of it, and the spec now argues the hold on what actually makes it read as a
+stop: it arrives 0.35 s after the *fastest* interval in the replay (the L9/L10 pair) — a 13.7×
+deceleration — and it is the only stretch where the terminal does nothing at all.
+
+**My judgment: the hold survives at 4.80 s and I am not asking to change it.** Residual stillness after
+the narration is read is 0.23 s, against 0.07 s at 60 s — marginally better, since reading time was always
+what filled the hold.
+
+**The real cost landed on Content, not on the hold.** SP7 carries the page's thesis in ≤16 words, down
+from ≤26. Achievable with zero slack — *"No human touched this. The run stopped itself and waited for a
+person to press deploy."* is exactly 16 words, reading in 4.57 s of the 4.80 s window — but there is no
+room for a run-up, and 26 words is the kind of budget a writer uses to make a line *land* rather than
+merely fit. **If one budget is worth revisiting after the replay is seen running, it is SP7; the cheapest
+source is SP6's 12 words, inside the same beat, needing no reschedule.** Raised now so it is a known trade
+at the Wave 3 gate rather than a discovery.
+
+**Would Apple ship this?** The mobile model, yes — it inverts the right priority and is measured rather
+than asserted, which is the specific failure it replaces. My least comfortable number is the 5.1px of
+slack at 375×553: positive and derived from real tokens, but one line-height from failing, and it rests on
+my estimate of the narration card's worst case (6 lines for a 33-word slot at ~35 chars/line). **QA should
+measure the rendered card against SP3's actual copy once Content files it** — at 7 lines the terminal drops
+to 4 visible lines at 553px, which the design absorbs, but the budget table would then be wrong and should
+be corrected rather than quietly tolerated.
+
+**Note for PM:** `muster-requests-lint.sh` sits at its 300-line budget. Nothing here is closed to sweep —
+HO-009 awaits your review and HO-002's box is correctly unticked pending this handoff.
+
+**Revision log:**
+- 2026-07-25: Filed. Self-review caught (a) six Rule 15 violations I had introduced while making the specs
+  explain their own changes — "the earlier permission is withdrawn", "this replaces the earlier claim",
+  "unchanged by the mobile amendment", "the only slot whose budget grew", "the two calls that were once
+  judgment", and a "rulings this spec executes" framing in Provenance. The specs state current truth; the
+  before/after belongs here. (b) A duplicated "the emphasis system" in §13's designed-here list. (c) The
+  WCAG 1.4.10 exception and its keyboard obligation, which the brief did not mention and which the
+  horizontal-scroll solution creates.
+- Every number in both specs was re-derived mechanically before filing: dwells tile to 48.000, shares sum
+  to 100.00%, all seven budgets equal `floor(window × 3.5)`, every beat-opening line lands on its beat
+  boundary, and every row of the height budget recomputes from its shell token.
+
 ### 2026-07-25 HO-009 — Beat inventory trued up to corpus v1.1
 **Type:** handoff
 **Producer:** Developer

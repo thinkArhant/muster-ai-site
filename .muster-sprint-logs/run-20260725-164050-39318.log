@@ -1,0 +1,174 @@
+📓 sprint trail · run-20260725-164050-39318  (run budget: 30 steps)
+   log: .muster-sprint-logs/run-20260725-164050-39318.log · raw: .muster-sprint-logs/run-20260725-164050-39318.jsonl
+═══════════════════════════════════════════════════════════
+
+─────────────────────────────────────────────────────────── step 1
+▶ [34;1mDEVELOPER[0m · 2026-07-25 Developer (web): True up the beat inventory to corpus v1.1  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Binding to Developer for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh developer auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/developer/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  💬 Now the task inputs.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now the arithmetic. Let me verify every figure v1.1 changes before editing.
+  🧪 bash   python3 - <<'PY' def s(t): h,m,sec = map(int,t.split(':')); return h*3600+m*60+sec def hms(x): return f"{x//60}m{x%60:02
+  🧪 bash   grep -rn "3852\|21:43:09\|64m12s\|64 m 12" --include="*.md" --include="*.html" --include="*.js" --include="*.css" . | gr
+  💬 All figures confirmed. Now the amendments — only my own deliverable changes; the decision-log and HO-001 references are history and stay.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  💬 Now the Derivations section — D2, D3, D4, D5, D8, and the "not derivable" line.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  💬 Now Findings F1/F2 — v1.1 settles both at source.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  💬 Now the mechanical checks — no stale figures, corpus untouched, arithmetic in the file matches the file's own numbers.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== stale v1.0 figures in the invento
+  💬 Two hits remain, and reviewing them against Rule 15 (durability discipline) they shouldn't be there — a durable spec states current truth, not its own edit history. The before/after belongs in the han
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  💬 Now a full mechanical verification pass over the amended file — every number in it re-checked against the corpus.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== stale v1.0 figures (must be none)
+  💬 The deliverable is arithmetic, so the test is a mechanical re-derivation: parse the corpus, parse the amended file, and assert every printed figure matches.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 python3 - <<'PY' import re,sys corpus=open(
+  ⚠️  tool returned an error
+  💬 The test caught a real error I introduced: B6 isn't the next-shortest beat — B1 (454 s) is. Fixing:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 python3 - <<'PY' import re,sys,subprocess c
+  💬 All green. Now the Pre-Handoff Self-Review checklist, and I need to account for two files that show modified but that I didn't touch.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 git diff --stat knowledge-base/current-spri
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 git status --porcelain echo "=== checklist 
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 grep -n "Pre-Handoff Self-Review Checklist"
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 sed -n '460,475p' muster/system-guide.md
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== item 3: cross-references cited in
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 sed -n '75,98p' knowledge-base/foundational
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 sed -n '250,300p' knowledge-base/decision-l
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== replay spec's real-interval figur
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 sed -n '39,52p' knowledge-base/design-specs
+  💬 Downstream replay spec already matches at 1 dp — no drift. Filing HO-009:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now the queue: move my step to Done and promote the UI/UX amendment step.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 ls muster/scripts/ | grep -i lint echo "===
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== Next Step parses to ui-ux ===" aw
+  💬 Queue is well-formed and advances to UI/UX. Final verification run, then commit.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 python3 - <<'PY' > /tmp/final_check.txt 2>&
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 git add knowledge-base/design-specs/web/sec
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 bash muster/scripts/muster-commit-lint.sh H
+  💬 Step complete. All checks pass, tree clean, queue advanced to UI/UX. **What changed in `section-02-beat-inventory.md`** The chain end is now a measured figure (`21:43:15`, span 3858 s) rather than one
+    📖 ×10 · ✏️  ×25 · 🧪 ×23 · ⚠️  ×1
+  ✓ 59 turns · $4.61 · peak ctx 127k/1M 12% · out 38k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m8m 45s[0m · advanced → 2026-07-25 UI/UX (web): Gate amendments — narration-first mobile, 48 s chain, B5 rebalance (UI-UX) · handoff HO-009 filed ✓
+    run so far: 8m 45s · $4.61 · 1 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 2
+▶ [36;1mUI-UX[0m · 2026-07-25 UI/UX (web): Gate amendments  [2m[claude-opus-5][0m
+  narration-first mobile, 48 s chain, B5 rebalance
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh ui-ux auto
+  💬 Binding to UI/UX for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/ui-ux.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/ui-ux.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  🧪 bash   grep -n "DEC-015\|DEC-016" knowledge-base/decision-log.md | head -20
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  🧪 bash   grep -n "^## \|^### \|^\*\*Status\|^- \[ \]\|^- \[x\]" knowledge-base/agent-requests.md | head -60; echo ---; wc -l know
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "L1\b\|L10\|L11\|L12\|terminal inventory\|Terminal inventory\|## " knowledge-base/bodh-sprint4-corpus.md | head 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  🧪 bash   python3 - <<'PY' import re txt=open('knowledge-base/bodh-sprint4-corpus.md').read() blk=txt.split('## Terminal-line inve
+  🧪 bash   python3 - <<'PY' R=0.35 b={'B1':6.40,'B2':7.20,'B3':9.60,'B4':9.60,'B5':6.95,'B6':8.25} o=0; bounds={} for k,v in b.item
+  🧪 bash   grep -rn "theme control\|THEME ·\|Theme control\|Open questions\|open question" knowledge-base/design-specs/web/ knowled
+  💬 Now applying the amendments. Page shell first (A1, A2):
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  💬 Now the replay spec — A4 (48 s chain + rebalance):
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now §6 — the sync contract at 48 s:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now §7 — layout, with the mobile height budget (A3):
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   grep -n "60 s\|60s\|60\.00\|12\.65\|6\.35\|64:1\|47\.35\|52\.5\|7\.5 s\|4 s cadence\|12px\|soft-wrap\|soft wrap" knowled
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now §8 states, §10 responsive, §11 accessibility:
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now §12 checklist, §13 provenance, and removing the open-questions section:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   grep -n "60\b\|soft.wrap\|hanging indent\|caption card\|scrollback" knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the verification pass — re-deriving every number in the amended specs independently:
+  🧪 bash   python3 - <<'PY' import re s=open('knowledge-base/design-specs/web/section-02-replay.md').read() ok=True def chk(c,m): g
+  🧪 bash   python3 - <<'PY' def rank(offs,end,label): t=sorted(offs); iv=[] for a,b in zip(t,t[1:]+[end]): iv.append(round(b-a,2)) 
+  🧪 bash   grep -n -A 40 "Pre-Handoff Self-Review" muster/system-guide.md | head -60
+  🧪 bash   grep -n -B3 -A 30 "Pre-Handoff Self-Review Checklist" muster/system-guide.md | head -60
+  💬 Running the self-review checks:
+  🧪 bash   echo "=== 5: foundational assumptions ==="; grep -n "A-00[3467]" knowledge-base/foundational-assumptions.md | head -20 e
+  💬 Self-review caught Rule 15 (durability) violations I introduced — stripping the "previously/now" framings:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   python3 - <<'PY' s=open('knowledge-base/design-specs/web/section-02-replay.md').read() p=open('knowledge-base/design-spe
+  💬 Now filing HO-010:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "^### DEC-" knowledge-base/decision-log.md | tail -5; echo ---; tail -20 knowledge-base/decision-log.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 Now the queue — my step to Done, PM review promoted to Next Step:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh; echo "--- requests lint ---"; bash muster/scripts/muster-requests-lint.sh 2>&1
+  🧪 bash   python3 - <<'PY' s=open('knowledge-base/agent-requests.md').read().split('\n') idx=[i for i,l in enumerate(s) if l.start
+  💬 HO-010 is the entry pushing the file over budget — tightening it rather than fake-resolving anything else:
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() a=s.index('### 2026-07-25 HO-010') b=s.index('###
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh; echo "rc=$?"; echo "--- queue ---"; bash muster/scripts/muster-queue-lint.s
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   python3 - <<'PY' s=open('knowledge-base/design-specs/web/section-02-replay.md').read() p=open('knowledge-base/design-spe
+  🧪 bash   grep -n "theme control" knowledge-base/design-specs/web/page-shell.md knowledge-base/design-specs/web/section-02-replay.
+  💬 That one is the intentional "No theme control ships" statement, not a residue. Committing:
+  🧪 bash   git status --short; echo ---; git add -A && git commit -q -F - <<'MSG' ui-ux: §2 survives a 375px phone with both layers

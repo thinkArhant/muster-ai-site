@@ -448,5 +448,48 @@ instead of tested-for.
 **Touched**: `design-specs/web/page-shell.md`, `design-specs/web/section-02-replay.md`,
 `agent-requests.md` (HO-002), `orchestration-queue.md` (Done, Next Step, Founder Decisions).
 
+---
+
+### DEC-018 — §2's mobile height budget and the final 48 s schedule (2026-07-25)
+
+**Decision**: Four calls made inside the latitude DEC-016 granted, all now binding on the build.
+
+1. **The B6 internal split: L10 dwells 3.45 s, the gate hold is 4.80 s.** DEC-016 projected ~4.14 s if
+   L10 simply scaled ×0.8; compressing L10 harder buys the hold 0.66 s more (+16%), making the cut from
+   7.5 s a 36% one rather than 45%. SP6 pays 18 → 12 words for it.
+2. **The gate hold is argued on deceleration, not duration.** It is not and never was the longest
+   interval in the replay — ranked by length it was 4th of 11 at 60 s and is 5th of 11 at 48 s. What
+   marks it as a stop is that it arrives 0.35 s after the fastest interval in the chain (the L9/L10
+   same-instant pair), a 13.7× deceleration, and it is the only stretch where the terminal does nothing.
+3. **The mobile height budget is 424.4px of fixed core against a 375 × 553 visual viewport** — an
+   iPhone SE in mobile Safari with toolbars shown, deliberately not the 667px device height. Visible
+   terminal lines = `floor((visual VH − 424.4) / 24.7)`, clamped [3, 12]; the two-layer guarantee holds
+   down to 499px of visual viewport height, below which the totals strip drops below the fold first and
+   the narration card is last to go. Simultaneity is enforced, not hoped for: mobile playback starts at
+   ≥95% core visibility and pauses below 90%.
+4. **The terminal's horizontal scroll is a scoped WCAG 1.4.10 exception with a 2.1.1 obligation
+   attached.** An aligned-column log is content requiring two-dimensional layout, so wrapping it would
+   destroy the alignment that makes it readable; the exception is contained to one region, which carries
+   `tabindex="0"` and its own accessible name so arrow keys reach the ends of long lines. Related:
+   `--text-terminal` stays 13px on every viewport, since horizontal scroll — not smaller type — is what
+   handles long lines.
+
+**Rationale**: 2 is a correction that matters more than the rescale it came from — the pacing claim the
+spec was defending was not true before the rescale either, so restating a smaller version of it would
+have preserved a wrong argument for a right beat. 3 exists because the finding it resolves was caused by
+asserting a fit instead of budgeting one; a budget stated against device height rather than visual
+viewport would have repeated the same error one layer down. 4 is the cost of the fidelity-preserving
+solution, and it is cheap only if the keyboard obligation ships with it.
+
+**Consequence to carry**: SP7 — the honest headline, the page's thesis — drops from ≤26 to ≤16 words. It
+fits with zero slack (a worked 16-word line reads in 4.57 s of the 4.80 s window), but there is no room
+for a run-up. If it needs relief after the replay is seen running, the cheapest source is SP6's 12 words
+inside the same beat, which requires no reschedule.
+
+**Impact**: Developer, QA, Content, PM.
+
+**Touched**: `design-specs/web/page-shell.md`, `design-specs/web/section-02-replay.md`,
+`agent-requests.md` (HO-010), `orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
