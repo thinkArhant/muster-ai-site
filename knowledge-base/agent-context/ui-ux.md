@@ -112,7 +112,7 @@ spec is what that judgment lands on.
 **The four amendments**:
 - **A1** Drop the theme control (`page-shell.md` §9, §15 q1). Delete the row, not the theme system — both themes stay first-class via `prefers-color-scheme`
 - **A2** Close the motion-budget question (§10 scope note, §15 q2): the replay is content playback; budget stays at three plus the cursor
-- **A3** **Mobile is narration-first** — terminal is texture, narration is the payload. Per-viewport visible-line counts; long lines scroll inside the terminal's own container; page body never scrolls horizontally; narration card stays in view for the full playback. **§5.1 needs amending too** — line persistence becomes a desktop guarantee with a stated small-viewport equivalent
+- **A3** **Mobile is narration-first** — terminal is texture, narration is the payload. Per-viewport visible-line counts; long lines soft-wrap and **nothing scrolls horizontally anywhere** (DEC-026 — supersedes the terminal's own scroll container); narration card stays in view for the full playback. **§5.1 needs amending too** — line persistence becomes a desktop guarantee with a stated small-viewport equivalent
 - **A4** Rescale to 48 s uniform ×0.8; B3 stays 20%, **B5 restored 10.6% → ~14.5%**, B6 absorbs at ~17.2%
 
 **Acceptance criteria**:
@@ -150,3 +150,22 @@ your next touch if you disagree.
 Your next likely involvement is a Wave 3 gate outcome or a QA finding against `section-02-replay.md` §7.1
 — specifically the narration card's 6-line worst case, which QA measures against SP3's real copy once
 Content files it.
+
+---
+
+## Current state of §2's mobile model (2026-07-26 — supersedes A3 above)
+
+The log soft-wraps at every viewport with a 2ch hanging indent, **nothing scrolls horizontally
+anywhere**, and §2 claims no WCAG 1.4.10 exception at all. Narration-first still holds — per-viewport
+visible line counts, the card in view for the whole playback.
+
+The current numbers, so nothing downstream quotes the retired ones: fixed core **379.4px** (the chain
+totals strip left it, returning 45.0px), one wrapped line 49.4px, **3 whole lines at 375 × 553** with
+25.4px of slack, guarantee floor 478.2px. The line region at 375px is 325px = **41 columns**; eleven of
+the twelve corpus lines exceed it and all of L1–L11 cost exactly two rows there. Landscape inverts the
+column split — the terminal takes the wider column (~54/42), sized by the 41-column requirement rather
+than by a share.
+
+Accepted with no revision (DEC-027). Two items are deferred to Sprint 2 rather than dropped: SP3
+overflows the six-line narration card at 320px (the fix is §7.1's own priority order — the beat
+indicator returns 28.5px against a 28.9px line), and the totals value line wraps at that width.

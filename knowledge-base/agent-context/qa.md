@@ -134,9 +134,10 @@ into task 2: the audit's 45-character floor is unsatisfiable and gets re-based t
   go green on the threshold alone. Disagree in HO-007 rather than deleting the check
 - **Measured beat intervals reported factually** — the founder judges pacing with styling mentally subtracted, so give that judgment data to sit alongside
 - Copy checked against `copy-rules.md` → Review checklist, including the Safari-catch boundary and scope labels
-- **Mobile at 375 × 553**: terminal window shows 5 lines, both layers fully visible for the whole
-  playback, measured core height ≤553px, page body never scrolls horizontally (also at 320px and 200%
-  zoom), and the terminal's scroll container is focusable and arrow-key operable
+- **Mobile at 375 × 553**: terminal window shows **3 whole wrapped lines**, both layers fully visible
+  for the whole playback, measured core height ≤553px, nothing scrolls horizontally anywhere — page
+  body or terminal region — at 375px, 320px and 200% zoom, and the terminal's scroll container is
+  focusable and arrow-key operable in the vertical axis
 - **Measure the rendered narration card against SP3's real copy** — `section-02-replay.md` §7.1 budgets
   a 6-line worst case and UI/UX flagged it as the budget's least comfortable number. At 7 lines the
   terminal drops to 4 visible lines, which the design absorbs, but the budget table is then wrong and
@@ -148,3 +149,43 @@ into task 2: the audit's 45-character floor is unsatisfiable and gets re-based t
 **Key refs**: `bodh-sprint4-corpus.md` · `design-specs/web/section-02-beat-inventory.md` ·
 `design-specs/web/section-02-replay.md` · `design-specs/web/section-02-narration.md` ·
 `agent-skills/content/copy-rules.md` · `muster/team/qa/skills/web/web-testing.md`
+
+---
+
+## Current task — re-validate §2 after the fix wave (2026-07-26)
+
+Two changes to validate and one audit check to retire. `section-02-replay.md` and
+`section-02-narration.md` are final (DEC-027) and are the authority.
+
+**One earlier row's reasoning no longer applies**: the totals strip has left the playback core, so its
+line count no longer threatens the two-layer guarantee. Measure it anyway — it is a copy-fit question
+now, not a budget one.
+
+**DEC-023 — retire the band check.** The 45–75-character reading-band check is retired as an assertion
+and re-scoped to a reported measurement. The founder ruled `64ch` ships as written, so a check asserting
+a standard the product has deliberately declined keeps `qa-independent-audit.mjs` red forever, which
+trains everyone to ignore it. The number stays visible; the false red goes. **The audit must exit zero
+on a clean build afterwards** — that is the acceptance criterion, not a nicety. Same disposition as the
+45-character floor in DEC-021: replace a wrong threshold, never loosen it.
+
+**What the mobile change must satisfy** (§12 carries the full checklist; these are the ones that moved):
+3 whole lines at 375 × 553 with both layers visible for the entire playback and measured core height
+≤553px; **no corpus line needs a horizontal gesture to read in full at 320 / 360 / 375 / 390 / 393px**;
+nothing scrolls horizontally anywhere — page body or terminal region — at 375px, 320px and 200% zoom;
+the window never clips a wrapped line part-way through its rows; continuation rows carry the 2ch hanging
+indent and no row but an entry's first begins at the left edge; the totals strip renders below the core
+on mobile and its value line never wraps to a third strip row; desktop measures ≥74 columns at
+`--bp-wide` and above with all twelve lines fitting and no wrap.
+
+**Check the 320px case specifically.** The visible-line formula is a ceiling below 375px, where the two
+longest lines cost three rows rather than two — a build that implements the 49.4px constant literally
+will show a third line and clip it. Two known-carried items live at that width and are **not** yours to
+fix: SP3 overflows the six-line narration card there, and the totals value line wraps (DEC-027.1–2).
+Report them if they reproduce; they are deferred, not open.
+
+Fidelity is unchanged: twelve lines byte-clean against the corpus, and the revised SP7 string diffed
+against the narration file rather than against the previous build. Cross-engine on WebKit and Blink,
+with the WebKit ceiling from DEC-021.4 unchanged — mobile evidence is Blink-only and must say so in
+those words.
+
+**Red build: do not advance.** Re-point Next Step to a `Role: pm` assessment step rather than halting.

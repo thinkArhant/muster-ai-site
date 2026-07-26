@@ -117,3 +117,26 @@ is not. Anything not in the corpus is not in the replay.
 **Key refs**: `agent-skills/content/copy-rules.md` · `product-spec-seed.md` §2 ·
 `bodh-sprint4-corpus.md` · `design-specs/web/section-02-beat-inventory.md` ·
 `design-specs/web/section-02-replay.md` · `muster/team/content/skills/generic/brand-voice.md`
+
+---
+
+## SP7 as it now stands (2026-07-26 — supersedes the note above)
+
+SP7 was rewritten at the founder's Wave 3 gate (DEC-024) and accepted with no revision (DEC-027):
+
+> The operator planned the sprint, left the agents running, and returns to a deploy-ready site.
+
+**15 of 16 words, 4.29 s of the 4.80 s hold, and SP6's relief is still unspent at 10 of 12.** The timed
+total is unchanged at 139 of 163. The thesis is now told as the operator's arc rather than by negation;
+the honest-headline fact — no human touched the chain until the deploy gate — is carried inside it,
+stated as what the operator did rather than what no one did.
+
+**The guardrail that governed the rewrite is worth keeping.** The ask arrived as "something a VC would
+want to hear that would amaze them," which is the exact instruction that produces adjectives-as-argument.
+The line contains none: "deploy-ready" is the packet's recorded state, not praise for it, and the effect
+comes from tense landing on a terminal that reads `awaiting operator`. On this page a sentence reaching
+for awe is a blocking finding no matter how well it reads.
+
+One item is carried to Sprint 2 and the lever is copy length: **SP3 overflows the narration card at
+320px** (7 lines into a 6-line budget). Nothing to do now — SP3 is not open — but any future growth in
+that string makes it worse, and any replacement should aim under six rendered lines at 320px.

@@ -2,159 +2,166 @@
 <!-- File-mediated I/O contract between the autonomous sprint loop and the founder at a wave gate. PM-owned. Tier-2: read on demand only (at a wave gate / on resume), never a startup read. -->
 <!-- The loop does NOT parse this file. PM writes the Output block at the gate; the founder writes the Verdict block; PM reads the verdict on resume (muster/scripts/muster-sprint-resume.sh). Keeping human feedback here — not in the orchestration queue — is the seam a future remote/mobile bridge plugs into. -->
 
-> **This is the Wave 3 packet — the §2 replay gate.** The Wave 1 packet it replaces was approved with
-> amendments on 2026-07-25 and its amendments were delivered and accepted (HO-010); that record lives in
-> git history rather than here, so nothing describing a 60 s chain or a 7.5 s hold can be mistaken for
-> the current state. The live numbers are a **48.00 s** chain and a **4.80 s** gate hold (DEC-016,
-> DEC-018).
+> **This is the Wave 3 RE-GATE packet.** The first §2 gate approved the replay on pacing and narration
+> (passes 1–3) on 2026-07-26 and returned four findings; all four are ruled and three are built or
+> being built (DEC-023 through DEC-026). That verdict is preserved at the bottom of this file, because
+> this gate is a re-judgement of the same section rather than a new one. **This gate is narrow: two
+> things.** The live numbers remain a **48.00 s** chain and a **4.80 s** gate hold.
 
 ## Current Wave
 
-**Wave:** 3 — the §2 replay: narration written, built, validated
+**Wave:** 3 re-gate — the §2 replay after the fix wave: SP7 reframed, the phone terminal wrapped
 **Build at:** the autonomous worktree on `sprint/auto-20260725-163930`. The live page is `index.html`
 in that worktree; `bash scripts/test.sh` re-runs both engines' harnesses from there.
-**Under review:** the live §2 section · `design-specs/web/section-02-narration.md` · HO-006
-(Developer) · HO-007 (QA)
+**Under review:** the live §2 section · `design-specs/web/section-02-narration.md` · HO-011 (UI/UX) ·
+HO-012 (Content) · HO-013 (Developer) · HO-014 (QA)
 
 **Your criterion, restated because it is the whole gate**: the replay must be excellent on run-log
 pacing and plain-English narration **with the styling mentally subtracted**. If it only works dressed,
 that is the signal the seed's Sequencing section wanted in week one, and it is cheaper to hear now
 than after §1 and §3 are built on top of it.
 
-### Notices since last gate
+### Notices since the first gate
 
-Six, all from `founder-notices.md`, all FYI — none needs an answer:
+Two, from `founder-notices.md`, both FYI — neither needs an answer:
 
-- The gate hold landed at **4.80 s**, not the ~4.14 s DEC-016 projected, which bought SP7 a 16-word
-  budget instead of 14.
-- **SP7 is the one budget worth revisiting once you see it running** — ≤16 words with zero slack.
-  Content landed it at 15 and explicitly did not spend the relief. SP6's 12 words are still available
-  and need no reschedule.
-- Two pacing-rationale claims written for the Wave 2 amendment were wrong and were corrected in place
-  rather than costing a revision round; no design value moved (DEC-019 C1/C2).
-- Wave 2 closed with no blockers; **one question is waiting for you** in the queue's Founder Decisions
-  (the reading column renders ~90 characters, not ~64). It gates nothing before §3, in Sprint 2.
-- **`100dvh` in mobile Safari is the one §2 behaviour no harness here can prove**, and §7.1's entire
-  424.4px budget rests on it — worth 30 seconds on your iPhone at this gate. Everything else on mobile
-  is Blink-verified and labelled as such.
-- QA's finding that `.instrument`'s phone padding could not be fixed without breaking §2's signed-off
-  budget was wrong on the arithmetic; the fix rode the build step (DEC-021.1).
+- **The phone terminal now wraps instead of scrolling sideways, and the price is visible on your
+  iPhone**: 3 log lines instead of 5 at 375 × 553, each readable to its last character where none was
+  before. Paid by moving the totals strip just below the playback core — not from fidelity, not from
+  type size (DEC-026). The totals read the same; they sit a thumb-flick down. Desktop is measurably
+  unchanged, verified at five widths.
+- **The audit no longer exits red.** With `64ch` ruled, the 45–75-character band check is retired to a
+  reported measurement on the QA step, so `qa-independent-audit.mjs` goes back to being a signal.
+
+**Still true and still unproven:** `100dvh` in mobile Safari is the one §2 behaviour no harness here
+can prove, and §7.1's entire **379.4px** budget rests on it. The wrap change bought real margin —
+25.4px of slack at 375 × 553 where it had 5.1px — but margin is not proof, which is why the
+live-playback look below is worth your 30 seconds.
 
 ### Already green — machine-verified, do not re-litigate
 
-Evidence is in the HO-005 review block and, once they land, HO-006 and HO-007. Listed so your
-attention goes to the judgment calls below rather than to arithmetic:
+Carried forward from the first gate, where each was re-derived by PM rather than read off a handoff.
+The fix wave touched two things — one narration string and the mobile layout — so everything below
+still holds; HO-013 and HO-014 re-measure it on the rebuilt page.
 
-- **The narration fits its contract, measured not eyeballed.** All ten strings re-measured by script
-  at PM review: 139 timed words of a 163 ceiling, every slot inside budget *and* inside its read
-  window at 3.5 w/s. The tightest string (SP4b, 11/11 words) reads in 3.14 s of a 3.20 s window.
+- **The narration fits its contract, measured not eyeballed.** All ten strings re-measured by script,
+  twice now: 139 timed words of a 163 ceiling, every slot inside budget *and* inside its read window at
+  3.5 w/s. SP7's rewrite moved no number — 15 words before, 15 after. The tightest string (SP4b,
+  11/11 words) reads in 3.14 s of a 3.20 s window.
 - **Every factual claim is sourced.** Each slot cites its corpus line in place; PM looked each one up
-  in the corpus rather than checking it against the citation. The corpus is unmodified.
+  in the corpus rather than checking it against the citation, including all five beats of the new SP7.
+  The corpus is unmodified and proven so from git — all three founder-authored files carry only
+  `founder:` commits.
 - **The two named traps are closed.** The Safari-only SVG catch is absent entirely. The whole-product
   aggregates (9.3 h, $147) appear in no slot. Every §2 number is a website-wave number.
-- **Timing tiles exactly.** Dwells sum to 48.00 s, the six design shares to 100.00%, and each beat's
-  cumulative dwell lands on its opening line's offset.
-
-**Build and QA evidence, re-run by PM at the gate rather than read off the handoffs:**
-
-- **Both harnesses reproduce.** `bash scripts/test.sh` is green end to end (129 Blink, 13 WebKit).
-  The independent audit — written against the specs, not against the build — is **99 of 100**, with
-  7 further measurements reported rather than asserted.
-- **The one red is deliberate and is not a §2 defect.** It is the `64ch` reading-measure question
-  below, left red because the threshold is satisfiable and the build simply does not satisfy it;
-  turning it green before you answer would be laundering. `node tests/qa-independent-audit.mjs`
-  therefore exits non-zero **on purpose** until you rule. `scripts/test.sh` is unaffected and green.
-- **Fidelity holds at the byte.** All 12 terminal lines diff byte-clean against the corpus, read off
-  disk at test time; 679 characters with equal codepoint counts, so nothing is truncated, padded or
-  re-wrapped. All 10 narration slots render verbatim, 1069 characters. The corpus is proven
-  unmodified from git, not asserted — all three founder-authored files carry only `founder:` commits.
-- **The 48-second schedule tiles exactly.** PM re-derived it from the spec's own twelve offsets:
-  the eleven intervals sum to **48.00 s** to the hundredth. Worst measured reveal drift is **16.8 ms**
-  against a 100 ms tolerance, so the build matches the schedule it was specified to.
-- **The phone budget is met with room.** At 375 × 553 the core measures **499.89px** against a
-  553px budget, five whole line boxes visible, and both layers stay on screen for **100.0%** of the
-  chain across 192 samples — measured under the 48px sticky bar rather than against the raw viewport.
+- **Timing tiles exactly and is untouched by the fix.** Dwells sum to 48.00 s, the six design shares to
+  100.00%, each beat's cumulative dwell lands on its opening line's offset, and the worst measured
+  reveal drift was 16.8 ms against a 100 ms tolerance.
+- **Fidelity holds at the byte, and structurally.** All 12 lines diff byte-clean against the corpus —
+  679 characters, equal codepoint counts. A soft wrap inserts and removes no character, which is
+  precisely why wrapping could pay for the fix and truncation could not.
+- **The phone budget is met with more room than before.** The fixed core drops to **379.4px** once the
+  totals strip moves below it, so at 375 × 553 the terminal shows **3 whole wrapped lines** with 25.4px
+  of slack. Before the fix it measured 499.89px with five *clipped* lines and 5.1px of slack.
 - **The degraded paths are complete, not reduced.** Reduced-motion and no-JS both render the full
-  transcript, string-identical to the motion path's end state. Zero non-`file:`/`data:` requests
-  across a full 48-second playback, and the page renders complete with the network off.
+  transcript, string-identical to the motion path's end state. Zero non-`file:`/`data:` requests across
+  a full 48-second playback, and the page renders complete with the network off.
 
-**One caveat you should carry into your own testing.** Every mobile measurement above is **Blink
-only** — 375 × 553, 320px, landscape, 200% zoom, the visibility gate, the windowed terminal and all
-playback timing. WebKit's evidence is the no-JS complete transcript at a fixed render, both themes.
-That gap is why the iPhone look below is worth your 30 seconds.
+**One caveat to carry into your own testing.** Every mobile measurement is **Blink only** — 375 × 553,
+320px, landscape, 200% zoom, the visibility gate, the windowed terminal and all playback timing.
+WebKit's evidence is the no-JS complete transcript at a fixed render, both themes. That gap is exactly
+why the live-playback look is worth your 30 seconds.
 
 ### Verify — human-only checks
 
-Four things the machine cannot judge. All four are about pacing and words; none is about styling,
-which is the point.
+**Passes 1, 2 and 3 are settled and are not re-opened**: the narration alone carried a first-time
+reader, the expanded re-verify beat and the compressed QA beat both read correctly, and the 4.80 s gate
+hold reads as stillness rather than as a stall. You judged all three at the first gate with the styling
+subtracted; nothing in the fix wave touched them — no dwell, no offset, no other slot's words moved.
 
-- [ ] **Watch it once without reading the terminal.** Cover the log column. Does the narration alone
-      carry someone who has never used Muster from "a real run" to `bodh.day`, live? That is the
-      acceptance bar in its literal form, and it is the only test that answers it.
-- [ ] **The 48-second dwell table (§5).** B3 — the PM re-verifying another agent's work with its own
-      screenshots — is the shortest beat in the real chain (11.4%) and gets the longest single dwell
-      (20.0%). B5, QA's validation, is the longest real beat (22.5%) and is compressed to 14.5%. Both
-      deviations are deliberate and both are stated. Judge whether the wow beat earns its expansion
-      and whether QA's proof still lands compressed.
-- [ ] **The gate hold at 4.80 s.** Deliberate stillness after `Role: halt · awaiting operator`, with
-      nothing happening in it. It is not the longest interval in the replay and never was — what marks
-      it is deceleration: B6 opens on the chain's fastest interval (0.35 s) and closes on this hold, a
-      13.7× spread inside one beat. Judge whether it reads as meaning or as a stall.
-- [ ] **SP7, the thesis line, at 15 words**: *"The run stops itself at the gate. No human touched this
-      until the deploy button."* It reads in 4.29 s of the 4.80 s hold. This is the sentence the page
-      exists to earn. If it needs a run-up, the relief is SP6's 12 words in the same beat and costs no
-      reschedule — say so here and it is a one-line change.
+Two checks, plus the look that the first gate could not get.
 
-### Worth 30 seconds of device time
+- [ ] **SP7, rewritten to your arc, at 15 words**: *"The operator planned the sprint, left the agents
+      running, and returns to a deploy-ready site."* Still 15 words, still 4.29 s of the 4.80 s hold —
+      the reframe cost nothing and SP6's 12 words of relief are still unspent if you want a run-up.
+      **The judgement you asked for**: does it land the arc without reaching? PM's line-by-line found no
+      adjective-as-argument — "deploy-ready" is the packet's recorded state, not praise — and the effect
+      comes from the tense turn landing on a terminal that reads `awaiting operator` at that instant.
+      That is the guardrail satisfied on paper. Whether it *lands* is yours.
 
-Not a checklist item — a look only you can take. Open the page on your iPhone and confirm the §2 core
-fits with both layers visible for the whole playback. `100dvh` behaviour in mobile Safari is the
-mechanism §7.1's budget rests on, and the only instrument that settles it is a real phone.
+- [ ] **The phone, on the thing you complained about.** Every log line should now read to its last
+      character with no sideways gesture, anywhere. **The price is visible and you should look at it
+      with the benefit in view**: the terminal shows **3 whole lines** at 375 × 553 instead of 5, and
+      each sets two rows. The trade was not five-lines-versus-three — at 41 columns a phone that does
+      not wrap shows five *first halves*, and eleven of the twelve corpus lines are longer than the
+      column. Judge whether three lines still reads as a live log rather than as a caption. UI/UX said
+      plainly it would not sign off at two; three is the top of the range and was paid for by moving
+      the totals strip one thumb-flick below the playback, where it reads identically.
+
+### Carried from the first gate: the live-playback look
+
+Still open, and it is the one thing no harness here can produce. Your screenshot last time showed the
+complete-transcript end state — all twelve lines, the beat indicator at `BEAT 06 / 06`, narration
+stacked — which means playback had finished or Reduce Motion was on. Both render correctly, so the
+screenshot is real evidence for the degraded path; it just is not evidence for the guarantee under test.
+
+**What to do**: reload, let §2 scroll into view fresh, and watch *during* the chain. The terminal should
+show a short window of lines that advances, with the narration card in view the whole time. `100dvh` in
+mobile Safari is the mechanism the entire height budget rests on, and a real phone is the only
+instrument that settles it.
 
 ### Decisions needed from you
 
-**None on §2.** One unrelated question is parked in the queue's Founder Decisions — the reading column
-renders ~90 characters where the seed says "~64ch". It gates nothing this sprint (no body copy occupies
-that column yet and §2's narration never enters it); its first consumer is §3 in Sprint 2, and
-`pre-launch-checklist.md` holds it hard so it cannot ship unanswered. Answer it here if you would
-rather not carry it.
+**None.** The reading-column question you carried into the last gate is answered — `64ch` ships as
+written (DEC-023), and its one consequence, the audit's band check, is retired to a reported measurement
+on the QA step so the audit stops exiting red on a standard the product has deliberately declined.
 
 ### Known findings — carried, not blocking this gate
 
-**No blocking defect was found in §2 by either the build step or QA.** Six items are carried. None
-needs an answer at this gate; PM disposes them into Sprint 2 unless you say otherwise.
+**No blocking defect was found in §2.** What changed since the last gate:
 
-- **The narration card meets its worst case with zero margin** (F2). SP3 sets 6 lines in a 6-line
-  budget — 199.39px against 199.4px. Nothing is wrong today, but any future growth in SP3, or a wider
-  glyph in a replacement string, costs a seventh line and 16.5px the phone does not have. Worth
-  knowing because the lever is copy length, not layout.
-- **At 320px the totals value line wraps to a third line** (F3, confirming OBS-002). Measured: strip
-  49.5px, value line 246.34px in 272px. §7.1's budget is stated for 375 × 553, and 320px sits below
-  the width any row of it was derived at, so this is outside the signed-off budget rather than a
-  breach of it.
-- **`bodh.day · LIVE` is not a link** (OBS-003). Making it one would put the only external URL in a
-  shipped file, and the harness asserts there are none. This pairs naturally with the §6 domain
-  question and is best answered with it, in Sprint 2.
+- **The narration card's zero-margin worst case became a real overflow at 320px** — SP3 sets 7 lines
+  into a 6-line card there. Pre-existing and width-driven, not caused by the wrap change: the card meets
+  its budget exactly at 375px, so the seventh line is bought by narrowing below the width the budget is
+  derived at. Deferred to Sprint 2 because fixing it now means either re-opening SP3's copy (not open
+  this wave) or a taller card that costs the terminal a line at the budget case — trading a guaranteed
+  viewport for an unbudgeted one. The fix is already costed: §7.1's priority order drops the beat
+  indicator, which returns 28.5px against a 28.9px line. Held in `pre-launch-checklist.md`.
+- **The totals value line still wraps at 320px**, and it stopped mattering to the guarantee once the
+  strip left the playback core. A copy-fit question for Sprint 2.
+- **`bodh.day · LIVE` is not a link** (OBS-003) — pairs with the §6 domain question, best answered
+  together in Sprint 2.
 - **The narration rail scrolls its own overflow on desktop** (OBS-001, low).
-- **The section's label id differs from the spec's literal string** (OBS-004) — spec says
-  `s2-heading`, build uses `s02-title`. Both satisfy the requirement and the audit passes on the
-  built id; only the literal differs. PM will move the spec, not the build.
-- **Landscape phone shows 8 whole terminal lines against §10's derived 7** (OBS-005). Headless
-  Chrome gives the full 375px of height where Safari's landscape toolbars leave ~331px, so the
-  spec's figure is the conservative one and stands. No action.
+- **The section's label id differs from the spec's literal string** (OBS-004). PM moves the spec.
+- **Landscape now shows 3 lines by design, not 8 by accident** (supersedes OBS-005). The column split
+  inverted — the terminal takes the wider column, sized by the 41-character requirement rather than by
+  a share, because width is the only thing that decides whether a line reads without a gesture.
 
-**Three deviations from the specs shipped deliberately, each with its reasoning in HO-006.** The
-narration rail is 22rem rather than a literal `36ch` (at `36ch` the terminal falls under the width
-L3 needs and the spec's own twelve-lines-fit guarantee fails at every desktop width); the controls
-sit below the core rather than inline with the totals; and the chrome label's tracking tightens on
-small viewports. PM accepts all three — each resolves a spec-internal contradiction rather than
-trading away a design value.
+**Two spec gaps were found by re-deriving the deliverables rather than reading them**, and both were
+the kind that silently re-break a fixed defect later: the totals strip's fit constraint was stated
+without the tracking value that achieves it, and §7.1's line-height constant is exact at 375px but a
+ceiling below it, where a literal implementation would clip a line at 320px. Both now say so in the
+spec and on the build step.
+
+**Three deviations from the specs shipped deliberately at the first gate and stand.** The narration
+rail is 22rem rather than a literal `36ch`; the controls sit below the core; the chrome label's tracking
+tightens on small viewports. Each resolves a spec-internal contradiction rather than trading away a
+design value.
 
 ## Verdict
 
 <!-- Founder writes the verdict here, then runs muster/scripts/muster-sprint-resume.sh. Two forms: -->
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
 <!-- Bug list — PM inserts a fix step per bug, then continues. -->
+
+**Status:** _awaiting your verdict — the re-gate_
+
+---
+
+### Previous verdict — the first §2 gate, 2026-07-26
+
+Kept because this gate re-judges the same section. All four findings below are ruled and three are
+already built or building; F-G3 is the live-playback look still carried above.
 
 **Status:** APPROVED WITH ONE COPY FIX — 2026-07-26
 

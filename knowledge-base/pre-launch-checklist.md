@@ -44,11 +44,24 @@
   - `qlmanage` is the only WebKit on this machine; it executes no JavaScript and renders at a fixed
     ~1024² regardless of the requested size, so **no WebKit evidence can exist at mobile widths**
     (QA proved both with committed probes). The residual that matters is `100dvh` inside
-    `max-height: calc(100dvh - 3rem)` — `section-02-replay.md` §7.1's entire 424.4px budget rests on it,
+    `max-height: calc(100dvh - 3rem)` — `section-02-replay.md` §7.1's entire 379.4px budget rests on it,
     and dynamic viewport units with a showing/hiding toolbar are exactly where mobile Safari diverges.
+    The budget now carries 25.4px of slack at 375 × 553 rather than 5.1px (DEC-026) — real margin
+    against this exact risk, but margin is not proof.
   - Resolution is a device look, not a harness: open §2 on an iPhone in Safari with the toolbars shown
     and confirm both layers stay on screen for the whole playback. Everything else in §2 is machine-
     verified on Blink. See DEC-021.4.
+  - Milestone gate: launch
+
+- [ ] **§2's narration card overflows at 320px** — Blocker: soft, Source: pm, Added: 2026-07-26
+  - SP3 sets 7 rendered lines into a 6-line card at 320px (202.3px of text in a 173.4px text area).
+    Pre-existing and width-driven: the card meets its budget with zero margin at 375px, so the seventh
+    line is bought by narrowing below the width every row of §7.1's budget is derived at.
+  - Not fixable inside the §2 fix wave without either re-opening SP3 (Content) or a taller card that
+    costs the terminal a visible line at the budget case. The resolution is already known and costs
+    nothing: §7.1's priority order drops the beat indicator first, returning 28.5px against a 28.9px
+    line. The totals value line also wraps to a third strip row at that width (DEC-027.2).
+  - Decide with §3's copy work in Sprint 2, when SP3 is open and the lever is available. See DEC-027.1.
   - Milestone gate: launch
 
 - [ ] **Count-up cells have an `aria-live` posture** — Blocker: soft, Source: qa, Added: 2026-07-25

@@ -82,7 +82,7 @@ criterion). No other step uses a premium model.
 | 1 | Corpus verification + beat inventory → design foundation spec → PM review | **Founder gate** | ✓ **approved with amendments**, 2026-07-25 |
 | 2 | Inventory true-up → spec amendments → PM review → shell build → QA validation | none — output is machine-verifiable against the approved spec | ✓ done, 2026-07-25 — one founder question raised, no blockers |
 | 3 | §2 narration → PM review → replay build → QA validation | **Founder gate** — judge pacing + narration, styling subtracted | ✓ **approved with one copy fix**, 2026-07-26 |
-| 3b | Mobile no-horizontal-scroll spec → SP7 rewrite → PM review → rebuild → QA re-validate | **Founder re-gate** — narrow: the new thesis line, and the phone | running |
+| 3b | Mobile no-horizontal-scroll spec → SP7 rewrite → PM review → rebuild → QA re-validate | **Founder re-gate** — narrow: the new thesis line, and the phone | running — both specs accepted, no revision (DEC-027); rebuild is next |
 
 **Wave 2 order is deliberate.** The gate's amendments change `page-shell.md` (theme control dropped) and
 `section-02-replay.md` (48 s rescale, B5 rebalance, narration-first mobile), so the UI/UX amendment and
@@ -266,9 +266,9 @@ agent that finds a gap reports it and stops.
     - Zero network requests; reduced-motion path complete
     - Narration/terminal synchronization holds at reduced motion and, where JS is involved, on Blink
     - Measured beat intervals reported factually, so the founder's pacing judgment has data alongside it
-    - **Measure the rendered narration card at 375 × 553 against SP3's actual copy.** The §7.1 height
-      budget assumes a 6-line worst case; at 7 lines the terminal drops to 4 visible lines, which the
-      design absorbs but the budget table does not. A wrong row gets corrected, not tolerated
+    - **Measure the rendered narration card against SP3's actual copy.** It meets its 6-line budget at
+      375 × 553 with zero margin and overflows to 7 lines at 320px — deferred to Sprint 2 with the fix
+      costed (DEC-027.1), so report it, don't fix it. Any future SP3 growth makes it worse
     - Derive validation scope from HO-002 and HO-005 directly, so a dev-charter omission does not also blind QA
   - **Key refs**: `team/qa/skills/web/web-testing.md`, `bodh-sprint4-corpus.md`, `section-02-beat-inventory.md`
 

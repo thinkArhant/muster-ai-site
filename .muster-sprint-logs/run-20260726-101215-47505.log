@@ -94,3 +94,160 @@
   🧪 bash   tail -6 knowledge-base/founder-notices.md
   🧪 bash   cat >> knowledge-base/founder-notices.md <<'EOF' - 2026-07-26 ui-ux: the phone terminal now wraps instead of scrolling s
   🧪 bash   git add -A && git status --short && bash muster/scripts/muster-commit-lint.sh 2>&1 | tail -3
+  🧪 bash   git commit -q -F - <<'EOF' ui-ux: the phone terminal reads without a sideways gesture Log lines soft-wrap with a 2ch han
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD 2>&1 | tail -5
+  💬 Step complete. Queue advanced to Content (SP7 rewrite). ## What I did Resolved gate finding **F-G4** — a phone reader should not swipe sideways to finish a log line — as a revision to `knowledge-base/
+    📖 ×13 · ✏️  ×20 · 📝 ×4 · 🧪 ×44
+  ✓ 82 turns · $9.25 · peak ctx 199k/1M 19% · out 85k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-26 ui-ux: the phone terminal now wraps instead of scrolling sideways, and the price is visible on your iPhone at the re-gate — 3 log lines instead of 5 at 375×553, each one readable to its last character where none was before. Paid by moving the totals strip just below the playback core, not from fidelity or type size (DEC-026); the totals still read the same, they just sit a thumb-flick down. Desktop is measurably unchanged.
+  ✓ [36;1mUI-UX[0m · [1m21m 39s[0m · advanced → 2026-07-26 Content (web): Reframe SP7 to the operator's arc (CONTENT) · handoff HO-011 filed ✓
+    run so far: 21m 39s · $9.25 · 1 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 2
+▶ [33;1mCONTENT[0m · 2026-07-26 Content (web): Reframe SP7 to the operator's arc  [2m[claude-fable-5][0m
+  ⚙  session start
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 The queue's Next Step is a Content step (rewrite SP7 to the operator's arc). Binding to Content for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh content auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/content.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/content/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/content.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/brand-guidelines.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-narration.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 40 muster/system-guide.md | head -80
+  🧪 bash   grep -rn "section-02-narration" tests/ scripts/ 2>/dev/null | head -20
+  🧪 bash   grep -n "Pre-Handoff Self-Review Checklist" -B2 -A 30 muster/system-guide.md | head -60
+  🧪 bash   grep -n "No human touched\|deploy button" tests/*.mjs index.html 2>/dev/null | head
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  🧪 bash   bash scripts/test.sh
+  🧪 bash   node -e ' const count = s => s.split(/\s+/).filter(t => /[A-Za-z0-9]/.test(t)).length; const lines = { "SP7 new": "The o
+  💬 Suite green, and the new SP7 measures 15 words / 4.29 s — identical arithmetic to the old line, so the slot-summary table's numbers stand. Now applying the rewrite to `section-02-narration.md`.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-narration.md
+  🧪 bash   grep -n "honest headline\|run stops\|No human touched\|deploy button" knowledge-base/design-specs/web/section-02-narrati
+  🧪 bash   grep -n "SP7" knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now filing HO-012 in `agent-requests.md`.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Now the Done entry at the top, and trimming the section to the 10-entry cap (5 oldest entries drop):
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 That leaves 11 entries — one over the cap. Removing the oldest remaining entry:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   grep -c "^- 2026" knowledge-base/orchestration-queue.md
+  🧪 bash   ls muster/scripts/ | grep -i lint
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>/dev/null; bash muster/scripts/muster-lint-handoff.sh 2>/dev/null; true
+  💬 Lints clean. Committing the step:
+  🧪 bash   git add knowledge-base/design-specs/web/section-02-narration.md knowledge-base/agent-requests.md knowledge-base/orchestr
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD
+  💬 The Content step is complete and the queue is advanced. Summary of what shipped: **The rewrite (HO-012, resolving F-G1 / DEC-024).** SP7 — §2's thesis line — now reads: > *The operator planned the spr
+    📖 ×14 · ✏️  ×6 · 🧪 ×17
+  ✓ 38 turns · $7.34 · peak ctx 150k/1M 15% · out 35k  (success)
+  ✓ [33;1mCONTENT[0m · [1m9m 44s[0m · advanced → 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild (PM) · handoff HO-012 filed ✓
+    run so far: 31m 23s · $16.59 · 2 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 3
+▶ [35;1mPM[0m · 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh pm auto
+  💬 Binding to PM for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/pm.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/CLAUDE.md
+  💬 Now the PM bootstrap reads.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/pm.md
+  🧪 bash   wc -l knowledge-base/agent-requests.md knowledge-base/decision-log.md knowledge-base/current-sprint.md knowledge-base/de
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "^## \|^### DEC-" knowledge-base/decision-log.md | tail -30
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-narration.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the re-derivation work. Word counts first, by script under the file's own §1 convention:
+  🧪 bash   python3 - <<'PY' import re slots = { "SP1":"A real run, replayed: Bodh's website wave — one evening, AI agents, unattend
+  💬 Budget arithmetic, re-derived independently:
+  🧪 bash   python3 - <<'PY' import math # fixed core, item by item, from tokens sticky=48.0; beat=11*1.5; gap1=12.0; chrome=16.5+12
+  💬 Now the corpus check — I'll verify SP7's arc against source rather than against its citation table:
+  🧪 bash   grep -n "What Sprint 4 was" -A 12 knowledge-base/bodh-sprint4-corpus.md; echo "=== L11 / halt ==="; grep -n "halt\|await
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  💬 Now the files I own and must cascade. Checking current state:
+  🧪 bash   sed -n '1,60p' knowledge-base/pre-launch-checklist.md; echo "=== FOUNDER NOTICES (tail) ==="; tail -12 knowledge-base/fo
+  🧪 bash   grep -n "424.4\|499\|5 whole lines\|five lines\|visible lines\|horizontal\|totals strip\|64ch\|SP7" knowledge-base/agent
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  💬 Running the harness myself at review rather than citing the handoffs' claim:
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -25
+  🧪 bash   grep -c "" .test-logs/run-20260726-104755.log; grep -E "Blink|WebKit|passed|PASS|✅" .test-logs/run-20260726-104755.log |
+  🧪 bash   python3 - <<'PY' import re src=open('knowledge-base/bodh-sprint4-corpus.md').read() block=src.split('## Terminal-line in
+  🧪 bash   grep -n "text-readout\|text-micro\|--gutter\|--bp-wide\|--gap-flow\|--gap-hairline" knowledge-base/design-specs/web/page
+  🧪 bash   grep -n "totals" -A 8 web/styles.css 2>/dev/null | head -60 || ls; echo "=== find css ==="; ls *.css web/*.css assets/*.
+  ⚠️  tool returned an error
+  🧪 bash   ls -1; echo "=== css blocks in index.html ==="; grep -n "replay__totals\|totals__value\|text-micro" index.html | head -2
+  🧪 bash   grep -rn "totals__value" -A 10 styles/ | head -40; echo "=== micro token ==="; grep -rn "\-\-text-micro:" -A 2 styles/ |
+  🧪 bash   python3 -c " s='~64 MIN AGENT WORK · 289 API CALLS · \$24.73' print(len(s), repr(s)) adv=11*(7.847/13) for track,name in
+  💬 Every load-bearing figure reproduces. Now applying the cascades I own. First the two stale spec passages:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the review blocks. Both handoffs accepted:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now moving both to Resolved (the lint requires it) with the actionable detail relocated into the build step:
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() start=s.index('### HO-011 —') end=s.index('## Res
+  💬 The review blocks aren't in git yet, so "full detail in git history" would be false. Restoring them to commit first:
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() body=open('.review-ho011-012.bak').read() anchor=
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() a=s.index("- 2026-07-26 — HO-012 (Content): SP7 r
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 Now the agent-context cascades. Checking the passages that are now stale:
+  🧪 bash   sed -n '105,125p' knowledge-base/agent-context/ui-ux.md; echo "=== QA 105-145 ==="; sed -n '105,145p' knowledge-base/age
+  🧪 bash   for f in developer qa ui-ux content; do echo "=== $f ==="; grep -n "^## " knowledge-base/agent-context/$f.md; wc -l < kn
+  🧪 bash   python3 - <<'PY' import io blocks = { 'developer': """ --- ## Current task — rebuild §2 to the amended spec and copy (20
+  💬 Now the pre-launch checklist (stale budget figure + the deferred item) and the founder-facing packet:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  ⚠️  tool returned an error
+  🧪 bash   grep -n "424.4" -B 3 -A 3 knowledge-base/pre-launch-checklist.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  💬 Now the queue — true-up, promote the rebuild step with the routed findings folded in:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   sed -n '84,135p' knowledge-base/orchestration-queue.md
+  💬 Structure is correct. Adding the deferred items to the QA step and the Done entry:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() s=s.replace(""" script-measured, reading in 
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() done=s.split('## Done (Last 10)')[1] import 
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() # drop the oldest entry (Wave 2: QA) — over 
+  💬 Now re-basing the founder's gate packet for the re-gate — it still quotes the retired SP7 string:
+  🧪 bash   python3 - <<'PY' p='knowledge-base/wave-review.md' s=open(p).read() # 1. header note s=s.replace("""> **This is the Wave
+  🧪 bash   python3 - <<'PY' p='knowledge-base/wave-review.md' s=open(p).read() # Verify section: re-scope to the two narrow checks 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  🧪 bash   python3 - <<'PY' p='knowledge-base/wave-review.md' s=open(p).read() a=s.index("### Notices since last gate") b=s.index("
+  💬 Now the founder notice, sprint board, and commit:
+  🧪 bash   cat >> knowledge-base/founder-notices.md <<'EOF' - 2026-07-26 pm: both fix-wave deliverables accepted with no revision —
+  🧪 bash   sed -n '80,92p' knowledge-base/current-sprint.md; echo "=== 262-278 ==="; sed -n '262,278p' knowledge-base/current-sprin
+  🧪 bash   python3 - <<'PY' p='knowledge-base/current-sprint.md' s=open(p).read() s=s.replace("""| 3b | Mobile no-horizontal-scroll
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 45 muster/system-guide.md | head -60
+  🧪 bash   grep -n "## Pre-Handoff Self-Review Checklist" -A 40 muster/system-guide.md
+  💬 Running the Pre-Handoff Self-Review Checklist. Item 1 — grepping for contradictions the edits could have left:
+  🧪 bash   echo "--- retired SP7 string outside build/history ---"; grep -rln "run stops itself at the gate" knowledge-base/ index.
+  🧪 bash   python3 - <<'PY' # Fix the contradicting lines in place rather than only superseding them below p='knowledge-base/agent-
+  🧪 bash   grep -n "^### A-00\|^\*\*A-00\|^- \*\*A-00" knowledge-base/foundational-assumptions.md | head -12
+  🧪 bash   ls muster/scripts/muster-sprint-resume.sh tests/qa-independent-audit.mjs 2>&1; git diff --stat knowledge-base/bodh-sprin
+  💬 Checklist clean. Committing the review while the full detail is still in `agent-requests.md`, so the Resolved one-liners' "full detail in git history" is true:
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the phone fix and the new thesis line are both cleared to build HO-011 and 

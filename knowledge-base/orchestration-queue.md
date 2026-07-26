@@ -24,9 +24,11 @@ readability check rides the §2 QA step. From DEC-022: the totals strip's per-vi
 the build step, and its two-line assertion rides the QA step. All four are dispositions of findings in
 HO-004 and HO-005 — none is new scope.
 
-**The narration is closed.** HO-005 is accepted with no revision and no word rewritten; the strings in
-`section-02-narration.md` are final and are rendered verbatim. Where any other file spells a §2 string
-differently, that file is stale and the narration file wins.
+**The build inputs are closed again after the fix wave.** HO-011 and HO-012 are both accepted with no
+revision (DEC-027), so `section-02-replay.md` and `section-02-narration.md` are final and carry nothing
+open. SP7 was rewritten once, at the founder's gate — the narration file holds the current string and is
+rendered verbatim. Where any other file spells a §2 string differently, that file is stale and the
+narration file wins.
 
 **The build ships its own cross-engine harness** (DEC-020): `bash scripts/test.sh` runs
 `tests/verify-shell.mjs` (Blink) then `tests/verify-webkit.mjs` (WebKit), both dependency-free and
@@ -86,37 +88,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild
-
-```
-Role: pm
-Model: claude-opus-5
-
-**Task:** Review the mobile-layout amendment and the SP7 rewrite together, before either is built.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-011, HO-012
-- `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md`
-- `knowledge-base/decision-log.md` — DEC-024, DEC-025
-- `knowledge-base/agent-skills/content/copy-rules.md`
-- `muster/team/pm/skills/generic/deliverable-review.md`
-
-**Acceptance criteria:**
-- **Re-derive, don't re-read.** Recount SP7's words yourself and confirm it is inside 16; if SP6 was
-  spent, recount that too. Re-derive the mobile height budget against the stated viewport
-- **DEC-024's guardrail is the one to enforce.** If the new SP7 reaches for awe rather than stating a
-  fact, that is a blocking finding no matter how well it reads. Judge it as a skeptical reader would
-- Confirm the arc is actually supported by the cited corpus lines, not merely plausible
-- Confirm §5.1's persistence wording moved if the visible-line count changed
-- If UI/UX pushed back on the 2–3 line outcome, evaluate on the merits and route to Founder Decisions
-  rather than overruling a design objection silently
-
-**On completion:** Run the Pre-Handoff Self-Review Checklist. Promote the rebuild step.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Developer (web): Rebuild §2 to the amended spec and copy
 
 ```
@@ -126,8 +97,10 @@ Model: claude-opus-5
 **Task:** Apply the approved mobile-layout change and the revised narration string to the built §2.
 
 **Inputs:**
-- `knowledge-base/agent-requests.md` — HO-011, HO-012 with their PM reviews
-- `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md` — authoritative
+- `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md` — authoritative,
+  both final and carrying nothing open
+- `knowledge-base/decision-log.md` — DEC-024, DEC-026, DEC-027
+- `knowledge-base/agent-context/developer.md` — the current-task block carries the numbers and the trap
 - `knowledge-base/bodh-sprint4-corpus.md` — read-only
 
 **Acceptance criteria:**
@@ -137,9 +110,23 @@ Model: claude-opus-5
 - Reduced-motion and no-JS paths still render the complete transcript
 - `bash scripts/test.sh` green on both engines; extend it rather than adding a second runner
 - Timing untouched — the 48.00 s schedule is not in scope for this fix
+- **Quantise the terminal window by measurement, not by the 49.4px constant** (DEC-027.4). §7.1's
+  formula is exact at ≥375px and a ceiling below it — at 320px the region is 34 columns and the two
+  longest lines cost three rows, so a literal implementation places a third line and clips it, which
+  §7.1 rule 2 forbids. Rule 3's flex-remainder mechanism is the one to build
+- **Confirm the two derived landscape figures** UI/UX flagged: the chrome bar at a 324px column
+  (budgeted at two lines / 58px, may fall to 41.5px) and the worst-case narration slot at ~29
+  characters per line (budgeted 7 lines / 228.3px). If either exceeds its slack, §7.1's priority order
+  drops the beat indicator first — state what you measured either way
+- The totals value line keeps `0.02em` tracking, not `--track-micro` — at the wide tracking its 43
+  characters set 351.7px against a 327px column and wrap to a third strip row
 
 **On completion:** File HO-013 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
 
 ### 2026-07-26 QA (web): Re-validate §2 and retire the reading-band check
 
@@ -151,14 +138,20 @@ Model: claude-opus-5
 
 **Inputs:**
 - `knowledge-base/agent-requests.md` — HO-013
-- `knowledge-base/decision-log.md` — DEC-023, DEC-025
+- `knowledge-base/decision-log.md` — DEC-023, DEC-026, DEC-027
 - `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md`
+- `knowledge-base/agent-context/qa.md` — the current-task block states what moved and what is deferred
 
 **Acceptance criteria:**
 - **DEC-023:** the 45–75-character band check is retired as an assertion and re-scoped to a reported
   measurement. The number stays visible; the false red goes. `qa-independent-audit.mjs` must exit zero
   on a clean build afterwards — an audit that is always red is an audit nobody reads
 - Twelve lines still diff byte-clean; the revised narration string diffs against the narration file
+- **3 whole lines at 375 × 553**, not 5 — the mobile rows of §12 all moved (DEC-026). The window must
+  never clip a wrapped line part-way through its rows, including at 320px where the longest lines cost
+  three rows
+- Two items at 320px are **deferred, not open** (DEC-027.1–2): SP3 overflows the six-line narration
+  card, and the totals value line wraps to a third strip row. Report them if they reproduce; do not fix
 - No horizontal scroll required at 375px; body still never scrolls horizontally at 375 / 320 / 200%
 - Reduced-motion and no-JS paths complete; zero runtime network requests
 - Cross-engine on WebKit and Blink; state plainly what remains Blink-only
@@ -194,28 +187,38 @@ sprint worktree.
 ## Done (Last 10)
 <!-- newest first -->
 
+- 2026-07-26 — Fix wave step 3: PM — both fix-wave deliverables accepted, no revision; the rebuild's
+  inputs are closed (DEC-027). Everything re-derived rather than re-read: SP7 recounts to 15 of 16 words
+  reading in 4.29 s of the 4.80 s hold with SP6's relief unspent at 10 of 12, and the mobile core sums
+  to 379.4px item by item, giving 3 lines at 375 × 553 with 25.4px of slack — all five viewport rows,
+  both landscape columns and the 478.2px floor reproduce, and the two build measurements land on the
+  arithmetic to 0.01px. **The claim the whole trade rests on was checked at the corpus, not in the
+  handoff**: eleven of twelve lines exceed 41 columns and every one of L1–L11 costs exactly two rows
+  there, with the longest token 18 characters against 34, so the wrap backstop is genuinely unreachable.
+  DEC-024's guardrail met on the merits — no adjective-as-argument, the effect carried by tense landing
+  on `awaiting operator`, deploy boundary intact. **Two gaps found by re-deriving rather than reading**:
+  annotation 7 stated the totals strip's fit constraint but not the tracking that achieves it (a rebuild
+  from the spec alone could have re-broken a fixed defect), and §7.1's 49.4px line constant is a ceiling
+  below 375px that would clip a line at 320px if built literally — both now stated where the build will
+  see them. SP3's 320px card overflow deferred to Sprint 2 with its fix already costed. Harness re-run
+  at review: `scripts/test.sh` green.
+
 - 2026-07-26 — Fix wave step 2: Content — SP7 now tells the operator's arc (HO-012). *"The operator
   planned the sprint, left the agents running, and returns to a deploy-ready site."* 15 of 16 words,
   script-measured, reading in 4.29 s of the 4.80 s hold; SP6's relief unspent; every verb cited to
-  the corpus and zero adjectives-as-argument. **Awaiting PM review.**
+  the corpus and zero adjectives-as-argument. **Accepted by PM, no revision** (DEC-027).
 
 - 2026-07-26 — Fix wave step 1: UI/UX — the phone terminal reads without a sideways gesture (HO-011).
   Soft-wrap plus a 2ch hanging indent, paid for by lifting the totals strip out of the playback core;
   3 whole lines at 375 × 553, zero horizontal overflow anywhere, fidelity and type scale untouched
   (DEC-026). Prototyped and measured in Blink at nine viewports rather than derived. Desktop verified
-  unchanged at five widths. **Awaiting PM review.**
+  unchanged at five widths. **Accepted by PM, no revision** (DEC-027).
 
 - 2026-07-26 — Wave 3 Gate: **APPROVED with one copy fix** by the founder. Pacing and narration judged
   good with styling subtracted; the 4.80 s gate hold upheld at its reduced length. Four findings routed
   as a fix wave: SP7 reframed to the operator's arc (DEC-024), mobile terminal to read without
   horizontal scroll (DEC-025), reading column ruled `64ch` as-shipped with the band check retired
   (DEC-023), and the real-iPhone playback check carried to the re-gate.
-
-- 2026-07-26 — Wave 3 Step 4: QA §2 replay validation (HO-007). 20/20 criteria green, 7 measurements
-  reported; seven defects found and fixed in the audit itself. Accepted by PM.
-<!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
-<!-- Format: - [DATE] [Agent]: [One-line summary] -->
-<!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
 
 - 2026-07-26 — Wave 3: QA — §2 replay validated; every criterion green (HO-007). Twelve lines byte-clean
   against the corpus and the corpus proven unmodified from git; worst reveal drift 16.8 ms across all
@@ -282,18 +285,3 @@ sprint worktree.
   labelled as such; the one residual — `100dvh` in mobile Safari, the mechanism §7.1's whole budget rests
   on — is named, carried to pre-launch, and flagged to the founder for the Wave 3 gate. F3 applied
   directly to `page-shell.md` §11.
-
-- 2026-07-25 — Wave 2: QA — Shell validated against `page-shell.md`, both engines (HO-004). Every
-  acceptance criterion passes and no build defect was found; HO-003's QA box is ticked. Build suite
-  86/86, independent audit 37/39 — the two failures are readability decisions QA lacks authority for,
-  so the queue goes to PM rather than to Content. F1: `64ch` renders ~90 prose characters, past WCAG
-  1.4.8's 80-character ceiling, and it traces to a seed value. F2: `.instrument`'s flat 48px padding
-  leaves a 174px column at ~18 chars/line on a 320px phone — confirms OBS-001 and extends it past the
-  375px case the producer reported. F3 confirms OBS-002 (spec §11's heading count, not the build).
-  OBS-003's class confirmed but its figure disputed: ~66.7 counts `0` glyphs, not reading characters.
-  Two suspicions chased and cleared rather than reported — the `overflow-x: hidden` assertion does
-  falsify (injected 900px box at 375px viewport reports scrollWidth 901), and the contrast audit was
-  redone across all 29 text runs rather than the 6 sampled selectors. The material new constraint is
-  the WebKit ceiling: `qlmanage` runs no JavaScript and ignores the requested size, rendering at a
-  fixed ~1024², both proven with committed probes — so §2's mobile cross-engine criterion cannot be
-  met on this tooling and now needs a decision with a wave of runway rather than at the gate.

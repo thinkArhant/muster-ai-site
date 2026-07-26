@@ -179,3 +179,46 @@ reconstruct it. Re-point `## Next Step` to a `Role: pm` step naming the missing 
 
 **Key refs**: `design-specs/web/section-02-replay.md` · `design-specs/web/section-02-narration.md` ·
 `bodh-sprint4-corpus.md` · `design-specs/web/section-02-beat-inventory.md` · `product-spec-seed.md` §2
+
+---
+
+## Current task — rebuild §2 to the amended spec and copy (2026-07-26)
+
+`section-02-replay.md` and `section-02-narration.md` are both final and accepted (DEC-027). Build from
+them; where any other file spells a §2 string differently, the narration file wins.
+
+**Two changes, and only two.** Timing is untouched — the 48.00 s schedule, the ten reveal offsets and
+the 4.80 s gate hold are not in scope.
+
+1. **SP7's string changed** (DEC-024): *"The operator planned the sprint, left the agents running, and
+   returns to a deploy-ready site."* Render it verbatim from the narration file — never retyped. The
+   built page still carries the superseded line, so the independent audit reds on SP7 until this lands.
+2. **The phone terminal wraps and the totals strip moves** (DEC-026). `white-space: pre-wrap` with a
+   2ch hanging indent (`padding-inline-start: 2ch; text-indent: -2ch`) at **every** viewport — it is
+   inert on desktop, where no line reaches the column. `overflow-wrap: break-word` as a backstop only.
+   Nothing scrolls horizontally anywhere: not the terminal's region, not the page body, at any width.
+   The chain totals strip sits **immediately below** the playback core on mobile, not inside it — that
+   is what buys the 45.0px the wrap costs. Desktop keeps it in the two-column core.
+
+**Numbers you will be measured against**: fixed core **379.4px**; one wrapped corpus line is two 24.7px
+line boxes = 49.4px; at 375 × 553 the window is **3 whole lines**, core used 527.6px, slack 25.4px. The
+guarantee floor is 478.2px of visual viewport height.
+
+**The one trap.** §7.1's `floor((VH − 379.4) / 49.4)` is a *budget* formula: exact at ≥375px, a
+**ceiling** below it, because at 320px the region is 34 columns and the two longest lines cost three
+rows. Implementing the constant literally there places a third line the window then clips mid-rows,
+which §7.1 rule 2 forbids. Build rule 3's mechanism instead — quantise the flex remainder down to whole
+wrapped lines by measurement, so the count falls out of the real row heights.
+
+**Two landscape figures in the spec are derived, not measured, and are yours to confirm**: the chrome
+bar at a 324px column (budgeted conservatively at two lines / 58px; it may fall to 41.5px) and the
+worst-case narration slot at ~29 characters per line (budgeted 7 lines / 228.3px). Both have slack above
+them; if either exceeds it, §7.1's priority order drops the beat indicator first.
+
+**The totals strip's tracking is spec, not styling.** `0.02em` on the value line, not `--track-micro` —
+at the wide tracking the 43-character string sets 351.7px against a 327px column and wraps to a third
+strip row. The scope label keeps `--track-micro`.
+
+Fidelity is unchanged and structurally so: a soft wrap inserts and removes no character, so all twelve
+lines still diff byte-clean. Reduced-motion and no-JS paths still render the complete transcript.
+`bash scripts/test.sh` must be green on both engines — extend it, never add a second runner (DEC-020).

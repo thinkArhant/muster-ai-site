@@ -11,7 +11,7 @@
 ### HO-011 — §2 mobile terminal: the phone reads without a sideways gesture
 
 **From**: UI/UX · **To**: PM (review), then Developer (build), QA (validate)
-**Date**: 2026-07-26 · **Status**: open
+**Date**: 2026-07-26 · **Status**: done — accepted by PM 2026-07-26, no revision
 **Deliverable**: `knowledge-base/design-specs/web/section-02-replay.md` — §3 (one line), §5.1, §7
 (desktop note, annotations 4 and 7), §7.1 (rules, budget, viewport table, wireframe), §10, §11, §12,
 §13
@@ -216,10 +216,70 @@ five resolve and all five values match what §7.1's budget assumes. Item 5: A-00
 reference. `bash scripts/test.sh` is green (129 Blink, 13 WebKit) on the unchanged build, as expected:
 this handoff moves the spec, and the build is HO-013's step.
 
+#### PM review — ACCEPTED, no revision (2026-07-26)
+
+**Every figure re-derived from tokens and from the corpus, not read off the handoff.** The fixed core
+sums to **379.4px** item by item; the wrapped line box is 24.7 × 2 = 49.4px; `floor((553 − 379.4) /
+49.4)` = **3**, core used 527.6, slack 25.4. All five viewport rows reproduce exactly (5 lines at 640 /
+659 / 664 / 667, slack 13.6 / 32.6 / 37.6 / 40.6), as do the column counts at the stated 7.847px advance
+(41 / 39 / 43 / 43 / 41, and 34 at 320px), the 478.2px guarantee floor, the 45.0px the strip returns
+(424.4 → 379.4), and both landscape columns (232.2px of 242.5 with 10.3 spare; narration 228.3 with
+14.2). The two build measurements the handoff cites as corroboration land where the arithmetic puts
+them: 424.4 − 48 + 5 × 24.7 = **499.9** against a measured 499.89, and 454.9 against 454.89.
+
+**The load-bearing claim was checked against the corpus itself, character by character.** Eleven of the
+twelve lines exceed 41 columns (longest 74, shortest over-length 43) and **every one of L1–L11 costs
+exactly two rows at 41 columns** — the constant the deterministic window rests on, and it holds with no
+exceptions rather than approximately. L12 is 31 characters and sets one row. The longest whitespace
+token is **18 characters** against a 34-column narrowest region, so the `break-word` backstop is
+genuinely unreachable, as claimed. Three wrapped lines carry ~170 characters against five clipped ones'
+205 — the 17% figure is right, and so is the argument built on it: the 205 contains no line a reader can
+finish.
+
+**The trade is accepted on its merits, not on its arithmetic.** Three lines is thin and the handoff says
+so. What decides it is that the alternative is not "five lines" but "five first-halves of lines" — at 41
+columns a non-wrapping phone shows the reader no complete log line at all, which makes §2's own claim
+(*these are the real log lines*) unverifiable on the device where most readers will meet it. Spending
+the totals strip to reach 3 rather than settling at 2 is the right call and the reasoning for it — a
+two-line box stops reading as a log — is sound. Nothing was pushed back on that needs a founder answer.
+
+**Findings disposed:**
+
+- **F1 (DEC-025's width figures) — accepted and already superseded.** DEC-026 carries 325px / 41
+  columns / 268px. Nothing downstream quotes the old numbers; `wave-review.md` is re-based this session.
+- **F2 (SP3 overflows the narration card at 320px) — DEFERRED to Sprint 2 with the mechanism named,
+  not left loose.** Confirmed pre-existing: the card is budgeted at six lines and SP3 sets six at 375px
+  with zero margin (HO-007's finding), so the seventh line is bought by narrowing to 320px, not by this
+  change. 320px sits below the width every row of the budget is derived at. It is not fixable inside
+  this wave without either re-opening SP3 (Content, not open this wave) or a taller card (which costs
+  the terminal a line at the budget case — trading a guaranteed viewport for an unbudgeted one). The
+  resolution when it lands: §7.1's own priority order already pays for it, since dropping the beat
+  indicator returns 28.5px and the seventh line costs 28.9px. Carried in `pre-launch-checklist.md`.
+- **F3 (totals-strip wrap at 320px) — CARRIED, downgraded as stated.** Correct that it stops being a
+  core-budget problem once the strip leaves the core. It stays a copy-fit question for Sprint 2.
+- **F4 (annotation 7's ruling re-based onto width) — accepted, and the reason was re-derived rather
+  than taken.** At 375px `--text-readout` clamps to 24px, which sets the 43-character value string at
+  ~623px in a 327px column — unfittable by a factor of two, so the ruling stands on width exactly as
+  claimed. One gap found while checking it and closed in the spec: annotation 7 stated the constraint
+  but not the lever. At `--track-micro` the string sets **351.7px** and overflows the 327px column; at
+  the `0.02em` the build actually applies it sets **295.0px**. DEC-022 ruled tracking as the lever and
+  the build implements it, but the spec did not say so — a rebuild from the spec alone could have
+  reintroduced `--track-micro` and re-broken a fixed defect. Now stated in annotation 7.
+
+**One implementation trap, routed to the rebuild step rather than filed as a defect.** §7.1's formula
+uses a 49.4px constant, and the spec is explicit that this is exact at ≥375px and a **ceiling** below
+it. At 320px the two longest lines cost three rows, so the constant over-counts and would place a third
+line the window then clips part-way — which rule 2 forbids. Rule 3 already specifies the correct
+mechanism (quantise the flex remainder down to whole wrapped lines, measured), so this is a note to
+build the measured version rather than the arithmetic shorthand. Added to the rebuild step's criteria.
+
+**Verification**: `bash scripts/test.sh` re-run by PM at review — **green** (13/13 WebKit, suite green
+end to end) on the unchanged build, matching the handoff's claim. A-001 holds: the corpus was read only.
+
 ### HO-012 — §2's thesis line now tells the operator's arc
 
 **From**: Content · **To**: PM (review), then Developer (build), QA (validate)
-**Date**: 2026-07-26 · **Status**: open
+**Date**: 2026-07-26 · **Status**: done — accepted by PM 2026-07-26, no revision
 **Deliverable**: `knowledge-base/design-specs/web/section-02-narration.md` — SP7 (string, citation
 table, commentary). SP6 untouched.
 **Resolves**: F-G1 / DEC-024
@@ -290,6 +350,55 @@ none leaves it. The technical reader also still gets the halt verbatim, from L11
 None. F-G1 stated the arc and DEC-024 stated the budget and the guardrail; all three are satisfied
 as specified.
 
+#### PM review — ACCEPTED, no revision (2026-07-26)
+
+**Recounted, not read.** Under the file's own §1 convention (whitespace-delimited tokens containing a
+letter or digit), SP7 is **15 words** against a 16-word budget, reading in **4.29 s** of the 4.80 s hold.
+The superseded line is also 15, so the claim that no slot-summary number moves is right. SP6 was
+**recounted because the criteria asked**: 10 of 12, the relief genuinely unspent. Every other slot
+re-measured in the same pass — 139 timed words of 163, all ten inside budget, all nine timed ones inside
+their windows — and every budget re-derived as `floor(window × 3.5)`, which reproduces all seven.
+
+**DEC-024's guardrail is satisfied, and it was judged as the skeptic, not as the author.** The line
+carries no adjective-as-argument. Its four modifiers are three articles and "deploy-ready," which is a
+state the corpus records rather than praise for it: session row 8 assembles the founder deploy packet
+and stops the run, session row 2 ships a deployable `web/`. The sentence is carried by verbs, and the
+effect it does have comes from tense — *planned, left, returns* — landing on a terminal line that reads
+`Role: halt · awaiting operator` at that instant. That is the SP3 mechanism (a specific true fact placed
+where it lands hardest), not the mechanism DEC-024 warned against. It would have been blocking if it had
+reached for awe; it does not.
+
+**The arc was checked at the corpus, not against the citation table.** All five beats hold: *planned*
+— "Planned to run **fully autonomous** end-to-end … with a **single human gate at deploy**" plus DEC-019
+("Sprint 4 **authored** to run end-to-end autonomously"); *left / agents running* — "It did." and the
+narration-facts bullet, true for sessions 1–8 with a single halt; *returns* — terminal L11 and session
+row 8 ("the deploy gate is the founder's"); *deploy-ready* — session row 8 and session row 2.
+
+**One inferential step chased and cleared, recorded so it is not re-litigated.** The corpus never says
+"the operator planned the sprint" in those words — its planning statement is agentless ("Planned to
+run…"), and DEC-019 says "authored" without naming who. The attribution to the operator holds on two
+independent supports: the eight traced sessions are all agents, so whoever authored the run sits outside
+the chain; and the founder's own F-G1 framing states the arc in exactly these terms. If it is ever
+challenged, that is the answer.
+
+**The deploy boundary holds** — "deploy-ready," never "deployed," and nothing attaches the deploy to the
+chain's end. SP8 still carries the three-days-later fact and the reason (the gate waited on Apple).
+Copy-rules re-checked line by line against the slot: R1 (no numeral in it), R2 (no wall-clock, boundary
+intact), R6, R7 (product voice, no first person), R8 (the agents are named as agents and the human's
+acts are planning and returning, never the work). No banned adjective, no exclamation.
+
+**Findings disposed:**
+
+- **F1 (stale SP7 brief in the replay spec §6) — APPLIED this session.** The brief now states the
+  operator's arc and says explicitly that the honest-headline fact is carried inside it, so a future
+  reader of the spec alone cannot reconstruct the retired negative framing. No timing, anchor or budget
+  in that row moved. Correctly routed rather than edited across the role boundary.
+- **F2 (the audit reds SP7 until the rebuild) — confirmed by inspection, not accepted on assertion.**
+  `index.html:113` still renders the superseded string; `bash scripts/test.sh` re-run by PM at review is
+  **green**, since the build suite does not read the narration file. Expected sequencing.
+- **F3 (stale Execution Mode prose in the queue) — APPLIED this session.** Correctly noted rather than
+  edited: it is PM-owned prose.
+
 #### Self-review
 
 Ran the Pre-Handoff Self-Review Checklist. Item 1's grep caught the stale SP7 brief in the replay
@@ -356,13 +465,3 @@ append — DEC-024 already records this ruling.
   Chain end and B6 measured at source (3858 s / 486 s), calls and cost corroborated by arithmetic to
   the unit and the cent, corpus unmodified at the founder's commit `025842c`. The self-caught margin
   error (B1, not B6, is second-shortest — B3 leads by 13 s) makes hazard 3 sharper. No downstream drift.
-
-- 2026-07-25 — HO-002 (UI/UX): Design foundation + §2 replay spec. Closed — F1 resolved by HO-010 and
-  the PM box ticked on the delivered budget, not on the wave moving on. Sixteen contrast ratios and the
-  full timing model were re-derived independently at first review; the design direction, token system,
-  and pacing model carried through the amendment unchanged. Full detail in git history.
-
-- 2026-07-25 — HO-001 (Developer): Bodh corpus verified, §2 beat inventory derived. All six seed
-  beats supported, no gaps, no HALT; all twelve terminal lines assigned. Accepted by UI/UX (as pacing
-  input) and PM (with one figure superseded by corpus v1.1 — derived chain end `21:43:09`/3852 s is
-  now measured `21:43:15`/3858 s, moving B6 480→486 s). Trued up by HO-009. Full detail in git history.

@@ -845,5 +845,54 @@ anything quoting its arithmetic should quote these instead.
 `agent-requests.md` (HO-011), `orchestration-queue.md`, `founder-notices.md`.
 `agent-context/{developer,qa,ui-ux}.md` are PM's to cascade at the HO-011 review step.
 
+### DEC-027 — Both fix-wave deliverables accepted; the rebuild's inputs are closed (2026-07-26)
+
+**Decision**: HO-011 (mobile terminal) and HO-012 (SP7) are accepted with no revision. The two
+authoritative files — `section-02-replay.md` and `section-02-narration.md` — are final for the rebuild,
+and nothing in either is open. Four items are disposed below; none of them gates the build.
+
+**Rationale**: Both deliverables were re-derived rather than re-read. SP7 recounts to 15 words of 16
+(4.29 s of the 4.80 s hold) with SP6's relief genuinely unspent at 10 of 12, and the mobile budget sums
+to 379.4px item by item, giving 3 lines at 375 × 553 with 25.4px of slack — every viewport row, both
+landscape columns and the 478.2px floor reproduce, and the two build measurements land on the arithmetic
+to 0.01px. The claim the whole trade rests on was checked at the corpus itself: eleven of the twelve
+lines exceed 41 columns and **all of L1–L11 cost exactly two rows there**, with no exceptions, so the
+window is deterministic as specified rather than approximately.
+
+**DEC-024's guardrail is met on the merits.** SP7 carries no adjective-as-argument; "deploy-ready" is
+the packet's recorded state, not praise for it, and the line's effect comes from tense landing on a
+terminal that reads `awaiting operator`. The deploy boundary holds — deploy-ready, never deployed.
+
+**The trade is accepted as a trade.** Three log lines on a phone is thin, and the reason it is still
+right is that the alternative was never five lines: at 41 columns a non-wrapping phone shows five
+*first halves*, and §2's claim is that these are the real log lines.
+
+**Four dispositions:**
+
+1. **SP3 overflows the narration card at 320px — DEFERRED to Sprint 2, with the fix already known.**
+   Pre-existing and width-driven: the card is budgeted at six lines and SP3 sets six at 375px with zero
+   margin, so the seventh line is bought by narrowing below the budgeted width, not by the wrap change.
+   Fixing it this wave means re-opening SP3 (Content, not open this wave) or a taller card that costs
+   the terminal a line at the budget case — trading a guaranteed viewport for an unbudgeted one. §7.1's
+   own priority order pays for it when it lands: dropping the beat indicator returns 28.5px against a
+   28.9px line. Held in `pre-launch-checklist.md` so it cannot ship unnoticed.
+2. **The totals strip's 320px wrap stays carried and is no longer load-bearing**, now that the strip
+   sits outside the playback core. A copy-fit question for Sprint 2, not a guarantee question.
+3. **Annotation 7 gains the lever it was missing.** It stated that the 43-character value string must
+   set on one line but not what makes it: at `--track-micro` the string sets 351.7px against a 327px
+   column and overflows; at `0.02em` it sets 295.0px. DEC-022 ruled tracking as the lever and the build
+   implements it, but a rebuild from the spec alone could have reintroduced the wide tracking and
+   re-broken a fixed defect. Now stated in the spec.
+4. **§7.1's 49.4px line constant is a budget shorthand, not a build instruction.** It is exact at
+   ≥375px and a ceiling below, where the two longest lines cost three rows; implementing it literally
+   at 320px would place a third line and clip it, which rule 2 forbids. Rule 3's measured quantisation
+   is the mechanism, and the rebuild step now says so.
+
+**Impact**: Developer (builds against both files), QA (re-validates), UI/UX, Content, PM.
+
+**Touched**: `agent-requests.md`, `design-specs/web/section-02-replay.md` (§6 SP7 brief, annotation 7),
+`orchestration-queue.md`, `current-sprint.md`, `wave-review.md`, `pre-launch-checklist.md`,
+`founder-notices.md`, `agent-context/{developer,qa,ui-ux,content}.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
