@@ -251,3 +251,5 @@
   🧪 bash   ls muster/scripts/muster-sprint-resume.sh tests/qa-independent-audit.mjs 2>&1; git diff --stat knowledge-base/bodh-sprin
   💬 Checklist clean. Committing the review while the full detail is still in `agent-requests.md`, so the Resolved one-liners' "full detail in git history" is true:
   🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the phone fix and the new thesis line are both cleared to build HO-011 and 
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() start=s.index('### HO-011 —'); end=s.index('## Re
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the request queue is back to two open lines Both reviewed handoffs swept to
