@@ -88,41 +88,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 QA (web): Re-validate §2 and retire the reading-band check
-
-```
-Role: qa
-Model: claude-opus-5
-
-**Task:** Re-validate the rebuilt §2, and apply DEC-023 to the audit.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-013
-- `knowledge-base/decision-log.md` — DEC-023, DEC-026, DEC-027
-- `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md`
-- `knowledge-base/agent-context/qa.md` — the current-task block states what moved and what is deferred
-
-**Acceptance criteria:**
-- **DEC-023:** the 45–75-character band check is retired as an assertion and re-scoped to a reported
-  measurement. The number stays visible; the false red goes. `qa-independent-audit.mjs` must exit zero
-  on a clean build afterwards — an audit that is always red is an audit nobody reads
-- Twelve lines still diff byte-clean; the revised narration string diffs against the narration file
-- **3 whole lines at 375 × 553**, not 5 — the mobile rows of §12 all moved (DEC-026). The window must
-  never clip a wrapped line part-way through its rows, including at 320px where the longest lines cost
-  three rows
-- Two items at 320px are **deferred, not open** (DEC-027.1–2): SP3 overflows the six-line narration
-  card, and the totals value line wraps to a third strip row. Report them if they reproduce; do not fix
-- No horizontal scroll required at 375px; body still never scrolls horizontally at 375 / 320 / 200%
-- Reduced-motion and no-JS paths complete; zero runtime network requests
-- Cross-engine on WebKit and Blink; state plainly what remains Blink-only
-- Red build: do NOT advance — re-point Next Step to a `Role: pm` assessment step
-
-**On completion:** File HO-014 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Wave 3 Re-gate — founder review
 
 ```
@@ -147,8 +112,21 @@ lines that advances, with the narration card in view the whole time.
 sprint worktree.
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
+<!-- Empty — the re-gate is the sprint's last step. PM plans what follows from the founder's verdict. -->
+
 ## Done (Last 10)
 <!-- newest first -->
+
+- 2026-07-26 — Wave 3 re-validation: QA — §2 re-validated after the fix wave (HO-014). Every criterion
+  green and no build defect found; `qa-independent-audit.mjs` **exits zero for the first time** at
+  106/106 with 9 reported measurements, and `scripts/test.sh` re-run green at 146 Blink / 13 WebKit.
+  The four superseded assertions were re-derived against the spec and re-based to assert the corrected
+  direction independently; the audit gained six checks that §12 required and only the producer's
+  harness carried. Both 320px items reproduce and are left deferred. Four findings for PM, one of them
+  a wording qualifier the founder will otherwise read as a miss. **Awaiting PM review, then the gate.**
 
 - 2026-07-26 — Wave 3 rebuild: Developer — §2 rebuilt to the amended spec and copy (HO-013). SP7 renders
   the operator's arc verbatim (all ten slots now diffed against the narration file, 10/10); the phone

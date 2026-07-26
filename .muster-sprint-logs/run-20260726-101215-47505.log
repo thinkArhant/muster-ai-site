@@ -365,3 +365,125 @@
   🧪 bash   sed -n '/^## Done (Last 10)/,$p' knowledge-base/orchestration-queue.md | grep -c "^- 2026-"
   🧪 bash   git status --porcelain
   🧪 bash   git add -A && git commit -q -F - <<'EOF' developer: §2 wraps on a phone and SP7 tells the operator's arc Every corpus lo
+  🧪 bash   git --no-pager log --oneline -3 && bash scripts/test.sh
+  💬 **§2 rebuilt, committed, green on both engines.** 146/146 Blink, 13/13 WebKit. **The two changes** SP7 now renders the operator's arc verbatim. Rather than trust the retyping, the harness reads all te
+    📖 ×18 · ✏️  ×25 · 📝 ×2 · 🧪 ×39 · ⚠️  ×3
+  ✓ 85 turns · $11.09 · peak ctx 235k/1M 23% · out 92k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m34m 12s[0m · advanced → 2026-07-26 QA (web): Re-validate §2 and retire the reading-band check (QA) · handoff HO-013 filed ✓
+    run so far: 1h 21m · $35.58 · 4 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 5
+▶ [32;1mQA[0m · 2026-07-26 QA (web): Re-validate §2 and retire the reading-band check  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh qa auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/qa.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/qa/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  🧪 bash   ls -la && echo "---SCRIPTS---" && ls scripts tests 2>/dev/null && echo "---SRC---" && ls -R src public 2>/dev/null | hea
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -40
+  🧪 bash   tail -60 .test-logs/run-20260726-113436.log
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/README.md
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | tail -80; echo "EXIT=$?"
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit1.txt 2>&1; echo "AUDIT_EXIT=$?"; grep -n "FAIL" /tmp/audit1.txt; echo "
+  🧪 bash   grep -n "45\|75\|band\|characters per line\|five whole\|never wrap\|never scrolls horizontally\|wider one\|derives 7" te
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   grep -n "^### DEC-023\|^### DEC-024\|^### DEC-025\|^### DEC-026\|^### DEC-027\|^### DEC-028" knowledge-base/decision-log
+  🧪 bash   ls -la /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/7fab7f37-9e74-4
+  🧪 bash   wc -l /tmp/audit1.txt 2>/dev/null; tail -3 /tmp/audit1.txt 2>/dev/null; echo "---procs---"; ps aux | grep -c "[C]hrome"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  🧪 bash   wc -c /tmp/audit1.txt; grep -n "^## §12\|^## §10\|^## §7\|^## §" knowledge-base/design-specs/web/section-02-replay.md | 
+  🧪 bash   grep -n "^#" knowledge-base/design-specs/web/section-02-replay.md | head -40; echo "---"; wc -l knowledge-base/design-sp
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   wc -c /tmp/audit1.txt; ps aux | grep "[q]a-independent" | head -3
+  🧪 bash   grep -n "launchChrome" -A 25 tests/lib/*.mjs 2>/dev/null | head -60; ls tests/lib
+  🧪 bash   pkill -f "qa-independent-audit" ; sleep 1; pkill -f "muster-shell-" ; sleep 1; ps aux | grep -c "[C]hrome"; echo done
+  🧪 bash   grep -n "const S02_STATIC" tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   grep -n "SAMPLER" tests/qa-independent-audit.mjs | head; echo "---"; sed -n '/const SAMPLER = /,/^ \`;\|)()\`;/p' tests/
+  🧪 bash   grep -n "log__line" styles/replay.css | head -20; echo "---JS---"; grep -n "log__line\|is-in\|revealed\|classList" scrip
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   grep -n "narrowest" tests/qa-independent-audit.mjs
+  💬 Now the four superseded assertions.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   grep -n "^ const drift\|const drift =\|const fits\|const gestured\|const windowed\|const sliced" tests/qa-independent-au
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   grep -n "desktop: all twelve lines fit the terminal" -B 6 -A 6 tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  💬 Now the 320px assertion alongside the existing report.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node --check tests/qa-independent-audit.mjs && echo "SYNTAX OK"; grep -n "unmodified\|git diff\|025842c" tests/qa-indepe
+  🧪 bash   (node tests/qa-independent-audit.mjs > /tmp/audit2.txt 2>&1; echo "AUDIT_EXIT=$?" >> /tmp/audit2.txt)
+  🧪 bash   git -C . status --porcelain | head -20; echo "---FOUNDER FILES---"; git log -1 --format="%h %ad %s" -- knowledge-base/pr
+  🧪 bash   grep -n "sp7" -A 8 knowledge-base/design-specs/web/section-02-narration.md | head -40
+  🧪 bash   grep -n "SP7" -A 10 knowledge-base/design-specs/web/section-02-narration.md | head -40
+  🧪 bash   grep -n "operator planned the sprint" index.html; echo "---"; grep -c "data-slot" index.html
+  🔧 ToolSearch
+  🧪 bash   until [ -s /tmp/audit2.txt ] && grep -q "AUDIT_EXIT=" /tmp/audit2.txt; do sleep 10; done; echo "AUDIT DONE"
+  🧪 bash   grep -n "FAIL\|AUDIT_EXIT\|checks passed" /tmp/audit2.txt
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   cat > /tmp/probe.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-202
+  🧪 bash   cat > /tmp/probe2.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  💬 Now the 320px quantisation check — replace the static snapshot assertion with a sampled chain.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node --check tests/qa-independent-audit.mjs && echo "SYNTAX OK"
+  ⚠️  tool returned an error
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node --check tests/qa-independent-audit.mjs && echo "SYNTAX OK"
+  🧪 bash   (node tests/qa-independent-audit.mjs > /tmp/audit3.txt 2>&1; echo "AUDIT_EXIT=$?" >> /tmp/audit3.txt)
+  🧪 bash   pkill -f "qa-independent-audit"; sleep 1; echo killed
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node --check tests/qa-independent-audit.mjs && echo "SYNTAX OK" && (node tests/qa-independent-audit.mjs > /tmp/audit4.tx
+  🧪 bash   sleep 5; ps aux | grep -c "[q]a-independent-audit"
+  🧪 bash   wc -l knowledge-base/pre-launch-checklist.md knowledge-base/wave-review.md knowledge-base/founder-notices.md knowledge-b
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  🧪 bash   until [ -s /tmp/audit4.txt ] && grep -q "AUDIT_EXIT=" /tmp/audit4.txt; do sleep 15; done; grep -n "FAIL\|AUDIT_EXIT\|che
+  🧪 bash   grep -n "RPRT\|320px\|sideways\|byte-clean\|hanging indent\|three whole\|soft-wrap\|wider one\|nothing scrolls\|window n
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node --check tests/qa-independent-audit.mjs && echo "SYNTAX OK"
+  🧪 bash   nohup sh -c 'node tests/qa-independent-audit.mjs > /tmp/audit5.txt 2>&1; echo "AUDIT_EXIT=$?" >> /tmp/audit5.txt' >/dev/
+  🧪 bash   sed -n '1,46p' /tmp/audit4.txt
+  🧪 bash   sed -n '46,70p' /tmp/audit4.txt
+  🧪 bash   grep -n "FAIL\|AUDIT_EXIT\|checks passed" /tmp/audit5.txt; echo "---"; grep -n "SP3 against the six-line" /tmp/audit5.tx
+  🧪 bash   ls -la /tmp/audit5.txt 2>&1; ps aux | grep -c "[q]a-independent-audit"
+  🧪 bash   until grep -q "AUDIT_EXIT=" /tmp/audit5.txt 2>/dev/null; do sleep 15; done; grep -n "FAIL\|AUDIT_EXIT\|checks passed\|SP
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 40 muster/system-guide.md | head -60
+  🧪 bash   grep -n "Pre-Handoff Self-Review Checklist" -A 30 muster/system-guide.md | head -45
+  🧪 bash   sed -n '459,475p' muster/system-guide.md
+  🧪 bash   grep -n "^### A-00\|^## " knowledge-base/foundational-assumptions.md | head -20
+  🧪 bash   grep -n "^## \|^### " knowledge-base/wave-review.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  🧪 bash   grep -n "WebKit\|vignette" /tmp/audit5.txt; echo "---count---"; grep -c "^PASS" /tmp/audit5.txt; grep -c "^RPRT" /tmp/au
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   sed -n '85,125p' knowledge-base/orchestration-queue.md; echo "=== LINT ==="; bash muster/scripts/muster-queue-lint.sh 2>
+  🧪 bash   git show --stat --oneline HEAD | head -20
+  🧪 bash   git add -A && git status --porcelain && git commit -q -F - <<'EOF' qa: the independent audit runs green and covers all o

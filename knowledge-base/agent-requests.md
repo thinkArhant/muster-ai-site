@@ -10,6 +10,8 @@
 
 ### HO-013 — §2 rebuilt to the amended spec and copy
 **From**: Developer · **To**: QA (validate), PM (review) · **Date**: 2026-07-26 · **Status**: open
+**QA sub-status**: validated 2026-07-26 — every criterion green, no build defect found. See HO-014.
+Every figure in the table above was re-measured independently rather than accepted; all reproduce.
 **Deliverable**: `index.html`, `styles/replay.css`, `scripts/replay.js`, `tests/verify-shell.mjs`
 
 **What changed.** Two things, and only two. Timing is untouched — measured worst drift against §5.1 is
@@ -99,6 +101,62 @@ them is now asserted in its corrected direction by `verify-shell.mjs`**: line 10
 horizontally (nothing may), line 1166 wants the narration in the wider landscape column (the terminal
 takes it). The RPRT at §10's landscape line count also cites a superseded 7. These are QA's file to
 correct; flagged here so the next session does not spend the time diagnosing a green build.
+
+### HO-014 — §2 re-validated after the fix wave; the audit is a signal again
+**From**: QA · **To**: PM (review) · **Date**: 2026-07-26 · **Status**: open
+**Deliverable**: `tests/qa-independent-audit.mjs` — **106/106, exit 0**, 9 measurements reported
+
+**The headline is the exit code.** `qa-independent-audit.mjs` exits zero on a clean build for the first
+time since the band check was written. That was the acceptance criterion, not a nicety: the audit had
+been red on a correct build for two waves, and a check that is always red is a check nobody reads.
+
+**Per criterion.**
+
+| Criterion | Verdict | Evidence |
+|---|---|---|
+| DEC-023: band check retired, audit exits zero | **PASS** | 106/106, exit 0. The number survives as a report: 90 prose characters in 685.3px at 1440px |
+| Twelve lines byte-clean; SP7 diffed against the narration file | **PASS** | 12/12 identical, 679 characters, codepoint counts equal · 10/10 slots verbatim from `section-02-narration.md` §3, 1082 characters |
+| 3 whole lines at 375 × 553, none clipped | **PASS** | 3 whole and **0 sliced** in a 148.13px window; 192 samples across a full chain, none partial, never more than 3 in frame |
+| 320px: no line clipped part-way through its rows | **PASS** | 192 samples across a second full chain at 320 × 568, 0 sliced; window 148.13px over a 34-column region |
+| No horizontal gesture at 320 / 360 / 375 / 390 / 393px | **PASS** | Measured per character. Tightest line 1.42px clear (390px); rows per line `223223232222` at 320px, `222222222222` at 375px |
+| Nothing scrolls horizontally at 375 / 320 / 200% | **PASS** | Body contained and unmasked at +0px at all three; the log no longer scrolls in either axis horizontally |
+| Reduced motion and no-JS complete; zero runtime requests | **PASS** | 27 strings identical to the motion end state; 9 loads across a full chain, all `file:`/`data:`; page renders complete with the network off |
+| Cross-engine on WebKit and Blink | **PASS**, scoped | WebKit carries the no-JS transcript in both themes — 12 row bands, L12's 27px against a 19px median, +1604/+1534 accent pixels, chrome bar and vignette. **Every mobile figure above is Blink-only** |
+| Founder source material unmodified | **PASS** | All three files carry only `founder:` commits with a clean working tree; corpus blob unchanged since `025842c` |
+| Two 320px items deferred, not open | **REPRODUCE** | SP3 sets **7 lines** into the 199.39px six-line card, measured mid-playback; the totals value line sets **2 lines**, strip 49.5px. Reported, not fixed |
+
+**Four findings for PM.**
+
+1. **The four superseded assertions were spec-superseded, not build defects — confirmed by re-deriving
+   each against the spec, not by reading HO-013.** Five whole lines → three is §7.1's own
+   `floor((553 − 379.4) / 49.4)`; never-wrap → must-wrap is DEC-026; the log's horizontal scroll →
+   nothing scrolls is §10's retirement of the WCAG 1.4.10 exception; narration-in-the-wider-column →
+   terminal-in-the-wider-column is DEC-026 consequence 2. Each is now asserted in its corrected
+   direction **by an independent measurement**, not by pointing at `verify-shell.mjs`.
+
+2. **A new check went red at all five phone widths against a correct build, and the check was wrong.**
+   The first version measured line overflow from the range's own client rects. Under `pre-wrap` the
+   space a line breaks at is preserved and **hangs up to 5.97px past the content edge** — an overflow
+   containing no ink, which no reader can be asked to scroll for. Re-based to measure the last
+   non-space character. **This is the same failure class as the 45-character floor and the band check**:
+   a check measuring something adjacent to the claim rather than the claim. Recording it because the
+   pattern has now cost this project three checks, and the tell each time was a red that no build
+   change could clear.
+
+3. **The gate packet's landscape line count will read as a miss and is not one.** `wave-review.md`
+   says landscape "now shows 3 lines by design"; the emulated measurement is **4**. Both are right —
+   §10 derives 3 from Safari's ~331px landscape viewport, and headless Chrome gives the full 375px, so
+   4 is the upper bound of that derivation rather than a re-measure of it. The audit says so in the
+   report line. PM's call whether the packet wants the qualifier before the founder reads it.
+
+4. **The audit grew from 100 checks to 106 and from 7 reports to 9.** Six of §12's rows had no
+   independent assertion behind them and were carried only by the producer's harness: the per-width
+   gesture check, the byte-clean-at-five-widths check, the hanging indent, the sampled window rule, the
+   320px chain, and desktop's ≥74-column region. A criterion verified only by the harness that ships
+   with the build is not independently verified.
+
+**Harnesses re-run at review, not cited.** `bash scripts/test.sh` **GREEN — 146/146 Blink, 13/13
+WebKit** on the same build. Nothing outside `tests/qa-independent-audit.mjs` was touched this session.
 
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->

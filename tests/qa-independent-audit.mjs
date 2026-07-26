@@ -382,15 +382,18 @@ try {
   evidence.overflow = overflowReport;
   evidence.readingMeasure = measures;
 
-  /* Reported as measurements, not as pass/fail against a number nobody has set:
-     the spec says "~64ch" and the build sets exactly 64ch. These two checks
-     assert only the floors a reader needs — prose must not fall to an
-     unreadably narrow column, and must not run past the upper readability band. */
+  /* DEC-023 — the founder ruled the reading column ships at `64ch`, comparing
+     the shipped width against 65- and 70-character alternatives set in the
+     page's own tokens. The 45–75-character band is therefore a standard this
+     product has deliberately declined, and a check asserting it would exit
+     non-zero on every clean build for as long as the page exists. It is
+     retired as an assertion and kept as a measurement, so the number stays on
+     the record without the false signal. Same disposition as the 45-character
+     floor below: replace a wrong threshold, never loosen a right one. */
   const widest = measures.find((m) => m.width === 1440);
-  const narrowest = measures.find((m) => m.width === 320);
-  check("reading column stays inside the 45–75 character readability band at desktop widths",
-    widest.typicalChars >= 45 && widest.typicalChars <= 75,
-    `${widest.typicalChars} characters per line in ${widest.colWidth}px at 1440px — the 64ch token resolves to ${widest.colWidth}px`);
+  report("reading column, measured at desktop widths (DEC-023 — reported, not asserted)",
+    `${widest.typicalChars} prose characters per line in ${widest.colWidth}px at 1440px — the 64ch token resolves ` +
+    `to ${widest.colWidth}px, which is the shipped value the founder chose; the common band is 45–75 characters`);
   /* DEC-021.1–2 — this replaces a 45-character floor at 320px that no build
      could ever satisfy: 45 × 7.615px of average prose advance is 342.7px,
      wider than the viewport itself, so the check was failing on arithmetic
@@ -664,6 +667,15 @@ try {
       const top = li.offsetTop - base - log.scrollTop;
       return li.offsetHeight > 0 && top >= -0.6 && top + li.offsetHeight <= contentH + 0.6;
     }).length;
+    /* A line that intersects the window without fitting inside it is a line
+       sliced through its rows — what §7.1 rule 2 forbids. Counted at the
+       window's resting position, where the quantisation either holds or does
+       not; the sampler covers the moving case. */
+    const partialLinesVisible = lines.filter((li) => {
+      const top = li.offsetTop - base - log.scrollTop, bottom = top + li.offsetHeight;
+      return li.offsetHeight > 0 && bottom > 0.6 && top < contentH - 0.6 &&
+             !(top >= -0.6 && bottom <= contentH + 0.6);
+    }).length;
 
     const sp3 = entries.find((e) => e.dataset.slot === "sp3");
     const sp3Text = sp3.querySelector(".narration__text");
@@ -701,7 +713,21 @@ try {
       rects: { core: rect(core), terminal: rect(terminal), narration: rect(narration), log: rect(log), totals: rect(totals) },
       chromeHeight: +document.querySelector(".terminal__chrome").getBoundingClientRect().height.toFixed(2),
       indicatorHeight: +document.querySelector(".replay__beat").getBoundingClientRect().height.toFixed(2),
-      lineBox, logPad: padT + padB, wholeLinesVisible, contentH: +contentH.toFixed(2),
+      lineBox, logPad: padT + padB, wholeLinesVisible, partialLinesVisible, contentH: +contentH.toFixed(2),
+      /* The line region and its column count, measured rather than assumed:
+         the horizontal inset changes across --bp-wide, so deriving columns
+         from the terminal's outer box would encode a padding guess. The
+         advance is measured in the line's own font, not taken as \`ch\`. */
+      logRegion: (() => {
+        const w = log.clientWidth - parseFloat(ls.paddingLeft) - parseFloat(ls.paddingRight);
+        const probe = document.createElement("span");
+        probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre;font:" + cs(lines[0]).font;
+        probe.textContent = "0".repeat(100);
+        log.appendChild(probe);
+        const adv = probe.getBoundingClientRect().width / 100;
+        probe.remove();
+        return { width: +w.toFixed(2), advance: +adv.toFixed(3), columns: Math.floor(w / adv) };
+      })(),
       logScroll: { scrollHeight: log.scrollHeight, clientHeight: log.clientHeight,
                    scrollWidth: log.scrollWidth, clientWidth: log.clientWidth, overflow: cs(log).overflow },
       lineWhiteSpace: cs(lines[0]).whiteSpace,
@@ -851,10 +877,29 @@ try {
     const covered = (el) => { const r = el.getBoundingClientRect();
       const vis = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, BAR));
       return r.height ? +(vis / r.height).toFixed(4) : 0; };
+    /* §7.1 rule 2 — a wrapped line is shown whole or not at all. That is a
+       claim about every instant of the playback, not about its end state, so
+       it is sampled rather than snapshotted. Positions come from offsetTop,
+       which the reveal's 4px transform does not move. */
+    const log = document.querySelector(".log");
+    const lines = [...document.querySelectorAll(".log__line")];
+    const windowState = () => {
+      const s = getComputedStyle(log);
+      const view = log.getBoundingClientRect().height - parseFloat(s.paddingTop) - parseFloat(s.paddingBottom);
+      const origin = lines[0].offsetTop;
+      let whole = 0, partial = 0;
+      for (const li of lines) {
+        if (!li.hasAttribute("data-revealed")) continue;
+        const top = li.offsetTop - origin - log.scrollTop, bottom = top + li.offsetHeight;
+        if (bottom <= 0.6 || top >= view - 0.6) continue;      /* out of the window entirely */
+        if (top >= -0.6 && bottom <= view + 0.6) whole++; else partial++;
+      }
+      return { whole, partial };
+    };
     window.__qaSample = setInterval(() => {
       window.__qa.samples.push({ at: +performance.now().toFixed(0), state: document.querySelector(".replay").dataset.state,
         terminal: covered(terminal), narration: covered(narration), core: covered(core),
-        coreH: +core.getBoundingClientRect().height.toFixed(2) });
+        coreH: +core.getBoundingClientRect().height.toFixed(2), ...windowState() });
     }, 250);
     return true;
   })()`;
@@ -944,6 +989,14 @@ try {
       desktopAfter.logScroll.scrollWidth <= desktopAfter.logScroll.clientWidth + 1,
     `log ${desktopAfter.logScroll.scrollHeight}/${desktopAfter.logScroll.clientHeight} vertical, ` +
     `${desktopAfter.logScroll.scrollWidth}/${desktopAfter.logScroll.clientWidth} horizontal at 1440px`);
+  /* The wrap is meant to be inert above --bp-wide (§7 annotation 4): the same
+     `pre-wrap` rule applies, and no line reaches the column, so desktop is
+     unchanged. That is a measurement, not an inspection of the CSS. */
+  const desktopLongest = Math.max(...CORPUS_LINES.slice(0, 11).map((l) => l.length));
+  check("desktop is unchanged by the wrap: the line region measures ≥74 columns and no line reaches it",
+    desktopAfter.logRegion.columns >= 74 && desktopAfter.logRegion.columns >= desktopLongest,
+    `${desktopAfter.logRegion.columns} columns in ${desktopAfter.logRegion.width}px at a ` +
+    `${desktopAfter.logRegion.advance}px advance, against a longest chain line of ${desktopLongest} characters`);
   report("measured beat intervals, for the founder's pacing judgment",
     chain.drift.map((d, i) => i === 0 ? null : `L${d.line}−L${d.line - 1} ${((d.measured - chain.drift[i - 1].measured) / 1000).toFixed(2)}s`)
       .filter(Boolean).join(" · ") + ` — gate hold ${((chain.drift[11].measured - chain.drift[10].measured) / 1000).toFixed(2)}s`);
@@ -1039,10 +1092,15 @@ try {
   const mChain = readChain("375x553", mobileChain);
   evidence.mobileTiming = mChain;
 
-  check("mobile 375x553: the terminal window shows exactly five whole lines",
-    mobileMid.wholeLinesVisible === 5,
-    `${mobileMid.wholeLinesVisible} whole line boxes of ${mobileMid.lineBox}px in ${mobileMid.contentH}px of log content box ` +
-    `(§7.1 derives floor((553 − 424.4) / 24.7) = 5)`);
+  /* DEC-026 — three, not five. Every line but L12 now sets two rows at 41
+     columns, so the window is sized in whole wrapped lines: floor((553 −
+     379.4) / 49.4) = 3, with the totals strip lifted out of the core to pay
+     for it. Five was the pre-wrap count and is superseded. */
+  check("mobile 375x553: the terminal window shows exactly three whole wrapped lines (DEC-026)",
+    mobileMid.wholeLinesVisible === 3 && mobileMid.partialLinesVisible === 0,
+    `${mobileMid.wholeLinesVisible} whole wrapped lines and ${mobileMid.partialLinesVisible} sliced in ` +
+    `${mobileMid.contentH}px of log content box, one row ${mobileMid.lineBox}px ` +
+    `(§7.1 derives floor((553 − 379.4) / 49.4) = 3)`);
   check("mobile 375x553: the measured playback core fits the visual viewport",
     mobileMid.rects.core.height <= 553,
     `core ${mobileMid.rects.core.height}px against a 553px visual viewport — indicator ${mobileMid.indicatorHeight} / ` +
@@ -1055,10 +1113,27 @@ try {
     `(measured under the 48px sticky bar, not against the raw viewport)`);
   check("mobile: the chain still holds spec §5.1 timing on the windowed terminal",
     mChain.drift.length === 12 && mChain.worst <= 100, `worst drift ${mChain.worst} ms`);
-  check("mobile: lines never wrap and are never truncated — the log owns its own overflow",
-    mobileMid.lineWhiteSpace === "pre" && mobileMid.logScroll.scrollWidth > mobileMid.logScroll.clientWidth,
-    `white-space: ${mobileMid.lineWhiteSpace}, log scrolls ${mobileMid.logScroll.scrollWidth}px of content in ` +
-    `${mobileMid.logScroll.clientWidth}px — the long line is read inside the box`);
+  /* §7.1 rule 2, sampled across the whole chain rather than at its end: the
+     window shows whole wrapped lines only. Bottom-aligning the newest line
+     would satisfy an end-state snapshot and still slice the topmost line
+     through its rows for most of the playback, so the end state cannot stand
+     in for this. */
+  const windowed = mobileChain.samples.filter((s) => s.state === "playing" && s.whole + s.partial > 0);
+  const sliced = windowed.filter((s) => s.partial > 0);
+  const overfull = windowed.filter((s) => s.whole > 3);
+  check("mobile: the window never clips a wrapped line part-way through its rows (§7.1 rule 2)",
+    windowed.length > 100 && sliced.length === 0 && overfull.length === 0,
+    `${windowed.length} samples across the chain, ${sliced.length} with a partial line, at most ` +
+    `${Math.max(...windowed.map((s) => s.whole))} whole lines in frame`);
+  /* DEC-026 inverts this one. The old check asserted `white-space: pre` and a
+     log that scrolled its own overflow; the founder ruled that a phone reader
+     never makes a sideways gesture, so the lines must wrap and the log must
+     not scroll horizontally at all. Wrapping is the payer precisely because it
+     costs no fidelity — the byte-clean diff below is what proves that. */
+  check("mobile: lines soft-wrap and the log never scrolls sideways (DEC-026)",
+    mobileMid.lineWhiteSpace === "pre-wrap" && mobileMid.logScroll.scrollWidth <= mobileMid.logScroll.clientWidth,
+    `white-space: ${mobileMid.lineWhiteSpace}, log content ${mobileMid.logScroll.scrollWidth}px in ` +
+    `${mobileMid.logScroll.clientWidth}px of box — nothing to reach sideways for`);
   check("mobile: the totals strip renders as exactly two --text-micro lines",
     mobileMid.totalsValueLines === 1 && mobileMid.totalsScopeLines === 1 &&
       mobileMid.totalsValueSize === "11px" && mobileMid.totalsScopeSize === "11px" &&
@@ -1150,9 +1225,55 @@ try {
     `value ${s02At320.totalsValueLines} line(s) @${s02At320.totalsValueSize} · scope ${s02At320.totalsScopeLines} · ` +
     `strip ${s02At320.totalsHeight}px · value line ${s02At320.totalsValueWidth}px of ${s02At320.contentWidth}px of content width`);
   evidence.containment = containment;
-  check("the page body never scrolls horizontally at 375px, 320px or 200% zoom — only the log does",
-    containment.every((c) => c.escapes.length === 0 && c.unmasked <= 0 && c.logScrolls),
+  /* DEC-026 — §2 no longer claims the scoped WCAG 1.4.10 exception the log's
+     horizontal scroll used to need, so `logScrolls` inverts: nothing scrolls
+     horizontally anywhere, the body and the log alike. */
+  check("nothing scrolls horizontally at 375px, 320px or 200% zoom — not the body, not the log (DEC-026)",
+    containment.every((c) => c.escapes.length === 0 && c.unmasked <= 0 && !c.logScrolls),
     containment.map((c) => `${c.label}: ${c.escapes.length ? c.escapes.join("/") : "contained"}, unmasked +${c.unmasked}px, log scrolls ${c.logScrolls}`).join(" · "));
+
+  /* --- 320px: the width the budget is a ceiling at (DEC-027.4) ---
+     §7.1's 49.4px line constant is exact at ≥375px and a CEILING below it,
+     where the two longest lines cost three rows. A build implementing the
+     formula literally would place a third line here and slice it through its
+     rows. The idle state cannot answer this — the window only quantises when
+     a line is revealed — so this is a second chain, sampled like the first. */
+  await page.setViewport({ width: 320, height: 568, deviceScaleFactor: 1, mobile: true });
+  await page.goto(PAGE_URL);
+  await page.eval(INSTRUMENT);
+  await page.eval(SAMPLER);
+  await page.eval(`(() => { const c = document.querySelector(".replay__core");
+    scrollTo({ top: scrollY + c.getBoundingClientRect().top - 50, behavior: "instant" }); })()`);
+  await sleep(1200);
+  /* Taken mid-playback, not at the end: the narration card holds a fixed
+     six-line height only while the chain runs — in the end state it becomes
+     the full ten-entry list, whose height says nothing about the budget. */
+  const at320Mid = await page.eval(S02_STATIC);
+  await runChain();
+  await page.eval("clearInterval(window.__qaSample)");
+  const chain320 = await page.eval("({ ...window.__qa })");
+  const at320End = await page.eval(S02_STATIC);
+  const windowed320 = chain320.samples.filter((s) => s.state === "playing" && s.whole + s.partial > 0);
+  const sliced320 = windowed320.filter((s) => s.partial > 0);
+  evidence.chain320 = { samples: chain320.samples.length, windowed: windowed320.length, sliced: sliced320.length };
+  check("320px: the window quantises on measured rows, never on the 49.4px constant (DEC-027.4)",
+    windowed320.length > 100 && sliced320.length === 0 && windowed320.every((s) => s.whole >= 1),
+    `${windowed320.length} samples across a full chain at 320 × 568, ${sliced320.length} with a line sliced through ` +
+    `its rows; window ${at320End.contentH}px over a ${at320End.logRegion.columns}-column region`);
+  /* DEC-027.1 — deferred to Sprint 2, reported here so the disposition keeps a
+     number against it. Pre-existing and width-driven: SP3 sets six lines with
+     zero margin at the budgeted 375px, so the seventh is bought by the
+     narrower column, not by the wrap change. */
+  report("320px: SP3 against the six-line narration card (DEC-027.1 — deferred, reported not asserted)",
+    `${at320Mid.cardLines} lines of SP3 in ${at320Mid.cardTextWidth}px of text column, mid-playback; card ` +
+    `${at320Mid.cardHeight}px against the 199.4px six-line budget — ` +
+    `${at320Mid.cardLines > 6 ? "the overflow reproduces" : "no overflow at this width"}`);
+  check("320px: the end state still carries all twelve lines byte-clean, in the log's own vertical scroll",
+    at320End.lineText.join("\n") === CORPUS_LINES.join("\n") &&
+      at320End.logScroll.scrollWidth <= at320End.logScroll.clientWidth,
+    `${at320End.lineText.length} lines, text ${at320End.lineText.join("\n") === CORPUS_LINES.join("\n") ? "identical to the corpus" : "DIVERGENT"}, ` +
+    `${at320End.logScroll.scrollHeight}px of content in ${at320End.logScroll.clientHeight}px vertically, ` +
+    `${at320End.logScroll.scrollWidth}/${at320End.logScroll.clientWidth} horizontally`);
 
   /* --- landscape phone (§10) --- */
   await page.setViewport({ width: 667, height: 375, deviceScaleFactor: 1, mobile: true });
@@ -1163,11 +1284,106 @@ try {
   const landscape = await page.eval(S02_STATIC);
   evidence.landscape = landscape;
   writeFileSync(join(ARTIFACTS, "qa-s02-landscape-667.png"), await page.screenshot());
-  check("landscape phone 667x375: two columns with the narration in the wider one",
-    landscape.rects.narration.width > landscape.rects.terminal.width &&
-      landscape.rects.narration.left >= landscape.rects.terminal.right - 1,
-    `terminal ${landscape.rects.terminal.width}px | narration ${landscape.rects.narration.width}px, side by side`);
-  report("landscape phone: visible terminal lines (§10 derives 7 from a 331px Safari viewport)",
+  /* DEC-026 consequence 2 — landscape inverts its split. The terminal takes
+     the wider column now, sized by the 41-character wrap rule rather than by a
+     share, because width is the only thing that decides whether a log line
+     reads without a gesture; narration set narrower simply runs taller, and
+     height is what landscape has to spare. Narration-first survives as a
+     priority, not as a column width. */
+  check("landscape phone 667x375: two columns with the terminal in the wider one, at ≥41 characters (DEC-026)",
+    landscape.rects.terminal.width > landscape.rects.narration.width &&
+      landscape.rects.terminal.right <= landscape.rects.narration.left + 1 &&
+      landscape.logRegion.columns >= 41,
+    `terminal ${landscape.rects.terminal.width}px, line region ${landscape.logRegion.width}px = ` +
+    `${landscape.logRegion.columns} columns at a ${landscape.logRegion.advance}px advance | narration ` +
+    `${landscape.rects.narration.width}px, side by side`);
+  /* --- the founder-set constraint, measured at the five phone widths ---
+     "A phone reader never makes a sideways gesture to finish a log line"
+     (§13, founder-set) is the constraint the whole mobile window is sized
+     around, so it is measured per width rather than inferred from the 375px
+     case. Rows are recovered by clustering the range's client rects, because a
+     row is several inline spans and a wrapped line is several rows. */
+  const LINE_FIT = `(() => {
+    const log = document.querySelector(".log");
+    const s = getComputedStyle(log);
+    const box = log.getBoundingClientRect();
+    const left = box.left + parseFloat(s.borderLeftWidth) + parseFloat(s.paddingLeft);
+    const right = box.right - parseFloat(s.borderRightWidth) - parseFloat(s.paddingRight);
+    const rowsOf = (li) => {
+      const r = document.createRange(); r.selectNodeContents(li);
+      const rects = [...r.getClientRects()].filter((k) => k.width > 0).sort((a, b) => a.top - b.top);
+      const rows = [];
+      for (const k of rects) {
+        const last = rows[rows.length - 1];
+        if (last && Math.abs(k.top - last.top) < 8) {
+          last.left = Math.min(last.left, k.left); last.right = Math.max(last.right, k.right);
+        } else rows.push({ top: k.top, left: k.left, right: k.right });
+      }
+      return rows;
+    };
+    /* Measured character by character, and only on the characters a reader has
+       to reach. Under pre-wrap the space a line breaks at is preserved and
+       hangs past the content edge — up to ~6px here — so a range's own client
+       rects report an overflow that contains no ink and that no reader can be
+       asked to scroll for. The claim is about the last CHARACTER, so the
+       measurement is too. */
+    const inkBounds = (li) => {
+      const walk = document.createTreeWalker(li, NodeFilter.SHOW_TEXT);
+      const r = document.createRange();
+      let n, maxRight = -Infinity, minLeft = Infinity;
+      while ((n = walk.nextNode())) {
+        const t = n.nodeValue;
+        for (let j = 0; j < t.length; j++) {
+          if (/\\s/.test(t[j])) continue;
+          r.setStart(n, j); r.setEnd(n, j + 1);
+          const k = r.getBoundingClientRect();
+          if (k.width <= 0 && k.height <= 0) continue;
+          if (k.right > maxRight) maxRight = k.right;
+          if (k.left < minLeft) minLeft = k.left;
+        }
+      }
+      return { maxRight, minLeft };
+    };
+    const lines = [...document.querySelectorAll(".log__line")];
+    const per = lines.map((li, i) => {
+      const rows = rowsOf(li);
+      const ink = inkBounds(li);
+      return { line: i + 1, rows: rows.length,
+               escapes: ink.maxRight > right + 0.5 || ink.minLeft < left - 0.5,
+               spare: +(right - ink.maxRight).toFixed(2),
+               indent: rows.length > 1 ? +(rows[1].left - rows[0].left).toFixed(2) : null,
+               flushRows: rows.slice(1).filter((r) => r.left <= rows[0].left + 0.5).length };
+    });
+    return { region: +(right - left).toFixed(2), per, text: lines.map((li) => li.textContent),
+             logScrolls: log.scrollWidth > log.clientWidth,
+             docScrolls: document.documentElement.scrollWidth > document.documentElement.clientWidth };
+  })()`;
+  const fits = [];
+  for (const [w, h] of [[320, 568], [360, 640], [375, 553], [390, 664], [393, 659]]) {
+    await page.setViewport({ width: w, height: h, deviceScaleFactor: 1, mobile: true });
+    await page.goto(PAGE_URL);
+    const f = await page.eval(LINE_FIT);
+    fits.push({ label: `${w}px`, ...f });
+  }
+  evidence.phoneLineFit = fits.map((f) => ({ label: f.label, region: f.region,
+    rows: f.per.map((p) => p.rows), escapes: f.per.filter((p) => p.escapes).map((p) => p.line) }));
+  const gestured = fits.filter((f) => f.per.some((p) => p.escapes) || f.logScrolls || f.docScrolls);
+  check("no corpus line needs a sideways gesture to finish, at 320 / 360 / 375 / 390 / 393px (§13, founder-set)",
+    gestured.length === 0,
+    gestured.map((f) => `${f.label}: lines ${f.per.filter((p) => p.escapes).map((p) => p.line).join(",") || "none"} escape` +
+      `${f.logScrolls ? ", log scrolls" : ""}${f.docScrolls ? ", document scrolls" : ""}`).join(" ;; ") ||
+      fits.map((f) => `${f.label} ✓ ${f.region}px region, rows ${f.per.map((p) => p.rows).join("")}, tightest line ` +
+        `${Math.min(...f.per.map((p) => p.spare)).toFixed(2)}px clear`).join(" · "));
+  const fidelityDrift = fits.flatMap((f) => f.text.map((t, i) => t === CORPUS_LINES[i] ? null : `${f.label} L${i + 1}`).filter(Boolean));
+  check("soft wrap costs no fidelity: all twelve lines stay byte-clean at all five phone widths",
+    fidelityDrift.length === 0,
+    fidelityDrift.join(", ") || `12/12 identical to the corpus at each of the five widths — a soft break inserts no character`);
+  const indentBad = fits.filter((f) => f.per.some((p) => p.rows > 1 && (!(p.indent > 1) || p.flushRows > 0)));
+  check("continuation rows carry the hanging indent; no row but an entry's first starts at the left edge",
+    indentBad.length === 0,
+    indentBad.map((f) => `${f.label}: ${f.per.filter((p) => p.rows > 1 && (!(p.indent > 1) || p.flushRows > 0)).map((p) => `L${p.line} indent ${p.indent}`).join("/")}`).join(" ;; ") ||
+      fits.map((f) => `${f.label} +${[...new Set(f.per.map((p) => p.indent).filter(Boolean))].join("/")}px`).join(" · "));
+  report("landscape phone: visible terminal lines (§10 derives 3 from a 331px Safari viewport)",
     `${landscape.wholeLinesVisible} whole lines at an emulated 667x375 — headless Chrome gives the full 375px of ` +
     `height where Safari's landscape toolbars leave ~331px, so this is the upper bound of that derivation, not a re-measure of it`);
 

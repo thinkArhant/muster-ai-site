@@ -1,6 +1,6 @@
 run: run-20260726-101215-47505
-state: running step 4
-step: 2026-07-26 Developer (web): Rebuild §2 to the amended spec and copy
-step started: 2026-07-26 10:59:47
-last completed: 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild · 74 turns · $7.9 · out 62k · 16m 8s
-totals: 3 attempt(s) · 194 turns · $24.49
+state: running step 5
+step: 2026-07-26 QA (web): Re-validate §2 and retire the reading-band check
+step started: 2026-07-26 11:33:59
+last completed: 2026-07-26 Developer (web): Rebuild §2 to the amended spec and copy · 85 turns · $11.09 · out 92k · 34m 12s
+totals: 4 attempt(s) · 279 turns · $35.58
