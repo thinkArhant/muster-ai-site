@@ -657,5 +657,57 @@ checklist item holds just as firmly.
 `current-sprint.md`, `agent-context/{developer,qa}.md`, `pre-launch-checklist.md`, `triage-log.md`,
 `founder-notices.md`.
 
+### DEC-022 — §2 narration accepted; the totals strip gets one string and one scale (2026-07-25)
+
+**Decision**: `section-02-narration.md` is accepted with no revision and is the verbatim build input
+for §2's narration layer. Three calls settle everything the review raised; none of them changes a word
+of the narration.
+
+**1. SP4's three micro-captions render on all viewports.** The sync contract made the split optional
+above `--bp-wide` and required below it. Rendering it everywhere costs one rail entry's worth of
+layout and buys a single copy set, a single sync behaviour, and one artifact for QA to diff instead of
+two. A desktop-only 33-word variant would have been a second string to keep true forever.
+
+**2. The chain totals strip has one authoritative string, and it is Content's.** Line 1 is
+`~64 MIN AGENT WORK · 289 API CALLS · $24.73`; line 2 is the mandatory scope label
+`BODH SPRINT 4 · WEBSITE WAVE ONLY`. The replay spec's two wireframes carried `~64 MIN ACTIVE` and
+were the Developer's other source; they now match. "AGENT WORK" is the corpus's own sanctioned
+phrasing where "ACTIVE" is merely R2-compliant, and annotation 7 already assigned this copy to
+Content — so this was a cascade of an accepted deliverable, not a copy call PM made.
+
+**3. The strip's value scale was specified two ways in one file, and §7.1 wins on mobile.**
+Annotation 7 renders values at `--text-readout`; §7.1's height budget prices the whole strip at
+`2 × (--text-micro 11px × 1.5) = 33.0px`. At 375px `--text-readout` clamps to 24px, so one value line
+alone is 24px and the strip becomes 40.5px — **7.5px over a budget that has 5.1px of slack**, which
+busts the 553px core before a single log line is placed. Below `--bp-wide` the strip is therefore two
+`--text-micro` lines; `--text-readout` stands at `≥ --bp-wide`, where the column has room and nothing
+is budgeted against it.
+
+*Why §7.1 and not annotation 7*: the budget is the artifact the mobile two-layer guarantee rests on,
+every row of it was re-derived from a shell token at DEC-019, and QA holds a hard assertion against
+it. A token reference inside an annotation table is the looser of the two statements. Ruled rather
+than escalated because it is a scale choice inside a signed-off budget, not a design value — the same
+class as DEC-021.1.
+
+**A related risk is routed, not ruled.** The accepted string is 43 characters. In `--font-mono` at
+11px that is ~284px bare and ~350px with `--track-micro` (0.14em), against ~327px of content width at
+375px. So **tracking, not the four added characters, is what would wrap line 1 to a third line** and
+cost 16.5px the budget does not have. The Developer sets tracking on the value line within the micro
+treatment; QA measures and reports the rendered line count either way. Copy does not move for this —
+reaching for the shorter string would have been fixing a typographic setting by editing a fact.
+
+**Two claims were chased before accepting, and both held.** SP6's "the same instant" looked like
+precision added over two minute-stamped lines; it is measured at source — session 7 starts 21:20:42
+and its measured duration of 867 s lands on 21:35:09, session 8's stated start — and it descends from
+beat-inventory D7 through the replay spec's own SP6 brief. And the seed's honest headline beat, which
+the seed states as one sentence, is delivered whole rather than dropped: SP3 carries the PM re-check,
+SP6 the 11/11 PASS, SP7 "no human touched this until the deploy button," landing at the gate.
+
+**Impact**: Developer, QA, Content, UI/UX.
+
+**Touched**: `design-specs/web/section-02-replay.md` (annotation 7, both wireframes),
+`agent-requests.md` (HO-005), `orchestration-queue.md`, `current-sprint.md`, `wave-review.md`,
+`agent-context/{content,developer,qa}.md`, `founder-notices.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

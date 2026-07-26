@@ -18,9 +18,15 @@ the shell was built against a spec with no dropped theme control in it. Wave 2 s
 question and no blockers — see `## Founder Decisions` (the reading column) and DEC-021 for the four
 dispositions.
 
-**Two DEC-021 rulings are attached inline to the Wave 3 steps that carry them**, rather than living as
-separate steps: the `.instrument` phone-inset fix rides the §2 build step, and the audit's re-based
-readability check rides the §2 QA step. Both are dispositions of HO-004's findings, not new scope.
+**Four rulings are attached inline to the Wave 3 steps that carry them**, rather than living as separate
+steps. From DEC-021: the `.instrument` phone-inset fix rides the §2 build step, and the audit's re-based
+readability check rides the §2 QA step. From DEC-022: the totals strip's per-viewport value scale rides
+the build step, and its two-line assertion rides the QA step. All four are dispositions of findings in
+HO-004 and HO-005 — none is new scope.
+
+**The narration is closed.** HO-005 is accepted with no revision and no word rewritten; the strings in
+`section-02-narration.md` are final and are rendered verbatim. Where any other file spells a §2 string
+differently, that file is stale and the narration file wins.
 
 **The build ships its own cross-engine harness** (DEC-020): `bash scripts/test.sh` runs
 `tests/verify-shell.mjs` (Blink) then `tests/verify-webkit.mjs` (WebKit), both dependency-free and
@@ -80,46 +86,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 PM: Wave 3 narration review
-
-```
-Role: pm
-Model: claude-opus-5
-
-**Task:** Review HO-005 line by line against the copy rules before any of it gets built.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-005
-- `knowledge-base/design-specs/web/section-02-narration.md`
-- `knowledge-base/agent-skills/content/copy-rules.md`
-- `knowledge-base/product-spec-seed.md` §2
-- `knowledge-base/bodh-sprint4-corpus.md` — spot-check every claim against source
-- `muster/team/pm/skills/generic/deliverable-review.md`
-
-**Deliverable:** Review verdict on HO-005 in `agent-requests.md`.
-
-**Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
-- Rules 1, 2, 5, 6, 7 and 8 verified line by line, not sampled
-- Every factual claim spot-checked against the corpus — an unverifiable claim is a blocking finding
-- The Safari catch handled per the seed's explicit instruction, or absent
-- Copy is on-voice without being inflated; Content may tighten founder-supplied passages, never inflate them
-
-**On completion:** Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`). Promote the
-§2 implementation step.
-
-**Also re-base `wave-review.md` for the Wave 3 gate before promoting.** It currently holds the closed
-Wave 1 packet, and the gate step tells the founder to read that file for the checklist — Wave 1's
-60 s chain and 7.5 s hold must not be what they read at the §2 gate. Write the Current Wave block, the
-"already green — machine-verified" list, and the human-only checks now (the founder's criterion is
-pacing and narration with styling subtracted, so the checks are about the 48 s dwell table, the gate
-hold at 4.80 s, SP7's ≤16 words, and whether the narration alone carries a non-technical reader). Leave
-the build/QA evidence as a stub the founder reads alongside HO-006 and HO-007; this is the last PM step
-before the gate, so no later step can do it.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-24 Developer (web): §2 replay implementation
 
 ```
@@ -173,6 +139,29 @@ disposition of HO-004's findings, and this is the session already in these files
    in HO-006. **Do not resolve this by installing a browser**: zero dependencies is DEC-020 and a
    published property of the repo.
 
+**Two more items ruled in DEC-022 while reviewing the narration. Also not new scope — both are about
+the chain-totals strip, and both were found by measuring Content's accepted strings against the layout
+that has to hold them.**
+
+3. **The totals strip's value scale is per-viewport.** Annotation 7 renders values at
+   `--text-readout`; §7.1's height budget prices the whole strip at `2 × (--text-micro 11px × 1.5)
+   = 33.0px`. At 375px `--text-readout` clamps to 24px, so one value line alone is 24px and the strip
+   becomes 40.5px — 7.5px over a budget with 5.1px of slack, busting the 553px core before a log line
+   is placed. **Below `--bp-wide` the strip is two `--text-micro` lines**; `--text-readout` stands at
+   `≥ --bp-wide`. Already applied to annotation 7 — build to the file.
+
+4. **Keep the mobile strip at two lines; the lever is tracking, not copy.** Line 1
+   (`~64 MIN AGENT WORK · 289 API CALLS · $24.73`) is 43 characters — in `--font-mono` at 11px that is
+   ~284px bare but ~350px with `--track-micro` (0.14em), against ~327px of content width at 375px. So
+   tracking is what would wrap it to a third line and cost 16.5px the budget does not have. Set
+   tracking on the value line within the micro treatment and assert the strip's rendered line count in
+   the harness. **Do not shorten the string** — it is accepted copy carrying the corpus's own sanctioned
+   phrasing, and reaching for it would be fixing a typographic setting by editing a fact.
+
+**Strings come from `section-02-narration.md` §5, which is the authority on §2's chrome copy.** The
+replay spec's wireframes now match it; if you find any third spelling of a string anywhere, the
+narration file wins.
+
 **HALT CONDITION (inline, mandatory):** if the corpus lacks a line the replay spec calls for, do NOT
 invent, paraphrase, or reconstruct it to fill the gap. Re-point `## Next Step` to a `Role: pm`
 assessment step naming the missing line and stop.
@@ -180,6 +169,9 @@ assessment step naming the missing line and stop.
 **On completion:** File HO-006 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
 (`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-24 QA (web): §2 replay validation
 
@@ -228,6 +220,11 @@ Model: claude-opus-5
   same wave, so red does not go green on the threshold alone. If you disagree with the arithmetic, say so
   in HO-007 rather than deleting the check
 
+- **Measure the chain-totals strip too (DEC-022.3–4).** At 375 × 553 the strip is budgeted at exactly
+  two `--text-micro` lines = 33.0px, and the whole core has 5.1px of slack — a third line costs 16.5px
+  and busts it. Assert the rendered line count and the value-line scale below `--bp-wide`; report the
+  measured strip width against the ~327px content width so the margin is on the record either way
+
 **On completion:** File HO-007 in `agent-requests.md`. If red, do NOT advance — re-point `## Next Step`
 to a `Role: pm` assessment step. Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`).
 ```
@@ -254,6 +251,26 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
+
+- 2026-07-25 — Wave 3: PM — §2 narration accepted; the build inputs are now closed (DEC-022). HO-005
+  accepted with no revision and not a word rewritten. Every string re-measured by script rather than
+  read off the deliverable's table — 139 of 163 timed words, all ten strings inside budget and all nine
+  timed ones inside their read windows, every budget correctly derived as `floor(window × 3.5)` — and
+  every claim looked up in the corpus rather than checked against its citation. **Two suspicions chased
+  and cleared rather than reported**: SP6's "the same instant" is measured at source (session 7's start
+  plus its measured 867 s lands exactly on session 8's stated start) and descends from beat-inventory
+  D7 through the spec's own SP6 brief, so it is not precision the copy invented; and the seed's honest
+  headline beat, stated there as one sentence, is delivered whole across SP3/SP6/SP7 rather than
+  dropped. SP4's all-viewport split ratified — one copy set beats a desktop-only variant. **The totals
+  strip produced the two real findings, and neither is against the narration.** Content's
+  `~64 MIN AGENT WORK` is right and is now cascaded into both replay wireframes, which still carried
+  the superseded `~64 MIN ACTIVE` and were the Developer's other source. And the strip's value scale
+  was specified two ways in one file: annotation 7 says `--text-readout`, which at 375px clamps to 24px
+  and makes the strip 40.5px against a 33.0px budget with 5.1px of slack — so §7.1 wins below
+  `--bp-wide`. The related wrap risk is routed, not ruled: at 43 characters the string fits ~327px bare
+  and overflows it with `--track-micro`, so tracking is the lever and the copy does not move. Gate
+  packet re-based for Wave 3 — the founder's four checks are pacing and words only, with styling
+  subtracted.
 
 - 2026-07-25 — Wave 3: Content — §2 narration written to the sync contract (HO-005). All eight slots
   inside budget, script-measured: 139 timed words of a 163 ceiling; SP7 landed at 15/16 with no SP6
@@ -329,11 +346,6 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
   the seed with contrast measured per pair; §2 paced as a 60 s comprehension-weighted chain against the
   v1.1-corrected intervals, with an eight-slot narration sync contract. Three design questions parked in
   Founder Decisions. Awaiting review — PM, then founder gate.
-
-- 2026-07-25 — Wave 1: Developer — Bodh corpus verification + beat inventory (HO-001). All six §2 beats
-  supported, all twelve terminal lines assigned, corpus unmodified; arithmetic re-derived independently
-  with two precision caveats and four pacing hazards recorded. One non-blocking founder question parked
-  above (8 sessions vs DEC-023's "7 agent steps"). Awaiting review — UI/UX, PM.
 
 - 2026-07-25 — Wave 1 Gate: **APPROVED with amendments** by the founder. Three design questions settled
   (DEC-015); four §2/shell amendments routed to HO-010 (DEC-016). Autonomous run cleared to launch.

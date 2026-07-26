@@ -105,6 +105,13 @@ into task 2: the audit's 45-character floor is unsatisfiable and gets re-based t
 - Every rendered terminal line diffed against `bodh-sprint4-corpus.md` and cited — altered, paraphrased, or invented lines are blocking
 - Corpus file confirmed unmodified — an agent editing founder source material is blocking
 - "Condensed from the real build log" label present
+- **Every §2 chrome string diffed against `section-02-narration.md` §5**, which is the authority on §2
+  copy (DEC-022). Narration slot text is rendered verbatim — a paraphrase is a blocking finding, same as
+  an altered terminal line
+- **Measure the chain-totals strip (DEC-022.3–4).** At 375 × 553 it is budgeted at exactly two
+  `--text-micro` lines = 33.0px and the core has 5.1px of slack, so a third line costs 16.5px and busts
+  it. Assert the rendered line count and the value-line scale below `--bp-wide`; report the measured
+  strip width against the ~327px content width so the margin is on the record either way
 - **Cross-engine parity, scoped to what the tooling can prove (DEC-021.4 — supersedes a flat "both
   engines").** WebKit's job is the no-JS/reduced-motion complete transcript at ~1024²: twelve corpus
   lines verbatim, L12's large-rust treatment, the §9 emphasis system, terminal chrome, grain and vignette

@@ -1,6 +1,6 @@
 run: run-20260725-164050-39318
-state: running step 7
-step: 2026-07-24 Content (web): §2 narration script
-step started: 2026-07-25 19:45:12
-last completed: 2026-07-24 QA (web): Shell validation · 78 turns · $8.3 · out 65k · 16m 40s
-totals: 6 attempt(s) · 443 turns · $46.42
+state: running step 8
+step: 2026-07-24 PM: Wave 3 narration review
+step started: 2026-07-25 19:54:53
+last completed: 2026-07-24 Content (web): §2 narration script · 39 turns · $7.61 · out 41k · 9m 41s
+totals: 7 attempt(s) · 482 turns · $54.03

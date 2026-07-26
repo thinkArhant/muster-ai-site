@@ -144,6 +144,19 @@ shell-level fix carried forward into task 3 rather than reopening this one: `.in
 - Reduced-motion path renders complete content
 - WebKit and Blink verified before filing, within the ceiling below
 - Implement everything in HO-002 and HO-005; the above is non-exhaustive
+- **§2's chrome strings come from `section-02-narration.md` §5 (DEC-022).** That file is the authority
+  on §2 copy — h2, terminal label, live indicator word, totals strip, controls, beat display names. The
+  replay spec's wireframes were cascaded to match it; if any third spelling of a string turns up, the
+  narration file wins. Narration slot text is final and rendered verbatim
+- **The chain-totals strip's value scale is per-viewport (DEC-022.3).** `--text-readout` at
+  `≥ --bp-wide`; `--text-micro` below it. §7.1 prices the whole strip at `2 × (--text-micro 11px × 1.5)
+  = 33.0px`, and at 375px `--text-readout` clamps to 24px — one value line alone would be 24px, making
+  the strip 40.5px against a budget with 5.1px of slack, which busts the 553px core. Applied to
+  annotation 7 already; build to the file
+- **Keep the mobile strip at two lines — the lever is tracking, not copy (DEC-022.4).** Line 1 is 43
+  characters: in `--font-mono` at 11px that is ~284px bare but ~350px with `--track-micro` (0.14em),
+  against ~327px of content width at 375px. Set tracking on the value line within the micro treatment
+  and assert the rendered line count in the harness. Do not shorten the string — it is accepted copy
 - **Fix `.instrument`'s phone inset while you are in these files (DEC-021.1).** Below `--bp-wide` the
   total inset must not exceed `--gap-flow` (24px a side); desktop keeps `--gap-block` (48px). Today it is
   a flat 48px everywhere, so a 320px phone spends 96px of a 272px card on padding and the prose column is

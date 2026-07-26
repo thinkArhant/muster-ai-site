@@ -627,3 +627,91 @@
   💬 Both lints pass. Committing the step:
   🧪 bash   cd "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" && git log -1 --format="%B" | tail -3
   🧪 bash   cd "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" && git add knowledge-base/design-specs/we
+  💬 The Content step is complete: the §2 narration script is written, filed as HO-005, and the queue now points at the PM narration review. Committed as `6f4b762`. **What was delivered** — `knowledge-base
+    📖 ×17 · ✏️  ×6 · 📝 ×1 · 🧪 ×14 · ⚠️  ×1
+  ✓ 39 turns · $7.61 · peak ctx 144k/1M 14% · out 41k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-25 pm: Wave 2 is closed — shell accepted on both engines, no blockers; one question is waiting for you in the queue's Founder Decisions (the reading column renders ~90 characters, not ~64 — it gates nothing before §3).
+     - 2026-07-25 pm: the one §2 mobile behaviour no harness here can prove is `100dvh` in mobile Safari, and §7.1's whole 424.4px budget rests on it — worth 30 seconds on your iPhone at the Wave 3 gate; everything else on mobile is Blink-verified.
+     - 2026-07-25 pm: QA's finding that `.instrument`'s phone padding could not be fixed without breaking §2's signed-off budget was wrong on the arithmetic — the fix is free and now rides the §2 build step; no design value moved (DEC-021.1).
+  📌 '## Founder Decisions' changed this step — review knowledge-base/orchestration-queue.md
+  ✓ [33;1mCONTENT[0m · [1m9m 41s[0m · advanced → 2026-07-24 PM: Wave 3 narration review (PM) · handoff HO-005 filed ✓
+    run so far: 1h 28m · $54.03 · 6 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 8
+▶ [35;1mPM[0m · 2026-07-24 PM: Wave 3 narration review  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  💬 Greenfield ongoing → housekeeping, then role binding.
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Binding to PM for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh pm auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/pm.md
+  💬 I'll do the PM bootstrap reads in parallel.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/pm.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-narration.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  🧪 bash   wc -l knowledge-base/design-specs/web/section-02-replay.md knowledge-base/design-specs/web/section-02-beat-inventory.md 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  🧪 bash   grep -n "§2\|Watch it ship\|WATCH IT SHIP\|honest headline\|beat" knowledge-base/product-spec-seed.md | head -60
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/product-spec-seed.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/skills/generic/deliverable-review.md
+  💬 Now the mechanical verification — word budgets measured, not eyeballed, plus the requests lint.
+  🧪 bash   python3 - <<'PY' import re slots = { "SP1":("A real run, replayed: Bodh's website wave — one evening, AI agents, unatten
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh; echo "---lint exit $?---"; grep -nEi "\b(we|our|us|I'm|I've|ourselves)\b|!|
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/founder-notices.md
+  🧪 bash   grep -rn -- "--text-micro\|--font-mono\|--font-sans\|letter-spacing" styles/*.css | head -40
+  🧪 bash   grep -n -- "--track-\|--text-micro\|--text-label" styles/tokens.css
+  🧪 bash   grep -n -- "--text-readout\|--gap-flow\|--gap-hairline\|--bp-wide" styles/tokens.css; echo "--- readout usage ---"; grep
+  🧪 bash   grep -rn "64 MIN\|WEBSITE WAVE ONLY" --include=*.md --include=*.html --include=*.css --include=*.js . | grep -v "^./.mus
+  🧪 bash   grep -rn "64 MIN" knowledge-base index.html styles scripts tests 2>/dev/null
+  💬 Two references to cascade. Applying the accepted copy to the spec's wireframes:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the review verdict on HO-005.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   git add knowledge-base/agent-requests.md knowledge-base/design-specs/web/section-02-replay.md && git commit -q -F - <<'M
+  💬 Now the closeout — sweep the ledger, log the decision, re-base the gate packet, and advance the queue.
+  🧪 bash   python3 - <<'PY' import re p='knowledge-base/agent-requests.md' s=open(p).read() start=s.index('### 2026-07-25 HO-005 — 
+  💬 Now the decision-log entry:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 Now re-basing the gate packet for Wave 3 — this is the last PM step before the founder gate.
+  🧪 bash   python3 - <<'PY' p='knowledge-base/wave-review.md' s=open(p).read() head=s[:s.index('## Current Wave')] verdict_start=s.
+  🧪 bash   python3 - <<'PY' p='knowledge-base/wave-review.md' s=open(p).read() old_banner_start=s.index('> **This packet is CLOSED*
+  💬 Now the queue — promote the build step with the DEC-022 rulings carried inline.
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() # 1. Replace Next Step body with the promote
+  🧪 bash   grep -n "^## \|^### 2026" knowledge-base/orchestration-queue.md | sed -n '1,20p'
+  💬 The dedup step cut the wrong occurrence. Restoring and redoing:
+  🧪 bash   git checkout -- knowledge-base/orchestration-queue.md && grep -n "^## Next Step\|^## Upcoming\|^### 2026" knowledge-base
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() ns_start=s.index('### 2026-07-24 PM: Wave 3 
+  🧪 bash   awk 'NR>250 && /^- 2026/' knowledge-base/orchestration-queue.md | wc -l; awk 'NR>250 && /^- 2026/' knowledge-base/orches
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() old="""- 2026-07-25 — Wave 1: Developer — Bo
+  💬 Now the sprint board and agent-context cascade:
+  🧪 bash   python3 - <<'PY' p='knowledge-base/current-sprint.md' s=open(p).read() s=s.replace("""- [ ] **Wave 3 narration review** 
+  🧪 bash   grep -rn "\- \[ \]" knowledge-base/agent-context/*.md | head -20
+  🧪 bash   grep -n "Current Tasks" -A 18 knowledge-base/agent-context/content.md | head -30
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-context/content.md' s=open(p).read() s=s.replace("### 1. §2 narration script — 
+  🧪 bash   grep -n "^### [0-9]\." knowledge-base/agent-context/developer.md knowledge-base/agent-context/qa.md
+  🧪 bash   sed -n '133,150p' knowledge-base/agent-context/developer.md; echo "=== QA ==="; sed -n '98,112p' knowledge-base/agent-co
+  🧪 bash   python3 - <<'PY' d='knowledge-base/agent-context/developer.md' s=open(d).read() s=s.replace("""- Implement everything in
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -15
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 30 muster/system-guide.md | head -45
+  🧪 bash   grep -n "Self-Review Checklist" muster/system-guide.md | head
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/system-guide.md
+  🧪 bash   grep -rn "~64 MIN ACTIVE" knowledge-base/ 2>/dev/null; echo "--- assumptions ---"; grep -n "^### A-0" -A 4 knowledge-bas
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   git add -A && git commit -q -F - <<'MSG' && bash muster/scripts/muster-commit-lint.sh HEAD~2..HEAD 2>&1 | tail -3 pm: th

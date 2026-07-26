@@ -119,7 +119,11 @@ agent that finds a gap reports it and stops.
     - Gate packet states that approving it launches the autonomous run at Wave 2
   - **Key refs**: `team/pm/skills/generic/deliverable-review.md`, `team/qa/skills/generic/verification-discipline.md`
 
-- [ ] **Wave 3 narration review** — Priority: HIGH, Effort: S, Platform: n-a
+- [x] **Wave 3 narration review** — Priority: HIGH, Effort: S, Platform: n-a
+  - **Done** 2026-07-25 — HO-005 accepted, no revision, no word rewritten. All ten strings re-measured
+    by script (139/163 timed words, every slot inside its read window). Two build-level items on the
+    chain-totals strip ruled in DEC-022 and carried inline on the §2 build and QA steps; gate packet
+    re-based for Wave 3
   - **Deliverable**: review verdict on HO-005 in `agent-requests.md`
   - **Dependencies**: Content HO-005
   - **Acceptance criteria**:
@@ -194,7 +198,11 @@ agent that finds a gap reports it and stops.
 
 ### Content
 
-- [ ] **§2 narration script** — Priority: HIGH, Effort: M, Platform: web
+- [x] **§2 narration script** — Priority: HIGH, Effort: M, Platform: web
+  - **Done** 2026-07-25 — HO-005 accepted with no revision. All eight slots inside budget, SP7 landed
+    at 15 of 16 words with SP6's relief unspent, the Safari catch omitted, every claim cited in place.
+    The strings are final and are rendered verbatim; `section-02-narration.md` §5 is the authority on
+    §2's chrome copy
   - **Deliverable**: `knowledge-base/design-specs/web/section-02-narration.md` — the narration layer
     line by line, each line keyed to its terminal beat; HO-005
   - **Dependencies**: beat inventory HO-001, replay spec HO-002

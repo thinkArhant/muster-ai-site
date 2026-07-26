@@ -71,7 +71,12 @@ because the gate waited on Apple. No copy may imply the deploy closed the chain.
 ## Current Tasks
 <!-- PM-MANAGED: PM updates at sprint planning, task completion, priority changes -->
 
-### 1. §2 narration script — Priority: HIGH, Effort: M, Platform: web
+### 1. §2 narration script — Priority: HIGH, Effort: M, Platform: web — **[x] DONE 2026-07-25 (HO-005)**
+
+Accepted with no revision and no word rewritten. All eight slots inside budget (139 of 163 timed words,
+every slot inside its read window); SP7 landed at 15 of 16 with SP6's relief unspent; the Safari catch
+omitted. SP4's all-viewport split ratified. `section-02-narration.md` §5 is now the authority on §2's
+chrome copy — the replay spec's wireframes were cascaded to match it (DEC-022).
 
 **Deliverable**: `knowledge-base/design-specs/web/section-02-narration.md` — the narration layer line by
 line, each line keyed to its terminal beat; HO-005 in `agent-requests.md`.
