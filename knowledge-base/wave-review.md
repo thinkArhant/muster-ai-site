@@ -156,6 +156,62 @@ trading away a design value.
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
 <!-- Bug list — PM inserts a fix step per bug, then continues. -->
 
-**Status:**
+**Status:** APPROVED WITH ONE COPY FIX — 2026-07-26
+
+The replay stands on pacing and narration with the styling subtracted. Passes 1, 2 and 3 all judged
+good by the founder: the narration alone carries a reader who has never used Muster; the expanded
+re-verify beat and the compressed QA beat both read correctly; and the 4.80 s gate hold reads as
+deliberate stillness rather than as a stall. The hold is upheld at its reduced length — the concern
+recorded in DEC-016 that funding B3 from B6 might cost the beat its meaning did not materialise.
+
 **Findings:**
--
+
+- **F-G1 — SP7 is rewritten to the founder's arc.** The current line frames the thesis negatively
+  ("no human touched this"). The founder wants the active human story a first-time reader actually
+  pictures: *the operator plans the sprint, leaves while the agents run, and comes back to work that is
+  ready to deploy.* The arc is factually supported by the corpus — the chain ran unattended with a
+  single human gate at deploy — so this is a framing change, not a new claim. Routed to Content as a
+  revision of SP7, with SP6's 12 unspent words in the same beat available as the relief.
+  **Guardrail, and it is the whole risk here**: the founder's framing of the ask was "something a VC
+  would want to hear that would amaze them." That is the exact instruction that produces
+  adjectives-as-argument, and `copy-rules.md` forbids it. The arc is approved; amazement is not a copy
+  technique. The line earns its effect from the fact being true and specific, the way SP3's
+  "re-checked with its own screenshots" does. Content revises; PM reviews line by line before it builds.
+
+- **F-G2 — The reading measure is ruled: option A, `64ch` ships as written.** The founder compared
+  all three widths and chose the current build. The seed's "reading column ~64ch" therefore means the
+  CSS value, and no change is made to `--read-max`. **Consequence that must ride this fix wave**: the
+  independent audit's 45–75-character band check now asserts a standard the product has deliberately
+  declined, so it must be retired or re-scoped to a reported measurement. Left as-is it keeps
+  `qa-independent-audit.mjs` exiting non-zero forever, which trains everyone to ignore a red audit.
+  This closes the last hard item that was holding in `pre-launch-checklist.md`.
+
+- **F-G3 — The phone check is NOT yet satisfied, and the screenshot does not settle it.** The founder's
+  iPhone screenshot shows all twelve terminal lines, the beat indicator at its authored end state
+  ("BEAT 06 / 06 · THE HUMAN GATE"), and the narration entries stacked rather than one at a time. Per
+  §7 line 120 that is the **complete-transcript end state** — either playback had already finished, or
+  Reduce Motion is on in iOS. Both render correctly and the screenshot is evidence the degraded path
+  looks right on a real phone, which is worth having. But the guarantee under test — a five-line
+  windowed terminal with both layers visible *during* the 48 s — applies only to live playback, and
+  live playback is what the screenshot does not show. `100dvh` in mobile Safari therefore remains
+  unverified on real WebKit, exactly as flagged going in. Carried to the re-gate: reload the page, let
+  §2 scroll into view fresh, and watch during the chain. Not blocking, because every other mobile
+  measurement is Blink-verified and the failure mode it guards against would be visible immediately.
+
+- **F-G4 — The phone reader should not scroll horizontally to read a log line.** Raised by the founder
+  from the real device. This reopens F1's approved resolution, which is legitimate — F1 was settled on
+  measurement, and the founder is now reading it on the instrument the gate exists to apply. Routed to
+  UI/UX with the trade costed rather than left to be discovered: at 375px the terminal's inner width is
+  ~301px ≈ 38 characters and the longest corpus line is 74 characters ≈ 577px, so removing ~276px of
+  horizontal scroll is paid for in visible line count (soft-wrap supports about **2–3 log lines instead
+  of 5** against the 553px core budget) or in type scale (~5px, not viable). It is never paid for in
+  fidelity — truncation and ellipsis stay forbidden, because they convert §2's central claim from true
+  to false. PM's position is soft-wrap with a hanging indent, which is consistent with the spec's own
+  ruling that on mobile the terminal is texture and the narration is the payload. See DEC-025.
+
+**Founder observation, recorded with its correction.** The founder read the opening as `muster` and
+`ui-ux` landing together and then a long wait for the developer line, and judged that rhythm right —
+setup is quick, the design step visibly takes work, and the reader has time to absorb the screen. The
+rhythm is real and the judgment stands; the interval is **6.05 s**, not the ~48 s estimated (48 s is
+the whole chain). Recording the measured figure so the pacing rationale is not carried forward on a
+mis-estimate.

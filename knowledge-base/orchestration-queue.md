@@ -86,30 +86,209 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 Wave 3 Gate — founder review
+### 2026-07-26 UI/UX (web): Mobile terminal reads without horizontal scroll
 
 ```
-Role: halt
+Role: ui-ux
+Model: claude-opus-5
 
-**Gate:** The §2 replay judged on pacing and narration, styling mentally subtracted.
+**Task:** Resolve gate finding F-G4. A phone reader must be able to read a terminal line without
+scrolling horizontally. You own the mechanism; two constraints bind it and neither is negotiable.
 
-This is the sprint's decision point. Per the founder's added acceptance criterion, the replay must be
-excellent on run-log timing and plain-English narration alone — the visual frame is not allowed to
-carry it. If it only works dressed, that is the signal the seed's Sequencing section wanted in week one.
+**Inputs:**
+- `knowledge-base/wave-review.md` — the founder's verdict, F-G4
+- `knowledge-base/decision-log.md` — DEC-025 (the costed trade), DEC-016 (why F1 landed on horizontal scroll)
+- `knowledge-base/design-specs/web/section-02-replay.md` — your own deliverable, §7, §7.1, §10
+- `knowledge-base/bodh-sprint4-corpus.md` — the twelve real lines; longest is 74 characters. Read-only
 
-**Read:** `knowledge-base/wave-review.md` for the verification checklist and write your verdict there.
-**Under review:** the live §2 section, `section-02-narration.md`, HO-006, HO-007.
+**The two constraints.** Byte-clean corpus fidelity — no truncation, no ellipsis, no paraphrase, every
+rendered character still diffs against the corpus. And the 553px core budget. The cost of removing
+horizontal scroll is paid in visible line count or type scale, never in fidelity.
 
-**Resume:** write your verdict in `knowledge-base/wave-review.md`, then run
-`muster/scripts/muster-sprint-resume.sh` from inside the sprint worktree.
+**The arithmetic is already done — verify it, then choose.** At 375px the terminal's inner width is
+~301px ≈ 38 characters; the longest line is 74 characters ≈ 577px, needing ~276px of scroll today.
+Soft-wrap makes most lines two rows; the core has ~53px of slack and one line box is 24.7px, so wrapping
+supports roughly five rows — about **2–3 log lines visible instead of 5**. A type-scale fix needs ~5px
+and fails legibility. PM's position is soft-wrap with a hanging indent, which is consistent with your own
+ruling that on mobile the terminal is texture and the narration is the payload.
+
+**Push back if warranted.** If dropping to 2–3 visible lines makes the terminal read as broken rather
+than as texture, say so in the handoff rather than shipping it. A hybrid (wrap the newest line only,
+scroll the rest) is worth costing, but weigh it against the layout shift on every reveal that the
+opacity-only playback model exists to prevent.
+
+**Deliverable:** revised `section-02-replay.md` (§7, §7.1, §10 and the §12 checklist row); HO-011.
+
+**Acceptance criteria:**
+- No horizontal scroll is required to read any corpus line at 375px, or an explicit reasoned refusal
+- A restated mobile height budget with its numbers and assumed viewport; the core still fits 553px
+- Fidelity rules intact; reduced-motion and no-JS paths still render the complete transcript
+- §5.1's line-persistence wording updated if the visible-line count changes — it was the easy miss last time
+- Say explicitly whether desktop layout changed; if it did not, say that too
+
+**On completion:** File HO-011 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
+(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-<!-- Empty — the Wave 3 gate is the sprint's last step. -->
+### 2026-07-26 Content (web): Reframe SP7 to the operator's arc
+
+```
+Role: content
+Model: claude-fable-5
+
+**Task:** Rewrite SP7, §2's thesis line, per gate finding F-G1 and DEC-024.
+
+**Inputs:**
+- `knowledge-base/decision-log.md` — DEC-024, including the budget and the named risk
+- `knowledge-base/wave-review.md` — F-G1, the founder's framing verbatim
+- `knowledge-base/design-specs/web/section-02-narration.md` — your own deliverable
+- `knowledge-base/agent-skills/content/copy-rules.md` — binding
+- `knowledge-base/bodh-sprint4-corpus.md` — every claim traces here. Read-only
+
+**The change.** SP7 currently states the thesis by negation: *"The run stops itself at the gate. No
+human touched this until the deploy button."* The founder wants the active arc a first-time reader
+pictures — the operator plans the sprint, leaves while the agents run, and comes back to work that is
+ready to deploy. The corpus supports it: the chain ran unattended with a single human gate at deploy.
+
+**The risk, stated plainly because it was in the ask.** The founder framed this as "something a VC
+would want to hear that would amaze them." Taken literally that is an instruction to write
+adjectives-as-argument, which `copy-rules.md` forbids and which this page cannot survive — a site whose
+argument is *every number here is checkable* cannot carry a sentence reaching for awe. Land the arc;
+do not reach. This line earns its effect the way SP3 does, from a fact that is specific and true.
+
+**Budget:** SP7's window is the 4.80 s gate hold — `floor(4.80 × 3.5)` = **16 words**. The current line
+spends 15. SP6's 12 words in the same beat are the only relief and cost no reschedule; use them if the
+arc needs a run-up, and say so.
+
+**Deliverable:** revised `section-02-narration.md` (SP7, and SP6 if used); HO-012.
+
+**Acceptance criteria:**
+- The arc lands: plan → leave → agents run → return → ready to deploy
+- Word count stated and inside budget; if SP6 is spent, both counts stated
+- Product voice — §2 is not one of the two first-person places (rule 7)
+- Zero adjectives-as-argument, zero rounded numbers, correct scope labels, "measured" never "proven"
+- Every factual claim cites its corpus line
+
+**On completion:** File HO-012 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
+(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
+```
+
+### 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild
+
+```
+Role: pm
+Model: claude-opus-5
+
+**Task:** Review the mobile-layout amendment and the SP7 rewrite together, before either is built.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-011, HO-012
+- `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md`
+- `knowledge-base/decision-log.md` — DEC-024, DEC-025
+- `knowledge-base/agent-skills/content/copy-rules.md`
+- `muster/team/pm/skills/generic/deliverable-review.md`
+
+**Acceptance criteria:**
+- **Re-derive, don't re-read.** Recount SP7's words yourself and confirm it is inside 16; if SP6 was
+  spent, recount that too. Re-derive the mobile height budget against the stated viewport
+- **DEC-024's guardrail is the one to enforce.** If the new SP7 reaches for awe rather than stating a
+  fact, that is a blocking finding no matter how well it reads. Judge it as a skeptical reader would
+- Confirm the arc is actually supported by the cited corpus lines, not merely plausible
+- Confirm §5.1's persistence wording moved if the visible-line count changed
+- If UI/UX pushed back on the 2–3 line outcome, evaluate on the merits and route to Founder Decisions
+  rather than overruling a design objection silently
+
+**On completion:** Run the Pre-Handoff Self-Review Checklist. Promote the rebuild step.
+```
+
+### 2026-07-26 Developer (web): Rebuild §2 to the amended spec and copy
+
+```
+Role: developer
+Model: claude-opus-5
+
+**Task:** Apply the approved mobile-layout change and the revised narration string to the built §2.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-011, HO-012 with their PM reviews
+- `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md` — authoritative
+- `knowledge-base/bodh-sprint4-corpus.md` — read-only
+
+**Acceptance criteria:**
+- The narration string renders verbatim from the narration file; no retyping
+- No horizontal scroll needed to read a corpus line at 375px, per the amended spec
+- Fidelity unchanged: all twelve lines still diff byte-clean against the corpus
+- Reduced-motion and no-JS paths still render the complete transcript
+- `bash scripts/test.sh` green on both engines; extend it rather than adding a second runner
+- Timing untouched — the 48.00 s schedule is not in scope for this fix
+
+**On completion:** File HO-013 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+```
+
+### 2026-07-26 QA (web): Re-validate §2 and retire the reading-band check
+
+```
+Role: qa
+Model: claude-opus-5
+
+**Task:** Re-validate the rebuilt §2, and apply DEC-023 to the audit.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-013
+- `knowledge-base/decision-log.md` — DEC-023, DEC-025
+- `knowledge-base/design-specs/web/section-02-replay.md`, `section-02-narration.md`
+
+**Acceptance criteria:**
+- **DEC-023:** the 45–75-character band check is retired as an assertion and re-scoped to a reported
+  measurement. The number stays visible; the false red goes. `qa-independent-audit.mjs` must exit zero
+  on a clean build afterwards — an audit that is always red is an audit nobody reads
+- Twelve lines still diff byte-clean; the revised narration string diffs against the narration file
+- No horizontal scroll required at 375px; body still never scrolls horizontally at 375 / 320 / 200%
+- Reduced-motion and no-JS paths complete; zero runtime network requests
+- Cross-engine on WebKit and Blink; state plainly what remains Blink-only
+- Red build: do NOT advance — re-point Next Step to a `Role: pm` assessment step
+
+**On completion:** File HO-014 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+```
+
+### 2026-07-26 Wave 3 Re-gate — founder review
+
+```
+Role: halt
+
+**Gate:** The §2 replay re-judged after the fix wave — SP7's new framing, and the phone without
+horizontal scroll.
+
+The first gate approved the replay on pacing and narration (passes 1–3) and returned two changes. This
+gate is narrow: does the new thesis line land the operator's arc without reaching, and does the phone
+now read without sideways scrolling.
+
+**Carried from the first gate and still open:** `100dvh` in mobile Safari is unverified on real WebKit.
+The earlier screenshot showed the complete-transcript end state, not live playback. Reload the page,
+let §2 scroll into view fresh, and watch *during* the chain — the terminal should show a short window of
+lines that advances, with the narration card in view the whole time.
+
+**Read:** `knowledge-base/wave-review.md` and write your verdict in its `## Verdict` section.
+**Under review:** the live §2 section, `section-02-narration.md`, HO-011 through HO-014.
+
+**Resume:** write your verdict, then run `muster/scripts/muster-sprint-resume.sh` from inside the
+sprint worktree.
+```
 
 ## Done (Last 10)
+<!-- newest first -->
+
+- 2026-07-26 — Wave 3 Gate: **APPROVED with one copy fix** by the founder. Pacing and narration judged
+  good with styling subtracted; the 4.80 s gate hold upheld at its reduced length. Four findings routed
+  as a fix wave: SP7 reframed to the operator's arc (DEC-024), mobile terminal to read without
+  horizontal scroll (DEC-025), reading column ruled `64ch` as-shipped with the band check retired
+  (DEC-023), and the real-iPhone playback check carried to the re-gate.
+
+- 2026-07-26 — Wave 3 Step 4: QA §2 replay validation (HO-007). 20/20 criteria green, 7 measurements
+  reported; seven defects found and fixed in the audit itself. Accepted by PM.
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->

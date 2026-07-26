@@ -32,16 +32,13 @@
     stated fallback until then.
   - Milestone gate: launch
 
-- [ ] **Reading column resolved to a real measure** — Blocker: hard, Source: pm, Added: 2026-07-25
-  - `--read-max: 64ch` resolves to 685.31px and renders **~90 prose characters per line**, because `ch`
-    is the advance of `0` (10.281px) while prose averages 7.615px. The common typographic band is 45–75
-    and WCAG 2.1 SC 1.4.8 (AAA) caps a reading block at 80. The build matches the spec and the spec
-    matches seed line 228 — the gap is between `64ch` and what `64ch` renders.
-  - Awaiting the founder's reading of "~64ch" (the CSS unit, or the measure). Parked in
-    `orchestration-queue.md` → Founder Decisions with a PM recommendation; see DEC-021.3. It gates
-    nothing before §3, which is why it is here rather than halting the run — this item is the backstop
-    that stops it shipping unanswered.
-  - Milestone gate: launch
+- [x] **Reading column resolved to a real measure** — RESOLVED 2026-07-26, Source: pm, Added: 2026-07-25
+  - Founder ruled at the Wave 3 gate after comparing the shipped width against 65- and 70-character
+    alternatives rendered in the page's own tokens: **`64ch` ships as written**. The seed's "reading
+    column ~64ch" means the CSS value, not a rendered character count. No change to `--read-max`.
+  - Carried consequence, tracked on the QA fix step: the audit's 45–75-character band check is retired
+    as an assertion and re-scoped to a reported measurement, so `qa-independent-audit.mjs` stops exiting
+    non-zero on a standard the product has deliberately declined. See DEC-023.
 
 - [ ] **§2's mobile layout checked on a real iPhone** — Blocker: hard, Source: pm, Added: 2026-07-25
   - `qlmanage` is the only WebKit on this machine; it executes no JavaScript and renders at a fixed

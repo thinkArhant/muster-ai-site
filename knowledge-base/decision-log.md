@@ -709,5 +709,98 @@ SP6 the 11/11 PASS, SP7 "no human touched this until the deploy button," landing
 `agent-requests.md` (HO-005), `orchestration-queue.md`, `current-sprint.md`, `wave-review.md`,
 `agent-context/{content,developer,qa}.md`, `founder-notices.md`.
 
+---
+
+### DEC-023 — The reading column is `64ch` as written; the band check is retired (2026-07-26)
+
+**Decision**: Founder ruling at the Wave 3 gate. `--read-max: 64ch` ships unchanged. The seed's
+"reading column ~64ch" means the CSS value, not a rendered character count. The independent audit's
+45–75-character band check is retired as an assertion and re-scoped to a reported measurement.
+
+**Rationale**: The founder compared the shipped width against 70-character and 65-character
+alternatives rendered in the page's own tokens and chose the shipped one. That settles the only
+question that was open — the build, the spec and the seed already agreed with each other; the ambiguity
+was solely whether `ch` meant the unit or the measure. PM recommended the opposite (honour the measure,
+express it in `rem`) and is overruled on the founder's eye, which is the right instrument for a
+typographic call the seed left to taste.
+
+**The consequential half is the check, not the token.** A test asserting a standard the product has
+deliberately declined does not become harmless by being known — it keeps `qa-independent-audit.mjs`
+exiting non-zero indefinitely, and an audit that is always red is an audit nobody reads. Retiring it to
+a reported measurement keeps the number visible without the false signal. Same disposition as the
+45-character floor in DEC-021: replace a wrong threshold, never loosen it.
+
+**Closes** the last hard item held in `pre-launch-checklist.md` on this question.
+
+**Impact**: QA (retire the check), Developer (no change), UI/UX (no change), PM.
+
+**Touched**: `wave-review.md`, `pre-launch-checklist.md`, `orchestration-queue.md`,
+`tests/qa-independent-audit.mjs` (on the QA step).
+
+---
+
+### DEC-024 — SP7 is reframed to the operator's arc, with the inflation risk named (2026-07-26)
+
+**Decision**: SP7 — §2's thesis line — is rewritten from its negative framing ("no human touched this
+until the deploy button") to the active human arc: the operator plans the sprint, leaves while the
+agents run, and returns to work ready to deploy. SP6's 12 unspent words in the same beat are the
+available relief. Content revises; PM reviews line by line before the rebuild.
+
+**Rationale**: The current line states the thesis by negation, asking the reader to infer the story
+rather than see it. The founder's arc is what a first-time reader pictures, and it is factually
+supported — the corpus records the chain running unattended with a single human gate at deploy — so
+this is a framing change, not a new claim. That distinction is what makes it approvable at all.
+
+**The risk is recorded because it was in the ask.** The request was framed as "something a VC would
+want to hear that would amaze them." Taken literally that instructs adjectives-as-argument, which
+`copy-rules.md` forbids and which this page's thesis cannot survive: a site arguing *every number here
+is checkable* cannot carry a sentence reaching for awe. The arc is approved; amazement is not a
+technique to apply. The line earns its effect the way SP3 does — from a fact that is specific and true.
+A revision landing the arc inside the rules is the deliverable; one landing it by inflating is a
+blocking finding at PM review.
+
+**Budget**: SP7's window is the 4.80 s gate hold, `floor(4.80 × 3.5)` = 16 words; the current line
+spends 15. SP6's 12 words are the only relief and cost no reschedule.
+
+**Impact**: Content, PM, Developer, QA.
+
+**Touched**: `wave-review.md`, `orchestration-queue.md`, `current-sprint.md`,
+`design-specs/web/section-02-narration.md` (on the Content step).
+
+---
+
+### DEC-025 — Mobile terminal: the founder wants no horizontal scroll; fidelity is not the payer (2026-07-26)
+
+**Decision**: The founder's stated goal is that a phone reader never scrolls horizontally to read a
+terminal line. UI/UX owns the mechanism. Two constraints bind the solution and are not negotiable:
+byte-clean corpus fidelity (no truncation, no ellipsis, no paraphrase) and the 553px core budget.
+Whatever ships, the cost is paid in visible line count or type scale — never in fidelity.
+
+**Rationale**: This reopens the resolution the founder approved at the Wave 1 gate, which is
+legitimate: F1 was settled on measurement, but the founder is now reading it on a real phone, and that
+is the instrument the gate exists to apply.
+
+**The arithmetic, so the trade is chosen rather than discovered.** At 375px the terminal's inner width
+is ~301px ≈ 38 characters at `--text-terminal`. The longest corpus line (L3) is 74 characters ≈ 577px,
+so it currently needs ~276px of horizontal scroll. Removing that scroll has exactly three payers:
+- **Soft-wrap.** Most lines become two rows. The core has ~53px of slack against its 553px budget and
+  one line box is 24.7px, so wrapping supports roughly **five rows total — about 2–3 log lines
+  visible instead of 5.** That is the honest price.
+- **Type scale.** Fitting 74 characters in 301px needs ~4px per character, roughly a 5px font. Not
+  viable; it fails legibility long before it fails the budget.
+- **Truncation.** Forbidden — it converts §2's central claim from true to false.
+
+**PM position**: soft-wrap with a hanging indent, accepting 2–3 visible lines, is the only variant that
+honours the request. It is defensible precisely because the spec already ruled that *on mobile the
+terminal is texture and the narration is the payload* — if that ruling is right, trading terminal lines
+for readability is consistent with it rather than a retreat from it. A hybrid (wrap the newest line,
+scroll the rest) is worth costing but risks a layout shift on every reveal, which the opacity-only
+playback model exists to avoid. UI/UX decides and states the measured budget either way.
+
+**Impact**: UI/UX (owns it), Developer, QA, PM.
+
+**Touched**: `wave-review.md`, `orchestration-queue.md`, `current-sprint.md`,
+`design-specs/web/section-02-replay.md` (§7, §10 — on the UI/UX step).
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
