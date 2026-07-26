@@ -103,3 +103,30 @@
   🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | tail -10; echo "=== handoff lint ==="; bash muster/scripts/muster-lin
   🧪 bash   git show --stat --oneline HEAD | head -20
   🧪 bash   git add -A && git status --short && git commit -q -F - <<'EOF' qa: §2 replay validated green, one carried founder questi
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD 2>&1 | tail -5
+  🧪 bash   tail -8 knowledge-base/founder-notices.md
+  🧪 bash   cat >> knowledge-base/founder-notices.md <<'EOF' - 2026-07-26 qa: §2 passes every criterion, so the gate is yours — but 
+  💬 **QA step complete — §2 replay validated, queue advanced to the Wave 3 founder gate.** The uncommitted tree was a partial §2 audit extension from an interrupted attempt; I continued from it rather tha
+    📖 ×19 · ✏️  ×21 · 🧪 ×52
+  ✓ 93 turns · $8.71 · peak ctx 182k/1M 18% · out 52k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-26 qa: §2 passes every criterion, so the gate is yours — but `node tests/qa-independent-audit.mjs` exits red on purpose (99/100): the one failing check is the `64ch` reading-measure question waiting on your word, left red rather than laundered. `bash scripts/test.sh` is green.
+  ✓ [32;1mQA[0m · [1m47m 9s[0m · advanced → 2026-07-24 Wave 3 Gate — founder review · handoff HO-007 filed ✓
+    run so far: 47m 9s · $8.71 · 1 steps
+───────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════
+⛔ HALT — 2026-07-24 Wave 3 Gate — founder review   (Role: halt)
+
+   The loop stopped for founder input — nothing is wrong.
+   • Wave gate: review knowledge-base/wave-review.md, write your verdict in its
+     ## Verdict section, then run: bash muster/scripts/muster-sprint-resume.sh
+     (from this worktree).
+   • PM escalation: see '## Founder Decisions' in knowledge-base/orchestration-queue.md, answer, then re-run
+     muster-sprint-run.sh.
+═══════════════════════════════════════════════════════════
+── run summary ────────────────────────────────────────────
+  2026-07-24 QA (web): §2 replay vali    93    $8.71   18%    52k  47m 9s
+  2026-07-24 Wave 3 Gate — founder r  halt
+───────────────────────────────────────────────────────────
+  1 steps · 93 turns · $8.71 · out 52k · 47m 9s wall · stopped: halt (2026-07-24 Wave 3 Gate — founder review)
+  📣 1 founder notice(s) this run — read knowledge-base/founder-notices.md

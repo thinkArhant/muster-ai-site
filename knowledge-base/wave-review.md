@@ -55,7 +55,33 @@ attention goes to the judgment calls below rather than to arithmetic:
 - **Timing tiles exactly.** Dwells sum to 48.00 s, the six design shares to 100.00%, and each beat's
   cumulative dwell lands on its opening line's offset.
 
-*Build and QA evidence lands here when HO-006 and HO-007 file — read those two alongside this packet.*
+**Build and QA evidence, re-run by PM at the gate rather than read off the handoffs:**
+
+- **Both harnesses reproduce.** `bash scripts/test.sh` is green end to end (129 Blink, 13 WebKit).
+  The independent audit — written against the specs, not against the build — is **99 of 100**, with
+  7 further measurements reported rather than asserted.
+- **The one red is deliberate and is not a §2 defect.** It is the `64ch` reading-measure question
+  below, left red because the threshold is satisfiable and the build simply does not satisfy it;
+  turning it green before you answer would be laundering. `node tests/qa-independent-audit.mjs`
+  therefore exits non-zero **on purpose** until you rule. `scripts/test.sh` is unaffected and green.
+- **Fidelity holds at the byte.** All 12 terminal lines diff byte-clean against the corpus, read off
+  disk at test time; 679 characters with equal codepoint counts, so nothing is truncated, padded or
+  re-wrapped. All 10 narration slots render verbatim, 1069 characters. The corpus is proven
+  unmodified from git, not asserted — all three founder-authored files carry only `founder:` commits.
+- **The 48-second schedule tiles exactly.** PM re-derived it from the spec's own twelve offsets:
+  the eleven intervals sum to **48.00 s** to the hundredth. Worst measured reveal drift is **16.8 ms**
+  against a 100 ms tolerance, so the build matches the schedule it was specified to.
+- **The phone budget is met with room.** At 375 × 553 the core measures **499.89px** against a
+  553px budget, five whole line boxes visible, and both layers stay on screen for **100.0%** of the
+  chain across 192 samples — measured under the 48px sticky bar rather than against the raw viewport.
+- **The degraded paths are complete, not reduced.** Reduced-motion and no-JS both render the full
+  transcript, string-identical to the motion path's end state. Zero non-`file:`/`data:` requests
+  across a full 48-second playback, and the page renders complete with the network off.
+
+**One caveat you should carry into your own testing.** Every mobile measurement above is **Blink
+only** — 375 × 553, 320px, landscape, 200% zoom, the visibility gate, the windowed terminal and all
+playback timing. WebKit's evidence is the no-JS complete transcript at a fixed render, both themes.
+That gap is why the iPhone look below is worth your 30 seconds.
 
 ### Verify — human-only checks
 
@@ -95,8 +121,34 @@ rather not carry it.
 
 ### Known findings — carried, not blocking this gate
 
-*Populated from HO-006 and HO-007 when they file. If this heading still reads "none," nothing was
-found.*
+**No blocking defect was found in §2 by either the build step or QA.** Six items are carried. None
+needs an answer at this gate; PM disposes them into Sprint 2 unless you say otherwise.
+
+- **The narration card meets its worst case with zero margin** (F2). SP3 sets 6 lines in a 6-line
+  budget — 199.39px against 199.4px. Nothing is wrong today, but any future growth in SP3, or a wider
+  glyph in a replacement string, costs a seventh line and 16.5px the phone does not have. Worth
+  knowing because the lever is copy length, not layout.
+- **At 320px the totals value line wraps to a third line** (F3, confirming OBS-002). Measured: strip
+  49.5px, value line 246.34px in 272px. §7.1's budget is stated for 375 × 553, and 320px sits below
+  the width any row of it was derived at, so this is outside the signed-off budget rather than a
+  breach of it.
+- **`bodh.day · LIVE` is not a link** (OBS-003). Making it one would put the only external URL in a
+  shipped file, and the harness asserts there are none. This pairs naturally with the §6 domain
+  question and is best answered with it, in Sprint 2.
+- **The narration rail scrolls its own overflow on desktop** (OBS-001, low).
+- **The section's label id differs from the spec's literal string** (OBS-004) — spec says
+  `s2-heading`, build uses `s02-title`. Both satisfy the requirement and the audit passes on the
+  built id; only the literal differs. PM will move the spec, not the build.
+- **Landscape phone shows 8 whole terminal lines against §10's derived 7** (OBS-005). Headless
+  Chrome gives the full 375px of height where Safari's landscape toolbars leave ~331px, so the
+  spec's figure is the conservative one and stands. No action.
+
+**Three deviations from the specs shipped deliberately, each with its reasoning in HO-006.** The
+narration rail is 22rem rather than a literal `36ch` (at `36ch` the terminal falls under the width
+L3 needs and the spec's own twelve-lines-fit guarantee fails at every desktop width); the controls
+sit below the core rather than inline with the totals; and the chrome label's tracking tightens on
+small viewports. PM accepts all three — each resolves a spec-internal contradiction rather than
+trading away a design value.
 
 ## Verdict
 
