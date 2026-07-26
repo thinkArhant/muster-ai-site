@@ -27,6 +27,23 @@ started, Legal, Marketing, deploy. §4's spec-sheet rendering is the second desi
 (seed → Sequencing item 2) and lands in Sprint 2. `VERIFY.md` lands with §1, which carries the
 `VERIFY ⎘` chip that links to it — tracked in `pre-launch-checklist.md`.
 
+### Founder direction carried into Sprint 2 planning
+
+Raised at the Wave 3 gate, neither in Sprint 1 scope. Both go to UI/UX as spec work at Sprint 2
+planning, not as amendments to a signed-off spec.
+
+1. **One section at a time on desktop** — land on §1 alone with a scroll signal, each subsequent
+   section arriving whole with its header visible. This is the seed's own *"one idea per screen"*
+   (Design direction → Layout) asking for a mechanism the shell has not yet implemented; the shell
+   currently expresses it as composition only (96–168px section padding). UI/UX to specify, with the
+   §2 conflict named explicitly: §2's mobile core already measures 499.89px of a 553px viewport, so a
+   full-viewport snap cannot apply to it uniformly. Founder also asked for the attention research
+   behind it — Research is unstaffed, so this is the narrow incremental request DEC-001 anticipated.
+2. **More of §2's two-layer pattern** — the founder values the terminal/plain-English split as the
+   engagement mechanism. PM position: §5's readout cards and §4's spec-sheets are the planned second
+   and third doses of the same "show the real artifact" DNA in different forms; a second *replay* is
+   not recommended (see the gate response). To be settled at planning, not assumed.
+
 ### Execution mode
 
 | | Waves 0–1 | Waves 2–3 |
