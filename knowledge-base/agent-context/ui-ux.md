@@ -88,7 +88,12 @@ in *both* layers, at every viewport, and the founder accepted Gate 3 partly for 
 3-entry phone guarantee collapses. DEC-032 originally sketched "a positioned mark in the log's 12px
 gutter" — that mechanism is **withdrawn**, because the gutter *is* the 12px and a mark inside it breaks
 the equality. The requirement is the outcome: tick clears the timestamp, equality survives, floor holds.
-A reasoned refusal naming which one you traded is an acceptable deliverable.
+
+**Your own spec already rules the tie-break — do not re-derive one.** §7.1 rule 1 says that if any of
+L1–L11 measures three rows, *the gutter yields* — reduced in **both layers together** so §9.1's single
+inset survives, to the largest value that holds the constant, with the surviving figure recorded in
+rule 1. §9.1: *"the invariant is the equality; 12px is its value ... the rule is what never bends. The
+number can, once."* Fidelity and the entry count are never the payer.
 
 Also rule whether `.narration__entry`'s active mark moves too — `verify-shell.mjs:617` asserts the two
 sides are equal, so changing one and not the other is a defect either way. Read

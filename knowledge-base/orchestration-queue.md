@@ -178,9 +178,15 @@ tick↔text, row↔row, entry↔entry, text↔wrap edge.
    guarantee collapses
 
 So the requirement is an **outcome, not the mechanism DEC-032 sketched**: the tick must clear the
-timestamp legibly, the 12px equality must survive, and the 37-column floor must hold. If those three
-cannot all be satisfied, say which one you are trading and why — a reasoned refusal with a costed
-alternative is an acceptable deliverable.
+timestamp legibly, the equality must survive, and the 37-column floor must hold.
+
+**Your own spec already rules the tie-break — use it rather than re-deriving one.** §7.1 rule 1: if
+measurement puts any of L1–L11 at three rows, *"the gutter yields — not fidelity, not the entry count:
+reduce it, in both layers together so §9.1's single inset survives, to the largest value that holds the
+constant, and record the measured figure here."* And §9.1: *"the invariant is the equality; 12px is its
+value ... the rule is what never bends. The number can, once."* So the gutter may drop below 12px if it
+must — **as long as both layers move together and stay equal**, and the surviving figure is recorded in
+rule 1. Fidelity and the entry count are never the payer.
 
 **Also rule**: does `.narration__entry`'s active mark (`styles/replay.css:232`) move too?
 `verify-shell.mjs:617` asserts the two sides are equal, so changing one and not the other is a defect

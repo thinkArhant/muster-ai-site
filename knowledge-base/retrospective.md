@@ -1,8 +1,17 @@
-# Muster framework feedback — from the muster-ai-site build
+# Retrospective — the muster-ai-site build
 
-<!-- Findings about MUSTER ITSELF, not about this product. Accumulated during the build and handed to
-the Muster core team at project close. Product decisions live in decision-log.md; this file is only for
-things that should change in the framework. -->
+<!-- The project retrospective, written FOR THE MUSTER CORE TEAM and handed over at project close.
+Findings here are about MUSTER ITSELF, not about this product — things that should change in the
+framework so every project gets the improvement for free on update. Product decisions live in
+decision-log.md; this file is only for framework-shaped findings.
+
+Accumulated live during the build rather than written at the end, so the reasoning is captured while
+it is still fresh and falsifiable. Any agent that hits a framework limitation files here rather than
+working around it silently.
+
+Convention: findings are numbered FF-NNN, newest appended. Each states what happened, what it cost,
+what the framework should do about it, and — where the project built a local workaround — exactly what
+that workaround is, so the core team can adopt, replace, or reject it rather than rediscover it. -->
 
 ---
 
@@ -112,3 +121,77 @@ over in avoided rework. But it cost about three times what it needed to, and the
 needed it. The framework should make R1 and R3 cheap and automatic, so that the expensive technique (R2)
 is reserved for the judgment-shaped question it is actually good at — *what would a cold reader have to
 invent?* — rather than spent re-deriving line numbers a script could have checked.
+
+---
+
+## FF-002 — PM solved a framework problem locally instead of routing it upstream
+
+**Filed**: 2026-07-26, immediately after FF-001
+**Severity**: medium — process, not tooling. It determines whether findings compound or stay stranded.
+**Founder correction, verbatim in substance**: *findings go to the retrospective so the core team decides
+what belongs in the framework, and then every project gets it free on update — versus a script that only
+benefits this project.*
+
+### What happened
+
+Having filed FF-001 with recommendation R1 ("ship a referential-integrity plan lint"), PM then **built
+that lint itself**, as `tools/plan-lint.py` in this project. It works — run against the live Sprint 2
+queue it found five defects in about two seconds, three of them real — but building it here was the
+wrong reflex.
+
+The framework-shaped move is to describe the gap, hand it to the core team, and let the improvement land
+in Muster so every project inherits it. Building it locally captures the value once, for one repo, and
+leaves the next project to rediscover the same gap and pay for the same audit. It also splits ownership:
+a project-local script drifts from whatever the framework eventually ships.
+
+### What was built, so the core team can adopt rather than rediscover
+
+`tools/plan-lint.py` — deliberately **not** in `scripts/`, because this project's `verify-shell.mjs`
+globs that directory into the shipped-file set and the zero-external-request surface. Any framework
+version needs an equivalent placement rule or it will trip a project's own harness.
+
+It parses an orchestration queue into fenced steps and checks:
+
+| Check | Caught on this project |
+|---|---|
+| Every work step declares a `**Deliverable:**` | 2 PM steps had none |
+| The blocked-path instruction is **inside** every specialist fence, not in surrounding prose | The rule had lived only in HTML comments outside the fences, so no specialist ever received it in its payload |
+| Handoff IDs are contiguous, and every consumed ID has a producer **earlier** in the queue | HO-021 was orphaned in an earlier draft |
+| Every `Inputs:` path resolves on disk, or is some earlier step's declared deliverable | A bare `wave-review.md` that would not resolve for a cold agent |
+| Every `DEC-NNN` resolves in the decision log or its archive | — |
+| Every `file:line` citation contains the symbol it names | An earlier draft cited a selector 24 lines off, pointing at an unrelated rule |
+| Exactly one fenced step under `## Next Step` | — |
+
+**PM is exempt from the never-halt check** — PM is the only role permitted to set `Role: halt`, so
+asserting the instruction on a PM step is a false positive. A framework version needs that exemption.
+
+**Every dormant check was proved able to fail** by deliberately corrupting a copy of the queue and
+confirming each fired. This project has now been caught three times by checks that could not fail
+(FF-001, and twice inside the product's own test harness), so "the lint passed" is not evidence until
+the lint has been shown to fail.
+
+### Recommendations to the core team
+
+**R6 — Decide whether `plan-lint` belongs in the framework.** If Muster already ships an equivalent, this
+project's copy should be deleted and the finding closed. If not, the seven checks above are a working
+starting point with a real defect history behind each one. The two highest-value checks are the
+producer-before-consumer ordering check and the instruction-inside-the-fence check, because both caught
+defects that would otherwise have surfaced mid-run as silent wrong behaviour rather than as an error.
+
+**R7 — Make the routing rule explicit in the PM brain file.** A framework-shaped finding goes to the
+retrospective *first*. Building a local workaround is permitted — sometimes the project genuinely cannot
+wait — but the retrospective entry must then describe the workaround in enough detail for the core team
+to adopt or reject it, which is what this entry is attempting. Nothing in `sprint-planning.md` or
+`skill-gap-classification.md` currently says this, and PM's instinct without it was to solve locally and
+move on.
+
+**R8 — `skill-gap-classification.md` covers skills, not tooling.** It answers "is this new *skill*
+generic or product-specific," and PM applied nothing equivalent to a *script*. The same five-criteria
+test would have routed `plan-lint` upstream immediately. Extending that skill to cover tooling and
+protocol-file changes would close the gap that produced this finding.
+
+### Status
+
+`tools/plan-lint.py` stays in this project for now, at the founder's direction, and the queue is
+required to pass it before any run. Improvements continue to land in this file until project close, when
+the whole retrospective goes to the core team.
