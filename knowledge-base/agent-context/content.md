@@ -70,55 +70,57 @@ because the gate waited on Apple. No copy may imply the deploy closed the chain.
 
 ## Current Tasks
 
-**Sprint 2 — two steps. Your output is reviewed at Gate A *before* anything is built, because copy is a
-build input and reviewing it afterwards is how rework happens.**
+**Sprint 2 — two steps. Your §1/§3 step runs FIRST in the whole sprint**, because the hero design must
+specify a headline treatment and its accessible name against your real candidate strings (DEC-034).
 
-### 1. §1 and §3 copy → `section-01-copy.md`, `section-03-copy.md`, HO-022 (model: claude-fable-5)
+### 1. §1 and §3 copy → `section-01-copy.md`, `section-03-copy.md`, HO-018 (model: claude-fable-5)
 
 **The §1 headline is yours to make and defend.** The seed calls the anchor text *"Ship a product.
-Without a team."* **available, not locked**, and says explicitly *"Content arranges headline vs.
-subline."* Deliver 3–4 candidates, one recommendation, and the reasoning for each — the founder chooses
-at Gate A from *rendered* versions.
+Without a team."* **available, not locked**, and says *"Content arranges headline vs. subline."* Deliver
+3–4 candidates with one recommendation; the founder picks at Gate A from **rendered** versions.
 
-**The founder's own direction is the incumbent to beat**, not one option among equals:
+**The founder's own direction is the incumbent to beat:**
 
 > *Ship a product with a ~~human~~ **AI agents** team* — "human" struck, "AI agents" accented.
 
-It is a strong idea: it resolves the ambiguity visually instead of spending words, and a strikethrough
-is an **edit mark**, which on a page about process and revision is on-thesis rather than decorative.
-Four things decide whether it lands:
+A strong idea — it resolves the ambiguity visually instead of spending words, and a strikethrough is an
+**edit mark**, on-thesis for a page about process. Four things decide whether it lands:
 
 1. **The article breaks as written** — "a human team" → "a AI agents team" does not parse. Strike the
-   article along with the adjective, or find better. Do not ship the founder's phrasing verbatim.
-2. **Screen readers** announce struck text as ordinary text. UI/UX specifies the treatment and the
-   accessible name; write copy that survives being read aloud correctly.
+   article with the adjective, or find better. Do not ship the founder's phrasing verbatim.
+2. **Screen readers** announce struck text as ordinary text. Write copy that survives being read aloud.
 3. **The accent cannot be a new colour** (A-006). Rust on display-size text is available (DEC-017).
-4. **Does it cost a beat of confusion?** §1's job is a message landing in five seconds. A struck word is
-   parsed before it is read. Say what you think and why.
+4. **Does it cost a beat of confusion?** §1's job is a message landing in five seconds.
 
-**§3** folds a CrewAI/AutoGen contrast into a clause: competitors optimise message-passing, Muster
-optimises what each agent reads. That is grounded in the founder's own survey, not a documented review.
-If it needs external grounding, open a `needs-research` entry in `research/change-log.md` scoped to
-competitor positioning only — do not assert it harder to cover the gap.
+**Rulings you have, so you need not invent them:**
 
-### 2. §4, §5 and §6 copy → three files, HO-023
+- **The measured line.** The seed's string is *"this build: 9.3 hours of active build, $147 in AI
+  tokens"* — but "this build" reads as THIS SITE while the numbers are BODH, which is A-005's named
+  failure mode inside the source string. **You may and should rewrite the framing** so scope is
+  unambiguous. §1 is a brief, not the locked draft §4 is. The numbers never change.
+- **Length budgets.** None exist for §1/§3, unlike §2's narration. **Set them** — state a word count and
+  rationale per string. PM recounts against your stated budget rather than against nothing.
+- **The eight role labels**: PM · Developer · UI/UX · QA · Content · Marketing · Legal · Research.
+- **§3's CrewAI/AutoGen clause** rests on the founder's own survey. Research is unstaffed this sprint —
+  if no research lands before §3 builds, the clause ships **cut, not softened**.
+- **SP3 overflows §2's narration card at 320px** and the lever is copy length, open exactly once, now.
 
-**§4's four decisions are founder-authored locked draft.** Tighten only. Never inflate, never reorder
-the argument, never add a fifth. Rule 7 permits first person here — this is one of only two places.
+### 2. §4, §5 and §6 copy → three files, HO-023 (opus)
+
+**§4's four decisions are founder-authored locked draft.** Tighten only — never inflate, never reorder,
+never add a fifth. R7 permits first person here. **"Tightened, not rewritten" must be checkable**: every
+original sentence's subject and claim survive, no sentence is deleted, and you state before/after word
+counts per decision so PM verifies rather than judges.
 
 **§5** carries Bodh, the provenance line, and this site. The provenance line is founder-supplied first
-person and is the other permitted first-person place. The source app stays unnamed — no status, no
-"coming soon". This site's readout is dashes until launch. No growing-list hype.
+person — preserve it. The source app stays unnamed. THIS SITE is dashes. No growing-list hype.
 
-**§6** is one `curl`, shipping the GitHub raw URL:
-`curl -fsSL https://raw.githubusercontent.com/thinkArhant/muster-ai/main/scripts/setup-project.sh | bash -s my-product`
-`muster.build` is fictional and must never appear (DEC-010, R12).
+**§6** is one `curl`, byte-identical to the string in `copy-rules.md`, then `cd my-product && claude`,
+and **one GitHub link**. `muster.build` is fictional and must never appear (DEC-010, R12). Verify by
+string equality, not by fetching.
 
-**Binding throughout**: every rule in `agent-skills/content/copy-rules.md`. R8 especially — the team is
-AI and says so, with no unqualified "the Muster team". Scope labels are the page's likeliest factual
-failure: BODH's 9.3 h / $147 is whole-product, the wave is 64 min / 289 calls / $24.73, THIS SITE is
-dashes. Every factual claim traces to `bodh-sprint4-corpus.md` or the seed; a claim neither supports is
-cut, not softened.
+**Binding throughout**: every rule in `copy-rules.md`, and `brand-guidelines.md` §5 — which holds the
+only enumerated banned-word list. Scope labels are the page's likeliest factual failure.
 
 ## SP7 as it now stands (2026-07-26 — supersedes the note above)
 

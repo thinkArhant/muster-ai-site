@@ -15,6 +15,7 @@ Three measurement scopes exist. Mixing two in one claim is the most likely factu
 |---|---|---|
 | **BODH** | idea → live | 9.3 h active build · $147 · 4.8 h operator attention · 4 commit-days (Jul 11–18) · whole product, incl. the iOS app |
 | **BODH SPRINT-4 WEBSITE WAVE** | the §2 chain, one evening | ~64 min across 8 traced sessions · 289 API calls · $24.73 · zero revision rounds · zero bugs · 11/11 QA |
+| **THIS SITE** | spec → live | — (measured at launch) |
 
 **Sessions versus steps — both true, different things.** 8 traced sessions = 7 agent work-steps + the PM
 review/retro session (session 8, which wrote DEC-023 and does not count itself). Say **"8 sessions"** or
@@ -25,7 +26,9 @@ wrong, on a page whose thesis is numeric honesty.
 roster. **Seven roles ran this wave**; research did not. Narration must not imply all eight worked it.
 "Eight agents, one operator" remains correct as a description of Muster; it is not a description of this
 chain.
-| **THIS SITE** | spec → live | — (measured at launch) |
+
+**The eight roles, named** (needed for §1's formation labels; enumerated nowhere else in the
+knowledge-base): **PM · Developer · UI/UX · QA · Content · Marketing · Legal · Research.**
 
 - Never mix scopes in one claim.
 - Never attribute 9.3 h or $147 to the website wave.

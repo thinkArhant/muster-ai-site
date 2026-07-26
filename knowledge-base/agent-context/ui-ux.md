@@ -70,65 +70,82 @@ doctrine — treat it with the authority of a skill file.
 
 ## Current Tasks
 
-**Sprint 2 — three steps, in queue order. Two founder gates only; Gate A judges a *rendered* sample of
-your §4 work, so specs must be buildable from themselves.**
+**Sprint 2 — four steps. Two founder gates only. Gate A judges a *rendered* sample of your §4 work, so
+that spec must be buildable from itself.**
 
-### 1. §1 hero design → `section-01-hero.md`, HO-018 (model: claude-fable-5)
+**Your steps run AFTER Content's §1/§3 copy**, deliberately: the hero spec specifies a headline treatment
+and its accessible name against real candidate strings, not a hypothesis (DEC-034).
 
-The page's five-second verdict, and the section with the most distinct elements. Implement the seed's
-§1 inventory in full: the measured line **visible without scrolling**; eight named roles as labels on
-the PM-hub + bus-bar formation (this IS the roster, there is no separate roster section); one `curl`;
-the terminal streaming the real Sprint-4 log; the dual build readout with THIS SITE dashed above BODH,
-scope-labelled; the `VERIFY ⎘` chip; the eyebrow facts.
+### 1. Terminal spacing system + brand seats → amended specs + `brand-seats.md`, HO-019 (opus)
 
-**The highest-risk detail is the headline's accessible name.** The founder's preferred direction is a
-typographic device — a struck word plus an accented one. Struck text is announced by screen readers as
-ordinary text, so an unspecified treatment ships a headline that reads aloud as gibberish. You specify
-how a struck word sets *and* how the whole headline is announced; Content supplies the candidates.
+Close the defect class that cost three Sprint-1 rounds. Name and measure all five left-edge
+relationships: tick↔card, tick↔text, row↔row, entry↔entry, text↔wrap edge.
 
-Rust on the headline is permitted at display size (DEC-017, ≥24px). No thirteenth palette value
-(A-006). The motion budget stays closed at three live elements plus the cursor — §1's terminal stream
-and the count-up are two of the three that already exist, not new ones. Reading measure is `64ch` as
-the CSS value (DEC-023).
+**Two constraints make this hard and you should know them before you start.** `section-02-replay.md`
+§9.1 holds a **12px equality invariant** — the accent mark is inset 12px from its own card's inner edge
+in *both* layers, at every viewport, and the founder accepted Gate 3 partly for that. §7.1 holds a
+**37-first-row-column floor with only 5.7px of margin at 360px** before L3 wraps to three rows and the
+3-entry phone guarantee collapses. DEC-032 originally sketched "a positioned mark in the log's 12px
+gutter" — that mechanism is **withdrawn**, because the gutter *is* the 12px and a mark inside it breaks
+the equality. The requirement is the outcome: tick clears the timestamp, equality survives, floor holds.
+A reasoned refusal naming which one you traded is an acceptable deliverable.
 
-### 2. §4 spec-sheet rendering → `section-04-decisions.md`, HO-019
+Also rule whether `.narration__entry`'s active mark moves too — `verify-shell.mjs:617` asserts the two
+sides are equal, so changing one and not the other is a defect either way. Read
+`tests/verify-shell.mjs` and `tests/qa-independent-audit.mjs` before specifying assertions; several
+existing checks hardcode `12`, which is the value-not-relationship anti-pattern DEC-032 exists to end.
+Say which must be re-based.
 
-The seed's **second design centerpiece**. Four founder decisions as spec-sheets: Decision / Problem /
-Trade-off / Mechanism rows, strongest first, dates as small stamps.
+**Brand seats** (DEC-031): header lockup `pennant + MUSTER_` with a **static** rust underscore — it never
+blinks, the `curl` owns the only cursor. Five section separators. `brand-guidelines.md` §4 also names a
+**footer** lockup that DEC-031 omits — rule on it. Favicon is an inline data-URI rust square at 16×16
+today; specify the pennant's path and viewBox at that size. **Specify the underscore's accessible name**:
+today the header announces "MUSTER", and an unspecified underscore changes what every screen reader says
+on every page.
 
-**The acceptance test is that it is buildable from itself** — a Developer builds one real spec-sheet
-from this spec for Gate A without asking you a question. The founder judges that rendered artifact, not
-a description of it.
+Sized optically — 470×703 ≈ 1:1.5 against an 8×8 square. `clip-path: polygon(0 0, 100% 0, 100% 100%,
+50% 81.79%, 0 100%)`, never inline SVG, never on a pole. `page-shell.md` §8 and §9 still describe the
+square and "one accent glyph permitted"; both are stale and yours to amend.
 
-### 3. Terminal spacing system, brand seats, scroll-snap → amended specs + `brand-seats.md`, HO-020
+### 2. §1 hero design → `section-01-hero.md`, HO-020 (model: claude-fable-5)
 
-**A — the terminal's left edge, as a system.** Three Sprint-1 fix rounds each satisfied their stated
-criterion and disturbed an adjacent relationship, because five relationships derive from two or three
-shared CSS values. Name and measure all five: tick↔card, tick↔text, row↔row, entry↔entry, text↔wrap
-edge. **Move the tick out of the text flow** — today it is `border-inline-start` on `.log__line`, and
-the hanging indent (`padding-inline-start: 1ch`, `text-indent: -1ch`) puts the first row at 0 from that
-border, so on a key beat the timestamp butts against the tick. Specify it as a positioned mark in the
-log's gutter. **One harness assertion per relationship** — that is the deliverable that stops a fourth
-round (DEC-032).
+The page's five-second verdict, and the section with the most distinct elements. Implement the seed's §1
+inventory in full. **The eight role names are PM · Developer · UI/UX · QA · Content · Marketing · Legal ·
+Research** — they were enumerated nowhere in the knowledge-base and now live in `copy-rules.md`.
 
-**B — the pennant seats** (DEC-031). Header lockup is `pennant + MUSTER_` with a **static** rust
-underscore — it never blinks, the `curl` owns the only cursor on the page. Five section separators take
-the pennant in place of their 8px squares. Icon seats (favicon, tile, avatars) use the artwork as
-supplied. **Never render the pennant on a pole.**
+**State an above-the-fold pixel budget against a named viewport**, the way §7.1 does for §2. "Visible
+without scrolling" is otherwise unfalsifiable, and §1 carries more elements than §2 did.
 
-Sized **optically, not mechanically**: the pennant is ~1:1.5 portrait where the square is 1:1, so equal
-width sets half again as tall. Drawn as `clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 81.79%, 0 100%)`
-on the existing box — no inline SVG, no new network request, and the WebKit divergence class avoided
-rather than tested for. At 8–12px the mark reads as punctuation; at display size it becomes badging,
-which this page's restraint does not carry.
+**The headline's accessible name is the highest-risk detail on the page.** Struck text is announced as
+ordinary text; specify markup and announced string per candidate.
 
-**C — scroll-snap** in `page-shell.md`. The seed's *one idea per screen* as a mechanism rather than as
-composition. **Proximity snapping, never JavaScript scroll-jacking** — keyboard paging, find-in-page
-and 200% zoom must all survive, and QA asserts accessibility mechanically here. **§2 is exempt**: its
-core already fills most of a phone viewport. Define the reduced-motion path.
+**The hero terminal** is unspecified anywhere: say which corpus lines, at what rate, whether it loops,
+and its end state. It inherits the terminal component and §9 emphasis rules from `section-02-replay.md`.
 
-**Standing practice this sprint**: assert relationships, not values. Any spec that changes spacing,
-insets or rhythm names the relationship it preserves and gives the harness a way to check it.
+**Scope adjacency (A-005)**: the wave-scope terminal sits beside whole-product BODH figures in one
+viewport — the page's likeliest factual failure. Say how they stay visually distinct.
+
+**A-003**: state which choices came from `direction-reference.html` as feel cues versus the seed's locked
+values. It never ships and must not leak in as spec.
+
+### 3. §4 spec-sheet rendering → `section-04-decisions.md`, HO-021 (model: claude-fable-5)
+
+The seed's second design centerpiece. **Buildable from itself** is the acceptance test — a Developer
+builds one real sheet from it for Gate A without asking a question.
+
+Beyond the four rows, the seed's decisions also carry a **bolded title sentence** (the strongest line in
+each sheet) and a **category** (`framework` / `product`) — specify both. **The stamps are not one shape**:
+three carry dates, one is `(product — Bodh)` with **no date at all**, and rule 4 forbids inventing one.
+`--ink` on `--accent` measures 3.43/2.79 and **fails AA**, so a filled rust label column is banned — state
+the emphasis system you use instead. §4 is one of only two first-person places (R7).
+
+### 4. Scroll-snap spec → amended `page-shell.md`, HO-022 (opus)
+
+Proximity snapping, **never JavaScript scroll-jacking**. Keyboard paging, find-in-page and 200% zoom must
+survive. Set `scroll-padding-block-start` against the 48px sticky bar or every section heading clips.
+**§2 is exempt** — specify how the exemption is expressed and what happens at its boundaries.
+`prefers-reduced-motion` does **not** disable scroll-snap (snap is not animation) — decide and state
+whether snapping turns off under it, and why.
 
 ## Current state of §2's mobile model (2026-07-26 — supersedes A3 above)
 

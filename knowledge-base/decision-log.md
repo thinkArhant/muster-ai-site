@@ -127,5 +127,65 @@ assertions before sections — not by adding gates back. The founder accepted th
 
 **Touched**: `current-sprint.md`, `orchestration-queue.md`, `agent-context/*`, `sprint-archive.md`.
 
+---
+
+### DEC-034 — The Sprint 2 plan is resequenced after an adversarial audit (2026-07-26)
+
+**Decision**: Three fresh-context agents audited the Sprint 2 queue by reading only what each step hands
+its executor. Their findings are applied. Four rulings and one model change:
+
+1. **Copy runs before design.** §1/§3 copy is now step 1; §1 hero design is step 3. The hero spec must
+   specify a headline treatment *and its accessible name* against real candidate strings — the original
+   order asked a premium model to design a treatment for strings that did not exist yet.
+2. **The shell build moves into Wave 1, ahead of the Gate A sample.** The sample renders in the page's
+   real tokens, so the tokens must be final first; otherwise the build diverges from the artifact the
+   founder judged, and step "§3 and §4" declares that divergence a defect. It also retires the §2 defect
+   class before the founder spends a gate rather than after.
+3. **The `http(s)` harness collision is ruled here, not discovered mid-run.**
+   `verify-shell.mjs:533` fails any shipped file containing an `http(s)` URL, and §6 must ship the
+   GitHub `curl` plus one GitHub link. The check is **amended, never deleted**: a URL as inert text or
+   as a clickable `href` is permitted; `src`, `@import`, `url()`, `<link>` and `<script src>` stay
+   banned. A-004's claim is about what the page *requests at runtime*, not what it displays. Left
+   unruled, the cheapest fix for a blocked agent is to delete the guard on the page's most load-bearing
+   published claim.
+4. **DEC-032's prescribed mechanism is withdrawn and replaced by an outcome.** DEC-032 said to put the
+   key-beat tick "in the log's 12px gutter" — but that gutter *is* the 12px inset, so a mark inside it
+   would sit at less than 12px and break the equality invariant the founder accepted at Gate 3. The
+   horizontal budget is also only 5.7px at 360px before a corpus line goes to three rows. The
+   requirement is now the outcome: the tick clears the timestamp, the 12px equality survives, the
+   37-column floor holds — and a reasoned refusal naming which one is traded is an acceptable answer.
+
+**Model change**: `claude-fable-5` now runs **three** steps, not two — §1/§3 copy, §1 hero design, and
+**§4 spec-sheet rendering**. §4 qualifies under DEC-004's two-clause test: the seed calls it the second
+design centerpiece, and its rendered output is a Gate A artifact the founder explicitly accepts. Its
+acceptance criterion — *buildable from itself, a Developer builds one without asking a question* — is a
+judgment test, and it is exactly where a lesser tier ships a spec that reads complete and is not.
+
+**Deliberately NOT upgraded**: the terminal spacing system. The instinct is loud because it remediates
+the class that failed three times, and it is wrong — DEC-004 is explicit that premium buys judgment, not
+correctness, and this step is correctness. DEC-032's own diagnosis is that the harness asserted values
+instead of relationships; an assertion either can fail or it cannot, and no model tier changes that. The
+leverage is PM's verification step, which now requires proving each assertion fails when violated.
+
+**Rationale for auditing at all**: the previous plan looked sound to its author. The audit found that
+two of five sampled steps were not executable by a fresh session, that HO-021 was orphaned in the
+numbering, that the eight role names §1 must render **existed nowhere in the knowledge-base**, that
+`copy-rules.md`'s scope table had the THIS SITE row stranded outside it, and that the shell step would
+silently break roughly ten passing assertions across two harness files — one of which `scripts/test.sh`
+does not even run. None of that was visible from inside the plan.
+
+**Also fixed**: the blocked-path instruction lived only in HTML comments outside the fenced blocks, so
+every specialist received a payload with no blocked-path rule; it is now inside every step. `VERIFY.md`
+and the curl verification move into this sprint rather than an unscheduled Wave 3 — the §1 chip would
+otherwise 404 at Gate B on a page whose argument is checkable claims. The count-up `aria-live` posture is
+decided at §1, the only sprint where real readout cells make it decidable. Both gates now instruct the
+founder to resume via `muster-sprint-resume.sh`, because that is what converts a verdict into fix steps,
+and Gate B requires any fix round to end with a scoped QA re-run.
+
+**Impact**: all staffed agents, PM.
+
+**Touched**: `orchestration-queue.md` (full rewrite), `current-sprint.md`, `copy-rules.md` (scope table
+repaired, the eight role names recorded), `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

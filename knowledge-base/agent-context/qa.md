@@ -69,32 +69,34 @@ directly reusable as a copy-validation matrix when you validate §2.
 
 **Sprint 2 — one step, at the end of Wave 2. A single full-page sweep, not one pass per section.**
 
-### Full-page sweep → HO-029
+### Full-page sweep → HO-030
 
 Validate the content-complete page end to end. **Derive scope from the section specs directly**, so a
 dev-charter omission does not also blind QA.
 
-- **Cross-engine parity on WebKit *and* Blink**, with evidence per engine. State plainly what remains
-  Blink-only — scoping honestly is worth more than a claim the harness cannot support.
-- **Zero runtime network requests**, with evidence. This is a published product claim, not a preference.
-- **Contrast ≥4.5:1** for body text in both themes; landmarks and focus states verified.
-- **The headline's accessible name** verified by what a screen reader would actually announce. The §1
-  headline uses a struck word, which is announced as ordinary text unless handled — this is the single
-  likeliest accessibility defect on the page.
-- **Reduced-motion and no-JS** paths render complete content across every section.
-- **§2 fidelity** still byte-clean against the corpus; the corpus unmodified, proven from git rather
-  than asserted.
-- **All relationship assertions green**, and `qa-independent-audit.mjs` exits zero. An assertion that
-  cannot fail is not an assertion — check that each would actually fail if violated. This is the
-  blind-by-construction failure that has now been caught three times on this project.
-- **Scroll-snap**: keyboard paging, find-in-page and 200% zoom each verified working.
+- **Cross-engine parity on WebKit *and* Blink**, evidence per engine. State plainly what remains
+  Blink-only — honest scoping is worth more than a claim the harness cannot support.
+- **Zero runtime network requests.** The `http(s)` check was amended this sprint to permit inert text and
+  clickable `href`s while still banning fetching references (DEC-034). **Plant a fetching reference,
+  prove the check goes red, then remove it.** A guard that cannot fail is not a guard — this project has
+  now been caught by blind-by-construction checks three times.
+- **Contrast ≥4.5:1** body text in both themes; landmarks and focus states verified.
+- **The §1 headline's computed accessible name**, read from the AX tree via
+  `Accessibility.getFullAXTree`, not asserted. The headline uses a struck word, which is announced as
+  ordinary text unless handled — the likeliest accessibility defect on the page.
+- **Reduced-motion and no-JS** render complete content across every section.
+- **§2 fidelity** byte-clean against the corpus; the corpus unmodified, proven from git.
+- **Every relationship assertion green *and* verified to fail when violated.**
+- **Scroll-snap**: keyboard paging, find-in-page, 200% zoom each verified working.
+- **`VERIFY.md` exists** at repo root and the §1 chip resolves to it.
+- **Run the `curl` against the live repo and record the result.** `pre-launch-checklist.md` requires it
+  confirmed working, not assumed. This is the one step permitted to make a network request.
 - **Copy rules as a text matrix** across all sections: no `muster.build`, no cross-scope aggregates,
-  scope labels present in the DOM beside their values, THIS SITE still dashed.
+  scope labels present beside their values, THIS SITE still dashed.
 
-**Red build or any failing check: halt to PM, do not advance the queue.** Re-point `## Next Step` to a
-`Role: pm` assessment step.
+**If a check fails**: never set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step
+naming the failing check, and file HO-030 with what you found.
 
 **Standing practice**: verify against a render of the state under test. A frame that cannot display the
-condition being claimed is not evidence — PM made exactly this mistake in Sprint 1 by confirming a
+condition being claimed is not evidence — PM made exactly that mistake in Sprint 1 by confirming a
 key-beat fix against a render with no key beat revealed.
-

@@ -52,22 +52,44 @@ network requests, reduced-motion completeness and corpus fidelity are all machin
 
 ### Model plan
 
-`claude-opus-5` is the default for every step. Premium `claude-fable-5` on exactly two: the §1 hero
-design (the page's five-second verdict) and the §1/§3 copy step (the headline and the argument). No
-other step uses a premium model.
+`claude-opus-5` is the default for every step. Premium `claude-fable-5` on exactly **three**, each
+passing DEC-004's two-clause test — foundation-critical creation whose output the founder explicitly
+accepts:
+
+| Step | Why it qualifies |
+|---|---|
+| §1 and §3 copy | The headline candidates *are* a Gate A artifact and the founder picks one |
+| §1 hero design | Authors the treatment every §1 element inherits; accepted at Gate A |
+| §4 spec-sheet rendering | The seed's second design centerpiece; its rendered output is judged at Gate A |
+
+**Deliberately not premium — the terminal spacing system.** It remediates the class that failed three
+times, which makes the instinct loud and wrong: DEC-004 reserves premium for judgment, and this step is
+correctness. An assertion either can fail or it cannot, and no model tier changes that. The leverage is
+PM's verification, which now requires proving each assertion fails when violated (DEC-034).
 
 ### Wave structure
 
+Resequenced after an adversarial audit found three blocking sequence defects (DEC-034).
+
 | Wave | Contents | Gate |
 |---|---|---|
-| 1 | §1 hero design · §4 spec-sheet design · spacing system + brand mark · §1/§3 copy · §4/§5/§6 copy · sample render · PM review | **Gate A** |
-| 2 | Shell work (spacing + brand) → §1/§6 → §3/§4 → §5 → scroll-snap → QA sweep | **Gate B** |
-| 3 | `VERIFY.md` · Legal review · curl verification | launch decision |
+| 1 | §1/§3 copy → spacing system + brand seats → §1 hero design → §4 spec-sheets → scroll-snap spec → §4/§5/§6 copy → shell build → sample render → PM review | **Gate A** |
+| 2 | §1/§6 (+ `VERIFY.md`) → §3/§4 → §5 → scroll-snap → QA sweep → PM review | **Gate B** |
 
-**Wave 2's order is a dependency, not a preference.** The shell step's relationship assertions must
-land before any section builds, so that every later step's own `scripts/test.sh` run inherits them.
-Scroll-snap builds **last**: it cannot be validated before there are sections to snap between, and it
-is the likeliest thing to be rejected at Gate B, so building it last minimises sunk cost.
+**Three orderings are dependencies, not preferences:**
+- **Copy before design.** The §1 hero spec must specify a headline treatment *and its accessible name*
+  against real candidate strings. The first draft of this plan had the design running first, which asked
+  a premium model to design for strings that did not exist.
+- **The shell before the Gate A sample.** The sample renders in the page's real tokens, so the tokens
+  must be final first — otherwise the built page diverges from the artifact the founder judged, which
+  the §3/§4 step declares a defect. It also retires the §2 defect class before a gate is spent.
+- **Scroll-snap last.** It cannot be validated before sections exist to snap between, and it is the
+  likeliest thing to be rejected at Gate B.
+
+**Wave 3 is dissolved.** `VERIFY.md` and the curl verification are hard launch blockers and now ride
+Wave 2 — the §1 chip would otherwise 404 at Gate B on a page whose whole argument is checkable claims.
+Legal review is correctly deferred: its job is confirming the privacy posture on the *final* page, and
+QA asserts that posture at code level (A-008).
 
 ### Settled at planning — not escalated
 
