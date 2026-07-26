@@ -131,7 +131,8 @@ agent that finds a gap reports it and stops.
 
 ### Developer
 
-- [ ] **Bodh corpus verification + beat inventory** — Priority: HIGH, Effort: S, Platform: web
+- [x] **Bodh corpus verification + beat inventory** — Priority: HIGH, Effort: S, Platform: web
+  - **Done** 2026-07-25 — HO-001 accepted; trued up to corpus v1.1 as HO-009 and accepted 2026-07-25
   - **Deliverable**: `knowledge-base/design-specs/web/section-02-beat-inventory.md` — corpus lines mapped
     to the seed's six beats in order, timestamps verbatim, inter-beat intervals shown as derived; HO-001
   - **Dependencies**: `knowledge-base/bodh-sprint4-corpus.md` (founder-supplied)
@@ -170,7 +171,9 @@ agent that finds a gap reports it and stops.
 
 ### UI/UX
 
-- [ ] **Design foundation + §2 replay spec** — Priority: HIGH, Effort: L, Platform: web
+- [x] **Design foundation + §2 replay spec** — Priority: HIGH, Effort: L, Platform: web
+  - **Done** 2026-07-25 — HO-002 accepted at the Wave 1 gate with amendments; the amendments delivered
+    as HO-010 and accepted 2026-07-25, closing finding F1. Both specs are the Wave 2/3 build inputs
   - **Deliverable**: `knowledge-base/design-specs/web/page-shell.md` (tokens, type scale, motifs,
     section chrome, both themes) and `knowledge-base/design-specs/web/section-02-replay.md` (replay
     layout, two-layer structure, annotation placement, beat timing, reduced-motion fallback); HO-002
@@ -198,6 +201,10 @@ agent that finds a gap reports it and stops.
     - Lands the honest headline beat: the PM re-checked the developer's work with its own screenshots, QA passed 11/11, no human touched this until the deploy button
     - Zero rounded numbers, zero adjectives-as-argument, "measured" never "proven", scope labels correct, AI team named as AI
     - Every factual claim traceable to a line in `bodh-sprint4-corpus.md` — cite it. A claim the corpus does not support is cut, not softened
+    - Word budgets in `section-02-replay.md` §6 are hard limits, measured not eyeballed. **SP7 — the
+      page's thesis, at the gate — is ≤16 words with zero slack.** Write to it; if it genuinely cannot
+      land in 16, say so in the handoff rather than overrunning. The relief comes from SP6's 12 words in
+      the same beat (DEC-019), and that is a PM call, not a Content one
   - **Key refs**: `agent-skills/content/copy-rules.md`, `product-spec-seed.md` §2, `bodh-sprint4-corpus.md`, `team/content/skills/generic/brand-voice.md`
 
 ### QA
@@ -223,6 +230,9 @@ agent that finds a gap reports it and stops.
     - Cross-engine parity on WebKit and Blink; zero network requests; reduced-motion path complete
     - Narration/terminal synchronization holds across engines and at reduced motion
     - Measured beat intervals reported factually, so the founder's pacing judgment has data alongside it
+    - **Measure the rendered narration card at 375 × 553 against SP3's actual copy.** The §7.1 height
+      budget assumes a 6-line worst case; at 7 lines the terminal drops to 4 visible lines, which the
+      design absorbs but the budget table does not. A wrong row gets corrected, not tolerated
     - Derive validation scope from HO-002 and HO-005 directly, so a dev-charter omission does not also blind QA
   - **Key refs**: `team/qa/skills/web/web-testing.md`, `bodh-sprint4-corpus.md`, `section-02-beat-inventory.md`
 

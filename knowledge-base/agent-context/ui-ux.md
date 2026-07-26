@@ -134,3 +134,19 @@ for, so losing it on mobile broke the criterion, not just the layout.
 
 **Key refs**: `wave-review.md` · `decision-log.md` DEC-015/016 · `agent-requests.md` HO-002 finding F1 ·
 `bodh-sprint4-corpus.md` (read-only; longest line 74 chars)
+
+**Status**: delivered as HO-010 and **accepted with notes 2026-07-25** — all four amendments landed, F1
+closed, every number re-derived clean. The gate-hold push-back is upheld: at 4.80 s it gives SP7 16 words
+rather than the 14 the projected 4.14 s alternative would have. Two factual claims in the pacing
+rationale were wrong and PM corrected them in place rather than spending a revision round on two
+sentences — C1: the hold does not "arrive 0.35 s after the fastest interval" (L11's 3.45 s interval sits
+between; the 13.7× figure is a beat-level spread, restated as such); C2: the 6.60 s L8→L9 ellipsis is the
+third-longest interval, not the second. No design value moved. See DEC-019; overrule either wording at
+your next touch if you disagree.
+
+---
+
+**No further UI/UX steps this sprint.** Waves 2–3 are Developer, Content and QA executing the two specs.
+Your next likely involvement is a Wave 3 gate outcome or a QA finding against `section-02-replay.md` §7.1
+— specifically the narration card's 6-line worst case, which QA measures against SP3's real copy once
+Content files it.

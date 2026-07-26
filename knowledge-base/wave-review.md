@@ -2,6 +2,12 @@
 <!-- File-mediated I/O contract between the autonomous sprint loop and the founder at a wave gate. PM-owned. Tier-2: read on demand only (at a wave gate / on resume), never a startup read. -->
 <!-- The loop does NOT parse this file. PM writes the Output block at the gate; the founder writes the Verdict block; PM reads the verdict on resume (muster/scripts/muster-sprint-resume.sh). Keeping human feedback here — not in the orchestration queue — is the seam a future remote/mobile bridge plugs into. -->
 
+> **This packet is CLOSED** — Wave 1, approved with amendments 2026-07-25, and the amendments are
+> delivered and accepted (HO-010). It is kept as the record of that gate. **It is not the Wave 3 packet**
+> and must not be what the founder reads at the §2 gate; the PM narration-review step re-bases this file
+> before the build runs. Anything below describing a 60 s chain or a 7.5 s hold is the state at the Wave 1
+> gate, superseded by DEC-016 and DEC-018.
+
 ## Current Wave
 
 **Wave:** 1 — Design foundation + §2 replay spec

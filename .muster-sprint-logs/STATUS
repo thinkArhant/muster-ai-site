@@ -1,6 +1,6 @@
 run: run-20260725-164050-39318
-state: running step 2
-step: 2026-07-25 UI/UX (web): Gate amendments — narration-first mobile, 48 s chain, B5 rebalance
-step started: 2026-07-25 16:49:35
-last completed: 2026-07-25 Developer (web): True up the beat inventory to corpus v1.1 · 59 turns · $4.61 · out 38k · 8m 45s
-totals: 1 attempt(s) · 59 turns · $4.61
+state: running step 3
+step: 2026-07-25 PM: Review HO-010 and clear HO-002
+step started: 2026-07-25 17:05:00
+last completed: 2026-07-25 UI/UX (web): Gate amendments — narration-first mobile, 48 s chain, B5 rebalance · 69 turns · $7.31 · out 69k · 15m 25s
+totals: 2 attempt(s) · 128 turns · $11.92

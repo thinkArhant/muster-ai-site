@@ -11,11 +11,11 @@
 **Waves 0–1 complete and the Wave 1 founder gate is APPROVED with amendments (2026-07-25).** The
 autonomous run is cleared to launch; the driver starts from the current `## Next Step`.
 
-**Wave 2 order matters and is deliberate.** The gate's amendments change `page-shell.md` (the theme
-control is dropped) and `section-02-replay.md` (48 s rescale, B5 rebalance, narration-first mobile), so
-the UI/UX amendment and its PM review run **before** the shell build. Building the shell first would
-build a control that has been dropped, and would leave the spec — not the build — as the thing out of
-date. Order: inventory true-up → spec amendments → PM review → shell build → shell QA.
+**Wave 2's spec work is complete.** The inventory true-up, both spec amendments, and the PM review are
+done; `page-shell.md` and `section-02-replay.md` are final, PM-accepted, and carry nothing open. The
+remaining Wave 2 steps are the shell build and its QA validation, both machine-checkable against the
+spec. The ordering that put the amendments ahead of the build did its job: the shell is built against a
+spec with no dropped theme control in it.
 
 **Telemetry practice — agents do not measure this build.** Do not run `muster/scripts/muster-meter.py`
 in any session. Build telemetry snapshots are founder-supplied and committed at milestones. Any step
@@ -47,40 +47,6 @@ all page copy until measured at launch (seed rule 4).
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-25 PM: Review HO-010 and clear HO-002
-
-```
-Role: pm
-Model: claude-opus-5
-
-**Task:** Review the amended specs, then close out HO-002.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-010, and HO-002 with its unticked PM box
-- `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md`
-- `knowledge-base/decision-log.md` — DEC-015, DEC-016
-- `muster/team/pm/skills/generic/deliverable-review.md`
-- `muster/team/qa/skills/generic/verification-discipline.md`
-
-**Deliverable:** review verdict on HO-010; HO-002's PM reviewer box ticked and Status flipped to `done`
-once F1 is genuinely resolved; both moved to Resolved if complete.
-
-**Acceptance criteria:**
-- **Re-derive, don't re-read**: confirm the dwells tile to exactly 48.00 s and that every word budget equals its window × 3.5 w/s. Arithmetic that was verified once at 60 s is not verified at 48 s
-- Confirm B5 landed in the 14–15% band and that B6 — not B3 or QA — funded it
-- Confirm the mobile height budget is a number against a stated viewport, not a claim that it fits
-- Confirm §5.1's line-persistence rule was amended, not just §7 and §10 — that was the easy one to miss
-- Confirm no stale open-question text survives in either spec
-- If UI/UX pushed back on the gate hold, evaluate it on the merits and route to Founder Decisions if it needs a ruling — do not overrule a design objection silently
-- Do not tick HO-002 unless F1 is actually resolved. An unticked box pending a fix is correct process (founder-confirmed); ticking it early is the rot `muster-requests-lint.sh` exists to catch
-
-**On completion:** Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`). Promote the
-shell build step.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-24 Developer (web): Page shell implementation
 
 ```
@@ -90,7 +56,8 @@ Model: claude-opus-5
 **Task:** Build the page shell — design foundation, both themes, section chrome. No section content.
 
 **Inputs:**
-- `knowledge-base/design-specs/web/page-shell.md` — the approved spec; implement everything in it, the criteria below are non-exhaustive examples and never override the handoff
+- `knowledge-base/design-specs/web/page-shell.md` — the approved spec, PM-accepted 2026-07-25 with the gate amendments applied. Nothing in it is open. Implement everything in it; the criteria below are non-exhaustive examples and never override the handoff
+- `knowledge-base/decision-log.md` — DEC-015, DEC-018 (the two that changed the shell)
 - `knowledge-base/product-spec-seed.md` → "Tech, deploy, telemetry practice" and "Design direction"
 - `knowledge-base/agent-context/developer.md` — your Current Tasks
 - `muster/team/developer/skills/web/web-best-practices.md`
@@ -111,6 +78,9 @@ Model: claude-opus-5
 **On completion:** File HO-003 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
 (`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-24 QA (web): Shell validation
 
@@ -171,6 +141,7 @@ each keyed to its terminal beat; HO-005 in `agent-requests.md`.
 - The Safari-only SVG catch is either omitted or narrated explicitly as a founder-directed polish pass — never as part of the untouched run
 - Never imply the website wave alone cost 9.3 h / $147 — those are whole-product aggregates
 - Every claim cites a corpus line. A claim the corpus does not support is cut, not softened
+- **SP7 — the page's thesis, at the gate — is ≤16 words with zero slack.** Write to 16. If it cannot land in 16 without going flat, file both versions in HO-005 (the 16 you would ship and the ~20 you would write) and say so; do not overrun and do not quietly flatten. Relief comes from SP6's 12 words in the same beat and is PM's call (DEC-019)
 
 **On completion:** File HO-005 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
 (`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
@@ -202,6 +173,15 @@ Model: claude-opus-5
 
 **On completion:** Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`). Promote the
 §2 implementation step.
+
+**Also re-base `wave-review.md` for the Wave 3 gate before promoting.** It currently holds the closed
+Wave 1 packet, and the gate step tells the founder to read that file for the checklist — Wave 1's
+60 s chain and 7.5 s hold must not be what they read at the §2 gate. Write the Current Wave block, the
+"already green — machine-verified" list, and the human-only checks now (the founder's criterion is
+pacing and narration with styling subtracted, so the checks are about the 48 s dwell table, the gate
+hold at 4.80 s, SP7's ≤16 words, and whether the narration alone carries a non-technical reader). Leave
+the build/QA evidence as a stub the founder reads alongside HO-006 and HO-007; this is the last PM step
+before the gate, so no later step can do it.
 ```
 
 ### 2026-07-24 Developer (web): §2 replay implementation
@@ -264,6 +244,8 @@ Model: claude-opus-5
 - Cross-engine parity on WebKit and Blink; zero runtime network requests; reduced-motion path complete
 - Narration/terminal sync holds across both engines and at reduced motion
 - Report measured beat intervals factually, so the founder's pacing judgment has data alongside it
+- **Mobile at 375 × 553**: 5 terminal lines visible, both layers on screen for the whole playback, core height measured ≤553px, page body never scrolls horizontally (also at 320px and 200% zoom), terminal scroll container focusable and arrow-key operable
+- **Measure the rendered narration card against SP3's real copy.** §7.1 budgets a 6-line worst case and UI/UX flagged it as the budget's weakest number. At 7 lines the terminal drops to 4 visible lines — the design absorbs that, the budget table does not. Report the measured count either way
 
 **On completion:** File HO-007 in `agent-requests.md`. If red, do NOT advance — re-point `## Next Step`
 to a `Role: pm` assessment step. Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`).
@@ -291,6 +273,18 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
+
+- 2026-07-25 — Wave 2: PM — Both specs reviewed and accepted; the §2 build inputs are now final
+  (HO-010 accepted with notes, HO-009 accepted clean, HO-002 closed on F1's resolution; all three swept
+  to Resolved, Active back to 3/300 lines). Every number re-derived rather than re-read: dwells tile to
+  48.000 s, all seven budgets equal `floor(window × 3.5)`, B5's 14.48% is funded entirely by B6 with B3
+  and QA paying nothing, and every row of the 424.4px mobile core recomputes from a shell token. The
+  gate-hold push-back is upheld on the merits — at 4.80 s it gives SP7 16 words rather than the 14 the
+  projected alternative would have. Two claims written for the amendment were wrong and were corrected
+  in place rather than spending a revision round: the hold does not arrive 0.35 s after the fastest
+  interval (L11's 3.45 s sits between), and the 6.60 s ellipsis is third-longest, not second. No design
+  value moved. SP7's zero-slack budget routed to Content; the narration card's 6-line assumption routed
+  to QA as a measurement, not an assumption. DEC-019.
 
 - 2026-07-25 — Wave 2: UI/UX — Gate amendments applied (HO-010). Theme control dropped and the motion
   budget closed in the shell; §2 rescaled to a 48.00 s chain with B5 restored to 14.48% funded by B6, not

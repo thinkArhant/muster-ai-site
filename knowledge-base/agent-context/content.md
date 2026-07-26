@@ -86,6 +86,16 @@ QA re-derived the date math *with its own formula* across 24 dates × 3 timezone
 zero bugs. The first is what makes the second credible to a skeptical reader — that is why the beat was
 given room back. **B6 (the gate hold) lost time**, so SP7's honest-headline slot is tighter than it was.
 
+**SP7 is the tight one, and it is the page's thesis.** ≤16 words, at the gate, with zero slack — a
+16-word line reads in 4.57 s of the 4.80 s window. Write to 16. If the line genuinely cannot land in 16
+without going flat, **say so in HO-005 with the version you would write at 20 and the version you would
+ship at 16** — do not overrun, and do not quietly flatten it either. The known relief is SP6's 12 words
+in the same beat, which needs no reschedule, and it is PM's call to spend (DEC-019). Raising it is the
+expected outcome, not a failure.
+
+The specs are final and PM-accepted as of 2026-07-25; nothing in either is open. Two pacing-rationale
+sentences in §5.1 were corrected after filing (DEC-019) — they change no budget, no anchor, no window.
+
 **Acceptance criteria**:
 - Product voice throughout — §2 is not one of the two first-person places
 - A non-technical reader follows the narration alone; a technical reader reads the terminal lines; both reach `bodh.day · LIVE`

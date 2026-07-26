@@ -96,6 +96,9 @@ approximate a line or timestamp — a fabricated line refutes the page's central
 **Key refs**: `bodh-sprint4-corpus.md` · `product-spec-seed.md` §2 + Verification ·
 `muster/team/developer/skills/generic/plan-first-discipline.md`
 
+**Status**: DONE — HO-001 accepted, trued up to corpus v1.1 as HO-009 and accepted 2026-07-25. The
+inventory is final: chain 3858 s, B6 486 s, both endpoints measured at source.
+
 ---
 
 ### 2. Page shell implementation — Priority: HIGH, Effort: L, Platform: web
@@ -103,6 +106,11 @@ approximate a line or timestamp — a fabricated line refutes the page's central
 **Deliverable**: `index.html`, `styles/`, `scripts/` — shell only, no section content. HO-003.
 
 **Dependencies**: `design-specs/web/page-shell.md` (UI/UX, HO-002), approved at the founder gate.
+**The spec is now final and PM-accepted** — the Wave 1 amendments landed as HO-010 (accepted 2026-07-25).
+Build from the file as it stands; nothing in it is open. Two things changed since the gate: **no theme
+control ships** (§9 — build the theme *system*, both palettes and `prefers-color-scheme`, and keep the
+`:root[data-theme]` attribute so QA can force a theme, but put no control in the UI), and §10's motion
+budget is closed at three elements plus the curl cursor, with the §2 replay explicitly outside it.
 
 **Acceptance criteria**:
 - Both palettes at exact hex values, both themes first-class; mono display / humanist-sans reading split

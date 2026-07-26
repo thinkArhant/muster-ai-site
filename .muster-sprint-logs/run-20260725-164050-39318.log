@@ -172,3 +172,101 @@
   🧪 bash   grep -n "theme control" knowledge-base/design-specs/web/page-shell.md knowledge-base/design-specs/web/section-02-replay.
   💬 That one is the intentional "No theme control ships" statement, not a residue. Committing:
   🧪 bash   git status --short; echo ---; git add -A && git commit -q -F - <<'MSG' ui-ux: §2 survives a 375px phone with both layers
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "rc=$?"
+  💬 Step complete. All four gate amendments are applied, HO-010 is filed, and the queue now points at the PM review step. **What landed** - **A1** — theme control removed from `page-shell.md` §9, replaced
+    📖 ×13 · ✏️  ×29 · 🧪 ×26
+  ✓ 69 turns · $7.31 · peak ctx 179k/1M 17% · out 69k  (success)
+  ✓ [36;1mUI-UX[0m · [1m15m 25s[0m · advanced → 2026-07-25 PM: Review HO-010 and clear HO-002 (PM) · handoff HO-010 filed ✓
+    run so far: 24m 10s · $11.92 · 2 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 3
+▶ [35;1mPM[0m · 2026-07-25 PM: Review HO-010 and clear HO-002  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  💬 Greenfield ongoing. Running session-start housekeeping.
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  💬 MUSTER_ROLE=auto — reading the queue to determine the role.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Binding to PM for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh pm auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/pm.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/pm.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | head -50
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  🧪 bash   grep -niE "open question|to be decided|TBD|recommend(ed)? include|theme control|theme toggle|60 s|60-second|60 second|7\
+  🧪 bash   git log --oneline -3 -- knowledge-base/design-specs/web/section-02-replay.md && git show HEAD~1:knowledge-base/design-sp
+  🧪 bash   git show HEAD~1:knowledge-base/design-specs/web/section-02-replay.md | sed -n '60,100p'
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/skills/generic/deliverable-review.md
+  🧪 bash   git status --porcelain knowledge-base/bodh-sprint4-corpus.md knowledge-base/product-spec-seed.md knowledge-base/design-s
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  🧪 bash   grep -nE "^### A-00|^## A-00|A-00[0-9]" knowledge-base/foundational-assumptions.md | head -40
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  🧪 bash   grep -rniE "theme (control|toggle|switch)|60[ -]?s(econd)? chain|60 s replay|60-second|7\.5 s hold" --include=*.md knowl
+  🧪 bash   grep -rniE "theme control|theme toggle|theme switch|60 s|60s chain|60-second|7\.5 s" knowledge-base --include='*.md' | g
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/ui-ux.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  🧪 bash   grep -n "^- \[ \]\|^ - \[ \]\|^### [0-9]\.\|^- \[x\]\|Done table\|^## Done\|^### Done" knowledge-base/current-sprint.md 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  🧪 bash   grep -n "^## DEC-\|^### DEC-" knowledge-base/decision-log.md | tail -6; echo "=== notices:"; tail -12 knowledge-base/fou
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 Both specs verified. I found two factual errors in newly-written §5.1 rationale text. Applying the corrections.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 Now the review verdicts. Writing them into the Active entries first so the detail lands in git history before the sweep.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now HO-009 and HO-002.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | head -20
+  💬 Verdicts are written. Committing them so the detail lands in git history before the sweep.
+  🧪 bash   git add -A knowledge-base/ && git commit -q -F - <<'EOF' pm: §2's pacing argument is now true as well as verified HO-010
+  🧪 bash   grep -n "^## Active Handoffs\|^## Resolved\|^### 2026" knowledge-base/agent-requests.md
+  🧪 bash   python3 - <<'PY' import io p='knowledge-base/agent-requests.md' lines=open(p).read().split('\n') # keep 1..10 (index 0..
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | head -10
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  💬 Now the agent-context files.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/ui-ux.md
+  🧪 bash   grep -n "HO-009\|HO-001\|^### \|^**Status**" knowledge-base/agent-context/developer.md | head -30
+  🧪 bash   grep -nE "HO-009|HO-001|^### |Status" knowledge-base/agent-context/developer.md | head -30
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/content.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/content.md
+  🧪 bash   grep -nE "^### |replay validation|375" knowledge-base/agent-context/qa.md | head -20
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  💬 Now the queue: move this step to Done and promote the shell build.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Now the Done entry and the Execution Mode note.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | head -20; echo "=== requests:"; bash muster/scripts/muster-requests-lint
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/founder-notices.md
+  🧪 bash   grep -n "Pre-Handoff Self-Review" muster/system-guide.md | head -3
+  🧪 bash   grep -n "Self-Review Checklist" muster/system-guide.md | head; echo "---"; sed -n '/## Pre-Handoff Self-Review Checklist
+  🧪 bash   ls knowledge-base/agent-skills/content/copy-rules.md && grep -c "^- 2026" knowledge-base/orchestration-queue.md; echo "-
+  🧪 bash   sed -n '84,94p' knowledge-base/design-specs/web/section-02-replay.md; echo "=== rule-15 scan of my spec edits:"; grep -n
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the shell build now has a final, closed spec to build from Swept HO-010, HO

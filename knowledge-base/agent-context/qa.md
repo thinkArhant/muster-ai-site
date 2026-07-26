@@ -104,6 +104,13 @@ directly reusable as a copy-validation matrix when you validate §2.
 - Narration/terminal synchronization holds across both engines and at reduced motion
 - **Measured beat intervals reported factually** — the founder judges pacing with styling mentally subtracted, so give that judgment data to sit alongside
 - Copy checked against `copy-rules.md` → Review checklist, including the Safari-catch boundary and scope labels
+- **Mobile at 375 × 553**: terminal window shows 5 lines, both layers fully visible for the whole
+  playback, measured core height ≤553px, page body never scrolls horizontally (also at 320px and 200%
+  zoom), and the terminal's scroll container is focusable and arrow-key operable
+- **Measure the rendered narration card against SP3's real copy** — `section-02-replay.md` §7.1 budgets
+  a 6-line worst case and UI/UX flagged it as the budget's least comfortable number. At 7 lines the
+  terminal drops to 4 visible lines, which the design absorbs, but the budget table is then wrong and
+  gets corrected rather than tolerated. Report the measured line count either way
 - Derive scope from HO-002 and HO-005 directly
 
 **On red**: halt to PM, do not advance the queue.
