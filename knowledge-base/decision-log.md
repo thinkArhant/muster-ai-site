@@ -802,5 +802,48 @@ playback model exists to avoid. UI/UX decides and states the measured budget eit
 **Touched**: `wave-review.md`, `orchestration-queue.md`, `current-sprint.md`,
 `design-specs/web/section-02-replay.md` (§7, §10 — on the UI/UX step).
 
+---
+
+### DEC-026 — The phone terminal wraps, and the totals strip pays for it (2026-07-26)
+
+**Decision**: §2's log lines soft-wrap at every viewport (`white-space: pre-wrap` plus a 2ch hanging
+indent) and nothing scrolls horizontally anywhere. The chain totals strip moves out of the mobile
+playback core to immediately below it, which buys the 45.0px the wrap costs. At 375 × 553 the terminal
+shows **3 whole lines** instead of 5.
+
+**Rationale**: DEC-025 set the goal and the two constraints and left UI/UX the mechanism. Measured on
+the built page rather than derived: the line region at 375px is 325px — 41 characters — and eleven of
+the twelve corpus lines are longer than that, so a phone that does not wrap can show no complete log
+line at all. Three wrapped lines carry ~170 readable characters against ~205 clipped ones; the section's
+claim is that these are the real log lines, and a line the reader cannot finish does not carry it.
+
+**The payer was chosen, not discovered.** The totals strip is static evidence, not one of the two
+layers the mobile guarantee is about, and §7.1's own priority order already named it first when the
+core runs short. It stays present from load and moves one thumb-flick down. Fidelity, type scale, the
+narration card and the section's spacing rhythm are all untouched — soft-wrap inserts no character, so
+the byte-clean diff is unaffected, which is exactly why wrapping can be the payer and truncation cannot.
+
+**Three consequences to carry:**
+
+1. **The guarantee floor improves** from 499px to 478.2px of visual viewport height, and the budget
+   case gains 20.3px of slack (5.1 → 25.4) against the still-unproven `100dvh` behaviour in mobile
+   Safari. Taller phones lose lines: 360 × 640 goes 8 → 5, the 659–667px band 9 → 5.
+2. **Landscape inverts its column split** — the terminal takes the wider column (~54/42), sized by the
+   41-column requirement rather than by a share. Width is the only thing that decides whether a log
+   line reads without a gesture; narration set narrower simply runs taller, and height is what
+   landscape has to spare. Narration-first survives as a priority.
+3. **§2 claims no WCAG 1.4.10 exception.** The scoped exception for the terminal's horizontal scroll is
+   retired rather than narrowed.
+
+**Two figures corrected in passing**: the line region is 325px / 41 columns, not ~301px / 38
+characters, and the current horizontal scroll is 268px, not ~276px. DEC-025's direction is unaffected;
+anything quoting its arithmetic should quote these instead.
+
+**Impact**: Developer (build), QA (validate — the mobile checklist rows in §12 all move), UI/UX, PM.
+
+**Touched**: `design-specs/web/section-02-replay.md` (§3, §5.1, §7, §7.1, §10, §11, §12, §13),
+`agent-requests.md` (HO-011), `orchestration-queue.md`, `founder-notices.md`.
+`agent-context/{developer,qa,ui-ux}.md` are PM's to cascade at the HO-011 review step.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

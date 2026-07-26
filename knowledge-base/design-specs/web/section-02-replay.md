@@ -31,7 +31,7 @@ The viewer watches Muster do exactly what produced the page they are on.
 2. The "condensed from the real build log" label — the honesty anchor
 3. The ending: `bodh.day · LIVE` — the shipped artifact
 4. Beat position indicator (`BEAT 03 / 06`)
-5. Chain totals readout (scope-labelled, always visible)
+5. Chain totals readout (scope-labelled, static, present from load — never revealed on a schedule)
 6. Replay controls
 
 **On small viewports the two layers are not equal.** The terminal is texture and the narration is the payload — the reader who cannot fit both at full size is exactly the non-technical reader the narration layer exists for. When space runs out, the terminal loses height; the narration card does not, and fidelity never does (§7.1).
@@ -97,8 +97,8 @@ Cadence rules for the Developer: line reveals use `--reveal` (350 ms, opacity + 
 **Line persistence** — a desktop guarantee with a stated small-viewport equivalent:
 
 - **≥ `--bp-wide`**: all twelve lines fit the terminal without scrollback. Every revealed line stays visible from its reveal to the end state; nothing moves once placed.
-- **< `--bp-wide`**: the terminal is a window of *N* lines (§7 derives *N* per viewport), showing the most recent *N* revealed lines. Persistence is preserved in two weaker but real senses: every revealed line remains in the DOM and rendered for the whole playback, and every one stays reachable by scrolling the terminal's own vertical overflow. What is not preserved is *simultaneous visibility* of all twelve — that is the cost of the narration card holding its place on screen, and it is the right cost to pay (§7).
-- The window advances by whole line boxes as an instant position change (`scroll-behavior: auto`), never an animated scroll. The reveal itself is still opacity-only.
+- **< `--bp-wide`**: the terminal is a window of *N* whole lines (§7.1 derives *N* per viewport — **3 at the 375 × 553 budget case**), showing the most recent *N* revealed lines. A line that wraps counts as one line and is shown whole or not at all; the window never clips a line part-way through its rows. Persistence is preserved in two weaker but real senses: every revealed line remains in the DOM and rendered for the whole playback, and every one stays reachable by scrolling the terminal's own vertical overflow. What is not preserved is *simultaneous visibility* of all twelve — that is the cost of the narration card holding its place on screen and of every line reading complete without a sideways gesture, and it is the right cost to pay (§7.1).
+- The window advances by whole lines as an instant position change (`scroll-behavior: auto`), never an animated scroll. The reveal itself is still opacity-only, so a line occupies its rows from load and nothing reflows when it is revealed.
 
 ## 6. Narration sync contract
 
@@ -148,7 +148,9 @@ Every narration claim must trace to a corpus line (Content cites; QA diffs). The
    BODH SPRINT 4 · WEBSITE WAVE ONLY
 ```
 
-Two columns above `--bp-wide`: terminal ~60% / narration rail ~36ch, `--gap-block` between. Terminal height fixed to fit all twelve lines + chrome (no scrollback, no layout shift as lines reveal — lines occupy space from load; reveal is opacity only). At 1280px the terminal's inner width is ~667px and the longest corpus line (L3, 74 chars) sets ~577px at `--text-terminal` — every line fits on one row with room to spare, so no wrapping and no horizontal scrolling occurs on desktop.
+Two columns above `--bp-wide`: terminal ~60% / narration rail ~36ch, `--gap-block` between. Terminal height fixed to fit all twelve lines + chrome (no scrollback, no layout shift as lines reveal — lines occupy space from load; reveal is opacity only).
+
+**The desktop terminal is at least 74 columns at every width from `--bp-wide` up**, which is what makes the twelve-lines-fit guarantee hold: the rail takes a fixed width rather than a share, so the terminal's line region measures **78 columns at `--bp-wide` and 79 from ~1200px up** at `--text-terminal` (a `0` advance of 7.847px at 13px). The longest corpus line (L3) is 74 characters. Every line therefore sets one row on desktop, the wrap rule in §7.1 is inert there, and nothing scrolls in either axis. **Any change that makes the terminal column proportional rather than fixed puts this guarantee at risk and must re-derive it at `--bp-wide`, not at 1280px.**
 
 Everything above §7.1 is the desktop layout and applies only at `--bp-wide` and wider.
 
@@ -156,11 +158,19 @@ Everything above §7.1 is the desktop layout and applies only at `--bp-wide` and
 
 **The terminal is texture on mobile; the narration is the payload.** The small-viewport reader is the non-technical reader the narration layer exists for, so when the viewport cannot hold both layers at full size, the terminal gives up height — never the narration card, and never fidelity.
 
-Three rules follow from that priority. Together they resolve a real collision: a fixed twelve-line terminal, a no-truncation rule, and a 375px viewport cannot all be satisfied at once, so one of the three has to give, and it is the fixed terminal.
+Three rules follow from that priority. Together they resolve a real collision: a fixed twelve-line terminal, a no-truncation rule, a no-sideways-gesture rule, and a 375px viewport cannot all be satisfied at once. The fixed terminal is what gives — a phone reader gets fewer log lines, and every one of them reads complete.
 
-1. **Lines never wrap.** The terminal's line region is `white-space: pre` with `overflow-x: auto` on that region only. Long lines extend past the right edge and are read by scrolling *inside the terminal*; the page body never scrolls horizontally, because the container clips its own overflow. This is what buys byte-clean fidelity — soft-wrap plus a fixed height could not fit, and truncation is forbidden. At 375px the terminal's inner width is ~301px ≈ 38 characters, so the longest line (74 chars, ~577px) is read with ~276px of horizontal scroll.
-2. **The terminal is a window of *N* lines**, showing the most recent *N* revealed lines, with *N* derived per viewport from the budget below. Earlier lines scroll up out of the window and stay reachable in the terminal's own vertical overflow (§5.1).
-3. **The playback core fits the viewport by construction.** Beat indicator + terminal + narration card + totals strip form one flex column with `max-height: calc(100dvh - 3rem)` (the sticky status bar). The terminal window is the flex remainder, quantised down to whole `--text-terminal` line boxes. Both layers are therefore on screen together whenever the core is on screen, which §8 makes a precondition of playback rather than a hope.
+1. **Lines soft-wrap. They never truncate and they never scroll sideways.** The line region is `white-space: pre-wrap` — which preserves the corpus's own inter-column padding exactly while permitting a break at a space — with a **2ch hanging indent** (`padding-inline-start: 2ch; text-indent: -2ch`) so a continuation row is visibly a continuation and cannot be misread as a new log entry. Neither the terminal's own region nor the page body scrolls horizontally, at any viewport.
+
+   **Wrapping is not a fidelity cost, and that is the whole reason it is the payer.** A soft wrap inserts no character and removes none: the rendered text still diffs byte-clean against the corpus, where truncation and ellipsis would not. `overflow-wrap: break-word` is set as a backstop only — the longest token in the corpus is 18 characters against a narrowest specified column of 34, so it never fires; if a future line did force it, a broken token is still preferable to an overflow.
+
+   At 375px the terminal's line region measures **325px — 41 characters** at `--text-terminal`. Eleven of the twelve corpus lines are longer than that, so on a phone **every log line but the terminal-state line sets exactly two rows**. That constant is what makes the window below deterministic, and it is measured, not assumed.
+
+2. **The terminal is a window of *N* whole lines**, showing the most recent *N* revealed lines, with *N* derived per viewport from the budget below. A wrapped line is one line: it is shown whole or not at all, never clipped part-way through its rows. Earlier lines scroll up out of the window and stay reachable in the terminal's own vertical overflow (§5.1).
+
+3. **The playback core fits the viewport by construction.** Beat indicator + terminal + narration card form one flex column with `max-height: calc(100dvh - 3rem)` (the sticky status bar). The terminal window is the flex remainder, quantised down to whole wrapped lines. Both layers are therefore on screen together whenever the core is on screen, which §8 makes a precondition of playback rather than a hope.
+
+   **The chain totals strip sits immediately below the core, not inside it.** It is static evidence, not a playback layer — it reads identically before, during and after the chain, and the two-layer guarantee is about the terminal and the narration, which are the two layers. Lifting it out of the core is what pays for the wrap: 45.0px, or nearly two line boxes, bought back from the item §3 ranks lowest of the three.
 
 **Mobile height budget — the assumed viewport is 375 × 553**, an iPhone SE in mobile Safari with the toolbars shown. That is the *visual* viewport, not the 667px device height: budgeting against device height would assert a fit the reader never sees.
 
@@ -174,24 +184,28 @@ Three rules follow from that priority. Together they resolve a real collision: a
 | Terminal borders | 1 + 1 | 2.0 |
 | Terminal → card gap | `--gap-flow` (see note) | 24.0 |
 | Narration card | 6 × (`--text-body` 17px × 1.7 = 28.9) + 24 pad + 2 border | 199.4 |
-| Card → totals gap | `--gap-hairline` | 12.0 |
-| Chain totals strip | 2 × (`--text-micro` 11px × 1.5) | 33.0 |
 | Bottom clearance | `--gap-hairline` | 12.0 |
-| **Fixed core** | everything except log lines | **424.4** |
+| **Fixed core** | everything except log lines | **379.4** |
 
-**Visible lines = `floor((visual viewport height − 424.4) / 24.7)`, clamped to [3, 12]** — where 24.7px is one `--text-terminal` line box (13px × 1.9).
+One `--text-terminal` line box is 24.7px (13px × 1.9); at 375px and wider one wrapped corpus line is **two** of them, 49.4px. The window is therefore sized in whole lines, not in rows:
 
-| Viewport | Visual VH | Visible lines | Core used | Slack |
-|---|---|---|---|---|
-| 375 × 553 — iPhone SE, Safari, toolbars shown (**the budget case**) | 553 | **5** | 547.9 | 5.1 |
-| 360 × 640 — small Android portrait | 640 | 8 | 622.0 | 18.0 |
-| 393 × 659 — Pixel 8, Chrome, toolbars shown | 659 | 9 | 646.7 | 12.3 |
-| 390 × 664 — iPhone 15, Safari, toolbars shown | 664 | 9 | 646.7 | 17.3 |
-| 375 × 667 — SE with toolbars hidden | 667 | 9 | 646.7 | 20.3 |
+**Visible lines = `floor((visual viewport height − 379.4) / 49.4)`, clamped to [2, 12]**, and the terminal's line region is that many × 49.4px.
 
-**The guarantee holds down to 499px of visual viewport height** (424.4 + 3 line boxes = 498.5). Below that the core cannot fit and the priority order decides what goes: the totals strip drops below the fold first, then the beat indicator. The narration card and a three-line terminal are the last things standing, in that order.
+| Viewport | Visual VH | Columns | Visible lines | Core used | Slack |
+|---|---|---|---|---|---|
+| 375 × 553 — iPhone SE, Safari, toolbars shown (**the budget case**) | 553 | 41 | **3** | 527.6 | 25.4 |
+| 360 × 640 — small Android portrait | 640 | 39 | 5 | 626.4 | 13.6 |
+| 393 × 659 — Pixel 8, Chrome, toolbars shown | 659 | 43 | 5 | 626.4 | 32.6 |
+| 390 × 664 — iPhone 15, Safari, toolbars shown | 664 | 43 | 5 | 626.4 | 37.6 |
+| 375 × 667 — SE with toolbars hidden | 667 | 41 | 5 | 626.4 | 40.6 |
 
-Two notes on the budget itself. The terminal → card gap is `--gap-flow` rather than `--gap-block`: on mobile the two layers are one idea at a time (§3), so the tighter rhythm is what the content means, and the section's spaciousness is carried by `--gap-section`, which is untouched. And `--text-terminal` stays 13px on every viewport, with no small-screen step down: horizontal scroll is what handles long lines, so shrinking the type would buy about three more visible characters and cost legibility on the smallest screens.
+Columns are `floor((viewport width − 48 gutter − 2 border) / 7.847)`. **At 375px and wider the line count above is exact**, because every corpus line costs exactly two rows there. **Below 375px it is a ceiling**: at 320px the region is 34 columns and the longest lines cost three rows, so the window shows 2 whole lines rather than 3. 320px sits below the width any row of this budget is derived at, and the two-line floor is what the clamp guarantees there.
+
+**The guarantee holds down to 478.2px of visual viewport height** (379.4 + 2 wrapped lines). Below that the core cannot fit and the priority order decides what goes: the beat indicator drops first, then the terminal falls to a single wrapped line. The narration card is the last thing standing.
+
+Three notes on the budget itself. The terminal → card gap is `--gap-flow` rather than `--gap-block`: on mobile the two layers are one idea at a time (§3), so the tighter rhythm is what the content means, and the section's spaciousness is carried by `--gap-section`, which is untouched. `--text-terminal` stays 13px on every viewport, with no small-screen step down — the type scale is the one payer this section will not spend, because fitting the longest line on one row needs roughly a 5px font and legibility fails long before the budget does. And the 25.4px of slack at the budget case is deliberate margin, not room to spend: `100dvh` behaviour in mobile Safari is the mechanism this entire budget rests on, and it is the one behaviour no harness in this project can prove.
+
+**Why three complete lines is the right shape, stated so the trade can be checked.** Eleven of the twelve corpus lines are longer than the 41 columns a 375px phone gives, so a phone that does not wrap can show no complete line at all — only the first 41 characters of each. Three wrapped lines put about 170 characters on screen where five clipped ones put about 205, and every one of the 170 belongs to a line the reader can finish. The section's claim is that these are the real log lines; a line the reader cannot reach the end of does not carry that claim, however many of them are on screen.
 
 ### Wireframe — mobile (375 × 553)
 
@@ -201,11 +215,13 @@ Two notes on the budget itself. The terminal → card gap is `--gap-flow` rather
   │ ○ CONDENSED FROM THE REAL       │
   │   BUILD LOG               ● RUN │
   │─────────────────────────────────│
-  │ 20:46  dev      web/ built · ro→│  windowed: last 5 revealed
-  │ 20:59  pm ✓     independent re-→│  lines. Long lines run past
-  │ 21:06  content  copy on-voice ·→│  the right edge and scroll
-  │ 21:11  legal    data-not-colle-→│  INSIDE this box — never
-  │ 21:16  mkt      share card writ→│  wrapped, never truncated
+  │ 21:06  content  copy on-voice · │  windowed: last 3 revealed
+  │   one meta edit · HO-029        │  lines, each wrapping to two
+  │ 21:11  legal    data-not-       │  rows. Continuation rows are
+  │   collected · confirmed at code │  indented 2ch. Nothing is
+  │   level · HO-030                │  truncated and nothing scrolls
+  │ 21:16  mkt      share card      │  sideways — the line region is
+  │   written · HO-031              │  41 characters wide here
   └─────────────────────────────────┘
   ┌─────────────────────────────────┐
   │ ▌ N3 — the PM re-checked the    │  narration card: fixed
@@ -214,17 +230,20 @@ Two notes on the budget itself. The terminal → card gap is `--gap-flow` rather
   │   trusting the developer's.     │  whole playback
   │                                 │
   └─────────────────────────────────┘
-   ~64 MIN AGENT WORK · 289 API CALLS ·  totals strip, static, always
-   $24.73                                visible. Two lines, both
-   BODH SPRINT 4 · WEBSITE WAVE ONLY     --text-micro (§7.1 budget);
-                                         line 1 must not wrap to a third
   ─ ─ ─ ─ ─ ─ fold at 553px ─ ─ ─ ─ ─
-   ⏭ SHOW FULL LOG                       controls sit below the
-                                         core; not part of the
-                                         two-layer guarantee
+   ~64 MIN AGENT WORK · 289 API CALLS ·  totals strip, static, present
+   $24.73                                from load. Sits BELOW the core
+   BODH SPRINT 4 · WEBSITE WAVE ONLY     — it is evidence, not a layer.
+                                         Two lines, both --text-micro;
+   ⏭ SHOW FULL LOG                       line 1 must not wrap to a third
+
+                                         controls below the strip; not
+                                         part of the two-layer guarantee
 ```
 
 The section `<h2>` and `--gap-section` padding sit above the core and scroll away as the reader arrives — the core is what must be simultaneously visible, not the whole section.
+
+The wrapped rows above are illustrative of the shape, not of where the break falls: the break point is whatever the 41-character region produces, and the rendered characters are the corpus's, unchanged.
 
 ### Annotations
 
@@ -233,10 +252,10 @@ The section `<h2>` and `--gap-section` padding sit above the core and scroll awa
 | 1 | Section tag | Shell motif — `<h2>` `§02 · WATCH IT SHIP` (final wording: Content) |
 | 2 | Beat indicator | `--text-label` `--muted`; updates per beat; `aria-hidden` (state is announced by content itself, §11) |
 | 3 | Terminal | `--surface`, 1px `--hair` border, sharp corners, registration `+` marks at two corners. Chrome bar: `--text-micro` label + live indicator (the shell's pulse dot — motion element 2's terminal instance) |
-| 4 | Log lines | `--text-terminal`. Stamp `--muted` · role `--ink` · detail `--ink` (the log is content here, not ambience) · key-beat emphasis per §9. `<ol>`, one `<li>` per corpus line |
+| 4 | Log lines | `--text-terminal`. Stamp `--muted` · role `--ink` · detail `--ink` (the log is content here, not ambience) · key-beat emphasis per §9. `<ol>`, one `<li>` per corpus line. `white-space: pre-wrap` with a 2ch hanging indent at every viewport (§7.1 rule 1) — inert on desktop, where no line reaches the column width |
 | 5 | Narration entries | `--text-body`, `--ink` always (never muted, never dimmed). Sans — the plain-English track is visually the *readable* layer against the mono terminal |
 | 6 | Active marker | 2px `--accent` left bar + beat tag `--text-micro` `--muted`. Position/shape channel — colour is not the sole indicator |
-| 7 | Chain totals readout | Shell readout-cell motif, always visible, static values (no count-up here — §2's numbers are evidence in a log context, and the cells are visible mid-playback; count-up stays on §1/§5 readouts). Scope label `--text-micro` `--muted` mandatory. **Value scale is per-viewport**: `--text-readout` at ≥ `--bp-wide`, where the column has the room; `--text-micro` below it, because §7.1's height budget prices the whole strip at `2 × (--text-micro × 1.5) = 33.0px` and a `--text-readout` line alone is 24px, which busts the 375 × 553 slack on its own. Where this row and §7.1 disagree, §7.1 wins — the mobile guarantee rests on that budget. Copy: the strings in `section-02-narration.md` §5, which is authoritative for §2's chrome, per copy-rules (exact numbers; wave scope; never wall-clock framing) |
+| 7 | Chain totals readout | Shell readout-cell motif, static values present from load (no count-up here — §2's numbers are evidence in a log context; count-up stays on §1/§5 readouts). Scope label `--text-micro` `--muted` mandatory. **Position is per-viewport**: inside the two-column core at ≥ `--bp-wide`; immediately below the playback core under it, where it is evidence rather than a playback layer (§7.1 rule 3). **Value scale is per-viewport**: `--text-readout` at ≥ `--bp-wide`, where the column has the room; `--text-micro` below it, on width — the value string is 43 characters against a 327px column at 375px, and it must set on one line without wrapping to a third strip row. Where this row and §7.1 disagree, §7.1 wins — the mobile guarantee rests on that budget. Copy: the strings in `section-02-narration.md` §5, which is authoritative for §2's chrome, per copy-rules (exact numbers; wave scope; never wall-clock framing) |
 | 8 | Controls | Ghost buttons, `--text-label`, `--hair` border, `--ink` text, 44px hit area. `⏭ SHOW FULL LOG` during playback → `⟲ REPLAY` in end state |
 
 ## 8. States
@@ -261,17 +280,17 @@ Derived from the shell's measured rust rules — rust at 13px would sit below AA
 ## 10. Responsive behavior
 
 - **≥ `--bp-wide`**: two-column layout per wireframe. Rail scrolls its own overflow only if narration exceeds terminal height (it should not at spec'd budgets — verify).
-- **< `--bp-wide`, portrait**: stacked, narration-first, per §7.1 — windowed terminal, no wrapping, horizontal scroll inside the terminal's own container, fixed-height caption card. **Truncation and ellipsis remain forbidden**: every rendered character must diff byte-clean against the corpus, and horizontal scroll is precisely what preserves that.
-- **Landscape phone (667×375): two columns, narration in the wider one.** The stacked layout cannot hold here — measured by the same method as §7.1, Safari's landscape toolbars leave ~331px of visual viewport against a 424.4px fixed core, so the stacked core overflows before a single log line is placed. The wider column goes to the narration, not the terminal: narration ~55% of the 667px width (~40 characters per line, so the 33-word worst-case slot sets 5 lines ≈ 170px), terminal ~42%. The vertical budget is then 331 − 48 status bar − 28.5 indicator − 12 clearance = 242.5px per column, giving **7 visible terminal lines** ((242.5 − 67.5 chrome) / 24.7) and 27px of slack in the narration column with the totals strip beneath the card. Narration-first survives the rotation; the stacking does not.
+- **< `--bp-wide`, portrait**: stacked, narration-first, per §7.1 — windowed terminal of whole lines, soft-wrap with a 2ch hanging indent, no horizontal scrolling in any region, fixed-height caption card, totals strip below the core. **Truncation and ellipsis remain forbidden**: every rendered character must diff byte-clean against the corpus, and soft-wrap is precisely what preserves that, because it adds and removes nothing.
+- **Landscape phone (667×375): two columns, and the terminal takes the wider one.** The stacked layout cannot hold here — measured by the same method as §7.1, Safari's landscape toolbars leave ~331px of visual viewport, so the stacked core overflows before a log line is placed. **The column split is set by the wrap rule, not by a share**: the terminal column is sized so its line region is at least 41 characters (321.7px at `--text-terminal`), which is **324px** of the 600.3px content width at 667px — about 54% — leaving the narration ~252px, about 42%, at ~29 characters per line. This inverts the portrait priority for one reason and it is a width reason, not a rank reason: width is the only thing that decides whether a log line reads without a gesture, whereas narration set narrower simply runs taller, and height is what landscape has to spare. The vertical budget is 331 − 48 status bar − 28.5 indicator − 12 clearance = **242.5px per column**: the terminal spends 58 chrome + 2 border + 24 padding + 148.2 lines = 232.2px, giving **3 visible terminal lines** with 10.3px spare, and the worst-case narration slot sets 7 lines ≈ 228.3px with 14.2px of slack. Both columns fit; the totals strip sits below the core as it does in portrait. Narration-first survives the rotation as a priority; the stacking does not.
 - iPad portrait: single column at wider gutter, and the §7.1 core comfortably fits — two-column engages only above `--bp-wide`.
-- 200% zoom: reflows to the stacked layout; the page body never scrolls horizontally. The terminal's own horizontal scroll is a deliberate, scoped exception under WCAG 1.4.10, which exempts content requiring two-dimensional layout — an aligned-column log is that content, and wrapping it would destroy the stamp/role/detail alignment that makes it readable as a log. The exception is contained: it is one scrollable region with its own accessible name and keyboard access (§11).
+- 200% zoom: reflows to the stacked layout. **Nothing scrolls horizontally anywhere — not the page body, not the terminal.** §2 claims no WCAG 1.4.10 exception: the log wraps like any other text, and the stamp/role/detail alignment that makes it readable as a log survives because the wrap is a soft break at a space with a hanging indent, so every entry still opens on its own timestamp. Where the zoomed visual viewport falls under 478.2px, §7.1's priority order applies and the beat indicator drops before the terminal does.
 
 ## 11. Accessibility
 
 - Section: `<section aria-labelledby="s2-heading">`; terminal `<ol>` labelled "Build log, condensed from the real build log"; narration `<ol>` labelled "Narration".
 - **No `aria-live` during playback** — the full transcript is in the DOM from load, so screen readers read the complete content in document order without twelve timed interruptions. The reveal is visual-only (`opacity`), never `display:none`/`visibility:hidden` (which would hide content from AT), and never DOM insertion.
 - Controls are `<button>`s with visible focus rings and 44px targets; the replay never traps focus or scroll.
-- **The terminal's scroll container is keyboard-operable** (WCAG 2.1.1): on viewports where it scrolls, it carries `tabindex="0"` and its own accessible name, so arrow keys reach the ends of long lines and the earlier lines above the window. It takes a visible focus ring like any other focusable element.
+- **The terminal's scroll container is keyboard-operable** (WCAG 2.1.1): on viewports where the window holds fewer than twelve lines it carries `tabindex="0"` and its own accessible name, so arrow keys reach the earlier lines above the window. It scrolls in one axis only — there is no horizontal scroll to reach — and it takes a visible focus ring like any other focusable element.
 - Playback pauses on `visibilitychange` — no motion runs unwatched.
 - `bodh.day` in SP8/L12 context may link out (plain `<a>`, no prefetch — zero runtime requests holds until a user navigates).
 - Colour-alone check: beats are indicated by text (indicator, tags); key beats by weight + glyph + tick; the live dot pairs with the "RUN" word.
@@ -290,16 +309,21 @@ Derived from the shell's measured rust rules — rust at 13px would sit below AA
 - [ ] Zero external requests during and after playback (product claim)
 - [ ] Cross-engine: WebKit **and** Blink, playback timing and both themes — evidence per engine
 - [ ] Narration word counts within §6 budgets (measured, not eyeballed)
-- [ ] **Mobile, at 375×553**: terminal window shows 5 lines; narration card and terminal are both fully visible for the entire playback; core height measured ≤553px
-- [ ] **Mobile fidelity**: no wrapping, no truncation, no ellipsis — long lines diff byte-clean and are reachable by scrolling the terminal container
-- [ ] **The page body never scrolls horizontally** at 375px, 320px, and 200% zoom — only the terminal's own region does
-- [ ] Landscape phone (667×375) renders the two-column arrangement with narration in the wider column, 7 terminal lines visible
-- [ ] The terminal scroll container is focusable and arrow-key scrollable, with an accessible name
+- [ ] **Mobile, at 375×553**: terminal window shows 3 whole lines; narration card and terminal are both fully visible for the entire playback; core height measured ≤553px including the sticky bar
+- [ ] **No corpus line requires a horizontal gesture to read in full** at 320 / 360 / 375 / 390 / 393px — every line's last character is on screen once its rows are
+- [ ] **Mobile fidelity**: no truncation, no ellipsis, no re-flowing of the corpus's own inter-column padding. Soft-wrap inserts and removes no character — each line's text content still diffs byte-clean
+- [ ] Continuation rows carry the 2ch hanging indent; no continuation row can be mistaken for a new entry (no row but an entry's first begins at the left edge)
+- [ ] **Nothing scrolls horizontally** — neither the page body nor the terminal's own region — at 375px, 320px, and 200% zoom
+- [ ] The window never clips a wrapped line part-way through its rows
+- [ ] The totals strip renders below the playback core on mobile, above it in the desktop two-column layout, and its value line never wraps to a third strip row
+- [ ] Desktop is unchanged: the terminal's line region measures ≥74 columns at `--bp-wide` and above, no line wraps, and all twelve fit without scrollback
+- [ ] Landscape phone (667×375) renders the two-column arrangement with the terminal in the wider column at ≥41 characters, 3 terminal lines visible
+- [ ] The terminal scroll container is focusable and arrow-key scrollable in the vertical axis, with an accessible name
 
 ## 13. Provenance
 
 From the seed (locked): the two-layer structure, the six-beat sequence, the "condensed" label, the honest-beat requirement, the no-overclaim boundary, scripted HTML/CSS/JS with no tooling dependency, ending on `bodh.day` live. From the beat inventory (measured): all real durations, hazards, and line-to-beat mapping, with the chain end at the corpus's measured `21:43:15`. Designed here (the craft): the 48 s comprehension-weighted compression model, per-beat dwells and their stated deviations, the gate hold, the sync contract and word budgets, the ink-plus-mark emphasis system, the narration-first mobile model and its height budget. From the direction reference (feel only): terminal chrome density and feed rhythm — its muted feed text and rust feed words are deliberately not inherited (see `page-shell.md` §13).
 
-Founder-set: the 48 s chain length; the beat shares that give QA's validation 14.48% and fund the wow beat from the gate hold rather than from QA; narration-first as the mobile priority order; the totals strip's stillness.
+Founder-set: the 48 s chain length; the beat shares that give QA's validation 14.48% and fund the wow beat from the gate hold rather than from QA; narration-first as the mobile priority order; the totals strip's stillness; **that a phone reader never makes a sideways gesture to finish a log line** — the constraint the mobile window is sized around.
 
 Nothing in this file is open.

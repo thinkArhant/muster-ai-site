@@ -86,53 +86,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 UI/UX (web): Mobile terminal reads without horizontal scroll
-
-```
-Role: ui-ux
-Model: claude-opus-5
-
-**Task:** Resolve gate finding F-G4. A phone reader must be able to read a terminal line without
-scrolling horizontally. You own the mechanism; two constraints bind it and neither is negotiable.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — the founder's verdict, F-G4
-- `knowledge-base/decision-log.md` — DEC-025 (the costed trade), DEC-016 (why F1 landed on horizontal scroll)
-- `knowledge-base/design-specs/web/section-02-replay.md` — your own deliverable, §7, §7.1, §10
-- `knowledge-base/bodh-sprint4-corpus.md` — the twelve real lines; longest is 74 characters. Read-only
-
-**The two constraints.** Byte-clean corpus fidelity — no truncation, no ellipsis, no paraphrase, every
-rendered character still diffs against the corpus. And the 553px core budget. The cost of removing
-horizontal scroll is paid in visible line count or type scale, never in fidelity.
-
-**The arithmetic is already done — verify it, then choose.** At 375px the terminal's inner width is
-~301px ≈ 38 characters; the longest line is 74 characters ≈ 577px, needing ~276px of scroll today.
-Soft-wrap makes most lines two rows; the core has ~53px of slack and one line box is 24.7px, so wrapping
-supports roughly five rows — about **2–3 log lines visible instead of 5**. A type-scale fix needs ~5px
-and fails legibility. PM's position is soft-wrap with a hanging indent, which is consistent with your own
-ruling that on mobile the terminal is texture and the narration is the payload.
-
-**Push back if warranted.** If dropping to 2–3 visible lines makes the terminal read as broken rather
-than as texture, say so in the handoff rather than shipping it. A hybrid (wrap the newest line only,
-scroll the rest) is worth costing, but weigh it against the layout shift on every reveal that the
-opacity-only playback model exists to prevent.
-
-**Deliverable:** revised `section-02-replay.md` (§7, §7.1, §10 and the §12 checklist row); HO-011.
-
-**Acceptance criteria:**
-- No horizontal scroll is required to read any corpus line at 375px, or an explicit reasoned refusal
-- A restated mobile height budget with its numbers and assumed viewport; the core still fits 553px
-- Fidelity rules intact; reduced-motion and no-JS paths still render the complete transcript
-- §5.1's line-persistence wording updated if the visible-line count changes — it was the easy miss last time
-- Say explicitly whether desktop layout changed; if it did not, say that too
-
-**On completion:** File HO-011 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Content (web): Reframe SP7 to the operator's arc
 
 ```
@@ -175,6 +128,9 @@ arc needs a run-up, and say so.
 **On completion:** File HO-012 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
 (`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild
 
@@ -280,6 +236,12 @@ sprint worktree.
 
 ## Done (Last 10)
 <!-- newest first -->
+
+- 2026-07-26 — Fix wave step 1: UI/UX — the phone terminal reads without a sideways gesture (HO-011).
+  Soft-wrap plus a 2ch hanging indent, paid for by lifting the totals strip out of the playback core;
+  3 whole lines at 375 × 553, zero horizontal overflow anywhere, fidelity and type scale untouched
+  (DEC-026). Prototyped and measured in Blink at nine viewports rather than derived. Desktop verified
+  unchanged at five widths. **Awaiting PM review.**
 
 - 2026-07-26 — Wave 3 Gate: **APPROVED with one copy fix** by the founder. Pacing and narration judged
   good with styling subtracted; the 4.80 s gate hold upheld at its reduced length. Four findings routed

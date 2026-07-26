@@ -1,6 +1,6 @@
-run: run-20260726-083600-56238
-state: halted: halt (2026-07-24 Wave 3 Gate — founder review)
-step: 2026-07-24 Wave 3 Gate — founder review
-step started: 2026-07-26 08:36:00
-last completed: 2026-07-24 QA (web): §2 replay validation · 93 turns · $8.71 · out 52k · 47m 9s
-totals: 1 attempt(s) · 93 turns · $8.71
+run: run-20260726-101215-47505
+state: running step 1
+step: 2026-07-26 UI/UX (web): Mobile terminal reads without horizontal scroll
+step started: 2026-07-26 10:12:15
+last completed: —
+totals: 

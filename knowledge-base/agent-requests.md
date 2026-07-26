@@ -8,7 +8,213 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-*None open.*
+### HO-011 — §2 mobile terminal: the phone reads without a sideways gesture
+
+**From**: UI/UX · **To**: PM (review), then Developer (build), QA (validate)
+**Date**: 2026-07-26 · **Status**: open
+**Deliverable**: `knowledge-base/design-specs/web/section-02-replay.md` — §3 (one line), §5.1, §7
+(desktop note, annotations 4 and 7), §7.1 (rules, budget, viewport table, wireframe), §10, §11, §12,
+§13
+**Resolves**: F-G4 / DEC-025
+
+---
+
+**The mechanism: soft-wrap with a 2ch hanging indent, paid for by lifting the chain totals strip out
+of the playback core.** At the 375 × 553 budget case the phone terminal shows **3 whole log lines**
+instead of 5, and every line on screen reads to its last character with no horizontal scrolling in any
+region — not the terminal's, not the page body's, at any viewport.
+
+PM's position in DEC-025 was soft-wrap with a hanging indent, accepting 2–3 lines. This lands at 3,
+which is the top of that range, and it gets there without touching fidelity, type scale, the narration
+card, or the section's spacing rhythm.
+
+**Prototyped and measured, not derived.** The candidate rule was applied to the built page in headless
+Blink at five viewports and the results measured. Wrapping is what the numbers below describe, not what
+they predict.
+
+---
+
+#### The measured arithmetic — and two corrections to DEC-025's figures
+
+DEC-025 costed the trade at "~301px ≈ 38 characters" of terminal width and "~276px of scroll". Both
+are slightly off, in the direction that makes the trade easier rather than harder. **The real line
+region at 375px is 325px — 41 characters** at a measured mono advance of 7.847px, and the longest line
+currently needs **268px** of horizontal scroll, not 276. `.log` carries block padding only, not inline
+padding, which is where the 24px went. The direction of DEC-025 is untouched; only the numbers move.
+
+| | Measured |
+|---|---|
+| Mono advance at `--text-terminal` (13px) | **7.847px** |
+| Line region at 375px | **325px = 41 columns** |
+| Corpus lines longer than 41 characters | **11 of 12** |
+| Rows per line at 375px with the wrap rule | **exactly 2**, for all of L1–L11 |
+| Terminal horizontal overflow with the rule | **0px** at 320 / 360 / 375 / 390px |
+| Page-body horizontal overflow | **0px**, before and after |
+
+**Eleven of the twelve lines are longer than the column**, so on a phone today no complete log line can
+be read without a gesture. That is the finding restated exactly: it is not that lines are hard to
+finish, it is that none of them can be.
+
+#### Where the height came from
+
+The fixed core drops **424.4px → 379.4px**. The 45.0px is the totals strip (33.0) and its
+`--gap-hairline` (12.0), moved to sit immediately below the core rather than inside it.
+
+That item was chosen because §7.1's own priority order already nominated it first when the core runs
+short, and because it is not one of the two layers the mobile guarantee is about. The strip is static
+evidence — it reads identically before, during and after the chain — so what it gives up is
+simultaneous visibility with a playback it takes no part in. It remains present from load, one
+thumb-flick down, and it is what the reader's eye lands on the moment the chain ends.
+
+Verified by measurement rather than by derivation: `.replay__core` measures **499.89px** today at
+375 × 553 (matching the signed-off budget to 0.01px once the 48px sticky bar is added back) and
+**454.89px** with the strip lifted — the predicted 45.0px exactly.
+
+| Viewport | Columns | Visible lines | Core used | Slack |
+|---|---|---|---|---|
+| **375 × 553 (the budget case)** | 41 | **3** | 527.6 | **25.4** |
+| 360 × 640 | 39 | 5 | 626.4 | 13.6 |
+| 393 × 659 | 43 | 5 | 626.4 | 32.6 |
+| 390 × 664 | 43 | 5 | 626.4 | 37.6 |
+| 375 × 667 | 41 | 5 | 626.4 | 40.6 |
+
+**The guarantee floor improves from 499px of visual viewport height to 478.2px**, and the budget case
+gains 20.3px of slack (5.1 → 25.4). That slack is deliberate, not spare: `100dvh` in mobile Safari is
+still the unproven mechanism the whole budget rests on, and this is the first version of the budget
+that carries real margin against it.
+
+**Cost, stated plainly.** Taller phones lose more than the budget case does: 360 × 640 goes 8 → 5 and
+the 659–667px band goes 9 → 5. The budget case goes 5 → 3.
+
+#### Why 3 lines is not a retreat
+
+Three wrapped lines put ~170 characters on screen where five clipped ones put ~205 — about 17% fewer.
+Every one of the 170 belongs to a line the reader can finish; none of the 205 did. §2's claim is that
+these are the real log lines, and a line the reader cannot reach the end of does not carry that claim,
+however many of them are on screen. At B4's 3.2 s cadence a line survives ~9.6 s in a 3-line window,
+which is ample to read one.
+
+I was asked to push back if 2–3 lines makes the terminal read as broken rather than as texture. **It
+does not, at 3.** At 2 it would — a two-line box stops being a log and becomes a caption — which is why
+the totals strip was worth spending to reach 3, and why the clamp floor is 2 rather than 1.
+
+#### The hybrid was costed and is rejected
+
+Wrapping only the newest line and scrolling the rest fails twice over. It answers the founder's
+complaint for one line in twelve — every older line still needs the gesture. And each reveal would
+collapse the previous newest line from two rows to one, shifting every line in the window, which is the
+exact class of motion the opacity-only playback model exists to prevent (§5.1). Cost paid, no benefit
+bought.
+
+#### Type scale, re-tested and still refused
+
+DEC-025 costed the naive version (74 characters in one row → ~5px). The non-naive version is a modest
+step down with wrapping still on: at 12px the line box shrinks to 22.8px but the column only reaches 45
+characters, and the row budget is unchanged. At 11px it buys exactly one more line and spends the
+legibility of the log on the one viewport where the reader holds the device closest. Not worth one
+line.
+
+#### Desktop: **unchanged, and now guarded**
+
+Measured at 960 / 1024 / 1100 / 1280 / 1440px with the wrap rule applied: **identical output at every
+width** — 78–79 columns, every line one row, zero overflow in either axis. The rule is inert above
+`--bp-wide` because no line reaches the column.
+
+While verifying that, I found a latent risk worth writing into the spec: the desktop guarantee had only
+ever been derived at 1280px, and it holds at `--bp-wide` only because the Developer's 22rem fixed rail
+(HO-006's accepted deviation) keeps the terminal at 614px rather than a share of the viewport. A
+proportional rail would put the 960–1100px band under 74 columns and break the twelve-lines-fit
+guarantee silently. §7 now states the ≥74-column requirement and says where to re-derive it.
+
+#### Landscape: the column split now follows the wrap rule, and it inverts
+
+`§10` gave the wider column to the narration (~55/42). It now goes to the terminal (~54/42, 324px /
+252px of a 600.3px content width) for a width reason rather than a rank reason: **width is the only
+thing that decides whether a log line reads without a gesture, whereas narration set narrower simply
+runs taller — and height is what landscape has to spare.** Narration-first survives as a priority; it
+just is not what the horizontal axis is for here. Landscape lands at **3 visible lines**, matching
+portrait, with 10.3px spare in the terminal column and 14.2px in the narration column against the
+242.5px budget.
+
+**Developer: two landscape figures are derived, not measured, and need confirming** — the chrome bar at
+324px (I budgeted the conservative two-line 58px; it may fall to 41.5px on one line) and the worst-case
+narration slot at ~29 characters per line (I budgeted 7 lines / 228.3px). Both have slack above them; if
+either exceeds it, the beat indicator drops per §7.1's priority order.
+
+#### A WCAG exception is retired
+
+§10 previously claimed a scoped WCAG 1.4.10 exception for the terminal's horizontal scroll. It is gone:
+nothing scrolls horizontally anywhere, at 375px, 320px or 200% zoom. §2 now claims no exception at all.
+The stamp/role/detail alignment that justified the exception survives, because the wrap is a soft break
+at a space with a hanging indent — every entry still opens on its own timestamp, and no continuation
+row starts at the left edge.
+
+#### Fidelity: intact, and structurally so
+
+`white-space: pre-wrap` preserves the corpus's own inter-column padding exactly and inserts no
+character. A soft wrap is a rendering decision, not an edit: `textContent` is byte-identical either
+way, which is precisely why wrapping can be the payer and truncation cannot.
+`overflow-wrap: break-word` is set as a backstop only — the longest token in the corpus is 18
+characters against a narrowest specified column of 34, so it never fires.
+
+Reduced-motion and no-JS paths are untouched: they render the complete transcript, which now wraps
+instead of overflowing — strictly more readable, same content.
+
+#### §5.1 line persistence — moved, and this time on purpose
+
+The visible-line count changed, so §5.1's small-viewport clause moved with it: it now reads *a window
+of N whole lines*, states 3 at the budget case, and adds the rule that a wrapped line is shown whole or
+not at all. This was the easy miss last time and it was checked first this time.
+
+---
+
+#### Findings for PM
+
+- **F1 — DEC-025's width arithmetic is wrong and should not be carried forward.** 325px / 41 columns
+  and 268px of scroll, not 301px / 38 characters and ~276px. No decision turns on it; recorded so the
+  next file to quote it quotes the measured figure.
+- **F2 — SP3 already overflows the narration card at 320px, and this change does not cause it.**
+  Measured: at 320px the card's fixed height is 199.39px and SP3 sets 7 lines needing 202.23px of text
+  plus insets. This is the zero-margin card meeting a width below the one it was budgeted at. It is
+  pre-existing, outside F-G4, and 320px sits below the signed-off budget viewport — but it is a live
+  overflow, not a theoretical one, and the lever is copy length rather than layout. Routing it rather
+  than fixing it: fixing it means either a taller card (which costs the terminal a line) or shorter
+  copy (which is Content's, and SP3 is not open this wave).
+- **F3 — the totals strip's 320px wrap (OBS-002) stops being a core-budget problem.** With the strip
+  outside the core, its third-line wrap at 320px no longer threatens the two-layer guarantee. It is
+  still a copy-fit question and still worth answering; it is just no longer load-bearing.
+- **F4 — annotation 7's `--text-micro` ruling keeps its value and loses its reason.** DEC-022 set the
+  mobile value scale from §7.1's height budget, which the strip has now left. The value does not move:
+  it stands on width instead — 43 characters in a 327px column, which `--text-readout` cannot set on
+  one line. Restated in place rather than left resting on a budget it is no longer in.
+
+#### Open questions
+
+None. Nothing in this change needs a founder answer; F-G4 stated the goal and DEC-025 stated the
+constraints, and both are satisfiable as specified.
+
+#### Would Apple ship this?
+
+**Yes.** The test is whether the fix is the simpler thing rather than the more elaborate one, and it is:
+one CSS rule replaces a scroll container, a WCAG exception, and a keyboard affordance that existed only
+to reach the right-hand end of a line. The page loses two log lines on the smallest phone and stops
+asking the reader to swipe sideways inside a scrolling page to finish a sentence — a gesture that
+competes with the page's own scroll and that nothing on screen advertises. The honest reservation is
+that three lines is a thin terminal; it is thin because the content is 56-character lines and the
+device is 41 columns wide, and every alternative that keeps five lines keeps them by hiding half of
+each one. I would not sign off at two.
+
+#### Self-review
+
+Ran the Pre-Handoff Self-Review Checklist. Item 1 caught two stale internals: §5.1's window wording
+(fixed) and §7's annotation 4, which described lines but not their wrap behaviour (fixed). Item 9
+caught a "before this rule / after it" framing in §7.1's closing paragraph and a "previously" in §10 —
+both rewritten as current truth, with the history left here where it belongs. Item 3 spot-checked
+`page-shell.md` for `--gap-hairline`, `--gap-flow`, `--text-terminal`, `--gutter` and `--bp-wide`; all
+five resolve and all five values match what §7.1's budget assumes. Item 5: A-003, A-006 and A-007 hold
+— no new token, no new colour, no new motion element, and nothing inherited from the direction
+reference. `bash scripts/test.sh` is green (129 Blink, 13 WebKit) on the unchanged build, as expected:
+this handoff moves the spec, and the build is HO-013's step.
 
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
