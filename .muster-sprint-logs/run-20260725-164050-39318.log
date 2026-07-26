@@ -715,3 +715,129 @@
   📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
   ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
   🧪 bash   git add -A && git commit -q -F - <<'MSG' && bash muster/scripts/muster-commit-lint.sh HEAD~2..HEAD 2>&1 | tail -3 pm: th
+  🧪 bash   git log --oneline -3; echo "--- status ---"; git status --short | head; echo "--- lints ---"; bash muster/scripts/muster
+  💬 Step complete. PM, Wave 3 narration review. **HO-005 accepted — no revision, no word rewritten.** Every string re-measured by script rather than read off the deliverable's own table: 139 of 163 timed 
+    📖 ×20 · ✏️  ×7 · 🧪 ×35
+  ✓ 63 turns · $6.45 · peak ctx 183k/1M 18% · out 50k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-25 pm: §2's narration is accepted with no revision — SP7, the thesis line, landed at 15 of its 16 words and left SP6's relief unspent; the build inputs are now closed and the replay is next.
+     - 2026-07-25 pm: the totals strip was specified two ways in one file (24px values against a 33px budget with 5.1px of slack) — ruled to §7.1 rather than escalated, since it is a scale inside a signed-off budget, not a design value (DEC-022.3).
+     - 2026-07-25 pm: wave-review.md is re-based for the §2 gate — four checks, all pacing and words with styling subtracted, plus 30 seconds on your iPhone for the one thing no harness here can prove.
+  ✓ [35;1mPM[0m · [1m12m 5s[0m · advanced → 2026-07-24 Developer (web): §2 replay implementation (DEVELOPER) · handoff HO-005 filed ✓
+    run so far: 1h 40m · $60.48 · 7 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 9
+▶ [34;1mDEVELOPER[0m · 2026-07-24 Developer (web): §2 replay implementation  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Binding to Developer for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh developer auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-narration.md
+  🧪 bash   ls -la && echo "---STYLES---" && ls -la styles scripts tests 2>/dev/null && echo "---WC---" && wc -l index.html styles/*
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/tokens.css
+  🧪 bash   grep -n "Terminal-line inventory" -A 60 knowledge-base/bodh-sprint4-corpus.md | head -100
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/motifs.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/chrome.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/test.sh
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   ls tests/lib tests/fixtures && sed -n 1,60p tests/lib/cdp.mjs
+  🧪 bash   sed -n 60,220p tests/lib/cdp.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  🧪 bash   wc -l knowledge-base/design-specs/web/page-shell.md; grep -n "^## \|^### " knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  🧪 bash   node -e ' const fs=require("fs"); const t=fs.readFileSync("knowledge-base/bodh-sprint4-corpus.md","utf8").split("\n"); c
+  🧪 bash   grep -n "export function" tests/lib/png.mjs && sed -n 1,30p tests/lib/png.mjs
+  🧪 bash   node -e ' const fs=require("fs"); const t=fs.readFileSync("knowledge-base/design-specs/web/section-02-narration.md","utf
+  📝 write  /tmp/gen-s02.mjs
+  🧪 bash   node /tmp/gen-s02.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  💬 Now the `.instrument` phone-inset fix (DEC-021.1):
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/motifs.css
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  💬 Now the playback engine:
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  💬 Now let me get a first render check before extending the harness:
+  🧪 bash   cat > /tmp/probe.mjs <<'EOF' import { launchChrome } from "./tests/lib/cdp.mjs"; import { fileURLToPath } from "node:url
+  🧪 bash   sed -i '' 's#"./tests/lib/cdp.mjs"#"/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  🧪 bash   node /tmp/probe.mjs 2>&1 | tail -70
+  🧪 bash   cat > /tmp/probe2.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20
+  🧪 bash   sed -n 220,300p /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   python3 - <<'EOF' import re p='tests/verify-shell.mjs' s=open(p).read() s=s.replace('!/\\\\d{2}:\\\\d{2}:\\\\d{2}/.test(
+  💬 Now the landscape-phone arrangement (replay spec §10):
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | tail -50
+  🧪 bash   python3 - <<'PYEOF' p='tests/verify-shell.mjs' s=open(p).read() old = """ const css = (el, prop) => getComputedStyle(el)
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | grep -E "^FAIL|checks passed"
+  🧪 bash   sed -n 60,150p tests/lib/png.mjs
+  🧪 bash   python3 - <<'PYEOF' p='tests/verify-webkit.mjs' s=open(p).read() old = '''/* A copy of the page with the theme forced, s
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/webkit-dark-s02.png
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   bash scripts/test.sh
+  🧪 bash   grep -cE "^PASS" .test-logs/run-20260725-202829.log; grep -E "checks passed|1000px|landscape phone" .test-logs/run-20260
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/webkit-light-s02.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s02-375.png
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   bash scripts/test.sh; grep -E "^FAIL|checks passed|window follows" .test-logs/$(ls -1t .test-logs | head -1)
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s02-375.png
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   bash scripts/test.sh; grep -E "^FAIL|checks passed|≥95%" .test-logs/$(ls -1t .test-logs | head -1)
+  🧪 bash   python3 - <<'PYEOF' p='tests/verify-shell.mjs' s=open(p).read() old = ''' const phone = await page.eval(`(async () => { 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s02-end.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s02-reduced.png
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 40 muster/system-guide.md | head -60
+  🧪 bash   grep -n "Pre-Handoff Self-Review Checklist" -A 45 muster/system-guide.md | head -60
+  🧪 bash   sed -n 460,470p muster/system-guide.md
+  🧪 bash   grep -nE "HO-0|DEC-0|Wave |sprint|Sprint" styles/replay.css scripts/replay.js | grep -v "SPRINT 4" | grep -v "sprint/aut
+  🧪 bash   sed -n 80,160p knowledge-base/foundational-assumptions.md
+  🧪 bash   grep -n "§2 replay implementation" -A 60 knowledge-base/current-sprint.md | head -80
+  🧪 bash   wc -l knowledge-base/agent-requests.md; sed -n 1,60p knowledge-base/agent-requests.md
+  🧪 bash   grep -n "### Handoff Entry" -A 30 muster/system-guide.md | head -40
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   python3 - <<'PYEOF' p='knowledge-base/orchestration-queue.md' s=open(p).read() next_start = s.index('## Next Step') upco
+  🧪 bash   git checkout -- knowledge-base/orchestration-queue.md && grep -c "" knowledge-base/orchestration-queue.md && grep -n "^#
+  🧪 bash   python3 - <<'PYEOF' import re p='knowledge-base/orchestration-queue.md' s=open(p).read() next_start = s.index('\n## Next
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -20; echo "--- diff stat ---"; git diff --stat knowledge-base/orche
+  🧪 bash   bash muster/scripts/muster-lint-handoff.sh 2>&1 | tail -5; git status --short
+  🧪 bash   cat .gitignore; echo "--- tracked artifacts ---"; git ls-files tests/artifacts | head
+  🧪 bash   cat tests/artifacts/.gitignore; ls tests/artifacts/
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/README.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/README.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Final green run before committing:
+  🧪 bash   bash scripts/test.sh; grep -E "checks passed" .test-logs/$(ls -1t .test-logs | head -1)
+  🧪 bash   git diff --stat knowledge-base/bodh-sprint4-corpus.md knowledge-base/product-spec-seed.md knowledge-base/design-specs/di

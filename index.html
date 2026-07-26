@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/chrome.css">
 <link rel="stylesheet" href="styles/motifs.css">
+<link rel="stylesheet" href="styles/replay.css">
 </head>
 <body>
 
@@ -61,13 +62,72 @@
       <span class="rule__line rule__line--grow" aria-hidden="true"></span>
     </div>
     <div class="container section__body">
-      <!-- SHELL PLACEHOLDER — removed when §2 lands. -->
-      <div class="instrument slot" data-shell-placeholder>
-        <span class="regmark regmark--tl" aria-hidden="true">+</span>
-        <span class="regmark regmark--br" aria-hidden="true">+</span>
-        <p class="t-body read">The two-layer annotated replay ships with
-          <code>design-specs/web/section-02-replay.md</code>. This card is shell scaffolding and is removed
-          when the section lands.</p>
+
+      <!-- The complete annotated transcript is in the DOM from load. Playback is
+           an opacity reveal over it, so no-JS and reduced-motion readers get the
+           whole thing and screen readers read it once, in document order. -->
+      <div class="replay">
+
+        <div class="replay__core">
+
+          <p class="replay__beat t-micro" aria-hidden="true" data-beat-indicator>BEAT 06 / 06 · THE HUMAN GATE</p>
+
+          <div class="replay__layers">
+
+            <div class="terminal">
+              <span class="regmark regmark--tl" aria-hidden="true">+</span>
+              <span class="regmark regmark--br" aria-hidden="true">+</span>
+              <div class="terminal__chrome">
+                <p class="terminal__label t-micro"><span class="terminal__label-prefix">BODH · SPRINT 4 — </span>CONDENSED FROM THE REAL BUILD LOG</p>
+                <p class="terminal__live t-micro">
+                  <span class="pulse" aria-hidden="true"><span class="pulse__core"></span></span>
+                  <span class="terminal__live-word">RUN</span>
+                </p>
+              </div>
+              <ol class="log" tabindex="0" aria-label="Build log, condensed from the real build log">
+        <li class="log__line" data-line="1" data-beat="1"><span class="log__stamp">20:38</span><span class="log__role">  muster   </span><span class="log__detail">sprint/auto · queue read · 8 roles standing by</span></li>
+        <li class="log__line" data-line="2" data-beat="1"><span class="log__stamp">20:38</span><span class="log__role">  ui-ux    </span><span class="log__detail">production spec + assets · HO-027 filed</span></li>
+        <li class="log__line" data-line="3" data-beat="2"><span class="log__stamp">20:46</span><span class="log__role">  dev      </span><span class="log__detail">web/ built · rotation port parity ✓ (UTC+ / UTC−) · HO-028</span></li>
+        <li class="log__line log__line--key" data-line="4" data-beat="3"><span class="log__stamp">20:59</span><span class="log__role">  <b class="log__token">pm</b> <span class="log__glyph">✓</span>     </span><span class="log__detail">independent re-verify · own screenshots · match</span></li>
+        <li class="log__line" data-line="5" data-beat="4"><span class="log__stamp">21:06</span><span class="log__role">  content  </span><span class="log__detail">copy on-voice · one meta edit · HO-029</span></li>
+        <li class="log__line" data-line="6" data-beat="4"><span class="log__stamp">21:11</span><span class="log__role">  legal    </span><span class="log__detail">data-not-collected · confirmed at code level · HO-030</span></li>
+        <li class="log__line" data-line="7" data-beat="4"><span class="log__stamp">21:16</span><span class="log__role">  mkt      </span><span class="log__detail">share card written · HO-031</span></li>
+        <li class="log__line" data-line="8" data-beat="5"><span class="log__stamp">21:20</span><span class="log__role">  qa       </span><span class="log__detail">re-deriving rotation · 24 dates × 3 timezones …</span></li>
+        <li class="log__line log__line--key" data-line="9" data-beat="5"><span class="log__stamp">21:35</span><span class="log__role">  <b class="log__token">qa</b>       </span><span class="log__detail">11/11 acceptance · <b class="log__token">PASS</b> · zero bugs · HO-032</span></li>
+        <li class="log__line" data-line="10" data-beat="6"><span class="log__stamp">21:35</span><span class="log__role">  pm       </span><span class="log__detail">handoffs accepted · deploy packet → founder</span></li>
+        <li class="log__line" data-line="11" data-beat="6"><span class="log__stamp">21:43</span><span class="log__role">  gate     </span><span class="log__detail">Role: halt · awaiting operator</span></li>
+        <li class="log__line log__line--state" data-line="12" data-beat="6"><span class="log__stamp">─────</span><span class="log__role">  deploy   </span><span class="log__detail">bodh.day · LIVE</span></li>
+              </ol>
+            </div>
+
+            <div class="narration">
+              <ol class="narration__list" aria-label="Narration">
+        <li class="narration__entry" data-slot="sp1" data-beat="1"><span class="narration__tag" aria-hidden="true">QUEUE ADVANCES</span><span class="narration__text">A real run, replayed: Bodh's website wave — one evening, AI agents, unattended. The queue advances; UI/UX files the production spec.</span></li>
+        <li class="narration__entry" data-slot="sp2" data-beat="2"><span class="narration__tag" aria-hidden="true">DEVELOPER BUILDS</span><span class="narration__text">The developer builds the deployable site — an exact port of the app's date-rotation logic, verified on both sides of UTC.</span></li>
+        <li class="narration__entry" data-slot="sp3" data-beat="3"><span class="narration__tag" aria-hidden="true">PM RE-VERIFIES</span><span class="narration__text">One agent auditing another: the PM re-checks the developer's work with its own screenshots — never trusting the developer's. Visual parity, rotation, trackers, placeholders. Accepted.</span></li>
+        <li class="narration__entry" data-slot="sp4a" data-beat="4"><span class="narration__tag" aria-hidden="true">THREE HANDOFFS</span><span class="narration__text">Content polishes the copy — on-voice, one meta-description edit.</span></li>
+        <li class="narration__entry" data-slot="sp4b" data-beat="4"><span class="narration__tag" aria-hidden="true">THREE HANDOFFS</span><span class="narration__text">Legal confirms 'Data Not Collected' in code, not in a policy.</span></li>
+        <li class="narration__entry" data-slot="sp4c" data-beat="4"><span class="narration__tag" aria-hidden="true">THREE HANDOFFS</span><span class="narration__text">Marketing writes the share card — 134 characters, no competitor mention.</span></li>
+        <li class="narration__entry" data-slot="sp5" data-beat="5"><span class="narration__tag" aria-hidden="true">QA FULL VALIDATION</span><span class="narration__text">QA doesn't re-run the developer's tests — it re-derives the date math with its own formula, across 24 dates and 3 timezones.</span></li>
+        <li class="narration__entry" data-slot="sp6" data-beat="6"><span class="narration__tag" aria-hidden="true">THE HUMAN GATE</span><span class="narration__text">PASS — 11/11, zero bugs. The PM accepts, the same instant.</span></li>
+        <li class="narration__entry" data-slot="sp7" data-beat="6"><span class="narration__tag" aria-hidden="true">THE HUMAN GATE</span><span class="narration__text">The run stops itself at the gate. No human touched this until the deploy button.</span></li>
+        <li class="narration__entry" data-slot="sp8"><span class="narration__text">bodh.day, live. The deploy landed three days later — the gate waited on Apple. This wave: 64 minutes of agent work across 8 sessions, 289 API calls, $24.73 at API list price.</span></li>
+              </ol>
+            </div>
+
+          </div>
+
+          <p class="totals">
+            <span class="totals__value">~64 MIN AGENT WORK · 289 API CALLS · $24.73</span>
+            <span class="totals__scope">BODH SPRINT 4 · WEBSITE WAVE ONLY</span>
+          </p>
+
+        </div>
+
+        <!-- Controls are built by scripts/replay.js and only when playback runs:
+             with no JS, or at reduced motion, there is nothing to control. -->
+        <div class="replay__controls" data-replay-controls></div>
+
       </div>
     </div>
   </section>
@@ -166,5 +226,6 @@
 </footer>
 
 <script src="scripts/count-up.js" defer></script>
+<script src="scripts/replay.js" defer></script>
 </body>
 </html>

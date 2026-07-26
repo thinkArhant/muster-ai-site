@@ -35,15 +35,27 @@ QuickLook already on the machine.
 | 375px, 320px, 200% zoom | No horizontal scroll |
 | Forced colors | Texture drops out, borders survive |
 | `fixtures/count-up.html` | Parsing, decimal preservation, the 55%-visibility trigger, exact landing value, zero layout shift during the roll, dashes never animating, reduced motion rendering immediately |
+| §2 replay, wide | Every log line diffed byte-clean against the corpus read off disk, the honesty label, minute-precision stamps only, a real 48-second playback with its reveal offsets recorded as they happen, the gate hold's silence, skip and replay by keyboard, network isolation through playback |
+| §2 replay, 375 × 553 | The height budget row by row, five whole visible lines, the window following the newest revealed line, the strip's two lines and its unwrapped value line, the visibility gate refusing to play behind the status bar, arrow-key scrolling of the log |
 
 Plus two checks that read the shipped files rather than the rendered page: no `http(s)` URL anywhere,
 raw hex only in the token block, no build-system artifacts, no bottom margins.
+
+Timing is measured, not trusted: the replay records the elapsed chain time at which each line actually
+revealed, and those numbers are diffed against the spec's schedule. Asserting the schedule against
+itself would prove nothing.
 
 **`verify-webkit.mjs`** — renders the page in both themes through QuickLook and measures the pixel
 spread of a patch of bare page ground. A generated texture that fails to rasterise in one engine is
 this project's known failure class, and it is invisible to any computed-style assertion: the pixels are
 the only place it shows up. The patch is located by luminance rather than coordinates, so the two
 engines can be compared without their layouts lining up.
+
+It also renders §2 with the hero hidden. QuickLook runs no JavaScript and ignores the requested size,
+so a section below the fold never enters its frame — hiding the hero brings §2 into view without
+touching anything else, and what renders is the no-JavaScript path, which for this section is the
+complete transcript. The check is differential: ink coverage with §2 present against a control render
+with it hidden, so a blank or unstyled section fails instead of passing quietly.
 
 ## Adding a section
 

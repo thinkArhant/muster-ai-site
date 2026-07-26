@@ -12,9 +12,17 @@
      - no horizontal scroll at 320px, 375px, or 200% zoom
      - the grain layer actually renders (pixel spread of bare ground)
 
+   And the §2 replay's own contracts:
+
+     - every rendered log line diffs byte-clean against the corpus on disk
+     - measured reveal offsets against the replay spec's schedule, watched over
+       a real 48-second chain rather than read off the schedule it was given
+     - the phone height budget, row by row, at 375 x 553
+     - reduced motion and no-JS render the complete transcript, no controls
+
    Usage:  node tests/verify-shell.mjs [--json]
 
-   WebKit is verified separately by tests/webkit-render.sh; both engines are
+   WebKit is verified separately by tests/verify-webkit.mjs; both engines are
    required evidence at every visual milestone.  */
 
 import { launchChrome } from "./lib/cdp.mjs";
@@ -367,7 +375,9 @@ try {
      advance — the column measures ~67 characters wide, inside the spec's "~64ch". */
   check("reading column is the seed-locked 64ch", dark.reading.token === "64ch" && dark.reading.maxWidth.includes("px"), `--read-max ${dark.reading.token} -> ${dark.reading.maxWidth}`);
   check("reading column measures ~64 characters", dark.reading.capacity >= 60 && dark.reading.capacity <= 72, `${dark.reading.capacity} characters at ${dark.reading.rendered}px`);
-  check("pulse animating with motion on", dark.animations.filter((a) => String(a.name).startsWith("pulse")).length === 3, JSON.stringify(dark.animations.map((a) => a.name)));
+  /* Two lamps now: the status bar and the terminal's live indicator, three
+     animations each (core brightness + two rings a half-period apart). */
+  check("pulse animating with motion on", dark.animations.filter((a) => String(a.name).startsWith("pulse")).length === 6, JSON.stringify(dark.animations.map((a) => a.name)));
   check("no horizontal scroll at 1440px", dark.overflow.scrollWidth <= dark.overflow.clientWidth, JSON.stringify(dark.overflow));
 
   /* palette fidelity against the seed's locked values */
@@ -544,6 +554,348 @@ try {
   vignette.forEach((v) => {
     check(`vignette floor keeps labels >= 4.5:1 (${v.theme})`, v.mutedRatio >= 4.5, `muted ${v.mutedRatio}:1, ink ${v.inkRatio}:1 at ${v.alpha * 100}% black`);
   });
+
+  /* ================================================================ §2 ===
+     The two-layer replay. Fidelity first: every rendered log character is
+     diffed against the founder-authored corpus read off disk, not against a
+     copy in this file. Then the pacing, then the mobile height budget.
+     ======================================================================= */
+
+  /* The corpus is the baseline and is never written to — read it, slice the
+     terminal inventory out of the fence, and compare. */
+  const corpusLines = (() => {
+    const text = readFileSync(join(ROOT, "knowledge-base", "bodh-sprint4-corpus.md"), "utf8").split("\n");
+    const at = text.findIndex((l) => l.startsWith("## Terminal-line inventory"));
+    return text.slice(at + 2, at + 14);
+  })();
+
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.setViewport({ width: 1440, height: 900 });
+  await page.goto(PAGE_URL);
+
+  const s2 = await page.eval(`(() => {
+    const replay = document.querySelector(".replay");
+    const log = document.querySelector(".log");
+    const terminal = document.querySelector(".terminal");
+    const lines = [...document.querySelectorAll(".log__line")];
+    const entries = [...document.querySelectorAll(".narration__entry")];
+    const label = document.querySelector(".terminal__label");
+    const totals = document.querySelector(".totals");
+    const value = document.querySelector(".totals__value");
+    const scope = document.querySelector(".totals__scope");
+    const css = (el, prop) => getComputedStyle(el).getPropertyValue(prop).trim();
+    /* Tokens resolve to hex; computed colours resolve to rgb(). Compare like
+       with like by asking the engine what the token paints as. */
+    const asRgb = (token) => {
+      const probe = document.createElement("span");
+      probe.style.color = "var(" + token + ")";
+      document.body.appendChild(probe);
+      const value = getComputedStyle(probe).color;
+      probe.remove();
+      return value;
+    };
+    return {
+      state: replay.dataset.state,
+      renderedLines: lines.map((li) => li.textContent),
+      revealedAtIdle: lines.filter((li) => li.hasAttribute("data-revealed")).length,
+      entryCount: entries.length,
+      entryText: entries.map((li) => li.querySelector(".narration__text").textContent),
+      labelText: label.textContent,
+      labelVisible: css(label, "visibility") === "visible" && css(label, "display") !== "none",
+      liveWord: document.querySelector(".terminal__live-word").textContent,
+      logName: log.getAttribute("aria-label"),
+      logTabindex: log.getAttribute("tabindex"),
+      logOverflow: css(log, "overflow-x") + "/" + css(log, "overflow-y"),
+      narrationName: document.querySelector(".narration__list").getAttribute("aria-label"),
+      sectionText: document.querySelector("#watch-it-ship").textContent,
+      ariaLive: document.querySelectorAll("#watch-it-ship [aria-live]").length,
+      hidden: [...document.querySelectorAll("#watch-it-ship .log__line, #watch-it-ship .narration__entry")]
+        .filter((el) => css(el, "display") === "none" || css(el, "visibility") === "hidden").length,
+      logFits: { scrollWidth: log.scrollWidth, clientWidth: log.clientWidth },
+      terminalHeight: Math.round(terminal.getBoundingClientRect().height * 100) / 100,
+      totalsValue: { text: value.textContent, size: css(value, "font-size"), color: css(value, "color"),
+                     weight: css(value, "font-weight") },
+      totalsScope: { text: scope.textContent, size: css(scope, "font-size") },
+      totalsHeight: Math.round(totals.getBoundingClientRect().height * 100) / 100,
+      stateLine: { size: css(lines[11], "font-size"), weight: css(lines[11], "font-weight"),
+                   detailColor: css(lines[11].querySelector(".log__detail"), "color") },
+      keyLines: [3, 8].map((i) => ({
+        line: i + 1,
+        tick: css(lines[i], "border-inline-start-color"),
+        token: css(lines[i].querySelector(".log__token"), "font-weight")
+      })),
+      glyph: css(document.querySelector(".log__glyph"), "color"),
+      accent: asRgb("--accent"),
+      controls: [...document.querySelectorAll(".replay__controls button")].map((b) => b.textContent),
+      columns: css(document.querySelector(".replay__layers"), "grid-template-columns")
+    };
+  })()`);
+  evidence.s2 = s2;
+
+  const lineDiff = corpusLines
+    .map((line, i) => (s2.renderedLines[i] === line ? null : `L${i + 1}`))
+    .filter(Boolean);
+  check("twelve corpus lines render, byte-clean", s2.renderedLines.length === 12 && lineDiff.length === 0, lineDiff.length ? `differs at ${lineDiff.join(", ")}` : "12/12 identical to the corpus inventory");
+  check("no line is truncated, padded, or re-wrapped", s2.renderedLines.every((l, i) => [...l].length === [...corpusLines[i]].length), "character counts match the corpus");
+  check("the honesty label is present and visible", s2.labelText.includes("CONDENSED FROM THE REAL BUILD LOG") && s2.labelVisible, s2.labelText);
+  check("live indicator pairs the lamp with a word", s2.liveWord === "RUN", s2.liveWord);
+  check("only minute-precision stamps reach the DOM", !/\d{2}:\d{2}:\d{2}/.test(s2.sectionText), "no second-precision timestamp in §2");
+  check("no playback offset renders as content", !/\bt=\s?\d/.test(s2.sectionText) && !/\b48\.00 s\b/.test(s2.sectionText), "no t= offset, no chain duration in §2 copy");
+  check("ten narration slots present", s2.entryCount === 10, `${s2.entryCount} entries`);
+  check("no aria-live during playback", s2.ariaLive === 0, `${s2.ariaLive} live regions`);
+  check("reveal never hides content from assistive tech", s2.hidden === 0, `${s2.hidden} display:none / visibility:hidden entries`);
+  check("terminal log is a named, focusable scroll region", s2.logName === "Build log, condensed from the real build log" && s2.logTabindex === "0" && s2.logOverflow === "auto/auto", `${s2.logTabindex} · ${s2.logOverflow}`);
+  check("narration list is named", s2.narrationName === "Narration", s2.narrationName);
+  check("idle reveals nothing", s2.state === "idle" && s2.revealedAtIdle === 0, `${s2.state}, ${s2.revealedAtIdle} revealed`);
+  check("all twelve lines fit the wide terminal without horizontal scroll", s2.logFits.scrollWidth <= s2.logFits.clientWidth, JSON.stringify(s2.logFits));
+  check("two columns above --bp-wide", /\d/.test(s2.columns) && s2.columns.split(" ").length === 2, s2.columns);
+  check("L12 is large-text rust over the corpus divider", parseFloat(s2.stateLine.size) >= 19 && Number(s2.stateLine.weight) >= 700 && s2.stateLine.detailColor === s2.accent, JSON.stringify(s2.stateLine));
+  check("key beats carry a rust tick and a bold ink token", s2.keyLines.every((k) => k.tick === s2.accent && Number(k.token) >= 700), JSON.stringify(s2.keyLines));
+  check("the ✓ is a rust graphical mark", s2.glyph === s2.accent, s2.glyph);
+  check("chain totals render Content's strings", s2.totalsValue.text === "~64 MIN AGENT WORK · 289 API CALLS · $24.73" && s2.totalsScope.text === "BODH SPRINT 4 · WEBSITE WAVE ONLY", `${s2.totalsValue.text} / ${s2.totalsScope.text}`);
+  check("totals value is rust at readout scale above --bp-wide", parseFloat(s2.totalsValue.size) >= 24 && s2.totalsValue.color === s2.accent, `${s2.totalsValue.size} ${s2.totalsValue.color}`);
+  check("one control during playback: skip", s2.controls.length === 1 && s2.controls[0].includes("SHOW FULL LOG"), s2.controls.join(" | "));
+
+  /* --- the pacing, measured. The section is judged on this, so the harness
+         watches a real 48-second chain rather than trusting the schedule. --- */
+  const SCHEDULE = [0, 350, 6400, 13600, 23200, 26400, 29600, 32800, 39400, 39750, 43200, 48000];
+  const played = await page.eval(`(async () => {
+    document.querySelector("#watch-it-ship").scrollIntoView({ behavior: "instant", block: "center" });
+    const started = performance.now();
+    while (window.MusterReplay.state() !== "end" && performance.now() - started < 60000) {
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    const lines = [...document.querySelectorAll(".log__line")];
+    return {
+      state: window.MusterReplay.state(),
+      marks: window.MusterReplay.marks.slice(),
+      revealed: lines.filter((li) => li.hasAttribute("data-revealed")).length,
+      entries: document.querySelectorAll(".narration__entry[data-revealed]").length,
+      active: document.querySelectorAll(".narration__entry[data-active]").length,
+      indicator: document.querySelector("[data-beat-indicator]").textContent,
+      controls: [...document.querySelectorAll(".replay__controls button")].map((b) => b.textContent),
+      wall: Math.round(performance.now() - started)
+    };
+  })()`);
+  evidence.s2Playback = played;
+
+  const drift = played.marks.map((m, i) => Math.round(m.at - SCHEDULE[i]));
+  const worst = Math.max(...drift.map(Math.abs));
+  check("playback reaches its end state", played.state === "end" && played.revealed === 12 && played.entries === 10, `${played.state}, ${played.revealed} lines, ${played.entries} entries in ${played.wall}ms`);
+  check("measured reveal offsets match §5.1 within 100 ms", played.marks.length === 12 && worst <= 100, `worst drift ${worst}ms · ${drift.join("/")}`);
+  check("same-stamp pairs are one --reveal cadence apart", Math.abs((played.marks[1].at - played.marks[0].at) - 350) <= 100 && Math.abs((played.marks[9].at - played.marks[8].at) - 350) <= 100, `L1→L2 ${played.marks[1].at - played.marks[0].at}ms · L9→L10 ${played.marks[9].at - played.marks[8].at}ms`);
+  check("the gate hold is silent from 43.55 s to 48.00 s", played.marks.filter((m) => m.at > 43550 && m.at < 47900).length === 0, "no reveal inside the hold");
+  check("the end state names the last beat", played.indicator === "BEAT 06 / 06 · THE HUMAN GATE", played.indicator);
+  check("the end state offers a replay", played.controls.length === 1 && played.controls[0].includes("REPLAY"), played.controls.join(" | "));
+  check("zero external network requests through playback", page.requests.every(isLocal), describe(page.requests));
+  check("no runtime errors through playback", page.consoleErrors.length === 0, page.consoleErrors.join("; ") || "none");
+  writeFileSync(join(ARTIFACTS, "blink-dark-s02-end.png"), await page.screenshot());
+
+  /* skip and replay, by keyboard */
+  const controlRun = await page.eval(`(async () => {
+    const button = document.querySelector(".replay__controls button");
+    button.focus();
+    const focused = document.activeElement === button;
+    button.click();                       /* ⟲ REPLAY */
+    await new Promise((r) => setTimeout(r, 500));
+    const midway = { state: window.MusterReplay.state(),
+                     revealed: document.querySelectorAll(".log__line[data-revealed]").length };
+    document.querySelector(".replay__controls button").click();   /* ⏭ SHOW FULL LOG */
+    return { focused, midway, after: { state: window.MusterReplay.state(),
+      revealed: document.querySelectorAll(".log__line[data-revealed]").length } };
+  })()`);
+  check("replay restarts, skip jumps to the end", controlRun.focused && controlRun.midway.revealed < 12 && controlRun.after.state === "end" && controlRun.after.revealed === 12, JSON.stringify(controlRun));
+
+  /* --- reduced motion / no-JS: the complete transcript --- */
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+  await page.goto(PAGE_URL);
+  const s2Still = await page.eval(`(() => {
+    const css = (el, prop) => getComputedStyle(el).getPropertyValue(prop).trim();
+    const lines = [...document.querySelectorAll(".log__line")];
+    const entries = [...document.querySelectorAll(".narration__entry")];
+    return {
+      state: document.querySelector(".replay").dataset.state || null,
+      lines: lines.length,
+      linesOpaque: lines.filter((li) => css(li, "opacity") === "1").length,
+      entries: entries.length,
+      entriesOpaque: entries.filter((li) => css(li, "opacity") === "1").length,
+      tags: entries.filter((li) => css(li.querySelector(".narration__tag") || li, "display") !== "none").length,
+      totals: css(document.querySelector(".totals"), "display") !== "none",
+      controls: document.querySelectorAll(".replay__controls button").length,
+      text: lines.map((li) => li.textContent)
+    };
+  })()`);
+  evidence.s2Reduced = s2Still;
+  check("reduced motion renders the complete transcript", s2Still.state === null && s2Still.linesOpaque === 12 && s2Still.entriesOpaque === 10 && s2Still.totals, JSON.stringify({ state: s2Still.state, lines: s2Still.linesOpaque, entries: s2Still.entriesOpaque }));
+  check("reduced-motion transcript is byte-clean too", s2Still.text.every((l, i) => l === corpusLines[i]), "12/12 identical to the corpus inventory");
+  check("reduced motion offers no controls (nothing to control)", s2Still.controls === 0, `${s2Still.controls} buttons`);
+  check("the static transcript keeps its beat grouping", s2Still.tags === 10, `${s2Still.tags} entries carry a beat tag`);
+  writeFileSync(join(ARTIFACTS, "blink-dark-s02-reduced.png"), await page.screenshot());
+
+  /* --- the phone height budget (replay spec §7.1) --- */
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.setViewport({ width: 375, height: 553, deviceScaleFactor: 1, mobile: true });
+  await page.goto(PAGE_URL);
+  const phone = await page.eval(`(async () => {
+    /* Centring the section leaves the core's top under the sticky bar, which is
+       below the gate's threshold — playback must refuse to start there. Then
+       park the core just clear of the bar, where it is entitled to run. */
+    document.querySelector("#watch-it-ship").scrollIntoView({ behavior: "instant", block: "center" });
+    await new Promise((r) => setTimeout(r, 300));
+    const gatedOut = window.MusterReplay.state();
+    const coreEl = document.querySelector(".replay__core");
+    scrollTo({ top: scrollY + coreEl.getBoundingClientRect().top - 52, behavior: "instant" });
+    await new Promise((r) => setTimeout(r, 400));
+    const css = (el, prop) => getComputedStyle(el).getPropertyValue(prop).trim();
+    const box = (sel) => Math.round(document.querySelector(sel).getBoundingClientRect().height * 100) / 100;
+    const log = document.querySelector(".log");
+    const core = document.querySelector(".replay__core");
+    const coreRect = core.getBoundingClientRect();
+    const value = document.querySelector(".totals__value");
+    const instrument = document.querySelector(".instrument");
+    const instStyle = getComputedStyle(instrument);
+    /* The strip's value line is display:block, so its box is the column width,
+       not the ink. Measure the ink with a probe that copies the treatment. */
+    const probe = document.createElement("span");
+    probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+    ["font-family", "font-size", "font-weight", "letter-spacing", "text-transform"]
+      .forEach((prop) => probe.style.setProperty(prop, css(value, prop)));
+    probe.textContent = value.textContent;
+    document.body.appendChild(probe);
+    const valueInk = probe.getBoundingClientRect().width;
+    probe.remove();
+    const asRgb = (token) => {
+      const p = document.createElement("span");
+      p.style.color = "var(" + token + ")";
+      document.body.appendChild(p);
+      const v = getComputedStyle(p).color;
+      p.remove();
+      return v;
+    };
+    const lineBox = parseFloat(css(log, "line-height"));
+    const pad = parseFloat(css(log, "padding-top")) + parseFloat(css(log, "padding-bottom"));
+    const before = log.scrollTop;
+    log.scrollTop = 40;
+    const scrolls = log.scrollTop !== before;
+    log.scrollTop = before;
+    return {
+      gatedOut,
+      state: window.MusterReplay.state(),
+      core: Math.round(coreRect.height * 100) / 100,
+      coreTop: Math.round(coreRect.top), coreBottom: Math.round(coreRect.bottom),
+      viewport: innerHeight,
+      visibleLines: Math.round(((log.clientHeight - pad) / lineBox) * 100) / 100,
+      lineBox,
+      chrome: box(".terminal__chrome"), card: box(".narration"), totals: box(".totals"),
+      indicator: box(".replay__beat"),
+      cardLines: Math.round((box(".narration") - 26) / 28.9 * 100) / 100,
+      totalsValue: { size: css(value, "font-size"), color: css(value, "color"),
+                     ink: Math.round(valueInk * 100) / 100,
+                     lines: Math.round(value.getBoundingClientRect().height / 16.5 * 100) / 100,
+                     available: Math.round(value.getBoundingClientRect().width * 100) / 100 },
+      labelLines: Math.round(document.querySelector(".terminal__label").getBoundingClientRect().height / 16.5 * 100) / 100,
+      scrolls,
+      docScroll: { s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth },
+      instrument: { inset: parseFloat(instStyle.paddingLeft) + parseFloat(instStyle.paddingRight),
+                    width: Math.round(instrument.getBoundingClientRect().width * 100) / 100 },
+      ink: asRgb("--ink")
+    };
+  })()`);
+  evidence.s2Phone = phone;
+
+  check("phone: the playback core fits the visual viewport", phone.core <= 553 - 48 + 0.5 && phone.coreTop >= -0.5 && phone.coreBottom <= phone.viewport + 0.5, `core ${phone.core}px, ${phone.coreTop}→${phone.coreBottom} in ${phone.viewport}px`);
+  /* The gate's own contract: playback only runs while at least 95% of the core
+     is in the band the reader can actually see — under the sticky status bar,
+     not behind it. */
+  const seen = Math.max(0, Math.min(phone.coreBottom, phone.viewport) - Math.max(phone.coreTop, 48)) / phone.core;
+  check("phone: playback refuses to start with the core under the status bar", phone.gatedOut === "idle", `state ${phone.gatedOut} when centred`);
+  check("phone: playback runs only with the core ≥95% in view", phone.state === "playing" && seen >= 0.95, `${Math.round(seen * 1000) / 10}% of the core below the status bar, state ${phone.state}`);
+  check("phone: terminal window shows five whole lines", Math.abs(phone.visibleLines - 5) < 0.05, `${phone.visibleLines} × ${phone.lineBox}px line boxes`);
+  check("phone: the §7.1 fixed rows measure as budgeted", Math.abs(phone.chrome - 41.5) < 0.5 && Math.abs(phone.card - 199.4) < 0.5 && Math.abs(phone.totals - 33) < 0.5 && Math.abs(phone.indicator - 16.5) < 0.5, `chrome ${phone.chrome} · card ${phone.card} · totals ${phone.totals} · indicator ${phone.indicator}`);
+  check("phone: the chrome label holds one line", Math.abs(phone.labelLines - 1) < 0.1, `${phone.labelLines} lines`);
+  check("phone: totals strip is two micro lines, value line unwrapped", parseFloat(phone.totalsValue.size) === 11 && Math.abs(phone.totalsValue.lines - 1) < 0.1, `${phone.totalsValue.size}, ${phone.totalsValue.lines} line(s)`);
+  check("phone: the 43-character value line clears the content width", phone.totalsValue.ink <= phone.totalsValue.available, `${phone.totalsValue.ink}px of ${phone.totalsValue.available}px`);
+  check("phone: totals value is ink, not rust, at micro size", phone.totalsValue.color === phone.ink, phone.totalsValue.color);
+  check("phone: the terminal owns its scroll, the body never does", phone.scrolls && phone.docScroll.s <= phone.docScroll.c, `log scrolls: ${phone.scrolls}, doc ${phone.docScroll.s}/${phone.docScroll.c}`);
+  check("phone: .instrument inset is at most 20% of the card", phone.instrument.inset / phone.instrument.width <= 0.2, `${phone.instrument.inset}px of ${phone.instrument.width}px = ${Math.round((phone.instrument.inset / phone.instrument.width) * 1000) / 10}%`);
+  writeFileSync(join(ARTIFACTS, "blink-dark-s02-375.png"), await page.screenshot());
+
+  /* Every line occupies its space from load, so a window that simply scrolled
+     to the end of the DOM would sit over lines that have not been revealed and
+     show the reader an empty terminal. The window must follow the newest
+     revealed line instead. */
+  const phoneWindow = await page.eval(`(async () => {
+    const log = document.querySelector(".log");
+    const lines = [...document.querySelectorAll(".log__line")];
+    const shown = () => {
+      const box = log.getBoundingClientRect();
+      return lines.filter((li) => li.hasAttribute("data-revealed"))
+        .filter((li) => {
+          const r = li.getBoundingClientRect();
+          return r.top >= box.top - 1 && r.bottom <= box.bottom + 1;
+        }).length;
+    };
+    const revealed = () => lines.filter((li) => li.hasAttribute("data-revealed")).length;
+    const early = { revealed: revealed(), inWindow: shown() };
+    window.MusterReplay.finish();
+    await new Promise((r) => setTimeout(r, 100));
+    const box = log.getBoundingClientRect();
+    const last = lines[11].getBoundingClientRect();
+    return { early, endShowsL12: last.bottom <= box.bottom + 1 && last.top >= box.top - 1 };
+  })()`);
+  check("phone: the window follows the newest revealed line", phoneWindow.early.revealed > 0 && phoneWindow.early.inWindow === Math.min(phoneWindow.early.revealed, 5) && phoneWindow.endShowsL12, JSON.stringify(phoneWindow));
+
+  /* Native keyboard scrolling of the log region — a real key event, not a
+     synthetic one, because the behaviour under test is the browser's. */
+  const beforeKey = await page.eval(`(() => {
+    window.MusterReplay.pause();      /* the window auto-advances; hold it still */
+    const log = document.querySelector(".log");
+    log.scrollTop = 0;
+    log.focus();
+    return log.scrollTop;
+  })()`);
+  for (const type of ["rawKeyDown", "keyUp"]) {
+    await page.call("Input.dispatchKeyEvent", { type, windowsVirtualKeyCode: 40, code: "ArrowDown", key: "ArrowDown" });
+  }
+  await page.eval("new Promise(r => setTimeout(r, 200))");
+  const afterKey = await page.eval(`({ top: document.querySelector(".log").scrollTop, focused: document.activeElement.className })`);
+  check("phone: arrow keys scroll the focused log region", afterKey.focused === "log" && afterKey.top > beforeKey, `scrollTop ${beforeKey} → ${afterKey.top}`);
+
+  /* The tightest wide viewport: just above --bp-wide, where the rail is what
+     yields so the longest corpus line still fits without horizontal scroll. */
+  await page.setViewport({ width: 1000, height: 800 });
+  await page.goto(PAGE_URL);
+  const tightWide = await page.eval(`(() => {
+    const log = document.querySelector(".log");
+    const rail = document.querySelector(".narration").getBoundingClientRect();
+    return { sw: log.scrollWidth, cw: log.clientWidth, rail: Math.round(rail.width),
+      s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth };
+  })()`);
+  check("1000px: the longest corpus line still fits the terminal", tightWide.sw <= tightWide.cw && tightWide.s <= tightWide.c, `log ${tightWide.sw}/${tightWide.cw}, rail ${tightWide.rail}px`);
+
+  /* --- 320px and landscape --- */
+  await page.setViewport({ width: 320, height: 568, deviceScaleFactor: 1, mobile: true });
+  await page.goto(PAGE_URL);
+  const narrow = await page.eval(`({ s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth,
+    lines: Math.round(((document.querySelector(".log").clientHeight - 24) / 24.7) * 100) / 100 })`);
+  check("320px: the body still never scrolls horizontally", narrow.s <= narrow.c, `scrollWidth ${narrow.s} vs ${narrow.c}, ${narrow.lines} lines visible`);
+
+  await page.setViewport({ width: 667, height: 375, deviceScaleFactor: 1, mobile: true });
+  await page.goto(PAGE_URL);
+  const landscape = await page.eval(`(() => {
+    const log = document.querySelector(".log");
+    const term = document.querySelector(".terminal").getBoundingClientRect();
+    const rail = document.querySelector(".narration").getBoundingClientRect();
+    return { lines: Math.round(((log.clientHeight - 24) / 24.7) * 100) / 100,
+      stacked: rail.top >= term.bottom - 1, termWidth: Math.round(term.width), railWidth: Math.round(rail.width),
+      s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth };
+  })()`);
+  evidence.s2Landscape = landscape;
+  check("landscape phone takes two columns, narration in the wider one", !landscape.stacked && landscape.railWidth > landscape.termWidth, `terminal ${landscape.termWidth}px / narration ${landscape.railWidth}px`);
+  check("landscape phone keeps at least seven log lines on screen", landscape.lines >= 7 && landscape.s <= landscape.c, `${landscape.lines} lines visible, doc ${landscape.s}/${landscape.c}`);
+  writeFileSync(join(ARTIFACTS, "blink-dark-s02-landscape.png"), await page.screenshot());
+
+  await page.setViewport({ width: 1440, height: 900 });
 } finally {
   await page.close();
   await chrome.close();

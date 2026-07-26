@@ -86,93 +86,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 Developer (web): §2 replay implementation
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Build §2 — the two-layer annotated replay of Bodh's Sprint 4 — inside the shell, wiring the
-founder-supplied corpus into the terminal layer.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/section-02-replay.md` (HO-002) — implement everything in it; the criteria below are non-exhaustive examples and never override the handoff
-- `knowledge-base/design-specs/web/section-02-narration.md` (HO-005, PM-approved) — the narration copy verbatim
-- `knowledge-base/bodh-sprint4-corpus.md` — the real lines the terminal layer renders. Read-only: wire it in, never edit or regenerate it
-- `knowledge-base/design-specs/web/section-02-beat-inventory.md` (HO-001) — line-to-beat mapping and real intervals
-- `knowledge-base/product-spec-seed.md` §2
-- `knowledge-base/agent-context/developer.md` — your Current Tasks
-- `muster/team/developer/skills/web/web-best-practices.md`
-
-**Deliverable:** the §2 section built into `index.html` + supporting `styles/` and `scripts/`.
-
-**Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
-- **Founder criterion:** the replay must stand on pacing and plain-English narration alone, independent of the visual frame. At review the founder judges run-log timing and narration with styling mentally subtracted; both must be excellent on their own
-- Terminal layer renders lines from the corpus verbatim, labelled "condensed from the real build log" — nothing staged, embellished, or invented
-- Narration synchronized to the terminal beats per the replay spec's timing; ends on `bodh.day`, live
-- Scripted HTML/CSS/JS only — no asciinema, no tooling dependency, zero external requests
-- Reduced-motion path renders the complete content, not a degraded subset
-- Verify WebKit and Blink before filing, **within the stated ceiling** (next bullet)
-
-**Two shell-level items ruled in DEC-021 that land with this step. Neither is new scope — both are the
-disposition of HO-004's findings, and this is the session already in these files.**
-
-1. **Fix `.instrument`'s phone inset.** Below `--bp-wide` its total inset must not exceed `--gap-flow`
-   (24px a side); desktop keeps `--gap-block` (48px). Today it is a flat 48px at every width, so a 320px
-   phone spends 96px of a 272px card on padding and the prose column is 174px. **Do not add a second
-   named breakpoint** — `page-shell.md` §7 keeps `--bp-wide` as the only page-chrome breakpoint; a fluid
-   `clamp()` between the two rhythm multiples is the preferred expression and also avoids a cliff at
-   960px. Extend the existing harness with the assertion rather than adding a runner (DEC-020).
-   *You left this alone in OBS-001 because §7.1's budget is derived off shell tokens to the tenth of a
-   pixel. That reasoning does not apply: §7.1 budgets its own insets — its rows read* Terminal body
-   padding 12 + 12 *and* Narration card … + 24 pad *— and at 48px its core would compute to 568.4px
-   against a 553px viewport. §2 is unaffected by this change.*
-
-2. **The WebKit ceiling is real; do not spend the session fighting it.** `qlmanage` executes no
-   JavaScript and ignores the requested size, rendering at a fixed ~1024² (QA proved both with committed
-   probes). So WebKit evidence for §2 is the **no-JS/reduced-motion complete transcript** — all twelve
-   corpus lines verbatim, L12's large-rust treatment, the §9 emphasis system, terminal chrome, grain and
-   vignette parity, both themes — and that is genuinely load-bearing, because DEC-017 item 4 makes
-   playback an opacity reveal over a complete DOM, so what `qlmanage` renders *is* the no-JS fallback.
-   Everything else — playback timing, the visibility gate, the windowed terminal, media queries,
-   horizontal-scroll containment, all mobile widths — is Blink evidence and is labelled as Blink evidence
-   in HO-006. **Do not resolve this by installing a browser**: zero dependencies is DEC-020 and a
-   published property of the repo.
-
-**Two more items ruled in DEC-022 while reviewing the narration. Also not new scope — both are about
-the chain-totals strip, and both were found by measuring Content's accepted strings against the layout
-that has to hold them.**
-
-3. **The totals strip's value scale is per-viewport.** Annotation 7 renders values at
-   `--text-readout`; §7.1's height budget prices the whole strip at `2 × (--text-micro 11px × 1.5)
-   = 33.0px`. At 375px `--text-readout` clamps to 24px, so one value line alone is 24px and the strip
-   becomes 40.5px — 7.5px over a budget with 5.1px of slack, busting the 553px core before a log line
-   is placed. **Below `--bp-wide` the strip is two `--text-micro` lines**; `--text-readout` stands at
-   `≥ --bp-wide`. Already applied to annotation 7 — build to the file.
-
-4. **Keep the mobile strip at two lines; the lever is tracking, not copy.** Line 1
-   (`~64 MIN AGENT WORK · 289 API CALLS · $24.73`) is 43 characters — in `--font-mono` at 11px that is
-   ~284px bare but ~350px with `--track-micro` (0.14em), against ~327px of content width at 375px. So
-   tracking is what would wrap it to a third line and cost 16.5px the budget does not have. Set
-   tracking on the value line within the micro treatment and assert the strip's rendered line count in
-   the harness. **Do not shorten the string** — it is accepted copy carrying the corpus's own sanctioned
-   phrasing, and reaching for it would be fixing a typographic setting by editing a fact.
-
-**Strings come from `section-02-narration.md` §5, which is the authority on §2's chrome copy.** The
-replay spec's wireframes now match it; if you find any third spelling of a string anywhere, the
-narration file wins.
-
-**HALT CONDITION (inline, mandatory):** if the corpus lacks a line the replay spec calls for, do NOT
-invent, paraphrase, or reconstruct it to fill the gap. Re-point `## Next Step` to a `Role: pm`
-assessment step naming the missing line and stop.
-
-**On completion:** File HO-006 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-24 QA (web): §2 replay validation
 
 ```
@@ -229,6 +142,9 @@ Model: claude-opus-5
 to a `Role: pm` assessment step. Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`).
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
 ### 2026-07-24 Wave 3 Gate — founder review
 
 ```
@@ -251,6 +167,15 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
+
+- 2026-07-25 — Wave 3: Developer — §2 replay built and playing to schedule (HO-006). Twelve corpus
+  lines byte-clean on both engines, measured reveal offsets at 0 ms drift against §5.1, and the phone
+  core at 499.89px with five whole lines. Two bugs the harness caught before they shipped: the window
+  scrolled to the end of the DOM and showed an empty terminal on a phone, and the visibility gate
+  counted the band behind the sticky status bar as visible. Three deviations stated in the handoff, the
+  material one being the rail width — a literal 36ch starves the terminal below the width L3 needs, so
+  the rail yields and the fidelity guarantee holds. `bash scripts/test.sh` green: 129 Blink, 13 WebKit.
+  Awaiting review — QA, then PM.
 
 - 2026-07-25 — Wave 3: PM — §2 narration accepted; the build inputs are now closed (DEC-022). HO-005
   accepted with no revision and not a word rewritten. Every string re-measured by script rather than
@@ -346,6 +271,3 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
   the seed with contrast measured per pair; §2 paced as a 60 s comprehension-weighted chain against the
   v1.1-corrected intervals, with an eight-slot narration sync contract. Three design questions parked in
   Founder Decisions. Awaiting review — PM, then founder gate.
-
-- 2026-07-25 — Wave 1 Gate: **APPROVED with amendments** by the founder. Three design questions settled
-  (DEC-015); four §2/shell amendments routed to HO-010 (DEC-016). Autonomous run cleared to launch.

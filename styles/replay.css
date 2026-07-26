@@ -1,0 +1,500 @@
+/* ==========================================================================
+   §2 — the two-layer annotated replay.
+
+   Three states, and the default one is the one that needs no JavaScript:
+
+     no [data-state]      the complete annotated transcript. This is what a
+                          reader with JS off, or with reduced motion on, gets —
+                          twelve log lines, ten narration entries, the totals
+                          strip, all of it. Nothing here is a degraded subset.
+     [data-state=idle]    same DOM, lines and entries at zero opacity, waiting
+     [data-state=playing] the reveal schedule runs (scripts/replay.js)
+     [data-state=end]     everything revealed, controls offer a replay
+
+   Reveal is opacity + a 4px rise, never display/visibility and never DOM
+   insertion, so the transcript is one continuous read for assistive tech
+   whatever the state (replay spec §11).
+
+   Mobile-first, because mobile is the harder layout: the terminal is texture
+   there and the narration is the payload, so the terminal is what gives up
+   height when the viewport runs out (replay spec §7.1).
+   ========================================================================== */
+
+.replay {
+  --line-box: calc(var(--text-terminal) * var(--lead-terminal)); /* 24.7px */
+  --card-lines: 6;
+}
+
+/* --------------------------------------------------------------------------
+   The playback core — beat indicator, terminal, narration card, totals.
+   Sized to fit the visual viewport under the sticky status bar while playback
+   runs, so both layers are on screen together for the whole chain. In the
+   complete-transcript state it is unconstrained: there is no playback to keep
+   in frame, and clipping a static transcript would lose content.
+   -------------------------------------------------------------------------- */
+
+.replay__core {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  padding-block-end: var(--gap-hairline); /* bottom clearance in the §7.1 budget */
+}
+
+.replay[data-state="idle"] .replay__core,
+.replay[data-state="playing"] .replay__core {
+  max-block-size: calc(100dvh - 3rem);
+}
+
+.replay__beat {
+  flex: none;
+}
+
+/* On a phone the two layers are one column of the core's flex context, so the
+   wrapper steps out of the box tree entirely. */
+.replay__layers {
+  display: contents;
+}
+
+/* --------------------------------------------------------------------------
+   Terminal
+   -------------------------------------------------------------------------- */
+
+.terminal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  flex: 1 1 auto;
+  margin-block-start: var(--gap-hairline);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+}
+
+.terminal__chrome {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-hairline);
+  padding: var(--gap-hairline);
+  border-block-end: 1px solid var(--hair);
+}
+
+.terminal__label,
+.terminal__live {
+  margin: 0;
+}
+
+/* The honesty label is always visible. Below --bp-wide the run's name drops and
+   the required sentence stays whole — and its tracking tightens, because the
+   §7.1 budget prices the chrome bar at one micro line and the label at 0.14em
+   would wrap to two at 375px. The label is chrome, not a reading passage. */
+.terminal__label-prefix {
+  display: none;
+}
+
+.terminal__label {
+  letter-spacing: 0.02em;
+}
+
+.terminal__live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-hairline);
+  flex: none;
+}
+
+/* The log is the terminal's scroll region: it owns its overflow in both axes so
+   the page body never scrolls horizontally. Lines never wrap and are never
+   truncated — a long line is read by scrolling inside this box, which is what
+   keeps every rendered character byte-identical to the corpus. */
+.log {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  margin: 0;
+  /* Vertical padding is the §7.1 budget's `terminal body padding` row. There is
+     none horizontally: the lines carry their own left inset, and the right edge
+     is a scroll edge, so padding there would only narrow the fidelity window. */
+  padding-block: var(--gap-hairline);
+  padding-inline: 0;
+  list-style: none;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-terminal);
+  line-height: var(--lead-terminal);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.log__line {
+  display: block;
+  white-space: pre;
+  border-inline-start: 2px solid transparent;
+  padding-inline-start: var(--gap-hairline);
+}
+
+.log__stamp {
+  color: var(--muted);
+}
+
+.log__token {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Rust as a graphical mark only — the fact it flags is carried in ink at AA. */
+.log__glyph {
+  color: var(--accent);
+}
+
+.log__line--key {
+  border-inline-start-color: var(--accent);
+}
+
+/* The terminal state. Large enough that rust clears AA-large, which is what
+   lets the shipped artifact be the one line in the log that is not ink. */
+.log__line--state {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.log__line--state .log__detail {
+  color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Narration — a fixed-height caption card on a phone, a rail on a wide screen.
+   Full ink in both: this is the layer that is meant to be read.
+   -------------------------------------------------------------------------- */
+
+.narration {
+  flex: none;
+  position: relative;
+  margin-block-start: var(--gap-flow);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: var(--gap-hairline);
+}
+
+.narration__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.narration__entry {
+  display: block;
+  border-inline-start: 2px solid transparent;
+  padding-inline-start: var(--gap-hairline);
+}
+
+.narration__entry + .narration__entry {
+  margin-block-start: var(--gap-flow);
+}
+
+.narration__tag {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: var(--lead-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--track-micro);
+  color: var(--muted);
+}
+
+.narration__text {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--lead-body);
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------------------
+   Chain totals — static by design. These are evidence in a log context, and a
+   number that counts up reads as marketing where a flat one reads as measured.
+   Value scale is per-viewport: at --text-readout a single value line is 24px,
+   which alone would bust the phone height budget, so below --bp-wide the strip
+   is two --text-micro lines. Tracking, not the copy, is the lever that keeps
+   the value line from wrapping to a third: at 0.14em the 43-character string
+   measures ~350px against ~327px of content width at 375px.
+   -------------------------------------------------------------------------- */
+
+.totals {
+  flex: none;
+  margin-block-start: var(--gap-hairline);
+}
+
+.totals__value,
+.totals__scope {
+  display: block;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.totals__value {
+  font-size: var(--text-micro);
+  line-height: var(--lead-micro);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.totals__scope {
+  font-size: var(--text-micro);
+  line-height: var(--lead-micro);
+  letter-spacing: var(--track-micro);
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   Controls — built by JS, so they exist only when there is playback to control.
+   -------------------------------------------------------------------------- */
+
+.replay__controls:empty {
+  display: none;
+}
+
+.replay__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-flow);
+  margin-block-start: var(--gap-flow);
+}
+
+.control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5ch;
+  min-block-size: 44px;
+  padding-inline: var(--gap-flow);
+  background-color: transparent;
+  border: 1px solid var(--hair);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.control:hover {
+  border-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Playback states
+   -------------------------------------------------------------------------- */
+
+.replay[data-state] .log__line,
+.replay[data-state] .narration__entry {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--reveal), transform var(--reveal);
+}
+
+.replay[data-state] .log__line[data-revealed] {
+  opacity: 1;
+  transform: none;
+}
+
+/* On a phone the card holds one entry at a time and never reflows between
+   slots, so entries stack in place. They stay in the DOM and in reading order;
+   only their opacity changes. */
+.replay[data-state="idle"] .narration__list,
+.replay[data-state="playing"] .narration__list {
+  position: relative;
+  block-size: calc(var(--card-lines) * var(--text-body) * var(--lead-body));
+}
+
+.replay[data-state="idle"] .narration__entry,
+.replay[data-state="playing"] .narration__entry {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  margin-block-start: 0;
+}
+
+.replay[data-state="idle"] .narration__entry[data-active],
+.replay[data-state="playing"] .narration__entry[data-active] {
+  opacity: 1;
+  transform: none;
+}
+
+/* The phone card carries no beat tag: the indicator above the terminal already
+   names the beat, and the card's six lines are budgeted for narration. */
+.replay[data-state="idle"] .narration__tag,
+.replay[data-state="playing"] .narration__tag {
+  display: none;
+}
+
+.replay[data-state="end"] .log__line,
+.replay[data-state="end"] .narration__entry {
+  opacity: 1;
+  transform: none;
+}
+
+.narration__entry[data-active] {
+  border-inline-start-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Landscape phone — the one place the stacked layout cannot hold. Rotated,
+   Safari's toolbars leave roughly 331px of visual viewport against a fixed
+   core of 424.4px, so stacking overflows before a single log line is placed.
+   Narration-first survives the rotation; the stacking does not, so the two
+   layers go side by side with the wider column given to the narration and the
+   totals strip tucked beneath it. This is an orientation query, not a second
+   page-chrome breakpoint: --bp-wide remains the only one.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 59.999rem) and (orientation: landscape) and (max-height: 30rem) {
+  .replay {
+    --card-lines: 5;
+  }
+
+  .replay__core {
+    display: grid;
+    grid-template-columns: minmax(0, 42fr) minmax(0, 55fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    column-gap: var(--gap-flow);
+  }
+
+  .replay__beat {
+    grid-column: 1 / -1;
+  }
+
+  .terminal {
+    grid-column: 1;
+    grid-row: 2 / 4;
+  }
+
+  .narration {
+    grid-column: 2;
+    grid-row: 2;
+    margin-block-start: var(--gap-hairline);
+  }
+
+  .totals {
+    grid-column: 2;
+    grid-row: 3;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Wide layout — two columns, terminal left, narration rail right.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 60rem) {
+  .replay__layers {
+    display: grid;
+    /* The terminal column carries a floor, and the rail is what yields to it.
+       L3 is 74 characters and sets ~599px at --text-terminal including the
+       line's own inset; below that floor a corpus line would need horizontal
+       scroll on a desktop, which the section's fidelity guarantee does not
+       accept. So the terminal is given 38.5rem before the rail takes anything,
+       and the rail's 22rem is a ceiling it reaches once the page is wide —
+       ~33ch of prose at 1280px and up, narrower between there and --bp-wide.
+       A rail expressed literally as 36 sans `ch` resolves to ~385px here and
+       would take the terminal under the floor at every width. */
+    grid-template-columns: minmax(min(100%, 38.5rem), 1fr) minmax(0, 22rem);
+    gap: var(--gap-block);
+    align-items: start;
+    margin-block-start: var(--gap-hairline);
+  }
+
+  /* While playback runs the rail is a scroll region matched to the terminal's
+     height. With no playback state at all — no JS — both columns simply take
+     their content height and the whole transcript flows. */
+  .replay[data-state] .narration {
+    align-self: stretch;
+  }
+
+  /* All twelve lines fit; the terminal takes its content height and nothing
+     moves as lines reveal, because every line occupies its space from load. */
+  .terminal {
+    margin-block-start: 0;
+    flex: none;
+  }
+
+  .narration {
+    margin-block-start: 0;
+    padding: var(--gap-flow);
+  }
+
+  /* The rail is taller than the terminal at spec'd budgets, so it scrolls its
+     own overflow against the terminal's height instead of setting the row's.
+     Only while there is a playback state: the static transcript flows. */
+  .replay[data-state] .narration__list {
+    position: absolute;
+    inset: var(--gap-flow);
+    block-size: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .replay[data-state] .narration__entry {
+    position: static;
+    margin-block-start: 0;
+  }
+
+  .replay[data-state] .narration__entry + .narration__entry {
+    margin-block-start: var(--gap-flow);
+  }
+
+  .replay[data-state] .narration__tag {
+    display: block;
+  }
+
+  /* Revealed entries accumulate in the rail and stay full ink. */
+  .replay[data-state] .narration__entry[data-revealed] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .terminal__label-prefix {
+    display: inline;
+  }
+
+  .terminal__label {
+    letter-spacing: var(--track-micro);
+  }
+
+  .totals {
+    margin-block-start: var(--gap-block);
+  }
+
+  .totals__value {
+    font-size: var(--text-readout);
+    line-height: var(--lead-readout);
+    letter-spacing: 0;
+    color: var(--accent);
+  }
+
+  .totals__scope {
+    margin-block-start: var(--gap-hairline);
+  }
+
+  .replay__controls {
+    justify-content: flex-end;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — the complete transcript, immediately. The script never
+   starts playback here; this is the belt to that braces, and it also means a
+   reader who flips the preference mid-page is not left with hidden lines.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .replay .log__line,
+  .replay .narration__entry {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

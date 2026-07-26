@@ -100,11 +100,17 @@
    the border and the surface value shift.
    -------------------------------------------------------------------------- */
 
+/* The inset steps fluidly between the two rhythm multiples rather than at a
+   breakpoint: --gap-block (48px) once the page is wide, --gap-flow (24px) on a
+   phone, and no cliff at --bp-wide. A flat 48px would spend 96px of a 320px
+   card's width on padding — a third of the surface, and the prose column that
+   is left reads at about 23 characters. The clamp resolves to 24px at 375px
+   and to exactly 48px at 960px (--bp-wide). */
 .instrument {
   position: relative;
   background-color: var(--surface);
   border: 1px solid var(--hair);
-  padding: var(--gap-block);
+  padding: clamp(var(--gap-flow), 0.539rem + 4.1vw, var(--gap-block));
 }
 
 .regmark {
