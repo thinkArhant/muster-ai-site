@@ -8,7 +8,56 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-*None open.*
+### 2026-07-26 HO-018 — §1 and §3 copy; SP3 shortened and measured clear at 320px
+**Type:** handoff
+**Producer:** content
+**Deliverable:** `knowledge-base/design-specs/web/section-01-copy.md`,
+`knowledge-base/design-specs/web/section-03-copy.md`, amended
+`knowledge-base/design-specs/web/section-02-narration.md` + `index.html` (SP3, applied together
+because the harness asserts the strings identical)
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Summary:**
+- **§1**: four headline candidates with per-candidate announced strings — A the anchor, B the
+  founder's edit mark with the article break repaired (★ recommended; announced string
+  `Ship a product with AI agents.`), C the ambiguity resolved in words, D the name as collective
+  noun. One shared subline (11 of 12), the measured line reframed off "this build" to
+  `Bodh … idea → live` in primary (18 of 20) and compact (12 of 14) forms, eyebrow verbatim,
+  formation label sets for both hub readings pending the founder's formation ruling, readout strings
+  with dashes + `measured at launch`, the curl verified identical by string equality, terminal
+  chrome labels shared with §2 so the wave scope is carried by the label.
+- **§3**: kicker (10 of 12) + one paragraph (85 of 90). CrewAI/AutoGen clause ships **named** —
+  ruling and grounds in the file §5, with the 63-word cut pre-authored so "cut, not softened" is
+  executable without reopening copy (DEC-035).
+- **SP3 lever pulled** (DEC-027.1 → DEC-035): 24 → 19 words, beat preserved. Measured resolved:
+  audit reports 5 lines at 320px against the 6-line card; timed total now 134 of 163.
+  `scripts/test.sh` GREEN and `qa-independent-audit.mjs` 106/106, exit 0 — both run foreground this
+  session. Pre-launch 320px item closed on that evidence.
+
+**Revision log:**
+- 2026-07-26: Self-review caught the acceptance criterion "every string carries a word count and
+  budget" colliding with locked strings that may not vary (role names, curl, readout values) —
+  resolved by stating equality-verification for locked strings in §1's rules rather than inventing
+  unfalsifiable budgets.
+
+**Observations:**
+- OBS-001 — Stale SP3 counts in PM-owned context   Severity: low
+  Evidence: `agent-context/content.md` (SP3 at 24 words, timed total 139 of 163); historical
+  mentions in `wave-review.md:60` and Resolved handoff one-liners are records of their moment and
+  need no edit.
+  Suggested action: PM refreshes `agent-context/content.md` at next cascade.
+- OBS-002 — Audit report prose now stale on two rows   Severity: low
+  Evidence: `qa-independent-audit.mjs:1151` prints "SP3 is N characters, the longest slot" (computed
+  live, still true at 134 chars) and the 320px SP3 row still says "DEC-027.1 — deferred"; both are
+  report labels, not assertions.
+  Suggested action: tidy wording in the spacing-system step, which already re-bases audit checks.
+- OBS-003 — Totals-strip third line at 320px no longer reproduces   Severity: low
+  Evidence: audit reports the value line at 2 lines, 246.34px of 272px content width at 320px
+  (DEC-027.2 expected a third line).
+  Suggested action: none — recorded so the next §2 measurement doesn't treat the old figure as
+  baseline.
 
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->

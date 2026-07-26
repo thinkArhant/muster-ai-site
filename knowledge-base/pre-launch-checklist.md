@@ -53,16 +53,16 @@
     verified on Blink. See DEC-021.4.
   - Milestone gate: launch
 
-- [ ] **§2's narration card overflows at 320px** — Blocker: soft, Source: pm, Added: 2026-07-26
-  - SP3 sets 7 rendered lines into a 6-line card at 320px (202.3px of text in a 173.4px text area).
-    Pre-existing and width-driven: the card meets its budget with zero margin at 375px, so the seventh
-    line is bought by narrowing below the width every row of §7.1's budget is derived at.
-  - Not fixable inside the §2 fix wave without either re-opening SP3 (Content) or a taller card that
-    costs the terminal a visible line at the budget case. The resolution is already known and costs
-    nothing: §7.1's priority order drops the beat indicator first, returning 28.5px against a 28.9px
-    line. The totals value line also wraps to a third strip row at that width (DEC-027.2).
-  - Decide with §3's copy work in Sprint 2, when SP3 is open and the lever is available. See DEC-027.1.
-  - Milestone gate: launch
+- [x] **§2's narration card overflows at 320px** — RESOLVED 2026-07-26, Source: content, Added: 2026-07-26
+  - Was: SP3 set 7 rendered lines into a 6-line card at 320px (202.3px of text in a 173.4px text
+    area). The resolution was deferred to §3's copy work, when SP3 would be open and the copy-length
+    lever available (DEC-027.1).
+  - Lever pulled: SP3 shortened 24 → 19 words / 183 → 134 characters with the beat preserved
+    (DEC-035), applied to `section-02-narration.md` and `index.html` together. Measured, not
+    estimated: `qa-independent-audit.mjs` reports **5 lines of SP3 in the 232px text column at 320px
+    against the 6-line / 199.4px card — no overflow at this width**; 106/106 checks green, exit 0;
+    `scripts/test.sh` green. The totals-strip third-line wrap at 320px reported by DEC-027.2 also no
+    longer reproduces (audit reports the value line at 2 lines, 246.34px of 272px).
 
 - [ ] **Count-up cells have an `aria-live` posture** — Blocker: soft, Source: qa, Added: 2026-07-25
   - OBS-004: the count-up engine is verified against `tests/fixtures/count-up.html` because the shell

@@ -73,77 +73,6 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Content (web): §1 and §3 copy
-
-```
-Role: content
-Model: claude-fable-5
-
-**Task:** Write §1 and §3. This runs FIRST in the sprint because the §1 hero design must specify a
-headline treatment against your real candidate strings, not a hypothesis.
-
-**Inputs:**
-- `knowledge-base/product-spec-seed.md` §1 and §3 — read-only
-- `knowledge-base/agent-skills/content/copy-rules.md` — binding, all twelve rules, and its scope table
-- `knowledge-base/brand-guidelines.md` §5 — the enumerated banned-word list lives here, nowhere else
-- `knowledge-base/bodh-sprint4-corpus.md` — read-only; every claim traces here
-- `knowledge-base/agent-context/content.md`
-
-**The §1 headline — candidates, a recommendation, and the reasoning.** The seed calls the anchor text
-*"Ship a product. Without a team."* **available, not locked**, and says explicitly *"Content arranges
-headline vs. subline."* Deliver 3–4 candidates with one recommendation; the founder picks at Gate A from
-*rendered* versions.
-
-**The founder's own direction is the incumbent to beat:**
-> *Ship a product with a ~~human~~ **AI agents** team* — "human" struck, "AI agents" accented.
-
-Strong idea: it resolves the ambiguity visually rather than by spending words, and a strikethrough is an
-**edit mark**, which on a page about process is on-thesis rather than decorative. Four things decide it:
-1. **The article breaks as written** — "a human team" → "a AI agents team" does not parse. Strike the
-   article with the adjective, or find better. Do not ship the founder's phrasing verbatim
-2. **Screen readers** announce struck text as ordinary text. Write copy that survives being read aloud;
-   UI/UX specifies the treatment and accessible name from your strings
-3. **The accent cannot be a new colour** (A-006). Rust on display-size text is available (DEC-017)
-4. **Does it cost a beat of confusion?** §1's job is a message landing in five seconds
-
-**Rulings you need, so you do not have to invent them:**
-- **The measured line.** The seed's string is *"this build: 9.3 hours of active build, $147 in AI
-  tokens"* — but "this build" reads as THIS SITE while the numbers are BODH, which is A-005's named
-  failure mode inside the source string. **You may and should rewrite the framing** so the scope is
-  unambiguous. §1's brief is a brief, not the locked draft §4 is. The numbers themselves are exact and
-  never change
-- **Length budgets.** None exist for §1/§3, unlike §2's narration. **Set them**: state a word count for
-  each string you write and the rationale. PM recounts against your stated budget
-- **§1's eight role labels**: PM · Developer · UI/UX · QA · Content · Marketing · Legal · Research
-- **§3's CrewAI/AutoGen clause** is grounded in the founder's own survey, not a documented review. If it
-  needs external grounding, open a `needs-research` entry scoped to competitor positioning only.
-  **Research is unstaffed this sprint** — if no research lands before §3 builds, the clause ships
-  **cut, not softened**
-- **SP3 overflows §2's narration card at 320px** (`pre-launch-checklist.md`). The lever is copy length
-  and it is open exactly once, now. If you can shorten SP3 without losing the beat, do it and say so
-
-**Deliverable:** `knowledge-base/design-specs/web/section-01-copy.md` (headline candidates with your
-recommendation, plus every §1 string) and `knowledge-base/design-specs/web/section-03-copy.md`; HO-018.
-
-**Acceptance criteria:**
-- 3–4 headline candidates, one recommendation, reasoning for each
-- Every string carries a stated word count and budget
-- **R8**: the team is AI and says so; no unqualified "the Muster team"
-- Scope labels correct and unambiguous — BODH is whole-product, THIS SITE is dashes (R4, R5)
-- Product voice — §1 and §3 are not the two first-person places (R7)
-- Zero rounded numbers, zero adjectives-as-argument, "measured" never "proven"
-- Every factual claim cites its corpus or seed line
-
-**If blocked:** do NOT set `Role: halt`. File the blocker in `agent-requests.md` addressed to PM and
-re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-018 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 UI/UX (web): Terminal spacing system and brand seats
 
 ```
@@ -225,6 +154,9 @@ reader says on every page.
 
 **On completion:** File HO-019 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 UI/UX (web): §1 hero design
 
@@ -776,6 +708,11 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-26 — Step: Content §1 and §3 copy (HO-018). Four headline candidates with announced strings
+  (B, the repaired founder edit-mark, recommended), §3 with the CrewAI/AutoGen clause ruled named and
+  its cut pre-authored, and the SP3 lever pulled — 19 words, measured 5 lines at 320px, both harnesses
+  green (DEC-035). Awaiting PM review at the Wave 1 review step.
 
 - 2026-07-26 — **Sprint 1 closed.** Shell + §2 delivered and accepted at gate 3 with one carried defect
   (the key-beat tick collides with the timestamp; folded into Sprint 2's spacing system per DEC-032).

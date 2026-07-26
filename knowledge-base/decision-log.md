@@ -187,5 +187,31 @@ and Gate B requires any fix round to end with a scoped QA re-run.
 **Touched**: `orchestration-queue.md` (full rewrite), `current-sprint.md`, `copy-rules.md` (scope table
 repaired, the eight role names recorded), `decision-log.md`.
 
+### DEC-035 — Two copy rulings: SP3 shortened to clear the 320px card; §3's competitor clause ships named (2026-07-26)
+
+**Decision 1 — SP3 is 19 words.** The one-time copy-length lever DEC-027.1 deferred to this step is
+pulled: SP3 drops its four-item enumeration ("Visual parity, rotation, trackers, placeholders") and
+ships as *"One agent auditing another: the PM re-checks the developer's work with its own screenshots —
+never trusting the developer's. Accepted."* — 24 → 19 words, 183 → 134 characters. The beat (the
+independent re-check) is intact; the enumeration was texture, and it survives in the corpus. Applied to
+`section-02-narration.md` and `index.html` in the same commit because the harness asserts the strings
+are identical. **Measured resolved, not estimated**: the audit reports 5 lines of SP3 at 320px against
+the 6-line card — the overflow that was 7-into-6 is gone; timed narration total is now 134 of 163;
+106/106 audit checks green, `scripts/test.sh` green.
+
+**Decision 2 — §3 names CrewAI and AutoGen; no research request is opened.** The seed instructs the
+fold ("fold the CrewAI/AutoGen contrast into one clause") and itself supplies the only thing the copy
+attributes to them — that they optimize how agents talk to each other. No number, scoreboard, or
+quality claim is made about either, so there is nothing external research would verify that the
+founder-authored source does not already state. Guard against the alternative outcome: the cut variant
+(seed's generalization, names removed, 63 words) is pre-authored in `section-03-copy.md` §5, so if
+review rules otherwise the clause ships cut, not softened, with no copy session reopened.
+
+**Impact**: content, ui-ux, developer, qa, pm.
+
+**Touched**: `section-02-narration.md`, `index.html`, `section-01-copy.md`, `section-03-copy.md`,
+`pre-launch-checklist.md` (320px item resolved), `decision-log.md`. PM cascade note: stale SP3 counts
+(24 words / 139 total) remain in `agent-context/content.md` (PM-owned) — flagged in HO-018.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

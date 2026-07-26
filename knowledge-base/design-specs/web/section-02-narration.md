@@ -32,14 +32,14 @@ is cited per slot below. Copy is governed by `agent-skills/content/copy-rules.md
 |---|---|---|---|---|---|---|
 | SP1 | L2 · 0.35 | B1 | ≤ 21 | 20 | 5.71 s | 6.05 s |
 | SP2 | L3 · 6.40 | B2 | ≤ 25 | 20 | 5.71 s | 7.20 s |
-| SP3 | L4 · 13.60 | B3 | ≤ 33 | 24 | 6.86 s | 9.60 s |
+| SP3 | L4 · 13.60 | B3 | ≤ 33 | 19 | 5.43 s | 9.60 s |
 | SP4 | L5/L6/L7 · 23.20/26.40/29.60 | B4 | ≤ 33 total, ≤ 11 each | 29 (8+11+10) | ≤ 3.14 s each | 3.20 s each |
 | SP5 | L8 · 32.80 | B5 | ≤ 23 | 21 | 6.00 s | 6.60 s (closes at L9) |
 | SP6 | L10 · 39.75 | B6 | ≤ 12 | 10 | 2.86 s | 3.45 s |
 | SP7 | L11 · 43.20 | B6 | ≤ 16 | 15 | 4.29 s | 4.80 s |
 | SP8 | L12 · 48.00 | end state | ≤ 35 | 31 | persistent | persistent |
 
-Timed slots total 139 words against the contract's 163-word ceiling. Every slot reads inside its
+Timed slots total 134 words against the contract's 163-word ceiling. Every slot reads inside its
 window at 3.5 words/s. **SP7 landed inside its 16-word budget without going flat — no relief from
 SP6 is requested.**
 
@@ -74,20 +74,22 @@ The developer builds the deployable site — an exact port of the app's date-rot
 | The rotation is date math | Session row 7 (rotation re-derived "across 24 dates") — "date-rotation" compresses the two |
 | Verified on both sides of UTC | Session row 2 ("rotation parity verified in UTC-positive AND UTC-negative timezones") |
 
-### SP3 — the wow beat (anchor L4, t=13.60 · B3 · 24 words)
+### SP3 — the wow beat (anchor L4, t=13.60 · B3 · 19 words)
 
 ```
-One agent auditing another: the PM re-checks the developer's work with its own screenshots — never trusting the developer's. Visual parity, rotation, trackers, placeholders. Accepted.
+One agent auditing another: the PM re-checks the developer's work with its own screenshots — never trusting the developer's. Accepted.
 ```
 
 | Claim | Corpus source |
 |---|---|
 | PM re-checks with its own screenshots, never the developer's | Session row 3; DEC-022 ("PM independently re-verifies with its own screenshots, never trusting the developer's"); narration-facts bullet 2 |
-| Visual parity, rotation, trackers, placeholders | Session row 3 (the four checked items, verbatim) |
 | Accepted | Session row 3 ("Accepted") |
 
-Written at 24 of 33 words deliberately: the dwell was expanded so this fact can be absorbed, not so
-more words fit. 6.86 s of reading in a 9.60 s window leaves the air the expansion bought.
+Written at 19 of 33 words deliberately: the dwell stays expanded so this fact can be absorbed, and
+the string sets inside §7.1's six-line narration card at its tightest case, 320px. The beat is the
+independent re-check itself; the four checked items (visual parity, rotation, trackers, placeholders)
+remain in the corpus's session row and are enumeration, not the beat. 5.43 s of reading in a 9.60 s
+window leaves generous air.
 
 ### SP4 — three roles, three micro-captions (anchors L5/L6/L7 · B4 · 8 + 11 + 10 = 29 words)
 

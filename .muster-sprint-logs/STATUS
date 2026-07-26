@@ -1,6 +1,6 @@
-run: run-20260726-131642-20535
-state: halted: halt (2026-07-26 Wave 3 Gate 3 — founder review)
-step: 2026-07-26 Wave 3 Gate 3 — founder review
-step started: 2026-07-26 14:32:54
-last completed: 2026-07-26 QA (web): Re-validate the phone log · 96 turns · $10.84 · out 80k · 39m 40s
-totals: 4 attempt(s) · 369 turns · $42.64
+run: run-20260726-161323-89974
+state: running step 1
+step: 2026-07-26 Content (web): §1 and §3 copy
+step started: 2026-07-26 16:13:23
+last completed: —
+totals: 
