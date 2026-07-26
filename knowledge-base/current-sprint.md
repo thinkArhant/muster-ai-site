@@ -41,6 +41,14 @@ network requests, reduced-motion completeness and corpus fidelity are all machin
 - **The direction reference never ships.**
 - **`.gitignore` is correct as written.**
 
+### Framework feedback is collected, not lost
+
+`knowledge-base/muster-framework-feedback.md` accumulates findings about **Muster itself** — not about
+this product — and is handed to the Muster core team at project close. FF-001 is filed: PM audits plans
+with subagents because the framework offers nothing cheaper, and roughly 60% of what such an audit finds
+is mechanically checkable. Any agent that hits a framework-shaped limitation files there rather than
+working around it silently.
+
 ### New standing practice this sprint
 
 - **Assert relationships, not values.** Three Sprint-1 fix rounds each satisfied a named value and
