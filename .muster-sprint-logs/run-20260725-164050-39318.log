@@ -577,3 +577,53 @@
   🧪 bash   bash muster/scripts/muster-lint-handoff.sh; echo "handoff-lint exit=$?" python3 - <<'PY' p='knowledge-base/orchestration
   🧪 bash   sed -n '/^## Next Step/,/^## Upcoming/p' knowledge-base/orchestration-queue.md | head -14; echo "..."; git status --shor
   🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the shell is accepted and §2 is cleared to be written HO-003 and HO-004 bot
+  💬 You've hit your session limit · resets 7:40pm (America/Los_Angeles)
+    📖 ×16 · ✏️  ×19 · 🧪 ×29
+  ⛔ 65 turns · $6.65 · peak ctx 184k/1M 18% · out 46k  (success)
+⏸ usage limit — sleeping until 19:45 (+5m buffer)
+─────────────────────────────────────────────────────────── step 7
+▶ [33;1mCONTENT[0m · 2026-07-24 Content (web): §2 narration script  [2m[claude-fable-5][0m
+  ⚙  session start
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh content auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/content.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/content/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/content.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-beat-inventory.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   grep -n "^#\|^##" "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/product-spec
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/product-spec-seed.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/brand-guidelines.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/content/skills/generic/brand-voice.md
+  🧪 bash   grep -n "Pre-Handoff Self-Review\|## Agent Communication Protocol\|Handoff entry\|HO-" "/Users/kanwarsandhu/Desktop/TA-m
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/system-guide.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  🧪 bash   grep -n "narration" "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sp
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  🧪 bash   grep -n -A 30 "§2 narration script" "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-narration.md
+  💬 Now verifying the word counts by script, as the file claims:
+  🧪 bash   cd "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" && python3 - <<'EOF' import re lines = { 
+  🧪 bash   cd "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" && git status --porcelain -- knowledge-ba
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Now the Done entry (and trimming the oldest, since Done is at its 10-entry cap):
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ⚠️  tool returned an error
+  🧪 bash   grep -n "Done (Last 10)" -A 8 "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Running the queue and handoff lints to confirm the advance is well-formed:
+  🧪 bash   cd "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" && bash muster/scripts/muster-queue-lint.
+  🧪 bash   cd "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" && bash muster/scripts/muster-lint-handof
+  💬 Both lints pass. Committing the step:
+  🧪 bash   cd "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" && git log -1 --format="%B" | tail -3
+  🧪 bash   cd "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" && git add knowledge-base/design-specs/we

@@ -80,44 +80,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 Content (web): §2 narration script
-
-```
-Role: content
-Model: claude-fable-5
-
-**Task:** Write the §2 narration layer — the plain-English track that runs synchronized to the real
-terminal log lines.
-
-**Inputs:**
-- `knowledge-base/product-spec-seed.md` §2 — the six-step sequence, the honest headline beat, and the explicit do-not-overclaim instruction on the Safari-only SVG catch
-- `knowledge-base/agent-skills/content/copy-rules.md` — the 12 non-negotiable rules as enforceable constraints
-- `knowledge-base/bodh-sprint4-corpus.md` — founder-supplied source material. Every factual claim must trace to a line here; cite it. Read-only: never edit this file
-- `knowledge-base/design-specs/web/section-02-beat-inventory.md` — which corpus lines belong to which beat
-- `knowledge-base/design-specs/web/section-02-replay.md` — beat timing and sync points to write against
-- `knowledge-base/agent-context/content.md` — your Current Tasks
-- `muster/team/content/skills/generic/brand-voice.md`
-
-**Deliverable:** `knowledge-base/design-specs/web/section-02-narration.md` — narration line by line,
-each keyed to its terminal beat; HO-005 in `agent-requests.md`.
-
-**Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
-- **Product voice throughout.** §2 is not one of the two permitted first-person places (rule 7: the provenance line in §5 and the decisions in §4 only)
-- A non-technical reader follows the narration alone; a technical reader reads the terminal lines; both reach `bodh.day · LIVE`
-- Lands the honest beat: the PM re-checked the developer's work with its own screenshots, QA passed 11/11, no human touched this until the deploy button
-- Exact numbers never rounded; "active build" never wall-clock; scope-labelled BODH vs THIS SITE; "measured — method and data published" never "proven"; the team named as AI
-- The Safari-only SVG catch is either omitted or narrated explicitly as a founder-directed polish pass — never as part of the untouched run
-- Never imply the website wave alone cost 9.3 h / $147 — those are whole-product aggregates
-- Every claim cites a corpus line. A claim the corpus does not support is cut, not softened
-- **SP7 — the page's thesis, at the gate — is ≤16 words with zero slack.** Write to 16. If it cannot land in 16 without going flat, file both versions in HO-005 (the 16 you would ship and the ~20 you would write) and say so; do not overrun and do not quietly flatten. Relief comes from SP6's 12 words in the same beat and is PM's call (DEC-019)
-
-**On completion:** File HO-005 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-24 PM: Wave 3 narration review
 
 ```
@@ -154,6 +116,9 @@ hold at 4.80 s, SP7's ≤16 words, and whether the narration alone carries a non
 the build/QA evidence as a stub the founder reads alongside HO-006 and HO-007; this is the last PM step
 before the gate, so no later step can do it.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-24 Developer (web): §2 replay implementation
 
@@ -290,6 +255,10 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
 
+- 2026-07-25 — Wave 3: Content — §2 narration written to the sync contract (HO-005). All eight slots
+  inside budget, script-measured: 139 timed words of a 163 ceiling; SP7 landed at 15/16 with no SP6
+  relief needed; Safari catch omitted; every claim cited to the corpus in place. Awaiting PM review.
+
 - 2026-07-25 — Wave 2: PM — Shell accepted and Wave 2 closed; §2 narration released (DEC-021). HO-003
   and HO-004 both accepted with the harnesses re-run at review rather than cited — `scripts/test.sh`
   86/86, `qa-independent-audit.mjs` 37/39 with exactly the two reported failures. Four items disposed,
@@ -368,6 +337,3 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 
 - 2026-07-25 — Wave 1 Gate: **APPROVED with amendments** by the founder. Three design questions settled
   (DEC-015); four §2/shell amendments routed to HO-010 (DEC-016). Autonomous run cleared to launch.
-- 2026-07-25 — Wave 1 Step 3: PM Wave 1 design review. HO-002 reviewed — 16 contrast ratios and the full
-  timing model re-derived independently, all clean; finding F1 (mobile two-layer simultaneity) raised and
-  carried. HO-002 left `needs-revision` with the PM box unticked pending HO-010.

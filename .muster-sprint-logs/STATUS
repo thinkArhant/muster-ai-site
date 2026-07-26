@@ -1,6 +1,6 @@
 run: run-20260725-164050-39318
-state: running step 6
-step: 2026-07-25 PM: Shell validation assessment — two readability findings
-step started: 2026-07-25 17:59:09
+state: running step 7
+step: 2026-07-24 Content (web): §2 narration script
+step started: 2026-07-25 19:45:12
 last completed: 2026-07-24 QA (web): Shell validation · 78 turns · $8.3 · out 65k · 16m 40s
-totals: 5 attempt(s) · 378 turns · $39.77
+totals: 6 attempt(s) · 443 turns · $46.42

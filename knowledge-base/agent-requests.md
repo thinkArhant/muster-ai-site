@@ -8,7 +8,35 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-*None open.*
+### 2026-07-25 HO-005 — §2 narration script
+**Type:** handoff
+**Producer:** content
+**Deliverable:** `knowledge-base/design-specs/web/section-02-narration.md`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+All eight slots written to the replay spec's §6 sync contract, every budget script-measured: 139
+timed words against the 163-word ceiling, every slot reading inside its window at 3.5 w/s. Every
+factual claim carries an in-place corpus citation; the whole-product aggregates (9.3 h / $147) appear
+nowhere; the Safari-only SVG catch is omitted (the cleaner of the two permitted treatments). The
+deliverable also carries the beat display names, the §2 chrome strings (h2, terminal label with the
+required "condensed" wording, totals strip with mandatory scope label, controls), and the end-state
+grouping order for the reduced-motion/no-JS transcript.
+
+**SP7 landed: 15 words of the ≤16 budget, no relief requested.** "The run stops itself at the gate.
+No human touched this until the deploy button." reads in 4.29 s of the 4.80 s hold. SP6's 12-word
+relief valve stays unspent and available.
+
+One choice PM should ratify at review: SP4's three micro-captions render on **all** viewports (the
+contract makes the split optional on desktop) — one copy set, one sync behavior, no desktop-only
+33-word variant to maintain.
+
+**Revision log:**
+- 2026-07-25: Filed. Self-review caught two pre-filing fixes: "surgical" was dropped from the SP4
+  Content caption (the corpus's own word, but an adjective the narration doesn't need to carry), and
+  SP4b was recut from "at code level, not by reading a policy" (13 words, over the ≤11 micro-budget)
+  to "in code, not in a policy" (11).
 
 
 ## Resolved (Last 10)
