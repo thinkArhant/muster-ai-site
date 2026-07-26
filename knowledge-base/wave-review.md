@@ -183,6 +183,45 @@ design value.
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
 <!-- Bug list — PM inserts a fix step per bug, then continues. -->
 
+### Gate 3 — 2026-07-26
+
+**Status:** ENTRY GROUPING ACCEPTED · ONE DEFECT CARRIED · SPRINT 1 CLOSES
+
+**Entry grouping works.** The split of the log's leading into a row pitch and an entry separator reads
+correctly at a glance, on both desktop and phone, and it cost nothing — the section got 7.2px shorter.
+The accent mark now takes the same 12px inset in both cards, and the correction that it was flush at
+*every* viewport rather than only on mobile made the fix strictly better than the finding asked for.
+
+**F-G3 — the key-beat tick now collides with the timestamp. Carried to Sprint 2, not fixed here.**
+On L4 and L9 the rust tick sits hard against `20:59` and `21:35` with no separation, on both desktop
+and phone. Cause, confirmed in the CSS rather than by eye: `.log__line` sets
+`padding-inline-start: 1ch` with `text-indent: -1ch`, which is the hanging indent's mechanism — first
+row starts at `padding − indent` = **0** from the border. On ordinary lines the border is transparent
+so nothing shows; on key beats the border *is* the tick. It was structurally certain to do this the
+moment the tick became visible against text.
+
+**Why it is not fixed as a fourth round.** This is the third consecutive fix that satisfied its stated
+criterion and disturbed an adjacent relationship — horizontal scroll → entry grouping → tick spacing.
+The cause is common to all three: the terminal's left edge has five relationships (tick↔card,
+tick↔text, row↔row, entry↔entry, text↔wrap edge) that all derive from two or three shared CSS values,
+and every harness asserts the value that was named rather than the relationship that matters. A fourth
+single-value round would cost roughly another $42 and carries a real chance of disturbing a fifth
+relationship. It is folded into Sprint 2's first build step, which names all five relationships as a
+system, moves the tick out of the text flow entirely, and adds one harness assertion per relationship.
+
+**PM's own miss, recorded.** PM verified this round against `qa-s02-mobile-375.png`, which renders
+BEAT 01 — no key beat is revealed at that frame, so the artifact used to confirm the fix was
+structurally incapable of showing this defect. That is the same blind-by-construction failure QA found
+in its own WebKit row profile, repeated at review. Standing correction: verify against a render of the
+state under test, never an arbitrary frame.
+
+**Sprint 1 closes here.** §2 is built, validated, and accepted with one carried defect. Total cost
+across three gates: ~$97.
+
+---
+
+### Re-gate — 2026-07-26
+
 **Status:** SP7 APPROVED · PHONE SENT BACK — 2026-07-26
 
 **SP7 lands.** *"The operator planned the sprint, left the agents running, and returns to a

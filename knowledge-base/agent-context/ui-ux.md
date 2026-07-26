@@ -69,89 +69,66 @@ None yet for this role. The seed's "Design direction" section functions as this 
 doctrine — treat it with the authority of a skill file.
 
 ## Current Tasks
-<!-- PM-MANAGED: PM updates at sprint planning, task completion, priority changes -->
 
-### 1. Design foundation + §2 replay spec — Priority: HIGH, Effort: L, Platform: web
+**Sprint 2 — three steps, in queue order. Two founder gates only; Gate A judges a *rendered* sample of
+your §4 work, so specs must be buildable from themselves.**
 
-**Deliverable**:
-- `knowledge-base/design-specs/web/page-shell.md` — tokens (both themes), type scale, motifs, section chrome
-- `knowledge-base/design-specs/web/section-02-replay.md` — replay layout, two-layer structure, annotation placement, beat timing, reduced-motion fallback
-- HO-002 in `agent-requests.md`
+### 1. §1 hero design → `section-01-hero.md`, HO-018 (model: claude-fable-5)
 
-**Dependencies**: `design-specs/web/section-02-beat-inventory.md` (Developer, HO-001) for real timing.
+The page's five-second verdict, and the section with the most distinct elements. Implement the seed's
+§1 inventory in full: the measured line **visible without scrolling**; eight named roles as labels on
+the PM-hub + bus-bar formation (this IS the roster, there is no separate roster section); one `curl`;
+the terminal streaming the real Sprint-4 log; the dual build readout with THIS SITE dashed above BODH,
+scope-labelled; the `VERIFY ⎘` chip; the eyebrow facts.
 
-**Acceptance criteria**:
-- Every token traced to the seed's locked values. Both themes first-class, not light-as-afterthought
-- Reading passages full-ink; muted tone reserved for labels and captions
-- Exactly three live motion elements specified, plus the curl cursor — nothing else; all reduced-motion-gated with complete-content fallbacks
-- Contrast ≥4.5:1 body text in both themes, stated per token pair
-- Replay spec pins beat timing and narration sync precisely enough that **pacing is a design decision, not a developer guess**
-- Timing paced against the real intervals in the beat inventory
-- States which choices came from the direction reference as feel cues versus the seed's locked values
+**The highest-risk detail is the headline's accessible name.** The founder's preferred direction is a
+typographic device — a struck word plus an accented one. Struck text is announced by screen readers as
+ordinary text, so an unspecified treatment ships a headline that reads aloud as gibberish. You specify
+how a struck word sets *and* how the whole headline is announced; Content supplies the candidates.
 
-**Why timing carries unusual weight here**: the founder judges the replay with the styling mentally
-subtracted — it must stand on pacing and narration alone, independent of the visual frame. Your timing
-spec is what that judgment lands on.
+Rust on the headline is permitted at display size (DEC-017, ≥24px). No thirteenth palette value
+(A-006). The motion budget stays closed at three live elements plus the cursor — §1's terminal stream
+and the count-up are two of the three that already exist, not new ones. Reading measure is `64ch` as
+the CSS value (DEC-023).
 
-**Key refs**: `product-spec-seed.md` → Design direction + §2 · `design-specs/direction-reference.html`
-(feel only) · `design-specs/web/section-02-beat-inventory.md` ·
-`muster/team/ui-ux/skills/web/{web-design-system,web-screen-specification,web-accessibility,web-marketing-and-conversion-pages}.md`
+### 2. §4 spec-sheet rendering → `section-04-decisions.md`, HO-019
 
-**Status**: delivered as HO-002 and approved at the Wave 1 gate with amendments. Superseded by task 2.
+The seed's **second design centerpiece**. Four founder decisions as spec-sheets: Decision / Problem /
+Trade-off / Mechanism rows, strongest first, dates as small stamps.
 
----
+**The acceptance test is that it is buildable from itself** — a Developer builds one real spec-sheet
+from this spec for Gate A without asking you a question. The founder judges that rendered artifact, not
+a description of it.
 
-### 2. Gate amendments — narration-first mobile, 48 s chain, B5 rebalance — Priority: HIGH, Effort: M, Platform: web
+### 3. Terminal spacing system, brand seats, scroll-snap → amended specs + `brand-seats.md`, HO-020
 
-**Deliverable**: revised `page-shell.md` and `section-02-replay.md`; HO-010. Full step brief in
-`orchestration-queue.md`; rulings and rationale in `decision-log.md` DEC-015 and DEC-016.
+**A — the terminal's left edge, as a system.** Three Sprint-1 fix rounds each satisfied their stated
+criterion and disturbed an adjacent relationship, because five relationships derive from two or three
+shared CSS values. Name and measure all five: tick↔card, tick↔text, row↔row, entry↔entry, text↔wrap
+edge. **Move the tick out of the text flow** — today it is `border-inline-start` on `.log__line`, and
+the hanging indent (`padding-inline-start: 1ch`, `text-indent: -1ch`) puts the first row at 0 from that
+border, so on a key beat the timestamp butts against the tick. Specify it as a positioned mark in the
+log's gutter. **One harness assertion per relationship** — that is the deliverable that stops a fourth
+round (DEC-032).
 
-**Dependencies**: none — the rulings are recorded. Runs before the shell build, because A1 changes
-`page-shell.md` and the Developer builds from it.
+**B — the pennant seats** (DEC-031). Header lockup is `pennant + MUSTER_` with a **static** rust
+underscore — it never blinks, the `curl` owns the only cursor on the page. Five section separators take
+the pennant in place of their 8px squares. Icon seats (favicon, tile, avatars) use the artwork as
+supplied. **Never render the pennant on a pole.**
 
-**The four amendments**:
-- **A1** Drop the theme control (`page-shell.md` §9, §15 q1). Delete the row, not the theme system — both themes stay first-class via `prefers-color-scheme`
-- **A2** Close the motion-budget question (§10 scope note, §15 q2): the replay is content playback; budget stays at three plus the cursor
-- **A3** **Mobile is narration-first** — terminal is texture, narration is the payload. Per-viewport visible-line counts; long lines soft-wrap and **nothing scrolls horizontally anywhere** (DEC-026 — supersedes the terminal's own scroll container); narration card stays in view for the full playback. **§5.1 needs amending too** — line persistence becomes a desktop guarantee with a stated small-viewport equivalent
-- **A4** Rescale to 48 s uniform ×0.8; B3 stays 20%, **B5 restored 10.6% → ~14.5%**, B6 absorbs at ~17.2%
+Sized **optically, not mechanically**: the pennant is ~1:1.5 portrait where the square is 1:1, so equal
+width sets half again as tall. Drawn as `clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 81.79%, 0 100%)`
+on the existing box — no inline SVG, no new network request, and the WebKit divergence class avoided
+rather than tested for. At 8–12px the mark reads as punctuation; at display size it becomes badging,
+which this page's restraint does not carry.
 
-**Acceptance criteria**:
-- Both layers visible simultaneously at 375×667 during playback — the criterion, not a particular solution
-- A stated mobile height budget: numbers plus the viewport assumed, not a claim that it fits
-- Dwells tile to exactly 48.00 s; word budgets recomputed at 3.5 w/s
-- Fidelity intact — no truncation, no ellipsis, every character diffs byte-clean against the corpus
-- Reduced-motion and no-JS paths still render the complete transcript
-- No stale "flagged for the gate" text survives in either spec
+**C — scroll-snap** in `page-shell.md`. The seed's *one idea per screen* as a mechanism rather than as
+composition. **Proximity snapping, never JavaScript scroll-jacking** — keyboard paging, find-in-page
+and 200% zoom must all survive, and QA asserts accessibility mechanically here. **§2 is exempt**: its
+core already fills most of a phone viewport. Define the reduced-motion path.
 
-**Latitude and push-back**: B6's internal split is yours. Scaling L10 ×0.8 leaves a ~4.14 s gate hold,
-down 45% from 7.5 s; compressing L10 harder preserves more. If the hold stops reading as deliberate
-stillness at its new length, say so in the handoff rather than shipping a pause that reads as a stall.
-
-**Why F1 was raised**: measured against the real corpus lines, the section core reached ~646px of a
-667px viewport at the spec'd 12px minimum — pushing the narration card off-screen while the terminal
-played. Narration is what carries the non-technical reader the founder's acceptance criterion is written
-for, so losing it on mobile broke the criterion, not just the layout.
-
-**Key refs**: `wave-review.md` · `decision-log.md` DEC-015/016 · `agent-requests.md` HO-002 finding F1 ·
-`bodh-sprint4-corpus.md` (read-only; longest line 74 chars)
-
-**Status**: delivered as HO-010 and **accepted with notes 2026-07-25** — all four amendments landed, F1
-closed, every number re-derived clean. The gate-hold push-back is upheld: at 4.80 s it gives SP7 16 words
-rather than the 14 the projected 4.14 s alternative would have. Two factual claims in the pacing
-rationale were wrong and PM corrected them in place rather than spending a revision round on two
-sentences — C1: the hold does not "arrive 0.35 s after the fastest interval" (L11's 3.45 s interval sits
-between; the 13.7× figure is a beat-level spread, restated as such); C2: the 6.60 s L8→L9 ellipsis is the
-third-longest interval, not the second. No design value moved. See DEC-019; overrule either wording at
-your next touch if you disagree.
-
----
-
-**No further UI/UX steps this sprint.** Waves 2–3 are Developer, Content and QA executing the two specs.
-Your next likely involvement is a Wave 3 gate outcome or a QA finding against `section-02-replay.md` §7.1
-— specifically the narration card's 6-line worst case, which QA measures against SP3's real copy once
-Content files it.
-
----
+**Standing practice this sprint**: assert relationships, not values. Any spec that changes spacing,
+insets or rhythm names the relationship it preserves and gives the harness a way to check it.
 
 ## Current state of §2's mobile model (2026-07-26 — supersedes A3 above)
 

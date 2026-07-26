@@ -66,183 +66,61 @@ The page is an exhibit of what Muster produces. Build quality is the argument.
 None yet for this role.
 
 ## Current Tasks
-<!-- PM-MANAGED: PM updates at sprint planning, task completion, priority changes -->
 
-### 1. Bodh corpus verification + beat inventory — Priority: HIGH, Effort: S, Platform: web
+**Sprint 2 — five steps. One is a decision aid for Gate A; one blocks every other; three build sections.**
 
-**Deliverable**: `knowledge-base/design-specs/web/section-02-beat-inventory.md`; HO-001 in `agent-requests.md`.
+### 1. Gate A sample render → `samples/gate-a.html`, HO-024
 
-Map `bodh-sprint4-corpus.md` onto the six §2 beats in `product-spec-seed.md` §2, and derive the pacing
-data downstream steps need. The corpus already ships a "Terminal-line inventory" — do not duplicate it.
-Your value-add is the beat mapping, the interval arithmetic, and an independent consistency check.
+Small step, high leverage: it converts Gate A from imagining to looking. Build every §1 headline
+candidate **as it would actually set** — real tokens, real fonts, real sizes, both themes, not an
+approximation — plus **one real §4 spec-sheet** built from the spec and the real copy, so the founder
+judges the rendering rather than a description of it. Label candidates so the founder can name one in a
+verdict. State each headline's accessible name and how you tested it.
 
-**Dependencies**: none — the corpus is in the repo.
+**This never ships.** It is a decision aid, like the reading-measure comparison. Keep it out of the
+page's build and out of the zero-request surface.
 
-**Acceptance criteria**:
-- **Read-only on the corpus.** No edits, no reformatting, no cleanup, no extension
-- Every corpus terminal line either assigned to a beat or explicitly listed as unused — nothing silently dropped
-- Timestamps preserved verbatim; inter-beat intervals shown as derived, with the arithmetic visible
-- Coverage report per beat: supported by which lines, or reported as a gap. **Gaps are reported, never filled**
-- Independent consistency check recorded: session durations against the chain total, session timestamps against the terminal inventory, and the corpus's own totals
-- Zero conversation content surfaced — queue lines, handoffs, decisions, timestamps only
+### 2. Shell — spacing system and brand mark → HO-025. **Blocks every section build.**
 
-**Known mapping** (verify, don't assume): the corpus's 8 sessions collapse onto the seed's 6 beats, with
-sessions 4–6 (content, legal, marketing) forming the seed's step 4.
+All five terminal left-edge relationships implemented, with **one `scripts/test.sh` assertion each**.
+Without the assertions this step is not done: they are what every later step inherits, and they are the
+deliverable that stops a fourth patch round (DEC-032).
 
-**HALT if**: the coverage report finds a beat the corpus does not support. File the report as-is, re-point
-`## Next Step` to a `Role: pm` step naming the unsupported beats, and stop. Do not invent, infer, or
-approximate a line or timestamp — a fabricated line refutes the page's central claim.
+Resolve the carried gate-3 defect — the key-beat tick collides with the timestamp at every viewport.
+**The tick becomes a positioned mark, not `border-inline-start` on the line**, so indentation and tick
+placement stop sharing a lever.
 
-**Key refs**: `bodh-sprint4-corpus.md` · `product-spec-seed.md` §2 + Verification ·
-`muster/team/developer/skills/generic/plan-first-discipline.md`
+Pennant in the header (`pennant + MUSTER_`, static underscore) and at all five section separators, via
+`clip-path`, sized per spec. Favicon data-URI swapped to the pennant. **Zero new network requests** —
+no inline SVG in these seats, which is the whole point of the clip-path route (DEC-031).
 
-**Status**: DONE — HO-001 accepted, trued up to corpus v1.1 as HO-009 and accepted 2026-07-25. The
-inventory is final: chain 3858 s, B6 486 s, both endpoints measured at source.
+§2's fidelity, its 48.00 s schedule and its phone budget are all unchanged — prove it, do not assume it.
 
----
+### 3. §1 and §6 → HO-026
 
-### 2. Page shell implementation — Priority: HIGH, Effort: L, Platform: web
+They pair because both carry the `curl` and the `VERIFY ⎘` chip. Build the founder's chosen headline
+with the accessible name the spec defines, and **verify it reads correctly aloud** rather than assuming
+the markup is enough. Measured line visible without scrolling; dual readout with THIS SITE dashed and
+scope-labelled; eight named roles on the formation; the §1 terminal stream. Wire the `VERIFY ⎘` link —
+the file itself lands in Wave 3, so do not invent it. §6's `curl` is the real GitHub raw URL,
+copy-paste-correct, never `muster.build`.
 
-**Deliverable**: `index.html`, `styles/`, `scripts/` — shell only, no section content. HO-003.
+### 4. §3 and §4 → HO-027
 
-**Dependencies**: `design-specs/web/page-shell.md` (UI/UX, HO-002), approved at the founder gate.
-**The spec is now final and PM-accepted** — the Wave 1 amendments landed as HO-010 (accepted 2026-07-25).
-Build from the file as it stands; nothing in it is open. Two things changed since the gate: **no theme
-control ships** (§9 — build the theme *system*, both palettes and `prefers-color-scheme`, and keep the
-`:root[data-theme]` attribute so QA can force a theme, but put no control in the UI), and §10's motion
-budget is closed at three elements plus the curl cursor, with the §2 replay explicitly outside it.
+§4's four spec-sheets must render **as approved at Gate A** — divergence from the sample the founder
+judged is a defect. Decision / Problem / Trade-off / Mechanism rows, strongest first, dates as small
+stamps. §3 is prose in the reading column at `64ch` (DEC-023).
 
-**Acceptance criteria**:
-- Both palettes at exact hex values, both themes first-class; mono display / humanist-sans reading split
-- Grain texture + top vignette CSS/SVG-generated; stencil section tags, hairline rules with machined end-ticks, registration marks, OPERATIONAL status bar
-- **Zero external network requests at runtime**, evidenced
-- Matte surfaces, sharp corners, opaque cards; reading column ~64ch; semantic landmarks, real focus states
-- All motion reduced-motion-gated, reduced path renders complete content
-- WebKit and Blink verified before filing
-- Implement everything in HO-002; the above is non-exhaustive
+### 5. §5, then scroll-snap → HO-028
 
-**Key refs**: `design-specs/web/page-shell.md` · `product-spec-seed.md` → Design direction + Tech ·
-`muster/team/developer/skills/web/{web-best-practices,web-accessibility,web-performance-engineering}.md`
+§5's readout cards use the shell motif; THIS SITE dashed; count-up is motion element 3, already in
+budget. **Scroll-snap builds last** — it needs sections to snap between, and it is the likeliest thing
+to be rejected at Gate B, so building it last minimises sunk cost. Proximity snapping, **never
+JavaScript scroll-jacking**; keyboard paging, find-in-page and 200% zoom each asserted, not claimed.
+**§2 is exempt** — verify its playback and phone budget are untouched by the snap container.
 
-**Status**: DONE — HO-003 accepted 2026-07-25. 79/79 Blink + 7/7 WebKit, re-run at review. One
-shell-level fix carried forward into task 3 rather than reopening this one: `.instrument`'s phone inset
-(DEC-021.1).
+**Every step**: zero external requests, cross-engine WebKit **and** Blink before filing, all motion
+`prefers-reduced-motion`-gated with complete content in the reduced path, and `scripts/test.sh` green
+including the relationship assertions. Extend the existing harness rather than adding a second runner
+(DEC-020). Never run `muster-meter.py`; never write a THIS SITE metric.
 
----
-
-### 3. §2 replay implementation — Priority: HIGH, Effort: L, Platform: web
-
-**Deliverable**: the §2 section built into the shell, corpus wired into the terminal layer. HO-006.
-
-**Dependencies**: beat inventory (HO-001), replay spec (HO-002), narration (HO-005, PM-approved).
-
-**Acceptance criteria**:
-- **Founder criterion**: the replay must stand on pacing and plain-English narration alone, independent of the visual frame. The founder judges timing and narration with styling mentally subtracted
-- Terminal layer renders corpus lines verbatim, labelled "condensed from the real build log" — nothing staged, embellished, or invented
-- Narration synchronized to the beats per the replay spec's timing; ends on `bodh.day`, live
-- Scripted HTML/CSS/JS only — no asciinema, no tooling dependency, zero external requests
-- Reduced-motion path renders complete content
-- WebKit and Blink verified before filing, within the ceiling below
-- Implement everything in HO-002 and HO-005; the above is non-exhaustive
-- **§2's chrome strings come from `section-02-narration.md` §5 (DEC-022).** That file is the authority
-  on §2 copy — h2, terminal label, live indicator word, totals strip, controls, beat display names. The
-  replay spec's wireframes were cascaded to match it; if any third spelling of a string turns up, the
-  narration file wins. Narration slot text is final and rendered verbatim
-- **The chain-totals strip's value scale is per-viewport (DEC-022.3).** `--text-readout` at
-  `≥ --bp-wide`; `--text-micro` below it. §7.1 prices the whole strip at `2 × (--text-micro 11px × 1.5)
-  = 33.0px`, and at 375px `--text-readout` clamps to 24px — one value line alone would be 24px, making
-  the strip 40.5px against a budget with 5.1px of slack, which busts the 553px core. Applied to
-  annotation 7 already; build to the file
-- **Keep the mobile strip at two lines — the lever is tracking, not copy (DEC-022.4).** Line 1 is 43
-  characters: in `--font-mono` at 11px that is ~284px bare but ~350px with `--track-micro` (0.14em),
-  against ~327px of content width at 375px. Set tracking on the value line within the micro treatment
-  and assert the rendered line count in the harness. Do not shorten the string — it is accepted copy
-- **Fix `.instrument`'s phone inset while you are in these files (DEC-021.1).** Below `--bp-wide` the
-  total inset must not exceed `--gap-flow` (24px a side); desktop keeps `--gap-block` (48px). Today it is
-  a flat 48px everywhere, so a 320px phone spends 96px of a 272px card on padding and the prose column is
-  174px. No second named breakpoint — `page-shell.md` §7 keeps `--bp-wide` as the only one, and a fluid
-  `clamp()` between the two rhythm multiples both satisfies that and avoids a cliff at 960px. Extend the
-  existing harness with the assertion (DEC-020). *This is the OBS-001 you deliberately left alone because
-  §7.1's budget is token-derived — that constraint does not hold: §7.1 budgets its own insets (12+12
-  terminal, 24 card), and at 48px its core would compute to 568.4px against a 553px viewport. §2 is
-  unaffected by the change.*
-- **The WebKit ceiling is measured, not a hypothesis (DEC-021.4).** `qlmanage` executes no JavaScript and
-  renders at a fixed ~1024² regardless of the requested size. WebKit's evidence for §2 is therefore the
-  no-JS/reduced-motion complete transcript — twelve lines verbatim, L12's treatment, the §9 emphasis
-  system, chrome, grain and vignette parity, both themes — which is load-bearing because DEC-017 item 4
-  makes playback an opacity reveal over a complete DOM. Everything else is Blink evidence and is labelled
-  as Blink evidence in HO-006. Do not spend the session fighting it and do not install a browser
-  (DEC-020)
-
-**HALT if**: the corpus lacks a line the replay spec calls for. Do not invent, paraphrase, or
-reconstruct it. Re-point `## Next Step` to a `Role: pm` step naming the missing line and stop.
-
-**Key refs**: `design-specs/web/section-02-replay.md` · `design-specs/web/section-02-narration.md` ·
-`bodh-sprint4-corpus.md` · `design-specs/web/section-02-beat-inventory.md` · `product-spec-seed.md` §2
-
----
-
-## Current task — rebuild §2 to the amended spec and copy (2026-07-26)
-
-`section-02-replay.md` and `section-02-narration.md` are both final and accepted (DEC-027). Build from
-them; where any other file spells a §2 string differently, the narration file wins.
-
-**Two changes, and only two.** Timing is untouched — the 48.00 s schedule, the ten reveal offsets and
-the 4.80 s gate hold are not in scope.
-
-1. **SP7's string changed** (DEC-024): *"The operator planned the sprint, left the agents running, and
-   returns to a deploy-ready site."* Render it verbatim from the narration file — never retyped. The
-   built page still carries the superseded line, so the independent audit reds on SP7 until this lands.
-2. **The phone terminal wraps and the totals strip moves** (DEC-026, amended by DEC-029).
-   `white-space: pre-wrap` with a **1ch** hanging indent (`padding-inline-start: 1ch; text-indent: -1ch`)
-   at **every** viewport — it is inert on desktop, where no line reaches the column. The 12px that used
-   to be the line's other half now sits on the log as the accent gutter, so a first character does not
-   move. `overflow-wrap: break-word` as a backstop only.
-   Nothing scrolls horizontally anywhere: not the terminal's region, not the page body, at any width.
-   The chain totals strip sits **immediately below** the playback core on mobile, not inside it — that
-   is what buys the 45.0px the wrap costs. Desktop keeps it in the two-column core.
-
-**Numbers you will be measured against** (current — the log's leading has split, so every figure that
-used a uniform 24.7px line box is retired): fixed core **379.4px**, unchanged; below `--bp-wide` a row
-inside an entry is **19.5px** (`--text-terminal` × `--lead-micro`), an **entry box is 39.0px**, and the
-**entry pitch — box plus the `--gap-hairline` separator — is 51.0px**. At 375 × 553 the window is
-**3 whole entries** in 141.0px of line region, core used 520.4px, slack **32.6px**. The guarantee floor
-is **469.4px** of visual viewport height. The log carries a 12px accent gutter at every viewport and the
-hanging indent is **1ch**, giving **39 first-row columns / 38 continuation** at 375px. Desktop keeps
-`--lead-terminal` and gains no separator.
-
-**The horizontal floor is 37/36 columns**, not whatever a viewport happens to give — verified by
-simulating the corpus, where all of L1–L11 hold at two rows down to exactly that and L3 (74 characters)
-breaks first below it. The floor has no rounding margin in it, and 360px sits 5.7px above it — under one
-column — so **measure the row count at 360 / 375 / 390 / 393 rather than trusting the table.** If any of
-L1–L11 sets three rows, the gutter yields — in both layers together, so §9.1's single inset survives —
-never fidelity and never the entry count.
-
-**The one trap, wearing a new number.** 51.0px is a *ceiling*, exactly as 49.4px was: L12 sets a
-different box (1.25rem, outside the chain) and below 375px a chain line is three rows. Build §7.1 rule
-4's mechanism — quantise the flex remainder down to whole **entries** by measurement — so the count
-falls out of real heights. The window must come to rest on an entry's own box edge and never inside a
-separator, which would show a fragment of gap at the top and read as a clipped entry.
-
-**Three implementation facts the spec states as outcomes and the stylesheet gets wrong by default.**
-(1) The desktop rail's inset has two sources: `.narration`'s padding *and*
-`.replay[data-state] .narration__list { inset: var(--gap-flow) }`. The second wins while playback runs,
-so changing only the padding fixes the static transcript and leaves the live chain at 24px. (2)
-`--line-box` in `.replay` is `--text-terminal × --lead-terminal` and is wrong below `--bp-wide` the
-moment the leading splits. (3) The continuation indent halves, 2ch → 1ch, as the entry cue strengthens —
-so the indent no longer stands alone and the separator has to be asserted as its own property.
-
-**Two landscape figures in the spec are derived, not measured, and are yours to confirm**: the chrome
-bar at a 324px column (budgeted conservatively at two lines / 58px; it may fall to 41.5px) and the
-worst-case narration slot at ~29 characters per line (budgeted 7 lines / 228.3px). Both have slack above
-them; if either exceeds it, §7.1's priority order drops the beat indicator first. Landscape's first row
-is derived at 40 columns with under a tenth of a column of headroom — §12 binds at the 37 floor and asks
-for the measured number, so a 39 there is margin spent, not a defect.
-
-**The totals strip's tracking is spec, not styling.** `0.02em` on the value line, not `--track-micro` —
-at the wide tracking the 43-character string sets 351.7px against a 327px column and wraps to a third
-strip row. The scope label keeps `--track-micro`.
-
-Fidelity is unchanged and structurally so: a soft wrap inserts and removes no character, so all twelve
-lines still diff byte-clean. Reduced-motion and no-JS paths still render the complete transcript.
-`bash scripts/test.sh` must be green on both engines — extend it, never add a second runner (DEC-020).

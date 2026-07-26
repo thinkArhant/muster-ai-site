@@ -69,56 +69,56 @@ because the gate waited on Apple. No copy may imply the deploy closed the chain.
 - `knowledge-base/agent-skills/content/copy-rules.md` — the seed's twelve non-negotiable rules as enforceable pass/fail checks, plus the scope table, the sourced-claim list, and the §2 do-not-overclaim boundary. Read alongside `muster/team/content/skills/generic/brand-voice.md`.
 
 ## Current Tasks
-<!-- PM-MANAGED: PM updates at sprint planning, task completion, priority changes -->
 
-### 1. §2 narration script — Priority: HIGH, Effort: M, Platform: web — **[x] DONE 2026-07-25 (HO-005)**
+**Sprint 2 — two steps. Your output is reviewed at Gate A *before* anything is built, because copy is a
+build input and reviewing it afterwards is how rework happens.**
 
-Accepted with no revision and no word rewritten. All eight slots inside budget (139 of 163 timed words,
-every slot inside its read window); SP7 landed at 15 of 16 with SP6's relief unspent; the Safari catch
-omitted. SP4's all-viewport split ratified. `section-02-narration.md` §5 is now the authority on §2's
-chrome copy — the replay spec's wireframes were cascaded to match it (DEC-022).
+### 1. §1 and §3 copy → `section-01-copy.md`, `section-03-copy.md`, HO-022 (model: claude-fable-5)
 
-**Deliverable**: `knowledge-base/design-specs/web/section-02-narration.md` — the narration layer line by
-line, each line keyed to its terminal beat; HO-005 in `agent-requests.md`.
+**The §1 headline is yours to make and defend.** The seed calls the anchor text *"Ship a product.
+Without a team."* **available, not locked**, and says explicitly *"Content arranges headline vs.
+subline."* Deliver 3–4 candidates, one recommendation, and the reasoning for each — the founder chooses
+at Gate A from *rendered* versions.
 
-**Dependencies**: beat inventory (Developer, HO-001) and replay spec (UI/UX) — **read the HO-010 amended
-version, not HO-002**. The chain rescaled from 60 s to 48 s, so every word budget in §6 shrank by 20%.
-Budgets are a spec contract, not a style guide: an overrun breaks the pacing the section is judged on.
+**The founder's own direction is the incumbent to beat**, not one option among equals:
 
-Two beats changed materially. **B5 (QA validation) gained time** — restored from 10.6% to ~14.5% of the
-chain, and in absolute terms it grew despite the shorter chain. It has to carry two claims, not one:
-QA re-derived the date math *with its own formula* across 24 dates × 3 timezones, **and** 11/11 PASS with
-zero bugs. The first is what makes the second credible to a skeptical reader — that is why the beat was
-given room back. **B6 (the gate hold) lost time**, so SP7's honest-headline slot is tighter than it was.
+> *Ship a product with a ~~human~~ **AI agents** team* — "human" struck, "AI agents" accented.
 
-**SP7 is the tight one, and it is the page's thesis.** ≤16 words, at the gate, with zero slack — a
-16-word line reads in 4.57 s of the 4.80 s window. Write to 16. If the line genuinely cannot land in 16
-without going flat, **say so in HO-005 with the version you would write at 20 and the version you would
-ship at 16** — do not overrun, and do not quietly flatten it either. The known relief is SP6's 12 words
-in the same beat, which needs no reschedule, and it is PM's call to spend (DEC-019). Raising it is the
-expected outcome, not a failure.
+It is a strong idea: it resolves the ambiguity visually instead of spending words, and a strikethrough
+is an **edit mark**, which on a page about process and revision is on-thesis rather than decorative.
+Four things decide whether it lands:
 
-The specs are final and PM-accepted as of 2026-07-25; nothing in either is open. Two pacing-rationale
-sentences in §5.1 were corrected after filing (DEC-019) — they change no budget, no anchor, no window.
+1. **The article breaks as written** — "a human team" → "a AI agents team" does not parse. Strike the
+   article along with the adjective, or find better. Do not ship the founder's phrasing verbatim.
+2. **Screen readers** announce struck text as ordinary text. UI/UX specifies the treatment and the
+   accessible name; write copy that survives being read aloud correctly.
+3. **The accent cannot be a new colour** (A-006). Rust on display-size text is available (DEC-017).
+4. **Does it cost a beat of confusion?** §1's job is a message landing in five seconds. A struck word is
+   parsed before it is read. Say what you think and why.
 
-**Acceptance criteria**:
-- Product voice throughout — §2 is not one of the two first-person places
-- A non-technical reader follows the narration alone; a technical reader reads the terminal lines; both reach `bodh.day · LIVE`
-- Lands the honest headline beat: the PM re-checked the developer's work with its own screenshots, QA passed 11/11, no human touched this until the deploy button
-- No rounded numbers, no adjectives-as-argument, "measured" never "proven", scope labels correct, AI team named as AI
-- **Every factual claim cites a line in `bodh-sprint4-corpus.md`.** A claim the corpus does not support is cut, not softened
-- The Safari-only SVG catch is omitted, or narrated explicitly as a founder-directed polish pass — never as part of the untouched run
-- Never imply the website wave alone cost 9.3 h / $147
+**§3** folds a CrewAI/AutoGen contrast into a clause: competitors optimise message-passing, Muster
+optimises what each agent reads. That is grounded in the founder's own survey, not a documented review.
+If it needs external grounding, open a `needs-research` entry in `research/change-log.md` scoped to
+competitor positioning only — do not assert it harder to cover the gap.
 
-**Pre-sourced claims are listed in `copy-rules.md`** → "§2-specific: the do-not-overclaim boundary."
-Use those; don't improvise near them. Compression and merging of corpus lines is permitted; invention
-is not. Anything not in the corpus is not in the replay.
+### 2. §4, §5 and §6 copy → three files, HO-023
 
-**Key refs**: `agent-skills/content/copy-rules.md` · `product-spec-seed.md` §2 ·
-`bodh-sprint4-corpus.md` · `design-specs/web/section-02-beat-inventory.md` ·
-`design-specs/web/section-02-replay.md` · `muster/team/content/skills/generic/brand-voice.md`
+**§4's four decisions are founder-authored locked draft.** Tighten only. Never inflate, never reorder
+the argument, never add a fifth. Rule 7 permits first person here — this is one of only two places.
 
----
+**§5** carries Bodh, the provenance line, and this site. The provenance line is founder-supplied first
+person and is the other permitted first-person place. The source app stays unnamed — no status, no
+"coming soon". This site's readout is dashes until launch. No growing-list hype.
+
+**§6** is one `curl`, shipping the GitHub raw URL:
+`curl -fsSL https://raw.githubusercontent.com/thinkArhant/muster-ai/main/scripts/setup-project.sh | bash -s my-product`
+`muster.build` is fictional and must never appear (DEC-010, R12).
+
+**Binding throughout**: every rule in `agent-skills/content/copy-rules.md`. R8 especially — the team is
+AI and says so, with no unqualified "the Muster team". Scope labels are the page's likeliest factual
+failure: BODH's 9.3 h / $147 is whole-product, the wave is 64 min / 289 calls / $24.73, THIS SITE is
+dashes. Every factual claim traces to `bodh-sprint4-corpus.md` or the seed; a claim neither supports is
+cut, not softened.
 
 ## SP7 as it now stands (2026-07-26 — supersedes the note above)
 

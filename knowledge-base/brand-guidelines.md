@@ -63,6 +63,39 @@ third. Never lead with architecture.
 
 ## 4. Visual Direction
 
+### The mark — the pennant
+
+A cream swallowtail banner: the standard a formation musters under. Founder-authored, supplied at
+`knowledge-base/design-specs/brand/` — `muster-mark-tile.svg` (cream on rust, the house tile),
+`muster-glyph-cream.svg` (dark grounds), `muster-glyph-ink.svg` (light grounds), `favicon.svg`.
+
+**Where the mark appears**
+
+| Seat | Treatment |
+|---|---|
+| Header and footer lockup | Pennant + `MUSTER_` — rust pennant (~8px), the wordmark, and a **static** rust underscore |
+| Section separators | Pennant replaces the square, at section-tag scale |
+| Favicon, social tile, avatars | The supplied artwork as authored |
+
+**The underscore never blinks.** The `curl` owns the only cursor on the page; the header's underscore
+is a static mark, not a cursor effect.
+
+**Never render the pennant on a pole.** The mark is the banner alone.
+
+**Geometry.** The pennant is a five-point polygon — `M0 0 L470 0 L470 703 L235 575 L0 703 Z` — so at
+page scale it is drawn as a `clip-path` on a plain box rather than as inline SVG:
+`polygon(0 0, 100% 0, 100% 100%, 50% 81.79%, 0 100%)`. That keeps the page free of SVG in these seats,
+which is deliberate: it costs no network request and avoids the inline-SVG rendering divergence this
+project treats as a known failure class.
+
+**Proportion is a design decision, not arithmetic.** The pennant is ~1:1.5 portrait where a square is
+1:1, so a mark set to the same width sets half again as tall. Section tags and the header lockup are
+sized optically. At 8–12px the mark reads as punctuation; at display sizes it becomes badging, which the
+page's restraint does not carry.
+
+**Colour.** Rust, per the accent rules — rust is permitted on graphical marks at any size. The mark
+introduces no new palette value.
+
 **Concept**: a spacious, mil-spec field manual rendered as a calm, *live* operations terminal.
 Terminal × military ("muster" = assemble into formation) × mechanical-trust × **spacious** — spacious
 being the overriding constraint. Generous air, one idea per screen.
