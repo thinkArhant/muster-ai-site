@@ -8,6 +8,128 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-26 HO-007 — §2 replay validated: every criterion green, one carried founder question
+
+**Type:** handoff
+**Producer:** QA
+**Deliverable:** `tests/qa-independent-audit.mjs` (extended from 39 checks to 100 + 7 reported
+measurements), evidence in `tests/artifacts/qa-independent-report.json`, renders in
+`tests/artifacts/qa-*.png` and `qa-webkit-*.png` (git-ignored by design — regenerate with
+`node tests/qa-independent-audit.mjs` rather than reading a stale copy)
+**Status:** open
+**Reviewers:**
+- [ ] PM — pending
+
+**Verdict: HO-006 passes.** Every acceptance criterion for §2 is green. `bash scripts/test.sh` is green
+end to end (129 Blink, 13 WebKit) and the independent audit — written against the specs, not against the
+build — is **99 of 100**, plus 7 measurements reported rather than asserted. The one red is F1 from the
+shell wave, which is already with the founder and is not a §2 defect; details below.
+
+Nothing in the build was altered by this session. The only file touched is the audit.
+
+**Per-criterion result**
+
+| # | Criterion | Result | Evidence |
+|---|---|---|---|
+| 1 | Every terminal line diffed against the corpus | PASS | 12/12 byte-clean, 679 characters, codepoint counts equal — no truncation, padding or re-wrap. Corpus parsed off disk at test time, not from a fixture |
+| 2 | Corpus unmodified since HO-001 | PASS | Proven from git, not asserted: last commit `025842c founder: corpus v1.1`, clean working tree. All three founder-authored files carry only `founder:` commits |
+| 3 | Every §2 chrome string diffed against the narration file §5 | PASS | 5/5 verbatim at desktop (heading, chrome label, `RUN`, both totals lines); the narrow label is exact too. All 10 narration slots verbatim, 1069 characters |
+| 4 | "Condensed from the real build log" label present | PASS | Rendered and visible at both widths; below `--bp-wide` it drops the run name and keeps the sentence whole |
+| 5 | Chain-totals strip at 375 × 553 (DEC-022.3–4) | PASS | 2 lines, both `--text-micro` 11px, strip 33.0px against a 33.0px budget. Value line 294.23px of 327px — 32.77px of margin, reported |
+| 6 | Cross-engine parity, scoped (DEC-021.4) | PASS | WebKit: 12 distinct log rows, L12's larger row, accent ink, chrome bar, top vignette, grain — both themes. Blink: everything else |
+| 7 | Zero network requests | PASS | 0 non-`file:`/`data:` loads across a full 48-second playback; the page also renders complete with the network off |
+| 8 | Reduced-motion path complete | PASS | No `data-state`, no controls, 12 lines + 10 entries + totals at opacity 1, string-identical to the motion path's end state |
+| 9 | No-JS path complete | PASS | Script execution disabled at the protocol: same DOM, same strings as reduced motion |
+| 10 | Narration/terminal sync | PASS | Worst reveal drift **16.8 ms** against §5.1 (tolerance 100 ms) across all 12 lines and all 10 slots, measured by a MutationObserver installed before playback — nothing read back from `window.MusterReplay` |
+| 11 | Measured beat intervals reported | PASS | Reported below, not asserted |
+| 12 | Mobile 375 × 553: 5 lines, both layers visible, core ≤553px | PASS | 5 whole line boxes; core **499.89px**; 192 samples across the chain at **100.0%** coverage of both layers, measured under the 48px sticky bar rather than against the raw viewport |
+| 13 | Body never scrolls horizontally at 375 / 320 / 200% zoom | PASS | 0 escaping boxes and +0px unmasked scroll at all three, with `body{overflow-x}` neutralised first so the assertion can actually fail. Only the log scrolls |
+| 14 | Terminal scroll container focusable and arrow-operable | PASS | `tabindex="0"`, named, 2px ring; real arrow keys move it 0→80 vertically and 0→80 horizontally |
+| 15 | Narration card measured against SP3's real copy | PASS | **6 lines, card 199.39px against 199.4px budgeted** — the §7.1 worst case is met exactly. See finding F2 |
+| 16 | `.instrument` inset ≤20% of card width at ≤375px (DEC-021.1–2) | PASS | 320px 17.6% · 360px 15.4% · 375px 14.7%. The old 45-character floor is replaced by this plus a reported measure |
+| 17 | Copy rules as a text matrix | PASS | No Safari catch, no cross-scope aggregates, no first person, no wall-clock framing, no rounded cost, no `muster.build`; scope label always in the DOM beside the values; only HH:MM stamps reach the DOM — no offsets, no derived durations |
+| 18 | §9 emphasis system | PASS | L4/L9 carry a 2px accent tick with bold-ink verdict tokens; L12 is 20px/700 with the corpus divider as its stamp. Both themes |
+| 19 | Accessibility names, controls, targets | PASS | Section labelled by its heading, both lists named, beat indicator `aria-hidden`; 3 focus stops in DOM order; skip and replay both driven by a real Enter key; controls 44px on a coarse pointer |
+| 20 | Playback pauses when unwatched (§11) | PASS | Hidden at ~1.5 s and held 6.5 s: L3's 6.4 s anchor passes with **no reveal**, and the chain resumes from where it stopped |
+
+**Measured beat intervals, for the founder's pacing judgment** (Blink, 1440 × 900, styling not a factor):
+
+`L2−L1 0.36s · L3−L2 6.05s · L4−L3 7.20s · L5−L4 9.60s · L6−L5 3.20s · L7−L6 3.20s · L8−L7 3.20s ·
+L9−L8 6.60s · L10−L9 0.35s · L11−L10 3.45s · L12−L11 4.80s`, chain 48.0 s. The two same-stamp pairs land
+one `--reveal` apart (358.4 ms and 350.1 ms). The gate hold is silent: nothing fires between 43.55 s
+and 48.00 s.
+
+**Engine scoping, stated plainly.** WebKit's evidence is the no-JS complete transcript at a fixed
+1400 × 1400 QuickLook render, both themes. **Every mobile measurement in this handoff is Blink-only —
+375 × 553, 320px, landscape, 200% zoom, the visibility gate, the windowed terminal and all playback
+timing. None of it is verified cross-engine.** The `qlmanage` ceiling is unchanged and was not closed by
+installing anything.
+
+**Two suspicions chased and cleared rather than reported.** (1) The §2 terminal runs a second pulse lamp,
+so six CSS animations are live where the shell had three. Replay spec §7 annotation 3 names it "motion
+element 2's terminal instance" and the budget is written in elements, so it holds — the audit was
+counting instances. (2) `pause()` leaves `data-state` on `"playing"` while the clock is stopped. Nothing
+but a test reads that attribute, so the visibility check was rewritten to measure the chain's own anchors
+instead — and the clock does stop.
+
+**Seven defects found in the audit itself, all fixed here.** Five of them turned **eight checks red
+against a correct build**; two were criteria nothing measured at all:
+1. **The WebKit row profile was blind by construction.** It counted pixels differing from page *ground*,
+   but log text sits on `--surface`, so text and bare panel both counted as ink — hiding all twelve lines
+   left the profile bit-identical at **815375 inked pixels either way**. The two renders are now diffed
+   against *each other*, which recovers 12 distinct row bands in both themes, and one band for L12 at
+   27px against a 19px median. That is a stronger measurement than the one it replaces, not a weaker one.
+2. **Two opacity assertions raced the last reveal**, snapshotting L12 mid-fade (worst opacity 0.19). The
+   harness now waits out one `--reveal` after the state flips.
+3. **A detail string printed its pass text while failing**, which would have made a real divergence read
+   as a pass in the log. It now prints what it measured.
+4. **The §9 glyph exception was applied in one contrast sweep and not the other**, so the same ✓ was
+   green in one check and red in the next.
+5. **The motion check counted animation instances, not motion elements**, and so read §2's second pulse
+   lamp as a budget breach. It now asserts that every running animation belongs to the pulse across the
+   two lamps the specs name — which is the claim the budget actually makes.
+6. **Terminal chrome and the top vignette were named in the criterion and measured by nobody** — neither
+   harness covered them. Both now have differential WebKit checks.
+7. **Playback-pause was unverified.** Now measured.
+
+**Findings for PM**
+
+- **F1 — the reading column renders ~90 characters (carried, not new).** `--read-max: 64ch` resolves to
+  685.3px. This is the founder question already in `## Founder Decisions` and carried as a hard item in
+  `pre-launch-checklist.md` (DEC-021.3). It is **not a §2 defect** — §2's narration never enters that
+  column — and it gates nothing this sprint. It is left red deliberately: the threshold is satisfiable,
+  the build simply does not satisfy it, and turning it green before the founder answers would be
+  laundering. The audit therefore exits non-zero by design until then. `scripts/test.sh` is unaffected.
+- **F2 — the narration card meets its worst case exactly, with zero margin.** SP3 sets **6 lines** in a
+  6-line budget; the card measures 199.39px against 199.4px. The budget is correct as written, so nothing
+  is wrong today — but there is no room in it. Any future growth in SP3, or a wider glyph in a
+  replacement string, costs a seventh line and 16.5px the mobile core does not have. Suggested action:
+  PM notes the zero margin against the copy, since the lever is copy length rather than layout.
+- **F3 — OBS-002 confirmed by measurement.** At 320px the totals value line wraps: 2 lines at 11px,
+  strip 49.5px, value line 246.34px in 272px of content. The producer's arithmetic was right. Reported
+  rather than asserted, because §7.1's budget is stated for 375 × 553 and 320px is below the width any
+  row of it is derived at. Suggested action: PM disposes OBS-002 with a number in hand.
+
+**Observations:**
+- OBS-004 — The replay spec's §11 names the section label as `aria-labelledby="s2-heading"`; the build
+  uses `s02-title`   Severity: low
+  Evidence: both satisfy the requirement (the section is labelled by its own heading) and the audit
+  passes on the built id. Only the literal string differs.
+  Suggested action: PM decides which of the two moves. Nothing is broken either way.
+- OBS-005 — Landscape phone shows 8 whole terminal lines in emulation against §10's derived 7
+  Severity: low
+  Evidence: headless Chrome gives the full 375px of height where Safari's landscape toolbars leave
+  ~331px, so this is the upper bound of that derivation rather than a re-measure of it. Two columns with
+  the narration wider (326.78px vs 249.53px) is confirmed.
+  Suggested action: none — the spec's figure is the conservative one and stands.
+
+**Revision log:**
+- 2026-07-26: Filed. Self-review re-read the criteria in `current-sprint.md` and `agent-context/qa.md`
+  and found one criterion — WebKit terminal chrome and vignette parity — that no harness measured; it is
+  now covered rather than described. Item 8(b) applies to nothing here: no failure was carried forward as
+  "flaky", and each of the seven reds was root-caused to a specific line of the audit with the falsifying
+  measurement recorded above.
+
 ### 2026-07-25 HO-006 — §2 replay built: the annotated transcript, playing to schedule
 **Type:** handoff
 **Producer:** Developer

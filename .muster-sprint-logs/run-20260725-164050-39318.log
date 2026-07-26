@@ -841,3 +841,82 @@
   💬 Final green run before committing:
   🧪 bash   bash scripts/test.sh; grep -E "checks passed" .test-logs/$(ls -1t .test-logs | head -1)
   🧪 bash   git diff --stat knowledge-base/bodh-sprint4-corpus.md knowledge-base/product-spec-seed.md knowledge-base/design-specs/di
+  🧪 bash   git commit -q -F - <<'EOF' developer: the page now replays a real build, on schedule §2 ships: twelve real log lines fro
+  💬 §2 is built and the suite is green on both engines. ## What shipped - **`index.html` §2** — the complete annotated transcript in the DOM at load: twelve corpus lines, ten narration entries, the totals
+    📖 ×25 · ✏️  ×32 · 📝 ×3 · 🧪 ×46
+  ✓ 107 turns · $15.21 · peak ctx 291k/1M 29% · out 113k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m33m 3s[0m · advanced → 2026-07-24 QA (web): §2 replay validation (QA) · handoff HO-006 filed ✓
+    run so far: 2h 13m · $75.69 · 8 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 10
+▶ [32;1mQA[0m · 2026-07-24 QA (web): §2 replay validation  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the mandated first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh qa auto
+  💬 Binding to QA for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/qa.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  🧪 bash   ls -la && echo "--- scripts ---" && ls scripts tests 2>/dev/null && echo "--- kb ---" && ls knowledge-base knowledge-bas
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -60
+  🧪 bash   cat scripts/test.sh; echo "=== latest log ==="; ls -t .test-logs/*.log | head -3
+  🧪 bash   date; echo "---"; grep -cE "^(PASS|FAIL)" .test-logs/run-20260725-204038.log; grep -E "checks passed|^FAIL|GREEN|RED" .t
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-narration.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  🧪 bash   grep -n "instrument" -A 20 styles/motifs.css | head -60; echo "=== tokens ==="; grep -nE "text-micro|text-body|text-term
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   sed -n 1,60p tests/lib/png.mjs; echo "=== exports ==="; grep -n "^export" tests/lib/png.mjs
+  🧪 bash   git log --oneline -- knowledge-base/bodh-sprint4-corpus.md && echo "--- status ---" && git status --porcelain knowledge-
+  🧪 bash   git log --format='%h %an %s' -- knowledge-base/product-spec-seed.md knowledge-base/design-specs/direction-reference.html
+  💬 Now I have the full picture. Let me extend the QA independent audit with §2 coverage.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  💬 Now the source-integrity and fidelity checks, plus the re-based `.instrument` check:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node --check tests/qa-independent-audit.mjs 2>&1 | head -20; echo "syntax rc=$?"
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | tail -80
+  🧪 bash   grep -n "48000\|setTimeout\|CHAIN\|marks\|waitFor\|sleep" tests/verify-shell.mjs | head -40
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   python3 - <<'PY' import re p='tests/qa-independent-audit.mjs' s=open(p).read() subs=[ ('await page.eval("new Promise((r)
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | tail -80
+  🧪 bash   python3 - <<'PY' p='tests/qa-independent-audit.mjs' s=open(p).read() old = ''' await page.setMedia({ colorScheme: "dark"
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | tail -90
+  💬 Several failures to triage. Let me probe the mobile line-count one directly:
+  🧪 bash   cat > /tmp/probe.mjs <<'EOF' import { launchChrome } from "./tests/lib/cdp.mjs"; import { fileURLToPath } from "node:url
+  ⚠️  tool returned an error
+  🧪 bash   sed -i '' 's|"./tests/lib/cdp.mjs"|"/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/
+  💬 The mobile count was confounded by the 4px reveal transform. Let me apply the full set of fixes:
+  🧪 bash   python3 - <<'PY' p='tests/qa-independent-audit.mjs' s=open(p).read() def rep(a,b): global s assert a in s, "MISS: "+a[:9
+  🧪 bash   python3 - <<'PY' p='tests/qa-independent-audit.mjs' s=open(p).read() def rep(a,b): global s assert a in s, "MISS: "+a[:1
+  💬 Now the WebKit differential — the current one measures against ground, which the terminal's own surface already saturates:
+  💬 API Error: Connection closed mid-response. The response above may be incomplete.
+    📖 ×15 · ✏️  ×6 · 🧪 ×22 · ⚠️  ×1
+  ⛔ 44 turns · $5.78 · peak ctx 198k/1M 19% · out 65k  (success)
+⛔ claude exited non-zero on step 10 — stopping for founder
+   (if this was a heavy step, it may have hit MAX_TURNS=150 — raise MAX_TURNS and
+    re-run to continue, or split the step at planning. Safe to resume: state was not advanced.)
+── run summary ────────────────────────────────────────────
+  2026-07-25 Developer (web): True up     59    $4.61   12%    38k  8m 45s
+  2026-07-25 UI/UX (web): Gate amendme    69    $7.31   17%    69k 15m 25s
+  2026-07-25 PM: Review HO-010 and cle    79    $7.86   17%    54k 12m 57s
+  2026-07-24 Developer (web): Page she    93   $11.69   21%   110k 24m 32s
+  2026-07-24 QA (web): Shell validatio    78     $8.3   19%    65k 16m 40s
+  2026-07-24 Content (web): §2 narrat    39    $7.61   14%    41k  9m 41s
+  2026-07-24 PM: Wave 3 narration revi    63    $6.45   18%    50k  12m 5s
+  2026-07-24 Developer (web): §2 repl   107   $15.21   29%   113k  33m 3s
+───────────────────────────────────────────────────────────
+  10 steps · 696 turns · $81.47 · out 651k · 2h 13m wall · stopped: error (non-zero exit) (2026-07-24 QA (web): §2 replay validation)
+  📣 10 founder notice(s) this run — read knowledge-base/founder-notices.md

@@ -86,65 +86,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 QA (web): §2 replay validation
-
-```
-Role: qa
-Model: claude-opus-5
-
-**Task:** Validate the §2 replay, including corpus fidelity.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-006
-- `knowledge-base/design-specs/web/section-02-replay.md` and `section-02-narration.md` — derive validation scope from these handoffs directly, so a dev-charter omission does not also blind QA
-- `knowledge-base/bodh-sprint4-corpus.md` — the fidelity baseline. Read-only
-- `knowledge-base/design-specs/web/section-02-beat-inventory.md`
-- `knowledge-base/agent-context/qa.md` — your Current Tasks
-- `muster/team/qa/skills/web/web-testing.md`
-
-**Deliverable:** HO-007 in `agent-requests.md` — per-criterion pass/fail with evidence.
-
-**Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
-- Every rendered terminal line diffed against the corpus and cited; any altered, paraphrased, or invented line is a blocking bug, not a nit
-- Confirm the corpus file itself is unmodified since HO-001 — an agent editing source material is a blocking finding
-- **Cross-engine parity, scoped to what the tooling can prove (DEC-021.4 — this supersedes a flat
-  "both engines" reading).** WebKit's job is the **no-JS/reduced-motion complete transcript** at ~1024²:
-  twelve corpus lines verbatim, L12's large-rust treatment, the §9 emphasis system, terminal chrome,
-  grain and vignette parity, both themes. That is load-bearing, not a fallback prize — DEC-017 item 4
-  makes the no-JS DOM identical to the complete transcript, on the engine whose inline-SVG divergence is
-  this project's known failure class. Blink carries everything else. **Mobile evidence is Blink-only and
-  HO-007 must say so in those words** — never "verified cross-engine". Your own probes established the
-  ceiling; do not re-litigate it, and do not close it by installing anything (DEC-020)
-- Zero runtime network requests; reduced-motion path complete
-- Narration/terminal sync holds at reduced motion and, where JS is involved, on Blink
-- Report measured beat intervals factually, so the founder's pacing judgment has data alongside it
-- **Mobile at 375 × 553**: 5 terminal lines visible, both layers on screen for the whole playback, core height measured ≤553px, page body never scrolls horizontally (also at 320px and 200% zoom), terminal scroll container focusable and arrow-key operable
-- **Measure the rendered narration card against SP3's real copy.** §7.1 budgets a 6-line worst case and UI/UX flagged it as the budget's weakest number. At 7 lines the terminal drops to 4 visible lines — the design absorbs that, the budget table does not. Report the measured count either way
-- **Re-base your own audit's 45-character floor, and verify the `.instrument` fix (DEC-021.1–2).** The
-  check `prose column does not collapse below 45 characters at the narrowest supported width` cannot pass
-  at 320px under any padding: 45 × 7.615px = 342.7px, wider than the viewport itself. With a zero-inset
-  card the ceiling is ~36 characters at 320px and ~43 at 375px, so the floor is unreachable on every
-  phone. Replace it with (a) a deterministic assertion that at ≤375px `.instrument`'s total horizontal
-  inset is **≤20% of the card width** (48/272 = 17.6% passes; today's 96/272 = 35.3% fails), and (b) the
-  measured character count **reported, not asserted** — the same treatment the narration card's line
-  count gets, and for the same reason: geometry is deterministic while a character count folds in font
-  metrics and line-break raggedness, which is why your 320px figure of 18 sits under that width's ~23
-  capacity. This is a threshold correction, not a tolerance loosening: the build is being fixed in the
-  same wave, so red does not go green on the threshold alone. If you disagree with the arithmetic, say so
-  in HO-007 rather than deleting the check
-
-- **Measure the chain-totals strip too (DEC-022.3–4).** At 375 × 553 the strip is budgeted at exactly
-  two `--text-micro` lines = 33.0px, and the whole core has 5.1px of slack — a third line costs 16.5px
-  and busts it. Assert the rendered line count and the value-line scale below `--bp-wide`; report the
-  measured strip width against the ~327px content width so the margin is on the record either way
-
-**On completion:** File HO-007 in `agent-requests.md`. If red, do NOT advance — re-point `## Next Step`
-to a `Role: pm` assessment step. Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`).
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-24 Wave 3 Gate — founder review
 
 ```
@@ -163,10 +104,27 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 `muster/scripts/muster-sprint-resume.sh` from inside the sprint worktree.
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
+<!-- Empty — the Wave 3 gate is the sprint's last step. -->
+
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
+
+- 2026-07-26 — Wave 3: QA — §2 replay validated; every criterion green (HO-007). Twelve lines byte-clean
+  against the corpus and the corpus proven unmodified from git; worst reveal drift 16.8 ms across all
+  twelve lines and all ten slots; phone core 499.89px with both layers at 100% coverage for the whole
+  chain; WebKit carries the no-JS transcript in both themes and every mobile figure is labelled
+  Blink-only. Build suite green (129 Blink, 13 WebKit); the independent audit is 99/100 with 7 reported
+  measurements. **Seven defects were in the audit, not the build** — five of them holding eight checks
+  red against a correct build, including a WebKit row profile that was blind by construction, and two
+  closing criteria nothing had measured. The one standing red is F1, the founder's `64ch` question,
+  left red deliberately. Three findings for PM: the narration card meets its 6-line worst case with zero
+  margin, OBS-002 confirmed by measurement at 320px, and a spec/build id mismatch in §11. Awaiting PM
+  review, then the founder gate.
 
 - 2026-07-25 — Wave 3: Developer — §2 replay built and playing to schedule (HO-006). Twelve corpus
   lines byte-clean on both engines, measured reveal offsets at 0 ms drift against §5.1, and the phone
