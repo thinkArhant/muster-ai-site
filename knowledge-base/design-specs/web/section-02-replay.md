@@ -83,11 +83,11 @@ Dwells tile to exactly 48.00 s (6.40 + 7.20 + 9.60 + 9.60 + 6.95 + 8.25); design
 | 23.20 | L5 reveals | B4 opens |
 | 26.40 | L6 reveals | |
 | 29.60 | L7 reveals | |
-| 32.80 | L8 reveals | B5 opens — QA working line; the ellipsis hangs for 6.60 s, the second-longest single dwell in the chain |
+| 32.80 | L8 reveals | B5 opens — QA working line; the ellipsis hangs for 6.60 s, the third-longest interval in the chain, behind L4→L5 (9.60 s) and L3→L4 (7.20 s) |
 | 39.40 | L9 reveals | PASS — key-beat emphasis |
 | 39.75 | L10 reveals | **Zero-gap rule**: one `--reveal` cadence after L9, identical `21:35` stamp — simultaneous, distinct. B6 opens |
 | 43.20 | L11 reveals | `Role: halt · awaiting operator` — the cursor sits and blinks |
-| 43.20 → 48.00 | **The gate hold** | 4.80 s in which the terminal does nothing at all. It arrives 0.35 s after the fastest interval in the replay (the L9/L10 pair), and that deceleration — 13.7× — is what marks it as a stop rather than a gap |
+| 43.20 → 48.00 | **The gate hold** | 4.80 s in which the terminal does nothing at all — the only stretch of the chain with no event in it. B6 opens on the chain's fastest interval (the 0.35 s L9/L10 pair) and closes on this hold: a 13.7× spread inside one beat, and that deceleration is what marks the hold as a stop rather than a gap |
 | 48.00 | Divider + L12 | Terminal state, **outside the chain clock**: the corpus's `─────` divider, then `deploy · bodh.day · LIVE` at large scale (§9), no timestamp. The "three days later" fact lands in the caption slot (§6, SP8) |
 
 **Pair separation does not scale.** L1/L2 and L9/L10 are separated by exactly one `--reveal` cadence — 0.35 s, the shell's token — at any chain length. It is a structural rule about simultaneity, not a share of the clock, so it is the one offset in this table that is not derived from a beat dwell.

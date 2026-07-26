@@ -12,9 +12,70 @@
 **Type:** handoff
 **Producer:** UI/UX
 **Deliverable:** `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md`
-**Status:** open
+**Status:** done
 **Reviewers:**
-- [ ] PM — pending
+- [x] PM — **reviewed 2026-07-25: ACCEPTED with notes. Two factual corrections applied by PM (disclosed
+  below); no design value changes.** Re-derived rather than re-read, per the step brief.
+
+  **Mechanical re-derivation — all clean.** Dwells tile to 48.000 s exactly (6.40 + 7.20 + 9.60 + 9.60 +
+  6.95 + 8.25). Design shares sum to 100.00% at full precision. Every beat-opening line lands on its beat
+  boundary (6.40 / 13.60 / 23.20 / 32.80 / 39.75) and the chain closes at 48.00. All seven timed budgets
+  equal `floor(window × 3.5)` — 21 / 25 / 33 / 33 / 23 / 12 / 16 — totalling 163 against a 168 ceiling,
+  and each window reproduces from the schedule, including SP5's deliberate close at L9 (6.60 s, not
+  6.95 s) and SP1's 6.05 s (the 0.35 s pair separation does not scale — the one row where ×0.8 does not
+  reproduce the table, correctly flagged in the handoff).
+
+  **B5's restoration is funded exactly as DEC-016 required.** B5 10.58% → 14.48%, inside the 14–15% band
+  and gaining absolute time (6.35 → 6.95 s) while the chain lost 20%. B6 21.08% → 17.19% is the only
+  donor; B3 held at 20.00%, and B1/B2/B4 held at 13.33 / 15.00 / 20.00. QA's own beat paid nothing.
+
+  **The mobile budget is a number, not a claim.** Every row of the 424.4px fixed core recomputes from a
+  `page-shell.md` token (3rem bar = 48; `--text-micro` 11 × 1.5 = 16.5; `--gap-hairline` 12;
+  `--gap-flow` 24; `--text-body` 17 × 1.7 = 28.9; `--text-terminal` 13 × 1.9 = 24.7), and the column
+  sums to 424.4. `floor((VH − 424.4) / 24.7)` reproduces all five viewport rows and their slack, the
+  499px floor is 424.4 + 3 line boxes, and the landscape figures (242.5 per column, 7 lines, 27px slack)
+  recompute too. The brief's criterion was 375 × 667; the spec budgets against the stricter 375 × 553
+  and meets 667 with 20.3px of margin. That is the right way to answer a finding caused by asserting a
+  fit — and the landscape re-verification that overturned its own earlier "verified" claim is the part I
+  would keep in a retro.
+
+  **§5.1 was amended, not just §7 and §10** — line persistence is now a desktop guarantee with an
+  explicit small-viewport equivalent that states plainly what is lost (simultaneous visibility of twelve
+  lines) rather than eliding it. That was the easy one to miss and it was not missed.
+
+  **No stale text.** Both "Open questions" sections are gone, `page-shell.md` §15 no longer exists, the
+  theme control is replaced by an explicit no-ship statement (the theme *system* and the
+  `:root[data-theme]` test hatch intact, so A-006 holds), and the motion budget is closed at three plus
+  cursor with its reasoning. Grepped: no surviving "flagged for the gate", "recommended include", or 60 s
+  chain reference in either file.
+
+  **Push-back on the gate hold: upheld, and it is stronger than the handoff claims for it.** Against
+  DEC-016's projected alternative (L10 ×0.8, hold ~4.14 s), the chosen 3.45 / 4.80 split gives SP7 **16
+  words rather than 14** *and* buys the hold 0.66 s — better for the thesis line on both counts. The
+  ≤26-word comparison in the handoff is against the 60 s chain, which the founder's 48 s decision had
+  already spent. No founder ruling needed; this sat inside the latitude DEC-016 granted. Logged as
+  DEC-019.
+
+  **Two findings — both accuracy, neither blocking, both corrected in place.** They are the same class of
+  error as the "longest silence" claim this amendment correctly removed, and they were introduced in the
+  text that replaced it:
+  - **C1 — the hold does not "arrive 0.35 s after the fastest interval."** L9/L10 closes at t=39.75; the
+    hold opens at t=43.20 — 3.45 s later, with L11's interval in between. The 13.7× figure is real but
+    beat-level: B6 *opens* on the 0.35 s pair and *closes* on the 4.80 s hold. Restated that way in §5.1
+    and in DEC-018 item 2, which carried the same sentence.
+  - **C2 — the 6.60 s L8→L9 ellipsis is the third-longest interval, not the second.** L4→L5 (9.60 s) and
+    L3→L4 (7.20 s) are longer. §5.1 now names both.
+
+  **Why applied rather than returned**: neither touches a dwell, a budget, or a layout value — the design
+  is unchanged to the millisecond — and a revision round costs a full session for two sentences. Applied
+  by PM and disclosed here so the record does not read as PM reviewing its own text; UI/UX may overrule
+  either wording at its next touch.
+
+  **Carried forward, not resolved here**: the narration card's 6-line worst case rests on an estimate.
+  QA measures the rendered card against SP3's actual copy once Content files it — at 7 lines the
+  375 × 553 case drops to 4 visible terminal lines (which the design absorbs) but the budget table would
+  be wrong and gets corrected, not tolerated. Added to QA's §2 validation criteria. SP7's zero-slack
+  budget is flagged to Content in its step and in `agent-context/content.md`.
 
 **Outcome:** All four gate amendments are in the specs, and F1 — the one that was a real design problem —
 is resolved with a mobile height budget the Developer can build to and QA can measure, rather than with
@@ -137,9 +198,29 @@ HO-009 awaits your review and HO-002's box is correctly unticked pending this ha
 **Type:** handoff
 **Producer:** Developer
 **Deliverable:** `knowledge-base/design-specs/web/section-02-beat-inventory.md`
-**Status:** open
+**Status:** done
 **Reviewers:**
-- [ ] PM — pending
+- [x] PM — **reviewed 2026-07-25: ACCEPTED, no findings.** Re-derived from the corpus rather than from
+  the handoff's summary.
+
+  **Verified independently.** The span is 3858 s from the corpus's own stated endpoints (`20:38:57` →
+  `21:43:15`, both quoted at source). The six beat windows tile it with no gap or overlap
+  (454 + 786 + 441 + 824 + 867 + 486 = 3858) and each window's seconds match its stated
+  start-to-start interval. All six shares recompute to two decimals and sum to 100.00%. D4's eight rows
+  are each the correct nearest-minute rounding, max divergence 29 s. D5 reconciles exactly: 3372 s
+  measured against 3360 s stated for sessions 1–7, plus 6 s at session 8, accounting for all 18 s. D10
+  tiles both totals — 289 calls and $24.73 to the cent — and B4's aggregate (74 calls, $6.14) is right.
+
+  **The corpus is unmodified**: clean `git status`, still at the founder's commit `025842c` (A-001 holds).
+
+  **The self-caught margin error is the reason to trust the rest.** B1 (454 s), not B6, is the
+  second-shortest beat, so B3's lead is 13 s, not 45 s. The corrected hazard is sharper than the
+  unquantified original — B3's shortness is a near-tie — and the replay spec's treatment of B3 (expanded
+  to 20.00% from 11.43% real, ~1.75×) is unaffected either way.
+
+  **No downstream drift**: `section-02-replay.md` §4 carries 3858 s, B6 at 486 s, and one-decimal shares
+  (11.8 / 20.4 / 11.4 / 21.4 / 22.5 / 12.6) that all round correctly from the amended figures. Nothing
+  to cascade. F1 and F2 are settled at source per DEC-013; no new decision needed, correctly.
 
 **Outcome:** The inventory's derived figures are now the measured ones, and two things it could
 previously only flag as limits are closed: the chain end is measured at source, and the calls and cost
@@ -206,16 +287,21 @@ executes that decision rather than adding one.
 **Type:** handoff
 **Producer:** UI/UX
 **Deliverable:** `knowledge-base/design-specs/web/page-shell.md`, `knowledge-base/design-specs/web/section-02-replay.md`
-**Status:** needs-revision
-<!-- Scope of the revision is narrow and named: finding F1 only (§2 mobile layout, §7 + §10). The design
-     direction, token system, and pacing model are accepted and the Wave 2 shell build proceeds from
-     page-shell.md as written. Revision is queued as HO-010 ahead of the §2 build in Wave 3. -->
-**Revision requested:** F1 — mobile two-layer simultaneity (see PM review below). Queued as HO-010.
+**Status:** done
+**Revision requested:** F1 — mobile two-layer simultaneity (see PM review below). Delivered as HO-010.
 **Reviewers:**
-- [ ] PM — **reviewed 2026-07-25: revision requested (F1). Cleared for the founder gate and for the
-  Wave 2 shell build in the meantime; re-tick when HO-010 lands.** The box stays open because the
-  deliverable still needs a change, not because the review is unfinished — the review is complete and is
-  below. Verified rather than accepted on summary.
+- [x] PM — **F1 RESOLVED and box ticked 2026-07-25, on HO-010's acceptance.** F1 asked for a mobile
+  height budget the Developer can build to and QA can measure. It got one: 424.4px of fixed core stated
+  against a 375 × 553 visual viewport, every row derived from a shell token, a formula that reproduces
+  five viewport rows, and a ≥95%-visibility playback gate that makes simultaneity a precondition rather
+  than an assertion. The criterion F1 was written to protect — the non-technical reader can read the
+  narration while watching the beat it annotates — is met at 375 × 667 with 20.3px of margin and still
+  met at the stricter 553 case. Ticked because the deliverable changed, not because the wave moved on.
+
+  Original review of 2026-07-25 follows, unchanged — *"revision requested (F1); cleared for the founder
+  gate and for the Wave 2 shell build in the meantime; re-tick when HO-010 lands."* The box stayed open
+  because the deliverable still needed a change, not because the review was unfinished. Verified rather
+  than accepted on summary.
 
   **Re-derived mechanically, all clean.** (a) All sixteen contrast ratios recomputed from the locked hex
   under WCAG 2.1 — every one matches to two decimals, including the three that fail their floors. The

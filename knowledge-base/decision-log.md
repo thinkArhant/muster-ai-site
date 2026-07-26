@@ -459,8 +459,9 @@ instead of tested-for.
    7.5 s a 36% one rather than 45%. SP6 pays 18 → 12 words for it.
 2. **The gate hold is argued on deceleration, not duration.** It is not and never was the longest
    interval in the replay — ranked by length it was 4th of 11 at 60 s and is 5th of 11 at 48 s. What
-   marks it as a stop is that it arrives 0.35 s after the fastest interval in the chain (the L9/L10
-   same-instant pair), a 13.7× deceleration, and it is the only stretch where the terminal does nothing.
+   marks it as a stop is that B6 opens on the chain's fastest interval (the 0.35 s L9/L10 same-instant
+   pair) and closes on the 4.80 s hold — a 13.7× spread inside one beat — and that the hold is the only
+   stretch of the chain with no event in it.
 3. **The mobile height budget is 424.4px of fixed core against a 375 × 553 visual viewport** — an
    iPhone SE in mobile Safari with toolbars shown, deliberately not the 667px device height. Visible
    terminal lines = `floor((visual VH − 424.4) / 24.7)`, clamped [3, 12]; the two-layer guarantee holds
@@ -490,6 +491,50 @@ inside the same beat, which requires no reschedule.
 
 **Touched**: `design-specs/web/page-shell.md`, `design-specs/web/section-02-replay.md`,
 `agent-requests.md` (HO-010), `orchestration-queue.md`.
+
+### DEC-019 — Wave 2 specs accepted; two pacing-rationale claims corrected (2026-07-25)
+
+**Decision**: The amended `page-shell.md` and `section-02-replay.md` are accepted and are the build
+inputs for Waves 2 and 3. The B6 internal split stands as UI/UX set it — the gate hold at 4.80 s, L10 at
+3.45 s — and no founder ruling is sought on it.
+
+**The push-back is upheld on the merits, and DEC-016's own framing understates the case for it.** Against
+the alternative DEC-016 projected (L10 scaled ×0.8, hold ~4.14 s), the chosen split gives SP7 — the
+honest headline, the page's thesis — a **16-word budget rather than 14**, while also buying the hold
+0.66 s. It is better for the thesis line on both counts. SP7's real loss is against the 60 s chain's ≤26
+words, which the 48 s decision had already spent.
+
+**Two claims in the pacing rationale were wrong and are corrected here, not carried.** Both were written
+for this amendment, and both are the same class of error as the "longest silence" claim the amendment
+correctly removed:
+
+1. **The hold does not "arrive 0.35 s after the fastest interval."** The L9/L10 pair closes at t=39.75
+   and the hold opens at t=43.20 — 3.45 s later, with L11's interval between them. The 13.7× figure is
+   real but it is a *beat-level* spread, not an adjacency: B6 opens on the 0.35 s pair and closes on the
+   4.80 s hold. Restated that way in `section-02-replay.md` §5.1 and in DEC-018 item 2. The design does
+   not move by a millisecond; only the argument for it is now true.
+2. **The 6.60 s L8→L9 ellipsis is the third-longest interval, not the second.** L4→L5 (9.60 s) and
+   L3→L4 (7.20 s) are longer. Corrected in §5.1 with both named.
+
+**Why PM applied these rather than requesting a revision**: neither correction contains a design call —
+no dwell, budget, or layout value changes — and a revision cycle costs a full session for two sentences
+(`deliverable-review.md`: accept-with-notes is underused). The edits are disclosed in the HO-010 verdict
+so the record does not read as PM reviewing its own text.
+
+**Also verified and standing**: dwells tile to 48.000 s; the six design shares sum to 100.00%; all seven
+word budgets equal `floor(window × 3.5)` and total 163 of 168; B5 lands at 14.48% funded entirely by B6
+(21.08% → 17.19%) with B3 held at 20.00% and B5 itself paying nothing; every row of the 424.4px mobile
+core recomputes from a `page-shell.md` token; the corpus is unmodified at the founder's commit `025842c`.
+
+**Consequence to carry** (unchanged from DEC-018, restated because it is the live one): SP7 at ≤16 words
+has zero slack. If it needs relief once the replay is seen running, the source is SP6's 12 words inside
+the same beat. Content writes to ≤16 and flags rather than overruns.
+
+**Impact**: Developer, QA, Content, UI/UX, PM.
+
+**Touched**: `design-specs/web/section-02-replay.md`, `decision-log.md` (DEC-018 item 2),
+`agent-requests.md` (HO-010, HO-009, HO-002), `current-sprint.md`, `agent-context/{ui-ux,developer,content}.md`,
+`orchestration-queue.md`.
 
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
