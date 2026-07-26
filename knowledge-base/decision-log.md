@@ -934,5 +934,54 @@ fidelity, and the no-horizontal-scroll guarantee.
 
 **Touched**: `wave-review.md`, `orchestration-queue.md`, `current-sprint.md`.
 
+### DEC-029 — The log's leading splits in two, and the accent mark gets one 12px inset (2026-07-26)
+
+**Decision**: F-R1 and F-R2 are both resolved as specified, and neither is paid for out of the height
+budget.
+
+1. **Entry grouping**: below `--bp-wide` the log's single leading value splits into a row pitch
+   (`--lead-micro`, 19.5px inside an entry) and an entry separator (`--gap-hairline`). Whitespace ratio
+   **2.85×** against the 1.0× a single leading gives. Three entries occupy 141.0px against 148.2px, so
+   slack at 375 × 553 goes 25.4 → 32.6px and the guarantee floor 478.2 → 469.4px. No viewport loses an
+   entry. Desktop keeps `--lead-terminal` and gains no separator — a desktop entry is one row, so the
+   leading already *is* the separation.
+2. **Accent inset**: the mark sits `--gap-hairline` (12px) from its own card's inner edge in both
+   layers, at every viewport. On desktop this is arithmetically free — the `--gap-hairline` share moves
+   from the line's padding to the log's and every character stays at the same x. On a phone it costs
+   12px of line region, and the hanging indent goes 2ch → 1ch to fund the continuation width.
+
+**Rationale**: both findings had one value doing two jobs. The leading separated rows and entries with
+the same number; the line's inline padding was expected to inset a mark that a border puts outside it.
+The fix in each case is to split the value, not to add a mechanism on top of it.
+
+**Two things were found by re-deriving rather than reading, and both change the shape of the fix.**
+
+- **F-R2 is not mobile-only.** `border-inline-start` sits outside `padding-inline-start`, so the
+  wide-viewport rule insets the log's *text* and never moved the tick. The tick is flush at every
+  viewport, and desktop's mismatch (0 against the rail bar's 24px) is the wider of the two. A phone-only
+  fix would have shipped the larger version of the same collision.
+- **DEC-028's claim that the horizontal room was already spent is wrong.** Simulated against the corpus
+  at every column width, all of L1–L11 hold at two rows down to **37 first-row columns / 36
+  continuation**; L3 at 74 characters breaks first below that. The section shipped at 41/39 — four
+  columns above its own floor. The floor had never been written down, which is why the room read as
+  unavailable. §7.1 now states it, and the same omission is corrected on the desktop side: §7's
+  "78 columns at `--bp-wide`" is the log's content box, and the first row a character actually gets is
+  **76** against L3's 74 — two columns of margin, not four.
+
+**The residual risk is named rather than assumed away.** The column figures are derived on a uniform
+monospace advance, four corpus glyphs can come from a fallback face, and **360px carries only 5.7px of
+margin over the floor**. §12 therefore requires the row count to be measured at 360 / 375 / 390 / 393
+rather than trusted, and §7.1 states the fallback: the gutter yields — reduced in both layers together
+so the single inset survives — never fidelity and never the entry count.
+
+**Open for PM**: `page-shell.md` pairs `--text-terminal` with a 1.9 leading. §2 takes `--lead-micro` for
+its mobile row pitch on the grounds that the pairing describes the one-row case and `--text-terminal` is
+component-scoped. If the shell should record the per-viewport pairing instead, that is a one-line shell
+amendment PM owns.
+
+**Impact**: Developer, QA, PM. Content is done with §2.
+
+**Touched**: `design-specs/web/section-02-replay.md`, `agent-requests.md`, `orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

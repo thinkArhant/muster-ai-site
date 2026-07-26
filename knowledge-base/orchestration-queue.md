@@ -88,62 +88,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 UI/UX (web): The phone log reads as entries, and the accent sits one way
-
-```
-Role: ui-ux
-Model: claude-opus-5
-
-**Task:** Resolve re-gate findings F-R1 and F-R2. Both are mobile-only and both were confirmed in the
-built CSS, not by eye. Requirements are stated as outcomes — you pick the mechanism.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — the founder's re-gate verdict, F-R1 and F-R2 with their measurements
-- `knowledge-base/decision-log.md` — DEC-028, and DEC-025/DEC-026 for what the wrap fix already spent
-- `knowledge-base/design-specs/web/section-02-replay.md` — your own deliverable, §7, §7.1, §9
-- `styles/replay.css` — the built CSS; `.log` (line ~112), `.log__line` (~146), `.narration__entry` (~206)
-
-**F-R1 — wrapped lines must group into entries.** At 375px four entries occupy eight rows and nothing
-separates them: `.log__line` has no `margin-block-start`, so an entry's continuation row and the next
-entry's first row are equally spaced. The hanging indent and the absent timestamp are the only cues and
-they need deliberate parsing.
-**Requirement**: entry boundaries visible at a glance at 375 × 553. Vertical separation is the obvious
-lever; a per-entry gap costs ~6px against ~25.4px of slack, so it will likely need funding from
-`--lead-terminal` rather than being added on top. Banding or a continuation glyph are alternatives.
-State the measured budget for whatever you choose.
-
-**F-R2 — one accent inset, or a stated reason for two.** `.narration__entry` sits in a card with
-`padding: var(--gap-hairline)` = 12px, so its bar is inset and reads as a mark inside the card. `.log`
-is `padding-inline: 0`, so the key-beat tick is flush against the card border and reads as part of the
-frame. The wide-viewport rule restores a gutter and its comment says the phone "cannot afford" it —
-that horizontal room went to the wrap fix.
-**Requirement**: one consistent relationship for the same semantic mark across both cards, or an
-explicit reasoned difference. If the room is genuinely not there, say so and propose the alternative
-rather than shipping the collision.
-
-**What you may not spend.** Fidelity (no truncation, no ellipsis, byte-clean) and the
-no-horizontal-scroll guarantee are both closed. The payer is `--lead-terminal`, visible line count, or
-a new budget you state and defend.
-
-**Push back if warranted.** If either requirement cannot be met inside the budget, a reasoned refusal
-with a costed alternative is an acceptable deliverable. Do not ship a compromise silently.
-
-**Deliverable:** revised `section-02-replay.md` (§7, §7.1, §9 as needed); HO-015.
-
-**Acceptance criteria:**
-- Entry boundaries visible at a glance at 375 × 553, with the mechanism and its measured cost stated
-- One accent relationship across both cards, or the difference stated and justified
-- Restated mobile height budget with its numbers and assumed viewport; the core still fits
-- Desktop explicitly addressed — say whether it changed, and if not, say that too
-- Fidelity and no-horizontal-scroll intact; reduced-motion and no-JS still render the complete transcript
-
-**On completion:** File HO-015 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 PM: Review HO-015 before it builds
 
 ```
@@ -155,7 +99,7 @@ Model: claude-opus-5
 **Inputs:**
 - `knowledge-base/agent-requests.md` — HO-015
 - `knowledge-base/design-specs/web/section-02-replay.md`
-- `knowledge-base/decision-log.md` — DEC-028
+- `knowledge-base/decision-log.md` — DEC-028, and DEC-029 for the resolution and its two corrections
 - `muster/team/pm/skills/generic/deliverable-review.md`
 
 **Acceptance criteria:**
@@ -169,9 +113,15 @@ Model: claude-opus-5
   do not mention, and say so
 - If UI/UX refused either requirement, evaluate the reasoning on its merits and route to Founder
   Decisions rather than overruling a design objection silently
+- **Rule the one item HO-015 leaves open**: `page-shell.md` pairs `--text-terminal` with a 1.9 leading,
+  and §2 takes `--lead-micro` for its mobile row pitch. Either ratify the component-scope argument or
+  amend the shell — the shell is not UI/UX's file to edit and the build reads both
 
 **On completion:** Run the Pre-Handoff Self-Review Checklist. Promote the build step.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): Build the phone log legibility fix
 
@@ -248,6 +198,14 @@ sprint worktree.
 
 ## Done (Last 10)
 <!-- newest first -->
+
+- 2026-07-26 — Wave 3 fix round 2, step 1: UI/UX — the phone log groups into entries and the rust mark
+  gets one 12px inset in both layers (HO-015, DEC-029). Neither finding was paid for: the leading split
+  returns 7.2px of height, and the accent gutter is arithmetically free on desktop and funded on mobile
+  by horizontal margin the spec had never written down. Two corrections found by re-deriving — F-R2 is
+  not mobile-only (a border sits outside padding, so the tick was flush at every viewport), and
+  DEC-028's "the room was already spent" is wrong: the two-row floor is 37/36 columns and the section
+  shipped at 41/39. **Awaiting PM review, then the build.**
 
 - 2026-07-26 — Wave 3 Re-gate: **SP7 approved, phone sent back.** The thesis line is final at 15 of 16
   words. Two blocking mobile findings routed as a second fix round (DEC-028): wrapped log lines do not
@@ -350,24 +308,3 @@ sprint worktree.
 - 2026-07-25 — Wave 3: Content — §2 narration written to the sync contract (HO-005). All eight slots
   inside budget, script-measured: 139 timed words of a 163 ceiling; SP7 landed at 15/16 with no SP6
   relief needed; Safari catch omitted; every claim cited to the corpus in place. Awaiting PM review.
-
-- 2026-07-25 — Wave 2: PM — Shell accepted and Wave 2 closed; §2 narration released (DEC-021). HO-003
-  and HO-004 both accepted with the harnesses re-run at review rather than cited — `scripts/test.sh`
-  86/86, `qa-independent-audit.mjs` 37/39 with exactly the two reported failures. Four items disposed,
-  none of them a gate. **F2's blocker was disproved, not weighed**: both the Developer and QA left
-  `.instrument`'s 48px phone padding alone because §7.1's mobile budget is derived off shell tokens, but
-  §7.1 budgets its own insets (12+12 terminal, 24 card) — at 48px its core would compute to 568.4px
-  against a 553px viewport, so the budget DEC-019 re-derived clean would already be busted. The claim
-  travelled through two handoffs and into a queue step before anyone checked it against the table it
-  cited. The step-down is ruled and rides the §2 build step. **The audit's 45-character floor is
-  unsatisfiable** — 45 × 7.615px = 342.7px, wider than a 320px viewport — so it is replaced by a
-  deterministic inset-share check plus a reported measure, with the build fixed alongside it so red does
-  not go green on a threshold. **F1 goes to the founder**: the diagnosis is settled (~90 rendered
-  characters) but "~64ch" has two honest readings and it is a founder-authored word; parked non-halting,
-  backstopped hard in `pre-launch-checklist.md`, and it gates nothing because §2's narration never enters
-  `--read-max` and §3 is Sprint 2 — the assessment step's premise that it wanted settling this wave was
-  wrong. **The WebKit ceiling is ruled**: `qlmanage` proves the no-JS complete transcript, which
-  DEC-017.4 makes load-bearing rather than a consolation; mobile evidence is Blink-only and must be
-  labelled as such; the one residual — `100dvh` in mobile Safari, the mechanism §7.1's whole budget rests
-  on — is named, carried to pre-launch, and flagged to the founder for the Wave 3 gate. F3 applied
-  directly to `page-shell.md` §11.

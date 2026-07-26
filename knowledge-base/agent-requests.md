@@ -158,6 +158,126 @@ been red on a correct build for two waves, and a check that is always red is a c
 **Harnesses re-run at review, not cited.** `bash scripts/test.sh` **GREEN — 146/146 Blink, 13/13
 WebKit** on the same build. Nothing outside `tests/qa-independent-audit.mjs` was touched this session.
 
+### HO-015 — The phone log groups into entries, and the rust mark gets one inset
+
+**From**: UI/UX · **To**: PM (review), Developer (build) · **Date**: 2026-07-26 · **Status**: open
+**Deliverable**: `knowledge-base/design-specs/web/section-02-replay.md` — §5.1, §7, §7.1 (rules 1–4,
+budget, tables, wireframe), annotations 4 and 6, new §9.1, §10, §12, §13
+
+Both findings are resolved as specified, neither by a compromise. **Neither needed to be paid for.**
+F-R1 returns 7.2px of height and F-R2 costs the desktop exactly nothing; the phone's share of F-R2 comes
+out of horizontal margin that was there all along and had never been written down.
+
+---
+
+**F-R1 — wrapped rows now group into entries. The mechanism is a split, not an addition.**
+
+The log had one leading value doing two jobs. On desktop that works, because an entry is one row there
+and the leading *is* the entry separation. On a phone an entry is two rows, so the same value separates
+rows and entries identically — a ratio of 1.0×, which is the finding stated as a number. Below
+`--bp-wide` the one value becomes the two it was standing in for:
+
+| | Row-to-row inside an entry | Entry to entry |
+|---|---|---|
+| Pitch | 19.5px (`--text-terminal` × `--lead-micro`) | 31.5px |
+| Whitespace between glyph boxes | 6.5px | 18.5px (`--gap-hairline` separator) |
+
+**The ratio is 2.85×**, and the ratio is what the eye reads — not the absolute gap. A 6px margin bolted
+onto the existing 1.9 leading would have bought 1.5×, spent 12px of the slack, and still needed parsing.
+
+**Measured budget.** Entry box 39.0px, separator 12.0px, entry pitch 51.0px. A window of *N* entries
+costs *N* boxes and *N* − 1 separators, so `visible = floor((visual VH − 379.4 + 12.0) / 51.0)`, clamped
+[2, 12]. At 375 × 553 that is **3 entries in 141.0px of line region against 148.2px before**, so the
+fix funds itself and returns **7.2px**: slack rises 25.4 → **32.6px**, and the guarantee floor falls
+478.2 → **469.4px**. Not one viewport in §7.1's table loses an entry — 3 / 5 / 5 / 5 / 5, unchanged —
+and the fixed core stays 379.4px, because nothing in it moves.
+
+`--lead-terminal` and `--gap-hairline` are both shell tokens; no new size is introduced. **The one thing
+PM should rule on**: `page-shell.md` states `--text-terminal` as `13px / 1.9`, a size/leading pair. §2
+takes `--lead-micro` for its mobile row pitch, which departs from that pairing. My position is that the
+pairing describes the one-row case and `--text-terminal` is explicitly component-scoped, so §2 stating
+its own row pitch is inside the component's remit — but if you would rather the shell record the
+per-viewport pairing, that is a one-line `page-shell.md` amendment and the shell is not my file to edit.
+
+**Desktop is unchanged and deliberately so.** `--lead-terminal` (1.9) stays above `--bp-wide` and no
+separator is added, because every desktop entry is one row and the leading already does the job. The
+split exists only where an entry is more than one row.
+
+---
+
+**F-R2 — one inset, 12px, in both layers. And the finding was bigger than it was reported.**
+
+**The diagnosis needs one correction, and it changes the scope of the fix.** `border-inline-start` sits
+*outside* `padding-inline-start`, so the wide-viewport rule that insets the log's *text*
+(`calc(var(--gap-hairline) + 2ch)`) never moved the tick. **The tick is flush at every viewport,
+desktop included** — and desktop's mismatch is the wider of the two, because the rail's bar sits
+`--gap-flow` (24px) in against the tick's 0. F-R2 reads as mobile-only; it is not, and a phone-only fix
+would have left the larger version of the same collision on the screen most readers arrive on.
+
+**The rule (§9.1)**: the accent mark is inset `--gap-hairline` (12px) from the inner edge of its own
+card, in both layers, at every viewport. Reading text does not move in either.
+
+- **Desktop: exactly zero cost.** The line's inset was already `--gap-hairline` + the hanging indent.
+  Moving the `--gap-hairline` share from the line to the log leaves every character at the same x —
+  600.0px of first row before and after, arithmetically identical — while the tick steps off the frame.
+  The narration card does the same trick: its inline-start padding drops to `--gap-hairline`, the entry
+  takes the difference, prose and rail measure unchanged, only the bar moves.
+- **Phone: paid out of measured margin.** The gutter costs 12px of line region → **39 first-row columns
+  / 38 continuation** at 375px, and the hanging indent goes 2ch → 1ch to release the continuation width
+  that keeps 360px whole. Every one of L1–L11 still sets **exactly two rows** at 360 / 375 / 390 / 393
+  and in landscape.
+
+**The claim in DEC-028 that the horizontal room was already spent is wrong, and I checked rather than
+argued.** Simulated greedy wrap against the corpus at every column width: **all of L1–L11 hold at two
+rows down to a first row of 37 columns and a continuation of 36.** L3 (74 chars) is the line that breaks
+first. The section shipped at 41/39 — four columns above its own floor — so the gutter was affordable
+and nobody had written the floor down. §7.1 now states it: **37/36 is the constraint; anything above it
+is margin.**
+
+| Viewport | First row / continuation | Margin over the 37/36 floor |
+|---|---|---|
+| 375 | 311.0px = 39 / 303.2px = 38 | 20.7px |
+| **360 (tightest)** | 296.0px = 37 / 288.2px = 36 | **5.7px** |
+| 390 / 393 | 326.0–329.0px = 41 / 40 | 35.7–38.7px |
+| landscape terminal column | 314.2px = 40 / 306.4px = 39 | 23.9px |
+| ≥ `--bp-wide` | 600.0px = 76 / 592.2px = 75 | unchanged, 2 columns over L3 |
+
+**What I could not verify and how it is handled.** These are derived on a uniform monospace advance.
+Four corpus glyphs (`·` `✓` `×` `→`) can come from a fallback face, and **360px has only 5.7px of
+margin** — under one column. So §12 requires the row count to be *measured* at 360 / 375 / 390 / 393
+rather than trusted, and §7.1 states the fallback: the gutter yields, reduced in both layers together
+so the single inset survives, never fidelity and never the entry count. Reducing it costs the narration
+card nothing — a smaller inline inset widens the card's measure, which only relieves its six-line budget.
+
+---
+
+**What this could break that F-R1 and F-R2 do not mention** — the same question that produced this
+round, asked forward:
+
+1. **The window's scroll arithmetic.** It advances by entry *pitch* (51.0px), not by a row, and must
+   come to rest on an entry's box edge — never inside a separator, which would show a fragment of gap at
+   the window's top and read as a clipped entry. Stated in §5.1 and §12.
+2. **The harness encodes the retired geometry.** `verify-shell.mjs` asserts `phone.columns === 41` and
+   `region ≈ 323`, and landscape `columns >= 41`; `qa-independent-audit.mjs` carries the 49.4px line
+   constant in three places. These are stale spec, not build defects — 39 / 40 and the entry model
+   replace them. The build step re-bases them; QA should expect the diff.
+3. **320px.** Already deferred and still deferred: 32 first-row columns / 31 continuation, the longest
+   lines at three rows, and the clamp's two-entry floor holding. Two lines there before and after, so
+   the gutter changes nothing that was not already outside the derived range.
+4. **The `break-word` backstop stays unreachable** — longest corpus token 18 characters against a
+   narrowest column of 31 at 320px.
+
+**Would Apple ship this? — Yes.** Because the fix removes a value that was doing two jobs badly rather
+than adding chrome to compensate for it, and because it costs nothing: no line lost, no character
+hidden, no type smaller, 7.2px of height returned, and the horizontal floor that governs all of it
+finally written down. The alternative I
+rejected — banding the entries — buys the same grouping with a new surface value the palette does not
+have and makes a terminal read as a data table. The alternative I nearly shipped, a 6px margin on top of
+the existing leading, buys a 1.5× ratio for 12px of the `100dvh` safety slack, which is a compromise
+shipped silently and the step told me not to do that.
+
+**Open for PM:** the `--text-terminal` size/leading pairing above. Nothing else.
+
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
 
