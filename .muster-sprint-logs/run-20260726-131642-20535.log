@@ -343,3 +343,123 @@
   🧪 bash   python3 - <<'PYEOF' p = "knowledge-base/orchestration-queue.md" s = open(p).read() old_start = s.index("- 2026-07-26 — W
   🧪 bash   bash muster/scripts/muster-lint-handoff.sh; echo "handoff lint exit $?"
   🧪 bash   git add -A && git commit -q -F - <<'EOF' developer: the phone log reads as entries at a glance Below --bp-wide the log's
+  🧪 bash   git log --oneline -1; git status --porcelain; echo "--- clean ---"
+  💬 Step complete. HO-016 filed, queue advanced to the QA re-validation step. ## What shipped **F-R1 — entries group visibly.** Below `--bp-wide` the log's single leading value splits into a row pitch (`-
+    📖 ×17 · ✏️  ×32 · 🧪 ×43 · ⚠️  ×2
+  ✓ 93 turns · $11.34 · peak ctx 235k/1M 23% · out 74k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m33m 56s[0m · advanced → 2026-07-26 QA (web): Re-validate the phone log (QA)
+    run so far: 1h 16m · $31.80 · 3 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 4
+▶ [32;1mQA[0m · 2026-07-26 QA (web): Re-validate the phone log  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  💬 Greenfield ongoing. Running session-start housekeeping.
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Binding to QA for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh qa auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/qa.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/qa/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  🧪 bash   wc -l knowledge-base/agent-requests.md knowledge-base/decision-log.md knowledge-base/design-specs/web/section-02-replay.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "^### DEC-0(28|29|30)|^### DEC-" -E knowledge-base/decision-log.md | tail -20
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now let me run the harness early — foreground and blocking.
+  🧪 bash   git log --oneline -3 && git status --short && echo "=== test.sh ===" && cat scripts/test.sh
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -20
+  🧪 bash   grep -cE "^(PASS|FAIL)" .test-logs/run-20260726-143348.log; grep -nE "checks passed|^FAIL" .test-logs/run-20260726-14334
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit-run1.txt 2>&1; echo "EXIT=$?"; tail -5 /tmp/audit-run1.txt; echo "---FA
+  🧪 bash   wc -l /tmp/audit-run1.txt 2>/dev/null; tail -5 /tmp/audit-run1.txt 2>/dev/null; echo "=== task out ==="; tail -5 "/priva
+  🧪 bash   ps aux | grep -i -E "chrome|node" | grep -v grep | head -20
+  💬 Audit is still running. Let me examine it while it works.
+  🧪 bash   wc -l tests/qa-independent-audit.mjs tests/verify-shell.mjs tests/verify-webkit.mjs tests/lib/* 2>&1; echo "---"; grep -
+  🧪 bash   sed -n 900,935p tests/qa-independent-audit.mjs
+  🧪 bash   wc -c /tmp/audit-run1.txt; ps -o pid,etime,stat,command -p 97838 2>/dev/null; pgrep -fl "qa-independent-audit" 
+  🧪 bash   grep -n "console.log\|process.stdout" tests/qa-independent-audit.mjs | head -20; echo "=== main flow ==="; sed -n 1590,1
+  💬 Audit runs long (all output emitted at the end). Let me do source-level verification while it runs.
+  🧪 bash   ls -la; echo "=== styles ==="; ls -la styles/ 2>/dev/null
+  🧪 bash   git log --oneline -1 -- knowledge-base/bodh-sprint4-corpus.md; git status --short knowledge-base/bodh-sprint4-corpus.md 
+  🧪 bash   grep -n -i "inventory\|^```" knowledge-base/bodh-sprint4-corpus.md | head -30
+  🧪 bash   grep -n -i 'inventory' knowledge-base/bodh-sprint4-corpus.md | head -20; echo '---fences---'; grep -n '^```' knowledge-b
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  🧪 bash   grep -n "log__line" index.html | head -20
+  🧪 bash   cat > /tmp/fid.mjs <<'EOF' import { readFileSync } from "node:fs"; const html = readFileSync("index.html", "utf8"); cons
+  🧪 bash   wc -c /tmp/audit-run1.txt; pgrep -fl "qa-independent-audit" | head -3; ps -o etime= -p 97766 2>/dev/null
+  🧪 bash   sed -n 1,80p tests/lib/cdp.mjs
+  🧪 bash   sed -n 80,262p tests/lib/cdp.mjs
+  💬 Now my own independent measurement harness, separate from the project's:
+  🧪 bash   cat > /tmp/qa-verify.mjs <<'EOF' /* QA independent re-measurement — HO-017. Written from section-02-replay.md, not from 
+  💬 Fixing two probe defects (font shorthand, core selector). Checking real class names:
+  🧪 bash   grep -oE 'class="[^"]*"' index.html | sort -u | grep -E "replay|core|totals|narration|terminal|log" | head -40
+  🧪 bash   grep -n "replay__core\|replay__layers\|terminal__body\|class=\"totals\"\|replay__beat" index.html | head; echo "=== css:
+  🧪 bash   wc -c /tmp/audit-run1.txt; ps -o etime= -p 97766 2>/dev/null || echo "audit process gone"
+  🧪 bash   ls -la tests/artifacts/ | head -20; date
+  🧪 bash   pgrep -fl "qlmanage|QuickLook|WebKit" | head -10; echo "---"; grep -n "qlmanage" tests/qa-independent-audit.mjs | head -
+  🧪 bash   ps -o pid,etime,time,%cpu -p 97838,97766 2>/dev/null
+  💬 Node is idle-blocked (0.65s CPU in 14 min) — the audit has deadlocked on a CDP call, not a slow render. Killing and retrying:
+  🧪 bash   kill -9 97766 97838 2>/dev/null; sleep 2; pgrep -fl "qa-independent-audit" || echo "cleared"; echo "--- orphan test chro
+  🧪 bash   pkill -9 -f "muster-shell-" 2>/dev/null; sleep 2; pgrep -f "muster-shell-" | wc -l | xargs echo "remaining orphan test c
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit-run2.txt 2>&1; echo "EXIT=$?"; tail -3 /tmp/audit-run2.txt; echo "---FA
+  💬 Audit exits zero at 106/106. Now the remaining independent measurements:
+  🧪 bash   cat > /tmp/qa-verify2.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-aut
+  🧪 bash   cd /tmp && python3 - <<'PY' import re s = open('/tmp/qa-verify2.mjs').read() # no-JS page: goto() ends with an in-page p
+  🧪 bash   cat > /tmp/an.mjs <<'EOF' import { readFileSync } from "node:fs"; const R = JSON.parse(readFileSync("/tmp/r2.json","utf8
+  💬 Two things need first-hand checks: the binding `--bp-wide` column count, and whether landscape playback actually starts.
+  🧪 bash   cat > /tmp/qa-verify3.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-aut
+  🧪 bash   cat > /tmp/qa-verify4.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-aut
+  💬 Playback triggers normally on real scrolling — not a defect. Now the copy diff:
+  🧪 bash   grep -n "^## \|^### " knowledge-base/design-specs/web/section-02-narration.md | head -20
+  🧪 bash   cat > /tmp/copy.mjs <<'EOF' import { readFileSync } from "node:fs"; const R = "/Users/kanwarsandhu/Desktop/TA-muster-ai-
+  🧪 bash   sed -n 138,160p knowledge-base/design-specs/web/section-02-narration.md; echo "=== rendered narration ==="; sed -n 100,1
+  🧪 bash   cat > /tmp/copy2.mjs <<'EOF' import { readFileSync } from "node:fs"; const R = "/Users/kanwarsandhu/Desktop/TA-muster-ai
+  🧪 bash   grep -E "^PASS.*WebKit|^PASS.*qlmanage" /tmp/audit-run2.txt | sed 's/ */ /g' | cut -c1-120; echo "=== reported measureme
+  🧪 bash   grep -n "^## \|^### " knowledge-base/wave-review.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 30 muster/system-guide.md | head -45
+  🧪 bash   grep -n "Pre-Handoff Self-Review Checklist" -A 40 muster/system-guide.md | head -50
+  🧪 bash   sed -n 456,478p muster/system-guide.md
+  🧪 bash   grep -nE "^### A-00[1-9]" knowledge-base/foundational-assumptions.md
+  💬 Now filing the handoff.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now the two measured figures in the gate packet:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  💬 Now the queue: my step to Done, gate promoted to Next Step.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   awk '/^## Done/,0' knowledge-base/orchestration-queue.md | grep -c "^- 2026"
+  🧪 bash   tail -8 knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   awk '/^## Done/,0' knowledge-base/orchestration-queue.md | grep -c "^- 2026"; echo "--- lint ---"; ls muster/scripts/ | 
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | tail -10; echo "--- handoff lint ---"; bash muster/scripts/muster-lin
+  🧪 bash   wc -l knowledge-base/agent-requests.md; awk '/^### HO-017/,/^### HO-016/' knowledge-base/agent-requests.md | wc -l
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | tail -5
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | tail -3
+  🧪 bash   awk '/^#### 3\./,/^#### 6\./' knowledge-base/agent-requests.md | head -60
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | tail -3
+  🧪 bash   awk '/^#### 2\./,/^#### 3\./' knowledge-base/agent-requests.md; echo "###### 7 ######"; awk '/^#### 7\./,/^#### Findings
+  🧪 bash   python3 - <<'PY' import io p='knowledge-base/agent-requests.md' s=open(p).read() reps=[ ("""**DEC-030 ruling 1 is genuin
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() reps=[ # fold section 8's wide table into compact
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() reps=[ ("""**F1 — §12's landscape row asks for "3
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() reps=[ ("""- **All twelve lines byte-clean** agai
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() reps=[ ("""Reported as a pair, terminal first, me
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' s=open(p).read() a="""**Deliverable**: per-criterion pass/fail wit
+  🧪 bash   grep -n "^---$" knowledge-base/agent-requests.md | head
+  🧪 bash   sed -n '130,140p' knowledge-base/agent-requests.md
+  🧪 bash   python3 - <<'PY' p='knowledge-base/agent-requests.md' lines=open(p).read().split("\n") # drop the decorative rule inside
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   sed -n '/^## Next Step/,/^## Upcoming/p' knowledge-base/orchestration-queue.md | grep -E "^###|^Role:|Read:|Resume:"; ec
+  🧪 bash   git status --short
+  💬 No source files touched — this was a validation step. Committing:
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' qa: the rebuilt phone log is validated green on every criterion HO-017. Every f

@@ -76,6 +76,16 @@ measured entry-separation and accent-pair figures here before this gate fires.
   move, so at 375 × 553 the terminal shows **3 whole entries** with **32.6px** of slack. Before the wrap
   fix it measured 499.89px with five *clipped* lines and 5.1px of slack; the entry split then returned
   another 7.2px on top. No viewport lost an entry to either change.
+- **An entry boundary is 2.85× the gap between rows inside an entry — measured, not eyeballed.** At
+  375 × 553 the whitespace is **18.5px between entries against 6.5px between rows**, on a 19.5px row
+  pitch and a 31.5px boundary pitch. The bar this had to clear is 2×. The two cues are separately
+  present, so losing one cannot hide behind the other: the continuation indent measures 7.81px and the
+  entry separator 12px.
+- **The rust mark measures 12px from its own card's inner edge in both layers, in every state.** The
+  pair is **12px / 12px** — terminal and narration card — at 1280px while the chain is running, at
+  1280px idle, in the end state, with JavaScript off, and at all five phone widths. The mid-playback
+  desktop reading is the one that matters: before the fix that state was the only one a reader with
+  JavaScript on would ever see, and it was the wrong one.
 - **The degraded paths are complete, not reduced.** Reduced-motion and no-JS both render the full
   transcript, string-identical to the motion path's end state. Zero non-`file:`/`data:` requests across
   a full 48-second playback, and the page renders complete with the network off.

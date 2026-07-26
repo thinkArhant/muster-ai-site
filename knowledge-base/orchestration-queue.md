@@ -95,48 +95,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 QA (web): Re-validate the phone log
-
-```
-Role: qa
-Model: claude-opus-5
-
-**Task:** Validate the rebuilt mobile log against the amended spec.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-016
-- `knowledge-base/decision-log.md` — DEC-028, DEC-030
-- `knowledge-base/design-specs/web/section-02-replay.md`
-
-**Acceptance criteria:**
-- Entry separation measured against the spec's stated budget, not eyeballed; report the number
-- Accent inset measured on both cards and reported as a pair — **at 1280px take the pair while playback
-  is running as well as statically.** The rail's inset has two sources and only one of them applies
-  during the chain, so a mark that is right with no JS can be wrong for the whole live section
-  (DEC-030). If §7.1 rule 1's fallback fired at 360px, the pair must still be equal
-- Fidelity: twelve lines byte-clean; no horizontal scroll at 375 / 320; body never scrolls horizontally
-- **The two-row constant is measured at 360 / 375 / 390 / 393, not inherited.** 360px is the tightest
-  case with 5.7px of margin over §7.1's 37/36 floor, and L3's second row carries two of the four glyphs
-  that can come from a fallback face. Report the row counts
-- Reduced-motion and no-JS complete; zero runtime network requests; audit still exits zero
-- Cross-engine on WebKit and Blink; state plainly what remains Blink-only
-- **Report the landscape column count; do not fail it at 40.** §12 now binds at the 37-column floor —
-  40 is a derived target with under a tenth of a column of headroom, and a red there would be the
-  measuring-something-adjacent failure this project has already paid for three times
-- Red build: do NOT advance — re-point Next Step to a `Role: pm` assessment step
-
-**On completion:** File HO-017 in `agent-requests.md`. **Then append two measured figures to
-`wave-review.md` → `### Already green` — the entry-separation pair and the accent-inset pair.** That
-section is the packet the founder reads at the gate, it is re-based for gate 3 already, and those two
-lines are the only thing in it that needs your numbers. This is a narrow, PM-granted write to one
-section of a PM-owned file — add the two figures, change nothing else in that file. Run the
-Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
-
 ### 2026-07-26 Wave 3 Gate 3 — founder review
 
 ```
@@ -159,9 +117,28 @@ fires and both layers hold — this gate just needs the same look once more on t
 sprint worktree.
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
 
 ## Done (Last 10)
 <!-- newest first -->
+
+- 2026-07-26 — Wave 3 fix round 2, step 4: QA — the rebuilt phone log validates green, no build defect
+  found (HO-017). Entry separation **18.5px against 6.5px — 2.85×** on the spec's own glyph box (3.67×
+  on the rect the engine reports; both reported, because a later re-derivation gets the second and
+  would think something moved). The accent pair is **12/12 in five states**, including the two desktop
+  playback samples that were the wrong one before the fix. Both cues asserted separately: indent 7.81px,
+  separator 12px. **Every line region in §7.1's table reproduces to the pixel**, the two-row constant
+  holds at 360/375/390/393, and 360px lands on the 37-column floor with the four fallback-face glyphs
+  costing nothing. The window's nine resting positions are **all exact multiples of the 51.0px pitch**
+  over 237 playing samples, with both layers at 100% coverage throughout and the core at 472.39px
+  against 472.4 budgeted. Desktop **76 columns at `--bp-wide`**, the width that binds. All four re-based
+  audit constants re-derived against the spec and confirmed — none loosened. 156 Blink / 13 WebKit;
+  audit exit 0 at 106/106. Three findings, none blocking: §12's landscape row asks for an exact 3
+  entries where the build shows 4 (same wording class DEC-030 just fixed one line above), the landscape
+  visibility gate's 16px tolerance (verified reachable by real scrolling, so not a defect), and an audit
+  deadlock traced to leaked headless browsers rather than to the build. **Awaiting the gate.**
 
 - 2026-07-26 — Wave 3 fix round 2, step 3: Developer — the phone log reads as entries and the rust mark
   sits one way in both layers (HO-016). Entry-to-entry whitespace 18.5px against row-to-row 6.5px
@@ -236,9 +213,3 @@ sprint worktree.
   3 whole lines at 375 × 553, zero horizontal overflow anywhere, fidelity and type scale untouched
   (DEC-026). Prototyped and measured in Blink at nine viewports rather than derived. Desktop verified
   unchanged at five widths. **Accepted by PM, no revision** (DEC-027).
-
-- 2026-07-26 — Wave 3 Gate: **APPROVED with one copy fix** by the founder. Pacing and narration judged
-  good with styling subtracted; the 4.80 s gate hold upheld at its reduced length. Four findings routed
-  as a fix wave: SP7 reframed to the operator's arc (DEC-024), mobile terminal to read without
-  horizontal scroll (DEC-025), reading column ruled `64ch` as-shipped with the band check retired
-  (DEC-023), and the real-iPhone playback check carried to the re-gate.
