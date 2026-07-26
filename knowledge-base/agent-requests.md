@@ -8,6 +8,134 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-016 — The phone log reads as entries and the rust mark sits one way in both layers
+
+**From**: Developer · **To**: QA (validate), PM (review) · **Date**: 2026-07-26 · **Status**: open
+
+**Deliverable**: `styles/replay.css`, `scripts/replay.js`, `tests/verify-shell.mjs`, and four re-based
+constants in `tests/qa-independent-audit.mjs`. DEC-029's F-R1 and F-R2 resolutions, built to the
+amended `section-02-replay.md`.
+
+**Harness**: `bash scripts/test.sh` green on both engines — **156/156 Blink, 13/13 WebKit**, up from
+146/13. `qa-independent-audit.mjs` re-run and **still exits zero at 106/106**.
+
+---
+
+#### What changed, and the measurement that stands behind each
+
+**1. The log's leading splits below `--bp-wide` (F-R1).** Rows take `--lead-micro`; entries are
+separated by `--gap-hairline` as `margin-block-start` on every line but the first. Above `--bp-wide`
+`--lead-terminal` stays and no separator is added — a desktop entry is one row, so the leading already
+*is* the separation.
+
+Measured at 375 × 553: **entry-to-entry whitespace 18.5px against row-to-row 6.5px — 2.85×**, on a
+19.5px row pitch, a 39.0px entry box and a 51.0px pitch. Those are §7.1's numbers to the pixel. Core
+520.4px of 553 (three whole entries in 141.0px of line region), so the split funded itself exactly as
+DEC-029 said it would.
+
+**2. The accent gutter moves from the line to the log (F-R2).** `.log` carries a 12px
+`padding-inline-start` at every viewport and the line's hanging indent falls to 1ch. On the narration
+side the card's inline-start padding drops to `--gap-hairline` and the entry's own padding takes the
+difference.
+
+The pair measures **12px / 12px in three states**: desktop with no playback state, desktop mid-chain,
+and phone mid-chain. Desktop's first character sits at **14px** from the terminal's inner edge — the
+same x it sat at before — and the first row still holds **76 columns** against L3's 74, so the gutter
+is arithmetically free above `--bp-wide` as §9.1 claims.
+
+**3. The window quantises on measured entries.** `quantiseWindow()` solves
+`N × box + (N−1) × separator ≤ view` from a measured box and the resolved separator, never from 51.0px.
+At 320 × 568 the entry box measures 58.5px (three rows) and the window correctly falls to **two**
+entries — the ceiling trap sprang exactly where DEC-030 ruling 2 said it would.
+
+---
+
+#### The four rulings, each with what it actually caught
+
+1. **The desktop rail's inset is set in two places.** Confirmed and both fixed. Changing
+   `.narration`'s padding alone leaves `.replay[data-state] .narration__list { inset: --gap-flow }`
+   deciding the bar's position for every state the reader ever sees with JS on — idle, playing and end
+   all carry a `data-state` attribute, so the "static" 12px would have been visible only with JS off.
+   The list's `inset-inline-start` is now the card's padding restated. **Both desktop states are
+   asserted separately in the harness**, and the mid-playback one is the load-bearing check.
+2. **51.0px is a ceiling.** Nothing reads it. The quantiser measures; §7.1 rule 4's mechanism is what
+   is built. Verified at 320px, where a literal build would have placed a clipped third entry.
+3. **`--line-box` was `--text-terminal × --lead-terminal`.** It was also dead — declared in `.replay`
+   and read by nothing. Deleted rather than corrected, with a note saying why a single row constant
+   cannot exist here now.
+4. **The continuation cue halved.** The indent and the separator are asserted as two properties, at
+   ~7.8px and 12px. A build that silently drops the separator now fails on the ratio (it collapses to
+   1.0×) rather than leaning on a cue too small to carry the grouping.
+
+---
+
+#### The check that would have caught F-R1
+
+`phone: entries are separated from rows by at least 2×, measured`. It reports both figures as
+whitespace between glyph boxes — the thing the eye actually reads — from two independent measurements:
+the row pitch from `Range.getClientRects()` (rendered rows) and the separator from layout offsets
+(transform-free, so a half-revealed chain cannot skew it), taken as the **smallest** gap in the chain
+so one lost boundary fails rather than being averaged away.
+
+This is the property nothing else covered. Fidelity, the height budget, the column count and the parity
+assertions all pass against a log whose eight rows read as eight things instead of four — that is
+precisely how the previous round shipped green.
+
+Five more checks landed alongside it: the window's **resting position** (318 samples, every one on an
+entry's box edge, never inside a separator), the **two-row constant measured at 360/375/390/393**, the
+**37-column floor** at every phone width, the **separator's survival** at all five widths, and the
+**desktop first row** at ≥74 columns with every line at one row.
+
+---
+
+#### Four things worth QA's attention
+
+- **360px sits exactly on the floor.** Measured 296.0px = **37 columns**, which is §7.1's floor with
+  nothing to spare. The table's 5.7px of margin is real but it is under one column, so the count is 37
+  and not 38. Nothing is wrong; it is the reason §12 asks for a measurement there rather than a
+  derivation, and it means any future pixel taken from the line region costs a row at 360px.
+- **393px measures 42 columns where §7.1 derives 41.** The advance measures 7.83px against the
+  spec's 7.847px. Margin spent in the reader's favour, reported not asserted.
+- **Landscape measures 40 columns**, matching §7.1's 314.2px derivation, with 4 whole entries visible
+  in headless Chrome's full 375px of height. The check binds at 37 and reports 40.
+- **`offsetTop`/`offsetHeight` are integers.** At 320px, where an entry box is 58.5px, differencing
+  them reads the 12px separator as 11px or 12px depending on subpixel position. The quantiser reads the
+  resolved margin instead, and the harness rect-differences wherever the reveal transform is uniform.
+  A ±1px wobble feeding a `floor()` is not something to leave in.
+
+#### Four constants re-based in `qa-independent-audit.mjs`
+
+Per the queue's Execution Mode line. All four encoded superseded geometry against what is now a correct
+build; **no assertion was loosened beyond what DEC-030 ruled**, and nothing was added to that file:
+
+1. Landscape bound at `columns >= 41` → **`>= 37`**, §7.1's floor, with the measured count in the
+   detail. At 40 it would have gone red against a correct build — the assert-something-adjacent
+   failure DEC-030 named.
+2. `floor((553 − 379.4) / 49.4) = 3` → **`floor((553 − 379.4 + 12.0) / 51.0) = 3`** in the mobile
+   window check's derivation string.
+3. The 320px block's prose and check name, from the 49.4px line constant to the 51.0px entry pitch.
+4. The "three wrapped lines" framing → three whole **entries**.
+
+QA should re-derive these against the spec rather than against this handoff — the same way HO-014
+handled the last round's re-base.
+
+#### Not in scope, untouched
+
+Timing, SP7 and every narration string. The 48.00 s schedule, the ten reveal offsets and the 4.80 s
+gate hold are unchanged; measured drift is unchanged. Fidelity is structurally unchanged — a soft wrap
+inserts and removes no character, and all twelve lines diff byte-clean at 320/360/375/390/393. The
+reduced-motion and no-JS paths still render the complete transcript.
+
+#### Open questions
+
+None. The `64ch` reading-column question is the founder's and does not touch this step.
+
+#### WebKit ceiling
+
+Unchanged and stated rather than assumed: `qlmanage` runs no JavaScript and renders at a fixed ~1024².
+WebKit's evidence is the no-JS complete transcript in both themes; **every phone and landscape figure
+above is Blink evidence and is labelled as such.**
+
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
 

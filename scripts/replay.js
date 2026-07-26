@@ -79,13 +79,19 @@
      twelve lines occupy their space from load, so scrolling to the bottom would
      park the window over lines that have not been revealed yet.
 
-     It aligns its TOP to a line boundary rather than parking the newest line's
-     bottom on the fold. Those are the same rule only while every line is one
-     row: once a line wraps to two or three, bottom-alignment leaves the topmost
-     line clipped part-way through its rows, which §7.1 rule 2 forbids. So the
-     window walks back from the newest line while whole lines still fit, and
-     lands on the first one that does. Instant position change, never an
-     animated scroll.
+     It aligns its TOP to an entry's own box edge rather than parking the newest
+     entry's bottom on the fold. Those are the same rule only while every entry
+     is one row: once an entry wraps to two or three, bottom-alignment leaves
+     the topmost entry clipped part-way through its rows, which §7.1 rule 3
+     forbids. So the window walks back from the newest entry while whole entries
+     still fit, and lands on the first one that does. Instant position change,
+     never an animated scroll.
+
+     Resting on `offsetTop` is what keeps it out of an inter-entry gap: the
+     separator is a margin, so it sits ABOVE the border box offsetTop reports.
+     Scrolling to that value scrolls the separator away entirely and puts the
+     window's top edge on the entry's own box — never inside the gap, which
+     would show a fragment of separation and read as a clipped entry.
 
      Positions come from offsetTop, which the reveal's 4px transform does not
      move; every line shares an offsetParent, so the differences are exact. */
@@ -215,36 +221,54 @@
   }
 
   /* --- the mobile core is sized by construction: the terminal window is the
-         flex remainder, quantised down to whole WRAPPED lines so a half line
-         never sits at the fold.
+         flex remainder, quantised down to whole ENTRIES so a half entry never
+         sits at the fold. One corpus line is one entry however many rows it
+         wraps to.
 
-         The unit is measured, not §7.1's 49.4px constant. That figure is a
-         budget: exact at 375px and wider, where every corpus line costs two
-         rows, and a ceiling below it — at 320px the region is 34 columns and
-         the two longest lines cost three rows. Taking the constant literally
-         there would place a third line the window then clips, so the count has
-         to fall out of the real row heights instead.
+         Both figures are measured, never taken from §7.1's table. The 51.0px
+         entry pitch there is a CEILING, not a constant: it is exact at 375px
+         and wider, where every chain line costs two rows, and wrong below — at
+         320px the region is 31 continuation columns and the longest lines cost
+         three rows. Taking the number literally there would place a third entry
+         the window then clips. So the box comes from the tallest
+         chain line's rendered height and the separator from the resolved
+         margin that draws it, and the count falls out of both. Neither is a
+         literal: change --gap-hairline or the leading and this follows.
 
-         The terminal-state line is excluded from the unit: it is the one line
-         not set at --text-terminal, it is revealed outside the chain, and
-         §7.1 derives the window from the eleven chain lines. --- */
+         The separator is read from the resolved style rather than differenced
+         out of offsetTop/offsetHeight because those two are integers — at a
+         width where an entry box is 58.5px they round, and the gap between two
+         entries reads 11px or 12px depending on where the box happens to land.
+         A ±1px wobble in the input to a floor() is not something to leave in.
+
+         Only the gaps BETWEEN entries are spent, which is why the fit solves
+         N × box + (N − 1) × separator ≤ view rather than N × pitch ≤ view — a
+         window sized on the pitch would leave a separator's worth of empty
+         gutter below the last entry.
+
+         The terminal-state line is excluded from both: it is the one line not
+         set at --text-terminal, it is revealed outside the chain, and §7.1
+         derives the window from the eleven chain lines. --- */
   function quantiseWindow() {
     log.style.removeProperty("block-size");
     log.style.removeProperty("flex");
     if (wide.matches) return;
     const style = getComputedStyle(log);
     const pad = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
-    let unit = 0;
+    let box = 0;
+    let separator = 0;
     for (let i = 0; i < lines.length - 1; i++) {
-      unit = Math.max(unit, lines[i].getBoundingClientRect().height);
+      box = Math.max(box, lines[i].getBoundingClientRect().height);
+      if (i > 0) separator = Math.max(separator, parseFloat(getComputedStyle(lines[i]).marginTop) || 0);
     }
-    if (!unit) return;
-    /* Clamped to [2, 12] per §7.1. The floor is two, not three: below 478.2px
-       of visual viewport the core cannot hold three whole wrapped lines, and a
-       clipped third line is worse than a shorter window. */
-    const fit = Math.max(2, Math.min(12, Math.floor((log.clientHeight - pad) / unit)));
+    if (!box) return;
+    const view = log.clientHeight - pad;
+    /* Clamped to [2, 12] per §7.1. The floor is two, not three: below 469.4px
+       of visual viewport the core cannot hold three whole entries, and a
+       clipped third entry is worse than a shorter window. */
+    const fit = Math.max(2, Math.min(12, Math.floor((view + separator) / (box + separator))));
     log.style.flex = "none";
-    log.style.blockSize = fit * unit + pad + "px";
+    log.style.blockSize = fit * box + (fit - 1) * separator + pad + "px";
   }
 
   /* --- autoplay gate: the section starts when it is properly on screen and

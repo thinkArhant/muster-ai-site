@@ -216,3 +216,130 @@
   🧪 bash   bash muster/scripts/muster-queue-lint.sh && bash muster/scripts/muster-requests-lint.sh && grep -rn --include='*.md' -e 
   🧪 bash   git status --porcelain
   🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the phone fix is cleared and the log's floor is written down HO-015 accepte
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "exit=$?"
+  💬 Step complete. PM review of HO-015 done, build step promoted. **Verdict: accepted with notes, no revision (DEC-030).** **What I re-derived rather than read.** The 379.4px fixed core sums item by item;
+    📖 ×18 · ✏️  ×29 · 🧪 ×50 · ⚠️  ×1
+  ✓ 98 turns · $10.59 · peak ctx 207k/1M 20% · out 74k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-26 pm: both phone findings are fixed and neither was paid for — the log's single leading value was doing two jobs, so it split into a row pitch and an entry separator, and entries now sit ~2.85× further apart than the rows inside them while the section got 7.2px *shorter*. Two of your re-gate findings were wrong in a way that made the fix better: the accent tick was flush at every viewport, not just on mobile (a border sits outside padding), and the horizontal room was not spent — the corpus holds at two rows down to 37 columns and the section had shipped at 41. Nobody had ever written that floor down; it is written down now. Accepted with notes, no revision (DEC-030), and `wave-review.md` is re-based for gate 3 — one thing, looked at two ways.
+  ✓ [35;1mPM[0m · [1m20m 57s[0m · advanced → 2026-07-26 Developer (web): Build the phone log legibility fix (DEVELOPER) · handoff HO-015 filed ✓
+    run so far: 42m 16s · $20.46 · 2 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 3
+▶ [34;1mDEVELOPER[0m · 2026-07-26 Developer (web): Build the phone log legibility fix  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  💬 Greenfield ongoing. Running housekeeping.
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Binding to Developer for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh developer auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/developer/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  🧪 bash   wc -l knowledge-base/design-specs/web/section-02-replay.md knowledge-base/design-specs/web/page-shell.md styles/replay.c
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/tokens.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "DEC-029\|DEC-030" knowledge-base/decision-log.md | head -20
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  🧪 bash   grep -n "component-scoped\|row pitch\|lead-terminal\|one-row" knowledge-base/design-specs/web/page-shell.md
+  🧪 bash   grep -n "replay\|log__\|narration\|totals\|terminal" index.html | head -60
+  🧪 bash   cat scripts/test.sh; echo "---"; grep -n "^async function\|^function\|^ await \|^const \|check(\|section(" tests/verify-
+  🧪 bash   grep -n "41 columns\|41 char\|323\|line region\|hanging indent\|2ch\|indent\|entry\|lineBox\|wrap" tests/verify-shell.mj
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -rn "line-box" styles/ scripts/ tests/ index.html; echo "--- audit retired geometry ---"; grep -n "49.4\|41 col\|41
+  🧪 bash   sed -n '1085,1115p;1230,1300p;1370,1400p' tests/qa-independent-audit.mjs
+  🧪 bash   grep -n "logRegion\|wholeLinesVisible\|partialLinesVisible\|lineBox\|contentH" tests/qa-independent-audit.mjs | head -40
+  🧪 bash   sed -n '650,735p;985,1000p' tests/qa-independent-audit.mjs
+  💬 Now I have the full picture. Let me make the CSS changes.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  💬 Now the wide-viewport block:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  💬 Now the JS window quantiser — ruling 2's measured-entry model:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the harness. First, a reusable accent-pair measurement:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the static (no-JS/reduced-motion) desktop pair, in the reduced-motion block:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the phone block — the entry-separation check that would have caught F-R1:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the phone checks themselves:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the phone accent pair and the window's resting position:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the landscape block and the desktop first-row column check:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the desktop first-row check at the tight wide viewport:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -n "log__line\|indent\|column\|41\|lead\|line-height" tests/verify-webkit.mjs
+  💬 Now run the suite, foreground and blocking:
+  🧪 bash   bash scripts/test.sh
+  🧪 bash   grep -nE "accent|entries|entry|column|two-row|separator|hanging|first character|first row|checks passed" .test-logs/run-
+  💬 Green on both engines. One refinement — the separator read via integer `offsetTop` carries ±1px rounding (visible as `320px 11px` in the sweep). Let me make the quantiser's input exact:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  🧪 bash   python3 - <<'EOF' import re p = "tests/verify-shell.mjs" s = open(p).read() # sweep block old = """ let separator = Infi
+  ⚠️  tool returned an error
+  🧪 bash   grep -n "separator = Math.min" tests/verify-shell.mjs
+  🧪 bash   sed -n '920,930p;1225,1235p;1262,1268p' tests/verify-shell.mjs | cat -A | sed 's/\$$//' | head -40
+  🧪 bash   sed -n '918,930p;1226,1234p;1261,1268p' tests/verify-shell.mjs
+  🧪 bash   sed -n '1166,1176p' tests/verify-shell.mjs
+  🧪 bash   python3 - <<'PYEOF' p = "tests/verify-shell.mjs" s = open(p).read() note = """/* Rect-differenced, not offsetTop-differe
+  ⚠️  tool returned an error
+  🧪 bash   python3 - <<'PYEOF' p = "tests/verify-shell.mjs" lines = open(p).read().split("\n") targets = [i for i, l in enumerate(l
+  🧪 bash   python3 - <<'PYEOF' p = "tests/verify-shell.mjs" src = open(p).read() lines = src.split("\n") # indices (0-based) to con
+  🧪 bash   sed -n '1165,1180p' tests/verify-shell.mjs; echo "..."; sed -n '1233,1240p' tests/verify-shell.mjs; echo "..."; sed -n '
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the audit's retired-geometry constants, per the queue's Execution Mode:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   python3 - <<'PYEOF' p = "tests/qa-independent-audit.mjs" s = open(p).read() old = """ /* DEC-026 — three, not five. Ever
+  💬 Now the full run — suite plus the independent audit:
+  🧪 bash   bash scripts/test.sh; echo "=== suite exit $? ==="; node tests/qa-independent-audit.mjs > .test-logs/audit.log 2>&1; ech
+  🧪 bash   grep -nE "entries|entry|column|two-row|separator|hanging|first character|checks passed|accent" .test-logs/run-20260726-1
+  💬 All green: 156 Blink / 13 WebKit / 106 audit. Let me look at the actual phone render — the gate criterion is what the eye reads:
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s02-375.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s02-end.png
+  💬 Now the Pre-Handoff Self-Review checklist:
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 45 muster/system-guide.md | head -70
+  🧪 bash   grep -n "Pre-Handoff Self-Review Checklist" -A 40 muster/system-guide.md | head -50
+  🧪 bash   sed -n '448,480p' muster/system-guide.md
+  💬 Running the self-review. First, durability discipline (Rule 15) on my own comments:
+  🧪 bash   grep -rn "DEC-\|HO-0\|F-R1\|F-R2\|OBS-0\|Sprint 2\|wave" styles/ scripts/*.js tests/verify-shell.mjs tests/verify-webkit
+  🧪 bash   python3 - <<'PYEOF' p = "tests/verify-shell.mjs" s = open(p).read() subs = [ (" This is the property F-R1 was, and it is
+  🧪 bash   echo "=== retired geometry still cited anywhere? ==="; grep -rn "49\.4\|2ch\|41 char\|41 columns\|323px\|478\.2\|24\.7px
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/replay.js
+  🧪 bash   sed -n '80,140p' knowledge-base/foundational-assumptions.md
+  🧪 bash   git status --porcelain knowledge-base/bodh-sprint4-corpus.md knowledge-base/product-spec-seed.md knowledge-base/design-s
+  🧪 bash   grep -E "checks passed" .test-logs/run-20260726-142228.log; grep -E "^FAIL" .test-logs/run-20260726-142228.log; echo "(n
+  💬 Green: 156 Blink / 13 WebKit / 106 audit. Now filing HO-016:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now the queue: move my step to Done and promote QA's step.
+  🧪 bash   python3 - <<'PYEOF' p = "knowledge-base/orchestration-queue.md" s = open(p).read() # --- promote the QA step into Next S
+  🧪 bash   sed -n '93,150p' knowledge-base/orchestration-queue.md; echo "=========== UPCOMING ==========="; sed -n '150,200p' knowl
+  🧪 bash   python3 - <<'PYEOF' p = "knowledge-base/orchestration-queue.md" s = open(p).read() old_start = s.index("- 2026-07-26 — W
+  🧪 bash   bash muster/scripts/muster-lint-handoff.sh; echo "handoff lint exit $?"
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' developer: the phone log reads as entries at a glance Below --bp-wide the log's

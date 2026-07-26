@@ -1092,15 +1092,18 @@ try {
   const mChain = readChain("375x553", mobileChain);
   evidence.mobileTiming = mChain;
 
-  /* DEC-026 — three, not five. Every line but L12 now sets two rows at 41
-     columns, so the window is sized in whole wrapped lines: floor((553 −
-     379.4) / 49.4) = 3, with the totals strip lifted out of the core to pay
-     for it. Five was the pre-wrap count and is superseded. */
+  /* DEC-029 — three, and now three whole ENTRIES rather than three wrapped
+     lines. Every line but L12 sets two rows at 39 columns, and below --bp-wide
+     the log's leading splits: rows take --lead-micro (19.5px), so an entry box
+     is 39.0px and the entry pitch — box plus the --gap-hairline separator — is
+     51.0px. Only the gaps BETWEEN entries are spent, so the window solves
+     floor((553 − 379.4 + 12.0) / 51.0) = 3. The 49.4px uniform line box is
+     superseded, as five was before it. */
   check("mobile 375x553: the terminal window shows exactly three whole wrapped lines (DEC-026)",
     mobileMid.wholeLinesVisible === 3 && mobileMid.partialLinesVisible === 0,
     `${mobileMid.wholeLinesVisible} whole wrapped lines and ${mobileMid.partialLinesVisible} sliced in ` +
     `${mobileMid.contentH}px of log content box, one row ${mobileMid.lineBox}px ` +
-    `(§7.1 derives floor((553 − 379.4) / 49.4) = 3)`);
+    `(§7.1 derives floor((553 − 379.4 + 12.0) / 51.0) = 3)`);
   check("mobile 375x553: the measured playback core fits the visual viewport",
     mobileMid.rects.core.height <= 553,
     `core ${mobileMid.rects.core.height}px against a 553px visual viewport — indicator ${mobileMid.indicatorHeight} / ` +
@@ -1232,11 +1235,11 @@ try {
     containment.every((c) => c.escapes.length === 0 && c.unmasked <= 0 && !c.logScrolls),
     containment.map((c) => `${c.label}: ${c.escapes.length ? c.escapes.join("/") : "contained"}, unmasked +${c.unmasked}px, log scrolls ${c.logScrolls}`).join(" · "));
 
-  /* --- 320px: the width the budget is a ceiling at (DEC-027.4) ---
-     §7.1's 49.4px line constant is exact at ≥375px and a CEILING below it,
-     where the two longest lines cost three rows. A build implementing the
-     formula literally would place a third line here and slice it through its
-     rows. The idle state cannot answer this — the window only quantises when
+  /* --- 320px: the width the budget is a ceiling at (DEC-027.4, DEC-030.2) ---
+     §7.1's 51.0px entry pitch is exact at ≥375px and a CEILING below it, where
+     the longest lines cost three rows — the same trap the 49.4px line constant
+     was, wearing a new number. A build implementing the formula literally would
+     place a third entry here and slice it through its rows. The idle state cannot answer this — the window only quantises when
      a line is revealed — so this is a second chain, sampled like the first. */
   await page.setViewport({ width: 320, height: 568, deviceScaleFactor: 1, mobile: true });
   await page.goto(PAGE_URL);
@@ -1256,7 +1259,7 @@ try {
   const windowed320 = chain320.samples.filter((s) => s.state === "playing" && s.whole + s.partial > 0);
   const sliced320 = windowed320.filter((s) => s.partial > 0);
   evidence.chain320 = { samples: chain320.samples.length, windowed: windowed320.length, sliced: sliced320.length };
-  check("320px: the window quantises on measured rows, never on the 49.4px constant (DEC-027.4)",
+  check("320px: the window quantises on measured entries, never on the 51.0px pitch (DEC-030.2)",
     windowed320.length > 100 && sliced320.length === 0 && windowed320.every((s) => s.whole >= 1),
     `${windowed320.length} samples across a full chain at 320 × 568, ${sliced320.length} with a line sliced through ` +
     `its rows; window ${at320End.contentH}px over a ${at320End.logRegion.columns}-column region`);
@@ -1285,15 +1288,20 @@ try {
   evidence.landscape = landscape;
   writeFileSync(join(ARTIFACTS, "qa-s02-landscape-667.png"), await page.screenshot());
   /* DEC-026 consequence 2 — landscape inverts its split. The terminal takes
-     the wider column now, sized by the 41-character wrap rule rather than by a
-     share, because width is the only thing that decides whether a log line
-     reads without a gesture; narration set narrower simply runs taller, and
-     height is what landscape has to spare. Narration-first survives as a
-     priority, not as a column width. */
-  check("landscape phone 667x375: two columns with the terminal in the wider one, at ≥41 characters (DEC-026)",
+     the wider column now, sized by the wrap rule rather than by a share,
+     because width is the only thing that decides whether a log line reads
+     without a gesture; narration set narrower simply runs taller, and height is
+     what landscape has to spare. Narration-first survives as a priority, not as
+     a column width.
+
+     Bound at §7.1's 37-column floor, not at the split's 40-column target: the
+     target derives to 40.04, under a tenth of a column of headroom, so a build
+     that measures 39 has spent margin rather than broken anything (DEC-030).
+     The measured count is in the detail either way. 36 is a defect. */
+  check("landscape phone 667x375: two columns with the terminal in the wider one, clearing the 37-column floor (DEC-030)",
     landscape.rects.terminal.width > landscape.rects.narration.width &&
       landscape.rects.terminal.right <= landscape.rects.narration.left + 1 &&
-      landscape.logRegion.columns >= 41,
+      landscape.logRegion.columns >= 37,
     `terminal ${landscape.rects.terminal.width}px, line region ${landscape.logRegion.width}px = ` +
     `${landscape.logRegion.columns} columns at a ${landscape.logRegion.advance}px advance | narration ` +
     `${landscape.rects.narration.width}px, side by side`);

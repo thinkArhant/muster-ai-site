@@ -593,6 +593,30 @@ try {
     return slots;
   })();
 
+  /* §9.1's one rule for both layers, as a measurement rather than a stylesheet
+     read: the 2px rust mark is inset the same distance from the inner edge of
+     its OWN card in the terminal and in the narration. The inset has to come
+     from the container — `border-inline-start` sits outside `padding-inline-
+     start`, so inline padding on the line insets that line's text and leaves
+     the mark welded to the frame. `rect.left + clientLeft` is the card's
+     padding-box edge, which is the "inner edge" the spec measures from. */
+  const ACCENT_PAIR = `(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const terminal = document.querySelector(".terminal");
+    const narration = document.querySelector(".narration");
+    const key = document.querySelector(".log__line--key");
+    const entry = document.querySelector(".narration__entry[data-active]") ||
+                  document.querySelector(".narration__entry");
+    const inner = (el) => el.getBoundingClientRect().left + el.clientLeft;
+    return {
+      state: document.querySelector(".replay").dataset.state || null,
+      terminal: r2(key.getBoundingClientRect().left - inner(terminal)),
+      narration: r2(entry.getBoundingClientRect().left - inner(narration))
+    };
+  })()`;
+  const pairOK = (p) => Math.abs(p.terminal - p.narration) < 0.5 && Math.abs(p.terminal - 12) < 0.5;
+  const pairDetail = (p) => `terminal ${p.terminal}px / narration ${p.narration}px from each card's inner edge (state ${p.state})`;
+
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
   await page.setViewport({ width: 1440, height: 900 });
   await page.goto(PAGE_URL);
@@ -742,6 +766,22 @@ try {
   })()`);
   check("replay restarts, skip jumps to the end", controlRun.focused && controlRun.midway.revealed < 12 && controlRun.after.state === "end" && controlRun.after.revealed === 12, JSON.stringify(controlRun));
 
+  /* --- the accent pair on a desktop, in the state that actually ships.
+         The rail's inset has TWO sources here: `.narration`'s padding, and the
+         absolutely-positioned `.narration__list` while any playback state is
+         present. The second wins for the whole live chain, so a pair measured
+         only in the static transcript can be right there and wrong on screen
+         for every second the reader is watching (§12). Both, measured. --- */
+  const deskLive = await page.eval(`(async () => {
+    window.MusterReplay.restart();
+    await new Promise((r) => setTimeout(r, 900));
+    const pair = ${ACCENT_PAIR};
+    window.MusterReplay.finish();
+    return pair;
+  })()`);
+  evidence.accentDesktopLive = deskLive;
+  check("desktop, mid-playback: the accent mark is 12px in from both cards", deskLive.state === "playing" && pairOK(deskLive), pairDetail(deskLive));
+
   /* --- reduced motion / no-JS: the complete transcript --- */
   await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
   await page.goto(PAGE_URL);
@@ -766,6 +806,9 @@ try {
   check("reduced-motion transcript is byte-clean too", s2Still.text.every((l, i) => l === corpusLines[i]), "12/12 identical to the corpus inventory");
   check("reduced motion offers no controls (nothing to control)", s2Still.controls === 0, `${s2Still.controls} buttons`);
   check("the static transcript keeps its beat grouping", s2Still.tags === 10, `${s2Still.tags} entries carry a beat tag`);
+  const deskStatic = await page.eval(ACCENT_PAIR);
+  evidence.accentDesktopStatic = deskStatic;
+  check("desktop, no playback state: the accent mark is 12px in from both cards", deskStatic.state === null && pairOK(deskStatic), pairDetail(deskStatic));
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-reduced.png"), await page.screenshot());
 
   /* --- the phone height budget (replay spec §7.1) --- */
@@ -835,21 +878,63 @@ try {
     })();
     const region = lines[0].getBoundingClientRect().width -
       parseFloat(css(lines[0], "border-inline-start-width"));
-    /* Row starts of a wrapped line: rect per row, min left per row. A
-       continuation row must begin to the RIGHT of its entry's first row. */
-    const rowStarts = (() => {
-      const wrapped = lines.find((li) => li.getBoundingClientRect().height > lineBox * 1.5);
-      if (!wrapped) return null;
+    /* Rendered rows of a line: one entry per row, keyed on rounded top, holding
+       the row's exact top and its leftmost ink. Rect geometry is safe WITHIN a
+       line — the reveal's 4px translate moves every row of it equally — but not
+       across two lines, where one may be revealed and the other not. So row
+       pitch comes from here and entry separation comes from layout offsets. */
+    const rowsOf = (li) => {
       const range = document.createRange();
-      range.selectNodeContents(wrapped);
+      range.selectNodeContents(li);
       const rows = new Map();
       for (const rect of range.getClientRects()) {
         if (rect.width <= 0) continue;
         const key = Math.round(rect.top);
-        rows.set(key, Math.min(rows.get(key) ?? Infinity, rect.left));
+        const seen = rows.get(key);
+        rows.set(key, { top: Math.min(seen ? seen.top : Infinity, rect.top),
+                        left: Math.min(seen ? seen.left : Infinity, rect.left) });
       }
-      const sorted = [...rows.entries()].sort((a, b) => a[0] - b[0]).map((e) => r2(e[1]));
-      return { line: wrapped.dataset.line, lefts: sorted };
+      return [...rows.entries()].sort((a, b) => a[0] - b[0]).map((e) => e[1]);
+    };
+    /* A continuation row must begin to the RIGHT of its entry's first row. */
+    const rowStarts = (() => {
+      const wrapped = lines.find((li) => li.getBoundingClientRect().height > lineBox * 1.5);
+      if (!wrapped) return null;
+      return { line: wrapped.dataset.line, lefts: rowsOf(wrapped).map((row) => r2(row.left)) };
+    })();
+    /* --- entry separation, measured (§12).
+       This is the one property nothing else covers:
+       fidelity, height budget, column count and parity assertions all pass
+       against a log that reads as an undifferentiated run of rows. What the
+       eye reads is the whitespace between glyph BOXES, so both figures are
+       stated that way — a row box is taller than its em box by the leading,
+       and half of that surplus sits on each side of every row.
+
+           row-to-row inside an entry : rowPitch − em
+           entry-to-entry             : separator + (rowPitch − em)
+
+       Both inputs are measurements. The separator comes from layout offsets
+       (transform-free, so a half-revealed chain cannot skew it) and is taken as
+       the SMALLEST gap in the chain, so one lost boundary fails the check
+       rather than being averaged away. Lose the separator entirely and the two
+       figures collapse onto each other at a ratio of 1.0. */
+    const separation = (() => {
+      const chain = lines.slice(0, 11);
+      let separator = Infinity;
+      for (let i = 1; i < chain.length; i++) {
+        separator = Math.min(separator, chain[i].offsetTop - chain[i - 1].offsetTop - chain[i - 1].offsetHeight);
+      }
+      let rowPitch = 0;
+      for (const li of chain) {
+        const rows = rowsOf(li);
+        for (let i = 1; i < rows.length; i++) rowPitch = Math.max(rowPitch, rows[i].top - rows[i - 1].top);
+      }
+      const em = parseFloat(css(lines[0], "font-size"));
+      const rowGap = rowPitch - em;
+      const entryGap = separator + rowGap;
+      return { separator: r2(separator), rowPitch: r2(rowPitch), em, box: r2(unit),
+               pitch: r2(unit + separator), rowGap: r2(rowGap), entryGap: r2(entryGap),
+               ratio: r2(entryGap / rowGap) };
     })();
     const totalsEl = document.querySelector(".totals");
     return {
@@ -858,11 +943,19 @@ try {
       core: Math.round(coreRect.height * 100) / 100,
       coreTop: Math.round(coreRect.top), coreBottom: Math.round(coreRect.bottom),
       viewport: innerHeight,
-      visibleLines: r2((log.clientHeight - pad) / unit),
+      /* N entries cost N boxes and N−1 separators — only the gaps BETWEEN
+         entries are spent — so the window holds (view + separator) / pitch. */
+      visibleEntries: r2((log.clientHeight - pad + separation.separator) / separation.pitch),
       lineBox, unit, heights, rows: heights.map((h) => r2(h / lineBox)),
-      advance: r2(advance), region: r2(region), columns: Math.floor(region / advance),
-      rowStarts,
-      hangingIndent: r2(2 * advance),
+      advance: r2(advance),
+      /* Three widths, named apart per §7: the log's content box, the line
+         region it gives after the accent gutter, and the first row a character
+         actually gets — which is the region less the line's own 2px tick, and
+         the one the column count is derived from. */
+      lineRegion: r2(log.clientWidth - parseFloat(css(log, "padding-left")) - parseFloat(css(log, "padding-right"))),
+      firstRow: r2(region), columns: Math.floor(region / advance),
+      rowStarts, separation,
+      hangingIndent: r2(advance),
       lineOverflow: lines.filter((li) => li.scrollWidth > li.clientWidth).map((li) => li.dataset.line),
       totalsOutsideCore: !core.contains(totalsEl),
       totalsBelowCore: totalsEl.getBoundingClientRect().top >= coreRect.bottom - 0.5,
@@ -890,17 +983,31 @@ try {
   const seen = Math.max(0, Math.min(phone.coreBottom, phone.viewport) - Math.max(phone.coreTop, 48)) / phone.core;
   check("phone: playback refuses to start with the core under the status bar", phone.gatedOut === "idle", `state ${phone.gatedOut} when centred`);
   check("phone: playback runs only with the core ≥95% in view", phone.state === "playing" && seen >= 0.95, `${Math.round(seen * 1000) / 10}% of the core below the status bar, state ${phone.state}`);
-  check("phone: terminal window shows three whole wrapped lines", Math.abs(phone.visibleLines - 3) < 0.05, `${phone.visibleLines} × ${phone.unit}px wrapped lines (${phone.lineBox}px rows)`);
+  check("phone: terminal window shows three whole entries", Math.abs(phone.visibleEntries - 3) < 0.05, `${phone.visibleEntries} entries of ${phone.separation.box}px on a ${phone.separation.pitch}px pitch (${phone.lineBox}px rows)`);
   /* The constant the whole budget rests on, checked against the render rather
      than against the spec that asserts it: at 375px every chain line costs
-     exactly two rows, which is what makes 49.4px the window's unit here. */
-  check("phone: every chain line wraps to exactly two rows", phone.rows.slice(0, 11).every((r) => Math.abs(r - 2) < 0.05) && Math.abs(phone.unit - 2 * phone.lineBox) < 0.1, `rows ${phone.rows.slice(0, 11).join("/")} · unit ${phone.unit}`);
-  check("phone: the line region measures 41 columns", phone.columns === 41 && Math.abs(phone.region - 323) < 1, `${phone.region}px / ${phone.advance}px advance = ${phone.columns} columns`);
-  check("phone: continuation rows carry the 2ch hanging indent", phone.rowStarts && phone.rowStarts.lefts.length >= 2 && Math.abs(phone.rowStarts.lefts[1] - phone.rowStarts.lefts[0] - phone.hangingIndent) < 1, phone.rowStarts ? `L${phone.rowStarts.line} rows start at ${phone.rowStarts.lefts.join(", ")} — ${phone.hangingIndent}px expected` : "no wrapped line found");
+     exactly two rows, which is what makes the entry box two row boxes here. */
+  check("phone: every chain line wraps to exactly two rows", phone.rows.slice(0, 11).every((r) => Math.abs(r - 2) < 0.05) && Math.abs(phone.unit - 2 * phone.lineBox) < 0.1, `rows ${phone.rows.slice(0, 11).join("/")} · entry box ${phone.unit}`);
+  /* §7.1's floor is what binds — 37 first-row columns / 36 continuation, the
+     width at which L3 breaks to a third row — and the measured count is
+     REPORTED, not asserted at its derived value. Binding at the derived 39
+     would fail a correct build on a rounding difference, which is the
+     assert-something-adjacent failure this project has already paid for. */
+  check("phone: the first row clears §7.1's 37-column floor", phone.columns >= 37, `line region ${phone.lineRegion}px → first row ${phone.firstRow}px / ${phone.advance}px advance = ${phone.columns} columns, floor 37 (§7.1 derives 39)`);
+  check("phone: continuation rows carry the 1ch hanging indent", phone.rowStarts && phone.rowStarts.lefts.length >= 2 && Math.abs(phone.rowStarts.lefts[1] - phone.rowStarts.lefts[0] - phone.hangingIndent) < 1, phone.rowStarts ? `L${phone.rowStarts.line} rows start at ${phone.rowStarts.lefts.join(", ")} — ${phone.hangingIndent}px expected` : "no wrapped line found");
+  /* --- the grouping, asserted directly. Everything above this line passes
+         against a log whose eight rows read as eight things instead of four: the wrap is
+         byte-clean either way, the budget sums either way, the columns measure
+         the same either way. The grouping is a property in its own right and it
+         is asserted as one — and as TWO properties, not one, because at 1ch the
+         indent is ~7.8px and cannot carry the grouping alone (§12). --- */
+  check("phone: entries are separated from rows by at least 2×, measured", phone.separation.ratio >= 2 && phone.separation.separator > 0.5, `entry-to-entry ${phone.separation.entryGap}px against row-to-row ${phone.separation.rowGap}px = ${phone.separation.ratio}× (spec'd 18.5 / 6.5 = 2.85×) — separator ${phone.separation.separator}px, row pitch ${phone.separation.rowPitch}px, em ${phone.separation.em}px`);
   check("phone: the §7.1 fixed rows measure as budgeted", Math.abs(phone.chrome - 41.5) < 0.5 && Math.abs(phone.card - 199.4) < 0.5 && Math.abs(phone.indicator - 16.5) < 0.5, `chrome ${phone.chrome} · card ${phone.card} · indicator ${phone.indicator}`);
   /* 379.4 is the fixed core INCLUDING the 48px sticky bar, which is not part of
-     the core element; three wrapped lines are what the remainder buys. */
-  check("phone: the core measures its §7.1 budget", Math.abs(phone.core - (379.4 - 48 + 3 * phone.unit)) < 0.5, `${phone.core}px measured vs ${Math.round((379.4 - 48 + 3 * phone.unit) * 100) / 100}px budgeted`);
+     the core element; three whole entries and the two separators between them
+     are what the remainder buys. */
+  const coreBudget = Math.round((379.4 - 48 + 3 * phone.separation.box + 2 * phone.separation.separator) * 100) / 100;
+  check("phone: the core measures its §7.1 budget", Math.abs(phone.core - coreBudget) < 0.5, `${phone.core}px measured vs ${coreBudget}px budgeted (3 × ${phone.separation.box} + 2 × ${phone.separation.separator} of line region)`);
   check("phone: the totals strip sits below the core, not inside it", phone.totalsOutsideCore && phone.totalsBelowCore && Math.abs(phone.totals - 33) < 0.5, `outside core: ${phone.totalsOutsideCore}, below it: ${phone.totalsBelowCore}, ${phone.totals}px`);
   check("phone: the chrome label holds one line", Math.abs(phone.labelLines - 1) < 0.1, `${phone.labelLines} lines`);
   check("phone: totals strip is two micro lines, value line unwrapped", parseFloat(phone.totalsValue.size) === 11 && Math.abs(phone.totalsValue.lines - 1) < 0.1, `${phone.totalsValue.size}, ${phone.totalsValue.lines} line(s)`);
@@ -909,6 +1016,9 @@ try {
   check("phone: the terminal owns its scroll, the body never does", phone.scrolls && phone.docScroll.s <= phone.docScroll.c, `log scrolls: ${phone.scrolls}, doc ${phone.docScroll.s}/${phone.docScroll.c}`);
   check("phone: no corpus line needs a sideways gesture to finish", phone.lineOverflow.length === 0, phone.lineOverflow.length ? `L${phone.lineOverflow.join(", L")} overflow their region` : "every line's last character is on screen once its rows are");
   check("phone: .instrument inset is at most 20% of the card", phone.instrument.inset / phone.instrument.width <= 0.2, `${phone.instrument.inset}px of ${phone.instrument.width}px = ${Math.round((phone.instrument.inset / phone.instrument.width) * 1000) / 10}%`);
+  const phonePair = await page.eval(ACCENT_PAIR);
+  evidence.accentPhone = phonePair;
+  check("phone, mid-playback: the accent mark is 12px in from both cards", pairOK(phonePair), pairDetail(phonePair));
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-375.png"), await page.screenshot());
 
   /* Every line occupies its space from load, so a window that simply scrolled
@@ -940,7 +1050,16 @@ try {
         if (head >= top - 1 && foot <= top + view + 1) whole++;
         else if (foot > top + 1 && head < top + view - 1) clipped.push(li.dataset.line);
       }
-      return { whole, clipped, revealed: lines.filter((li) => li.hasAttribute("data-revealed")).length };
+      /* §7.1 rule 3 / §12: the window comes to rest on an entry's own box edge
+         and never inside the gap above it — resting a separator's width high
+         would put a fragment of inter-entry space at the top of the frame,
+         which reads as a clipped entry. offsetTop is the border-box top and
+         the separator is a margin sitting above it, so "on a box edge" is
+         exactly "scrollTop matches some entry's offsetTop". */
+      const edges = lines.map((li) => li.offsetTop - origin);
+      const onEdge = top <= 0.6 || edges.some((e) => Math.abs(e - top) < 0.6);
+      return { whole, clipped, onEdge, top: Math.round(top * 100) / 100,
+               revealed: lines.filter((li) => li.hasAttribute("data-revealed")).length };
     };
     window.MusterReplay.restart();
     const samples = [];
@@ -959,14 +1078,16 @@ try {
     return {
       samples: samples.length,
       clipped: [...new Set(clipped)],
+      offEdge: [...new Set(samples.filter((s) => !s.onEdge).map((s) => s.top))],
       follows: withLines.every((s) => s.whole === Math.min(s.revealed, 3)),
       worst: Math.max(0, ...withLines.map((s) => s.whole)),
       endShowsL12: last.bottom <= box.bottom + 1 && last.top >= box.top - 1
     };
   })()`);
   evidence.s2PhoneWindow = phoneWindow;
-  check("phone: the window follows the newest revealed line, three at a time", phoneWindow.samples > 20 && phoneWindow.follows && phoneWindow.endShowsL12, `${phoneWindow.samples} samples, max ${phoneWindow.worst} whole lines, L12 in frame at the end: ${phoneWindow.endShowsL12}`);
-  check("phone: the window never clips a wrapped line part-way through its rows", phoneWindow.clipped.length === 0, phoneWindow.clipped.length ? `L${phoneWindow.clipped.join(", L")} half in frame` : `${phoneWindow.samples} samples across a full chain, none partial`);
+  check("phone: the window follows the newest revealed entry, three at a time", phoneWindow.samples > 20 && phoneWindow.follows && phoneWindow.endShowsL12, `${phoneWindow.samples} samples, max ${phoneWindow.worst} whole entries, L12 in frame at the end: ${phoneWindow.endShowsL12}`);
+  check("phone: the window never clips an entry part-way through its rows", phoneWindow.clipped.length === 0, phoneWindow.clipped.length ? `L${phoneWindow.clipped.join(", L")} half in frame` : `${phoneWindow.samples} samples across a full chain, none partial`);
+  check("phone: the window rests on an entry's box edge, never inside a separator", phoneWindow.offEdge.length === 0, phoneWindow.offEdge.length ? `resting at ${phoneWindow.offEdge.join(", ")}px — not an entry edge` : `${phoneWindow.samples} resting positions, every one on a box edge`);
 
   /* Native keyboard scrolling of the log region — a real key event, not a
      synthetic one, because the behaviour under test is the browser's. */
@@ -989,12 +1110,43 @@ try {
   await page.setViewport({ width: 1000, height: 800 });
   await page.goto(PAGE_URL);
   const tightWide = await page.eval(`(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const css = (el, p) => getComputedStyle(el).getPropertyValue(p).trim();
     const log = document.querySelector(".log");
+    const lines = [...document.querySelectorAll(".log__line")];
+    const terminal = document.querySelector(".terminal");
     const rail = document.querySelector(".narration").getBoundingClientRect();
+    const probe = document.createElement("span");
+    probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+    ["font-family", "font-size", "letter-spacing"].forEach((p) => probe.style.setProperty(p, css(lines[0], p)));
+    probe.textContent = "0";
+    document.body.appendChild(probe);
+    const advance = probe.getBoundingClientRect().width;
+    probe.remove();
+    const firstRow = lines[0].getBoundingClientRect().width - parseFloat(css(lines[0], "border-inline-start-width"));
+    /* Where the first CHARACTER sits, measured from the terminal's inner edge.
+       The accent gutter moved from the line to the log; §9.1 says that is
+       cost-free above --bp-wide, which is a claim about this number. */
+    const range = document.createRange();
+    range.selectNodeContents(lines[0]);
+    const ink = Math.min(...[...range.getClientRects()].filter((r) => r.width > 0).map((r) => r.left));
     return { sw: log.scrollWidth, cw: log.clientWidth, rail: Math.round(rail.width),
+      firstRow: r2(firstRow), columns: Math.floor(firstRow / advance),
+      textX: r2(ink - (terminal.getBoundingClientRect().left + terminal.clientLeft)),
+      rows: lines.slice(0, 11).map((li) => Math.round(li.getBoundingClientRect().height / parseFloat(css(log, "line-height")))),
       s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth };
   })()`);
+  evidence.s2TightWide = tightWide;
   check("1000px: the longest corpus line still fits the terminal", tightWide.sw <= tightWide.cw && tightWide.s <= tightWide.c, `log ${tightWide.sw}/${tightWide.cw}, rail ${tightWide.rail}px`);
+  /* §12: assert the FIRST ROW, which is the width L3 actually has to fit in —
+     not the log's content box, which is two columns wider and would pass a
+     build that had pushed a corpus line to a second row. */
+  const longest = Math.max(...corpusLines.slice(0, 11).map((l) => [...l].length));
+  check("1000px: the log's first row holds ≥74 columns and every line sets one row", tightWide.columns >= 74 && tightWide.columns >= longest && tightWide.rows.every((r) => r === 1), `${tightWide.firstRow}px = ${tightWide.columns} columns against a ${longest}-character longest line, rows ${tightWide.rows.join("")}`);
+  /* The accent gutter is cost-free above --bp-wide: the 12px moved from the
+     line's padding to the log's, so the first character keeps its x — 12px of
+     gutter plus the line's own 2px tick, in from the terminal's inner edge. */
+  check("desktop: the accent gutter did not move the log's first character", Math.abs(tightWide.textX - 14) < 0.5, `first character sits ${tightWide.textX}px in from the terminal's inner edge (12px gutter + 2px tick)`);
 
   /* --- the sideways-gesture sweep: every width a phone reader turns up on.
          The claim is per LINE, not per page — a body that does not scroll while
@@ -1006,17 +1158,45 @@ try {
     await page.goto(PAGE_URL);
     sweep[width] = await page.eval(`(() => {
       const r2 = (n) => Math.round(n * 100) / 100;
+      const css = (el, p) => getComputedStyle(el).getPropertyValue(p).trim();
       const log = document.querySelector(".log");
       const lines = [...document.querySelectorAll(".log__line")];
-      const pad = parseFloat(getComputedStyle(log).paddingTop) + parseFloat(getComputedStyle(log).paddingBottom);
-      const unit = Math.max(...lines.slice(0, 11).map((li) => li.getBoundingClientRect().height));
+      const ls = getComputedStyle(log);
+      const pad = parseFloat(ls.paddingTop) + parseFloat(ls.paddingBottom);
+      const lineBox = parseFloat(ls.lineHeight);
+      const chain = lines.slice(0, 11);
+      const unit = Math.max(...chain.map((li) => li.getBoundingClientRect().height));
+      /* Rect-differenced, not offsetTop-differenced: offsetTop and offsetHeight
+         are integers, so at a width where an entry box is 58.5px the gap between
+         two entries reads 11px or 12px depending on where the box lands. Every
+         line carries the same reveal transform at idle — this runs before the
+         section is scrolled into view — so rect differences are exact here in a
+         way they would not be mid-chain. */
+      let separator = Infinity;
+      for (let i = 1; i < chain.length; i++) {
+        separator = Math.min(separator, chain[i].getBoundingClientRect().top - chain[i - 1].getBoundingClientRect().bottom);
+      }
+      const probe = document.createElement("span");
+      probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+      ["font-family", "font-size", "letter-spacing"].forEach((p) => probe.style.setProperty(p, css(lines[0], p)));
+      probe.textContent = "0";
+      document.body.appendChild(probe);
+      const advance = probe.getBoundingClientRect().width;
+      probe.remove();
+      const firstRow = lines[0].getBoundingClientRect().width - parseFloat(css(lines[0], "border-inline-start-width"));
       return {
         overflowing: lines.filter((li) => li.scrollWidth > li.clientWidth).map((li) => li.dataset.line),
         logScroll: log.scrollWidth <= log.clientWidth,
         doc: document.documentElement.scrollWidth <= document.documentElement.clientWidth,
-        unit: r2(unit),
-        rows: r2(unit / parseFloat(getComputedStyle(log).lineHeight)),
-        windowLines: r2((log.clientHeight - pad) / unit),
+        unit: r2(unit), separator: r2(separator),
+        /* Per-line row counts, not just the tallest: §12 asks whether ANY
+           corpus line sets more than two rows, and a max over entry boxes
+           would hide a single three-row line behind a two-row maximum only if
+           they happened to tie. Measured per line, they cannot. */
+        perLine: chain.map((li) => Math.round(li.getBoundingClientRect().height / lineBox)),
+        rows: r2(unit / lineBox),
+        columns: Math.floor(firstRow / advance), firstRow: r2(firstRow),
+        entries: r2((log.clientHeight - pad + separator) / (unit + separator)),
         text: lines.map((li) => li.textContent)
       };
     })()`);
@@ -1025,11 +1205,22 @@ try {
   const gestured = SWEEP.filter((w) => sweep[w].overflowing.length || !sweep[w].logScroll || !sweep[w].doc);
   check("no corpus line needs a horizontal gesture at 320 / 360 / 375 / 390 / 393px", gestured.length === 0, gestured.length ? `${gestured.join(", ")}px overflow` : SWEEP.map((w) => `${w}px ✓`).join(" · "));
   check("soft wrap is not a fidelity cost at any phone width", SWEEP.every((w) => sweep[w].text.every((l, i) => l === corpusLines[i])), "12/12 byte-clean against the corpus at all five widths");
-  /* The trap §7.1 names explicitly: 49.4px is exact at 375px and a CEILING
-     below it. At 320px the region is 34 columns, the longest lines cost three
-     rows, and a window sized on the constant would place a third line and clip
-     it. Sized on the measured row heights, it falls to two. */
-  check("320px: the window is quantised on measured rows, not the 49.4px constant", sweep[320].rows > 2.5 && sweep[320].windowLines >= 2 && Number.isInteger(Math.round(sweep[320].windowLines)) && Math.abs(sweep[320].windowLines - Math.round(sweep[320].windowLines)) < 0.05, `unit ${sweep[320].unit}px = ${sweep[320].rows} rows → ${sweep[320].windowLines} whole lines`);
+  /* §12: the two-row constant is MEASURED, not inherited. 360px is the tightest
+     viewport in the set — 5.7px of margin over §7.1's 37-column floor, under
+     one column — and L3's second row carries two of the four corpus glyphs that
+     can come from a fallback face, so a derived count is not evidence here.
+     320px is excluded and deferred: it sits below the width any row of the
+     budget is derived at, and §7.1 states the count there is a ceiling. */
+  const TWO_ROW = [360, 375, 390, 393];
+  const overRows = TWO_ROW.filter((w) => sweep[w].perLine.some((r) => r > 2));
+  check("the two-row constant holds, measured at 360 / 375 / 390 / 393px", overRows.length === 0, overRows.length ? overRows.map((w) => `${w}px: L${sweep[w].perLine.map((r, i) => (r > 2 ? i + 1 : null)).filter(Boolean).join(",L")} set 3+ rows`).join(" ;; ") : TWO_ROW.map((w) => `${w}px ${sweep[w].columns}col ✓`).join(" · "));
+  check("every phone width clears §7.1's 37-column floor", TWO_ROW.every((w) => sweep[w].columns >= 37), TWO_ROW.map((w) => `${w}px → ${sweep[w].firstRow}px first row = ${sweep[w].columns} columns`).join(" · "));
+  check("the entry separator survives at every phone width", SWEEP.every((w) => sweep[w].separator > 0.5), SWEEP.map((w) => `${w}px ${sweep[w].separator}px`).join(" · "));
+  /* The trap §7.1 names explicitly, wearing its new number: 51.0px is exact at
+     375px and a CEILING below it. At 320px the longest lines cost three rows,
+     and a window sized on the constant would place a third entry and clip it.
+     Sized on the measured entry box and separator, it falls to two. */
+  check("320px: the window is quantised on measured entries, not the 51.0px pitch", sweep[320].rows > 2.5 && sweep[320].entries >= 2 && Math.abs(sweep[320].entries - Math.round(sweep[320].entries)) < 0.05, `entry box ${sweep[320].unit}px = ${sweep[320].rows} rows, separator ${sweep[320].separator}px → ${sweep[320].entries} whole entries at ${sweep[320].columns} columns`);
 
   await page.setViewport({ width: 320, height: 568, deviceScaleFactor: 1, mobile: true });
   await page.goto(PAGE_URL);
@@ -1038,14 +1229,20 @@ try {
     const log = document.querySelector(".log");
     const lines = [...document.querySelectorAll(".log__line")];
     const pad = parseFloat(getComputedStyle(log).paddingTop) + parseFloat(getComputedStyle(log).paddingBottom);
-    const unit = Math.max(...lines.slice(0, 11).map((li) => li.getBoundingClientRect().height));
+    const chain = lines.slice(0, 11);
+    const unit = Math.max(...chain.map((li) => li.getBoundingClientRect().height));
+    let separator = Infinity;
+    for (let i = 1; i < chain.length; i++) {
+      separator = Math.min(separator, chain[i].getBoundingClientRect().top - chain[i - 1].getBoundingClientRect().bottom);
+    }
     return { s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth,
-      lines: r2((log.clientHeight - pad) / unit), unit: r2(unit),
+      entries: r2((log.clientHeight - pad + separator) / (unit + separator)), unit: r2(unit),
+      separator: r2(separator),
       core: r2(document.querySelector(".replay__core").getBoundingClientRect().height) };
   })()`);
   evidence.s2Narrow = narrow;
-  check("320px: the body still never scrolls horizontally", narrow.s <= narrow.c, `scrollWidth ${narrow.s} vs ${narrow.c}, ${narrow.lines} whole lines of ${narrow.unit}px, core ${narrow.core}px`);
-  check("320 × 568: the window falls to two whole lines, and the core still fits", Math.abs(narrow.lines - 2) < 0.05 && narrow.core <= 568 - 48 + 0.5, `${narrow.lines} lines, core ${narrow.core}px of ${568 - 48}px`);
+  check("320px: the body still never scrolls horizontally", narrow.s <= narrow.c, `scrollWidth ${narrow.s} vs ${narrow.c}, ${narrow.entries} whole entries of ${narrow.unit}px, core ${narrow.core}px`);
+  check("320 × 568: the window falls to two whole entries, and the core still fits", Math.abs(narrow.entries - 2) < 0.05 && narrow.core <= 568 - 48 + 0.5, `${narrow.entries} entries of ${narrow.unit}px + ${narrow.separator}px separator, core ${narrow.core}px of ${568 - 48}px`);
 
   /* --- landscape phone --- */
   await page.setViewport({ width: 667, height: 375, deviceScaleFactor: 1, mobile: true });
@@ -1069,10 +1266,15 @@ try {
     const advance = probe.getBoundingClientRect().width;
     probe.remove();
     const region = lines[0].getBoundingClientRect().width - parseFloat(css(lines[0], "border-inline-start-width"));
+    let separator = Infinity;
+    for (let i = 1; i < 11; i++) {
+      separator = Math.min(separator, lines[i].getBoundingClientRect().top - lines[i - 1].getBoundingClientRect().bottom);
+    }
     const slots = [...document.querySelectorAll(".narration__entry")]
       .map((e) => ({ slot: e.dataset.slot, h: r2(e.getBoundingClientRect().height) }));
     const worst = slots.reduce((a, b) => (b.h > a.h ? b : a));
-    return { lines: r2((log.clientHeight - pad) / unit), unit: r2(unit),
+    return { entries: r2((log.clientHeight - pad + separator) / (unit + separator)),
+      unit: r2(unit), separator: r2(separator),
       stacked: rail.top >= term.bottom - 1, termWidth: r2(term.width), railWidth: r2(rail.width),
       region: r2(region), columns: Math.floor(region / advance),
       chrome: r2(document.querySelector(".terminal__chrome").getBoundingClientRect().height),
@@ -1085,8 +1287,13 @@ try {
   })()`);
   evidence.s2Landscape = landscape;
   check("landscape phone takes two columns, terminal in the wider one", !landscape.stacked && landscape.termWidth > landscape.railWidth, `terminal ${landscape.termWidth}px / narration ${landscape.railWidth}px`);
-  check("landscape phone: the terminal column holds at least 41 characters", landscape.columns >= 41 && landscape.overflowing.length === 0 && landscape.s <= landscape.c, `${landscape.region}px = ${landscape.columns} columns, doc ${landscape.s}/${landscape.c}`);
-  check("landscape phone keeps at least three whole log lines on screen", landscape.lines >= 3 && Math.abs(landscape.lines - Math.round(landscape.lines)) < 0.05, `${landscape.lines} whole lines of ${landscape.unit}px`);
+  /* Bound at §7.1's 37-column floor and REPORTING the measured count. The 55/41
+     split is sized to deliver 40, but that target derives to 40.04 — under a
+     tenth of a column of headroom — so asserting it would fail a correct build
+     on a rounding difference. A measured 39 is margin spent, not a defect; 36
+     is a defect. */
+  check("landscape phone: the terminal column clears the 37-column floor", landscape.columns >= 37 && landscape.overflowing.length === 0 && landscape.s <= landscape.c, `first row ${landscape.region}px = ${landscape.columns} columns (floor 37, split sized to deliver 40), doc ${landscape.s}/${landscape.c}`);
+  check("landscape phone keeps at least three whole log entries on screen", landscape.entries >= 3 && Math.abs(landscape.entries - Math.round(landscape.entries)) < 0.05, `${landscape.entries} whole entries of ${landscape.unit}px + ${landscape.separator}px separator`);
   /* The two figures §7.1 derived rather than measured, reported as measurements. */
   check("landscape phone: the chrome bar fits its budget", landscape.chrome <= 58.5, `${landscape.chrome}px measured against 58px budgeted — label sets ${landscape.chromeLabelRows} row(s)`);
   check("landscape phone: the worst narration slot fits its card", landscape.worst.h <= landscape.list + 0.5, `${landscape.worst.slot} sets ${landscape.worst.h}px in a ${landscape.list}px card`);

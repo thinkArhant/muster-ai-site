@@ -95,57 +95,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Developer (web): Build the phone log legibility fix
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Implement the approved F-R1 and F-R2 resolutions.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/section-02-replay.md` — authoritative (§5.1, §7, §7.1, §9.1, §12)
-- `knowledge-base/decision-log.md` — DEC-029 for the resolution, DEC-030 for the review and its rulings
-- `knowledge-base/design-specs/web/page-shell.md` — the type-scale note on component-scoped leading
-- `styles/replay.css` — `.log`, `.log__line`, `.narration`, `.narration__list`, `.narration__entry`
-
-**Acceptance criteria:**
-- Entry boundaries visible at a glance at 375 × 553, per the amended spec
-- One accent relationship across both cards, per the amended spec
-- Fidelity unchanged: all twelve lines still diff byte-clean; no line needs horizontal scroll at 375px
-- Reduced-motion and no-JS paths still render the complete transcript
-- Timing, SP7 and every narration string are untouched — not in scope
-- `bash scripts/test.sh` green on both engines; extend the harness rather than adding a second runner
-- **Add a check that would have caught F-R1.** A harness that passes a log nobody can parse is the gap
-  this round exposed; assert the entry-separation property directly
-
-**Four rulings from the review (DEC-030) ride this step. None is new scope — each is a way this fix
-can pass its own criterion and still be wrong, which is the pattern that produced the round.**
-
-1. **The desktop rail's inset is set in two places and the live one wins.** `.narration` carries
-   `padding: --gap-flow`, but while a playback state is present `.narration__list` is absolutely
-   positioned at `inset: var(--gap-flow)`. Change only the card's padding and the accent inset is right
-   in the no-JS transcript and stays at 24px for the entire live chain. Fix both, and measure the
-   desktop pair **during playback**, not only in the static state (§12).
-2. **51.0px is a ceiling, not a constant** — the same trap as the 49.4px line constant routed one round
-   ago, wearing a new number. L12 sets a different box (1.25rem, outside the chain) and below 375px a
-   chain line is three rows. §7.1 rule 4's "quantised down to whole entries" is a measurement
-   instruction and it governs; the window must still come to rest on an entry's box edge and never
-   inside a separator (§5.1).
-3. **`--line-box` in `.replay` is `--text-terminal × --lead-terminal`** and is wrong below `--bp-wide`
-   the moment the leading splits. Whatever reads it needs the entry box and the pitch, measured.
-4. **The continuation cue is halved as the entry cue is strengthened** — 2ch → 1ch, ~15.7px → ~7.8px.
-   That trade is approved, and it means the indent no longer stands alone: assert the indent and the
-   separator as two properties (§12), so a build that silently loses the separator fails rather than
-   leaning on a cue too small to carry it.
-
-**On completion:** File HO-016 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
-
 ### 2026-07-26 QA (web): Re-validate the phone log
 
 ```
@@ -184,6 +133,10 @@ section of a PM-owned file — add the two figures, change nothing else in that 
 Pre-Handoff Self-Review Checklist.
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
+
 ### 2026-07-26 Wave 3 Gate 3 — founder review
 
 ```
@@ -209,6 +162,13 @@ sprint worktree.
 
 ## Done (Last 10)
 <!-- newest first -->
+
+- 2026-07-26 — Wave 3 fix round 2, step 3: Developer — the phone log reads as entries and the rust mark
+  sits one way in both layers (HO-016). Entry-to-entry whitespace 18.5px against row-to-row 6.5px
+  (2.85×), the accent pair 12/12 in three states including mid-playback, desktop unmoved at 14px / 76
+  columns. All four rulings landed. **The harness gained the check this round exposed** — entry
+  separation, asserted directly and as two properties. 156 Blink / 13 WebKit green; audit still zero at
+  106/106. **Awaiting validation — QA, then the gate.**
 
 - 2026-07-26 — Wave 3 fix round 2, step 2: PM — HO-015 accepted with notes, no revision; the build step
   is cleared (DEC-030). The budget re-derived item by item and the load-bearing 37/36 floor checked by
@@ -282,15 +242,3 @@ sprint worktree.
   as a fix wave: SP7 reframed to the operator's arc (DEC-024), mobile terminal to read without
   horizontal scroll (DEC-025), reading column ruled `64ch` as-shipped with the band check retired
   (DEC-023), and the real-iPhone playback check carried to the re-gate.
-
-- 2026-07-26 — Wave 3: QA — §2 replay validated; every criterion green (HO-007). Twelve lines byte-clean
-  against the corpus and the corpus proven unmodified from git; worst reveal drift 16.8 ms across all
-  twelve lines and all ten slots; phone core 499.89px with both layers at 100% coverage for the whole
-  chain; WebKit carries the no-JS transcript in both themes and every mobile figure is labelled
-  Blink-only. Build suite green (129 Blink, 13 WebKit); the independent audit is 99/100 with 7 reported
-  measurements. **Seven defects were in the audit, not the build** — five of them holding eight checks
-  red against a correct build, including a WebKit row profile that was blind by construction, and two
-  closing criteria nothing had measured. The one standing red is F1, the founder's `64ch` question,
-  left red deliberately. Three findings for PM: the narration card meets its 6-line worst case with zero
-  margin, OBS-002 confirmed by measurement at 320px, and a spec/build id mismatch in §11. Awaiting PM
-  review, then the founder gate.
