@@ -381,3 +381,110 @@
   🧪 bash   ls muster/scripts/ | head -20; echo "---"; bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -20
   🧪 bash   bash muster/scripts/muster-requests-lint.sh 2>&1 | tail -20; echo "=== handoff lint ==="; bash muster/scripts/muster-lin
   🧪 bash   git add -A && git status --short
+  🧪 bash   git commit -q -F - <<'EOF' developer: the page now stands up in both themes on both engines The shell of the locked desi
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "exit=$?"
+  🧪 bash   grep -n "^### 7.1\|^## 7\.\|^### 7\." knowledge-base/design-specs/web/section-02-replay.md | head
+  💬 Step complete. The page shell is built, verified on both engines, and the queue has advanced to QA. ## What shipped `index.html` + `styles/{tokens,base,chrome,motifs}.css` + `scripts/count-up.js` — th
+    📖 ×17 · ✏️  ×23 · 📝 ×14 · 🧪 ×38 · ⚠️  ×1
+  ✓ 93 turns · $11.69 · peak ctx 219k/1M 21% · out 110k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m24m 32s[0m · advanced → 2026-07-24 QA (web): Shell validation (QA) · handoff HO-003 filed ✓
+    run so far: 1h 1m · $31.47 · 4 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 5
+▶ [32;1mQA[0m · 2026-07-24 QA (web): Shell validation  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  💬 Greenfield ongoing route. Running session-start housekeeping.
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Next Step is `Role: qa`. Binding to QA for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh qa auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/qa.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/qa/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  🧪 bash   wc -l knowledge-base/agent-requests.md knowledge-base/design-specs/web/page-shell.md muster/team/qa/skills/web/web-testi
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/qa/skills/web/web-testing.md
+  💬 Running the existing harness first (foreground, blocking) to establish the baseline.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/test.sh
+  🧪 bash   bash scripts/test.sh
+  💬 Baseline green. Now reading the actual build to derive scope from the spec independently.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/tokens.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/chrome.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/motifs.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   ls tests/lib tests/fixtures; echo ---; grep -n "async \(setMedia\|setViewport\|eval\|goto\|screenshot\|init\|close\)\|^ 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  💬 Now writing my own independent audit — deriving scope from `page-shell.md`, not from what the harness asserts.
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | tail -50
+  💬 37/37 on my own checks. Now falsifying the harness's own overflow assertion, and probing what WebKit can actually measure.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 cat > /tmp/qa-falsify.mjs <<'EOF' /* Falsif
+  ⚠️  tool returned an error
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 sed -i '' 's#"./tests/lib/cdp.mjs"#"/Users/
+  💬 The harness's overflow assertion falsifies correctly — my suspicion was wrong, and I'll record that as verified rather than as a finding. Now testing what WebKit can actually be made to measure.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 mkdir -p /tmp/qa-wk && cat > /tmp/qa-wk/js-
+  📖 read   /tmp/qa-wk/js-probe.html.png
+  💬 QuickLook renders WebKit but does not execute JS — a real constraint I'll state plainly. Building a CSS-only WebKit probe so the cross-engine evidence covers more than grain.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 cat > /tmp/qa-wk/css-support.html <<'EOF' <
+  📖 read   /tmp/qa-wk/css-support.html.png
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 for t in dark light; do sed "s#<html lang=\
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 ls -la /tmp/qa-wk/ | grep png cp /tmp/qa-wk
+  📖 read   /tmp/qa-wk/wk-dark-375.png
+  🧪 bash   cd /tmp/qa-wk cat > vp-probe.html <<'EOF' <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content
+  📖 read   /tmp/qa-wk/vp-375.png
+  💬 QuickLook ignores the requested size for layout — it renders at a fixed wide viewport and scales the raster. Pinning down the actual width so the report is precise.
+  🧪 bash   cd /tmp/qa-wk { echo '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width
+  📖 read   /tmp/qa-wk/vpw.png
+  💬 Effective QuickLook viewport is ~1024×1024 with JS off. Rendering Blink at the identical viewport so the cross-engine comparison is apples-to-apples.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 cat > /tmp/qa-blink-1024.mjs <<'EOF' import
+  📖 read   /tmp/qa-wk/wk-dark-1024.png
+  📖 read   /tmp/qa-wk/blink-dark-1024.png
+  📖 read   /tmp/qa-wk/wk-light-1024.png
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 cat > /tmp/qa-obs.mjs <<'EOF' import { laun
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 cat > /tmp/qa-lines.mjs <<'EOF' import { la
+  💬 Precise numbers now. Running an independent hygiene and source-integrity sweep.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== shipped-file external refs ===" g
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/count-up.js
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== seed palette + tech/a11y requirem
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ⚠️  tool returned an error
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 grep -n "strings identical" tests/qa-indepe
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 perl -i -pe 's/\.split\("\x01"\)/.split(Str
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 node tests/qa-independent-audit.mjs 2>&1 | 
+  💬 Two real findings. Fixing an evidence detail (I read padding off the paragraph, not the instrument) before finalising.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 node tests/qa-independent-audit.mjs 2>&1 | 
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 mkdir -p tests/artifacts/qa-webkit cp /tmp/
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 cp /tmp/qa-wk/css-support.html tests/fixtur
+  🧪 bash   bash scripts/test.sh
+  💬 Build suite green; my independent audit is 37/39. Writing the handoff.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now updating the queue: my step to Done, and re-pointing Next Step to a PM assessment rather than promoting Content.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 grep -n "Pre-Handoff Self-Review" -A 40 mus
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 grep -n "Self-Review Checklist" muster/syst
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/system-guide.md
+  💬 Running the Pre-Handoff Self-Review now.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== cross-ref existence ===" for f in
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 grep -nE "^### A-00[1-9]|^\*\*A-00" -A 4 kn
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now completing the self-review record in the handoff's revision log.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== final: build suite ===" bash scri
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 git add -A git status --short git commit -q

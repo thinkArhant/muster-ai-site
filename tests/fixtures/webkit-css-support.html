@@ -1,0 +1,33 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+body{background:#13140D;color:#E6E3D3;font:600 22px ui-monospace,Menlo,monospace;margin:0;padding:16px;line-height:1.45}
+.t{padding:2px 6px;margin:3px 0}
+.t::after{content:" FAIL";color:#ff5555}
+/* Each @supports flips its row to PASS only if WebKit really supports the feature the shell relies on. */
+@supports (background: color-mix(in srgb, red 30%, blue)) { .colormix::after{content:" PASS";color:#7CFC7C} }
+@supports selector(:focus-visible) { .fv::after{content:" PASS";color:#7CFC7C} }
+@supports (inline-size: 8px) and (inset-block-start: 0) { .logical::after{content:" PASS";color:#7CFC7C} }
+@supports (font-size: clamp(1rem, 2vw, 2rem)) { .clamp::after{content:" PASS";color:#7CFC7C} }
+@supports (position: sticky) { .sticky::after{content:" PASS";color:#7CFC7C} }
+@supports (font-variant-numeric: tabular-nums) { .tab::after{content:" PASS";color:#7CFC7C} }
+@supports (color: rgb(0 0 0 / 0.16)) { .space::after{content:" PASS";color:#7CFC7C} }
+@supports (color-scheme: dark light) { .cscheme::after{content:" PASS";color:#7CFC7C} }
+@supports (text-decoration-thickness: 1px) and (text-underline-offset: 3px) { .underline::after{content:" PASS";color:#7CFC7C} }
+@supports (background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E")) { .datauri::after{content:" PASS";color:#7CFC7C} }
+/* Live resolution proof: this swatch is painted with the same color-mix the ::selection rule uses.
+   If color-mix fails, the swatch falls back to the magenta below it and the divergence is visible. */
+.swatch{background:magenta;background:color-mix(in srgb,#C05A32 30%,#13140D);color:#E6E3D3;padding:10px}
+.mixwash{background:magenta;background:color-mix(in srgb,#C05A32 12%,transparent);padding:10px}
+</style></head><body>
+<div class="t colormix">color-mix() [--accent-selection/--accent-wash]</div>
+<div class="t fv">:focus-visible selector</div>
+<div class="t logical">logical props (inline-size/inset-block-start)</div>
+<div class="t clamp">clamp() type + spacing scale</div>
+<div class="t sticky">position:sticky (status bar)</div>
+<div class="t tab">tabular-nums (count-up, no reflow)</div>
+<div class="t space">space-separated rgb w/ alpha (vignette)</div>
+<div class="t cscheme">color-scheme: dark light</div>
+<div class="t underline">underline thickness + offset (link rule)</div>
+<div class="t datauri">svg data-URI background (grain)</div>
+<div class="swatch">SELECTION SWATCH — must be dark rust, never magenta</div>
+<div class="mixwash">ACCENT WASH — must be faint rust, never magenta</div>
+</body></html>

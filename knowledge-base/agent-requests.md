@@ -8,6 +8,140 @@
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-25 HO-004 — Shell validated: every acceptance criterion passes, two readability findings for PM
+**Type:** handoff
+**Producer:** QA
+**Deliverable:** per-criterion pass/fail with evidence (below); `tests/qa-independent-audit.mjs`,
+`tests/fixtures/webkit-css-support.html`, `tests/fixtures/webkit-viewport-probe.html`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Verdict: the shell passes every acceptance criterion in the step, on both engines.** Two findings
+below are readability decisions, not build defects — the build implements `page-shell.md` exactly and
+`page-shell.md` implements the seed exactly. Both need a design call QA does not have, so the queue is
+re-pointed to a PM assessment rather than promoted. Nothing here asks the Developer for a fix yet.
+
+**Evidence, and what is mine.** `bash scripts/test.sh` → **86/86 green** (79 Blink + 7 WebKit),
+re-run at session start and again at close. That is the producer's harness and it is a starting point,
+not the finding. My own scope came from `page-shell.md` §§1–13 and the seed's Tech + Accessibility
+lines: `node tests/qa-independent-audit.mjs` → **37/39**, 39 checks that re-derive rather than cite.
+Where the two harnesses measure the same contract they were written independently and agree.
+
+**Per-criterion.**
+
+| Criterion | Verdict | Evidence (mine, re-runnable) |
+|---|---|---|
+| Cross-engine parity, evidence per engine | **PASS**, with a stated ceiling | Blink 1024×1024 vs WebKit 1024×1024, both themes, visually diffed. Structure, palette, spacing, rules, ticks, registration marks, status bar, grain and vignette all correspond; the only divergence is line-break position from system-font metrics, which is shaping, not layout |
+| Zero runtime network requests | **PASS** | 7 loads at 1440, all `file:` or `data:` — the four stylesheets, the script, the document, the inline icon. Re-asserted in light and with the network stack switched off via CDP `Network.emulateNetworkConditions {offline:true}`: identical text, 0 console errors, full render |
+| Body contrast ≥4.5:1 both themes | **PASS**, exceeded | Not sampled: **every** text-bearing element measured against its composited backdrop. 29 runs per theme, worst **5.16:1** dark / **5.13:1** light — both are `--muted` labels, and no body run falls under 12:1. The spec's own 16-ratio table re-derives to the digit |
+| Landmarks and focus states | **PASS** | header/main/footer singular; 6 sections each `aria-labelledby` a heading they contain; `h1 h2 h2 h2 h2 h2`, no skips; 39/39 decorative constructions `aria-hidden`. Focus verified with a real dispatched Tab, not `.focus()`: first stop is the skip link, it matches `:focus-visible`, reveals to `top: 0`, rings at 2px solid accent / 3px offset, and activating it lands focus on `<main>` |
+| Reduced motion renders complete content | **PASS** | 0 running animations, and every rendered string is compared character-for-character against the motion path — 17/17 identical. Count-based parity would have missed a truncation; this would not |
+| No webfonts, no CDN, no build artifacts | **PASS** | 0 `@font-face`, 0 loaded webfonts, no `http(s)` in any shipped file, raw hex only in `tokens.css`, no `package.json` / `node_modules` / `dist`. Independent grep for `gtag|fbq|hotjar|sentry|plausible|analytics|beacon|sendBeacon|XMLHttpRequest|fetch(|WebSocket|EventSource`: **no hits** — the zero-requests claim holds at code level, not just at network level |
+| Page renders with no network | **PASS** | see above — offline render is byte-complete |
+| Scope derived from `page-shell.md` | **Done** | §§1–13 walked; §10's motion inventory, §2.3's rust rules, §4's one-sided spacing and §6's surface rules were each turned into a check the harness did not have |
+
+**Things the producer's harness does not assert, which I added and which pass.** The full-ink rule
+(A-007) — no `p`/`li` renders in `--muted`. The §2.3 rust floor — no element sets its own text in
+`--accent` below 24px, in either theme. One-sided spacing measured as *rendered* margin rather than
+grepped as source text: no element has a computed `margin-bottom > 0`. `::selection` composited by
+hand — `--ink` over accent-at-30% is 10.2:1 dark / 8.14:1 light. Element-by-element overflow at 13
+widths including ±1px around the 60rem breakpoint. Motion tokens compared to §10 literally.
+
+**Two claims I tried to break and could not.** I expected `body { overflow-x: hidden }` to make the
+harness's four no-horizontal-scroll assertions unfalsifiable, since that declaration propagates to the
+viewport. It does not: I injected a 900px box at a 375px viewport and `documentElement.scrollWidth`
+reported 901 against `clientWidth` 375 — the assertion fails when it should. I also re-ran every
+viewport with the declaration lifted to `visible`; 13/13 still clean. The check is sound and the
+`overflow-x` is belt-and-braces, not a mask. Recording the attempt because a future reader will have
+the same suspicion.
+
+**The WebKit ceiling — stated, not papered over.** `qlmanage` is the only WebKit available here, and it
+has two limits the handoff must carry rather than absorb into a PASS:
+1. **It does not execute JavaScript.** Verified with a probe whose body reads `JS DID NOT RUN` unless a
+   script overwrites it; the render says `JS DID NOT RUN`. So the count-up engine, the
+   `IntersectionObserver` gate and the skip-link focus move are **Blink-only evidence**.
+2. **It ignores the requested size for layout** — it renders at a fixed viewport and scales the raster.
+   Measured with `tests/fixtures/webkit-viewport-probe.html`: at `-s 375` the page still reports
+   `≥1000px` wide and `≥1000px` tall (≈1024²). So **no WebKit evidence exists at mobile widths**, and
+   media-query behaviour cannot be exercised there at all.
+
+What I could still prove in WebKit, and did: `tests/fixtures/webkit-css-support.html` renders a
+PASS/FAIL row per CSS feature the shell depends on. All ten pass — `color-mix()`, `:focus-visible`,
+logical properties, `clamp()`, `position: sticky`, `tabular-nums`, space-separated rgb with alpha,
+`color-scheme: dark light`, `text-decoration-thickness`/`text-underline-offset`, and SVG data-URI
+backgrounds. Two live swatches paint the exact `color-mix()` values `--accent-selection` and
+`--accent-wash` resolve to, over a magenta fallback: both render rust, so those tokens are real in
+WebKit and not silently falling back. Re-run either with
+`qlmanage -t -s 760 -o <dir> tests/fixtures/webkit-css-support.html`.
+
+**This matters for §2, not for the shell.** §2's acceptance requires mobile-at-375 verification on
+both engines. On this tooling that is not possible for WebKit. Better surfaced now, with a wave of
+runway, than discovered at §2's gate.
+
+**Findings.**
+
+- F1 — the reading column renders ~90 characters, not ~64   Severity: med
+  Evidence: `--read-max: 64ch` resolves to **685.31px**, and the seed says "reading column ~64ch"
+  (line 228). But `ch` is the advance of `0`, which in `--font-sans` is 10.281px while the average
+  prose character is ~7.6px. Measured by breaking the real placeholder paragraph at the rendered
+  width: **~90 characters per line at every width from 959px up**, 74 at 768px, 67 at 200% zoom.
+  WCAG 2.1 SC 1.4.8 caps a reading block at 80 characters, so 90 is outside a published ceiling, not
+  just outside taste. The build is exactly to spec and the spec is exactly to seed — the gap is
+  between `64ch` and what `64ch` renders.
+  Suggested action: PM decides. A-007 puts layout in the locked set and says the direction is executed,
+  not re-derived, and this value comes from the seed — so it is not UI/UX's to change alone and it is
+  certainly not QA's. It wants deciding before body copy lands: §3 is a kicker plus one paragraph into
+  this exact column.
+  Confirms the *class* of problem in OBS-003 while disputing its size: the producer's "~66.7
+  characters" counts how many `0` glyphs fit, which is a digit measure, not a reading measure.
+
+- F2 — the prose column collapses on small phones   Severity: med
+  Evidence: `.instrument` holds `padding: var(--gap-block)` = 48px a side at every width. Measured
+  card and column: 375px → 327px card, **229px column, ~27 chars/line, 8 lines**; 360px → 214px,
+  ~24; **320px → 272px card, 174px column, ~18 chars/line, 11 lines for a 199-character paragraph.**
+  At 320px, 96px of a 272px card is padding. Confirms OBS-001 — the producer's ~28 characters at
+  375px is right — and extends it: the 320px case was not reported and is materially worse.
+  Suggested action: UI/UX decides whether the shell default steps down on narrow viewports. I share
+  the producer's reasoning for leaving it untouched: `section-02-replay.md` §7.1 budgets its mobile
+  core to the tenth of a pixel off shell tokens, so a silent responsive change here would invalidate
+  a signed-off budget. That is an argument for deciding it deliberately, not for leaving it.
+
+- F3 — `page-shell.md` §11's heading count is wrong   Severity: low
+  Evidence: §11 says "one `<h1>` → six `<h2>` (section tags)"; §12 draws five tags (§02–§06) with the
+  hero carrying the `<h1>`. Built as five `<h2>` + one `<h1>`, matching §12. §11 also contradicts
+  itself — "Sections are `<section aria-labelledby>` their stencil-tag `<h2>`" cannot hold for a hero
+  that has no tag. Confirms OBS-002. The build is right; the spec sentence is wrong.
+  Suggested action: UI/UX corrects §11's count. No build change.
+
+**Observations:**
+- OBS-004 — count-up is fixture-verified, not page-verified   Severity: low
+  Evidence: the shell instantiates no `[data-countup]` element, so `refresh()` returns early and every
+  count-up verdict — in the producer's harness and in mine — rests on `tests/fixtures/count-up.html`.
+  The engine reads correctly (authored text is the exact final value, dashes never animate, the final
+  frame restores the source string rather than a recomputation) and the fixture evidence is real.
+  Suggested action: none now. Re-verify against real readout cells when §1 or §5 lands, and note that
+  a mid-roll value has no `aria-live` guard — assistive tech reaching the cell during the 1.2s roll
+  would read an intermediate number. Worth a decision when a cell actually ships.
+
+**Open questions (self-review item 6):**
+- F1 and F2 both need a design decision; neither is QA's. Routed to the PM assessment step, not to
+  Founder Decisions — PM is the sole party that calls the founder, and PM may well settle both.
+- The WebKit ceiling needs a ruling on what §2's cross-engine criterion is allowed to claim. Left out
+  of `founder-notices.md` for the same reason: PM decides whether the founder needs it.
+- No decision was resolved this session, so `decision-log.md` is unchanged by design.
+
+**Self-review caught.** Two of my own errors, both of which would have shipped false evidence. The
+`.instrument` padding figure in the reading-measure evidence was read off the paragraph rather than the
+card, so it reported `0px` where the real value is 48px — the number that makes F2 legible. And my
+first pass labelled the three running CSS animations "exactly three ambient animations … no fourth
+element", which reads as the three-element budget being filled; all three belong to the pulse alone,
+and elements 1 and 3 are not instantiated in the shell. Relabelled. Separately, I did not tick the
+Shell-validation box in `current-sprint.md`: it is a PM-owned protocol file (Rule 1).
+
+**Revision log:**
+- 2026-07-25: Filed. Build suite 86/86; independent audit 37/39, the two failures being F1 and F2.
+
 ### 2026-07-25 HO-003 — Page shell built, both themes, verified on both engines
 **Type:** handoff
 **Producer:** Developer
@@ -15,7 +149,9 @@
 `tests/` (harnesses + fixture), `knowledge-base/architecture.md`
 **Status:** in-review
 **Reviewers:**
-- [ ] QA — pending
+- [x] QA — reviewed, no build defects. Every acceptance criterion passes on both engines; see HO-004.
+      OBS-001 and OBS-002 confirmed and carried as F2 and F3; OBS-003's class confirmed, its figure
+      disputed and restated as F1.
 - [ ] PM — pending
 
 **What was built.** The shell of `page-shell.md`: the token system in both palettes, the type scale, the

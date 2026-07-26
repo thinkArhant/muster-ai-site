@@ -52,41 +52,64 @@ all page copy until measured at launch (seed rule 4).
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 QA (web): Shell validation
+### 2026-07-25 PM: Shell validation assessment — two readability findings
 
 ```
-Role: qa
+Role: pm
 Model: claude-opus-5
 
-**Task:** Validate the page shell against its acceptance criteria.
+**Task:** Assess HO-004's two open findings and decide handle-vs-escalate, then release the wave.
+
+The shell passed every acceptance criterion on both engines and QA found no build defect — the queue
+is here because QA hit two decisions it does not have authority for, not because anything is red.
+`bash scripts/test.sh` is 86/86; `node tests/qa-independent-audit.mjs` is 37/39, the two failures
+being F1 and F2 below.
 
 **Inputs:**
-- `knowledge-base/agent-requests.md` — HO-003
-- `knowledge-base/design-specs/web/page-shell.md` — derive validation scope from this spec directly, so a dev-charter omission does not also blind QA
-- `knowledge-base/product-spec-seed.md` → Tech + Accessibility
-- `knowledge-base/agent-context/qa.md` — your Current Tasks
-- `muster/team/qa/skills/web/web-testing.md`
-- `muster/team/qa/skills/generic/bug-reporting.md`
+- `knowledge-base/agent-requests.md` — HO-004 (and HO-003, now QA-reviewed)
+- `knowledge-base/design-specs/web/page-shell.md` §§1, 3, 4, 7, 11
+- `knowledge-base/product-spec-seed.md` line 228 ("reading column ~64ch") — F1 traces to a seed value
+- `muster/team/pm/skills/generic/decision-making.md` — Decision Autonomy Matrix
+- `muster/team/pm/skills/generic/deliverable-review.md`
 
-**Deliverable:** HO-004 in `agent-requests.md` — per-criterion pass/fail with evidence.
+**Decide, in this order:**
 
-**Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
-- Cross-engine parity on WebKit **and** Blink, with evidence per engine
-- Zero runtime network requests asserted with evidence — this is a published product claim
-- Contrast measured ≥4.5:1 body text in both themes; landmarks and focus states verified; reduced-motion path renders complete content
-- No webfonts, no CDN references, no build-system artifacts in the shipped output
+1. **F1 — the reading column renders ~90 characters, not ~64.** `--read-max: 64ch` resolves to
+   685.31px; `ch` is the advance of `0` (10.281px) while the average prose character is ~7.6px, so the
+   column renders ~90 characters at every width from 959px up. WCAG 2.1 SC 1.4.8 caps a reading block
+   at 80. The build matches the spec and the spec matches the seed — the gap is between `64ch` and what
+   `64ch` renders. **This is a seed value**, so decide whether it is yours to change, UI/UX's, or the
+   founder's. Whatever the verdict, it wants settling before body copy lands: §3 is a kicker plus one
+   paragraph into this exact column, and §2's narration card renders prose in the same shell.
 
-**Note on the developer's harness:** the build ships `tests/verify-shell.mjs` (Blink, 79 checks) and
-`tests/verify-webkit.mjs` (WebKit, 7 checks); `bash scripts/test.sh` runs both. Re-run them — a green
-suite is a starting point, not the finding. **Derive scope from `page-shell.md`, not from what the
-harness happens to assert**, and treat anything the spec requires but the harness does not cover as
-unverified until you cover it. HO-003's three observations (mobile `.instrument` padding, the §11/§12
-heading-count disagreement, the `ch`-vs-rendered-character measurement) are the producer's own; confirm
-or dispute them independently.
+2. **F2 — the prose column collapses on small phones.** `.instrument` holds a flat 48px of padding a
+   side at every width: 375px gives a 229px column at ~27 chars/line; **320px gives a 174px column at
+   ~18 chars/line, 11 lines for a 199-character paragraph, with 96px of a 272px card spent on padding.**
+   Confirms the producer's OBS-001 and extends it — the 320px case was not previously reported. Note
+   the constraint QA and the Developer both flagged: `section-02-replay.md` §7.1 budgets its mobile core
+   to the tenth of a pixel off shell tokens, so a responsive change to `.instrument` is not free. If it
+   goes to UI/UX, it goes with that budget named.
 
-**On completion:** File HO-004 in `agent-requests.md`. If the build is red or any check fails, do NOT
-advance the queue — re-point `## Next Step` to a `Role: pm` assessment step. Run the Pre-Handoff
-Self-Review Checklist (`muster/system-guide.md`) before filing.
+3. **F3 — `page-shell.md` §11's heading count is wrong** (says six `<h2>`, §12 draws five; built to
+   §12, which is correct). Spec-text fix, no build change. Small enough to route or handle directly.
+
+4. **The WebKit ceiling, which is the one with a deadline.** `qlmanage` does not execute JavaScript and
+   ignores the requested size for layout — it renders at a fixed ~1024² viewport regardless. QA proved
+   both with committed probes. So **no WebKit evidence can exist at mobile widths on this tooling**,
+   and §2's acceptance criteria require mobile-at-375 verification on both engines. Decide now what
+   §2's QA step is actually allowed to claim, rather than letting it arrive at the gate. Options worth
+   weighing: narrow §2's cross-engine criterion to what WebKit can prove and say so on the page's own
+   terms; accept Blink-only mobile evidence with the limit stated in the handoff; or treat it as a
+   founder call. Do not resolve it by installing a browser — zero dependencies is DEC-020.
+
+**Deliverable:** review verdict on HO-004 in `agent-requests.md`; decision-log entry for whatever F1
+and the WebKit ceiling resolve to; `agent-context` cascades if any value moves.
+
+**On completion:** promote the Content §2 narration step to `## Next Step` if nothing here blocks it —
+F1 and F2 touch the shell's prose treatment, not §2's narration copy, so they need not gate Content
+unless your assessment says otherwise. If any of the four needs the founder, write it to
+`## Founder Decisions` and set `Role: halt`. Run the Pre-Handoff Self-Review Checklist
+(`muster/system-guide.md`).
 ```
 
 ## Upcoming
@@ -253,6 +276,21 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
+
+- 2026-07-25 — Wave 2: QA — Shell validated against `page-shell.md`, both engines (HO-004). Every
+  acceptance criterion passes and no build defect was found; HO-003's QA box is ticked. Build suite
+  86/86, independent audit 37/39 — the two failures are readability decisions QA lacks authority for,
+  so the queue goes to PM rather than to Content. F1: `64ch` renders ~90 prose characters, past WCAG
+  1.4.8's 80-character ceiling, and it traces to a seed value. F2: `.instrument`'s flat 48px padding
+  leaves a 174px column at ~18 chars/line on a 320px phone — confirms OBS-001 and extends it past the
+  375px case the producer reported. F3 confirms OBS-002 (spec §11's heading count, not the build).
+  OBS-003's class confirmed but its figure disputed: ~66.7 counts `0` glyphs, not reading characters.
+  Two suspicions chased and cleared rather than reported — the `overflow-x: hidden` assertion does
+  falsify (injected 900px box at 375px viewport reports scrollWidth 901), and the contrast audit was
+  redone across all 29 text runs rather than the 6 sampled selectors. The material new constraint is
+  the WebKit ceiling: `qlmanage` runs no JavaScript and ignores the requested size, rendering at a
+  fixed ~1024², both proven with committed probes — so §2's mobile cross-engine criterion cannot be
+  met on this tooling and now needs a decision with a wave of runway rather than at the gate.
 
 - 2026-07-25 — Wave 2: Developer — Page shell built, both themes, verified on both engines (HO-003).
   79/79 Blink checks and 7/7 WebKit; the harness ships with the build (DEC-020). Awaiting review — QA,
