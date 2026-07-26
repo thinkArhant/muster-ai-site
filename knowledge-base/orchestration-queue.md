@@ -86,52 +86,6 @@ Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Content (web): Reframe SP7 to the operator's arc
-
-```
-Role: content
-Model: claude-fable-5
-
-**Task:** Rewrite SP7, §2's thesis line, per gate finding F-G1 and DEC-024.
-
-**Inputs:**
-- `knowledge-base/decision-log.md` — DEC-024, including the budget and the named risk
-- `knowledge-base/wave-review.md` — F-G1, the founder's framing verbatim
-- `knowledge-base/design-specs/web/section-02-narration.md` — your own deliverable
-- `knowledge-base/agent-skills/content/copy-rules.md` — binding
-- `knowledge-base/bodh-sprint4-corpus.md` — every claim traces here. Read-only
-
-**The change.** SP7 currently states the thesis by negation: *"The run stops itself at the gate. No
-human touched this until the deploy button."* The founder wants the active arc a first-time reader
-pictures — the operator plans the sprint, leaves while the agents run, and comes back to work that is
-ready to deploy. The corpus supports it: the chain ran unattended with a single human gate at deploy.
-
-**The risk, stated plainly because it was in the ask.** The founder framed this as "something a VC
-would want to hear that would amaze them." Taken literally that is an instruction to write
-adjectives-as-argument, which `copy-rules.md` forbids and which this page cannot survive — a site whose
-argument is *every number here is checkable* cannot carry a sentence reaching for awe. Land the arc;
-do not reach. This line earns its effect the way SP3 does, from a fact that is specific and true.
-
-**Budget:** SP7's window is the 4.80 s gate hold — `floor(4.80 × 3.5)` = **16 words**. The current line
-spends 15. SP6's 12 words in the same beat are the only relief and cost no reschedule; use them if the
-arc needs a run-up, and say so.
-
-**Deliverable:** revised `section-02-narration.md` (SP7, and SP6 if used); HO-012.
-
-**Acceptance criteria:**
-- The arc lands: plan → leave → agents run → return → ready to deploy
-- Word count stated and inside budget; if SP6 is spent, both counts stated
-- Product voice — §2 is not one of the two first-person places (rule 7)
-- Zero adjectives-as-argument, zero rounded numbers, correct scope labels, "measured" never "proven"
-- Every factual claim cites its corpus line
-
-**On completion:** File HO-012 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 PM: Review HO-011 and HO-012 before the rebuild
 
 ```
@@ -159,6 +113,9 @@ Model: claude-opus-5
 
 **On completion:** Run the Pre-Handoff Self-Review Checklist. Promote the rebuild step.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): Rebuild §2 to the amended spec and copy
 
@@ -236,6 +193,11 @@ sprint worktree.
 
 ## Done (Last 10)
 <!-- newest first -->
+
+- 2026-07-26 — Fix wave step 2: Content — SP7 now tells the operator's arc (HO-012). *"The operator
+  planned the sprint, left the agents running, and returns to a deploy-ready site."* 15 of 16 words,
+  script-measured, reading in 4.29 s of the 4.80 s hold; SP6's relief unspent; every verb cited to
+  the corpus and zero adjectives-as-argument. **Awaiting PM review.**
 
 - 2026-07-26 — Fix wave step 1: UI/UX — the phone terminal reads without a sideways gesture (HO-011).
   Soft-wrap plus a 2ch hanging indent, paid for by lifting the totals strip out of the playback core;
@@ -335,38 +297,3 @@ sprint worktree.
   the WebKit ceiling: `qlmanage` runs no JavaScript and ignores the requested size, rendering at a
   fixed ~1024², both proven with committed probes — so §2's mobile cross-engine criterion cannot be
   met on this tooling and now needs a decision with a wave of runway rather than at the gate.
-
-- 2026-07-25 — Wave 2: Developer — Page shell built, both themes, verified on both engines (HO-003).
-  79/79 Blink checks and 7/7 WebKit; the harness ships with the build (DEC-020). Awaiting review — QA,
-  then PM.
-
-- 2026-07-25 — Wave 2: PM — Both specs reviewed and accepted; the §2 build inputs are now final
-  (HO-010 accepted with notes, HO-009 accepted clean, HO-002 closed on F1's resolution; all three swept
-  to Resolved, Active back to 3/300 lines). Every number re-derived rather than re-read: dwells tile to
-  48.000 s, all seven budgets equal `floor(window × 3.5)`, B5's 14.48% is funded entirely by B6 with B3
-  and QA paying nothing, and every row of the 424.4px mobile core recomputes from a shell token. The
-  gate-hold push-back is upheld on the merits — at 4.80 s it gives SP7 16 words rather than the 14 the
-  projected alternative would have. Two claims written for the amendment were wrong and were corrected
-  in place rather than spending a revision round: the hold does not arrive 0.35 s after the fastest
-  interval (L11's 3.45 s sits between), and the 6.60 s ellipsis is third-longest, not second. No design
-  value moved. SP7's zero-slack budget routed to Content; the narration card's 6-line assumption routed
-  to QA as a measurement, not an assumption. DEC-019.
-
-- 2026-07-25 — Wave 2: UI/UX — Gate amendments applied (HO-010). Theme control dropped and the motion
-  budget closed in the shell; §2 rescaled to a 48.00 s chain with B5 restored to 14.48% funded by B6, not
-  QA; F1 resolved with a 424.4px mobile height budget against a stated 375×553 visual viewport and a
-  ≥95%-visibility playback gate. Landscape re-verified and corrected — it takes two columns, not stacking.
-  Gate hold preserved at 4.80 s rather than the projected 4.14 s; the "longest silence" claim was wrong
-  before the rescale too and is replaced with the deceleration argument. SP7 flagged at ≤16 words for
-  Content. Awaiting PM review.
-
-- 2026-07-25 — Wave 2: Developer — Beat inventory trued up to corpus v1.1 (HO-009). Chain end and B6
-  now measured (3858 s / 486 s), calls and cost corroborated by arithmetic, F1/F2 closed. Self-review
-  caught a margin error of mine: B1, not B6, is the second-shortest beat — B3 leads by 13 s, so its
-  "shortest beat" hazard is a near-tie. Downstream replay spec already matched; no drift. Awaiting PM
-  review.
-
-- 2026-07-25 — Wave 1: UI/UX — Design foundation + §2 replay spec (HO-002). Both themes tokenized from
-  the seed with contrast measured per pair; §2 paced as a 60 s comprehension-weighted chain against the
-  v1.1-corrected intervals, with an eight-slot narration sync contract. Three design questions parked in
-  Founder Decisions. Awaiting review — PM, then founder gate.

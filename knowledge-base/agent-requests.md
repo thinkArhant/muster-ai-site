@@ -216,6 +216,93 @@ five resolve and all five values match what §7.1's budget assumes. Item 5: A-00
 reference. `bash scripts/test.sh` is green (129 Blink, 13 WebKit) on the unchanged build, as expected:
 this handoff moves the spec, and the build is HO-013's step.
 
+### HO-012 — §2's thesis line now tells the operator's arc
+
+**From**: Content · **To**: PM (review), then Developer (build), QA (validate)
+**Date**: 2026-07-26 · **Status**: open
+**Deliverable**: `knowledge-base/design-specs/web/section-02-narration.md` — SP7 (string, citation
+table, commentary). SP6 untouched.
+**Resolves**: F-G1 / DEC-024
+
+---
+
+**The new line, verbatim:**
+
+> The operator planned the sprint, left the agents running, and returns to a deploy-ready site.
+
+**15 of 16 words, script-measured under the file's §1 convention; reads in 4.29 s of the 4.80 s gate
+hold.** Same count and read time as the line it replaces, so no slot-summary number moves and the
+timed total stays 139 of 163. **SP6's 12-word relief is not spent** — the arc lands in one sentence
+without a run-up, so SP6 stays at 10 of 12, exactly as accepted.
+
+#### The arc, mapped beat for beat
+
+DEC-024's arc is *plan → leave → agents run → return → ready to deploy*. The line carries all five:
+**planned** (corpus "What Sprint 4 was": planned fully autonomous end-to-end; DEC-019: "authored to
+run end-to-end autonomously with a single `Role: halt` at deploy") · **left / agents running**
+(narration-facts bullet 1 — no human touched this chain, sessions 1–8, single halt; "It did.") ·
+**returns** (terminal L11, the very line SP7 lands on: `Role: halt · awaiting operator`; session
+row 8: the deploy gate is the founder's) · **deploy-ready** (session row 8: "founder deploy packet
+assembled"; session row 2: deployable `web/`). Every verb is checkable in the corpus; full citation
+table is in the deliverable.
+
+#### The guardrail, addressed head-on
+
+DEC-024 named the risk: "amaze a VC" taken literally produces adjectives-as-argument. The line
+contains **zero adjectives-as-argument** — "deploy-ready" is the packet's state (assembled, halted,
+awaiting the operator), not praise, and the only other modifiers are articles. The effect is carried
+the way SP3 carries its own: by verbs a skeptic can verify and by the terminal line rendered directly
+beneath it, which reads `awaiting operator` at that instant. The tense does the thesis work — planned,
+left, *returns*: everything before the final clause is done, and the one human act left is the deploy.
+
+#### The deploy boundary holds
+
+"Deploy-ready," never "deployed." Nothing attaches the deploy to the chain's end; SP8 still states
+that the deploy landed three days later because the gate waited on Apple (R2 hard boundary).
+
+#### The honest-headline fact survives, restated positively
+
+The seed's beat — no human touched the chain until the deploy gate — is the same fact as "left the
+agents running … returns," told as what the operator did rather than what no one did. F-G1 called
+this a framing change, not a new claim, and that is what shipped: no new fact enters the page,
+none leaves it. The technical reader also still gets the halt verbatim, from L11 itself.
+
+#### Findings for PM
+
+- **F1 — the replay spec's SP7 brief is now stale and is PM's to cascade.**
+  `section-02-replay.md` §6's SP7 row still describes the slot as "no human touched this until the
+  deploy button. The run stops itself." Per the standing rule, where another file spells a §2 string
+  differently the narration file wins; the brief is UI/UX's deliverable, so the cascade belongs at
+  PM review — the same disposition as the totals-strip wireframes at the HO-005 review. No timing,
+  anchor, or budget in that row moves.
+- **F2 — the independent audit will red-flag SP7 until the rebuild, by design.**
+  `tests/qa-independent-audit.mjs` diffs the built narration layer against the narration file, and
+  `index.html` still renders the superseded string — the rebuild is HO-013's step. Expected
+  sequencing, not a defect. `bash scripts/test.sh` (the build suite) does not read the narration
+  file and is **green on the unchanged build**, re-run this session.
+- **F3 — one stale sentence in the queue's Execution Mode prose.** It still says the narration
+  carries "no word rewritten" / "nothing open," which predates the gate's fix wave. Harmless — the
+  binding sentence ("the narration file wins") remains correct — but PM may want to true it up while
+  closing this wave. PM-owned prose, so noted rather than edited.
+
+#### Open questions
+
+None. F-G1 stated the arc and DEC-024 stated the budget and the guardrail; all three are satisfied
+as specified.
+
+#### Self-review
+
+Ran the Pre-Handoff Self-Review Checklist. Item 1's grep caught the stale SP7 brief in the replay
+spec (routed as F1 above rather than edited across a role boundary). Item 2: all five acceptance
+criteria re-checked against the queue step — arc beats mapped, counts script-measured and stated,
+product voice (no first person anywhere in the slot), no banned language, every claim cited in
+place. Item 5: A-001 holds (the corpus was read only) and A-005 holds trivially (the line carries no
+number, so no scope can mix). Item 8: the behavioral change ships on the build step; the suite is
+green on the unchanged build and the audit's transient mismatch is stated above, not laundered.
+Item 9: the deliverable's commentary states current rationale only — no handoff IDs, no
+revision archaeology. Item 10: queue advanced (step to Done, PM review promoted); no decision to
+append — DEC-024 already records this ruling.
+
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
 

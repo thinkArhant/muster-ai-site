@@ -135,19 +135,27 @@ PASS — 11/11, zero bugs. The PM accepts, the same instant.
 | The PM accepts | Terminal L10; session row 8 ("All handoffs accepted") |
 | The same instant | L9 and L10 share the `21:35` stamp; session row 8 starts at 21:35:09, exactly session 7's start plus its measured duration (derivation shown in `section-02-beat-inventory.md`, D7) |
 
-### SP7 — the honest headline, at the gate (anchor L11, t=43.20 · B6 · 15 words)
+### SP7 — the operator's arc, at the gate (anchor L11, t=43.20 · B6 · 15 words)
 
 ```
-The run stops itself at the gate. No human touched this until the deploy button.
+The operator planned the sprint, left the agents running, and returns to a deploy-ready site.
 ```
 
 | Claim | Corpus source |
 |---|---|
-| The run stops itself | Session row 8 ("Run stops itself: `Role: halt` — the deploy gate is the founder's"); terminal L11 |
-| No human touched this until the deploy button | Narration-facts bullet 1 ("true for THIS chain — sessions 1–8, single halt") |
+| The operator planned the sprint | "What Sprint 4 was" ("Planned to run **fully autonomous** end-to-end … with a **single human gate at deploy**"); DEC-019 ("Sprint 4 authored to run end-to-end autonomously with a single `Role: halt` at deploy") |
+| Left the agents running — the chain ran unattended | "What Sprint 4 was" ("It did."); narration-facts bullet 1 ("No human touched this until the deploy button" — true for THIS chain, sessions 1–8, single halt) |
+| Returns — the gate waits on the operator | Terminal L11 (`Role: halt · awaiting operator`); session row 8 ("Run stops itself: `Role: halt` — the deploy gate is the founder's") |
+| A deploy-ready site | Session row 8 ("founder deploy packet assembled"); session row 2 ("Deployable `web/`: index + /privacy…") |
 
-Fifteen words read in 4.29 s of the 4.80 s hold. The line is the page's thesis and it landed inside
-budget; the 12-word relief available in SP6 is not needed.
+Fifteen words read in 4.29 s of the 4.80 s hold. The line is the page's thesis, told as the arc the
+reader has just watched: the operator plans, leaves the agents to run, and the terminal it lands on
+reads `awaiting operator`. The tense turn — planned, left, *returns* — is the gate itself: everything
+before the comma is done, and the one human act left is the deploy. "Deploy-ready" is the packet's
+state, not praise; the deploy itself is SP8's fact, three days later, so nothing here attaches the
+deploy to the chain's end. The seed's honest-headline fact — no human touched the chain until the
+deploy gate — is carried whole, stated as what the operator did rather than what no one did. The
+12-word relief available in SP6 is not needed.
 
 ### SP8 — end state (anchor L12, t=48.00 · persistent · 31 words)
 
