@@ -144,7 +144,7 @@ Every narration claim must trace to a corpus line (Content cites; QA diffs). The
   │ (revealed lines persist;         │  │ (rail follows     │
   │  12 lines fit, no scrollback)    │  │  active entry)    │
   └──────────────────────────────────┘  └───────────────────┘
-   ~64 MIN ACTIVE · 289 API CALLS · $24.73    ⏭ SHOW FULL LOG (7)(8)
+   ~64 MIN AGENT WORK · 289 API CALLS · $24.73  ⏭ SHOW FULL LOG (7)(8)
    BODH SPRINT 4 · WEBSITE WAVE ONLY
 ```
 
@@ -214,8 +214,10 @@ Two notes on the budget itself. The terminal → card gap is `--gap-flow` rather
   │   trusting the developer's.     │  whole playback
   │                                 │
   └─────────────────────────────────┘
-   ~64 MIN ACTIVE · 289 API CALLS ·      totals strip, static,
-   $24.73 — WEBSITE WAVE ONLY            always visible
+   ~64 MIN AGENT WORK · 289 API CALLS ·  totals strip, static, always
+   $24.73                                visible. Two lines, both
+   BODH SPRINT 4 · WEBSITE WAVE ONLY     --text-micro (§7.1 budget);
+                                         line 1 must not wrap to a third
   ─ ─ ─ ─ ─ ─ fold at 553px ─ ─ ─ ─ ─
    ⏭ SHOW FULL LOG                       controls sit below the
                                          core; not part of the
@@ -234,7 +236,7 @@ The section `<h2>` and `--gap-section` padding sit above the core and scroll awa
 | 4 | Log lines | `--text-terminal`. Stamp `--muted` · role `--ink` · detail `--ink` (the log is content here, not ambience) · key-beat emphasis per §9. `<ol>`, one `<li>` per corpus line |
 | 5 | Narration entries | `--text-body`, `--ink` always (never muted, never dimmed). Sans — the plain-English track is visually the *readable* layer against the mono terminal |
 | 6 | Active marker | 2px `--accent` left bar + beat tag `--text-micro` `--muted`. Position/shape channel — colour is not the sole indicator |
-| 7 | Chain totals readout | Shell readout-cell motif, always visible, static values (no count-up here — §2's numbers are evidence in a log context, and the cells are visible mid-playback; count-up stays on §1/§5 readouts). Values `--accent` `--text-readout`; scope label `--text-micro` `--muted` mandatory. Copy: Content, per copy-rules (exact numbers; wave scope; never wall-clock framing) |
+| 7 | Chain totals readout | Shell readout-cell motif, always visible, static values (no count-up here — §2's numbers are evidence in a log context, and the cells are visible mid-playback; count-up stays on §1/§5 readouts). Scope label `--text-micro` `--muted` mandatory. **Value scale is per-viewport**: `--text-readout` at ≥ `--bp-wide`, where the column has the room; `--text-micro` below it, because §7.1's height budget prices the whole strip at `2 × (--text-micro × 1.5) = 33.0px` and a `--text-readout` line alone is 24px, which busts the 375 × 553 slack on its own. Where this row and §7.1 disagree, §7.1 wins — the mobile guarantee rests on that budget. Copy: Content's strings in `section-02-narration.md` §5, per copy-rules (exact numbers; wave scope; never wall-clock framing) |
 | 8 | Controls | Ghost buttons, `--text-label`, `--hair` border, `--ink` text, 44px hit area. `⏭ SHOW FULL LOG` during playback → `⟲ REPLAY` in end state |
 
 ## 8. States
