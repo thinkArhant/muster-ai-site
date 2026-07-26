@@ -88,6 +88,11 @@ directly reusable as a copy-validation matrix when you validate §2.
 **Key refs**: `design-specs/web/page-shell.md` · `product-spec-seed.md` → Tech + Accessibility ·
 `muster/team/qa/skills/web/web-testing.md` · `muster/team/qa/skills/generic/{test-strategy,bug-reporting}.md`
 
+**Status**: DONE — HO-004 accepted 2026-07-25. Both harnesses re-run at review and agreeing. All four
+items disposed in DEC-021: F1 to the founder, F2 ruled (its cited blocker disproved), F3 applied to the
+spec, the `qlmanage` ceiling ruled and now scoping §2's cross-engine criterion. One correction to carry
+into task 2: the audit's 45-character floor is unsatisfiable and gets re-based there.
+
 ---
 
 ### 2. §2 replay validation — Priority: HIGH, Effort: M, Platform: web
@@ -100,8 +105,26 @@ directly reusable as a copy-validation matrix when you validate §2.
 - Every rendered terminal line diffed against `bodh-sprint4-corpus.md` and cited — altered, paraphrased, or invented lines are blocking
 - Corpus file confirmed unmodified — an agent editing founder source material is blocking
 - "Condensed from the real build log" label present
-- Cross-engine parity on WebKit and Blink; zero network requests; reduced-motion path complete
-- Narration/terminal synchronization holds across both engines and at reduced motion
+- **Cross-engine parity, scoped to what the tooling can prove (DEC-021.4 — supersedes a flat "both
+  engines").** WebKit's job is the no-JS/reduced-motion complete transcript at ~1024²: twelve corpus
+  lines verbatim, L12's large-rust treatment, the §9 emphasis system, terminal chrome, grain and vignette
+  parity, both themes. That is load-bearing, not a consolation — DEC-017 item 4 makes the no-JS DOM
+  identical to the complete transcript, on the engine whose inline-SVG divergence is this project's known
+  failure class. Blink carries playback, the visibility gate, the windowed terminal, media queries,
+  horizontal-scroll containment, and every mobile width. **Mobile evidence is Blink-only and HO-007 says
+  so in those words** — never "verified cross-engine". Your probes established the ceiling; it is not
+  re-litigated and not closed by installing anything (DEC-020)
+- Zero network requests; reduced-motion path complete
+- Narration/terminal synchronization holds at reduced motion and, where JS is involved, on Blink
+- **Re-base the audit's 45-character floor and verify the `.instrument` fix (DEC-021.1–2).** The check
+  cannot pass at 320px under any padding: 45 × 7.615px = 342.7px, wider than the viewport itself; the
+  ceiling is ~36 characters at 320px with a zero-inset card and ~43 at 375px. Replace it with (a) a
+  deterministic assertion that at ≤375px `.instrument`'s total horizontal inset is ≤20% of the card width
+  (48/272 = 17.6% passes, today's 96/272 = 35.3% fails) and (b) the measured character count **reported,
+  not asserted** — geometry is deterministic, a character count folds in font metrics and line-break
+  raggedness, which is why your 320px figure of 18 sits under that width's ~23 capacity. This is a
+  threshold correction, not a tolerance loosening: the build is fixed in the same wave, so red does not
+  go green on the threshold alone. Disagree in HO-007 rather than deleting the check
 - **Measured beat intervals reported factually** — the founder judges pacing with styling mentally subtracted, so give that judgment data to sit alongside
 - Copy checked against `copy-rules.md` → Review checklist, including the Safari-catch boundary and scope labels
 - **Mobile at 375 × 553**: terminal window shows 5 lines, both layers fully visible for the whole

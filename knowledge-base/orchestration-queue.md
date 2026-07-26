@@ -11,11 +11,16 @@
 **Waves 0–1 complete and the Wave 1 founder gate is APPROVED with amendments (2026-07-25).** The
 autonomous run is cleared to launch; the driver starts from the current `## Next Step`.
 
-**Wave 2's spec work is complete and the shell is built.** The inventory true-up, both spec amendments,
-the PM review, and the shell build are done; `page-shell.md` and `section-02-replay.md` are final,
-PM-accepted, and carry nothing open. QA validation is the last Wave 2 step. The ordering that put the
-amendments ahead of the build did its job: the shell was built against a spec with no dropped theme
-control in it.
+**Wave 2 is closed and Wave 3 is running.** The inventory true-up, both spec amendments, the PM review,
+the shell build, and QA validation are all done and accepted; `page-shell.md` and `section-02-replay.md`
+are final and carry nothing open. The ordering that put the amendments ahead of the build did its job:
+the shell was built against a spec with no dropped theme control in it. Wave 2 shipped one founder
+question and no blockers — see `## Founder Decisions` (the reading column) and DEC-021 for the four
+dispositions.
+
+**Two DEC-021 rulings are attached inline to the Wave 3 steps that carry them**, rather than living as
+separate steps: the `.instrument` phone-inset fix rides the §2 build step, and the audit's re-based
+readability check rides the §2 QA step. Both are dispositions of HO-004's findings, not new scope.
 
 **The build ships its own cross-engine harness** (DEC-020): `bash scripts/test.sh` runs
 `tests/verify-shell.mjs` (Blink) then `tests/verify-webkit.mjs` (WebKit), both dependency-free and
@@ -33,7 +38,30 @@ all page copy until measured at launch (seed rule 4).
 <!-- Format: - [DATE] [Agent]: [Question] -->
 <!-- Autonomous runs: this section is non-halting on its own — observation and scope escalations park here while the loop keeps running. PM is the sole party that summons the founder: only PM (after assessing a block per the Decision Autonomy Matrix) writes the question here AND sets the Next Step block's `Role:` to `halt` (see below). A specialist that hits a block routes it to a `Role: pm` assessment step instead of halting. There is no checkbox convention. -->
 
-*None open.*
+### The reading column renders ~90 characters. Did "~64ch" mean the CSS unit or the measure?
+
+**Context**: `--read-max: 64ch` resolves to 685.31px and renders **~90 prose characters per line** at
+every width from 959px up. `ch` is the advance of `0` (10.281px in `--font-sans`); prose averages
+7.615px. The build matches `page-shell.md` and `page-shell.md` matches seed line 228 — *"reading column
+~64ch"* — exactly. The gap is between `64ch` and what `64ch` renders, so it is your word that decides it,
+not a spec defect anyone can fix on their own authority. For reference, the common typographic band is
+45–75 characters and WCAG 2.1 SC 1.4.8 (AAA, not a level this project claims) caps a reading block at 80.
+
+**PM Recommendation**: honour the measure, not the unit — set the reading column so a rendered prose line
+lands around 60–70 characters, which at 17px `--font-sans` is roughly 460–535px, and express it in `rem`
+rather than `ch` so the value means what it says. Everything the seed puts around that line — *one idea
+per screen*, *spacious* as the overriding constraint — reads as an argument about the reading experience
+rather than about a CSS unit, and 90 characters is the least spacious line on the page. PM is confident
+on the diagnosis and deliberately not on the resolution: the other reading (you meant `max-width: 64ch`,
+and the build is already right) is honest, and the two produce materially different pages. It is one
+token either way.
+
+**Blocked**: nothing this sprint. No body copy renders in that column yet — the shell's paragraphs are
+`data-shell-placeholder` scaffolding — and §2's narration never enters it (`section-02-replay.md` §7 puts
+the rail at ~36ch on desktop, viewport-width on mobile). The first real consumer is **§3, in Sprint 2**.
+Carried as a hard item in `pre-launch-checklist.md` so it cannot ship unanswered. See DEC-021.3.
+
+**Your call**:
 
 <!-- Resolved 2026-07-25 — Wave 1 gate APPROVED with amendments. All three UI/UX questions settled per PM recommendation: (1) the §2 replay is content playback, not a fourth motion element — the budget stays closed at three plus the cursor; (2) the theme control is DROPPED — the page respects prefers-color-scheme and adds no controls the reader didn't ask for; (3) the chain-totals strip stays static. See DEC-015. -->
 <!-- Resolved 2026-07-25 — F1 direction: mobile is NARRATION-FIRST. Terminal is texture on mobile, narration is the payload. Per-viewport visible-line counts; long lines scroll inside the terminal's own container with the page body never scrolling horizontally; the narration card stays in view for the full playback. Plus: replay rescales to 48 s uniform ×0.8, and B5 (QA validation) is restored to ~14.5% funded from the gate hold rather than from QA. See DEC-016. -->
@@ -51,69 +79,6 @@ all page copy until measured at launch (seed rule 4).
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
-
-### 2026-07-25 PM: Shell validation assessment — two readability findings
-
-```
-Role: pm
-Model: claude-opus-5
-
-**Task:** Assess HO-004's two open findings and decide handle-vs-escalate, then release the wave.
-
-The shell passed every acceptance criterion on both engines and QA found no build defect — the queue
-is here because QA hit two decisions it does not have authority for, not because anything is red.
-`bash scripts/test.sh` is 86/86; `node tests/qa-independent-audit.mjs` is 37/39, the two failures
-being F1 and F2 below.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-004 (and HO-003, now QA-reviewed)
-- `knowledge-base/design-specs/web/page-shell.md` §§1, 3, 4, 7, 11
-- `knowledge-base/product-spec-seed.md` line 228 ("reading column ~64ch") — F1 traces to a seed value
-- `muster/team/pm/skills/generic/decision-making.md` — Decision Autonomy Matrix
-- `muster/team/pm/skills/generic/deliverable-review.md`
-
-**Decide, in this order:**
-
-1. **F1 — the reading column renders ~90 characters, not ~64.** `--read-max: 64ch` resolves to
-   685.31px; `ch` is the advance of `0` (10.281px) while the average prose character is ~7.6px, so the
-   column renders ~90 characters at every width from 959px up. WCAG 2.1 SC 1.4.8 caps a reading block
-   at 80. The build matches the spec and the spec matches the seed — the gap is between `64ch` and what
-   `64ch` renders. **This is a seed value**, so decide whether it is yours to change, UI/UX's, or the
-   founder's. Whatever the verdict, it wants settling before body copy lands: §3 is a kicker plus one
-   paragraph into this exact column, and §2's narration card renders prose in the same shell.
-
-2. **F2 — the prose column collapses on small phones.** `.instrument` holds a flat 48px of padding a
-   side at every width: 375px gives a 229px column at ~27 chars/line; **320px gives a 174px column at
-   ~18 chars/line, 11 lines for a 199-character paragraph, with 96px of a 272px card spent on padding.**
-   Confirms the producer's OBS-001 and extends it — the 320px case was not previously reported. Note
-   the constraint QA and the Developer both flagged: `section-02-replay.md` §7.1 budgets its mobile core
-   to the tenth of a pixel off shell tokens, so a responsive change to `.instrument` is not free. If it
-   goes to UI/UX, it goes with that budget named.
-
-3. **F3 — `page-shell.md` §11's heading count is wrong** (says six `<h2>`, §12 draws five; built to
-   §12, which is correct). Spec-text fix, no build change. Small enough to route or handle directly.
-
-4. **The WebKit ceiling, which is the one with a deadline.** `qlmanage` does not execute JavaScript and
-   ignores the requested size for layout — it renders at a fixed ~1024² viewport regardless. QA proved
-   both with committed probes. So **no WebKit evidence can exist at mobile widths on this tooling**,
-   and §2's acceptance criteria require mobile-at-375 verification on both engines. Decide now what
-   §2's QA step is actually allowed to claim, rather than letting it arrive at the gate. Options worth
-   weighing: narrow §2's cross-engine criterion to what WebKit can prove and say so on the page's own
-   terms; accept Blink-only mobile evidence with the limit stated in the handoff; or treat it as a
-   founder call. Do not resolve it by installing a browser — zero dependencies is DEC-020.
-
-**Deliverable:** review verdict on HO-004 in `agent-requests.md`; decision-log entry for whatever F1
-and the WebKit ceiling resolve to; `agent-context` cascades if any value moves.
-
-**On completion:** promote the Content §2 narration step to `## Next Step` if nothing here blocks it —
-F1 and F2 touch the shell's prose treatment, not §2's narration copy, so they need not gate Content
-unless your assessment says otherwise. If any of the four needs the founder, write it to
-`## Founder Decisions` and set `Role: halt`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`).
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-24 Content (web): §2 narration script
 
@@ -149,6 +114,9 @@ each keyed to its terminal beat; HO-005 in `agent-requests.md`.
 **On completion:** File HO-005 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
 (`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-24 PM: Wave 3 narration review
 
@@ -213,7 +181,32 @@ founder-supplied corpus into the terminal layer.
 - Narration synchronized to the terminal beats per the replay spec's timing; ends on `bodh.day`, live
 - Scripted HTML/CSS/JS only — no asciinema, no tooling dependency, zero external requests
 - Reduced-motion path renders the complete content, not a degraded subset
-- Verify WebKit and Blink before filing
+- Verify WebKit and Blink before filing, **within the stated ceiling** (next bullet)
+
+**Two shell-level items ruled in DEC-021 that land with this step. Neither is new scope — both are the
+disposition of HO-004's findings, and this is the session already in these files.**
+
+1. **Fix `.instrument`'s phone inset.** Below `--bp-wide` its total inset must not exceed `--gap-flow`
+   (24px a side); desktop keeps `--gap-block` (48px). Today it is a flat 48px at every width, so a 320px
+   phone spends 96px of a 272px card on padding and the prose column is 174px. **Do not add a second
+   named breakpoint** — `page-shell.md` §7 keeps `--bp-wide` as the only page-chrome breakpoint; a fluid
+   `clamp()` between the two rhythm multiples is the preferred expression and also avoids a cliff at
+   960px. Extend the existing harness with the assertion rather than adding a runner (DEC-020).
+   *You left this alone in OBS-001 because §7.1's budget is derived off shell tokens to the tenth of a
+   pixel. That reasoning does not apply: §7.1 budgets its own insets — its rows read* Terminal body
+   padding 12 + 12 *and* Narration card … + 24 pad *— and at 48px its core would compute to 568.4px
+   against a 553px viewport. §2 is unaffected by this change.*
+
+2. **The WebKit ceiling is real; do not spend the session fighting it.** `qlmanage` executes no
+   JavaScript and ignores the requested size, rendering at a fixed ~1024² (QA proved both with committed
+   probes). So WebKit evidence for §2 is the **no-JS/reduced-motion complete transcript** — all twelve
+   corpus lines verbatim, L12's large-rust treatment, the §9 emphasis system, terminal chrome, grain and
+   vignette parity, both themes — and that is genuinely load-bearing, because DEC-017 item 4 makes
+   playback an opacity reveal over a complete DOM, so what `qlmanage` renders *is* the no-JS fallback.
+   Everything else — playback timing, the visibility gate, the windowed terminal, media queries,
+   horizontal-scroll containment, all mobile widths — is Blink evidence and is labelled as Blink evidence
+   in HO-006. **Do not resolve this by installing a browser**: zero dependencies is DEC-020 and a
+   published property of the repo.
 
 **HALT CONDITION (inline, mandatory):** if the corpus lacks a line the replay spec calls for, do NOT
 invent, paraphrase, or reconstruct it to fill the gap. Re-point `## Next Step` to a `Role: pm`
@@ -244,11 +237,31 @@ Model: claude-opus-5
 **Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
 - Every rendered terminal line diffed against the corpus and cited; any altered, paraphrased, or invented line is a blocking bug, not a nit
 - Confirm the corpus file itself is unmodified since HO-001 — an agent editing source material is a blocking finding
-- Cross-engine parity on WebKit and Blink; zero runtime network requests; reduced-motion path complete
-- Narration/terminal sync holds across both engines and at reduced motion
+- **Cross-engine parity, scoped to what the tooling can prove (DEC-021.4 — this supersedes a flat
+  "both engines" reading).** WebKit's job is the **no-JS/reduced-motion complete transcript** at ~1024²:
+  twelve corpus lines verbatim, L12's large-rust treatment, the §9 emphasis system, terminal chrome,
+  grain and vignette parity, both themes. That is load-bearing, not a fallback prize — DEC-017 item 4
+  makes the no-JS DOM identical to the complete transcript, on the engine whose inline-SVG divergence is
+  this project's known failure class. Blink carries everything else. **Mobile evidence is Blink-only and
+  HO-007 must say so in those words** — never "verified cross-engine". Your own probes established the
+  ceiling; do not re-litigate it, and do not close it by installing anything (DEC-020)
+- Zero runtime network requests; reduced-motion path complete
+- Narration/terminal sync holds at reduced motion and, where JS is involved, on Blink
 - Report measured beat intervals factually, so the founder's pacing judgment has data alongside it
 - **Mobile at 375 × 553**: 5 terminal lines visible, both layers on screen for the whole playback, core height measured ≤553px, page body never scrolls horizontally (also at 320px and 200% zoom), terminal scroll container focusable and arrow-key operable
 - **Measure the rendered narration card against SP3's real copy.** §7.1 budgets a 6-line worst case and UI/UX flagged it as the budget's weakest number. At 7 lines the terminal drops to 4 visible lines — the design absorbs that, the budget table does not. Report the measured count either way
+- **Re-base your own audit's 45-character floor, and verify the `.instrument` fix (DEC-021.1–2).** The
+  check `prose column does not collapse below 45 characters at the narrowest supported width` cannot pass
+  at 320px under any padding: 45 × 7.615px = 342.7px, wider than the viewport itself. With a zero-inset
+  card the ceiling is ~36 characters at 320px and ~43 at 375px, so the floor is unreachable on every
+  phone. Replace it with (a) a deterministic assertion that at ≤375px `.instrument`'s total horizontal
+  inset is **≤20% of the card width** (48/272 = 17.6% passes; today's 96/272 = 35.3% fails), and (b) the
+  measured character count **reported, not asserted** — the same treatment the narration card's line
+  count gets, and for the same reason: geometry is deterministic while a character count folds in font
+  metrics and line-break raggedness, which is why your 320px figure of 18 sits under that width's ~23
+  capacity. This is a threshold correction, not a tolerance loosening: the build is being fixed in the
+  same wave, so red does not go green on the threshold alone. If you disagree with the arithmetic, say so
+  in HO-007 rather than deleting the check
 
 **On completion:** File HO-007 in `agent-requests.md`. If red, do NOT advance — re-point `## Next Step`
 to a `Role: pm` assessment step. Run the Pre-Handoff Self-Review Checklist (`muster/system-guide.md`).
@@ -276,6 +289,27 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
+
+- 2026-07-25 — Wave 2: PM — Shell accepted and Wave 2 closed; §2 narration released (DEC-021). HO-003
+  and HO-004 both accepted with the harnesses re-run at review rather than cited — `scripts/test.sh`
+  86/86, `qa-independent-audit.mjs` 37/39 with exactly the two reported failures. Four items disposed,
+  none of them a gate. **F2's blocker was disproved, not weighed**: both the Developer and QA left
+  `.instrument`'s 48px phone padding alone because §7.1's mobile budget is derived off shell tokens, but
+  §7.1 budgets its own insets (12+12 terminal, 24 card) — at 48px its core would compute to 568.4px
+  against a 553px viewport, so the budget DEC-019 re-derived clean would already be busted. The claim
+  travelled through two handoffs and into a queue step before anyone checked it against the table it
+  cited. The step-down is ruled and rides the §2 build step. **The audit's 45-character floor is
+  unsatisfiable** — 45 × 7.615px = 342.7px, wider than a 320px viewport — so it is replaced by a
+  deterministic inset-share check plus a reported measure, with the build fixed alongside it so red does
+  not go green on a threshold. **F1 goes to the founder**: the diagnosis is settled (~90 rendered
+  characters) but "~64ch" has two honest readings and it is a founder-authored word; parked non-halting,
+  backstopped hard in `pre-launch-checklist.md`, and it gates nothing because §2's narration never enters
+  `--read-max` and §3 is Sprint 2 — the assessment step's premise that it wanted settling this wave was
+  wrong. **The WebKit ceiling is ruled**: `qlmanage` proves the no-JS complete transcript, which
+  DEC-017.4 makes load-bearing rather than a consolation; mobile evidence is Blink-only and must be
+  labelled as such; the one residual — `100dvh` in mobile Safari, the mechanism §7.1's whole budget rests
+  on — is named, carried to pre-launch, and flagged to the founder for the Wave 3 gate. F3 applied
+  directly to `page-shell.md` §11.
 
 - 2026-07-25 — Wave 2: QA — Shell validated against `page-shell.md`, both engines (HO-004). Every
   acceptance criterion passes and no build defect was found; HO-003's QA box is ticked. Build suite
@@ -337,7 +371,3 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 - 2026-07-25 — Wave 1 Step 3: PM Wave 1 design review. HO-002 reviewed — 16 contrast ratios and the full
   timing model re-derived independently, all clean; finding F1 (mobile two-layer simultaneity) raised and
   carried. HO-002 left `needs-revision` with the PM box unticked pending HO-010.
-- 2026-07-25 — Wave 1 Step 2: UI/UX design foundation + §2 replay spec (HO-002). Both themes tokenized
-  with measured contrast, §2 paced to the tenth of a second.
-- 2026-07-25 — Wave 1 Step 1: Developer Bodh corpus verification + beat inventory (HO-001). All six seed
-  beats supported, no gaps, no HALT. Closed to Resolved.

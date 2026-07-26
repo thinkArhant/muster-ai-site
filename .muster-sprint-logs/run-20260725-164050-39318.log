@@ -488,3 +488,92 @@
   ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
   🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 echo "=== final: build suite ===" bash scri
   🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 git add -A git status --short git commit -q
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 bash muster/scripts/muster-commit-lint.sh H
+  💬 Step complete. ## What I did Validated the page shell against `page-shell.md` directly rather than against the developer's harness, then filed HO-004 and advanced the queue. **The build passes every a
+    📖 ×29 · ✏️  ×13 · 📝 ×1 · 🧪 ×34 · ⚠️  ×2
+  ✓ 78 turns · $8.3 · peak ctx 196k/1M 19% · out 65k  (success)
+  ✓ [32;1mQA[0m · [1m16m 40s[0m · advanced → 2026-07-25 PM: Shell validation assessment — two readability findings (PM) · handoff HO-004 filed ✓
+    run so far: 1h 18m · $39.77 · 5 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 6
+▶ [35;1mPM[0m · 2026-07-25 PM: Shell validation assessment  [2m[claude-opus-5][0m
+  two readability findings
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 I'm bound as **PM** for this step (Next Step is `Role: pm`).
+  🧪 bash   bash muster/scripts/muster-bind.sh pm auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/pm.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/CLAUDE.md
+  💬 Now the PM bootstrap reads, in parallel.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/pm.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh; echo "---exit $?"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/skills/generic/decision-making.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/skills/generic/deliverable-review.md
+  🧪 bash   wc -l knowledge-base/design-specs/web/page-shell.md knowledge-base/product-spec-seed.md knowledge-base/foundational-assu
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/product-spec-seed.md
+  💬 Running the build suite foreground now (my verdict depends on the green being real), alongside the remaining reads.
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -40; echo "=== test.sh exit: ${PIPESTATUS[0]} ==="
+  🧪 bash   bash scripts/test.sh > /tmp/testout.txt 2>&1; echo "EXIT=$?"; grep -Ei "pass|fail|[0-9]+/[0-9]+" /tmp/testout.txt | tail
+  🧪 bash   cat /tmp/testout.txt
+  🧪 bash   grep -Ec "" .test-logs/run-20260725-180046.log; grep -E "^(PASS|FAIL|✔|✖|[0-9]+ */ *[0-9]+)|checks? (passed|failed)|[0-9
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit.txt 2>&1; echo "EXIT=$?"; grep -E "FAIL|passed|/39" /tmp/audit.txt | ta
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  🧪 bash   sed -n '1,40p;180,260p' knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   sed -n '150,200p' knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   grep -n "instrument" styles/*.css index.html | head -30; echo "--- read-max ---"; grep -rn "read-max\|gap-block\|bp-wide
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/motifs.css
+  💬 Facts verified. Now the files I need to update.
+  🧪 bash   ls knowledge-base/; echo "--- notices ---"; cat knowledge-base/founder-notices.md; echo "--- triage tail ---"; tail -30 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  🧪 bash   grep -n "Current Tasks" -A 40 knowledge-base/agent-context/developer.md | head -60
+  🧪 bash   sed -n '104,220p' knowledge-base/agent-context/developer.md
+  🧪 bash   grep -n "Current Tasks" -A 100 knowledge-base/agent-context/qa.md | sed -n '1,110p'
+  💬 Verified: 86/86 green, audit 37/39 with exactly the two reported failures, and `.instrument`'s 48px padding is a Developer-chosen value (page-shell.md §8 specifies no padding). Now the assessment. Sta
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  💬 Now the decision-log entry covering all four rulings.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 Now the HO-004 verdict and closing both handoffs.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   python3 - <<'PY' import re p='knowledge-base/agent-requests.md' s=open(p).read() start=s.index('## Active Handoffs') end
+  💬 Now the queue — the founder escalation, the wave release, and the two amended §2 steps.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() # 1. Extract the Content step from Upcoming 
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Now the Done entry and the Execution Mode update.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -20; echo "exit=$?"
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  🧪 bash   cat >> knowledge-base/triage-log.md <<'EOF' - 2026-07-25 | OBS-003 (HO-003) → F1 (HO-004) | ESCALATE | A `64ch` column d
+  💬 Now the sprint board and agent-context files.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  💬 Now the agent-context cascades for Developer and QA.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  💬 Now the founder notices, then a final consistency pass.
+  🧪 bash   cat >> knowledge-base/founder-notices.md <<'EOF' - 2026-07-25 pm: Wave 2 is closed — shell accepted on both engines, no 
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 45 muster/system-guide.md | head -60
+  🧪 bash   grep -n "Pre-Handoff Self-Review Checklist" -A 40 muster/system-guide.md | head -50
+  🧪 bash   sed -n '448,485p' muster/system-guide.md
+  💬 Running the self-review checks now.
+  🧪 bash   echo "=== Done entries ==="; awk '/^## Done/,0' knowledge-base/orchestration-queue.md | grep -c "^- 2026" echo "=== hand
+  🧪 bash   bash muster/scripts/muster-lint-handoff.sh; echo "handoff-lint exit=$?" python3 - <<'PY' p='knowledge-base/orchestration
+  🧪 bash   sed -n '/^## Next Step/,/^## Upcoming/p' knowledge-base/orchestration-queue.md | head -14; echo "..."; git status --shor
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the shell is accepted and §2 is cleared to be written HO-003 and HO-004 bot

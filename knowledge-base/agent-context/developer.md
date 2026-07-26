@@ -124,6 +124,10 @@ budget is closed at three elements plus the curl cursor, with the §2 replay exp
 **Key refs**: `design-specs/web/page-shell.md` · `product-spec-seed.md` → Design direction + Tech ·
 `muster/team/developer/skills/web/{web-best-practices,web-accessibility,web-performance-engineering}.md`
 
+**Status**: DONE — HO-003 accepted 2026-07-25. 79/79 Blink + 7/7 WebKit, re-run at review. One
+shell-level fix carried forward into task 3 rather than reopening this one: `.instrument`'s phone inset
+(DEC-021.1).
+
 ---
 
 ### 3. §2 replay implementation — Priority: HIGH, Effort: L, Platform: web
@@ -138,8 +142,24 @@ budget is closed at three elements plus the curl cursor, with the §2 replay exp
 - Narration synchronized to the beats per the replay spec's timing; ends on `bodh.day`, live
 - Scripted HTML/CSS/JS only — no asciinema, no tooling dependency, zero external requests
 - Reduced-motion path renders complete content
-- WebKit and Blink verified before filing
+- WebKit and Blink verified before filing, within the ceiling below
 - Implement everything in HO-002 and HO-005; the above is non-exhaustive
+- **Fix `.instrument`'s phone inset while you are in these files (DEC-021.1).** Below `--bp-wide` the
+  total inset must not exceed `--gap-flow` (24px a side); desktop keeps `--gap-block` (48px). Today it is
+  a flat 48px everywhere, so a 320px phone spends 96px of a 272px card on padding and the prose column is
+  174px. No second named breakpoint — `page-shell.md` §7 keeps `--bp-wide` as the only one, and a fluid
+  `clamp()` between the two rhythm multiples both satisfies that and avoids a cliff at 960px. Extend the
+  existing harness with the assertion (DEC-020). *This is the OBS-001 you deliberately left alone because
+  §7.1's budget is token-derived — that constraint does not hold: §7.1 budgets its own insets (12+12
+  terminal, 24 card), and at 48px its core would compute to 568.4px against a 553px viewport. §2 is
+  unaffected by the change.*
+- **The WebKit ceiling is measured, not a hypothesis (DEC-021.4).** `qlmanage` executes no JavaScript and
+  renders at a fixed ~1024² regardless of the requested size. WebKit's evidence for §2 is therefore the
+  no-JS/reduced-motion complete transcript — twelve lines verbatim, L12's treatment, the §9 emphasis
+  system, chrome, grain and vignette parity, both themes — which is load-bearing because DEC-017 item 4
+  makes playback an opacity reveal over a complete DOM. Everything else is Blink evidence and is labelled
+  as Blink evidence in HO-006. Do not spend the session fighting it and do not install a browser
+  (DEC-020)
 
 **HALT if**: the corpus lacks a line the replay spec calls for. Do not invent, paraphrase, or
 reconstruct it. Re-point `## Next Step` to a `Role: pm` step naming the missing line and stop.

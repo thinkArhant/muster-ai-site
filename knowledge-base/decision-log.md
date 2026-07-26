@@ -565,5 +565,97 @@ A check that only runs when someone remembers to run it is not a check.
 
 **Touched**: `tests/`, `knowledge-base/architecture.md` §11, `agent-requests.md` (HO-003).
 
+### DEC-021 — Reading measure, phone insets, and what WebKit is allowed to claim (2026-07-25)
+
+**Decision**: The shell is accepted. Four calls settle the two findings and the two constraints QA
+surfaced with it; one of the four goes to the founder because it turns on what a founder-authored word
+means, and the wave releases regardless — nothing here blocks §2.
+
+**1. `.instrument`'s phone inset steps down, and the constraint that blocked it was false.** Below
+`--bp-wide` the instrument inset must not exceed `--gap-flow` (24px); desktop keeps `--gap-block` (48px).
+No new named breakpoint — a fluid `clamp()` between the two rhythm multiples is the preferred expression,
+since it also removes the cliff a hard query would put at 960px.
+
+*The blocker both the Developer and QA cited does not exist.* Both left the padding alone on the reasoning
+that `section-02-replay.md` §7.1 budgets §2's mobile core to the tenth of a pixel off shell tokens, so a
+responsive change here would invalidate a signed-off budget. §7.1 does not inherit this value: its rows
+read *Terminal body padding 12 + 12 = 24.0* and *Narration card … + 24 pad*. If `.instrument`'s 48px
+applied, the core would be 424.4 + 72 + 72 = 568.4px against a 553px viewport — the budget PM re-derived
+clean in DEC-019 would already be busted. §2 sets its own inset by construction, so the change is free
+with respect to it. The reasoning was carried through two handoffs and into a queue step before anyone
+checked it against the table it cited.
+
+*Why this is PM's call and not UI/UX's*: `page-shell.md` §8 specifies the instrument cell as surface +
+hairline border + sharp corners and states no padding. The 48px is a build-level choice, not a locked
+design value, so A-007 is not engaged.
+
+**2. The 45-character floor in the QA audit is arithmetically unsatisfiable and is replaced, not
+loosened.** The check `prose column does not collapse below 45 characters at the narrowest supported
+width` cannot pass at 320px under any padding: at 17px `--font-sans` the average prose character advance
+is 7.615px (measured 685.31px ÷ 90 characters), so 45 characters need 342.7px — more than the 320px
+viewport itself, before gutters, borders, or a card. With a zero-inset card the ceiling at 320px is ~36
+characters and at 375px is ~43. The floor is unreachable on every phone.
+
+This is deliberately **not** the tolerance-loosening pattern `decision-making.md` warns about, and the
+distinction is load-bearing: the build is being fixed *as well*, so red does not go green by moving a
+goalpost. What replaces the floor is a check that can actually fail — at ≤375px the instrument's total
+horizontal inset must be ≤20% of the card width (48/272 = 17.6% passes, today's 96/272 = 35.3% fails) —
+plus the measured character count **reported, not asserted**, the same treatment the narration card's
+line count already gets. Geometry is deterministic; a character count folds in font metrics and
+line-break raggedness, which is why QA's own 320px figure (18) sits well under that width's ~23-character
+capacity.
+
+**3. The reading column goes to the founder — the diagnosis is settled, the resolution is not.**
+`--read-max: 64ch` resolves to 685.31px and renders ~90 prose characters, because `ch` is the advance of
+`0` (10.281px) and prose averages 7.615px. The build matches the spec and the spec matches the seed; the
+gap is between `64ch` and what `64ch` renders.
+
+PM is confident on the diagnosis and deliberately not on the fix, because "reading column ~64ch" (seed
+line 228) has two honest readings that produce materially different pages: the CSS unit, under which the
+build is already correct, or the typographic measure, under which it is wrong by ~40%. Everything around
+it in the seed — *one idea per screen*, *spacious* as the overriding constraint — argues for the measure,
+which is why PM recommends honouring it. But it is a founder-authored value about the page's central
+reading experience, and that is where founder attention is worth spending. Parked non-halting in
+`## Founder Decisions` with a hard `pre-launch-checklist.md` backstop so it cannot ship unresolved.
+
+*It blocks nothing now.* No body copy renders in that column yet — the shell's paragraphs are
+`data-shell-placeholder` scaffolding. §2's narration is not affected either: `section-02-replay.md` §7
+sets the narration rail at ~36ch on desktop and the card is viewport-width on mobile, so §2's prose never
+enters `--read-max`. The first real consumer is §3, which is Sprint 2. The queue step's premise that this
+wanted settling before §2 was wrong on that point.
+
+**4. §2's cross-engine criterion is narrowed to what the tooling can prove, and the residual is named.**
+`qlmanage` is the only WebKit here; QA proved with committed probes that it executes no JavaScript and
+ignores the requested size, rendering at a fixed ~1024². So:
+
+- **WebKit must prove the no-JS/reduced-motion complete transcript** — all twelve corpus lines verbatim,
+  L12's large-rust treatment, the §9 emphasis system, terminal chrome, grain and vignette parity, both
+  themes. This is load-bearing rather than a consolation: DEC-017 item 4 makes playback an opacity reveal
+  over a complete DOM, so what `qlmanage` renders *is* the page's no-JS fallback, on the engine whose
+  inline-SVG divergence is this project's known failure class.
+- **Blink proves everything else** — playback timing, the visibility gate, the windowed terminal,
+  media-query behaviour, horizontal-scroll containment, and all evidence at 375px, 320px, and 200% zoom.
+- **Mobile evidence is Blink-only and HO-007 says so in those words**, never "verified cross-engine".
+- **The residual is one named item**: mobile-Safari viewport behaviour, chiefly `100dvh` inside
+  `max-height: calc(100dvh - 3rem)`, which is both unverifiable on this tooling and the load-bearing
+  mechanism of §7.1's entire budget. Carried as a hard pre-launch device check and flagged to the founder
+  as a look worth taking at the Wave 3 gate, where a real iPhone is the only instrument that settles it.
+
+Not resolved by installing a browser: DEC-020's zero-dependency property is a published claim about this
+repo, and it outranks the convenience.
+
+**Rationale for releasing rather than halting**: none of the four gates §2. Three are PM's under the
+matrix (a build-level value, test-infrastructure quality, an acceptance criterion that asserted evidence
+the tooling cannot produce) and the fourth is non-halting by construction. Halting a cleared autonomous
+run on a latent defect in a column no copy occupies yet would spend the founder's gate on something a
+checklist item holds just as firmly.
+
+**Impact**: Developer, QA, UI/UX, Content, PM.
+
+**Touched**: `design-specs/web/page-shell.md` §11, `agent-requests.md` (HO-003, HO-004),
+`orchestration-queue.md` (Next Step, Upcoming §2 developer + QA steps, Founder Decisions, Done),
+`current-sprint.md`, `agent-context/{developer,qa}.md`, `pre-launch-checklist.md`, `triage-log.md`,
+`founder-notices.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

@@ -63,8 +63,8 @@ criterion). No other step uses a premium model.
 |---|---|---|---|
 | 0 | PM: Stage 4 drafts + Sprint 1 context cascade | — (interactive) | ✓ done |
 | 1 | Corpus verification + beat inventory → design foundation spec → PM review | **Founder gate** | ✓ **approved with amendments**, 2026-07-25 |
-| 2 | Inventory true-up → spec amendments → PM review → shell build → QA validation | none — output is machine-verifiable against the approved spec | autonomous run cleared to launch |
-| 3 | §2 narration → PM review → replay build → QA validation | **Founder gate** — judge pacing + narration, styling subtracted | |
+| 2 | Inventory true-up → spec amendments → PM review → shell build → QA validation | none — output is machine-verifiable against the approved spec | ✓ done, 2026-07-25 — one founder question raised, no blockers |
+| 3 | §2 narration → PM review → replay build → QA validation | **Founder gate** — judge pacing + narration, styling subtracted | running |
 
 **Wave 2 order is deliberate.** The gate's amendments change `page-shell.md` (theme control dropped) and
 `section-02-replay.md` (48 s rescale, B5 rebalance, narration-first mobile), so the UI/UX amendment and
@@ -144,7 +144,10 @@ agent that finds a gap reports it and stops.
     - Zero conversation content surfaced — queue lines, handoffs, decisions, timestamps only
   - **Key refs**: `bodh-sprint4-corpus.md`, `product-spec-seed.md` §2 + Verification, `team/developer/skills/generic/plan-first-discipline.md`
 
-- [ ] **Page shell implementation** — Priority: HIGH, Effort: L, Platform: web
+- [x] **Page shell implementation** — Priority: HIGH, Effort: L, Platform: web
+  - **Done** 2026-07-25 — HO-003 accepted. 79/79 Blink + 7/7 WebKit, harness ships with the build
+    (DEC-020). One shell-level fix carried into the §2 build step: `.instrument`'s phone inset
+    (DEC-021.1)
   - **Deliverable**: `index.html`, `styles/` (tokens + shell), `scripts/` — the shell only, no section content
   - **Dependencies**: UI/UX HO-002 approved at the Wave 1 founder gate
   - **Acceptance criteria**:
@@ -209,7 +212,10 @@ agent that finds a gap reports it and stops.
 
 ### QA
 
-- [ ] **Shell validation** — Priority: HIGH, Effort: M, Platform: web
+- [x] **Shell validation** — Priority: HIGH, Effort: M, Platform: web
+  - **Done** 2026-07-25 — HO-004 accepted. Every acceptance criterion passes on both engines, no build
+    defect found; audit 37/39, the two failures disposed in DEC-021. The `qlmanage` ceiling it
+    established (no JS, fixed ~1024² viewport) now scopes §2's cross-engine criterion
   - **Deliverable**: HO-004 in `agent-requests.md` with per-criterion pass/fail and evidence
   - **Dependencies**: Developer shell (HO-003)
   - **Acceptance criteria**:
@@ -227,8 +233,12 @@ agent that finds a gap reports it and stops.
   - **Acceptance criteria**:
     - Every rendered terminal line diffed against `bodh-sprint4-corpus.md` and cited — any altered, paraphrased, or invented line is a blocking bug
     - Corpus file confirmed unmodified since HO-001 — an agent editing founder source material is a blocking finding
-    - Cross-engine parity on WebKit and Blink; zero network requests; reduced-motion path complete
-    - Narration/terminal synchronization holds across engines and at reduced motion
+    - **Cross-engine parity scoped to the tooling (DEC-021.4)**: WebKit proves the no-JS/reduced-motion
+      complete transcript at ~1024²; Blink proves playback, media queries, and every mobile width.
+      Mobile evidence is Blink-only and is labelled as such. `qlmanage` runs no JS and ignores the
+      requested size — that ceiling is measured, not assumed, and is not closed by installing anything
+    - Zero network requests; reduced-motion path complete
+    - Narration/terminal synchronization holds at reduced motion and, where JS is involved, on Blink
     - Measured beat intervals reported factually, so the founder's pacing judgment has data alongside it
     - **Measure the rendered narration card at 375 × 553 against SP3's actual copy.** The §7.1 height
       budget assumes a 6-line worst case; at 7 lines the terminal drops to 4 visible lines, which the

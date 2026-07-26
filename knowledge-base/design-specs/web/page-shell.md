@@ -209,8 +209,8 @@ Readout metric values count from 0 to their exact value over `--countup-duration
 
 ## 11. Accessibility foundation
 
-- **Landmarks**: `<header>` (status bar) · `<main>` (all six sections) · `<footer>`. Sections are `<section aria-labelledby>` their stencil-tag `<h2>`.
-- **Heading tree**: one `<h1>` (hero headline) → six `<h2>` (section tags) → `<h3>` only inside components that need it. No skipped levels.
+- **Landmarks**: `<header>` (status bar) · `<main>` (all six sections) · `<footer>`. Every section is `<section aria-labelledby>` a heading it contains — the hero by its `<h1>`, §02–§06 by their stencil-tag `<h2>`.
+- **Heading tree**: one `<h1>` (hero headline) → five `<h2>` (the §02–§06 stencil tags, §12) → `<h3>` only inside components that need it. No skipped levels. The hero carries no stencil tag; its `<h1>` is the section's heading.
 - **Skip link**: first focusable element, "Skip to content" → `#main`; hidden until focused, then `--surface` card + focus ring at top-left.
 - **Focus**: 2px solid `--accent` outline, 3px offset, on all interactive elements (§2.3.5). Never `outline: none` without this replacement.
 - **Touch targets**: ≥44×44px on coarse pointers — small chrome (chips, replay controls) extends its hit area via padding while the visual stays small.
