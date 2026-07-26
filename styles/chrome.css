@@ -1,0 +1,151 @@
+/* ==========================================================================
+   CHROME — skip link, status bar, section rules and stencil tags, footer
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Skip link — first focusable element on the page.
+   -------------------------------------------------------------------------- */
+
+.skip-link {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 100;
+  transform: translateY(-150%);
+  background-color: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--hair);
+  padding: var(--gap-hairline) var(--gap-flow);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   Status bar — sticky, fully opaque, hairline-ruled. No glass: no blur, no
+   translucency over content. 3rem total including its rule (border-box).
+   -------------------------------------------------------------------------- */
+
+.statusbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+  block-size: 3rem;
+  background-color: var(--ground);
+  border-block-end: 1px solid var(--hair);
+}
+
+.statusbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-flow);
+  block-size: 100%;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink);
+}
+
+.brand__mark {
+  inline-size: 8px;
+  block-size: 8px;
+  flex: none;
+  background-color: var(--accent);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-hairline);
+}
+
+/* Rust never carries the state alone — the word is the second channel. */
+.status__word {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   Section rule with machined end-ticks + stencil tag.
+
+   The rule spans the viewport; the tag sits on the container's content edge
+   and breaks the line, with a 9x1px perpendicular tick at each of its ends.
+   The construction is decorative and hidden from assistive tech — the <h2>
+   inside it is the real heading.
+   -------------------------------------------------------------------------- */
+
+.rule {
+  display: grid;
+  grid-template-columns:
+    calc(var(--gutter) + max(0px, (100% - var(--page-max)) / 2))
+    auto
+    1fr;
+  align-items: center;
+  inline-size: 100%;
+}
+
+.rule__line {
+  block-size: 1px;
+  background-color: var(--hair);
+}
+
+.rule__tag {
+  display: inline-flex;
+  align-items: center;
+}
+
+.rule__tick {
+  inline-size: 1px;
+  block-size: 9px;
+  flex: none;
+  background-color: var(--hair);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-hairline);
+  padding-inline: var(--gap-hairline);
+  white-space: nowrap;
+  font-weight: 400;
+}
+
+.tag__mark {
+  inline-size: 8px;
+  block-size: 8px;
+  flex: none;
+  background-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.pagefoot {
+  border-block-start: 1px solid var(--hair);
+  padding-block: var(--gap-block);
+}
+
+.pagefoot__inner > * + * {
+  margin-block-start: var(--gap-hairline);
+}

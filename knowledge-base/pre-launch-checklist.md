@@ -31,3 +31,13 @@
     If the founder's domain has landed by launch, confirm which URL ships — the GitHub raw URL is the
     stated fallback until then.
   - Milestone gate: launch
+
+- [ ] **Deploy serves only the page's own files** — Blocker: soft, Source: developer, Added: 2026-07-25
+  - Cloudflare Pages deploying the repo root would publish `knowledge-base/`, `tests/`, `muster/`, and
+    `scripts/test.sh` alongside the page. The repo is public by design so nothing leaks, but the
+    deployed site should still be the site — a 404-able `tests/artifacts/` is noise on an exhibit whose
+    argument is restraint.
+  - Resolve at the deploy step: either a build output directory containing `index.html`, `styles/`,
+    `scripts/*.js`, and the verification artifacts the page links to, or an exclusion list. Note that
+    `scripts/` holds both shipped page JS and the project's test runner.
+  - Milestone gate: launch

@@ -536,5 +536,34 @@ the same beat. Content writes to ≤16 and flags rather than overruns.
 `agent-requests.md` (HO-010, HO-009, HO-002), `current-sprint.md`, `agent-context/{ui-ux,developer,content}.md`,
 `orchestration-queue.md`.
 
+### DEC-020 — Visual milestones are gated by a dependency-free two-engine harness (2026-07-25)
+
+**Decision**: Cross-engine verification runs as committed code, not as a per-session procedure.
+`tests/verify-shell.mjs` drives headless Chrome over the DevTools Protocol for Blink;
+`tests/verify-webkit.mjs` drives QuickLook for WebKit. Both are re-runnable by any role, exit non-zero on
+failure, and write their evidence to `tests/artifacts/`.
+
+**Why it is code and not a checklist**: the page's central claims — zero external requests, measured
+contrast in both themes, complete reduced-motion content, cross-engine parity — are exactly the claims a
+human eye passes by default. A checklist item that reads "verified in Safari" is indistinguishable from
+one that was skipped. A harness that fails the build is not.
+
+**No dependencies, by design**: no `package.json`, no installed packages. Node's global `WebSocket`
+speaks CDP directly and Node's `zlib` decodes the screenshots; Chrome and QuickLook are already on the
+machine. A dependency manifest in this repo would be the first crack in "no build system," which is a
+published property of the page, not a preference.
+
+**The grain check is pixel-level on purpose.** Inline-SVG/WebKit divergence is this project's known
+failure class, and a filter that silently fails to rasterise in one engine passes every computed-style
+assertion ever written. Both harnesses locate a patch of bare page ground *by luminance* — so the two
+engines need not lay out identically — and compare its pixel spread. A flat fill scores zero.
+
+**Consequence to carry**: a new section extends the existing harness rather than adding its own runner.
+A check that only runs when someone remembers to run it is not a check.
+
+**Impact**: Developer, QA, PM.
+
+**Touched**: `tests/`, `knowledge-base/architecture.md` §11, `agent-requests.md` (HO-003).
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

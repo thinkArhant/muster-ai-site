@@ -11,11 +11,16 @@
 **Waves 0–1 complete and the Wave 1 founder gate is APPROVED with amendments (2026-07-25).** The
 autonomous run is cleared to launch; the driver starts from the current `## Next Step`.
 
-**Wave 2's spec work is complete.** The inventory true-up, both spec amendments, and the PM review are
-done; `page-shell.md` and `section-02-replay.md` are final, PM-accepted, and carry nothing open. The
-remaining Wave 2 steps are the shell build and its QA validation, both machine-checkable against the
-spec. The ordering that put the amendments ahead of the build did its job: the shell is built against a
-spec with no dropped theme control in it.
+**Wave 2's spec work is complete and the shell is built.** The inventory true-up, both spec amendments,
+the PM review, and the shell build are done; `page-shell.md` and `section-02-replay.md` are final,
+PM-accepted, and carry nothing open. QA validation is the last Wave 2 step. The ordering that put the
+amendments ahead of the build did its job: the shell was built against a spec with no dropped theme
+control in it.
+
+**The build ships its own cross-engine harness** (DEC-020): `bash scripts/test.sh` runs
+`tests/verify-shell.mjs` (Blink) then `tests/verify-webkit.mjs` (WebKit), both dependency-free and
+non-zero on failure. Every later step that touches the page re-runs it and extends it rather than
+adding a second runner.
 
 **Telemetry practice — agents do not measure this build.** Do not run `muster/scripts/muster-meter.py`
 in any session. Build telemetry snapshots are founder-supplied and committed at milestones. Any step
@@ -47,41 +52,6 @@ all page copy until measured at launch (seed rule 4).
 <!-- The `Role:` marker tells you which tab to open. Multi-tab: open a tab in that role (picker → matching role) and paste; bound role executes the task body directly. Single-tab from PM: paste in PM tab; PM reads the `Role:` marker and explicitly invokes Agent tool with `subagent_type=<role>`. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves — a blocked specialist re-points Next Step to a `Role: pm` assessment step and PM decides handle-vs-escalate. The autonomous loop (`muster/scripts/muster-sprint-run.sh`) stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step (matching the `MUSTER_ROLE=auto` contract in `muster/CLAUDE.md`) — a whitespace block or a human-readable "sprint complete" placeholder both read as complete. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-24 Developer (web): Page shell implementation
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Build the page shell — design foundation, both themes, section chrome. No section content.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/page-shell.md` — the approved spec, PM-accepted 2026-07-25 with the gate amendments applied. Nothing in it is open. Implement everything in it; the criteria below are non-exhaustive examples and never override the handoff
-- `knowledge-base/decision-log.md` — DEC-015, DEC-018 (the two that changed the shell)
-- `knowledge-base/product-spec-seed.md` → "Tech, deploy, telemetry practice" and "Design direction"
-- `knowledge-base/agent-context/developer.md` — your Current Tasks
-- `muster/team/developer/skills/web/web-best-practices.md`
-- `muster/team/developer/skills/web/web-accessibility.md`
-- `muster/team/developer/skills/web/web-performance-engineering.md`
-
-**Deliverable:** `index.html`, `styles/`, `scripts/` — shell only.
-
-**Acceptance criteria:** See `knowledge-base/current-sprint.md` for full criteria. Summary:
-- Static HTML/CSS + minimal vanilla JS. No framework, no build system beyond simple assembly, no webfonts
-- **Zero external network requests at runtime** — self-contained assets, inline SVG, CSS-generated texture. QA asserts this; it is a product claim, not a preference
-- Both palettes at the seed's exact hex values, both themes first-class; matte surfaces, sharp corners, opaque cards; reading column ~64ch
-- Semantic landmarks, real focus states, and every motion path `prefers-reduced-motion`-gated with complete content in the reduced path
-- Verify WebKit **and** Blink at every visual milestone (`qlmanage`/Safari + headless Chrome) — inline-SVG/WebKit divergence is a known failure class here
-- Do not run `muster-meter.py` and do not write any THIS SITE metric — telemetry is founder-supplied (see Execution Mode)
-- `knowledge-base/design-specs/direction-reference.html` is not a build input. Build from `page-shell.md`
-
-**On completion:** File HO-003 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist
-(`muster/system-guide.md`) before filing — item 10 enforces queue + decision-log update.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-24 QA (web): Shell validation
 
 ```
@@ -106,11 +76,21 @@ Model: claude-opus-5
 - Contrast measured ≥4.5:1 body text in both themes; landmarks and focus states verified; reduced-motion path renders complete content
 - No webfonts, no CDN references, no build-system artifacts in the shipped output
 
+**Note on the developer's harness:** the build ships `tests/verify-shell.mjs` (Blink, 79 checks) and
+`tests/verify-webkit.mjs` (WebKit, 7 checks); `bash scripts/test.sh` runs both. Re-run them — a green
+suite is a starting point, not the finding. **Derive scope from `page-shell.md`, not from what the
+harness happens to assert**, and treat anything the spec requires but the harness does not cover as
+unverified until you cover it. HO-003's three observations (mobile `.instrument` padding, the §11/§12
+heading-count disagreement, the `ch`-vs-rendered-character measurement) are the producer's own; confirm
+or dispute them independently.
+
 **On completion:** File HO-004 in `agent-requests.md`. If the build is red or any check fails, do NOT
 advance the queue — re-point `## Next Step` to a `Role: pm` assessment step. Run the Pre-Handoff
 Self-Review Checklist (`muster/system-guide.md`) before filing.
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-24 Content (web): §2 narration script
 
@@ -274,6 +254,10 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 <!-- A specialist Done entry is a POINTER to the handoff, not a substitute for it: `- DATE — Step N: <title> (HO-NNN). <one-line outcome>.` If it grows past ~5 lines, the detail belongs in the HO body. The autonomous loop lints the most-recent Done entry's HO reference against agent-requests.md and stops if it's missing. -->
 
+- 2026-07-25 — Wave 2: Developer — Page shell built, both themes, verified on both engines (HO-003).
+  79/79 Blink checks and 7/7 WebKit; the harness ships with the build (DEC-020). Awaiting review — QA,
+  then PM.
+
 - 2026-07-25 — Wave 2: PM — Both specs reviewed and accepted; the §2 build inputs are now final
   (HO-010 accepted with notes, HO-009 accepted clean, HO-002 closed on F1's resolution; all three swept
   to Resolved, Active back to 3/300 lines). Every number re-derived rather than re-read: dwells tile to
@@ -319,7 +303,3 @@ carry it. If it only works dressed, that is the signal the seed's Sequencing sec
   with measured contrast, §2 paced to the tenth of a second.
 - 2026-07-25 — Wave 1 Step 1: Developer Bodh corpus verification + beat inventory (HO-001). All six seed
   beats supported, no gaps, no HALT. Closed to Resolved.
-- 2026-07-24 — Wave 0: PM Stage 4 drafts + Sprint 1 context cascade. Product spec, brand guidelines, and
-  9 foundational assumptions written from the founder's seed; `copy-rules.md` project skill created;
-  developer/ui-ux/qa/content contexts populated with inlined tasks; root CLAUDE.md filled; DEC-001→009
-  logged. No handoff — PM step, reviewed by the founder directly.
