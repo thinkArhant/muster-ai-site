@@ -1,6 +1,6 @@
 run: run-20260726-131642-20535
-state: running step 4
-step: 2026-07-26 QA (web): Re-validate the phone log
+state: halted: halt (2026-07-26 Wave 3 Gate 3 — founder review)
+step: 2026-07-26 Wave 3 Gate 3 — founder review
 step started: 2026-07-26 14:32:54
-last completed: 2026-07-26 Developer (web): Build the phone log legibility fix · 93 turns · $11.34 · out 74k · 33m 56s
-totals: 3 attempt(s) · 273 turns · $31.80
+last completed: 2026-07-26 QA (web): Re-validate the phone log · 96 turns · $10.84 · out 80k · 39m 40s
+totals: 4 attempt(s) · 369 turns · $42.64

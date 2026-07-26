@@ -463,3 +463,29 @@
   🧪 bash   git status --short
   💬 No source files touched — this was a validation step. Committing:
   🧪 bash   git add -A && git commit -q -F - <<'EOF' qa: the rebuilt phone log is validated green on every criterion HO-017. Every f
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "exit=$?"
+  💬 **§2's rebuilt phone log validates green. No build defect found.** HO-017 is filed, the two measured figures are in the gate packet, and the queue now sits on the founder gate (`Role: halt`). **Harnes
+    📖 ×12 · ✏️  ×11 · 🧪 ×72
+  ✓ 96 turns · $10.84 · peak ctx 223k/1M 22% · out 80k  (success)
+  ✓ [32;1mQA[0m · [1m39m 40s[0m · advanced → 2026-07-26 Wave 3 Gate 3 — founder review
+    run so far: 1h 55m · $42.64 · 4 steps
+───────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════
+⛔ HALT — 2026-07-26 Wave 3 Gate 3 — founder review   (Role: halt)
+
+   The loop stopped for founder input — nothing is wrong.
+   • Wave gate: review knowledge-base/wave-review.md, write your verdict in its
+     ## Verdict section, then run: bash muster/scripts/muster-sprint-resume.sh
+     (from this worktree).
+   • PM escalation: see '## Founder Decisions' in knowledge-base/orchestration-queue.md, answer, then re-run
+     muster-sprint-run.sh.
+═══════════════════════════════════════════════════════════
+── run summary ────────────────────────────────────────────
+  2026-07-26 UI/UX (web): The phone lo    82    $9.87   21%    91k 21m 19s
+  2026-07-26 PM: Review HO-015 before     98   $10.59   20%    74k 20m 57s
+  2026-07-26 Developer (web): Build th    93   $11.34   23%    74k 33m 56s
+  2026-07-26 QA (web): Re-validate the    96   $10.84   22%    80k 39m 40s
+  2026-07-26 Wave 3 Gate 3 — founder  halt
+───────────────────────────────────────────────────────────
+  4 steps · 369 turns · $42.64 · out 319k · 1h 55m wall · stopped: halt (2026-07-26 Wave 3 Gate 3 — founder review)
+  📣 1 founder notice(s) this run — read knowledge-base/founder-notices.md
