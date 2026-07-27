@@ -452,23 +452,35 @@ measured and stated: on a phone the ladder cuts at the fold and the first screen
   and in §1's readout below the fold. The seed's "measured line visible without scrolling" guarantee
   is superseded by this ruling; the founder is the seed's author and this is his amendment, recorded
   here because the seed file itself is read-only inside the sprint.
-- **Below the fold §1 keeps its inventory**: dual build readout (THIS SITE dashes above BODH, with
-  the `VERIFY ⎘` chip), streaming terminal, curl. The first number a reader sees now arrives at the
-  first scroll, in the readout. *(Default recorded from the approved sample's own note; if the
-  founder meant ALL of Bodh out of §1 — including the readout's BODH row — he says so in one line
-  and the readout question routes to UI/UX instead.)*
+- **ALL Bodh material leaves §1 (DEC-046, founder's one-line override of the recorded default).**
+  Three removals, each with a later home the founder named: the measured line (§5), the readout's
+  BODH row (§5's cards), and the **hero streaming terminal** — it streams the Bodh Sprint-4 corpus
+  under a `BODH · SPRINT 4` label, and §2's replay directly below is the same material done
+  properly. §2 becomes the page's only terminal.
+- **What §1 keeps below the fold**: the THIS SITE readout remnant (dashes · `measured at launch` ·
+  `VERIFY ⎘` chip — self-referential proof posture, not Bodh) and the curl. Whether the remnant
+  still reads as a readout at one row, or folds into something smaller, is UI/UX's design call at
+  the fix step. Honest cost, stated: THIS SITE's dashes lose the measured BODH row that made the
+  dash idiom self-evident by contrast.
 - **The formation is promoted to the §1 centerpiece and gets a real design pass at the UI/UX fix
   step** — the sample's simplified render is a placeholder for composition judgment only. The
   founder explicitly deferred visual refinement to UI/UX's design step.
 
 *Carried to the fix round*: UI/UX revises `section-01-hero.md` — new composition, formation as
-centerpiece, new fold budget, and §10's scope-adjacency rewritten (the measured line it anchors on
-is gone). Content revises `section-01-copy.md` — subline and measured line removed, unselected
-headline candidates removed, everything else verbatim. Brand `§3` message hierarchy amended: §1
-leads with the claim and the team visual; measured proof lands at first scroll (founder-accepted
-deviation, recorded rather than hidden).
+centerpiece with its real design pass, new fold budget, the readout remnant ruled, and §10's
+scope-adjacency deleted rather than rewritten (with no Bodh numeral and no wave terminal in §1,
+there is no scope adjacency left to manage). The motion budget shrinks: the hero terminal was one
+of the page's three live elements. Content revises `section-01-copy.md` — subline, measured line,
+readout BODH row and terminal chrome labels removed, unselected headline candidates removed,
+everything else verbatim. Brand `§3` message hierarchy amended: §1 leads with the claim and the
+team visual; measured proof lands at first scroll (founder-accepted deviation, recorded rather
+than hidden).
 
-**§3, §5, §6 —** *awaiting the founder's read.*
+**§1 is CLOSED.**
+
+**§3, §5, §6 —** *awaiting the founder's read. §3 note: with the subline deleted, §3's paragraph
+is now the first full prose on the page, and the only prose statement of the 8-roles/1-operator
+fact — its opening clause is no longer redundant with §1.*
 
 **4. FORMATION — SETTLED.** The hub is **PM**; the bus-bar carries the **seven specialists**
 (Developer · UI/UX · QA · Content · Marketing · Legal · Research). No role appears twice, and it reads

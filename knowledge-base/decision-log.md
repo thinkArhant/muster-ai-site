@@ -682,5 +682,30 @@ rewrite), Content (`section-01-copy.md` loses the subline and measured line), De
 **Touched**: `wave-review.md` (Gate A item 3, §1), `brand-guidelines.md` §3,
 `samples/s01-sparse-hero.html`, `samples/s01-verdict-stack.html` (decision records, never ship).
 
+---
+
+### DEC-046 — All of Bodh leaves §1; §2 becomes the page's only terminal (2026-07-27)
+
+**Decision**: the founder exercised DEC-045's recorded override — *"all of bodh out of section 1"* —
+and closed §1. Three removals beyond DEC-045, each with the later home the founder's rationale
+("already shown later") points at: the readout's BODH row (§5's cards carry 9.3 h / $147 /
+bodh.day), and the **hero streaming terminal** (it streams the Bodh Sprint-4 corpus under a
+`BODH · SPRINT 4` label; §2's replay immediately below is the same material at full fidelity).
+§1 now contains no Bodh numeral, no Bodh label, no Bodh corpus line.
+
+**§1's final inventory**: eyebrow · headline · formation + caption above the fold; THIS SITE
+readout remnant (dashes, `measured at launch`, `VERIFY ⎘`) and the curl below it. The remnant's
+form at one row is UI/UX's call at the fix step. Honest cost recorded: the dashes lose the measured
+row whose contrast made the dash idiom self-evident.
+
+**What this dissolves**: hero §10's scope-adjacency system (no wave/whole-product adjacency exists
+in §1 anymore — the page's likeliest factual failure class shrinks); the hero terminal's seat in the
+motion budget (three live elements drops toward two, UI/UX re-states the budget); the wave-scope
+chrome-label pair in `section-01-copy.md` §9.
+
+**Impact**: UI/UX, Content, Developer, QA, PM.
+
+**Touched**: `wave-review.md` (Gate A item 3 — §1 CLOSED), `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
