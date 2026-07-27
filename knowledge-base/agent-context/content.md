@@ -103,7 +103,8 @@ A strong idea — it resolves the ambiguity visually instead of spending words, 
 - **The eight role labels**: PM · Developer · UI/UX · QA · Content · Marketing · Legal · Research.
 - **§3's CrewAI/AutoGen clause** rests on the founder's own survey. Research is unstaffed this sprint —
   if no research lands before §3 builds, the clause ships **cut, not softened**.
-- **SP3 overflows §2's narration card at 320px** and the lever is copy length, open exactly once, now.
+- **SP3 fits §2's narration card at 320px** — 19 words, measured 5 rendered lines against the 6-line
+  card. Any future growth in that string re-opens the defect; a replacement aims under six lines at 320px.
 
 ### 2. §4, §5 and §6 copy → three files, HO-023 (opus)
 
@@ -129,7 +130,7 @@ SP7 was rewritten at the founder's Wave 3 gate (DEC-024) and accepted with no re
 > The operator planned the sprint, left the agents running, and returns to a deploy-ready site.
 
 **15 of 16 words, 4.29 s of the 4.80 s hold, and SP6's relief is still unspent at 10 of 12.** The timed
-total is unchanged at 139 of 163. The thesis is now told as the operator's arc rather than by negation;
+total is 134 of 163. The thesis is now told as the operator's arc rather than by negation;
 the honest-headline fact — no human touched the chain until the deploy gate — is carried inside it,
 stated as what the operator did rather than what no one did.
 
@@ -139,6 +140,5 @@ The line contains none: "deploy-ready" is the packet's recorded state, not prais
 comes from tense landing on a terminal that reads `awaiting operator`. On this page a sentence reaching
 for awe is a blocking finding no matter how well it reads.
 
-One item is carried to Sprint 2 and the lever is copy length: **SP3 overflows the narration card at
-320px** (7 lines into a 6-line budget). Nothing to do now — SP3 is not open — but any future growth in
-that string makes it worse, and any replacement should aim under six rendered lines at 320px.
+**SP3 now fits at 320px** — shortened to 19 words and measured at 5 rendered lines against the 6-line
+card. Any future growth in that string re-opens the defect; a replacement aims under six lines at 320px.

@@ -479,5 +479,64 @@ copy file is the content inventory), ui-ux (none — §4's spec predates and mat
 `design-specs/web/section-06-copy.md`, `agent-requests.md` (HO-023), `orchestration-queue.md`,
 `decision-log.md`.
 
+### DEC-042 — Wave 1 accepted whole; four rulings that keep the founder gate to taste (2026-07-27)
+
+**Decision 1 — the independent audit is repaired in two moves, split across two owners.** A CDP client
+whose `send()` has no timeout turns a renderer stall into an unbounded silence, so
+`tests/lib/cdp.mjs` gains one, and it lands in the next build step — which is already amending the
+harness — rather than waiting for the party that will need it. A harness that can hang forever cannot
+report, and this is worth doing whatever is causing the spin. The diagnosis proper — why headless
+Chrome saturates at 375 × 553 under the audit's injected 250 ms sampler — lands with the QA sweep,
+which owns the audit. The split answers the objection the Developer raised in filing it: the party
+whose work the audit checks repairs the transport, never the assertions. Rejected: fixing only the
+timeout (it converts the stall into a red check without removing it) and fixing only the renderer
+(it leaves every future hang silent). Three downstream steps' acceptance criteria are amended so a
+completed-but-red audit is a result and a hang is a failure, rather than both being twenty minutes of
+nothing.
+
+**Decision 2 — WebKit parity for a scroll behaviour is a manual check, and is labelled as one.**
+`qlmanage` renders a static thumbnail and cannot scroll, so there is nothing for the existing WebKit
+harness to measure. The alternative — `safaridriver --enable` plus a WebDriver client — needs an
+admin authorisation only the founder can give and adds harness surface this sprint has not budgeted,
+which is scope an autonomous run has no authority to add. Scroll-snap's WebKit half is therefore a
+manual pass, recorded as manual in the QA handoff and never reported as a mechanical result, with the
+question folded into the Gate B iPhone ask that already exists. The Blink half stays measured.
+Separately, the WebKit harness *can* read rendered geometry out of a QuickLook PNG by colour-clustering
+— that widens what "cross-engine" can mean for **static** geometry, and does not rescue a behaviour.
+
+**Decision 3 — the display-type token lands with §1, not ahead of it.** `styles/tokens.css` carries the
+pre-amendment `--text-display` floor while the amended value is the one measured and specified. No
+harness asserts the clamp at all, so moving the token now would put an unguarded value into the shipped
+set ahead of the assertion that guards it — the exact drift this project's relationship rule exists to
+prevent. It lands in the §1 build step together with an assertion, or not at all.
+
+**Decision 4 — §5's `ACTIVE BUILD 9.3 h` repeat stays.** A figure for what the operator spent needs the
+build figure beside it as a denominator; the pre-authored fallback would leave operator attention and
+commit-days without one. It renders byte-identically to §1's string, which §1's harness already asserts.
+
+**Rationale**: the gate's job is taste, so everything else was settled or measured first. What reaches
+the founder is four items — the headline, the §4 sheet as an artifact, all five sections' copy, and the
+formation reading. What did not reach him: five machine check families re-run rather than read, every
+stated word budget recounted, all eight contrast pairs recomputed from the locked hex, the §4 seed diff
+re-derived independently, and both spacing assertions re-planted and watched to go red. The one thing
+that is *not* green — the audit — is stated as not green in the packet rather than omitted, because
+"51/51 and green" would otherwise have been an incomplete sentence on a page whose proposition is that
+its claims are checkable.
+
+**Also settled, no founder time spent**: `brand-guidelines.md` §4 no longer names a footer lockup
+(DEC-031 enumerates four seats and the footer is not among them) and its stale `~8px` pennant figure is
+corrected to DEC-037's 6 × 9 in the same row; §4's 7–8-sentences-against-the-seed's-~4–6 divergence goes
+to the founder as a density question against a rendered sheet rather than as a spec violation, with the
+recommendation to ship as-is.
+
+**Impact**: developer (the `cdp.mjs` timeout and the `--text-display` token both land in the §1-and-§6
+step; the amended audit criteria), qa (owns the renderer diagnosis, the manual WebKit pass, and the
+audit's two stale report labels; the widened static-geometry door), ui-ux (REQ-006 and REQ-007 both
+answered; no spec change), content (`agent-context/content.md` refreshed — SP3 was carried as an open
+defect in three places after it closed), pm (the Gate A packet), marketing/legal/research (stub).
+
+**Touched**: `wave-review.md`, `agent-requests.md`, `brand-guidelines.md`, `agent-context/content.md`,
+`triage-log.md`, `orchestration-queue.md`, `retrospective.md`, `founder-notices.md`, `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

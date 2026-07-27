@@ -2,182 +2,265 @@
 <!-- File-mediated I/O contract between the autonomous sprint loop and the founder at a wave gate. PM-owned. Tier-2: read on demand only (at a wave gate / on resume), never a startup read. -->
 <!-- The loop does NOT parse this file. PM writes the Output block at the gate; the founder writes the Verdict block; PM reads the verdict on resume (muster/scripts/muster-sprint-resume.sh). Keeping human feedback here — not in the orchestration queue — is the seam a future remote/mobile bridge plugs into. -->
 
-> **This is the Wave 3 GATE 3 packet — the phone, third look.** The first §2 gate approved the replay
-> on pacing and narration (passes 1–3); the re-gate approved SP7 and sent the phone back with two
-> findings. Both prior verdicts are preserved below, because this is a third judgement of the same
-> section rather than a new one. **This gate is narrower than the last: one thing, looked at two ways.**
-> The live numbers remain a **48.00 s** chain and a **4.80 s** gate hold.
+> **This is the GATE A packet — copy and rendered samples, before anything is built.** It sits here on
+> purpose: copy is a build input, and reviewing it after the section exists is how rework happens. The
+> three §2 verdicts from Sprint 1 are preserved at the bottom of this file; this is a new gate, not a
+> re-judgement of that one.
 
 ## Current Wave
 
-**Wave:** 3, gate 3 — the §2 replay after the second fix round: the phone log grouped into entries and
-the rust mark given one inset in both layers
+**Wave:** Sprint 2, Wave 1 — six specs and copy files, plus one rendered sample
 **Build at:** the autonomous worktree on `sprint/auto-20260725-163930`. The live page is `index.html`
-in that worktree; `bash scripts/test.sh` re-runs both engines' harnesses from there.
-**Under review:** the live §2 section · HO-015 (UI/UX) · HO-016 (Developer) · HO-017 (QA)
+in that worktree; the sample is `samples/gate-a.html`.
+**Under review:** HO-018 · HO-019 · HO-020 · HO-021 · HO-022 · HO-023 · HO-024 · HO-025 — all eight
+reviewed and accepted before this packet was written. Nothing below is waiting on a verdict from me.
 
-**Your criterion, restated because it is the whole gate**: the replay must be excellent on run-log
-pacing and plain-English narration **with the styling mentally subtracted**. If it only works dressed,
-that is the signal the seed's Sequencing section wanted in week one, and it is cheaper to hear now
-than after §1 and §3 are built on top of it.
+**What this gate is for**: four things need your taste. Everything else that could be settled has been
+settled, and everything a machine could decide has been run rather than argued.
 
-### Notices since the re-gate
+---
 
-One, and it needs no answer: **both findings you raised were fixed without being paid for.** The log's
-single leading value was doing two jobs — separating rows inside an entry and separating one entry from
-the next with the same number — so it was split into the two values it was standing in for. Entries are
-now separated by roughly **2.85×** the gap between rows inside one, and because the rows themselves
-tighten, the section got **7.2px shorter** rather than taller. The accent mark takes one 12px inset in
-both cards at every viewport.
+## Open this first
 
-**Two things in your own re-gate findings turned out to be wrong, and they are corrected here rather
-than left to be discovered.** Both were found by re-deriving rather than re-reading, and both made the
-fix better:
+**`samples/gate-a.html`** — open it in a browser. It is one file, it fetches nothing, and it renders
+all four headline candidates and one real §4 spec-sheet in both themes, in the page's actual tokens,
+with the machine's own measurements printed beside each one. It is not a mockup: the type, the colours
+and the spacing are the shipping values.
 
-- **F-R2 was not mobile-only.** A `border-inline-start` sits *outside* padding, so the wide-viewport
-  rule that insets the log's text never moved the tick. The tick was flush at **every** viewport, and
-  desktop's mismatch was the wider of the two — a flush tick against a rail bar sitting 24px in. A
-  phone-only fix would have left the larger version of the same collision on the screen most readers
-  arrive on.
-- **The horizontal room was not already spent.** Simulated against the corpus at every column width,
-  all eleven chain lines hold at two rows down to 37 first-row columns; the section had shipped at 41.
-  The floor had simply never been written down, which is why the room read as unavailable. It is
-  written down now.
+Read it in this order:
 
-**Still true and still unproven:** `100dvh` in mobile Safari is the one §2 behaviour no harness here
-can prove, and §7.1's entire **379.4px** budget rests on it. The fix widened the margin again —
-**32.6px** of slack at 375 × 553, up from 25.4px and from 5.1px before that — but margin is not proof,
-which is why the live-playback look below is worth your 30 seconds.
+1. **The four headlines**, dark theme, at your window's width. Then narrow the window to phone width
+   and look again — the sample prints the actual line breaks at 320 / 375 / 1280px under each.
+2. **The §4 spec-sheet**, both themes. This is the second design centerpiece and the first time it
+   exists as an artifact rather than a specification.
+3. Then come back here for the copy.
 
-### Already green — machine-verified, do not re-litigate
+---
 
-Carried forward from the earlier gates, where each was re-derived by PM rather than read off a handoff.
-This round touched vertical rhythm and one horizontal gutter — no string, no dwell, no offset — so
-everything below still holds; HO-016 and HO-017 re-measure it on the rebuilt page and QA appends its
-measured entry-separation and accent-pair figures here before this gate fires.
+## 1. Pick the §1 headline
 
-- **The narration fits its contract, measured not eyeballed.** All ten strings re-measured by script,
-  twice now: 139 timed words of a 163 ceiling, every slot inside budget *and* inside its read window at
-  3.5 w/s. SP7's rewrite moved no number — 15 words before, 15 after. The tightest string (SP4b,
-  11/11 words) reads in 3.14 s of a 3.20 s window.
-- **Every factual claim is sourced.** Each slot cites its corpus line in place; PM looked each one up
-  in the corpus rather than checking it against the citation, including all five beats of the new SP7.
-  The corpus is unmodified and proven so from git — all three founder-authored files carry only
-  `founder:` commits.
-- **The two named traps are closed.** The Safari-only SVG catch is absent entirely. The whole-product
-  aggregates (9.3 h, $147) appear in no slot. Every §2 number is a website-wave number.
-- **Timing tiles exactly and is untouched by the fix.** Dwells sum to 48.00 s, the six design shares to
-  100.00%, each beat's cumulative dwell lands on its opening line's offset, and the worst measured
-  reveal drift was 16.8 ms against a 100 ms tolerance.
-- **Fidelity holds at the byte, and structurally.** All 12 lines diff byte-clean against the corpus —
-  679 characters, equal codepoint counts. A soft wrap inserts and removes no character, which is
-  precisely why wrapping could pay for the fix and truncation could not.
-- **The phone budget is met with more room than before.** The fixed core is **379.4px** and does not
-  move, so at 375 × 553 the terminal shows **3 whole entries** with **32.6px** of slack. Before the wrap
-  fix it measured 499.89px with five *clipped* lines and 5.1px of slack; the entry split then returned
-  another 7.2px on top. No viewport lost an entry to either change.
-- **An entry boundary is 2.85× the gap between rows inside an entry — measured, not eyeballed.** At
-  375 × 553 the whitespace is **18.5px between entries against 6.5px between rows**, on a 19.5px row
-  pitch and a 31.5px boundary pitch. The bar this had to clear is 2×. The two cues are separately
-  present, so losing one cannot hide behind the other: the continuation indent measures 7.81px and the
-  entry separator 12px.
-- **The rust mark measures 12px from its own card's inner edge in both layers, in every state.** The
-  pair is **12px / 12px** — terminal and narration card — at 1280px while the chain is running, at
-  1280px idle, in the end state, with JavaScript off, and at all five phone widths. The mid-playback
-  desktop reading is the one that matters: before the fix that state was the only one a reader with
-  JavaScript on would ever see, and it was the wrong one.
-- **The degraded paths are complete, not reduced.** Reduced-motion and no-JS both render the full
-  transcript, string-identical to the motion path's end state. Zero non-`file:`/`data:` requests across
-  a full 48-second playback, and the page renders complete with the network off.
+Four candidates. The recommendation is **B**, and the case against it is real enough that it belongs in
+front of you rather than in a handoff.
 
-**One caveat to carry into your own testing.** Every mobile measurement is **Blink only** — 375 × 553,
-320px, landscape, 200% zoom, the visibility gate, the windowed terminal and all playback timing.
-WebKit's evidence is the no-JS complete transcript at a fixed render, both themes. That gap is exactly
-why the live-playback look is worth your 30 seconds.
+| | Visible string | Announced to a screen reader (read from the AX tree, not asserted) | Lines at 320 / 375 / 1280 |
+|---|---|---|---|
+| **A** | `Ship a product. Without a team.` | `SHIP A PRODUCT. WITHOUT A TEAM.` | 2 / 2 / 2 |
+| **B** ★ | `Ship a product with ~~a human team~~ AI agents.` | `SHIP A PRODUCT WITH AI AGENTS.` | **4** / 3 / 2 |
+| **C** | `Ship a product. The team is AI.` | `SHIP A PRODUCT. THE TEAM IS AI.` | 2 / 2 / 2 |
+| **D** | `Ship a product with a muster of AI agents.` | `SHIP A PRODUCT WITH A MUSTER OF AI AGENTS.` | 3 / 3 / 2 |
 
-### Verify — human-only checks
+**B is your own edit mark, with the article break repaired.** As you wrote it — *"Ship a product with a
+~~human~~ AI agents team"* — it reads "a AI agents team"; B strikes the whole noun phrase instead of the
+one word, which fixes the grammar and keeps the idea.
 
-**Passes 1, 2 and 3 are settled and are not re-opened**: the narration alone carried a first-time
-reader, the expanded re-verify beat and the compressed QA beat both read correctly, and the 4.80 s gate
-hold reads as stillness rather than as a stall. **SP7 is settled too** — you approved it at the re-gate
-at 15 of 16 words, and Content is done with §2. No dwell, no offset and no slot's words moved in this
-round; it touched vertical rhythm and one horizontal gutter, nothing else.
+**The thing B does that nothing else on this page does**: the struck words are *absent from what a screen
+reader announces* and *present in what a sighted reader sees*. That is measured — the announced string
+above came out of Blink's accessibility tree, not out of a promise. Select-and-copy still yields the full
+visible sentence, which is stated as accepted rather than solved.
 
-Two checks, plus the look no gate has managed to get yet.
+**The defect, and it is the reason this is a gate item.** At 320px B sets four lines, and the second one
+is a lone `WITH`:
 
-- [ ] **Can you tell where one log entry ends and the next begins, at a glance?** That is the whole of
-      the first check — at a glance, not on inspection. An entry is two rows on your phone; the gap
-      between two entries is now about **2.85×** the gap between the two rows inside one, which is the
-      ratio the eye actually reads. The alternative that was rejected is worth knowing so you can judge
-      against it: banding the entries would have grouped them too, with a new surface colour the palette
-      does not have, and would have made a terminal read as a data table.
+```
+320px   SHIP A PRODUCT / WITH / A HUMAN TEAM / AI AGENTS.
+375px   SHIP A PRODUCT WITH / A HUMAN TEAM / AI AGENTS.
+1280px  SHIP A PRODUCT WITH / A HUMAN TEAM AI AGENTS.
+```
 
-- [ ] **Does the rust mark sit the same way in both cards?** It should be inset the same 12px from the
-      inner edge of the terminal and of the narration card — the same distance, not merely both
-      present. Check it on the phone and, if you are at a desk, on the wide layout too: the desktop
-      mismatch was the larger of the two and it was invisible until it was measured.
+An orphan `WITH` at display size is not "every line is a whole phrase," and **it cannot be engineered
+away**: binding `WITH A HUMAN TEAM` into one unbreakable unit measures ~290px against a 272px column and
+overflows, which is the exact failure the type floor was already amended to remove. So the honest choice
+is *accept the orphan on the narrowest phones* or *take A or C*. Nothing overflows in any case, and B's
+two treated phrases stay unbroken at every width.
 
-**Not up for judgement this round unless something looks broken**: the three whole entries at
-375 × 553. That trade was settled at the re-gate — at 39 columns a phone that does not wrap shows five
-*first halves*, and eleven of the twelve corpus lines are longer than the column.
+**A's weakness, stated so the trade is symmetric**: "Without a team" sits one viewport above a formation
+labelled as a team of eight. A skeptical reader spends a beat reconciling those, and the subline resolves
+it one line too late for a five-second skim. C resolves that ambiguity in words and loses the edit-mark
+idea entirely.
 
-### Carried: the live-playback look, now mostly settled
+**Recommendation: B, accepting the 320px orphan.** 320px is the narrowest phone still in circulation and
+the line is legible and unbroken there; the edit mark is the strongest five-second idea any of the four
+carries. **A is the fallback and costs nothing** — it needs no spec change and no rebuild.
 
-**Your last screenshot did the job.** It caught live playback at `BEAT 03 / 06`, which is the state the
-guarantee is actually about — it confirmed the visibility gate fires and that both layers hold on screen
-during the chain. That is the evidence two gates asked for.
+---
 
-What remains is narrower: the same look once more on the rebuilt log, because the entry split changes
-what the window is quantised on. `100dvh` under mobile Safari's dynamic toolbars is still the one
-mechanism no harness here can prove, and a real phone is still the only instrument that settles it.
-Reload, let §2 scroll into view fresh, and watch *during* the chain.
+## 2. Judge the §4 spec-sheet
 
-### Decisions needed from you
+In the sample, both themes. This is decision 1, real copy, real spec — not a placeholder.
 
-**None.** The reading-column question you carried into the last gate is answered — `64ch` ships as
-written (DEC-023), and its one consequence, the audit's band check, is retired to a reported measurement
-on the QA step so the audit stops exiting red on a standard the product has deliberately declined.
+What it is trying to be: an instrument reading, not a testimonial. Your voice in sans, the machine's
+chrome in mono, and **no rust text anywhere in the section** — the accent appears only as a 2px bar
+against the Mechanism row. That was not a preference: ink-on-rust measures 3.43:1 dark and 2.79:1 light,
+so filled-rust containers with text are unusable here, and the emphasis had to come from somewhere else.
 
-### Known findings — carried, not blocking this gate
+| What was measured | Reading |
+|---|---|
+| Prose column | 685.31px (= 64ch) inside a 903.31px card |
+| Mechanism mark | 2px of accent, 12.00px from the card's inner edge |
+| Rust text in the sheet | zero elements, dark **and** light |
+| The title's announced name | `I optimized what each agent reads, not how they talk.` — the italic is inside the name |
 
-**No blocking defect was found in §2.** What changed since the last gate:
+**The one thing to look for**: whether the sheet reads as a *specification* or as a *quote block*. If it
+reads as a quote block, the whole §4 idea is wrong and it is much cheaper to hear that now.
 
-- **The narration card's zero-margin worst case became a real overflow at 320px** — SP3 sets 7 lines
-  into a 6-line card there. Pre-existing and width-driven, not caused by the wrap change: the card meets
-  its budget exactly at 375px, so the seventh line is bought by narrowing below the width the budget is
-  derived at. Deferred to Sprint 2 because fixing it now means either re-opening SP3's copy (not open
-  this wave) or a taller card that costs the terminal a line at the budget case — trading a guaranteed
-  viewport for an unbudgeted one. The fix is already costed: §7.1's priority order drops the beat
-  indicator, which returns 28.5px against a 28.9px line. Held in `pre-launch-checklist.md`.
-- **The totals value line still wraps at 320px**, and it stopped mattering to the guarantee once the
-  strip left the playback core. A copy-fit question for Sprint 2.
-- **`bodh.day · LIVE` is not a link** (OBS-003) — pairs with the §6 domain question, best answered
-  together in Sprint 2.
-- **The narration rail scrolls its own overflow on desktop** (OBS-001, low).
-- **The section's label id differs from the spec's literal string** (OBS-004). PM moves the spec.
-- **Landscape now shows 3 entries by design, not 8 by accident** (supersedes OBS-005). The column split
-  inverted — the terminal takes the wider column, sized by the wrap rule rather than by a share, because
-  width is the only thing that decides whether a line reads without a gesture. *Three is the number the
-  design derives from Safari's ~331px landscape viewport; an emulator handed the full 375px measures
-  four. Both are right — the derivation is the floor, the measurement is its upper bound — so a
-  screenshot showing four entries is not a miss.*
+**Second thing, smaller**: the longest title runs 6 lines at 320px. That is a lot of bold display type on
+a small phone. It measures fine; the question is whether it reads or shouts.
 
-**Spec gaps keep being found by re-deriving the deliverables rather than reading them**, and they are
-the kind that silently re-break a fixed defect later. Earlier rounds: the totals strip's fit constraint
-stated without the tracking value that achieves it, and §7.1's line-height constant exact at 375px but a
-ceiling below it. This round: "line region" meant two different widths in one file, the accent rule
-stated a number where the invariant is the equality of two numbers, and one checklist item bound at a
-derived figure with under a tenth of a column of headroom — a check that would have gone red on rounding
-against a correct build. All are closed in the spec and on the steps that carry them. **This is the
-third time a check has been caught measuring something adjacent to the claim it was written for**; it is
-recorded as a pattern rather than as three incidents.
+---
 
-**Three deviations from the specs shipped deliberately at the first gate and stand.** The narration
-rail is 22rem rather than a literal `36ch`; the controls sit below the core; the chrome label's tracking
-tightens on small viewports. Each resolves a spec-internal contradiction rather than trading away a
-design value.
+## 3. Read the copy — all five sections
+
+Return findings as one list. Files, in reading order:
+
+| Section | File | What is new |
+|---|---|---|
+| §1 hero | `design-specs/web/section-01-copy.md` | headline candidates, subline, measured line, eyebrow, readout strings |
+| §3 insight | `design-specs/web/section-03-copy.md` | kicker + one paragraph |
+| §4 decisions | `design-specs/web/section-04-copy.md` | **your draft, tightened by five words** |
+| §5 shipped | `design-specs/web/section-05-copy.md` | three prose lines + two readout cards |
+| §6 get started | `design-specs/web/section-06-copy.md` | lead line, `curl`, `cd`, one link |
+
+**Three things worth knowing before you read:**
+
+**§4 is barely touched, and that is the finding.** Five words out of 420, across four edits, in three
+rows. Every sentence you wrote survives — 30 in, 30 out, none deleted, split, merged or moved. I
+re-derived the diff from your seed independently rather than accepting the report:
+
+| Row | Edit |
+|---|---|
+| 1 · Problem | `the thing that actually breaks` → `what actually breaks` (−2); `room and let them` → `room, let them` (−1) |
+| 1 · Trade-off | `one role has to own` → `one role must own` (−1) |
+| 2 · Decision | `prose is reserved for judgment` → `prose is for judgment` (−1) |
+
+Everything else is word-identical. The draft carries almost no fat; a bigger delta would have meant
+cutting clauses, and cutting your copy is your call, not Content's.
+
+**Which raises the one §4 question**: your seed says *"Keep each ~4–6 sentences."* The draft runs **7–8
+per decision**. It measures fine — nothing overflows, the sheets fit — so this is purely whether it reads
+long once you see it rendered. You are looking at decision 1 in the sample; judge the density there. If
+it reads long, say so and Content cuts to your number. **My recommendation: ship it. Each sentence is
+carrying a distinct claim, and the ~4–6 was a note to yourself before the copy existed.**
+
+**§4's decision 4 has no date and must never get one.** Its stamp is `product — Bodh`. Bodh's launch date
+exists in the corpus and inserting it would fabricate provenance for a decision out of a deploy. The
+stamp is built as one text slot precisely so the no-date case ships as supplied. Nothing needed from you
+— stated so it is not read later as an omission.
+
+---
+
+## 4. Rule on §1's formation — eight roles, nine seats
+
+Two of your read-only source files disagree and neither can be edited from inside the sprint.
+
+- `product-spec-seed.md` **line 58**: *"the **eight named roles as labels** on the concept visual (PM
+  command hub + bus-bar formation)"*
+- `product-spec-seed.md` **line 224** and `brand-guidelines.md`: *"the roster as a formation (**PM hub +
+  eight plates** on a bus-bar)"* — one hub plus eight plates is nine seats for eight roles.
+
+**Recommendation: the hub is PM and the bus-bar carries the seven specialists.** Line 58 effectively
+settles it — it says the labels on the visual *are the eight named roles*. Hub = PM puts exactly eight
+role labels on the visual. The alternative (hub = the human operator, eight plates = the eight AI roles)
+puts **nine** labels there, one of which — `OPERATOR` — is not a role, so it cannot be the reading line 58
+describes. It also reads truest to what Muster is: PM coordinates, specialists execute.
+
+It is built to that reading already. **If you pick the other, it is a label swap, not a redesign** — both
+label sets are written and final.
+
+The eight names are settled and need nothing from you: **PM · Developer · UI/UX · QA · Content ·
+Marketing · Legal · Research.**
+
+---
+
+## Already green — machine-verified, do not spend attention here
+
+Every one of these was run this session, foreground, by me — not read off a handoff.
+
+| Check | Result |
+|---|---|
+| `bash scripts/test.sh` on the clean tree | ✅ **GREEN**, both engines, 1m49s |
+| `node tools/gate-a-report.mjs` | ✅ **51/51, exit 0** |
+| All four headlines' announced strings vs. their ruling | ✅ match, word-exact, read from the AX tree |
+| §4 seed-vs-shipped word diff, all 16 rows | ✅ 420 → 415, −5, **re-derived independently** |
+| §4 sentence count | ✅ 30 → 30 |
+| Every stated word budget across all five copy files | ✅ **recounted, all match**, none over budget |
+| Every stated contrast pair, both themes | ✅ **recomputed from the locked hex, all 8 exact** |
+| `curl` byte-equality across the four files that carry it | ✅ identical |
+| R4 · R5 — THIS SITE dashed, every metric scope-labelled | ✅ |
+| R6 · R10 · R12 — no "proven", no minor version, no `muster.build`, every URL real | ✅ |
+| R1 — no rounded number, no banned adjective, no exclamation mark | ✅ |
+| §1's element inventory vs. seed §1, item by item | ✅ all nine present |
+
+**The two assertions this sprint is built on were planted and proven to fail.** I did not take this on
+trust — I broke the build twice and watched the harness catch it:
+
+- `--mark-clear: 0ch` (the exact defect you gated at Gate 3) → **R2 goes red at all three states**,
+  reporting `L4 0px · L9 0px`.
+- `--mark-inset: 8px` → **R1 goes red**, reporting `terminal 8px / narration 12px … expected 8px read
+  from --mark-inset`. Note what that proves: the expected figure *followed the token* to 8px, and the
+  check still failed — on the inequality between the two layers. It cannot be satisfied by moving the
+  value it was written against, which is the whole point of the relationship rule.
+
+Both reverted; the tree is clean.
+
+---
+
+## One thing that is not green, and it is mine to fix, not yours
+
+**`tests/qa-independent-audit.mjs` hangs.** It does not fail — it stops, silently, every time, in the
+375 × 553 mobile chain, and never returns. Measured: the Node process sits at 0% CPU while its Chrome
+child spins at ~105%, and the CDP client has no timeout, so a reply that never arrives blocks forever.
+
+This is the second, independent harness. `scripts/test.sh` — the primary one — is green on the same
+tree, both engines, so **no shipped check is unverified**; what is missing is the cross-check.
+
+Ruled and scheduled, no decision needed from you: the timeout lands in the next build step (a harness
+that can hang cannot report), and the renderer diagnosis lands with QA, which owns the audit. I have
+noted it here rather than leaving it out because "51/51 and green" would otherwise have been an
+incomplete sentence.
+
+---
+
+## Settled without you — stated for visibility, not for a ruling
+
+Six items reached me that a founder gate did not need to spend attention on:
+
+1. **The `9.3 h` repeat in §5 stays.** §5's cards carry operator attention (4.8 h) and commit-days (4) —
+   the two measured figures the page shows nowhere else — and a figure for what the operator spent needs
+   the build figure beside it as a denominator. It renders byte-identically to §1's string.
+2. **Cross-engine for scroll-snap is a manual check, not a mechanical one.** QuickLook cannot scroll, so
+   WebKit parity for a *behaviour* is unreachable on this machine. Driving Safari would need a one-time
+   admin authorisation from you plus new harness surface in a sprint with none budgeted — not worth it.
+   It becomes a manual pass, labelled as manual, never reported as a mechanical result. **One sentence
+   gets added to your Gate B iPhone ask**: whether section snapping fights your scroll.
+3. **`brand-guidelines.md` no longer names a footer lockup** — it disagreed with the ruling that the
+   footer takes no mark. Amended. Its stale `~8px` pennant size is corrected to `6 × 9px` at the same time.
+4. **The display-type token lands with §1, not before it.** No harness currently asserts it, and landing
+   an unguarded token change ahead of the assertion that guards it is how values drift here.
+5. **§3 names CrewAI and AutoGen.** Your seed instructs the fold and the only thing attributed to them is
+   your own characterisation. The cut is pre-authored if a later review disagrees.
+6. **§5's provenance line contains no first-person pronoun** despite the seed labelling it "(first
+   person)". It ships exactly as you supplied it. The label describes who wrote it, not its grammar.
+
+---
 
 ## Verdict
+
+<!-- Founder writes the verdict here, then runs muster/scripts/muster-sprint-resume.sh. Two forms: -->
+<!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
+<!-- Bug list — PM inserts a fix step per bug, then continues. -->
+
+### Gate A — 2026-07-27
+
+**Four things need your word.** Everything else above is either already green or already settled.
+
+1. **Headline** — A, B, C or D. (Recommendation: B, accepting the 320px orphan. A is the free fallback.)
+2. **§4 spec-sheet** — does it read as a specification or as a quote block? Anything to change?
+3. **Copy** — all five sections, as one list of findings.
+4. **Formation** — hub = PM (recommended), or hub = operator?
+
+**Status:**
+
+**Findings:**
 
 <!-- Founder writes the verdict here, then runs muster/scripts/muster-sprint-resume.sh. Two forms: -->
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->

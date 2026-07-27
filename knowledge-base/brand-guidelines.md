@@ -73,9 +73,13 @@ A cream swallowtail banner: the standard a formation musters under. Founder-auth
 
 | Seat | Treatment |
 |---|---|
-| Header and footer lockup | Pennant + `MUSTER_` — rust pennant (~8px), the wordmark, and a **static** rust underscore |
+| Header lockup | Pennant + `MUSTER_` — rust pennant (6 × 9px), the wordmark, and a **static** rust underscore |
 | Section separators | Pennant replaces the square, at section-tag scale |
 | Favicon, social tile, avatars | The supplied artwork as authored |
+
+**The footer carries no lockup.** The header plus five section separators already seat the mark six
+times; a seventh a few rhythm units below the fifth does nothing the provenance line has not already
+done. The footer's authorship line is the closing signature.
 
 **The underscore never blinks.** The `curl` owns the only cursor on the page; the header's underscore
 is a static mark, not a cursor effect.

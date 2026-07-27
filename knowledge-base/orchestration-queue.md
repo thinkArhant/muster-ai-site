@@ -45,20 +45,20 @@ THIS SITE metrics remain dashes until the founder supplies a snapshot (seed rule
 
 ### §1's formation: eight roles, nine seats. Which is it?
 
-**Non-halting — answer at Gate A.** Two read-only founder sources disagree and neither can be edited.
-`product-spec-seed.md` line 58 says *"the **eight named roles as labels** on the concept visual (PM
-command hub + bus-bar formation)"* — PM is one of the eight. Line 224 and `brand-guidelines.md` say
-*"the roster as a formation (**PM hub + eight plates** on a bus-bar)"* — one hub plus eight plates is
-nine seats for eight roles.
+**Non-halting — asked at Gate A, which is now live.** Two read-only founder sources disagree and neither
+can be edited. `product-spec-seed.md` line 58 says *"the **eight named roles as labels** on the concept
+visual (PM command hub + bus-bar formation)"*. Line 224 and `brand-guidelines.md` say *"the roster as a
+formation (**PM hub + eight plates** on a bus-bar)"* — one hub plus eight plates is nine seats for eight
+roles.
 
-**PM recommendation**: the hub is PM and the bus-bar carries the **seven specialists**. That reads
-truest to what Muster actually is — PM coordinates, specialists execute — and it is the only reading
-where no role appears twice. The alternative worth considering is hub = the human operator, eight
-plates = the eight AI roles, which matches the page's "one person plus a governed AI team" thesis but
-contradicts the seed's literal words "PM command hub."
+**PM recommendation, now with the argument that settles it**: the hub is PM and the bus-bar carries the
+**seven specialists**. Line 58 says the labels on the visual *are the eight named roles* — hub = PM puts
+exactly eight role labels there. The alternative (hub = the human operator, eight plates = the eight AI
+roles) puts **nine** labels on it, one of which — `OPERATOR` — is not a role, so it cannot be the reading
+line 58 describes. It also reads truest to what Muster is: PM coordinates, specialists execute.
 
-**Not blocking**: UI/UX specifies the formation against the recommendation and states which reading it
-built; if the founder picks the other at Gate A it is a label change, not a redesign.
+**Not blocking**: §1 is specified and built to that reading; if the founder picks the other at Gate A it
+is a label swap, not a redesign, and both label sets are written and final.
 
 **The eight role names** are settled and need no ruling — PM · Developer · UI/UX · QA · Content ·
 Marketing · Legal · Research. They were enumerated nowhere in the knowledge-base; they now live in
@@ -68,76 +68,15 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- Resolved 2026-07-26 — Brand mark: header lockup is pennant + `MUSTER_` with a static underscore; five section separators take the pennant; icon seats as supplied; never on a pole. See DEC-031. -->
 <!-- Resolved 2026-07-26 — Gate model: two founder gates for Sprint 2, Gate A rendered. See DEC-033. -->
 <!-- Resolved 2026-07-26 — The harness's `no http(s) URL in any shipped file` check is AMENDED, never deleted: an inert href/text URL is permitted, a fetching reference (src, @import, url(), link, script) stays banned. See DEC-034. -->
+<!-- Resolved 2026-07-27 — REQ-006: `brand-guidelines.md` §4 amended; header lockup only, footer excluded in prose, pennant figure corrected to 6 × 9. See DEC-042. -->
+<!-- Resolved 2026-07-27 — REQ-007: scroll-snap's WebKit half is a MANUAL check, labelled as manual, with one sentence added to the Gate B iPhone ask. Not a mechanical pass. See DEC-042. -->
+<!-- Resolved 2026-07-27 — REQ-008: `cdp.mjs`'s `send()` timeout lands in the §1-and-§6 step; the renderer diagnosis lands with the QA sweep. See DEC-042. -->
 
 ## Next Step
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 PM: Review Wave 1 and build the Gate A packet
-
-```
-Role: pm
-Model: claude-opus-5
-
-**Task:** Review all six Wave 1 handoffs, run the mechanical copy checks, then assemble the Gate A
-packet.
-
-**Read REQ-008 before you plan your run.** `qa-independent-audit.mjs` **hangs** — two clean-tree runs
-stalled at the same point (the 375 × 553 mobile chain, right after `qa-s02-mobile-375.png`) and never
-returned. It is blocked, not slow: the Node process idles at 0% while its Chrome child spins at ~105%,
-and `tests/lib/cdp.mjs`'s `send()` has no timeout, so a CDP reply that never arrives hangs forever.
-`bash scripts/test.sh` is green on the same tree. Your criterion below — *"confirm the audit exits
-zero"* — cannot be met until this is repaired, and running it cold costs 20 minutes of silence. Rule how
-it gets fixed and by whom; REQ-008 states the two candidate directions and a recommendation.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-018, HO-019, HO-020, HO-021, HO-022, HO-023, HO-024, HO-025;
-  REQ-006, REQ-007, REQ-008
-- Every Wave 1 spec and copy file
-- `samples/gate-a.html` — the rendered sample, with its measured report already in it
-- `knowledge-base/agent-skills/content/copy-rules.md`
-- `muster/team/pm/skills/generic/deliverable-review.md`
-- `muster/team/qa/skills/generic/verification-discipline.md`
-
-**Deliverable:** review verdicts on HO-018 through HO-025 in `knowledge-base/agent-requests.md`, and the
-Gate A packet written into `knowledge-base/wave-review.md`.
-
-**Run the machine checks BEFORE the packet exists, so the founder never spends attention on them.**
-R4, R5, R6, R10 and R12 are grep-able across all five copy files: no `muster.build`, no cross-scope
-aggregate, scope labels present beside their values, THIS SITE dashed, no rounded numbers, no banned
-adjective. Attach the results as already-green evidence.
-
-**Acceptance criteria:**
-- **Re-derive, don't re-read.** Recount every word count against Content's own stated budgets; recompute
-  every contrast pair; check §1's element inventory against the seed line by line
-- **The headline's accessible name is the likeliest defect.** Read the computed names the sample
-  reports; do not accept "verified" as evidence
-- **Rule on the two open items HO-025 raises**: (a) candidate B sets **four** lines at 320px with a lone
-  `WITH` on line 2, against `section-01-hero.md` §4.1's stated three — the spec's figure is wrong and the
-  orphan is a real composition wart the founder should judge at the gate; (b) `styles/tokens.css` still
-  carries the pre-amendment `--text-display` floor while the sample renders the amended one, so decide
-  whether the token lands now or with §1
-- Confirm the spacing system preserves the 12px equality and the 37-column floor, and that its
-  assertions would actually **fail** if violated — an assertion that cannot fail is the
-  blind-by-construction failure in a new place
-- Confirm `qa-independent-audit.mjs` exits zero, not just `scripts/test.sh` — **see REQ-008 first**
-- Verify §4's copy was tightened, not rewritten, against Content's stated before/after counts
-- **Gate A packet**: one batch judged in a single sitting — rendered headlines with your recommendation,
-  the §4 spec-sheet, all five sections' copy, and the formation question from Founder Decisions. Human
-  judgment only; machine results attached as already-green
-- Settle everything the Decision Autonomy Matrix lets you settle. Only genuine taste reaches the packet
-
-**On completion:** Write the packet into `wave-review.md`, re-based for Gate A with prior verdicts
-preserved. **Sweep the reviewed handoffs to Resolved** — `muster-requests-lint.sh` has been red since
-before HO-025 (714 lines against a 300 budget, now 860) because Wave 1 batches six handoffs against one
-review, and this is the review. Run the Pre-Handoff Self-Review Checklist. Promote the gate by writing
-the Gate A block into `## Next Step`.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
-### 2026-07-26 Gate A — founder review: copy and rendered samples
+### 2026-07-27 Gate A — founder review: copy and rendered samples
 
 ```
 Role: halt
@@ -147,11 +86,20 @@ Role: halt
 Batched by design — judge everything needing taste in one sitting and return one list. It sits before
 any section is built, because copy is a build input and reviewing it afterwards is how rework happens.
 
-**What needs your word:**
-1. **Pick the §1 headline** from the rendered candidates.
-2. **Judge the §4 spec-sheet rendering** — the second design centerpiece, as a real artifact.
+**Open `samples/gate-a.html` in a browser first.** One file, fetches nothing, renders all four headline
+candidates and a real §4 spec-sheet in both themes against the page's shipping tokens, with the
+machine's own measurements printed beside each.
+
+**What needs your word — four things:**
+1. **Pick the §1 headline** from the rendered candidates. Recommendation: B, accepting a lone `WITH`
+   orphan at 320px. A is a free fallback and needs no rebuild.
+2. **Judge the §4 spec-sheet rendering** — does it read as a specification or as a quote block?
 3. **Read all five sections' copy** and return findings as one list.
-4. **Rule on §1's formation** — see `## Founder Decisions`: eight roles, nine seats.
+4. **Rule on §1's formation** — see `## Founder Decisions`: hub = PM (recommended) or hub = operator.
+
+Everything else Wave 1 raised is settled and stated in the packet, including one thing that is NOT
+green: `qa-independent-audit.mjs` hangs. It is ruled, scheduled, and needs nothing from you —
+`scripts/test.sh`, the primary harness, is green on both engines.
 
 **Read:** `knowledge-base/wave-review.md` and write your verdict in its `## Verdict` section.
 
@@ -159,6 +107,9 @@ any section is built, because copy is a build input and reviewing it afterwards 
 worktree. Resume spawns a PM that turns your findings into fix steps — that is how the list gets
 consumed, so use `resume` rather than re-running the driver.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): §1 and §6
 
@@ -186,7 +137,24 @@ the page's most load-bearing published claim.
 
 **The line number above is stale** — the `no http(s) URL in any shipped file` check is at
 **`verify-shell.mjs:660`**, and the shipped-set glob it keys on is at **`:650`** (both moved when the
-shell step re-based the harness). The ruling is unaffected; only the coordinate is.
+shell step re-based the harness). Both coordinates were re-confirmed at the Wave 1 review. The ruling is
+unaffected; only the coordinate was.
+
+**TWO THINGS RULED AT WAVE 1 REVIEW THAT LAND IN THIS STEP (DEC-042).**
+
+1. **Give `tests/lib/cdp.mjs`'s `send()` a timeout.** It has none (`:115–123`), so a CDP reply that never
+   arrives blocks the process forever — which is why `qa-independent-audit.mjs` currently *hangs* rather
+   than fails, costing anyone who runs it twenty minutes of silence. Reject the pending promise with a
+   message naming the method and the elapsed time. You are fixing the transport, not the audit's
+   assertions; the renderer diagnosis is QA's and is scheduled at the sweep. **After it lands, run the
+   audit**: if it still stalls it now goes red with a method on it, and you report that as a result
+   rather than losing the step to it.
+2. **Land the amended `--text-display` floor in `styles/tokens.css`** — `clamp(1.75rem, 6.5vw, 4.25rem)`,
+   per `page-shell.md` §3 and `section-01-hero.md` §14. It was deliberately held back from the Gate A
+   sample step because **no harness asserts the clamp at all** (verified by grep). So it lands **with an
+   assertion**, not alone: an unguarded token in the shipped set is the drift this project exists to
+   prevent. Assert the relationship the floor exists for — the headline sets without overflow at 320px —
+   not the literal string `1.75rem`.
 
 **Deliverable:** `index.html` (§1 and §6), `styles/`, `scripts/` as needed, amended
 `tests/verify-shell.mjs`; HO-026.
@@ -203,7 +171,8 @@ shell step re-based the harness). The ruling is unaffected; only the coordinate 
 - The `VERIFY ⎘` chip wired to `VERIFY.md` at repo root — **and write that file** (a short, honest
   index of what a reader can check and where). It is a hard launch blocker and the chip 404s without it
 - Motion budget closed at three plus the cursor; reduced-motion complete
-- `bash scripts/test.sh` green with the amended check, and `qa-independent-audit.mjs` exits zero
+- `bash scripts/test.sh` green with the amended check. The audit must **complete** — exit zero, or
+  fail named within its new timeout. A hang is a failure, not a pending result
 - Cross-engine WebKit and Blink before filing
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
@@ -231,7 +200,8 @@ Model: claude-opus-5
 - Title sentence, category, and the four rows all present; the no-date stamp case handled per spec
 - "Strongest first" is the seed's order and does not change
 - §3's prose in the reading column at `64ch` (DEC-023)
-- Both themes; contrast verified; cross-engine; `scripts/test.sh` green and the audit exits zero
+- Both themes; contrast verified; cross-engine; `scripts/test.sh` green and the audit **completes**
+  (zero, or named-red within its timeout — never a hang; DEC-042)
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
@@ -256,7 +226,8 @@ Model: claude-opus-5
 - Bodh, the provenance line, and this site as readout cards using the shell motif
 - THIS SITE dashed; scope labels present beside their values
 - Count-up is motion element 3, already in budget — same `aria-live` posture decided for §1
-- Both themes; cross-engine; `scripts/test.sh` green and the audit exits zero
+- Both themes; cross-engine; `scripts/test.sh` green and the audit **completes** (zero, or named-red
+  within its timeout — never a hang; DEC-042)
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
@@ -284,7 +255,9 @@ between, and it is the likeliest thing to be rejected at Gate B.
 - **§2 exempt** per spec — verify its playback, visibility gate and phone budget are untouched by the
   snap container
 - Reduced-motion behaviour exactly as the spec rules it
-- `scripts/test.sh` green and the audit exits zero; cross-engine before filing
+- `scripts/test.sh` green and the audit **completes** (DEC-042). **Cross-engine here is Blink-measured
+  plus a MANUAL Safari pass, recorded as manual** — `qlmanage` cannot scroll, so there is no mechanical
+  WebKit result for a scroll behaviour and none may be reported as one (REQ-007, DEC-042)
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
@@ -305,11 +278,23 @@ Model: claude-opus-5
   not also blind QA
 - `knowledge-base/bodh-sprint4-corpus.md` — read-only fidelity baseline
 
+**You own the audit's repair, and it is a deliverable of this step (REQ-008, DEC-042).**
+`qa-independent-audit.mjs` stalls in the 375 × 553 mobile chain — Node blocked at 0% CPU, its Chrome
+child spinning at ~105%. The transport half was fixed upstream (`cdp.mjs`'s `send()` now times out), so
+you will see a named failure rather than silence. **Find why the renderer saturates and fix it.** The
+leading hypothesis, unproven, is the audit's own injected 250 ms `SAMPLER` interval competing with
+`scripts/replay.js` under the mobile chain — bisect it rather than assume it. The audit must exit zero
+by the end of this step; it is the independent cross-check and the sprint has been running on one
+harness since.
+
 **Deliverable:** HO-030 in `agent-requests.md` — per-criterion pass/fail with evidence.
 
 **Acceptance criteria:**
 - Cross-engine parity on WebKit **and** Blink, with evidence per engine; state plainly what remains
-  Blink-only
+  Blink-only. **The WebKit harness can measure rendered geometry**, not just ink — colour-clustering a
+  QuickLook PNG reads a static relationship off the pixels (OBS-005). Use that for any static geometry a
+  spec calls cross-engine-critical. It does **not** reach scroll-snap, which is a behaviour: that half is
+  a manual Safari pass, labelled manual (DEC-042)
 - **Zero runtime network requests** with evidence. Confirm the amended `http(s)` check still catches a
   fetching reference — **plant one and prove it goes red**, then remove it. A guard that cannot fail is
   not a guard
@@ -374,7 +359,9 @@ system, and scroll-snap.
 
 **Also asked here, and it closes a hard launch blocker:** open §2 on your iPhone in Safari with the
 toolbars showing and confirm both layers stay on screen for the whole playback. No harness on this
-machine can prove it.
+machine can prove it. **While you are there — does section snapping fight your scroll?** That is the
+WebKit half of scroll-snap, and it is a manual check by ruling: `qlmanage` cannot scroll, and iOS
+momentum is exactly where a proximity pull is most likely to feel wrong (REQ-007, DEC-042).
 
 **Read:** `knowledge-base/wave-review.md` and write your verdict in its `## Verdict` section.
 
@@ -388,6 +375,23 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-27 — Step: PM Wave 1 review and the Gate A packet (DEC-042). **All eight handoffs accepted with
+  no revision**, and the acceptance is re-derived rather than read: the §4 seed-vs-shipped diff
+  independently reproduced at 420 → 415 / 30 → 30 sentences / exactly three rows, every stated word
+  budget across five copy files recounted with no mismatch, all eight contrast pairs recomputed from the
+  locked hex exactly, §1's element inventory checked against seed §1 item by item (all nine present),
+  `scripts/test.sh` re-run GREEN both engines and `tools/gate-a-report.mjs` re-run 51/51 exit 0.
+  **The two load-bearing assertions were re-planted and watched to go red** — `--mark-clear: 0ch` turns
+  R2 red at all three states, `--mark-inset: 8px` turns R1 red *with the expected figure following the
+  token*, failing on the inequality; tree reverted clean. **Four rulings keep the gate to taste**: the
+  audit's repair split across two owners (transport timeout to the §1 step, renderer diagnosis to QA),
+  scroll-snap's WebKit half ruled a labelled manual check, the `--text-display` token held to land with
+  §1 *and its assertion*, and §5's `9.3 h` repeat kept as the denominator. REQ-006/007/008 all closed;
+  `brand-guidelines.md` amended; six observations triaged; `agent-context/content.md` refreshed where it
+  still carried SP3 as an open defect. `muster-requests-lint.sh` back to green — 872 active lines to 6.
+  **Gate A is live: four things need the founder's word, and one thing is honestly not green** — the
+  independent audit hangs, which is stated in the packet rather than omitted.
 
 - 2026-07-27 — Step: Developer Gate A sample render (HO-025). Gate A is now something to look at:
   `samples/gate-a.html` sets all four headline candidates and one real §4 spec-sheet in both themes
@@ -455,9 +459,6 @@ with no verification behind it is how that happened.
   its cut pre-authored, and the SP3 lever pulled — 19 words, measured 5 lines at 320px, both harnesses
   green (DEC-035). Awaiting PM review at the Wave 1 review step.
 
-- 2026-07-26 — **Sprint 1 closed.** Shell + §2 delivered and accepted at gate 3 with one carried defect
-  (the key-beat tick collides with the timestamp; folded into Sprint 2's spacing system per DEC-032).
-  ~$97 across three founder gates. Archived in `sprint-archive.md`.
 - 2026-07-26 — **Sprint 2 planned, then stress-tested and resequenced** (DEC-033, DEC-034). Three
   blocking sequence defects found by adversarial audit and fixed before the run: copy now precedes the
   hero design, the shell precedes the Gate A sample, and the `http(s)` harness collision is ruled rather

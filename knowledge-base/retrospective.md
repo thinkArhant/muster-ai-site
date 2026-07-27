@@ -195,3 +195,33 @@ protocol-file changes would close the gap that produced this finding.
 `tools/plan-lint.py` stays in this project for now, at the founder's direction, and the queue is
 required to pass it before any run. Improvements continue to land in this file until project close, when
 the whole retrospective goes to the core team.
+
+## `muster-requests-lint.sh` assumes handoffs resolve as they are produced
+
+**Finding.** `agent-requests.md`'s 300-line Active budget is written for a sprint that closes each
+handoff as it lands. A sprint designed around a *batched* gate holds every handoff of the wave open at
+once by construction — Wave 1 held eight — and the lint goes red early and stays red until the review
+step sweeps them. It hit 872 active lines against the 300 budget before the sweep, and it read as a
+filing defect at every session start in between.
+
+**Why it matters beyond this project.** Two agents independently filed it as an observation (OBS-006,
+and a note inside HO-022) specifically to explain that the red lint was *expected*. That is the tell: a
+deterministic check whose failure has to be annotated in prose to be understood is costing more than it
+catches. Both agents were right, both spent words on it, and neither could act.
+
+**What the framework could do instead.** The budget is a good check — it is what keeps the file from
+becoming an archive. The gap is that it has one number for two sprint shapes. Options for the core team,
+in rough order of how much they cost:
+
+1. **Count only entries with no pending reviewer.** A handoff sitting `in-review` with an unticked box is
+   work-in-progress, not accumulation. Accumulation is a handoff that is *done* and still in Active —
+   which the lint already detects separately and more precisely.
+2. **Let a sprint declare its batch size.** A one-line knob (`.muster/config`, or a header in the queue's
+   Execution Mode block) that raises the Active budget for the duration of a batched wave.
+3. **Leave it, and document the shape.** Say in `system-guide.md` that a batched-gate sprint will run red
+   on this lint until its review step, so it is read as expected rather than diagnosed each time.
+
+**Not fixed locally**, deliberately — the budget is Muster's, the sweep resolved it here, and inventing a
+project-local override would hide the finding rather than route it. Option 1 looks correct on its merits
+regardless of sprint shape: "closed but still in Active" is the thing worth catching, and "open, being
+worked" is not.

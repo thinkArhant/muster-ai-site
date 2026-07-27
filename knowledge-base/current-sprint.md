@@ -118,7 +118,7 @@ the GitHub raw URL (DEC-010).
 
 ### UI/UX
 
-- [ ] **§1 hero design** — Priority: HIGH, Effort: L, Platform: web
+- [x] **§1 hero design** — Priority: HIGH, Effort: L, Platform: web
   - **Deliverable**: `knowledge-base/design-specs/web/section-01-hero.md`; HO-018
   - **Acceptance criteria**:
     - The seed's §1 inventory, all of it: measured line visible without scrolling, eight named roles as labels on the PM-hub/bus-bar formation, one `curl`, the streaming Sprint-4 terminal, the dual build readout (THIS SITE dashed above BODH), the `VERIFY ⎘` chip, eyebrow facts
@@ -127,7 +127,7 @@ the GitHub raw URL (DEC-010).
     - Motion budget stays closed at three elements plus the cursor
   - **Key refs**: `product-spec-seed.md` §1, `page-shell.md`, `brand-guidelines.md`
 
-- [ ] **§4 spec-sheet rendering** — Priority: HIGH, Effort: M, Platform: web
+- [x] **§4 spec-sheet rendering** — Priority: HIGH, Effort: M, Platform: web
   - **Deliverable**: `knowledge-base/design-specs/web/section-04-decisions.md`; HO-019
   - **Acceptance criteria**:
     - Decision / Problem / Trade-off / Mechanism as rows; strongest first; dates as small stamps
@@ -135,7 +135,7 @@ the GitHub raw URL (DEC-010).
     - Reading measure per DEC-023 (`64ch` ships as the CSS value)
   - **Key refs**: `product-spec-seed.md` §4, `page-shell.md`
 
-- [ ] **Terminal spacing system + brand mark seats** — Priority: HIGH, Effort: M, Platform: web
+- [x] **Terminal spacing system + brand mark seats** — Priority: HIGH, Effort: M, Platform: web
   - **Deliverable**: amended `section-02-replay.md`; `design-specs/web/brand-seats.md`; HO-020
   - **Acceptance criteria**:
     - All five left-edge relationships named and measured: tick↔card, tick↔text, row↔row, entry↔entry, text↔wrap edge
@@ -144,7 +144,7 @@ the GitHub raw URL (DEC-010).
     - One assertion per relationship specified for the harness
   - **Key refs**: `wave-review.md` gate 3, DEC-031, DEC-032, `brand-guidelines.md` §4
 
-- [ ] **Scroll-snap spec** — Priority: MED, Effort: S, Platform: web
+- [x] **Scroll-snap spec** — Priority: MED, Effort: S, Platform: web
   - **Deliverable**: amended `page-shell.md`; HO-021
   - **Acceptance criteria**:
     - Proximity snapping, never JavaScript scroll-jacking; keyboard paging, find-in-page and 200% zoom all survive
@@ -154,7 +154,7 @@ the GitHub raw URL (DEC-010).
 
 ### Content
 
-- [ ] **§1 and §3 copy** — Priority: HIGH, Effort: L, Platform: web
+- [x] **§1 and §3 copy** — Priority: HIGH, Effort: L, Platform: web
   - **Deliverable**: `design-specs/web/section-01-copy.md`, `section-03-copy.md`; HO-022
   - **Acceptance criteria**:
     - §1 headline: the founder's direction is the incumbent to beat — *"Ship a product with ~~a human~~ an AI agent team"* — plus alternatives, each with a recommendation and reasoning. Fix the article agreement; the founder's phrasing does not parse as written
@@ -163,7 +163,7 @@ the GitHub raw URL (DEC-010).
     - Measured line visible without scrolling; scope labels correct
   - **Key refs**: `copy-rules.md`, `product-spec-seed.md` §1 + §3
 
-- [ ] **§4, §5 and §6 copy** — Priority: HIGH, Effort: M, Platform: web
+- [x] **§4, §5 and §6 copy** — Priority: HIGH, Effort: M, Platform: web
   - **Deliverable**: `section-04-copy.md`, `section-05-copy.md`, `section-06-copy.md`; HO-023
   - **Acceptance criteria**:
     - §4's four decisions are founder-authored locked draft — tighten only, never inflate, never reorder the argument
@@ -174,11 +174,11 @@ the GitHub raw URL (DEC-010).
 
 ### Developer
 
-- [ ] **Gate A sample render** — Priority: HIGH, Effort: S, Platform: web
+- [x] **Gate A sample render** — Priority: HIGH, Effort: S, Platform: web
   - **Deliverable**: a static sample page — §1 headline candidates as they set, plus one real §4 spec-sheet; HO-024
   - **Acceptance criteria**: page tokens and fonts, not an approximation; candidates labelled; does not ship
 
-- [ ] **Shell: spacing system + brand mark** — Priority: HIGH, Effort: M, Platform: web
+- [x] **Shell: spacing system + brand mark** — Priority: HIGH, Effort: M, Platform: web
   - **Acceptance criteria**: all five relationships implemented with their assertions in `scripts/test.sh`; the gate-3 tick collision resolved; pennant in the header and five separators; favicon data-URI swapped; zero new network requests
   - **Blocks every section build.**
 
