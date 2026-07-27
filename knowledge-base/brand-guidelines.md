@@ -59,7 +59,9 @@ in Claude Code, costs tokens rather than salaries, and has shipped real products
 committed so you can check the numbers yourself.
 
 **Message hierarchy for the five-second skim**: measured proof first, mechanism second, philosophy
-third. Never lead with architecture.
+third. Never lead with architecture. **One founder-ruled exception (DEC-045)**: §1's first screen
+is the claim and the team formation alone — measured proof lands at the first scroll, in §1's
+readout. Everywhere else the hierarchy stands.
 
 ## 4. Visual Direction
 

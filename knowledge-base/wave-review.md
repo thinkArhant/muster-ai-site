@@ -437,7 +437,38 @@ alone it restates §2), model inversion (merged into 2), self-healing 429 bounda
 4), docs-describe-the-present and one-file-one-writer (real, but inside-baseball — most translation
 for least reader payoff), config-knobs-earn-existence (smallest blast radius of the ten).
 
-**3. Copy —** *awaiting*
+**3. Copy — IN PROGRESS. §1 is settled by the sparse-hero ruling; §3, §5, §6 still await.**
+
+**§1 — THE SPARSE HERO (Option A). Founder ruling, made against rendered evidence (DEC-045).**
+The founder wants a YC-grade first screen: *"only a few words that capture the attention, no
+clutter."* Both candidate compositions were rendered with a real simplified formation and fold
+rulers (`samples/s01-sparse-hero.html`); the founder picked **A** knowing the phone trade-off was
+measured and stated: on a phone the ladder cuts at the fold and the first screen carries no number.
+
+**What §1's first screen is now**: eyebrow · headline · the formation. Nothing else.
+- **The subline is deleted** (*One operator. Eight AI roles. The queue is the org chart.*) — its
+  meaning moves to the formation and its caption. The 8/1 repetition Exhibit 3 rendered dies with it.
+- **The measured line is deleted from §1** (*Bodh, idea → live: 9.3 h…*) — Bodh's numbers live in §5
+  and in §1's readout below the fold. The seed's "measured line visible without scrolling" guarantee
+  is superseded by this ruling; the founder is the seed's author and this is his amendment, recorded
+  here because the seed file itself is read-only inside the sprint.
+- **Below the fold §1 keeps its inventory**: dual build readout (THIS SITE dashes above BODH, with
+  the `VERIFY ⎘` chip), streaming terminal, curl. The first number a reader sees now arrives at the
+  first scroll, in the readout. *(Default recorded from the approved sample's own note; if the
+  founder meant ALL of Bodh out of §1 — including the readout's BODH row — he says so in one line
+  and the readout question routes to UI/UX instead.)*
+- **The formation is promoted to the §1 centerpiece and gets a real design pass at the UI/UX fix
+  step** — the sample's simplified render is a placeholder for composition judgment only. The
+  founder explicitly deferred visual refinement to UI/UX's design step.
+
+*Carried to the fix round*: UI/UX revises `section-01-hero.md` — new composition, formation as
+centerpiece, new fold budget, and §10's scope-adjacency rewritten (the measured line it anchors on
+is gone). Content revises `section-01-copy.md` — subline and measured line removed, unselected
+headline candidates removed, everything else verbatim. Brand `§3` message hierarchy amended: §1
+leads with the claim and the team visual; measured proof lands at first scroll (founder-accepted
+deviation, recorded rather than hidden).
+
+**§3, §5, §6 —** *awaiting the founder's read.*
 
 **4. FORMATION — SETTLED.** The hub is **PM**; the bus-bar carries the **seven specialists**
 (Developer · UI/UX · QA · Content · Marketing · Legal · Research). No role appears twice, and it reads

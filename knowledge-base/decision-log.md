@@ -645,5 +645,42 @@ DEC-043's guardrail — plainer words, not bigger claims; every trade-off surviv
 **Touched**: `decision-log.md`, `wave-review.md` (Gate A item 2C), `brand-guidelines.md` (§5
 insider-terms cascade per DEC-043).
 
+---
+
+### DEC-045 — The sparse hero: §1's first screen is the headline and the formation (2026-07-27)
+
+**Decision**: founder ruling at Gate A, made against rendered candidates
+(`samples/s01-sparse-hero.html`, fold rulers at 553/700px). §1's above-the-fold composition is
+**eyebrow · headline · formation** — Option A. The subline is deleted outright; the measured line
+is deleted from §1 (Bodh's numbers remain in §1's below-fold readout and in §5). Below the fold,
+§1's inventory is unchanged: dual build readout with `VERIFY ⎘`, streaming terminal, curl. The
+formation becomes the section's centerpiece and receives its real design pass at the UI/UX fix
+step — the founder explicitly deferred visual refinement to that step.
+
+**What the founder was shown before ruling, so this is never read as un-costed**: on desktop both
+options fit whole (A with 194px of air); on a phone the formation ladder is ~370px tall, so the
+fold cuts it mid-ladder and Option A's first screen carries **no number**. The founder picked A
+with that measurement in front of him. UI/UX's independent opinion recommended keeping one compact
+proof line (Option B); the founder's simplicity bar outranked it, which is exactly what a founder
+gate is for.
+
+**Supersessions, named**:
+- Seed §1's "measured line visible without scrolling" guarantee is superseded. The seed is
+  founder-authored and read-only inside the sprint; his gate ruling is the amendment mechanism,
+  same as DEC-043 for §4.
+- `brand-guidelines.md` §3's skim hierarchy ("measured proof first") bends for §1 only: the hero
+  leads with the claim and the team visual, and measured proof lands at the first scroll. Recorded
+  in the guidelines as a founder-accepted deviation rather than left as a contradiction for QA to
+  trip on.
+- The 8/1 subline/caption repetition (verdict-stack sample, Exhibit 3) resolves itself: only the
+  caption remains.
+
+**Impact**: UI/UX (hero recomposition, formation design pass, new fold budget, §10 scope-adjacency
+rewrite), Content (`section-01-copy.md` loses the subline and measured line), Developer, QA
+(fold assertions re-base), PM.
+
+**Touched**: `wave-review.md` (Gate A item 3, §1), `brand-guidelines.md` §3,
+`samples/s01-sparse-hero.html`, `samples/s01-verdict-stack.html` (decision records, never ship).
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
