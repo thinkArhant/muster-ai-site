@@ -258,9 +258,51 @@ Six items reached me that a founder gate did not need to spend attention on:
 3. **Copy** — all five sections, as one list of findings.
 4. **Formation** — hub = PM (recommended), or hub = operator?
 
-**Status:**
+**Status:** IN PROGRESS — recorded item by item as the founder settles each, so nothing is held only in
+conversation. The gate is not complete until all four carry a decision.
 
 **Findings:**
+
+**1. HEADLINE — SETTLED.** Candidate **B, amended to keep "team"**, with the accent narrowed:
+
+```
+Ship a product with ~~a human~~ an AI team.
+```
+
+- **Struck**: `a human` (ink, `aria-hidden`) · **Rust**: `an AI` · **Plain ink**: `team.`
+- **Announced string**: `Ship a product with an AI team.`
+
+*Why it beat the recommended B.* PM measured the amendment in the sample's real tokens before proposing
+it. It is better on all three axes rather than trading one for another:
+
+| | 320 | 360 | 375 | 390 | 1280 |
+|---|---|---|---|---|---|
+| B, as recommended | **4** | 3 | 3 | 3 | 2 |
+| B + "team" (shipping) | **3** | 3 | **2** | **2** | 2 |
+
+The 320px orphan `WITH` that was the sole objection to B **does not occur** in this form. Measured line
+breaks: `Ship a product / with a human / an AI team.` at 320px — every line a whole phrase, the struck
+phrase intact, the accented phrase intact. At 375px and above it sets two lines with the entire
+substitution on one of them, so the edit reads as a single gesture.
+
+*Why the accent is `an AI` and not `an AI team`.* The strike removes `a human`; what replaces it is
+`an AI`. **`team` is the constant that survives the edit** — accenting it would imply it is new and
+would blur the one idea the headline makes: the team does not change, its members do. Struck = removed,
+rust = replacement, plain = unchanged. Determiner-plus-modifier on both sides, so the swap is
+unit-for-unit.
+
+*Cost of the accent decision*: none. Colour does not affect layout, so the measured line counts hold,
+and the announced string is unaffected because the strike is hidden and rust is only colour.
+
+*Carried to the fix round*: Content finalises the exact string in `section-01-copy.md` and removes the
+unselected candidates; UI/UX re-measures against §3's fold budget and specifies the accent scope. This
+is a variant of an approved candidate — it rides the existing path, no rebuild of the sample.
+
+**2. §4 spec-sheet —** *awaiting*
+
+**3. Copy —** *awaiting*
+
+**4. Formation —** *awaiting*
 
 <!-- Founder writes the verdict here, then runs muster/scripts/muster-sprint-resume.sh. Two forms: -->
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
