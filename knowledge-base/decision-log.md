@@ -375,5 +375,54 @@ audit-sweep note §13), content (§4 copy supplies title/stamp/rows per the spec
 **Touched**: `design-specs/web/section-04-decisions.md` (new), `design-specs/web/page-shell.md` (§8
 motif row), `agent-requests.md` (HO-021), `orchestration-queue.md`, `decision-log.md`.
 
+### DEC-040 — Section scrolling: proximity snap on the document scroller, §2 exempt by declaration, off under reduced motion (2026-07-26)
+
+**Decision 1 — the scroll padding is the bar plus one `--rhythm`, not the bar.** `scroll-padding-block-start`
+is `calc(var(--bar-h) + var(--rhythm))` = 72px, and the status bar's height becomes `--bar-h` so the two
+cannot drift. The rejected value is the obvious one: at exactly the bar's 48px, a section's opening
+hairline rule — whose line sits 7.89px below the section's top edge — parks 7.89px under the status bar's
+own rule, and the page's separator motif reads as an accidental double line. Measured clearance at 72px:
+32.2px at 1280×900, 31.67px at 375×553. The binding property is the clearance; 72 is its value.
+
+**Decision 2 — §2 is exempt through a `.section--no-snap` modifier, and the exemption is verified as a
+property.** §2's playback gate is a visibility threshold (≥95% of the core to start, pause below 90%), and
+a snap position near that core competes with the gate rather than serving it — proximity is user-agent
+thresholded, so it cannot be relied on to *deliver* 95%, and a snap landing at 94% means the section
+silently never plays. Sweeping every rest position across the §1→§2→§3 transition at a 40px step: of the
+sampled positions where the core is ≥90% visible — 15 at 1280×900, 5 at 375×553 — none was moved. The
+exemption is declared rather than left to fall out of §2's height, and the contingency if a future engine
+widens its proximity range is named in the spec (§3 takes the modifier and the set begins at §4).
+
+**Decision 3 — snapping is OFF under `prefers-reduced-motion: reduce`.** The media query does not disable
+scroll-snap on its own, so this is a ruling. What is suppressed is not the snap position but the glide to
+it: every engine animates that adjustment and no author declaration bounds it (`scroll-behavior` governs
+author-initiated scrolls, not the UA's snap correction), so it is the one motion on this page that no
+token caps. It is post-gesture, viewport-scale, and unrequested. Turning it off costs zero content, which
+is the standard every other reduced path here meets. The stated and rejected counter: snap is position
+selection, and a reader may use it to orient — rejected because the composition already separates sections
+by 96–168px of air and a ruled tag. `scroll-padding-block-start` stays on under reduce; it serves anchors,
+the skip link and find-in-page, not motion.
+
+**Decision 4 — both phone and desktop, and `proximity` is a mechanism choice, not a preference.** Gating on
+`--bp-wide` would key an interaction decision to a page-chrome breakpoint; the honest reasons to exclude
+phones (fling momentum, dynamic toolbars) are pointer and platform properties, not width, and the pull is
+a fraction of the snapport so it already scales. `mandatory` is rejected on three grounds that are already
+committed elsewhere: oversized sections become unreachable, 200% zoom makes every section oversized, and
+find-in-page matches get pulled off screen. `scroll-snap-stop` stays `normal` — `always` is scroll-jacking
+by declaration.
+
+**Rationale**: measured in headless Blink at 1280×900 / 375×553 / 360×640 / 720×450@200% against the real
+page. The proximity range is a user-agent constant of ≈0.3 of the snapport (275 / 159 / 189 / 123px) that
+nothing in the design depends on. Keyboard behaviour was driven with real key events rather than
+`window.scrollBy`, which matters: the programmatic form reports a trap at the top of the page that a real
+reader never meets, so the assertion specifies the input path.
+
+**Impact**: developer (builds §7.1 and its eleven assertions; one markup change — the modifier on §2),
+qa (assertion list, and the find-in-page and WebKit limits are manual by construction), pm (REQ-007 asks
+for a ruling on the WebKit method for a scroll behaviour), content (none).
+
+**Touched**: `design-specs/web/page-shell.md` (§7.1 new; §7, §9, §10, §11, §13 amended),
+`agent-requests.md` (HO-022, REQ-007), `orchestration-queue.md`, `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

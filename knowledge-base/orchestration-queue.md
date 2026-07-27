@@ -73,41 +73,6 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 UI/UX (web): Scroll-snap spec
-
-```
-Role: ui-ux
-Model: claude-opus-5
-
-**Task:** Specify one-section-at-a-time scrolling — the seed's *one idea per screen* as a mechanism
-rather than as composition. Small spec, real accessibility surface.
-
-**Inputs:**
-- `knowledge-base/product-spec-seed.md` → Design direction, Layout
-- `knowledge-base/design-specs/web/page-shell.md` — yours to amend
-- `knowledge-base/design-specs/web/section-02-replay.md` §7.1 — §2's phone budget
-
-**Deliverable:** amended `page-shell.md`; HO-022.
-
-**Acceptance criteria:**
-- **Proximity snapping, never JavaScript scroll-jacking.** Keyboard paging, find-in-page and 200% zoom
-  must all survive — QA asserts accessibility mechanically on this project
-- **`scroll-padding-block-start` against the 48px sticky status bar.** Without it `scroll-snap-align:
-  start` clips every section heading. Specify the value
-- **§2 is exempt** — its core already fills most of a phone viewport. Specify *how* the exemption is
-  expressed and what happens at the boundary either side of it
-- **Reduced motion**: `prefers-reduced-motion` does not disable scroll-snap — snap is not animation.
-  Decide and state whether snapping is disabled under it, and why. Do not treat this as obvious
-- Say whether snapping applies on phone, desktop, or both, with the reasoning
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-022 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Content (web): §4, §5 and §6 copy
 
 ```
@@ -152,6 +117,9 @@ never appear (DEC-010, R12).
 
 **On completion:** File HO-023 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): Shell — spacing system and brand mark
 
@@ -536,6 +504,15 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-26 — Step: UI/UX scroll-snap spec (HO-022). One idea per screen as a scrolling behaviour:
+  proximity snap on the document scroller, `--scroll-pad` at bar + one rhythm so a section's rule never
+  abuts the bar's (32.2px / 31.67px measured clear), §2 exempt by modifier and **proven unmoved** across
+  20 sampled rest positions where its playback core is ≥90% visible, snapping OFF under reduced motion
+  (DEC-040). Keyboard verified with real key events — the programmatic form lies. 11 assertions, no
+  harness re-base forced, `scripts/test.sh` green. **Awaiting PM review at the Wave 1 review step;
+  REQ-007 asks PM to rule the WebKit method — `qlmanage` cannot scroll, so two downstream steps'
+  cross-engine criteria are unsatisfiable as written.**
 
 - 2026-07-26 — Step: UI/UX §4 spec-sheet rendering (HO-021). Buildable from itself with rendered
   measurements: value column is the reading column (64ch prose, 903.31px card), zero rust text with

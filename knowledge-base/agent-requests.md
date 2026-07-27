@@ -28,8 +28,142 @@ footer lockup and DEC-031 simply under-recorded it, then the right fix is the re
 add the seat. I do not think so, but the seat table predates DEC-031 and I cannot tell from the files
 which way the omission went.
 
+### 2026-07-26 REQ-007 — the scroll-snap build step's "cross-engine" criterion has no WebKit method
+**Type:** request
+**From:** ui-ux
+**To:** PM
+**Status:** open
+
+The Developer's scroll-snap step and QA's sweep both require cross-engine verification, and for this one
+feature the project cannot produce it. `tests/verify-webkit.mjs` renders through `qlmanage`, which
+produces a static thumbnail — **there is no scroll, so there is nothing to measure.** Every other visual
+milestone was verifiable in WebKit because it was a render; this one is a behaviour.
+
+Two ways to close it, and the choice is above my authority because one is tooling scope and the other
+spends a founder gate:
+
+1. **Drive Safari.** `/usr/bin/safaridriver` exists on this machine. It needs a one-time
+   `safaridriver --enable`, which prompts for admin authorisation — a founder action, not an agent one —
+   and then a WebDriver client, which is new harness surface in a sprint that has none budgeted.
+2. **Name it a manual check.** Safari on desktop plus one pass on a real iPhone, recorded in the QA
+   handoff as a manual result and never reported as a mechanical pass. Zero new tooling.
+
+**My recommendation is (2), with one addition PM already has a slot for.** The Gate B packet carries an
+iPhone ask (§2's two layers on a real device). Adding *"and tell us whether section snapping fights your
+scroll"* to that same ask costs the founder nothing extra, and iOS momentum scrolling is precisely where
+a proximity pull is most likely to feel wrong — it is the one condition no harness on this machine can
+reach. `page-shell.md` §7.1 → Cross-engine is written to (2) and states the limitation in the spec so a
+later reader cannot mistake a Blink-only result for parity.
+
+**Not blocking**: the spec ships either way, and the Blink half is measured. What is blocking is the
+*wording* of the two downstream steps' acceptance criteria, which as written cannot be satisfied.
+
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
+
+### 2026-07-26 HO-022 — scroll-snap specified: one section at a time, with §2's exemption proven rather than declared
+**Type:** handoff
+**Producer:** ui-ux
+**Deliverable:** amended `knowledge-base/design-specs/web/page-shell.md` — new §7.1 (the snap system),
+plus §7, §9, §10 (budget note + reduced-motion row), §11 and §13 amended to match
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Summary:**
+
+- **The whole feature is four lines of CSS on the document scroller, and it is measured, not proposed.**
+  `scroll-snap-type: y proximity` on `:root`, `scroll-snap-align: start` on `.section`, a
+  `.section--no-snap` modifier on §2, and a reduced-motion query. No JavaScript reads, writes, or
+  intercepts the scroll position — the spec says so in its first paragraph, because that is the line
+  between this and scroll-jacking.
+- **`scroll-padding-block-start` is 72px, not 48.** The bar is 48px, but each section opens with a
+  hairline rule whose line sits **7.89px** below the section's top edge — padding of exactly the bar
+  height parks that rule 7.89px under the bar's own rule and the page's separator motif reads as an
+  accidental double line. Bar + one `--rhythm` measures **32.2px of clear ground at 1280×900 and
+  31.67px at 375×553**. The binding property is the clearance; 72 is its value.
+- **§2's exemption is verified as a property, not asserted as an intention.** Sweeping every rest
+  position across the §1→§2→§3 transition at a 40px step: of every sampled position where the playback
+  core is ≥90% visible — **15 at 1280×900, 5 at 375×553 — the engine moved not one.** The ≥95% start
+  gate is therefore reachable and the pause threshold is never triggered by a snap.
+- **The proximity range is a measured user-agent constant, ≈0.3 of the snapport**: 275px at 1280×900
+  (0.306), 159px at 375×553 (0.288), 189px at 360×640 (0.295), 123px at 720×450 under 200% zoom
+  (0.273). Nothing in the design depends on its exact size, and the spec says so — but the §2 boundary
+  argument needed a number rather than a hope, and the contingency if a future engine widens it is
+  named in the spec (§3 takes the modifier too and the set begins at §4).
+- **Keyboard survives, driven with real key events rather than `scrollBy`.** Ten `ArrowDown` presses
+  give ten strictly increasing positions at both viewports — byte-identical to the snap-off sequence at
+  1280×900, and differing at 375×553 by **one 16px adjustment on a single press** before resuming its
+  40px step. `PageDown` reaches the document end with no backward step and no section skipped; on the
+  phone the later presses land exactly on section starts. **This distinction is load-bearing and is
+  written into the assertion**: the programmatic (`window.scrollBy`) version of the same check reports a
+  trap at the top of the page that a real reader never experiences, so a harness written that way would
+  fail a correct build.
+- **Reduced motion: snapping is OFF, and the reasoning is stated rather than assumed.** What reduced
+  motion would suppress is not the snap position but the glide to it — every engine animates that
+  adjustment and **no author declaration bounds it** (`scroll-behavior` governs author-initiated scrolls,
+  not the UA's snap correction). Every other motion on this page is capped by a token; this one cannot
+  be. It is post-gesture, viewport-scale, and unrequested. Turning it off costs zero content, which is
+  the same standard every other reduced path on this page meets. The counter-argument (snap is position
+  selection, and some readers use it to orient) is stated in the spec and rejected on the record.
+  `--scroll-pad` stays on under reduce — it serves anchors and find-in-page, not motion.
+- **Both phone and desktop.** Gating on `--bp-wide` would key an interaction decision to a
+  page-*chrome* breakpoint; the honest reasons to exclude phones — fling momentum, dynamic toolbars —
+  are pointer and platform properties, not width, and the pull is a fraction of the snapport so it
+  already scales with the screen.
+- **Eleven relationship assertions** (§7.1), each with its failure mode. Three are traps a harness
+  author would otherwise walk into: **A1** — `y proximity` *serialises as the string `"y"`* because
+  `proximity` is the initial strictness, so an assertion on the literal `"y proximity"` fails a correct
+  build while `"y"` alone also excludes `mandatory`; **A2** — the padding is asserted as *bar height +
+  `--rhythm` read from the page*, never as 72; **A8** — real key events, per above. **A4** additionally
+  asserts that *no other element in the document* carries a non-`none` `scroll-snap-align`, which is what
+  catches a snap-align added inside §4 or a card later.
+- **No harness re-base is forced.** Nothing in `verify-shell.mjs` or `qa-independent-audit.mjs` asserts
+  scroll behaviour; `scroll-snap-align` and `scroll-padding` have no layout effect, so §2's 48.00 s
+  schedule, its three-entry window, the 37-column floor and the 12px equality are untouched by
+  construction. Confirmed: `bash scripts/test.sh` is **GREEN** with the tree as filed.
+- **One markup change, named so it does not collide with the build step's charter**: `.section--no-snap`
+  on §2's `<section>`. A modifier rather than an id selector because the stylesheets carry no id
+  selectors and a developer restructuring §2 should meet the exemption in the markup they are editing.
+
+**Verification run this session.** Four measurement probes in `/tmp` (deliberately — `verify-shell.mjs`
+globs `styles/` and `scripts/` into the shipped set), driving headless Blink over `index.html` with the
+spec's CSS injected: geometry and snap-set audit at 1280×900 / 375×553 / 360×640 / 720×450@200%; a
+binary search for the proximity range at each; a 40px sweep of every rest position across §2 with core
+visibility sampled at each; real `Input.dispatchKeyEvent` arrow and page-down sequences with snap on and
+off; and a final pass applying the spec's CSS block *verbatim* with the modifier class, which reproduced
+every figure in the spec. **No shipped file was modified this session** — the deliverable is
+knowledge-base only, and `scripts/test.sh` was run to confirm the baseline is green under that claim.
+
+**Cross-engine — read this before accepting the build step as written.** Measurements are Blink-only,
+and for this feature that is not a spec-stage convenience but a project limit: `qlmanage` renders a
+static thumbnail and cannot scroll, so the existing WebKit harness has nothing to measure here. REQ-007
+above asks PM to rule on the method. The spec's Cross-engine subsection states the limitation in the
+durable file so a later reader cannot mistake a Blink result for parity.
+
+**Would Apple ship this? — Yes, because it is removable in four lines and it never takes the scroll away
+from the reader.** The reader's gesture always wins; the page only chooses where to settle, the choice is
+bounded by a UA constant nothing depends on, and the one section whose correctness depends on not being
+moved is exempt by declaration and proven unmoved by measurement. The honest reservations: (1) the
+phone's §1→§2 boundary has an attracting position roughly 160px wide, so a reader arrow-stepping out of
+the hero meets one 16px correction — small, measured, and stated, but real; (2) every measurement here is
+taken against a shell whose sections are still placeholders, so the *behaviour* generalises but the
+*heights* do not, which is why every figure is re-derived by the harness rather than hardcoded; (3) the
+WebKit half is a manual check until REQ-007 is ruled, and a manual check is weaker evidence than this
+project normally accepts.
+
+**Open questions carried:**
+- REQ-007 — the WebKit method for a scroll behaviour.
+- A11 is the mechanical stand-in for find-in-page, not the thing itself: the browser's find UI is not
+  scriptable. The spec says so plainly and names real Cmd+F in both engines as a manual step. The build
+  step's "find-in-page asserted in the harness" criterion should be read as A11 plus that manual check.
+
+**Observation for PM, not a request.** `muster-requests-lint.sh` fails this file on its 300-line Active
+budget — 360 lines before this step, 487 after. It is not drift: every entry is a Wave 1 handoff
+deliberately held `in-review` until the single batched PM review step, which is this sprint's design.
+The lint assumes handoffs resolve as they are produced; a batched-gate sprint holds six open at once by
+construction. Reconciling is PM's (Rule 1), and it resolves itself at the Wave 1 review step — flagged
+only so the failing lint is not read later as a filing defect.
 
 ### 2026-07-26 HO-021 — §4 specified: four spec-sheets buildable from the file, with zero rust text
 **Type:** handoff

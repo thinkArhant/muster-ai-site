@@ -133,7 +133,123 @@ Both layers CSS/SVG-generated, self-contained, `aria-hidden`, `pointer-events: n
 | `--gutter` | `clamp(1.5rem, 5vw, 4rem)` |
 | `--bp-wide` | `60rem` — the single page-chrome breakpoint (two-column contexts engage above it) |
 
-One idea per screen. Full-width hairline section rules span the viewport; content sits in the container; reading passages sit in the 64ch column. Layouts must reflow at 200% zoom without horizontal scroll; `user-scalable` is never disabled.
+One idea per screen. Full-width hairline section rules span the viewport; content sits in the container; reading passages sit in the 64ch column. Layouts must reflow at 200% zoom without horizontal scroll; `user-scalable` is never disabled. §7.1 turns *one idea per screen* from a composition rule into a scrolling behaviour.
+
+### 7.1 Section scrolling — proximity snap
+
+**One idea per screen, expressed as where the page comes to rest.** The reader scrolls the page; the page then settles on a section start rather than halfway through a heading. That is the whole feature. It is CSS scroll-snap on the document scroller, it runs entirely in the user agent, and **no JavaScript in this project reads, writes, or intercepts the page's scroll position.** Any implementation that does is not this spec.
+
+#### The declarations — the entire feature
+
+```
+:root {
+  --bar-h:      3rem;                              /* the sticky status bar, §9 */
+  --scroll-pad: calc(var(--bar-h) + var(--rhythm));
+
+  scroll-snap-type:           y proximity;
+  scroll-padding-block-start: var(--scroll-pad);
+}
+
+.section           { scroll-snap-align: start; }   /* scroll-snap-stop stays normal */
+.section--no-snap  { scroll-snap-align: none; }    /* §2 — see below */
+
+@media (prefers-reduced-motion: reduce) {
+  :root { scroll-snap-type: none; }
+}
+```
+
+`--bar-h` and `--scroll-pad` are tokens because the status bar's `block-size` and this padding are the same measurement twice; §9's bar takes `block-size: var(--bar-h)` so the two cannot drift.
+
+The exemption is a **modifier class on §2's `<section>`**, matching `.section--hero`, rather than an id selector: the page's stylesheets carry no id selectors, and a developer restructuring §2 should meet the exemption in the markup they are editing rather than in a stylesheet they have no reason to open. It is the one markup change this feature needs.
+
+#### Where the declarations go, and the trap under them
+
+`scroll-snap-type` goes on `:root`. It does **not** propagate from `body` to the viewport the way `overflow` does — and `body` carries `overflow-x: hidden` here, which *does* propagate, so the viewport is the scroller and `body` is not. Putting either declaration on `body` or on `<main>` is silent: nothing errors, nothing snaps. The harness asserts the declaration sits on the element that actually scrolls (A1) rather than that it exists somewhere.
+
+#### `scroll-padding-block-start` — the value and why it is not 48px
+
+The sticky bar is 48px, so `scroll-snap-align: start` without scroll-padding rests every section start *underneath* it. But the bar's own hairline is not the only line in play: each section opens with a full-width `--hair` rule carrying its stencil tag, and that rule's line sits 7.89px below the section's top edge. Padding of exactly the bar height would park a section's rule 7.89px under the bar's rule — two parallel hairlines reading as one accidental double rule, which is the page's own separator motif turned into a seam.
+
+The padding is therefore **the bar plus one `--rhythm`**: 72px. Measured on the shell, that leaves **32.2px of clear ground at 1280×900 and 31.67px at 375×553** between the bar's rule and the section's rule. The binding property is the clearance, not the 72 (A3).
+
+This declaration is not part of the snap feature and does not come out with it. It governs where *any* scroll-into-view lands — anchors, the skip link, and the browser's own find-in-page — all of which otherwise land under a sticky bar. It stays under reduced motion, and it stays if snapping is ever removed.
+
+#### The snap set, and §2's exemption
+
+Five of the six sections carry `scroll-snap-align: start`. **§2 carries `scroll-snap-align: none` through `.section--no-snap`, stated explicitly rather than left to fall out of its height.** The exemption is written rather than inferred: §2 measures taller than the snapport at every viewport, which by itself makes its interior a free resting region under CSS scroll-snap's rules for oversized areas — but that follows from a height, and a height is not a promise. A section whose playback guarantee depends on not being repositioned says so in a declaration.
+
+**Why §2 in particular.** Its playback core is sized to the viewport less the status bar, and its playback gate is a visibility threshold — below `--bp-wide` the chain starts at ≥95% visibility of the core and pauses below 90%. A snap position anywhere near that core competes with the gate rather than serving it: proximity snapping is user-agent-thresholded, so it cannot be relied on to *deliver* 95%, and a snap that lands the reader at 94% is worse than no snap at all — the section silently never plays.
+
+**What happens either side of it.** Nothing snaps from the hero's snap range through to §3's. Measured on the shell by sweeping every rest position across the transition at a 40px step: **of every sampled position where §2's core is ≥90% visible — 15 at 1280×900, 5 at 375×553 — the user agent moved not one.** The exemption is verified as a property (A7), not asserted as an intention.
+
+The boundaries themselves behave as the mechanism implies. Approaching §2, the hero's snap range still attracts: at 1280×900 the hero is shorter than the snapport and attracts to scroll 0; at 375×553 it is taller, so its snap positions form a range and the attracting one is the position where its bottom edge meets the fold. Leaving §2, §3's start attracts from roughly a third of a viewport out — by which point §2's core is off screen and playback has already paused on its own threshold. If a future engine's proximity range were wide enough to violate A7, the fix is bounded and named: **§3 takes `.section--no-snap` as well and the snap set begins at §4.**
+
+#### Proximity, never mandatory
+
+`mandatory` is not a stronger version of this feature; it is a different one, and it breaks three things this page has already committed to:
+
+1. **Content taller than the snapport becomes unreachable.** §4's four spec-sheets and §1 exceed a phone viewport; under `mandatory` the middle of an oversized section is not a valid rest.
+2. **200% zoom is the same failure, everywhere.** At 200% every section is taller than the snapport, so `mandatory` would make the whole page unreadable at the zoom level §7 promises to reflow at.
+3. **Find-in-page lands on a match and is then pulled off it.** Proximity's bounded, direction-aware pull is what keeps a match on screen.
+
+`scroll-snap-stop` stays at its initial `normal`. **`always` is scroll-jacking by declaration** — it forces a stop at every section and takes the fling gesture away from the reader. It is the obvious "improvement" here and it is banned (A5).
+
+#### Reduced motion: snapping is off
+
+`prefers-reduced-motion` does not disable scroll-snap; CSS does nothing automatic here, so this is a ruling and it is made once, in one media query. **Under `prefers-reduced-motion: reduce`, snapping is off.**
+
+The thing being suppressed is not the snap *position* — it is the glide to it. Every engine animates that adjustment, and no author declaration bounds it: `scroll-behavior` governs author-initiated scrolls, not the user agent's snap correction. Every other motion on this page is capped by a token (`--pulse-period`, `--countup-duration`, `--reveal`); this one cannot be. It is also post-gesture — it begins after the reader has stopped — and it moves the entire viewport, which is the largest surface the page can move. Unrequested, unbounded, viewport-scale, after the reader stopped: that is the profile the media query exists for.
+
+Turning it off costs no content. No section moves, no composition changes, nothing is hidden, and the reduced path here simply *is* the page. That matches the rule every other reduced path on this page follows.
+
+The counter-argument, stated and rejected: snapping is position selection rather than animation, and a reader who uses it for orientation loses an aid. Rejected because the aid is a refinement on a composition that already separates sections by 96–168px of air and a full-width ruled tag. Orientation does not depend on it. `--scroll-pad` stays on regardless, so anchors and find-in-page still land clear of the bar.
+
+#### Phone and desktop both
+
+Snapping applies at every viewport. The mechanism and its bound are identical on both, and the pull is a fixed fraction of the snapport, so it scales with the screen rather than needing a rule per screen. Gating it on `--bp-wide` would key an interaction decision to a page-*chrome* breakpoint; the honest reasons to exclude phones — fling momentum and dynamic browser toolbars — are pointer and platform properties, not width, and neither changes whether the resting position is the right one. On a phone, section boundaries are also where snapping earns the most: it is the arrival at a new section, under a sticky bar, that is otherwise half-scrolled.
+
+#### Measured behaviour (Blink, on this shell)
+
+| Property | 1280×900 | 375×553 | 360×640 | 720×450 @200% |
+|---|---|---|---|---|
+| Proximity range — furthest rest the UA still pulls in | 275px | 159px | 189px | 123px |
+| …as a fraction of the snapport | 0.306 | 0.288 | 0.295 | 0.273 |
+| Bar rule → section rule clearance when snapped | 32.2px | 31.67px | — | — |
+| Rest positions with §2's core ≥90% visible that were moved | 0 of 15 | 0 of 5 | — | — |
+
+The pull is ≈0.3 of the viewport height and consistent across four viewports; it is a user-agent constant, not a value this spec sets, and nothing in the design may depend on its exact size.
+
+Keyboard, driven with real key events: ten `ArrowDown` presses from the top of the page produce ten strictly increasing positions at both viewports — identical to the snap-off sequence at 1280×900, and differing at 375×553 by a single 16px adjustment on one press before resuming its 40px step. `PageDown` reaches the document end with no backward step and no section skipped; on the phone the later presses land exactly on section starts, which is the feature doing its job. **Section heights change as sections land, so these are evidence of the mechanism rather than constants** — every figure is re-derived from the page by the harness.
+
+#### It takes no slot in the motion budget
+
+Scroll-snap is not one of §10's three live elements and does not become a fourth. That budget governs *ambient* motion — what runs because the page is open. Snapping runs only in direct response to the reader's own scroll, stops when they stop, and is off entirely under reduced motion.
+
+#### Assertions — relationships, not values
+
+| # | Assertion | Fails when |
+|---|---|---|
+| A1 | `document.scrollingElement` is the root element and its computed `scroll-snap-type` is exactly `"y"` | the declaration is moved to `body`/`<main>` (silently inert), the axis changes, or someone sets `mandatory`. **`y proximity` serialises as `"y"`** — `proximity` is the initial strictness and is omitted; an assertion on the literal `"y proximity"` fails a correct build, and `mandatory` serialises in full, so this one string covers both properties |
+| A2 | computed `scroll-padding-block-start` = measured `.statusbar` height + computed `--rhythm` | the bar's height and the padding drift apart. Never hardcode 72 |
+| A3 | with a section snapped, its `.rule__line` top − `.statusbar` bottom ≥ `--gap-hairline` | the section's rule creeps back into the bar's rule |
+| A4 | exactly the `.section` elements other than §2 compute `start`; §2 computes `none`; **no other element in the document computes a non-`none` `scroll-snap-align`** | a snap-align is added inside §4, the terminal, or a card |
+| A5 | every snap area computes `scroll-snap-stop: normal` | `always` is introduced |
+| A6 | §2's terminal log — the `<ol>` that carries its own `overflow` and `tabindex` — computes `scroll-snap-type: none` | the section's own scrollback starts quantising. `scroll-snap-type` is not inherited, so this holds by default; the assertion is there because a nested scroller silently gaining snap is invisible until a reader is inside it |
+| A7 | sweeping rest positions across §2, every sampled position where the playback core is ≥90% visible rests where it was put | the exemption is weakened or a neighbouring snap position moves close enough to disturb playback |
+| A8 | ten `ArrowDown`s strictly increase the scroll position; `PageDown` reaches the document end with no backward and no zero step | scrolling is trapped or a section is skipped. **Drive this with real key events (`Input.dispatchKeyEvent`), never `window.scrollBy`** — programmatic and input-driven snapping differ in Blink, and the programmatic version reports a trap the reader never experiences |
+| A9 | at 720×450 CSS with `deviceScaleFactor: 2`, each section's last child scrolls fully into view and clear of the bar | oversized content becomes unreachable at 200% zoom |
+| A10 | under `prefers-reduced-motion: reduce`, `scroll-snap-type` is `none` and `scroll-padding-block-start` is unchanged | the ruling above is lost, or the padding is switched off with it |
+| A11 | `scrollIntoView()` on the last paragraph of §4 settles fully inside the viewport with its top below the bar | a snap adjustment steals a scroll-into-view target — the mechanical stand-in for find-in-page |
+
+**What A11 does not cover, stated plainly.** The browser's find UI is not scriptable, so A11 exercises the same scroll-into-view-then-snap path the find uses without being the find. Real find-in-page is a manual check in both engines and belongs in the verification record as one.
+
+#### Cross-engine
+
+The WebKit half of this project's gate renders static thumbnails through QuickLook, which does not scroll — so **scroll behaviour is the one thing the existing WebKit harness cannot verify.** WebKit's support for these properties is not in question; its *behaviour* under momentum scrolling is, and iOS is where a proximity pull is most likely to read as the page fighting the reader. Until a driven WebKit path exists on this project, WebKit verification for this feature is a named manual check — Safari on desktop, and one pass on a real iPhone — recorded with the same weight as a harness result and never reported as a mechanical pass.
+
+#### Removal path
+
+The feature is `scroll-snap-type` on `:root`, two `scroll-snap-align` declarations, and the reduced-motion query — one block, four lines. Deleting them removes it completely with **zero layout consequence**: no element's size, position, or rhythm depends on it, and `.section--no-snap` left on §2's markup is inert. `--bar-h`, `--scroll-pad`, and `scroll-padding-block-start` are not part of that block and stay — they serve anchors, the skip link, and find-in-page whether or not anything snaps.
 
 ## 8. Motifs
 
@@ -151,7 +267,7 @@ One idea per screen. Full-width hairline section rules span the viewport; conten
 
 ## 9. Status bar (shell chrome)
 
-Sticky at top, `height: 3rem`, opaque `--ground`, 1px `--hair` bottom rule. Contents, all `--text-label`:
+Sticky at top, `block-size: var(--bar-h)` (3rem), opaque `--ground`, 1px `--hair` bottom rule. The height is a token because §7.1's `--scroll-pad` is derived from it — the bar's height and the distance every scroll keeps clear of it are the same measurement, and a literal in one of the two places lets them drift. Contents, all `--text-label`:
 
 | Slot | Element | Owner |
 |---|---|---|
@@ -174,6 +290,8 @@ stays in the CSS for QA to force either theme; nothing in the UI sets it.
 The complete motion inventory of the page. **A fourth live element is a deviation (A-007).** Every path is `prefers-reduced-motion`-gated and every reduced path renders complete content.
 
 **Scope (settled): the §2 replay is content playback, not a live element.** The "exactly three" budget governs *ambient* page motion — the motion that runs because the page is open. The replay is user-facing content mandated by §2 itself: scroll-triggered, plays once, holds a complete end state, and renders its full transcript with motion off. It is specified in `section-02-replay.md` and occupies no slot here. The budget is closed at three plus the curl cursor.
+
+**Section snapping is not a live element either** (§7.1). It is the user agent settling a scroll the reader started, it stops when they stop, and it is off entirely under reduced motion — ambient it is not.
 
 **The header underscore is not a live element and never becomes one.** It is a static rust bar in the
 brand lockup (§9). The `curl` cursor owns the only blink on the page, and animating the underscore — the
@@ -223,6 +341,7 @@ Readout metric values count from 0 to their exact value over `--countup-duration
 | Cursor | blinks | solid block |
 | Header underscore | static | static — the same mark, unchanged |
 | §2 replay | timed playback | complete transcript (see replay spec) |
+| Section snapping | proximity snap on section starts | off — the reader's scroll rests exactly where they left it (§7.1) |
 
 ## 11. Accessibility foundation
 
@@ -233,7 +352,8 @@ Readout metric values count from 0 to their exact value over `--countup-duration
 - **Touch targets**: ≥44×44px on coarse pointers — small chrome (chips, replay controls) extends its hit area via padding while the visual stays small.
 - **Forced colors**: every interactive element carries a real border; icons are inline SVG or glyphs (no background-image icons); state never rides on background colour alone. Verify with `forced-colors: active` emulation.
 - **Colour is never the sole channel**: rust marks pair with glyph shape, weight, or text (e.g. pulse + "OPERATIONAL"; ✓ + "match").
-- **200% zoom** reflows without horizontal scroll or clipped content.
+- **200% zoom** reflows without horizontal scroll or clipped content, and every section's content stays reachable — which is why section snapping is `proximity` and never `mandatory` (§7.1).
+- **Scrolling stays the reader's** (§7.1): no script touches the scroll position; keyboard paging, arrow-key stepping, and find-in-page all survive snapping, each asserted rather than assumed. `scroll-padding-block-start` keeps anchors, the skip link, and find-in-page matches clear of the sticky bar whether or not anything snaps.
 
 ## 12. Page skeleton
 
@@ -267,6 +387,8 @@ The direction reference (`design-specs/direction-reference.html`) was read for m
 **Locked by the seed (authoritative):** all twelve hex values · mono/sans pairing and duties · tracked-uppercase stencil labels · metrics in tabular mono rust · grain + top vignette · all motifs in §8 · matte/sharp/opaque surface rules · exactly three motion elements + cursor · 64ch reading column · full-width section rules · spacious as overriding constraint.
 
 **Founder-authored, not seed-locked:** the pennant and its five-point geometry, supplied as artwork in `design-specs/brand/`, and the four rulings about where it seats. Sizing at each seat is craft and is decided in `brand-seats.md` §2 — the artwork gives a silhouette and a ratio, not a page size.
+
+**Designed here (the craft):** the section-snap system — proximity on the document scroller, `--scroll-pad` derived from the bar so a section's rule never abuts the bar's rule, §2's declared exemption and the sweep that verifies it, the reduced-motion ruling, and the eleven relationship assertions. The reference has no scroll behaviour of any kind.
 
 **Taken from the reference as feel cues (re-derived here, own values):** the calm density and section rhythm · tag-above-kicker composition · terminal chrome with dot caps and label bar · end-tick rule construction · registration-mark sparseness · pulse-lamp concept (execution deliberately stronger, §10.2) · grain rendered as faint tooth rather than visible noise.
 
