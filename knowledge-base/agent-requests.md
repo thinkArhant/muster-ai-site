@@ -31,6 +31,98 @@ which way the omission went.
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-26 HO-020 — §1 specified: the verdict fits the fold, measured, and the headline announces clean
+**Type:** handoff
+**Producer:** ui-ux
+**Deliverable:** `knowledge-base/design-specs/web/section-01-hero.md` (new); amended
+`knowledge-base/design-specs/web/page-shell.md` (§3 `--text-display`, §10.1); DEC-038
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Summary:**
+
+- **The fold is now falsifiable.** At the 375 × 553 budget case the measured line's bottom edge is
+  **461.8px — 91.2px above the fold** — a rendered measurement against the real tokens, not a
+  derivation, with the item-by-item table in the spec §3. The **primary** measured-line form ships at
+  every viewport; the compact form stays unspent as the named fallback. Named honestly: landscape
+  phone (667 × 331 visual) cannot hold the full verdict stack and the spec says what *is* above the
+  fold there instead of claiming "every viewport."
+- **The display floor was wrong against real strings, and is amended** (`page-shell.md` §3,
+  DEC-038.1): 2.4rem gives a 14-character line at 360px — candidate B sets 4–5 broken lines and
+  **overflows 320px inside the unbreakable struck phrase** (measured, `overflow=true`). At 1.75rem
+  every candidate sets 2–3 whole-phrase lines with zero overflow, via a nowrap break-unit system (§4.2)
+  rather than `<br>`. This is exactly the defect the copy-before-design resequencing existed to
+  surface; the copy file's own "two lines at 360px" rationale was also off by measurement, which
+  changes no string — noted as OBS-004.
+- **The headline's announced strings are measured, not asserted.** From the Blink AX tree: candidate B
+  computes `Ship a product with AI agents.` with the struck phrase absent (mechanism: `aria-hidden`
+  on the `<s>`, markup per candidate in §4.3). One cross-engine fact the build must encode: **Blink
+  computes the name from rendered (uppercased) text, WebKit from source text** — the equality
+  assertion is case-insensitive word-exact. Select-and-copy still yields the full visible sentence;
+  stated as accepted, since only the announced string excludes the edit.
+- **The hero terminal is §2's component, third instance of the one gutter system** — it inherits
+  `--mark-inset`/`--mark-width`/`--mark-clear` and never re-derives a left edge. Playback ruled
+  (DEC-038.2): all twelve corpus lines, 1.40s cadence, §2's 0.35s same-stamp pair rule, a 2× gap
+  before L12, **once per load, no loop**, resting on `deploy · bodh.day · LIVE`; visibility-triggered,
+  pauses unwatched; 3-entry window below `--bp-wide`; two-column engages at 1200px with a fixed 623px
+  terminal column (74 columns), the same mechanism as §2's desktop rail. Reduced motion / no JS:
+  complete log immediately.
+- **Scope adjacency (A-005) is structural** (§10): whole-product proof is one contiguous block, the
+  wave terminal follows it behind a `--gap-major` seam, every surface carries scope in its own chrome,
+  the wave's aggregate figures (`$24.73` · `289` · `~64`) exist nowhere in §1 — asserted, not trusted —
+  and the two scopes never share a component grammar (cells vs log).
+- **Formation built to hub-is-PM** (DEC-038.3): `<ul>` of eight locked names, PM first with the accent
+  border and hub position, bus/stems decorative and absent from the AX tree, `8 AI AGENTS · 1 OPERATOR`
+  caption. The pending founder ruling swaps label sets, not geometry.
+- **Chip ruled**: `href="VERIFY.md"`, accessible name `Verify these numbers — VERIFY.md` (visible
+  label contained — WCAG 2.5.3). Readout: THIS SITE above BODH, dashes ink and inert, count-up only on
+  the two numeric BODH values with final-frame byte-exactness; phone readout is stacked key/value rows
+  because `bodh.day` at the 24px rust floor measurably does not fit a third of a phone column.
+- **13 relationship assertions** (§13), each with a stated failure mode, and a **re-base table**
+  (§14): the audit's 64ch probe reads the shell placeholder (`qa-independent-audit.mjs:346`) and dies
+  when §1 lands — re-target to `.slot .t-body`; `#hero-title` must survive on the real h1 for
+  `verify-shell.mjs:264`; placeholder-count checks survive symmetrically; no harness asserts the old
+  display clamp (verified by grep).
+
+**Cross-engine.** Measurements are Blink-only — this ships a spec, not a build. Three constructions
+carry named WebKit risk, each stated where it lives: the AX-name casing divergence (§4.3), the
+eyebrow separators' `content: "·" / ""` alt-text syntax (older WebKit falls back to the plain
+declaration — separator renders, may be announced; the double declaration is specified), and the
+`text-decoration-thickness` on the display-size strike. Verify all three in WebKit **and** Blink
+before filing the build.
+
+**Verification run this session.** A probe page and script in `/tmp` (deliberately — `styles/` and
+`scripts/` are globbed into the shipped set) rendered the four candidates and the verdict stack in
+the real tokens, foreground in headless Blink, at 320 / 360 / 375 / 390 / 667×331 / 1280×700, under
+both floor values, plus `Accessibility.getFullAXTree` for all four computed names. No shipped file
+was touched this session (spec and knowledge-base only), so the harnesses' state is unchanged from
+HO-019's green baseline.
+
+**Would Apple ship this? — Yes, on the strength of what was removed.** The verdict stack is four
+text blocks and nothing else above the fold; the proof is one contiguous instrument block; the
+stream ends on the shipped artifact and never loops. The honest reservations: candidate B at three
+lines on a phone is a lot of display type — if it reads as shouting when rendered, candidate A is
+the fallback and needs no spec change; and the 1200px two-column condition is a second layout
+engage point beyond `--bp-wide`, accepted because the alternative (a share-based terminal column)
+is the exact proportional-column risk §2 warns against.
+
+**Revision log:**
+- 2026-07-26: Self-review caught the first fold budget omitting `.section--hero`'s `--gap-section`
+  top padding (the probe section lacked the class — 96px). Re-measured; every figure above includes
+  it.
+- 2026-07-26: Self-review caught assertion "rust floor" failing the emphasis system's own permitted
+  glyph marks (the log's `✓`, the chip's `⎘`) — re-scoped to fail rust *words* below AA-large while
+  passing duplicated-in-ink glyphs, matching shell §2.3.2.
+
+**Observations:**
+- OBS-004 — Copy file's headline-budget rationale is off by measurement   Severity: low
+  Evidence: `section-01-copy.md` §2 justifies the ≤9-word budget with "display-size mono must set on
+  at most two lines at 360px"; measured, no candidate over 6 words sets two lines at any phone width
+  (B/D set three whole-phrase lines at the amended floor). The budget itself is right; no string
+  changes.
+  Suggested action: PM notes it at review; wording is Content's to tidy if the file is ever reopened.
+
 ### 2026-07-26 HO-019 — the terminal's left edge closed as a system; pennant seats specified
 **Type:** handoff
 **Producer:** ui-ux

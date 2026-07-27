@@ -210,3 +210,103 @@
   💬 Both harnesses green. Correcting the handoff — I said I hadn't run them.
   ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
   🧪 bash   git add -A && git commit -q --amend --no-edit && git log --oneline -1 && git status --short
+  💬 Step complete and committed. Working tree clean. ## What landed **A — the terminal's left edge, as a system** (`section-02-replay.md`, new §9.2) The fix is subtractive: the key-beat mark stops being a
+    📖 ×16 · ✏️  ×40 · 📝 ×4 · 🧪 ×53 · ⚠️  ×1
+  ✓ 119 turns · $18.17 · peak ctx 311k/1M 31% · out 121k  (success)
+  ✓ [36;1mUI-UX[0m · [1m40m 1s[0m · advanced → 2026-07-26 UI/UX (web): §1 hero design (UI-UX) · handoff HO-019 filed ✓
+    run so far: 1h 2m · $28.37 · 2 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 3
+▶ [36;1mUI-UX[0m · 2026-07-26 UI/UX (web): §1 hero design  [2m[claude-fable-5][0m
+  ⚙  session start
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh ui-ux auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/ui-ux.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/ui-ux/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/ui-ux.md
+  💬 Bound to UI/UX. My step: design §1 hero (`section-01-hero.md`, HO-020). Reading the inputs now.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/product-spec-seed.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-01-copy.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/README.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/brand-guidelines.md
+  🧪 bash   wc -l knowledge-base/agent-requests.md knowledge-base/decision-log.md knowledge-base/ui-component-requests.md knowledge-
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  🧪 bash   grep -n -A 12 "DEC-017" knowledge-base/decision-log-archive.md | head -40
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  💬 All inputs read. Before writing the spec I'll skim the direction reference (feel-cue accounting is an acceptance criterion), the current build's hero slot, and the component-requests file.
+  🧪 bash   sed -n 1,120p knowledge-base/design-specs/direction-reference.html
+  🧪 bash   grep -n -i "hero\|section-1\|s1\|<main\|<h1" index.html | head -30
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/ui-component-requests.md
+  💬 You've hit your session limit · resets 6:30pm (America/Los_Angeles)
+    📖 ×19 · 🧪 ×7
+  ⛔ 27 turns · $5.15 · peak ctx 148k/1M 14% · out 26k  (success)
+⏸ usage limit — sleeping until 18:35 (+5m buffer)
+─────────────────────────────────────────────────────────── step 4
+▶ [36;1mUI-UX[0m · 2026-07-26 UI/UX (web): §1 hero design  [2m[claude-fable-5][0m
+  ⚙  session start
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh ui-ux auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/ui-ux.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/ui-ux/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/ui-ux.md
+  💬 Now the remaining startup reads: agent requests and component requests.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/ui-component-requests.md
+  💬 Startup complete — no open requests addressed to UI/UX. Now reading the design inputs for the §1 hero spec.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/product-spec-seed.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-01-copy.md
+  💬 Copy inputs digested. Now the token system and terminal component specs.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/README.md
+  💬 Now the terminal component spec (§9/§9.2), brand seats, assumptions, and brand guidelines.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/bodh-sprint4-corpus.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/brand-guidelines.md
+  💬 Inputs mostly loaded. Now the decision log (DEC-017, DEC-035, DEC-037 bind this spec) and the pre-handoff checklist.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 40 muster/system-guide.md | head -80
+  🧪 bash   grep -n "Self-Review Checklist" muster/system-guide.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/system-guide.md
+  🧪 bash   grep -n -E "text-display|2\.4rem|4\.25rem|<h1|querySelector\('h1|\"h1|'h1'|hero" tests/verify-shell.mjs tests/qa-indepen
+  🧪 bash   grep -n -E "track-label|track-micro|text-display|lead-micro|lead-terminal|gap-section" styles/*.css | head -30
+  🧪 bash   sed -n 250,280p tests/verify-shell.mjs; echo ---; sed -n 340,352p tests/qa-independent-audit.mjs; echo ---; grep -n "her
+  🧪 bash   grep -n "placeholder\|clamp(" tests/verify-shell.mjs tests/qa-independent-audit.mjs | head -20; echo ---; sed -n 60,64p 
+  🧪 bash   grep -n "track-display" styles/tokens.css; echo ---; wc -l knowledge-base/design-specs/direction-reference.html; grep -n
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/direction-reference.html
+  🧪 bash   sed -n 1,80p tests/lib/cdp.mjs; ls tests/lib/
+  🧪 bash   grep -n "export\|async \w*(" tests/lib/cdp.mjs | head -30
+  🧪 bash   grep -n "call" tests/lib/cdp.mjs | head
+  🧪 bash   grep -n "\.container\|\.t-lead\|\.t-body\|\.t-label\|\.t-micro\|\.read\b" styles/base.css | head
+  📝 write  /tmp/hero-probe.html
+  📝 write  /tmp/hero-probe.mjs
+  🧪 bash   cd /tmp && node hero-probe.mjs 2>&1 | tail -30
+  🧪 bash   sed -n 160,200p styles/base.css
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-01-hero.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-01-hero.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-01-hero.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   git status --short; echo ---; git show --stat --oneline c7d770c | head -15
+  🧪 bash   git log -1 --format=%B c7d770c
+  🧪 bash   git add knowledge-base/design-specs/web/section-01-hero.md knowledge-base/design-specs/web/page-shell.md knowledge-base/

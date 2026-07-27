@@ -73,62 +73,6 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 UI/UX (web): §1 hero design
-
-```
-Role: ui-ux
-Model: claude-fable-5
-
-**Task:** Design §1 — the page's five-second verdict, and the section carrying the most distinct
-elements. Content's candidates now exist; specify against them.
-
-**Inputs:**
-- `knowledge-base/product-spec-seed.md` §1 — read-only; the complete element inventory
-- `knowledge-base/design-specs/web/section-01-copy.md` — the real headline candidates (HO-018)
-- `knowledge-base/design-specs/web/page-shell.md` — inherit the token system, do not re-derive
-- `knowledge-base/design-specs/web/section-02-replay.md` §9 — the hero terminal inherits the terminal
-  component and emphasis rules from here. **§9.2 is new and binds you**: the terminal's left edge is a
-  five-relationship system, the key-beat mark sits outside the text flow, and any terminal you specify
-  inherits `--mark-inset` / `--mark-width` / `--mark-clear` rather than re-deriving a left edge
-- `knowledge-base/design-specs/web/brand-seats.md` — the pennant seats (HO-019). §1 carries no separator
-  pennant (the hero has no stencil tag), so do not add one
-- `knowledge-base/bodh-sprint4-corpus.md` — read-only; the real log lines the hero terminal streams
-- `knowledge-base/brand-guidelines.md` §4, `knowledge-base/foundational-assumptions.md`
-- `knowledge-base/design-specs/README.md` — the spec structure every other spec follows
-- `knowledge-base/agent-context/ui-ux.md`
-
-**Deliverable:** `knowledge-base/design-specs/web/section-01-hero.md`; HO-020.
-
-**Acceptance criteria:**
-- Every §1 element specified: the measured line **visible without scrolling**; the eight named roles
-  (PM · Developer · UI/UX · QA · Content · Marketing · Legal · Research) as labels on the formation;
-  one `curl`; the terminal streaming the real Sprint-4 log; the dual build readout with THIS SITE dashed
-  above BODH, scope-labelled; the `VERIFY ⎘` chip; the eyebrow facts
-- **State an above-the-fold budget** — a pixel budget against a named viewport, the way
-  `section-02-replay.md` §7.1 does for §2. "Visible without scrolling" is otherwise unfalsifiable, and
-  §1 carries more elements than §2 did
-- **The headline's accessible name is the highest-risk detail.** Struck text is announced as ordinary
-  text; specify the markup and the announced string for each candidate, so a screen reader does not read
-  gibberish on the page's most important line
-- **The hero terminal**: specify which corpus lines, at what rate, whether it loops, and its end state.
-  `page-shell.md` §10 scopes it as ambient motion — resolve what that means concretely
-- **Scope adjacency (A-005)**: the wave-scope terminal sits beside whole-product BODH figures in one
-  viewport. Say how the two are kept visually distinct — this is the page's likeliest factual failure
-- Rust permitted at display size (DEC-017); no thirteenth palette value (A-006); motion budget stays at
-  three elements plus the cursor — **the header underscore is static and is not a slot** (DEC-037.2)
-- **State which choices came from `direction-reference.html` as feel cues** versus the seed's locked
-  values (A-003) — it never ships and must not leak in as spec
-- The `VERIFY ⎘` chip's `href` and accessible name, given the file lands later in this sprint
-- Zero external network requests (A-004) binds every element you specify
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-020 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 UI/UX (web): §4 spec-sheet rendering
 
 ```
@@ -169,6 +113,9 @@ the founder judges a rendered sample of it at Gate A.
 
 **On completion:** File HO-021 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 UI/UX (web): Scroll-snap spec
 
@@ -630,6 +577,13 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-26 — Step: UI/UX §1 hero design (HO-020). The verdict fits the fold measured (measured-line
+  bottom 461.8px at 375×553, 91.2px clear), all four headline candidates' announced strings read from
+  the AX tree with B's struck phrase absent, the display floor amended to 1.75rem after the shipped
+  floor measurably overflowed 320px (DEC-038), the hero terminal ruled as §2's component streaming all
+  twelve lines once with no loop, formation built hub-is-PM. 13 assertions, 4 harness re-base sites.
+  **Awaiting PM review at the Wave 1 review step.**
 
 - 2026-07-26 — Step: UI/UX terminal spacing system and brand seats (HO-019). The terminal's left edge is
   five named relationships with one assertion each and the key-beat mark out of the text flow, so the

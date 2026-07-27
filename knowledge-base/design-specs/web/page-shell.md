@@ -72,7 +72,7 @@ Type scale — six steps, plus two component-scoped sizes (deliberate; the compo
 
 | Token | Size / leading | Face | Use |
 |---|---|---|---|
-| `--text-display` | `clamp(2.4rem, 6.5vw, 4.25rem)` / 1.05 | mono bold, uppercase, tracking .01em | Hero headline only |
+| `--text-display` | `clamp(1.75rem, 6.5vw, 4.25rem)` / 1.05 | mono bold, uppercase, tracking .01em | Hero headline only |
 | `--text-kicker` | `clamp(1.5rem, 3.5vw, 2.25rem)` / 1.3 | sans | Section statements, `--ink` |
 | `--text-lead` | `clamp(1.0625rem, 1.9vw, 1.25rem)` / 1.6 | sans | Hero lead, section intros, `--ink` |
 | `--text-body` | `1.0625rem` (17px) / 1.7 | sans | Paragraphs, `--ink`, max 64ch |
@@ -80,6 +80,8 @@ Type scale — six steps, plus two component-scoped sizes (deliberate; the compo
 | `--text-micro` | `0.6875rem` (11px) / 1.5 | mono, uppercase, tracking .14em | Captions, readout keys, `--muted` |
 | `--text-terminal` | `0.8125rem` (13px) / 1.9 | mono | Terminal log lines (component-scoped) |
 | `--text-readout` | `clamp(1.5rem, 3vw, 1.875rem)` / 1 | mono, tabular-nums | Metric values, `--accent` — floor 24px keeps rust at AA-large |
+
+**The display floor is a measured value, not a taste value.** 1.75rem (28px) is the largest floor at which the longest real headline candidate sets on three whole-phrase lines at 360px with no overflow at 320px; a 2.4rem floor produces a 14-character display line on phones, which breaks any nine-word headline into four or more lines and overflows inside an unbreakable phrase. The slope and ceiling are untouched — rendered size is identical above ~431px. The hero spec (`section-01-hero.md` §4) owns the wrap system the floor is measured against.
 
 **The leading in a component-scoped pairing is the one-row case.** `--text-terminal` is scaled for an instrument entry that sets one row, and 1.9 is the leading for that entry. Where a component's entry sets more than one row, a single leading value cannot both separate rows inside an entry and separate one entry from the next — it gives identical whitespace on both sides of an entry boundary, and the entries stop reading as entries. Such a component states its own row pitch and its own entry separator, and the pairing above is the default it departs from. The size never moves and no token is added; only the leading is component-overridable, and only where an entry wraps. `section-02-replay.md` §7.1 rule 2 is the instance.
 
@@ -188,8 +190,8 @@ Motion tokens:
 --reveal: 350ms ease-out;    /* single micro-reveal used by replay line entries */
 ```
 
-### 10.1 Hero terminal stream (element 1 — slot reserved)
-Streams the real run-log with rust *markers* on key beats. Full spec ships with the hero section spec; it inherits the terminal component and emphasis rules from `section-02-replay.md` §9.
+### 10.1 Hero terminal stream (element 1)
+Streams the real run-log with rust *markers* on key beats. Specified in `section-01-hero.md` §7; it inherits the terminal component and emphasis rules from `section-02-replay.md` §9, including the §9.2 left-edge system.
 
 ### 10.2 OPERATIONAL pulse (element 2)
 Appears in the status bar and as the terminal live indicator. **Clearly alive at a glance — subtlety is a defect here:**

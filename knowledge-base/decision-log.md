@@ -268,6 +268,45 @@ REQ-006).
 
 ---
 
+### DEC-038 — The hero: display floor re-measured against real strings; the stream plays once; the formation builds hub-is-PM (2026-07-26)
+
+**Decision**: four rulings, in `design-specs/web/section-01-hero.md`.
+
+1. **`--text-display`'s floor is amended to 1.75rem** (`page-shell.md` §3). The 2.4rem floor predated
+   any real headline string; measured against the candidates it yields a 14-character display line on
+   phones — candidate B sets four to five broken lines and **overflows the 320px viewport inside the
+   unbreakable struck phrase**, a horizontal-scroll defect no wrap rule can fix. At 28px, measured in
+   Blink at 320/360/375/390: A and C set 2 lines, B and D set 3 whole-phrase lines, nothing overflows.
+   Slope and ceiling untouched; rendered size is identical above ~431px. This is the case DEC-034
+   sequenced copy before design to catch: a treatment specified against a hypothesis instead of a
+   string.
+2. **The hero terminal streams all twelve corpus lines once per page load and never loops.** Uniform
+   1.40s cadence; the same-stamp pairs keep §2's one-`--reveal` separation; the pre-L12 gap is 2×
+   cadence — the gate in miniature. ~15s total, resting on `deploy · bodh.day · LIVE`. A real log that
+   replays itself reads as a screensaver; the reader who wants it again has §2's replay with controls.
+   Below `--bp-wide` it is a 3-entry window with §2's whole-entry semantics; the two-column hero
+   engages at 1200px with a **fixed** 623px terminal column (74 columns + the §9.2 gutter), the same
+   guarantee mechanism as §2's desktop rail.
+3. **The formation builds to the hub-is-PM reading** — hub plate `PM`, seven specialist plates, no
+   role twice — per the recommendation standing in Founder Decisions. Both label sets are final in
+   `section-01-copy.md` §6, so the alternative ruling is a label change, not a redesign.
+4. **The fold is a contract**: at 375 × 553 the measured line's bottom edge measures 461.8px — 91.2px
+   above the fold — with the **primary** measured-line form at every viewport (the compact form stays
+   unspent as the named fallback). Asserted against the element, not the figure.
+
+**Measured, not derived**: rendered probes in headless Blink against the real tokens at
+320/360/375/390/667-landscape/1280, both floor values, plus computed accessible names from the AX
+tree — candidate B announces `Ship a product with AI agents.` with the struck phrase absent. One
+cross-engine fact recorded for the build: Blink computes AX names from *rendered* text (uppercase via
+`text-transform`), WebKit from source text — announced-string assertions must be case-insensitive.
+
+**Impact**: Developer, QA, PM.
+
+**Touched**: `design-specs/web/section-01-hero.md` (new), `design-specs/web/page-shell.md` (§3,
+§10.1), `agent-requests.md`, `orchestration-queue.md`.
+
+---
+
 ### DEC-035 — Two copy rulings: SP3 shortened to clear the 320px card; §3's competitor clause ships named (2026-07-26)
 
 **Decision 1 — SP3 is 19 words.** The one-time copy-length lever DEC-027.1 deferred to this step is
