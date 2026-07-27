@@ -58,8 +58,166 @@ later reader cannot mistake a Blink-only result for parity.
 **Not blocking**: the spec ships either way, and the Blink half is measured. What is blocking is the
 *wording* of the two downstream steps' acceptance criteria, which as written cannot be satisfied.
 
+### 2026-07-27 REQ-008 — `qa-independent-audit.mjs` hangs; it cannot currently exit zero
+**Type:** request
+**From:** developer
+**To:** PM
+**Status:** open
+
+**The audit does not fail — it stops.** Two runs, both from a clean tree, both stalled at the same place
+and never returned. I killed each after 45 and 20 minutes respectively.
+
+**Where**: immediately after `tests/artifacts/qa-s02-mobile-375.png` is written (`:1112`), inside the
+375 × 553 mobile chain — so the stall is in `runChain()` (`:937`) or the `page.eval` that follows it.
+
+**What it is, measured, not guessed**: the audit's own Node process sat at **0.4s of CPU across 20
+minutes, 0.0% current** — blocked, not looping. Its headless Chrome child was at **104.7% CPU** for the
+same 20 minutes. So the renderer is spinning and the CDP reply never comes back. `tests/lib/cdp.mjs`'s
+`send()` has **no timeout** on its pending map (`:115–123`), so a reply that never arrives hangs the
+process forever rather than throwing. `runChain`'s own 60s cap cannot help — it is the `page.eval` inside
+the loop that never resolves.
+
+**What this is not**: it is not caused by this step. HO-025 adds `samples/gate-a.html` and
+`tools/gate-a-report.mjs`; the audit reads neither (verified — it globs nothing, and greps for `samples`
+in that file hit `window.__qa.samples`, an unrelated local). `bash scripts/test.sh` is **green** on the
+same tree, both engines, so the shipped page passes every check `verify-shell.mjs` and
+`verify-webkit.mjs` make at 375 × 553. That points at the audit's injected 250 ms `SAMPLER` interval
+saturating the renderer under the mobile chain rather than at a defect in `scripts/replay.js` — but I
+have not proven that, and I am not guessing in a handoff.
+
+**Why it needs PM now rather than at the QA sweep**: three queue steps have acceptance criteria that
+cannot currently be met as written. The Wave 1 review step (the step I am promoting) says *"Confirm
+`qa-independent-audit.mjs` exits zero, not just `scripts/test.sh`"*; the QA sweep and the Gate B review
+both repeat it. A reviewer who runs it cold loses 20 minutes to a silent hang before learning anything.
+
+**The ask**: rule how the audit is to be restored, and by whom. I did not fix it because it is shared
+verification infrastructure, the diagnosis is not complete, and a developer quietly editing the
+independent audit that checks the developer's own work is the wrong shape regardless of the fix.
+The two candidate directions, stated so PM can choose rather than re-derive:
+
+1. **Give `cdp.mjs`'s `send()` a timeout.** Turns every future hang into a named failure with a method
+   on it. Correct on its own merits — a harness that can hang forever cannot report — but it converts
+   this stall into a red check rather than removing it.
+2. **Find why the renderer spins at 375 × 553** and fix that. The real repair, and the only one that
+   gets the audit to zero. Needs a bisect of the injected sampler against the page's own playback.
+
+Both, in that order, is my recommendation. It is (1) that stops the next three steps from losing time
+to a silent hang, and (1) is cheap.
+
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
+
+### 2026-07-27 HO-025 — the Gate A sample renders; the struck headline announces clean, read from the AX tree
+**Type:** handoff
+**Producer:** developer
+**Deliverable:** `samples/gate-a.html`, `tools/gate-a-report.mjs`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Gate A is now a thing to look at rather than a thing to imagine.** `samples/gate-a.html` renders all
+four headline candidates and one real §4 spec-sheet, in both themes, against the page's real tokens —
+and prints the machine's own readings beside them.
+
+**The check this sample exists for passes.** Candidate B's announced string, read out of Blink's
+accessibility tree via `Accessibility.getFullAXTree`, is:
+
+| Candidate | Announced (AX tree) | Ruled (hero spec §4.3) |
+|---|---|---|
+| A | `SHIP A PRODUCT. WITHOUT A TEAM.` | matches |
+| **B** | **`SHIP A PRODUCT WITH AI AGENTS.`** | matches — **the struck phrase is absent** |
+| C | `SHIP A PRODUCT. THE TEAM IS AI.` | matches |
+| D | `SHIP A PRODUCT WITH A MUSTER OF AI AGENTS.` | matches |
+
+B's rendered text is `Ship a product with a human team AI agents.` and its announced name is
+`SHIP A PRODUCT WITH AI AGENTS.` — the words `a human team` are present in one and absent from the other,
+asserted as a word-set relationship rather than a string the check could be tuned to. Comparison is
+case-insensitive and word-exact: Blink computes a name from rendered text so `text-transform` reaches it,
+WebKit computes from source text, and the words are what §4.3 rules.
+
+**51 checks, all green, `node tools/gate-a-report.mjs` exits zero.**
+
+**The finding PM should carry into the packet: candidate B sets FOUR lines at 320px, not three.**
+`section-01-hero.md` §4.1 states *"measured in Blink at 320/360/375/390: A and C set 2 lines, B and D set
+3."* Measured against the real strings at the amended floor, B is 3 lines at 360/375/390 and **4 at
+320**, and the fourth line is an orphan:
+
+```
+320px   SHIP A PRODUCT / WITH / A HUMAN TEAM / AI AGENTS.
+375px   SHIP A PRODUCT WITH / A HUMAN TEAM / AI AGENTS.
+1280px  SHIP A PRODUCT WITH / A HUMAN TEAM AI AGENTS.
+```
+
+A lone `WITH` on line 2 is not "every line is a whole phrase" (§4.2). The spec's *substantive* claims all
+hold — nothing overflows at 320, and both of B's treated phrases stay unbroken at every measured width —
+so this is a wrong figure and a real composition wart, not a broken ruling. **It cannot be fixed by
+widening the break unit**: `WITH A HUMAN TEAM` measures ~290px against a 272px column at 320px, so making
+it one nowrap unit would overflow, which is the defect §4.1 amended the floor to remove. The honest
+options are to accept the orphan at 320px or to take A/C, and that is a judgment for the gate — which is
+why the sample now prints the actual lines at 320/375/1280 for all four candidates rather than a line
+count. A count cannot show the difference between a phrase and an orphan.
+
+**The §4 spec-sheet is built, not mocked** — decision 1, real copy, real spec:
+
+| Relationship | Measured (1280px, both themes) |
+|---|---|
+| Reading column is the prose column | `max-inline-size` **685.31px** on every `<dd>`, rendered 685.31px — the card is **903.31px** |
+| Label column | 96px, four `<dt>`s one line each, all four sharing one width |
+| Mechanism mark | **2px** of `background-color: var(--accent)`, **12.00px** from the card's inner edge |
+| Zero rust text | no element in the sheet resolves `color` to the accent, dark **or** light |
+| Announced structure | `DECISION · PROBLEM · TRADE-OFF · MECHANISM`, in the seed's order |
+| Title's announced name | `I optimized what each agent reads, not how they talk.` — the `<em>` content is in the name |
+
+Both figures match `section-04-decisions.md` §6.2's rendered measurements (685.31 / 903.31) exactly, which
+is the spec confirming itself against an independent build rather than me confirming the spec.
+
+**One deliberate difference from HEAD, stated because it is real.** The sample renders `--text-display`
+at the amended floor `clamp(1.75rem, 6.5vw, 4.25rem)` — the value ruled in `page-shell.md` §3 and measured
+in `section-01-hero.md` §4.1. **`styles/tokens.css` still carries the pre-amendment `clamp(2.4rem, …)`**;
+the §1 build step applies it (`section-01-hero.md` §14 lists it, and no harness asserts the old value). I
+did not amend the token here because this step's deliverable is the sample. Rendering the old floor would
+have shown the founder a headline that measurably overflows 320px inside B's unbreakable struck phrase —
+i.e. not how it will actually set, which is the one thing the sample is for. **If PM would rather the
+token land now, it is a one-line change and the §1 step should not be the first place it is discovered.**
+
+**Scope held.** No file was added under `styles/` or `scripts/` — `verify-shell.mjs:650` globs both
+directories whole, so a file there would join the shipped set and the zero-request surface. The sample is
+self-contained with inlined CSS, carries no header chrome and no section separators, and makes zero
+network requests (asserted, not assumed: every request the render made was `file://` or `data:`).
+`tools/gate-a-report.mjs` is not a second runner (DEC-020) — `scripts/test.sh` does not call it, it
+reports on an artifact that never ships, and it is run by hand once to prepare a gate. `tools/` already
+holds this kind of thing (`plan-lint.py`).
+
+**One check was blind and is not any more, caught by planting the failure.** The
+no-horizontal-scroll check initially failed at every phone width — on the generated report table, not on
+the type. I gave the report its own scroll container (scaffolding must not distort the surface under
+test) and added a **per-pane** overflow check beside the document one. Then I noticed `.pane` carried
+`overflow: hidden`, which made that new check unable to fail, so I removed it. **Proven, not claimed**: I
+planted a 220-character nowrap element in the dark pane and the check went red at all five widths
+(`document 2641/320 · dark 2641/320 · light 320/320`), correctly isolating the offending pane; the plant
+is removed and the tree is clean at 51/51.
+
+**Cross-engine.** Blink is the primary evidence and the only engine that can answer the announced-string
+question (QuickLook runs no JavaScript, and WebKit computes names from source text anyway). WebKit was
+verified to render the sample — QuickLook, 1400 × 1400, 5.69% of sampled pixels inked. Renders:
+`tests/artifacts/gate-a-blink-1280.png`, `gate-a-blink-375.png`, `gate-a-webkit-full.png`,
+`gate-a-report.json`.
+
+**Two line references in the queue and my agent-context are stale, and one of them is load-bearing.**
+Both cite `verify-shell.mjs` positions that moved when HO-024 re-based the harness:
+
+| Cited as | Actually at | What it is |
+|---|---|---|
+| `:527` | **`:650`** | the `styles/` + `scripts/` glob that defines the shipped set |
+| `:533` | **`:660`** | `no http(s) URL in any shipped file` |
+
+The second matters: the §1-and-§6 step is written around amending `:533`, and a developer who opens that
+line finds an unrelated check. The rule the step states is right and unaffected — narrow the check to
+fetching references, never delete it — only the coordinate is wrong.
+
+**`bash scripts/test.sh` is GREEN**, both engines, on this tree — nothing shipped was touched.
+**`qa-independent-audit.mjs` could not be run to completion: it hangs.** That is REQ-008 above, it
+reproduces from a clean tree, and it is not caused by this step.
 
 ### 2026-07-26 HO-024 — the terminal's left edge built as a system; the pennant seated, and the tick no longer collides
 **Type:** handoff

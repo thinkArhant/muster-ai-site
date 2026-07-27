@@ -73,48 +73,6 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Developer (web): Gate A sample render
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Build the static sample the founder judges at Gate A. Small step, high leverage — it converts
-Gate A from imagining to looking.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/section-01-copy.md` — the headline candidates (HO-018)
-- `knowledge-base/design-specs/web/section-01-hero.md` — how the treatment sets (HO-020)
-- `knowledge-base/design-specs/web/section-04-decisions.md` — the spec-sheet spec (HO-021)
-- `knowledge-base/design-specs/web/section-04-copy.md` — one real decision's copy (HO-023)
-- `styles/` — the page's real tokens, now final after the shell step
-
-**Deliverable:** `samples/gate-a.html` — **self-contained. Inline all CSS it needs. Do NOT add any file
-under `styles/` or `scripts/`**: `verify-shell.mjs:527` globs those directories entirely, so a new file
-there joins the shipped set and the zero-request surface. HO-025.
-
-**Acceptance criteria:**
-- Every headline candidate rendered **as it would actually set** — real tokens, real fonts, real sizes,
-  both themes. Not an approximation, not a mockup
-- One **real** §4 spec-sheet built from the spec and the real copy, so the founder judges the rendering
-  rather than a description of it
-- Candidates labelled so the founder can name one in a verdict
-- **Report each candidate's computed accessible name mechanically**, not by assertion.
-  `tests/lib/cdp.mjs` exposes a raw CDP `call`, so `Accessibility.getFullAXTree` gives you the announced
-  string. Print it beside each candidate — this is the check that catches a struck headline reading as
-  gibberish
-- Scope it to the headline and the spec-sheet: **no header chrome, no section separators**, so it cannot
-  drift from the page as later sections land
-- This never ships
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-025 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 PM: Review Wave 1 and build the Gate A packet
 
 ```
@@ -124,9 +82,19 @@ Model: claude-opus-5
 **Task:** Review all six Wave 1 handoffs, run the mechanical copy checks, then assemble the Gate A
 packet.
 
+**Read REQ-008 before you plan your run.** `qa-independent-audit.mjs` **hangs** — two clean-tree runs
+stalled at the same point (the 375 × 553 mobile chain, right after `qa-s02-mobile-375.png`) and never
+returned. It is blocked, not slow: the Node process idles at 0% while its Chrome child spins at ~105%,
+and `tests/lib/cdp.mjs`'s `send()` has no timeout, so a CDP reply that never arrives hangs forever.
+`bash scripts/test.sh` is green on the same tree. Your criterion below — *"confirm the audit exits
+zero"* — cannot be met until this is repaired, and running it cold costs 20 minutes of silence. Rule how
+it gets fixed and by whom; REQ-008 states the two candidate directions and a recommendation.
+
 **Inputs:**
-- `knowledge-base/agent-requests.md` — HO-018, HO-019, HO-020, HO-021, HO-022, HO-023, HO-024, HO-025
+- `knowledge-base/agent-requests.md` — HO-018, HO-019, HO-020, HO-021, HO-022, HO-023, HO-024, HO-025;
+  REQ-006, REQ-007, REQ-008
 - Every Wave 1 spec and copy file
+- `samples/gate-a.html` — the rendered sample, with its measured report already in it
 - `knowledge-base/agent-skills/content/copy-rules.md`
 - `muster/team/pm/skills/generic/deliverable-review.md`
 - `muster/team/qa/skills/generic/verification-discipline.md`
@@ -144,10 +112,15 @@ adjective. Attach the results as already-green evidence.
   every contrast pair; check §1's element inventory against the seed line by line
 - **The headline's accessible name is the likeliest defect.** Read the computed names the sample
   reports; do not accept "verified" as evidence
+- **Rule on the two open items HO-025 raises**: (a) candidate B sets **four** lines at 320px with a lone
+  `WITH` on line 2, against `section-01-hero.md` §4.1's stated three — the spec's figure is wrong and the
+  orphan is a real composition wart the founder should judge at the gate; (b) `styles/tokens.css` still
+  carries the pre-amendment `--text-display` floor while the sample renders the amended one, so decide
+  whether the token lands now or with §1
 - Confirm the spacing system preserves the 12px equality and the 37-column floor, and that its
   assertions would actually **fail** if violated — an assertion that cannot fail is the
   blind-by-construction failure in a new place
-- Confirm `qa-independent-audit.mjs` exits zero, not just `scripts/test.sh`
+- Confirm `qa-independent-audit.mjs` exits zero, not just `scripts/test.sh` — **see REQ-008 first**
 - Verify §4's copy was tightened, not rewritten, against Content's stated before/after counts
 - **Gate A packet**: one batch judged in a single sitting — rendered headlines with your recommendation,
   the §4 spec-sheet, all five sections' copy, and the formation question from Founder Decisions. Human
@@ -155,9 +128,14 @@ adjective. Attach the results as already-green evidence.
 - Settle everything the Decision Autonomy Matrix lets you settle. Only genuine taste reaches the packet
 
 **On completion:** Write the packet into `wave-review.md`, re-based for Gate A with prior verdicts
-preserved. Run the Pre-Handoff Self-Review Checklist. Promote the gate by writing the Gate A block into
-`## Next Step`.
+preserved. **Sweep the reviewed handoffs to Resolved** — `muster-requests-lint.sh` has been red since
+before HO-025 (714 lines against a 300 budget, now 860) because Wave 1 batches six handoffs against one
+review, and this is the review. Run the Pre-Handoff Self-Review Checklist. Promote the gate by writing
+the Gate A block into `## Next Step`.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Gate A — founder review: copy and rendered samples
 
@@ -205,6 +183,10 @@ an `http(s)` URL. §6 must ship the GitHub `curl` URL and one GitHub link, so th
   `<script src>`, or any attribute the browser resolves without user action.
 Narrow the check to fetching references. Weakening it to a blanket allow removes the mechanical guard on
 the page's most load-bearing published claim.
+
+**The line number above is stale** — the `no http(s) URL in any shipped file` check is at
+**`verify-shell.mjs:660`**, and the shipped-set glob it keys on is at **`:650`** (both moved when the
+shell step re-based the harness). The ruling is unaffected; only the coordinate is.
 
 **Deliverable:** `index.html` (§1 and §6), `styles/`, `scripts/` as needed, amended
 `tests/verify-shell.mjs`; HO-026.
@@ -406,6 +388,20 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-27 — Step: Developer Gate A sample render (HO-025). Gate A is now something to look at:
+  `samples/gate-a.html` sets all four headline candidates and one real §4 spec-sheet in both themes
+  against the page's real tokens, with the machine's readings printed beside them. **All four announced
+  strings read out of the Blink AX tree match their ruling — candidate B announces
+  `SHIP A PRODUCT WITH AI AGENTS.` with the struck phrase absent from the name and present in the
+  render.** §4 measured 685.31px prose column in a 903.31px card, 2px accent mark at 12.00px from the
+  card's inner edge, zero rust text in both themes — matching the spec's own figures exactly. 51/51
+  checks, `scripts/test.sh` green both engines, WebKit render verified. One blind check was found and
+  fixed: the per-pane overflow probe was proven to fail by planting a 220-char nowrap element and seeing
+  it go red on the offending pane only. **Awaiting PM review at the Wave 1 review step; three items —
+  candidate B sets FOUR lines at 320px with a lone `WITH` orphan against §4.1's stated three,
+  `styles/tokens.css` still carries the pre-amendment `--text-display` floor, and REQ-008: the
+  independent audit HANGS and cannot exit zero.**
 
 - 2026-07-26 — Step: Developer shell spacing system and brand mark (HO-024). The Gate 3 tick collision is
   closed by taking the mark out of the text flow — R1 holds at 12.00px in both layers, R2 measures 3.91px
