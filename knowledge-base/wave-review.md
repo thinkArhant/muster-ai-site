@@ -342,9 +342,35 @@ length, and state the measured height either way.
 **One thing to keep watching**: the longest decision title runs six lines at 320px today. The rewrite
 should retire that on its own; if it does not, it is a finding.
 
+**C — §4's four decisions are RE-SELECTED, not just rewritten. Scope grew after the ruling above.**
+Founder direction: build a candidate list of ~10 real decisions that shaped Muster, then narrow to the
+three or four that ship — so the section is chosen from the full set rather than inherited.
+
+**The section's job, in the founder's words**: show that he is a **systems thinker** with expert domain
+knowledge — that the taste and judgment to design a system that works is the strength on display.
+Every decision is about **Muster only**. Nothing about Bodh, nothing about Arogh.
+
+**Immediate consequence — the seed's decision 4 is out.** *"Building a real app with it, I removed the
+one feature every competitor adds"* is a Bodh product decision and is excluded by the Muster-only rule.
+That frees a slot, and it also retires the `(product — Bodh)` stamp — the one instance with **no date**
+that UI/UX had to specify a special case for. If no replacement is dateless, that special case can go.
+
+**Coverage required**: at least one decision on **architecture**, at least one on **systems thinking**.
+Founder-named candidates to investigate: the **autonomous sprint** (leave the agents running for hours,
+return to finished work); the **feedback loop** (a project offers its telemetry and retro at sprint
+close → filed as a GitHub issue → XO prepares the PR for the next framework version); and
+**environment-variable knobs** the operator tunes to preference.
+
+**How this is being sourced**: the founder runs the candidate-generation in a separate session, so the
+exploration does not enter this project's telemetry or token budget. PM supplies the brief, receives the
+ten candidates with evidence, narrows to the final set, and only then does Content write.
+
 **3. Copy —** *awaiting*
 
-**4. Formation —** *awaiting*
+**4. FORMATION — SETTLED.** The hub is **PM**; the bus-bar carries the **seven specialists**
+(Developer · UI/UX · QA · Content · Marketing · Legal · Research). No role appears twice, and it reads
+true to the architecture: PM coordinates, specialists execute. The seed's "eight plates" phrasing is
+superseded for the visual; the roster is still eight roles and copy still says eight.
 
 <!-- Founder writes the verdict here, then runs muster/scripts/muster-sprint-resume.sh. Two forms: -->
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
