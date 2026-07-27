@@ -232,12 +232,12 @@ const AUDIT = `(() => {
     return !(size >= 24 || (size >= 19 && weight >= 700));
   });
   /* Replay spec §9 declares exactly one exception and states its floor: the
-     corpus's own tick glyph is a graphical mark, redundant with the line's 2px
-     accent tick and its bold ink token, and is held to 3:1 rather than 4.5:1.
+     corpus's own ✓ glyph is a graphical mark, redundant with the line's 2px
+     accent mark and its bold ink token, and is held to 3:1 rather than 4.5:1.
      It is separated here rather than waved through — the count is asserted. */
   const graphicalRust = rustRuns.filter((el) => el.classList.contains("log__glyph"))
     .map((el) => (el.className || el.tagName) + " @" + cs(el).fontSize + " '" + el.textContent.trim() + "' in " +
-                 (el.closest(".log__line--key") ? "a key-beat line that also carries a tick and a bold token" : "AN UNMARKED LINE"));
+                 (el.closest(".log__line--key") ? "a key-beat line that also carries a mark and a bold token" : "AN UNMARKED LINE"));
   const smallRust = rustRuns.filter((el) => !el.classList.contains("log__glyph"))
     .map((el) => (el.className || el.tagName) + " @" + cs(el).fontSize + " '" + el.textContent.trim().slice(0, 30) + "'");
 
@@ -261,7 +261,13 @@ const AUDIT = `(() => {
   const imgs = [...document.querySelectorAll("img")].map((i) => ({ src: i.getAttribute("src"), alt: i.getAttribute("alt") }));
 
   /* --- decorative constructions must be hidden from AT --- */
-  const ruleParts = [...document.querySelectorAll(".rule__line, .rule__tick, .tag__mark, .regmark, .brand__mark, .pulse")]
+  /* .log__mark and .brand__rule belong in this sweep for opposite reasons: the
+     first is a new element in the middle of a log line, the second is the one
+     mark on the page whose accessible name is a real question rather than an
+     obvious one — the ruling is that the header announces exactly MUSTER, and a
+     typed underscore that reached the AT layer would be announced as "underscore",
+     as "line", or as nothing, differently per reader. */
+  const ruleParts = [...document.querySelectorAll(".rule__line, .rule__tick, .tag__mark, .regmark, .brand__mark, .brand__rule, .log__mark, .pulse")]
     .map((el) => ({ cls: el.className, hidden: el.getAttribute("aria-hidden") === "true" }));
 
   /* --- spacing: one-sided. Any rendered bottom margin is a defect. --- */
@@ -538,7 +544,7 @@ try {
     const glyphs = live.filter((r) => r.el === "log__glyph");
     check(`the one graphical rust glyph clears the 3:1 non-text floor (${theme})`,
       glyphs.length === 1 && glyphs[0].ratio >= 3,
-      glyphs.map((g) => `${g.ratio}:1 @${g.size}px — below the 4.5:1 text floor by design (§9), redundant with the tick and the bold token`).join("") || "no glyph found");
+      glyphs.map((g) => `${g.ratio}:1 @${g.size}px — below the 4.5:1 text floor by design (§9), redundant with the mark and the bold token`).join("") || "no glyph found");
   }
   check("light palette resolves to the seed's locked values",
     ["ground", "surface", "ink", "muted", "hair", "accent"].every((k) => light.tokens["--" + k].toUpperCase() === SEED.light[k]),
@@ -683,6 +689,12 @@ try {
     return {
       vw: document.documentElement.clientWidth,
       vh: document.documentElement.clientHeight,
+      /* Tokens resolve to hex, computed paints to rgb() — ask the engine what
+         the accent paints as so the mark's colour can be compared like with
+         like, instead of being read back out of the thing under test. */
+      accentRgb: (() => { const p = document.createElement("span");
+        p.style.color = "var(--accent)"; document.body.appendChild(p);
+        const v = cs(p).color; p.remove(); return v; })(),
       state: replay.dataset.state ?? null,
       heading: document.querySelector("#s02-title").textContent.trim().replace(/\\s+/g, " "),
       labelVisible: visibleText(label).trim(),
@@ -731,10 +743,17 @@ try {
       logScroll: { scrollHeight: log.scrollHeight, clientHeight: log.clientHeight,
                    scrollWidth: log.scrollWidth, clientWidth: log.clientWidth, overflow: cs(log).overflow },
       lineWhiteSpace: cs(lines[0]).whiteSpace,
-      key: [4, 9].map((n) => { const li = lines[n - 1]; const s = cs(li);
-        return { line: n, tick: s.borderInlineStartWidth + " " + s.borderInlineStartColor,
+      /* The mark is an element outside the text flow, so it is measured as one:
+         its own rendered width and its own paint. Reading a border off the line
+         would report 0px on a correct build. */
+      key: [4, 9].map((n) => { const li = lines[n - 1]; const m = li.querySelector(".log__mark");
+        return { line: n,
+                 mark: m ? +m.getBoundingClientRect().width.toFixed(2) + "px " + cs(m).backgroundColor : "absent",
+                 markWidth: m ? +m.getBoundingClientRect().width.toFixed(2) : null,
+                 markColour: m ? cs(m).backgroundColor : null,
                  bold: [...li.querySelectorAll(".log__token")].map((b) => b.textContent + "@" + cs(b).fontWeight + "/" + cs(b).color),
                  glyph: [...li.querySelectorAll(".log__glyph")].map((g) => g.textContent + "@" + cs(g).color) }; }),
+      markedLines: lines.filter((li) => li.querySelector(".log__mark")).map((li) => +li.dataset.line),
       l12: (() => { const li = lines[11]; const d = li.querySelector(".log__detail");
         return { size: cs(li).fontSize, weight: cs(li).fontWeight, colour: cs(d).color,
                  stamp: li.querySelector(".log__stamp").textContent }; })(),
@@ -820,12 +839,19 @@ try {
     /BODH SPRINT 4 · WEBSITE WAVE ONLY/.test(s02.sectionText) && /~64 MIN AGENT WORK/.test(s02.sectionText),
     `${JSON.stringify(s02.totalsValue)} + ${JSON.stringify(s02.totalsScope)}`);
 
-  /* --- emphasis system (§9) --- */
-  const accentRgb = s02.key[0].tick.split(" ").slice(1).join(" ");
-  check("key beats L4/L9: 2px accent tick, verdict tokens bold ink, glyph in accent (§9)",
-    s02.key.every((k) => /^2px/.test(k.tick) && k.bold.length > 0 && k.bold.every((b) => /@700\//.test(b))) &&
+  /* --- emphasis system (§9) ---
+     The mark's width and colour are measured off the element, and its presence
+     is asserted as an inventory: exactly L4 and L9 carry one. A build that
+     dropped the mark from one key beat, or grew one on a third line, fails here
+     rather than being read as "2px accent" from a stylesheet that no longer
+     draws anything. */
+  check("key beats L4/L9: a 2px accent mark, verdict tokens bold ink, glyph in accent (§9)",
+    s02.markedLines.join(",") === "4,9" &&
+      s02.key.every((k) => k.markWidth === 2 && k.markColour === s02.accentRgb &&
+                           k.bold.length > 0 && k.bold.every((b) => /@700\//.test(b))) &&
       s02.key[0].glyph.length === 1,
-    s02.key.map((k) => `L${k.line} tick ${k.tick} · ${k.bold.join(", ")}${k.glyph.length ? " · glyph " + k.glyph[0] : ""}`).join(" ;; "));
+    s02.key.map((k) => `L${k.line} mark ${k.mark} · ${k.bold.join(", ")}${k.glyph.length ? " · glyph " + k.glyph[0] : ""}`).join(" ;; ") +
+      ` ;; marked lines ${s02.markedLines.join(", ") || "none"} against the accent ${s02.accentRgb}`);
   check("L12 renders large-and-bold so the shipped artifact can set in accent at AA-large",
     parseFloat(s02.l12.size) >= 20 && Number(s02.l12.weight) >= 700 && s02.l12.stamp === "─────",
     `${s02.l12.size} / ${s02.l12.weight} / detail ${s02.l12.colour} / stamp ${JSON.stringify(s02.l12.stamp)} (no timestamp — the corpus divider)`);
@@ -1317,8 +1343,14 @@ try {
     const box = log.getBoundingClientRect();
     const left = box.left + parseFloat(s.borderLeftWidth) + parseFloat(s.paddingLeft);
     const right = box.right - parseFloat(s.borderRightWidth) - parseFloat(s.paddingRight);
+    /* The key-beat mark is the line's first child and sits outside the text
+       flow, so the range starts after it — left in, its 2px box would drag row
+       0's left edge into the gutter and report the hanging indent as wider than
+       it is. */
     const rowsOf = (li) => {
       const r = document.createRange(); r.selectNodeContents(li);
+      const m = li.querySelector(".log__mark");
+      if (m) r.setStartAfter(m);
       const rects = [...r.getClientRects()].filter((k) => k.width > 0).sort((a, b) => a.top - b.top);
       const rows = [];
       for (const k of rects) {
@@ -1600,7 +1632,12 @@ try {
       l12Band.length === 1 ? `L12 row ${l12Band[0].height}px at y=${l12Band[0].top} against a median ${medianOther}px ` +
         `for the other eleven — the same row the full-transcript diff puts last`
         : `${l12Band.length} bands changed when only .log__line--state was hidden`);
-    check(`WebKit paints accent ink inside §2 — L12, the ✓ glyph and the key-beat ticks (${theme})`,
+    /* The second construction `brand-seats.md` §11 names as WebKit-divergence
+       risk lands here: the key-beat mark is absolutely positioned with
+       `inset-block: 0` against a line box the reveal also transforms. QuickLook
+       runs no JavaScript, so what it renders is the untransformed transcript —
+       which is the case where the mark either paints or does not. */
+    check(`WebKit paints accent ink inside §2 — L12, the ✓ glyph and the key-beat marks (${theme})`,
       accentFull - accentNoLines > 200,
       `${accentFull} accent pixels with the lines shown vs ${accentNoLines} with them hidden ` +
       `(+${accentFull - accentNoLines}) — the emphasis system is rendering, not silently dropping`);

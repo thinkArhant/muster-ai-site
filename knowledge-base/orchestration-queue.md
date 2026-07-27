@@ -73,62 +73,6 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Developer (web): Shell — spacing system and brand mark
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Implement the terminal spacing system and the pennant seats. This runs before the Gate A
-sample so the sample renders in final tokens, and it retires the §2 defect class before the founder
-spends a gate.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-019
-- `knowledge-base/wave-review.md` — the Gate 3 verdict describing the tick collision at L4 and L9
-- `knowledge-base/design-specs/web/section-02-replay.md`, `page-shell.md`, `brand-seats.md`
-- `knowledge-base/brand-guidelines.md` §4, `knowledge-base/design-specs/brand/` — read-only artwork
-- `knowledge-base/decision-log.md` — DEC-031, DEC-032
-- `tests/verify-shell.mjs`, `tests/qa-independent-audit.mjs`, `tests/README.md`
-
-**Deliverable:** `index.html` (header lockup, favicon data-URI), `styles/replay.css`,
-`styles/chrome.css`, `styles/motifs.css`, **and both harness files**; HO-024.
-
-**This step re-bases existing assertions; it does not only add new ones.** Moving the tick off
-`border-inline-start` and decoupling the hanging indent breaks checks that currently pass. At least
-these, which you must **re-base so they still fail when their relationship is violated — never delete**:
-- `verify-shell.mjs:676,709` — key-beat tick read via `border-inline-start-color`
-- `verify-shell.mjs:617,783,811,1021` — accent-pair checks that **hardcode `12`**; these are value
-  assertions, the exact anti-pattern DEC-032 exists to end. Re-base them to assert terminal↔narration
-  *equality*
-- `verify-shell.mjs:716,997` — the negative `text-indent` and the 1ch hanging indent
-- `verify-shell.mjs:372` — `tagMark.w === 8 && tagMark.h === 8`; the pennant is ~1:1.5, not square
-- `verify-shell.mjs:880,1126,1186,1268,1298` — column counts computed by subtracting
-  `border-inline-start-width`. Removing the border silently widens the region by 2px and moves the
-  measurement against the **37-column floor**
-- `qa-independent-audit.mjs:735,825-828` — asserts `/^2px/` on the tick's border width. **This file is
-  NOT run by `scripts/test.sh`** — run it separately before filing, or QA discovers the red three steps
-  later
-
-**Acceptance criteria:**
-- All five relationships implemented with one assertion each; the 12px equality invariant preserved; the
-  37-column floor still met at 360px — prove both with measurements
-- The Gate 3 defect resolved: the key-beat tick no longer collides with the timestamp, at every viewport
-- Pennant in the header (`pennant + MUSTER_` with a static underscore — the underscore does not exist
-  today and is net-new), at all five section separators, and in the favicon data-URI, per spec
-- **Zero new network requests** — `clip-path`, not inline SVG
-- §2's fidelity, its 48.00 s schedule and its phone budget all unchanged; prove it
-- `bash scripts/test.sh` green AND `node tests/qa-independent-audit.mjs` exits zero
-- Cross-engine WebKit and Blink before filing
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-024 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Developer (web): Gate A sample render
 
 ```
@@ -167,6 +111,9 @@ there joins the shipped set and the zero-request surface. HO-025.
 
 **On completion:** File HO-025 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 PM: Review Wave 1 and build the Gate A packet
 
@@ -459,6 +406,14 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-26 — Step: Developer shell spacing system and brand mark (HO-024). The Gate 3 tick collision is
+  closed by taking the mark out of the text flow — R1 holds at 12.00px in both layers, R2 measures 3.91px
+  on L4 and L9 where it measured 0, the 37-column floor holds at 360px, and the hardcoded `12` is gone
+  from all four accent-pair sites. Pennant seated at 6×9 in the header, all five separators and the
+  favicon via `clip-path`, adding no request; the underscore is drawn and static and the header still
+  announces exactly `MUSTER`. §2 byte-clean and unchanged. Both harnesses green, both engines.
+  **Awaiting PM review at the Wave 1 review step; OBS-005 bears on how REQ-007 is settled.**
 
 - 2026-07-26 — Step: Content §4, §5 and §6 copy (HO-023). §4 tightened by **five words of 420** with a
   word-level seed-vs-shipped diff as the evidence and sentence count unchanged at 30 — titles and stamps

@@ -5,8 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Muster — the open-source multi-agent product framework for Claude Code</title>
 <meta name="description" content="Muster is an open-source multi-agent product framework for Claude Code. One person plus a governed AI team, with the build's measured data and real artifacts published alongside it.">
-<!-- Inline data-URI icon: self-contained, no network request, no /favicon.ico probe. -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2313140D'/%3E%3Crect x='4' y='4' width='8' height='8' fill='%23C05A32'/%3E%3C/svg%3E">
+<!-- Inline data-URI icon: self-contained, no network request, no /favicon.ico probe.
+     The founder's house tile as supplied — rust ground, cream pennant — restated
+     at a 16-unit viewBox, which is the authored 1024 coordinates divided by 64
+     (brand-seats.md §6). It deliberately does not follow the theme: a favicon
+     cannot, and the tile is legible without one. The two hex literals are legal
+     here and nowhere else — a data: URI cannot reference a custom property. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23C05A32'/%3E%3Cpath d='M4.33 2.34L11.67 2.34L11.67 13.33L8 11.33L4.33 13.33Z' fill='%23E6E3D3'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/chrome.css">
@@ -25,7 +30,13 @@
 
 <header class="statusbar">
   <div class="statusbar__inner container">
-    <span class="brand"><span class="brand__mark" aria-hidden="true"></span>MUSTER</span>
+    <!-- The underscore lives INSIDE the wordmark's own text run, not as a third
+         flex item: a sibling of the pennant would pick up .brand's 12px gap and
+         read as a rust dash floating clear of the R. Inside .brand__word only
+         the wordmark's own trailing letter-space separates them, which is
+         exactly the next character position (brand-seats.md §4). Both marks are
+         aria-hidden, so the header's accessible name is exactly MUSTER. -->
+    <span class="brand"><span class="brand__mark" aria-hidden="true"></span><span class="brand__word">MUSTER<span class="brand__rule" aria-hidden="true"></span></span></span>
     <p class="status">
       <span class="pulse" aria-hidden="true"><span class="pulse__core"></span></span>
       <span class="status__word">OPERATIONAL</span>
@@ -88,12 +99,12 @@
         <li class="log__line" data-line="1" data-beat="1"><span class="log__stamp">20:38</span><span class="log__role">  muster   </span><span class="log__detail">sprint/auto · queue read · 8 roles standing by</span></li>
         <li class="log__line" data-line="2" data-beat="1"><span class="log__stamp">20:38</span><span class="log__role">  ui-ux    </span><span class="log__detail">production spec + assets · HO-027 filed</span></li>
         <li class="log__line" data-line="3" data-beat="2"><span class="log__stamp">20:46</span><span class="log__role">  dev      </span><span class="log__detail">web/ built · rotation port parity ✓ (UTC+ / UTC−) · HO-028</span></li>
-        <li class="log__line log__line--key" data-line="4" data-beat="3"><span class="log__stamp">20:59</span><span class="log__role">  <b class="log__token">pm</b> <span class="log__glyph">✓</span>     </span><span class="log__detail">independent re-verify · own screenshots · match</span></li>
+        <li class="log__line log__line--key" data-line="4" data-beat="3"><span class="log__mark" aria-hidden="true"></span><span class="log__stamp">20:59</span><span class="log__role">  <b class="log__token">pm</b> <span class="log__glyph">✓</span>     </span><span class="log__detail">independent re-verify · own screenshots · match</span></li>
         <li class="log__line" data-line="5" data-beat="4"><span class="log__stamp">21:06</span><span class="log__role">  content  </span><span class="log__detail">copy on-voice · one meta edit · HO-029</span></li>
         <li class="log__line" data-line="6" data-beat="4"><span class="log__stamp">21:11</span><span class="log__role">  legal    </span><span class="log__detail">data-not-collected · confirmed at code level · HO-030</span></li>
         <li class="log__line" data-line="7" data-beat="4"><span class="log__stamp">21:16</span><span class="log__role">  mkt      </span><span class="log__detail">share card written · HO-031</span></li>
         <li class="log__line" data-line="8" data-beat="5"><span class="log__stamp">21:20</span><span class="log__role">  qa       </span><span class="log__detail">re-deriving rotation · 24 dates × 3 timezones …</span></li>
-        <li class="log__line log__line--key" data-line="9" data-beat="5"><span class="log__stamp">21:35</span><span class="log__role">  <b class="log__token">qa</b>       </span><span class="log__detail">11/11 acceptance · <b class="log__token">PASS</b> · zero bugs · HO-032</span></li>
+        <li class="log__line log__line--key" data-line="9" data-beat="5"><span class="log__mark" aria-hidden="true"></span><span class="log__stamp">21:35</span><span class="log__role">  <b class="log__token">qa</b>       </span><span class="log__detail">11/11 acceptance · <b class="log__token">PASS</b> · zero bugs · HO-032</span></li>
         <li class="log__line" data-line="10" data-beat="6"><span class="log__stamp">21:35</span><span class="log__role">  pm       </span><span class="log__detail">handoffs accepted · deploy packet → founder</span></li>
         <li class="log__line" data-line="11" data-beat="6"><span class="log__stamp">21:43</span><span class="log__role">  gate     </span><span class="log__detail">Role: halt · awaiting operator</span></li>
         <li class="log__line log__line--state" data-line="12" data-beat="6"><span class="log__stamp">─────</span><span class="log__role">  deploy   </span><span class="log__detail">bodh.day · LIVE</span></li>

@@ -192,11 +192,28 @@ const AUDIT = `(() => {
   const barBox = bar.getBoundingClientRect();
   const barBg = parseColor(css(bar, "background-color"));
 
-  /* --- motifs --- */
+  /* --- motifs ---
+     The pennant's placement rule is a relationship to the text beside it — its
+     bottom edge sits ON that text's baseline — and no engine exposes a
+     baseline. A zero-sized inline-block with vertical-align: baseline has its
+     own bottom margin edge on the baseline by definition, so its rect bottom IS
+     the baseline y. Probe in, measure, probe out. */
+  const baselineOf = (el) => {
+    const p = document.createElement("span");
+    p.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline;flex:none";
+    el.appendChild(p);
+    const y = p.getBoundingClientRect().bottom;
+    p.remove();
+    return y;
+  };
   const tick = document.querySelector(".rule__tick");
   const tickBox = tick.getBoundingClientRect();
   const mark = document.querySelector(".tag__mark");
   const markBox = mark.getBoundingClientRect();
+  const tagEl = document.querySelector(".tag");
+  const brandMark = document.querySelector(".brand__mark");
+  const brandRule = document.querySelector(".brand__rule");
+  const brandWord = document.querySelector(".brand__word");
   const pulse = document.querySelector(".pulse");
   const pulseBox = pulse.getBoundingClientRect();
   const regmarksPerSurface = [...document.querySelectorAll(".instrument")]
@@ -281,7 +298,57 @@ const AUDIT = `(() => {
     },
     motifs: {
       tick: { w: Math.round(tickBox.width * 100) / 100, h: Math.round(tickBox.height * 100) / 100 },
-      tagMark: { w: Math.round(markBox.width * 100) / 100, h: Math.round(markBox.height * 100) / 100 },
+      tagMark: { w: Math.round(markBox.width * 100) / 100, h: Math.round(markBox.height * 100) / 100,
+                 clip: css(mark, "clip-path"), bg: css(mark, "background-color"),
+                 /* The mark's bottom edge on the text's baseline. A zero-sized
+                    inline-block aligned to baseline has its own bottom margin
+                    edge ON the baseline, so its rect bottom IS the baseline y —
+                    measured rather than derived from font metrics the engine
+                    does not expose. */
+                 baselineDrop: Math.round((markBox.bottom - baselineOf(tagEl)) * 100) / 100 },
+      /* The load-bearing one: five separator tags are vertically centred in a
+         grid row, so a single pixel of flex-line growth from baseline alignment
+         shifts every one of them off its rule at once. */
+      tagBox: { h: Math.round(tagEl.getBoundingClientRect().height * 100) / 100,
+                lineBox: Math.round(parseFloat(css(tagEl, "line-height")) * 100) / 100 },
+      brand: {
+        mark: { w: Math.round(brandMark.getBoundingClientRect().width * 100) / 100,
+                h: Math.round(brandMark.getBoundingClientRect().height * 100) / 100,
+                clip: css(brandMark, "clip-path"), bg: css(brandMark, "background-color"),
+                colour: css(brandMark, "color"),
+                baselineDrop: Math.round((brandMark.getBoundingClientRect().bottom - baselineOf(brandWord)) * 100) / 100,
+                hidden: brandMark.getAttribute("aria-hidden") },
+        rule: { w: Math.round(brandRule.getBoundingClientRect().width * 100) / 100,
+                h: Math.round(brandRule.getBoundingClientRect().height * 100) / 100,
+                bg: css(brandRule, "background-color"), colour: css(brandRule, "color"),
+                /* Top edge 1px below the baseline, bottom edge 3px below it. */
+                top: Math.round((brandRule.getBoundingClientRect().top - baselineOf(brandWord)) * 100) / 100,
+                bottom: Math.round((brandRule.getBoundingClientRect().bottom - baselineOf(brandWord)) * 100) / 100,
+                /* The gap from the R is the wordmark's own trailing letter-space
+                   and nothing else — it is what makes the mark read as a prompt
+                   caret rather than an underline, so it must not be cancelled. */
+                fromWord: Math.round((brandRule.getBoundingClientRect().left -
+                  (() => { const r = document.createRange();
+                           r.setStart(brandWord.firstChild, 0);
+                           r.setEnd(brandWord.firstChild, brandWord.firstChild.length);
+                           return r.getBoundingClientRect().right; })()) * 100) / 100,
+                track: css(brandWord, "letter-spacing"),
+                hidden: brandRule.getAttribute("aria-hidden"),
+                animation: css(brandRule, "animation-name"),
+                transition: css(brandRule, "transition-duration") },
+        name: document.querySelector(".brand").textContent.trim(),
+        gap: css(document.querySelector(".brand"), "column-gap")
+      },
+      /* Tokens resolve to hex and computed colours to rgb(); ask the engine what
+         the token paints as so the two can be compared like with like. */
+      accentRgb: (() => {
+        const p = document.createElement("span");
+        p.style.color = "var(--accent)";
+        document.body.appendChild(p);
+        const v = css(p, "color");
+        p.remove();
+        return v;
+      })(),
       pulse: { w: Math.round(pulseBox.width * 100) / 100, h: Math.round(pulseBox.height * 100) / 100,
                radius: css(document.querySelector(".pulse__core"), "border-radius") },
       regmarksPerSurface,
@@ -369,7 +436,63 @@ try {
   check("vignette alpha 16% (dark)", Number(dark.tokens["--vignette-alpha"]) === 0.16, dark.tokens["--vignette-alpha"]);
   check("five stencil tags with machined ticks", dark.motifs.stencilTags.length === 5 && dark.motifs.ruleCount === 5, dark.motifs.stencilTags.join(" / "));
   check("ticks are 9x1px", dark.motifs.tick.w === 1 && dark.motifs.tick.h === 9, JSON.stringify(dark.motifs.tick));
-  check("stencil tag mark is an 8x8 accent square", dark.motifs.tagMark.w === 8 && dark.motifs.tagMark.h === 8, JSON.stringify(dark.motifs.tagMark));
+  /* The mark is the pennant at punctuation scale. Three clauses, and the one
+     that carries weight is the middle one: the mark's height is bound to
+     `.rule__tick`'s rather than to the literal 9, so the shared vertical measure
+     that makes the separator read as one machined assembly either moves together
+     or fails (brand-seats.md §2, §11). */
+  check("stencil tag mark is the 6x9 pennant, sharing the tick's 9px measure",
+    dark.motifs.tagMark.w === 6 && dark.motifs.tagMark.h === 9 &&
+      dark.motifs.tagMark.h === dark.motifs.tick.h && dark.motifs.tagMark.clip !== "none",
+    `${dark.motifs.tagMark.w}×${dark.motifs.tagMark.h} vs tick h ${dark.motifs.tick.h}, clip-path ${dark.motifs.tagMark.clip.slice(0, 48)}`);
+  check("the pennant's bottom edge sits on the tag label's baseline",
+    Math.abs(dark.motifs.tagMark.baselineDrop) < 0.5,
+    `mark bottom is ${dark.motifs.tagMark.baselineDrop}px from the baseline`);
+  /* Baseline alignment can grow a flex line, and this construction is centred in
+     a grid row across five sections — a pixel of growth moves all five tags off
+     their rules at once. The tag's box is its --text-label line box or it is a
+     defect. */
+  check("the tag's block size is set by its type, not by its mark",
+    Math.abs(dark.motifs.tagBox.h - dark.motifs.tagBox.lineBox) < 0.5,
+    `.tag renders ${dark.motifs.tagBox.h}px against a ${dark.motifs.tagBox.lineBox}px --text-label line box`);
+  /* The header lockup: pennant + MUSTER + a drawn static underscore. */
+  const bm = dark.motifs.brand;
+  check("header lockup carries the 6x9 pennant on the wordmark's baseline",
+    bm.mark.w === 6 && bm.mark.h === 9 && bm.mark.clip !== "none" &&
+      bm.mark.bg === dark.motifs.accentRgb && Math.abs(bm.mark.baselineDrop) < 0.5 && bm.mark.hidden === "true",
+    `${bm.mark.w}×${bm.mark.h}, ${bm.mark.baselineDrop}px off the baseline, ${bm.mark.bg}, aria-hidden ${bm.mark.hidden}`);
+  /* Painted with background-color and never `color`: the small-rust-text audit
+     collects elements whose `color` resolves to the accent, so a mark painted
+     the other way would be judged as sub-AA rust text. */
+  check("both brand marks are painted with background-color, never color",
+    bm.mark.bg === dark.motifs.accentRgb && bm.rule.bg === dark.motifs.accentRgb &&
+      bm.mark.colour !== dark.motifs.accentRgb && bm.rule.colour !== dark.motifs.accentRgb,
+    `mark bg ${bm.mark.bg} / color ${bm.mark.colour} · rule bg ${bm.rule.bg} / color ${bm.rule.colour}`);
+  /* Drawn rather than typed, which is what makes its 2px weight the same on
+     every platform: only its POSITION comes from the resolved face, via the
+     baseline. 1ch wide so it stays one character position whatever font wins. */
+  check("the underscore is a drawn 1ch × 2px bar 1–3px under the baseline",
+    bm.rule.h === 2 && bm.rule.w > 4 && bm.rule.w < 12 &&
+      Math.abs(bm.rule.top - 1) < 0.5 && Math.abs(bm.rule.bottom - 3) < 0.5,
+    `${bm.rule.w}×${bm.rule.h}px, top ${bm.rule.top}px / bottom ${bm.rule.bottom}px below the baseline`);
+  /* Inside the wordmark's own run, not a third flex item: as a sibling it would
+     take .brand's 12px gap and read as a rust dash floating clear of the R. What
+     separates it from the R is the wordmark's own trailing letter-space and
+     nothing else — that is exactly the next character position, and it is what
+     makes the mark read as a prompt caret rather than an underline. The run's
+     rect already carries that trailing space, so the bar abuts it at 0; the
+     tracking is asserted alongside, because cancelling it is the other way this
+     detail is lost and a zero offset alone would not notice. */
+  check("the underscore sits at the next character position, not at the lockup's gap",
+    bm.rule.fromWord >= 0 && bm.rule.fromWord < parseFloat(bm.gap) && parseFloat(bm.rule.track) > 0,
+    `${bm.rule.fromWord}px past the wordmark's run (which carries its own ${bm.rule.track} trailing letter-space), against a ${bm.gap} lockup gap`);
+  /* The motion inventory is closed at three plus the curl cursor, and a mark
+     that looks like a terminal caret is the element most likely to be
+     "improved" into a fourth. */
+  check("the underscore is static — no animation, no transition",
+    bm.rule.animation === "none" && parseFloat(bm.rule.transition) === 0,
+    `animation-name ${bm.rule.animation}, transition-duration ${bm.rule.transition}`);
+  check("the header's accessible name is exactly MUSTER", bm.name === "MUSTER", JSON.stringify(bm.name));
   check("registration marks: two per instrument surface", dark.motifs.regmarksPerSurface.every((n) => n === 2), JSON.stringify(dark.motifs.regmarksPerSurface));
   check("pulse lamp is an 8px circle", dark.motifs.pulse.w === 8 && dark.motifs.pulse.h === 8 && dark.motifs.pulse.radius === "50%", JSON.stringify(dark.motifs.pulse));
   check("OPERATIONAL word present (state not colour-alone)", dark.motifs.operationalWord === "OPERATIONAL", dark.motifs.operationalWord);
@@ -593,29 +716,97 @@ try {
     return slots;
   })();
 
-  /* §9.1's one rule for both layers, as a measurement rather than a stylesheet
-     read: the 2px rust mark is inset the same distance from the inner edge of
-     its OWN card in the terminal and in the narration. The inset has to come
-     from the container — `border-inline-start` sits outside `padding-inline-
-     start`, so inline padding on the line insets that line's text and leaves
-     the mark welded to the frame. `rect.left + clientLeft` is the card's
-     padding-box edge, which is the "inner edge" the spec measures from. */
+  /* R1 — §9.1's one rule for both layers, as a measurement rather than a
+     stylesheet read: the 2px rust mark is inset the same distance from the inner
+     edge of its OWN card in the terminal and in the narration. `rect.left +
+     clientLeft` is the card's padding-box edge, which is the "inner edge" the
+     spec measures from.
+
+     The terminal's mark is measured from THE MARK ELEMENT'S OWN BOX. The line
+     does not carry the mark any more — it is positioned outside the text flow —
+     so a measurement of the line's edge would measure the text's position
+     instead and report the gutter as the inset. The narration's mark is still
+     its entry's border-box edge, and that difference is the point: the check is
+     mechanism-agnostic and tests the distance each layer actually delivers.
+
+     R2 rides along, because this is where the geometry is: the gap between the
+     mark's inline-end edge and the line's leftmost text INK. Nothing else on the
+     page detects it, and a mechanism that couples the mark to the text flow
+     drives it to exactly 0 — which is what it measured in the build the founder
+     gated. Ink comes from a text-node walk, never from the line's rect: the mark
+     is a child of the line and its own rect would win a `Math.min` over the
+     range. */
   const ACCENT_PAIR = `(() => {
     const r2 = (n) => Math.round(n * 100) / 100;
     const terminal = document.querySelector(".terminal");
     const narration = document.querySelector(".narration");
-    const key = document.querySelector(".log__line--key");
+    const log = document.querySelector(".log");
     const entry = document.querySelector(".narration__entry[data-active]") ||
                   document.querySelector(".narration__entry");
     const inner = (el) => el.getBoundingClientRect().left + el.clientLeft;
+    const inkLeft = (li) => {
+      const walk = document.createTreeWalker(li, NodeFilter.SHOW_TEXT);
+      const r = document.createRange();
+      let n, min = Infinity;
+      while ((n = walk.nextNode())) {
+        for (let j = 0; j < n.nodeValue.length; j++) {
+          if (/\\s/.test(n.nodeValue[j])) continue;
+          r.setStart(n, j); r.setEnd(n, j + 1);
+          const k = r.getBoundingClientRect();
+          if (k.width > 0 && k.left < min) min = k.left;
+        }
+      }
+      return min;
+    };
+    /* Custom properties compute to token streams, not to pixels — reading
+       --mark-clear off the log gives back "0.5ch". Resolve it the way the
+       stylesheet does, by making the engine lay a length out in the log's own
+       font, so the expected figure is the stylesheet's and never a literal. */
+    const px = (prop) => {
+      const p = document.createElement("span");
+      p.style.cssText = "position:absolute;visibility:hidden;block-size:0;inline-size:var(" + prop + ")";
+      log.appendChild(p);
+      const w = p.getBoundingClientRect().width;
+      p.remove();
+      return r2(w);
+    };
+    const marks = [...document.querySelectorAll(".log__mark")].map((m) => {
+      const li = m.closest(".log__line");
+      const box = m.getBoundingClientRect();
+      return { line: li.dataset.line, inset: r2(box.left - inner(terminal)),
+               width: r2(box.width), clear: r2(inkLeft(li) - box.right) };
+    });
     return {
       state: document.querySelector(".replay").dataset.state || null,
-      terminal: r2(key.getBoundingClientRect().left - inner(terminal)),
+      marks,
+      markedLines: [...document.querySelectorAll(".log__line")]
+        .filter((li) => li.querySelector(".log__mark")).map((li) => li.dataset.line),
+      /* The expected figures come from the stylesheet, never from a literal: if
+         §7.1 rule 1's fallback ever fires and the gutter yields, the check
+         follows it and still fails on inequality. */
+      expected: px("--mark-inset"),
+      expectedClear: px("--mark-clear"),
+      terminal: r2(Math.min(...marks.map((m) => m.inset))),
       narration: r2(entry.getBoundingClientRect().left - inner(narration))
     };
   })()`;
-  const pairOK = (p) => Math.abs(p.terminal - p.narration) < 0.5 && Math.abs(p.terminal - 12) < 0.5;
-  const pairDetail = (p) => `terminal ${p.terminal}px / narration ${p.narration}px from each card's inner edge (state ${p.state})`;
+  /* The assertion is the EQUALITY; 12 is only its value. The floor is stated as
+     a relationship too — the inset is at least four times the mark's own width,
+     so a build that collapsed the gutter toward the frame fails even if both
+     layers collapsed together. */
+  const pairOK = (p) =>
+    Math.abs(p.terminal - p.narration) < 0.5 &&
+    Math.abs(p.terminal - p.expected) < 0.5 &&
+    p.terminal >= 4 * Math.max(...p.marks.map((m) => m.width));
+  const pairDetail = (p) =>
+    `terminal ${p.terminal}px / narration ${p.narration}px from each card's inner edge, ` +
+    `expected ${p.expected}px read from --mark-inset (≥ 4 × ${Math.max(...p.marks.map((m) => m.width))}px mark) (state ${p.state})`;
+  /* R2 — the mark clears the timestamp, on L4 AND L9. */
+  const clearOK = (p) => p.marks.length === 2 &&
+    p.marks.every((m) => m.clear > 0 && Math.abs(m.clear - p.expectedClear) < 0.5);
+  const clearDetail = (p) =>
+    p.marks.map((m) => `L${m.line} ${m.clear}px`).join(" · ") +
+    ` against a computed --mark-clear of ${p.expectedClear}px (state ${p.state})`;
 
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
   await page.setViewport({ width: 1440, height: 900 });
@@ -671,11 +862,16 @@ try {
       logLineWrap: css(document.querySelector(".log__line"), "white-space"),
       stateLine: { size: css(lines[11], "font-size"), weight: css(lines[11], "font-weight"),
                    detailColor: css(lines[11].querySelector(".log__detail"), "color") },
+      /* The mark is an element now, not a border, so it is read as one: its own
+         paint and its own presence. markedLines is the second half of the
+         claim — the mark exists on exactly L4 and L9 and nowhere else. */
       keyLines: [3, 8].map((i) => ({
         line: i + 1,
-        tick: css(lines[i], "border-inline-start-color"),
+        mark: (() => { const m = lines[i].querySelector(".log__mark");
+                       return m ? css(m, "background-color") : "absent"; })(),
         token: css(lines[i].querySelector(".log__token"), "font-weight")
       })),
+      markedLines: lines.filter((li) => li.querySelector(".log__mark")).map((li) => li.dataset.line),
       glyph: css(document.querySelector(".log__glyph"), "color"),
       accent: asRgb("--accent"),
       controls: [...document.querySelectorAll(".replay__controls button")].map((b) => b.textContent),
@@ -706,7 +902,7 @@ try {
   check("all twelve lines fit the wide terminal without horizontal scroll", s2.logFits.scrollWidth <= s2.logFits.clientWidth, JSON.stringify(s2.logFits));
   check("two columns above --bp-wide", /\d/.test(s2.columns) && s2.columns.split(" ").length === 2, s2.columns);
   check("L12 is large-text rust over the corpus divider", parseFloat(s2.stateLine.size) >= 19 && Number(s2.stateLine.weight) >= 700 && s2.stateLine.detailColor === s2.accent, JSON.stringify(s2.stateLine));
-  check("key beats carry a rust tick and a bold ink token", s2.keyLines.every((k) => k.tick === s2.accent && Number(k.token) >= 700), JSON.stringify(s2.keyLines));
+  check("key beats carry a rust mark and a bold ink token, on exactly L4 and L9", s2.keyLines.every((k) => k.mark === s2.accent && Number(k.token) >= 700) && s2.markedLines.join(",") === "4,9", `${JSON.stringify(s2.keyLines)} · marked lines ${s2.markedLines.join(", ") || "none"}`);
   check("the ✓ is a rust graphical mark", s2.glyph === s2.accent, s2.glyph);
   check("chain totals render Content's strings", s2.totalsValue.text === "~64 MIN AGENT WORK · 289 API CALLS · $24.73" && s2.totalsScope.text === "BODH SPRINT 4 · WEBSITE WAVE ONLY", `${s2.totalsValue.text} / ${s2.totalsScope.text}`);
   check("totals value is rust at readout scale above --bp-wide", parseFloat(s2.totalsValue.size) >= 24 && s2.totalsValue.color === s2.accent, `${s2.totalsValue.size} ${s2.totalsValue.color}`);
@@ -780,7 +976,8 @@ try {
     return pair;
   })()`);
   evidence.accentDesktopLive = deskLive;
-  check("desktop, mid-playback: the accent mark is 12px in from both cards", deskLive.state === "playing" && pairOK(deskLive), pairDetail(deskLive));
+  check("R1 desktop, mid-playback: the accent mark is equally inset from both cards", deskLive.state === "playing" && pairOK(deskLive), pairDetail(deskLive));
+  check("R2 desktop, mid-playback: the mark clears the timestamp on L4 and L9", clearOK(deskLive), clearDetail(deskLive));
 
   /* --- reduced motion / no-JS: the complete transcript --- */
   await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
@@ -808,7 +1005,20 @@ try {
   check("the static transcript keeps its beat grouping", s2Still.tags === 10, `${s2Still.tags} entries carry a beat tag`);
   const deskStatic = await page.eval(ACCENT_PAIR);
   evidence.accentDesktopStatic = deskStatic;
-  check("desktop, no playback state: the accent mark is 12px in from both cards", deskStatic.state === null && pairOK(deskStatic), pairDetail(deskStatic));
+  check("R1 desktop, no playback state: the accent mark is equally inset from both cards", deskStatic.state === null && pairOK(deskStatic), pairDetail(deskStatic));
+  check("R2 desktop, no playback state: the mark clears the timestamp on L4 and L9", clearOK(deskStatic), clearDetail(deskStatic));
+  /* The underscore's ruling holds in BOTH motion paths — this run is under
+     prefers-reduced-motion, where the page is already still and a stray
+     animation would be least visible. */
+  const ruleStill = await page.eval(`(() => {
+    const el = document.querySelector(".brand__rule");
+    const s = getComputedStyle(el);
+    return { animation: s.animationName, duration: s.transitionDuration,
+             box: [Math.round(el.getBoundingClientRect().width * 100) / 100,
+                   Math.round(el.getBoundingClientRect().height * 100) / 100] };
+  })()`);
+  evidence.brandRuleReduced = ruleStill;
+  check("reduced motion: the header underscore is the same static mark", ruleStill.animation === "none" && parseFloat(ruleStill.duration) === 0 && ruleStill.box[1] === 2, JSON.stringify(ruleStill));
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-reduced.png"), await page.screenshot());
 
   /* --- the phone height budget (replay spec §7.1) --- */
@@ -876,16 +1086,24 @@ try {
       p.remove();
       return w;
     })();
-    const region = lines[0].getBoundingClientRect().width -
-      parseFloat(css(lines[0], "border-inline-start-width"));
+    /* No subtraction: the line carries no border, so its rendered width IS the
+       first row's available width. Leaving a border-inline-start-width term in
+       would read 0 and quietly imply the mark is still in the flow. */
+    const region = lines[0].getBoundingClientRect().width;
     /* Rendered rows of a line: one entry per row, keyed on rounded top, holding
        the row's exact top and its leftmost ink. Rect geometry is safe WITHIN a
        line — the reveal's 4px translate moves every row of it equally — but not
        across two lines, where one may be revealed and the other not. So row
-       pitch comes from here and entry separation comes from layout offsets. */
+       pitch comes from here and entry separation comes from layout offsets.
+
+       The key-beat mark is the line's first child and sits OUTSIDE the text, so
+       the range starts after it — left in, its box would win the leftmost-ink
+       minimum on L4 and L9 and report the hanging indent as 13.7px. */
     const rowsOf = (li) => {
       const range = document.createRange();
       range.selectNodeContents(li);
+      const mark = li.querySelector(".log__mark");
+      if (mark) range.setStartAfter(mark);
       const rows = new Map();
       for (const rect of range.getClientRects()) {
         if (rect.width <= 0) continue;
@@ -948,10 +1166,11 @@ try {
       visibleEntries: r2((log.clientHeight - pad + separation.separator) / separation.pitch),
       lineBox, unit, heights, rows: heights.map((h) => r2(h / lineBox)),
       advance: r2(advance),
-      /* Three widths, named apart per §7: the log's content box, the line
-         region it gives after the accent gutter, and the first row a character
-         actually gets — which is the region less the line's own 2px tick, and
-         the one the column count is derived from. */
+      /* Two widths, named apart per §7 — not three. The log's content box, and
+         the line region it gives after the accent-mark footprint. The line
+         region IS the first row, because the mark sits outside the text flow and
+         takes nothing from it; a continuation row is one ch narrower for the
+         hanging indent. */
       lineRegion: r2(log.clientWidth - parseFloat(css(log, "padding-left")) - parseFloat(css(log, "padding-right"))),
       firstRow: r2(region), columns: Math.floor(region / advance),
       rowStarts, separation,
@@ -1018,7 +1237,10 @@ try {
   check("phone: .instrument inset is at most 20% of the card", phone.instrument.inset / phone.instrument.width <= 0.2, `${phone.instrument.inset}px of ${phone.instrument.width}px = ${Math.round((phone.instrument.inset / phone.instrument.width) * 1000) / 10}%`);
   const phonePair = await page.eval(ACCENT_PAIR);
   evidence.accentPhone = phonePair;
-  check("phone, mid-playback: the accent mark is 12px in from both cards", pairOK(phonePair), pairDetail(phonePair));
+  check("R1 phone, mid-playback: the accent mark is equally inset from both cards", pairOK(phonePair), pairDetail(phonePair));
+  /* The property that measured 0 in the build the founder gated. Nothing else on
+     the page detects it, and it is measured on both key beats rather than one. */
+  check("R2 phone, mid-playback: the mark clears the timestamp on L4 and L9", clearOK(phonePair), clearDetail(phonePair));
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-375.png"), await page.screenshot());
 
   /* Every line occupies its space from load, so a window that simply scrolled
@@ -1123,15 +1345,26 @@ try {
     document.body.appendChild(probe);
     const advance = probe.getBoundingClientRect().width;
     probe.remove();
-    const firstRow = lines[0].getBoundingClientRect().width - parseFloat(css(lines[0], "border-inline-start-width"));
+    const firstRow = lines[0].getBoundingClientRect().width;
     /* Where the first CHARACTER sits, measured from the terminal's inner edge.
-       The accent gutter moved from the line to the log; §9.1 says that is
-       cost-free above --bp-wide, which is a claim about this number. */
+       It deliberately moved: the mark's whole footprint is now the log's
+       inline-start padding, so the text begins at inset + width + clear rather
+       than at the old gutter-plus-tick. The expected figure is built from the
+       stylesheet's own three values so it follows them if they ever change. */
+    const px = (prop) => {
+      const p = document.createElement("span");
+      p.style.cssText = "position:absolute;visibility:hidden;block-size:0;inline-size:var(" + prop + ")";
+      log.appendChild(p);
+      const w = p.getBoundingClientRect().width;
+      p.remove();
+      return w;
+    };
+    const footprint = px("--mark-inset") + px("--mark-width") + px("--mark-clear");
     const range = document.createRange();
     range.selectNodeContents(lines[0]);
     const ink = Math.min(...[...range.getClientRects()].filter((r) => r.width > 0).map((r) => r.left));
     return { sw: log.scrollWidth, cw: log.clientWidth, rail: Math.round(rail.width),
-      firstRow: r2(firstRow), columns: Math.floor(firstRow / advance),
+      firstRow: r2(firstRow), columns: Math.floor(firstRow / advance), footprint: r2(footprint),
       textX: r2(ink - (terminal.getBoundingClientRect().left + terminal.clientLeft)),
       rows: lines.slice(0, 11).map((li) => Math.round(li.getBoundingClientRect().height / parseFloat(css(log, "line-height")))),
       s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth };
@@ -1143,10 +1376,11 @@ try {
      build that had pushed a corpus line to a second row. */
   const longest = Math.max(...corpusLines.slice(0, 11).map((l) => [...l].length));
   check("1000px: the log's first row holds ≥74 columns and every line sets one row", tightWide.columns >= 74 && tightWide.columns >= longest && tightWide.rows.every((r) => r === 1), `${tightWide.firstRow}px = ${tightWide.columns} columns against a ${longest}-character longest line, rows ${tightWide.rows.join("")}`);
-  /* The accent gutter is cost-free above --bp-wide: the 12px moved from the
-     line's padding to the log's, so the first character keeps its x — 12px of
-     gutter plus the line's own 2px tick, in from the terminal's inner edge. */
-  check("desktop: the accent gutter did not move the log's first character", Math.abs(tightWide.textX - 14) < 0.5, `first character sits ${tightWide.textX}px in from the terminal's inner edge (12px gutter + 2px tick)`);
+  /* R5's desktop half, and the number is derived from the stylesheet rather than
+     asserted at a literal: the first character sits at the mark's whole
+     footprint — inset + mark + clearance — in from the terminal's inner edge,
+     and the first row still clears L3's 74 columns (asserted above). */
+  check("desktop: the log's first character sits at the accent mark's footprint", Math.abs(tightWide.textX - tightWide.footprint) < 0.5, `first character sits ${tightWide.textX}px in from the terminal's inner edge, against a ${tightWide.footprint}px --mark-inset + --mark-width + --mark-clear`);
 
   /* --- the sideways-gesture sweep: every width a phone reader turns up on.
          The claim is per LINE, not per page — a body that does not scroll while
@@ -1183,7 +1417,7 @@ try {
       document.body.appendChild(probe);
       const advance = probe.getBoundingClientRect().width;
       probe.remove();
-      const firstRow = lines[0].getBoundingClientRect().width - parseFloat(css(lines[0], "border-inline-start-width"));
+      const firstRow = lines[0].getBoundingClientRect().width;
       return {
         overflowing: lines.filter((li) => li.scrollWidth > li.clientWidth).map((li) => li.dataset.line),
         logScroll: log.scrollWidth <= log.clientWidth,
@@ -1265,7 +1499,7 @@ try {
     document.body.appendChild(probe);
     const advance = probe.getBoundingClientRect().width;
     probe.remove();
-    const region = lines[0].getBoundingClientRect().width - parseFloat(css(lines[0], "border-inline-start-width"));
+    const region = lines[0].getBoundingClientRect().width;
     let separator = Infinity;
     for (let i = 1; i < 11; i++) {
       separator = Math.min(separator, lines[i].getBoundingClientRect().top - lines[i - 1].getBoundingClientRect().bottom);
@@ -1288,11 +1522,11 @@ try {
   evidence.s2Landscape = landscape;
   check("landscape phone takes two columns, terminal in the wider one", !landscape.stacked && landscape.termWidth > landscape.railWidth, `terminal ${landscape.termWidth}px / narration ${landscape.railWidth}px`);
   /* Bound at §7.1's 37-column floor and REPORTING the measured count. The 55/41
-     split is sized to deliver 40, but that target derives to 40.04 — under a
-     tenth of a column of headroom — so asserting it would fail a correct build
-     on a rounding difference. A measured 39 is margin spent, not a defect; 36
-     is a defect. */
-  check("landscape phone: the terminal column clears the 37-column floor", landscape.columns >= 37 && landscape.overflowing.length === 0 && landscape.s <= landscape.c, `first row ${landscape.region}px = ${landscape.columns} columns (floor 37, split sized to deliver 40), doc ${landscape.s}/${landscape.c}`);
+     split is sized to deliver comfortably above the floor, so asserting the
+     target itself would fail a correct build on a rounding difference. §12
+     pre-authorised the figure this now measures: 39 is margin spent, not a
+     defect; 36 is a defect. */
+  check("landscape phone: the terminal column clears the 37-column floor", landscape.columns >= 37 && landscape.overflowing.length === 0 && landscape.s <= landscape.c, `first row ${landscape.region}px = ${landscape.columns} columns (floor 37; §12 records 39 here as margin, 36 as a defect), doc ${landscape.s}/${landscape.c}`);
   check("landscape phone keeps at least three whole log entries on screen", landscape.entries >= 3 && Math.abs(landscape.entries - Math.round(landscape.entries)) < 0.05, `${landscape.entries} whole entries of ${landscape.unit}px + ${landscape.separator}px separator`);
   /* The two figures §7.1 derived rather than measured, reported as measurements. */
   check("landscape phone: the chrome bar fits its budget", landscape.chrome <= 58.5, `${landscape.chrome}px measured against 58px budgeted — label sets ${landscape.chromeLabelRows} row(s)`);

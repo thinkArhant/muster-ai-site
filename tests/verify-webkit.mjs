@@ -21,6 +21,8 @@ const RENDER_WIDTH = 1400;
 /* The seed's locked ground values. Kept here rather than parsed out of CSS on
    purpose: the render is checked against the spec, not against itself. */
 const GROUND = { dark: "#13140D", light: "#DBD8C6" };
+const ACCENT = { dark: "#C05A32", light: "#A0451F" };
+const INK = { dark: "#E6E3D3", light: "#191B10" };
 
 const results = [];
 const evidence = {};
@@ -92,6 +94,87 @@ function inkShare(image, groundLum) {
   return Math.round((inked / total) * 10000) / 100;
 }
 
+/* --- the header lockup, in the engine that can actually get it wrong ---
+
+   `brand-seats.md` §11 names one construction here with real WebKit divergence
+   risk: `align-self: baseline` on an EMPTY flex item. There is no text in the
+   pennant for an engine to synthesise a baseline from, so where its bottom edge
+   lands is an engine decision, and the Blink harness measures it with a DOM
+   probe this engine cannot run — QuickLook executes no JavaScript. So it is
+   measured off the pixels instead, which is the stronger evidence anyway: the
+   claim is about where the mark visibly sits.
+
+   The relationship, not the coordinate: the pennant's bottom edge and the
+   wordmark's baseline are the same line. `MUSTER` is all-caps mono with no
+   descender, so the wordmark's lowest inked row IS its baseline row, and the two
+   figures are directly comparable without a font metric. Tolerance is one raster
+   row — antialiasing puts a partial row at each edge, and asking a rasteriser
+   for sub-pixel agreement would fail a correct build. A build that dropped the
+   baseline alignment centres the mark instead, which moves it by about 3px
+   against a 16.8px line box, so a 1px tolerance still catches it. */
+const channel = (image, x, y, k) => image.pixels[y * image.stride + x * image.channels + k];
+const rgbAt = (image, x, y) => [channel(image, x, y, 0), channel(image, x, y, 1), channel(image, x, y, 2)];
+const hexRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const isNear = (c, t, tol) => c.every((v, i) => Math.abs(v - t[i]) <= tol);
+
+function lockupBaseline(image, theme) {
+  const accent = hexRgb(ACCENT[theme]);
+  const band = Math.min(image.height, Math.round(image.height * 0.1));
+
+  /* The pennant is the leftmost accent cluster in the status bar. Found by
+     connectivity and filtered on shape rather than looked up at a coordinate, so
+     the check survives the bar's contents moving. */
+  const hits = new Set();
+  for (let y = 0; y < band; y++) {
+    for (let x = 0; x < image.width; x++) {
+      if (isNear(rgbAt(image, x, y), accent, 12)) hits.add(x + "," + y);
+    }
+  }
+  const seen = new Set();
+  const clusters = [];
+  for (const key of hits) {
+    if (seen.has(key)) continue;
+    const stack = [key];
+    const cell = [];
+    while (stack.length) {
+      const k = stack.pop();
+      if (seen.has(k) || !hits.has(k)) continue;
+      seen.add(k);
+      const [cx, cy] = k.split(",").map(Number);
+      cell.push([cx, cy]);
+      for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) stack.push(cx + dx + "," + (cy + dy));
+    }
+    const xs = cell.map((c) => c[0]);
+    const ys = cell.map((c) => c[1]);
+    const box = { l: Math.min(...xs), r: Math.max(...xs), t: Math.min(...ys), b: Math.max(...ys) };
+    box.w = box.r - box.l + 1;
+    box.h = box.b - box.t + 1;
+    /* 6 × 9 authored, plus up to a row of antialiasing on each edge. */
+    if (box.w >= 5 && box.w <= 9 && box.h >= 8 && box.h <= 12) clusters.push(box);
+  }
+  if (!clusters.length) return null;
+  const mark = clusters.sort((a, b) => a.l - b.l)[0];
+
+  /* The wordmark: letters matched on the INK token, not on "anything that is not
+     ground". The looser reading catches the underscore's antialiasing — which is
+     accent bleeding toward ground, so it is neither — and that sits BELOW the
+     baseline by construction, which would drag the measurement down by the exact
+     amount the check is trying to detect. Every letter of MUSTER is ink; nothing
+     else in these rows is. */
+  const ink = hexRgb(INK[theme]);
+  let inkTop = Infinity;
+  let inkBottom = -1;
+  for (let y = Math.max(0, mark.t - 6); y < Math.min(image.height, mark.b + 6); y++) {
+    for (let x = mark.r + 2; x < Math.min(image.width, mark.r + 200); x++) {
+      if (!isNear(rgbAt(image, x, y), ink, 28)) continue;
+      if (y < inkTop) inkTop = y;
+      if (y > inkBottom) inkBottom = y;
+    }
+  }
+  if (inkBottom < 0) return null;
+  return { mark, inkTop, inkBottom, drop: mark.b - inkBottom };
+}
+
 try {
   mkdirSync(ARTIFACTS, { recursive: true });
 
@@ -120,6 +203,17 @@ try {
       `grain renders in WebKit (${theme})`,
       patch !== null && patch.stdDev > 0.2,
       patch ? `stdDev ${patch.stdDev}, range ${patch.min}-${patch.max}` : "no ground patch found"
+    );
+
+    const lockup = lockupBaseline(image, theme);
+    evidence[theme + "Lockup"] = lockup;
+    check(
+      `WebKit sets the header pennant on the wordmark's baseline (${theme})`,
+      lockup !== null && Math.abs(lockup.drop) <= 1,
+      lockup
+        ? `pennant ${lockup.mark.w}×${lockup.mark.h}px, its lowest row ${lockup.mark.b} against the wordmark's ` +
+          `baseline row ${lockup.inkBottom} — ${lockup.drop}px apart (one raster row of antialiasing allowed)`
+        : "no 6×9 accent pennant found in the status bar"
     );
   }
 

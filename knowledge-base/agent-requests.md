@@ -61,6 +61,152 @@ later reader cannot mistake a Blink-only result for parity.
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-26 HO-024 — the terminal's left edge built as a system; the pennant seated, and the tick no longer collides
+**Type:** handoff
+**Producer:** developer
+**Deliverable:** `index.html` (header lockup, favicon, key-beat marks), `styles/chrome.css`,
+`styles/replay.css`, `tests/verify-shell.mjs`, `tests/qa-independent-audit.mjs`, `tests/verify-webkit.mjs`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**The Gate 3 defect is closed, and it is closed by removing a value rather than by choosing a better
+one.** `border-inline-start` is off `.log__line`. The key-beat mark is now a real, empty, `aria-hidden`
+element positioned against its own line, and the log's inline-start padding opens the room it occupies:
+`--mark-inset` 12px + `--mark-width` 2px + `--mark-clear` 0.5ch = **17.91px**. Because the line's padding
+box is fixed by the log, the hanging indent can be set to anything without moving the mark a pixel — the
+collision existed because the mark and the indent *were the same CSS value*, and they no longer are.
+
+**The five relationships, measured on the built page** (HO-019 §9.2 specified them; these are what the
+build delivers):
+
+| | Relationship | Measured | Where it is asserted |
+|---|---|---|---|
+| **R1** | mark ↔ card | **12.00px in the terminal, 12.00px in the narration**, at desktop mid-playback, desktop static and phone | `pairOK` — asserts the *equality*, reads the expected figure from `--mark-inset`, and adds an `inset ≥ 4 × mark width` floor |
+| **R2** | mark ↔ text | **3.91px on L4 and 3.91px on L9** (0.5ch at a measured 7.83px advance) | new `clearOK`, at all three states. This measured **0** in the build the founder gated |
+| **R3** | row ↔ row | pitch 19.50px, whitespace 6.50px | unchanged — already a ratio, not a value |
+| **R4** | entry ↔ entry | 18.50px against R3's 6.50px = **2.85×** | unchanged — already `ratio ≥ 2 && separator > 0.5` |
+| **R5** | text ↔ wrap edge | **37 columns at 360px**, 39 at 375, 41 at 390/393, 76 at `--bp-wide` (L3 is 74 characters) | the column-count checks, with the `border-inline-start-width` subtraction removed from all five sites |
+
+**The 12px equality holds at 12px and the 37-column floor holds at 360px** — both are measurements above,
+not derivations. Neither constraint was traded: §7.1 rule 1's fallback did not fire.
+
+**No hardcoded `12` survives.** The four accent-pair sites the step named collapsed into one predicate
+that resolves `--mark-inset` by laying a length out in the log's own font. If the token ever moves, the
+check follows it and still fails on inequality — which is DEC-032's whole point, and the reason
+`verify-shell.mjs:617/783/811/1021` could not be fixed one at a time.
+
+**Every re-based assertion still fails when its relationship is violated — demonstrated, not claimed.**
+Three deliberate breaks, each reverted immediately:
+
+- `--mark-clear: 0ch` — the Gate 3 defect state exactly. **R2 goes red at all three states**, reporting
+  `L4 0px · L9 0px`. Note *why* it catches this: the expected figure follows the token to 0, so the
+  equality clause alone would have passed. The `clear > 0` clause is what fails.
+- `--mark-inset: 8px` — **R1 goes red at all three states**, reporting `terminal 8px / narration 12px …
+  expected 8px read from --mark-inset`. The expected figure followed the token, and the check failed on
+  the terminal↔narration *inequality*. That is DEC-032's property demonstrated directly: the check cannot
+  be satisfied by moving the value it was written against.
+- `align-self: flex-start` on the pennant — both WebKit lockup checks go red at −4px (below).
+
+`qa-independent-audit.mjs`'s `accentRgb` fossil at `:824` was deleted rather than re-based, per HO-019.
+
+**The pennant is seated in all six places** — header lockup, five section separators, favicon — at
+**6 × 9px**, drawn with `clip-path: polygon()` on a `background-color` box. No SVG, no new file, **zero new
+network requests**: the seats it replaces were background-color boxes and it keeps that property, which
+sidesteps the inline-SVG/WebKit divergence class rather than testing for it. The mark's height is asserted
+**equal to `.rule__tick`'s** rather than to the literal 9, so the shared measure that makes a separator read
+as one machined assembly moves together or goes red. `.tag` still renders **16.8px against a 16.8px
+`--text-label` line box** — baseline alignment did not grow the flex line, which was the load-bearing risk
+across five vertically-centred tags.
+
+**The underscore is net-new and is drawn, not typed** — a 1ch × 2px bar, measured **7.22 × 2px**, sitting
+1px to 3px below the baseline, inside the wordmark's own text run at **0px past its trailing 2.16px
+letter-space** against a 12px lockup gap. As a third flex item it takes that 12px and reads as a floating
+dash. It carries no animation and no transition in either motion path — asserted twice, including under
+`prefers-reduced-motion`, because a mark that looks like a terminal caret is the element most likely to
+become a fourth motion element. **The header's accessible name is exactly `MUSTER`**, read from the DOM.
+
+Both brand marks are painted with `background-color` and never `color`, with an assertion that says so —
+the trap HO-019 handed over, since the audit's small-rust-text sweep collects elements whose `color`
+resolves to the accent.
+
+**§2 is untouched, proven rather than asserted**: twelve corpus lines byte-clean at 320 / 360 / 375 / 390 /
+393px and in the reduced-motion transcript, the gate hold silent from 43.55 s to **48.00 s**, the phone core
+**472.39px against 472.40px budgeted**, three whole entries on a 51px pitch, every chain line still exactly
+two rows.
+
+**Cross-engine — and this is where the step was not yet finished.** `brand-seats.md` §11 names
+`align-self: baseline` on an **empty** flex item as the one construction here with real WebKit divergence
+risk, and nothing in the suite covered it in WebKit: `verify-webkit.mjs` measured only ground and grain,
+and QuickLook runs no JavaScript, so the DOM probe the Blink harness uses is unavailable. It is now
+measured off the pixels, which is better evidence anyway — the claim is about where the mark visibly
+sits. The pennant's lowest inked row and the wordmark's baseline row are found by colour and compared:
+**0px apart in dark and 0px apart in light.** `MUSTER` is all-caps mono with no descender, so its lowest
+inked row *is* its baseline row and the two figures need no font metric.
+
+I proved that check can fail before trusting it: `align-self: flex-start` moves it to **−4px** and both
+themes go red. One honest limit, because it changes what the check means — `align-self: center` renders
+**identically** here (the 9px mark centred in a 16.8px line box lands within 0.1px of the baseline), so
+what is protected is the mark's rendered position, not the CSS keyword that produces it. That is the right
+thing to protect, but a reader should not infer the keyword is guarded.
+
+The **second** WebKit risk §11 names — the log mark's `inset-block: 0` against a line box the reveal also
+transforms — is covered where it already lived, in the audit's §2 WebKit pass: accent ink inside §2 measures
+**1987 pixels dark and 1888 light with the log lines shown, against 343 with them hidden**, so the mark
+paints rather than silently dropping. QuickLook runs no JavaScript, so that render is the untransformed case, and
+the transformed one is Blink evidence. Both are labelled as such in the file.
+
+**Results, both harnesses, foreground, this session, on the final state of every file above**:
+`bash scripts/test.sh` **GREEN across both engines — 183 checks, 0 failing** (Blink 168, WebKit 15), and
+`node tests/qa-independent-audit.mjs` **106/106, exit 0**. Run separately, because the audit is not in
+`scripts/test.sh`.
+
+One operational note for whoever runs these next: the two harnesses **do not survive being run
+concurrently**. An audit sharing the machine with a `verify-shell` run hung indefinitely in its WebKit
+phase — no output for twelve minutes, no `qlmanage` child, killed and re-run clean. Run them one at a
+time. Nothing in the build causes it; QuickLook is the shared resource.
+
+**Would Apple ship this? — Yes, and the reason is that nothing moved that was not meant to.** The
+mechanism is subtractive, so the adjacent geometry had nothing to absorb; the numbers above are the same
+numbers HO-019 predicted, which is the check that the spec was buildable rather than aspirational. Two
+places I would not claim excellence. R5's margin at 360px is **2.4px** — thin, and thin because the budget
+has no more room, which §9.2 states rather than smooths over. And the WebKit lockup check finds its
+subject by colour-clustering the status bar; that is more fragile than a DOM query and it is the check
+most likely to need attention if the bar's contents change. It is shape-filtered rather than
+coordinate-looked-up for exactly that reason, and it reports what it found so a failure is diagnosable.
+
+**Revision log:**
+- 2026-07-26: Self-review found the step's cross-engine criterion satisfied only in the weak sense — the
+  suite ran in both engines, but no WebKit assertion touched the new construction, and `brand-seats.md`
+  §11 asks for that one by name. Added it, then broke it deliberately to confirm it fails.
+- 2026-07-26: First cut of the WebKit check read the wordmark as "any pixel that is not ground," which
+  swept in the underscore's antialiasing. That sits *below* the baseline by construction, so it dragged
+  the measurement to −5px and failed a correct build. Re-scoped to match the `--ink` token.
+- 2026-07-26: Self-review grepped the deliverable for the terminology this step retires and found four
+  live uses of "tick" for the key-beat mark in the audit — one check name and two reported detail
+  strings. The construction no longer exists under that name, and a reviewer grepping for it would have
+  found them. Renamed; `.rule__tick` and the corpus's own ✓ keep the word, correctly.
+- 2026-07-26: A duplicated word in a re-based audit comment, fixed.
+
+**Observations:**
+- OBS-005 — The WebKit harness can measure geometry, not just ink   Severity: low
+  Evidence: this step's baseline check reads a rendered relationship out of a QuickLook PNG by
+  colour-clustering. `verify-webkit.mjs` had been treated as a render-and-grain gate because QuickLook
+  runs no JavaScript, and several specs state cross-engine limits in those terms.
+  Suggested action: PM may want this noted where REQ-007 is settled — it does not rescue scroll-snap
+  (a behaviour still cannot be driven), but any *static* geometry a spec calls cross-engine-critical is
+  measurable this way, which is a wider door than the specs currently assume.
+
+- OBS-006 — `agent-requests.md` is over its active-section budget, and the sprint shape is why
+  Severity: low
+  Evidence: `muster-requests-lint.sh` fails at **698 active lines against a 300 budget**. It was already
+  over before this handoff (568) and no entry can be swept: every Wave 1 handoff is `in-review` by
+  design, because this sprint batches six deliverables into one PM review rather than closing them one
+  at a time.
+  Suggested action: none from here — the Wave 1 review step closes HO-018 through HO-025 and the sweep
+  falls out of it. Flagged only so a red lint at the next session start reads as expected rather than as
+  a new defect.
+
 ### 2026-07-26 HO-023 — §4, §5 and §6 copy: the founder's draft tightened by five words, and two inventory rulings
 
 **Type:** handoff

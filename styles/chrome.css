@@ -50,9 +50,16 @@
   block-size: 100%;
 }
 
+/* Baseline, not centre: the pennant's bottom edge sits ON the wordmark's
+   baseline, so its top overhangs the cap height by ~0.6px and it reads as a
+   marker set against the line rather than a bullet floating in it. An empty
+   flex item has no text baseline, so the engine synthesises one from the box —
+   which is the one construction here with real WebKit divergence risk, and is
+   why the mark's bottom edge is verified against the baseline in both engines
+   (brand-seats.md §2, §11). */
 .brand {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--gap-hairline);
   font-family: var(--font-mono);
   font-size: var(--text-label);
@@ -62,10 +69,49 @@
   color: var(--ink);
 }
 
-.brand__mark {
-  inline-size: 8px;
-  block-size: 8px;
+/* The pennant. A clip-path on a plain box rather than an SVG: the seats it
+   replaces were background-color boxes, which is why they have never had a
+   cross-engine problem, and this keeps that property — no new file, no request,
+   and the inline-SVG/WebKit divergence class avoided rather than tested for.
+   81.79% is 575/703, the authored notch apex, expressed as a percentage so the
+   silhouette is identical at every seat size. Painted with `background-color`
+   and never `color`: the small-rust-text audit collects elements whose `color`
+   resolves to the accent, and a mark painted with `color` would join that set
+   and be failed as sub-AA text. */
+.brand__mark,
+.tag__mark {
+  inline-size: 6px;
+  block-size: 9px;
   flex: none;
+  align-self: baseline;
+  background-color: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 81.79%, 0 100%);
+}
+
+.brand__word {
+  white-space: nowrap;
+}
+
+/* Drawn, not typed. A literal `_` sets at ~1px in the mono fallback stack —
+   hairline weight, not accent-mark weight — and both its thickness and its
+   depth below the baseline are decided by whichever face resolves, so the
+   lockup would differ on every platform. Drawn, the bar is 2px everywhere (the
+   page's single accent-mark weight, the same 2px as the key-beat mark and the
+   narration bar) and only its POSITION comes from the font, via the baseline,
+   which every face has. Its 1ch length tracks the resolved face's character
+   width, so it stays one character position wide whatever font wins.
+
+   Offset with relative positioning rather than a negative bottom margin: the
+   shift must not enter the line box, and the shell's spacing rule is one-sided.
+   Static — it never blinks. The curl cursor owns the only blink on the page and
+   a live underscore would be a fourth motion element (page-shell.md §10). */
+.brand__rule {
+  display: inline-block;
+  inline-size: 1ch;
+  block-size: 2px;
+  vertical-align: baseline;
+  position: relative;
+  inset-block-start: 3px;
   background-color: var(--accent);
 }
 
@@ -121,20 +167,20 @@
   background-color: var(--hair);
 }
 
+/* Baseline for the same reason as the lockup — and the load-bearing constraint
+   here is that .tag's rendered block size must NOT change when the square
+   becomes a pennant. Baseline alignment inside a flex line can grow the line
+   box, and this construction is vertically centred in a grid row, so a single
+   pixel of growth would shift all five section tags off their rules at once.
+   The 9px mark clears the 12px label's ascent, so the line box is unchanged —
+   asserted, not assumed (brand-seats.md §11). */
 .tag {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--gap-hairline);
   padding-inline: var(--gap-hairline);
   white-space: nowrap;
   font-weight: 400;
-}
-
-.tag__mark {
-  inline-size: 8px;
-  block-size: 8px;
-  flex: none;
-  background-color: var(--accent);
 }
 
 /* --------------------------------------------------------------------------

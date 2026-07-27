@@ -117,16 +117,25 @@
   flex: 1 1 auto;
   min-block-size: 0;
   margin: 0;
+  /* The three values of §9.2's left-edge system, each reachable from exactly
+     one place. R1 is the mark's distance from its own card — the one relationship
+     both layers share, and 12px is only its value; R2 is the mark's clearance
+     from the text, the largest half-column the 37-column floor holds; the 2px
+     between them is the mark itself. The log's inline-start padding opens the
+     room all three occupy, which is what takes the mark out of the text flow:
+     the line's padding box is then fixed by the log, so the hanging indent can
+     be set to anything without moving the mark a pixel. That independence is
+     the whole fix — the collision at L4 and L9 existed because the mark and the
+     indent were the same CSS value. */
+  --mark-inset: var(--gap-hairline);   /* R1 — mark to card   */
+  --mark-width: 2px;                   /*      the mark itself */
+  --mark-clear: 0.5ch;                 /* R2 — mark to text   */
   /* Vertical padding is the §7.1 budget's `terminal body padding` row.
-     Horizontally the log carries the accent gutter and nothing else: the 12px
-     inline-start is where the key-beat tick sits (§9.1), and it lives on the log
-     rather than on the line because `border-inline-start` sits OUTSIDE
-     `padding-inline-start` — inset the line and the text moves while the tick
-     stays welded to the frame. The inline-end stays 0: it is a wrap edge, and
-     every pixel taken there is a pixel that can push a corpus line to a third
-     row. */
+     The inline-end stays 0: it is a wrap edge (R5), and every pixel taken there
+     is a pixel that can push a corpus line to a third row. */
   padding-block: var(--gap-hairline);
-  padding-inline: var(--gap-hairline) 0;
+  padding-inline-start: calc(var(--mark-inset) + var(--mark-width) + var(--mark-clear));
+  padding-inline-end: 0;
   list-style: none;
   overflow: auto;
   overscroll-behavior: contain;
@@ -155,19 +164,30 @@
    only: the longest corpus token is 18 characters against a floor of 36
    continuation columns, so it never fires.
 
-   The inset is 1ch and not a pixel more below --bp-wide, and that is
-   load-bearing rather than taste: §7.1's budget derives from a line region of
-   the terminal's inner width less the log's 12px accent gutter (313px — a
-   39-character first row at 375px, against a 37-column floor), and every pixel
-   taken here is a pixel that can push a corpus line to a third row and cost the
-   window a whole entry. */
+   The indent is deliberately NOT a sixth relationship of the left edge: it is
+   independent of all five, and it carries no `border-inline-start` beside it.
+   With no border in the flow the line's rendered width IS the first row's
+   available width, which is why §7 names two widths rather than three. */
 .log__line {
   display: block;
+  position: relative;
   white-space: pre-wrap;
   overflow-wrap: break-word;
-  border-inline-start: 2px solid transparent;
   padding-inline-start: 1ch;
   text-indent: -1ch;
+}
+
+/* R1 and R2, drawn. `inset-inline-start` resolves against the line's PADDING
+   box, which the log's padding has already placed at inset + width + clear from
+   the card; stepping back by width + clear lands the mark at inset exactly. It
+   is empty and aria-hidden, so it adds no character to the line and the
+   byte-clean corpus diff is untouched — and it exists on L4 and L9 only. */
+.log__mark {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(-1 * (var(--mark-width) + var(--mark-clear)));
+  inline-size: var(--mark-width);
+  background-color: var(--accent);
 }
 
 /* The entry boundary. Only the gaps BETWEEN entries are spent, so a window of
@@ -190,10 +210,6 @@
 /* Rust as a graphical mark only — the fact it flags is carried in ink at AA. */
 .log__glyph {
   color: var(--accent);
-}
-
-.log__line--key {
-  border-inline-start-color: var(--accent);
 }
 
 /* The terminal state. Large enough that rust clears AA-large, which is what
@@ -470,10 +486,11 @@
   }
 
   /* A desktop entry is one row, so --lead-terminal already separates entries
-     and no boundary gap is added. The accent gutter moved from the line to the
-     log, which is exactly cost-free here: the line's first row began 12px in
-     from the tick before and begins 12px in from the tick now, so every
-     character keeps its x and the column count does not move. */
+     and no boundary gap is added. The accent gutter is unchanged across this
+     breakpoint: the mark's whole footprint is the log's inline-start padding at
+     every viewport, so the first character sits at the same distance from the
+     terminal's inner edge here as it does on a phone, and the desktop column
+     count follows from that one number rather than from a second rule. */
   .log {
     line-height: var(--lead-terminal);
   }
