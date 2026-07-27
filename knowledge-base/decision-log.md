@@ -187,6 +187,87 @@ and Gate B requires any fix round to end with a scoped QA re-run.
 **Touched**: `orchestration-queue.md` (full rewrite), `current-sprint.md`, `copy-rules.md` (scope table
 repaired, the eight role names recorded), `decision-log.md`.
 
+### DEC-036 — The key-beat mark leaves the text flow; 0.5ch is the clearance the floor holds (2026-07-26)
+
+**Decision**: the terminal's left edge is specified as five relationships, each reachable from exactly
+one CSS value (`section-02-replay.md` §9.2). The key-beat mark stops being a `border-inline-start` on the
+log line and becomes a real, empty, `aria-hidden` element positioned outside the text flow; the log's
+inline-start padding opens the room it sits in. The mark's distance from its card stays **12px** in both
+layers and its clearance from the text is **0.5ch (3.91px)**.
+
+**Rationale**: the tick collided with the timestamp because the mark and the hanging indent were the same
+CSS value — `padding-inline-start: 1ch` with `text-indent: -1ch` puts the first row at 0 from the border,
+and on a key beat the border *is* the mark. Positioning the mark against the line's box rather than
+drawing it on the line's edge removes the shared lever, so the class cannot recur rather than being caught
+next time. The indent is deliberately **not** counted as a sixth relationship: it was the thing that kept
+moving the other five, and listing it would invite the next change to be costed against them again.
+
+**The trade, stated.** At 360px — the tightest viewport — the mark's whole footprint may not exceed
+17.7px before L3 breaks to a third row and the phone entry guarantee collapses. 12px is the equality
+invariant the founder accepted at Gate 3 and §7.1 forbids fidelity or the entry count to pay; 2px is the
+mark. 0.5ch is the largest half-column the remainder holds, leaving 2.4px. The alternative — dropping the
+invariant to 8px to buy 8px of clearance — was rejected: it spends a founder-accepted value, drags the
+narration card's padding with it to keep the two equal, and lands on the same margin.
+
+**Measured, not derived.** Before/after at 320 / 360 / 375 / 390 / 393 / landscape / `--bp-wide` / 1440,
+plus a rendered key-beat frame at 375px and at desktop. The mark holds at 12.00px in both layers
+everywhere; clearance goes 0 → 3.91px; row pitch, entry separator, the 2.85× grouping ratio and the
+hanging indent do not move; **no column is lost** at 360, 375, 390 or `--bp-wide`, all of L1–L11 still
+set exactly two rows, and 320px is unchanged at two whole entries. Two counts fall by one — 393px to 41,
+which is the figure §7.1's table already carried, and the landscape column to 39, which §12 had already
+pre-authorised as margin spent. The shaped advance measures **7.83px**, not the 7.847 the tables derived
+on, which is why assertions now bind on column counts and report pixels.
+
+**Impact**: Developer, QA, PM.
+
+**Touched**: `design-specs/web/section-02-replay.md` (§7, §7.1 rule 1, §9, §9.1, new §9.2, annotation 4,
+§12, §13), `agent-requests.md`.
+
+---
+
+### DEC-037 — The pennant seats at 6×9, the underscore is drawn, and the footer takes no lockup (2026-07-26)
+
+**Decision**: four rulings, in `design-specs/web/brand-seats.md`.
+
+1. **One page-seat size: 6 × 9px** — header lockup and all five section separators. 9px is the section
+   rule's own end-tick height, so the separator reads as one machined assembly rather than three
+   unrelated parts; and at 6 × 9 the mark puts 23% *less* ink on the page than the 8 × 8 square it
+   replaces while reading stronger, because a silhouette carries identity a square does not. 8 × 12 was
+   rendered and rejected as badging — it out-weighs the caps it introduces by 43%.
+2. **The underscore is a drawn 1ch × 2px rust bar**, three pixels under the wordmark's baseline, inside
+   the wordmark's own text run rather than as a third flex item of the lockup. A typed `_` sets ~1px at
+   `--text-label` — `--hair` weight — at a depth decided by whichever face resolves from the mono
+   fallback stack, so the lockup would look different on every platform. Drawn, only its baseline
+   position comes from the font.
+3. **The header's accessible name stays exactly `MUSTER`.** Both marks are `aria-hidden`. `_` is
+   announced as "underscore", as "line", or as nothing depending on the screen reader and its verbosity
+   setting, so an announced underscore would greet different readers with different strings on the page's
+   first landmark — and the product is named Muster, not `MUSTER_`. Because the mark is a drawn box there
+   is no text node to announce, so the ruling and the mechanism agree and the name cannot drift.
+4. **No footer lockup.** `brand-guidelines.md` §4's seat table says "header **and footer** lockup";
+   DEC-031 enumerates four seats and the footer is not one. DEC-031 wins, and the design reason outranks
+   the precedence: the header plus five separators already put the mark on the page six times, and a
+   seventh instance a few rhythm units below the fifth does no work the provenance line has not already
+   done. DEC-031's guard against badging is stated as a scale limit; the equivalent failure at the footer
+   is frequency.
+
+**Rationale for sizing optically at all**: DEC-031 left it open deliberately — the artwork gives a
+silhouette and a 1:1.4957 ratio, not a page size, and a mark set to the square's width sets half again as
+tall. Three candidates were rendered at 6× against the real tokens in both themes, at the real wordmark
+and the real stencil tag, before one was chosen.
+
+**Also ruled**: the favicon is the founder's house tile restated at a 16-unit viewBox — the tile's own
+coordinates divided by 64 — because a favicon cannot follow `prefers-color-scheme` reliably and must read
+without a theme. A cream pennant on the near-black ground would be a sliver.
+
+**Impact**: Developer, QA, Content (wordmark string unchanged), PM (`brand-guidelines.md` §4 amendment,
+REQ-006).
+
+**Touched**: `design-specs/web/brand-seats.md` (new), `design-specs/web/page-shell.md` (§8, §9, §10, §12,
+§13), `agent-requests.md`.
+
+---
+
 ### DEC-035 — Two copy rulings: SP3 shortened to clear the 320px card; §3's competitor clause ships named (2026-07-26)
 
 **Decision 1 — SP3 is 19 words.** The one-time copy-length lever DEC-027.1 deferred to this step is

@@ -5,8 +5,144 @@
 ## Active Requests
 <!-- Entries with Status: open -->
 
+### 2026-07-26 REQ-006 — `brand-guidelines.md` §4 names a footer lockup that DEC-031 does not
+**Type:** request
+**From:** ui-ux
+**To:** PM
+**Status:** open
+
+§4's seat table reads *"Header **and footer** lockup | Pennant + `MUSTER_`"*. DEC-031 enumerates four
+seats and the footer is not among them. I have ruled it out — `brand-seats.md` §8, DEC-037.4 — on
+DEC-031's precedence plus a frequency argument: the header plus five separators already put the mark on
+the page six times, and a seventh a few rhythm units below the fifth does no work the provenance line has
+not already done.
+
+**The ask**: amend `brand-guidelines.md` §4's seat table so the row reads "Header lockup" and the footer
+is either absent or explicitly excluded. `brand-guidelines.md` is PM-owned (Rule 1), which is why this is
+a request rather than an edit. It is not blocking — the spec and the build both proceed from DEC-037 —
+but until it lands, a future reader has two files disagreeing about a brand seat, and that is exactly the
+gap DEC-034's audit was created to find.
+
+Worth PM's judgment rather than a rubber stamp: if the founder's second pennant ruling *did* intend a
+footer lockup and DEC-031 simply under-recorded it, then the right fix is the reverse — amend DEC-037 and
+add the seat. I do not think so, but the seat table predates DEC-031 and I cannot tell from the files
+which way the omission went.
+
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
+
+### 2026-07-26 HO-019 — the terminal's left edge closed as a system; pennant seats specified
+**Type:** handoff
+**Producer:** ui-ux
+**Deliverable:** `knowledge-base/design-specs/web/brand-seats.md` (new); amended
+`knowledge-base/design-specs/web/section-02-replay.md` (§7, §7.1 rule 1, §9, §9.1, **new §9.2**,
+annotation 4, §12, §13) and `knowledge-base/design-specs/web/page-shell.md` (§8, §9, §10, §12, §13);
+DEC-036, DEC-037; REQ-006
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Summary — A, the left edge.**
+
+- **The mark leaves the text flow.** `border-inline-start` comes off `.log__line`; the key-beat mark
+  becomes a real, empty, `aria-hidden` element positioned against its own line, and the log's
+  inline-start padding opens the room it sits in (`--mark-inset` + `--mark-width` + `--mark-clear` =
+  17.91px). That is the fix rather than a value change: the collision existed because the mark and the
+  hanging indent *were the same CSS value*, and the indent can now be set to anything without the mark
+  moving.
+- **Five relationships, one assertion each**, in §9.2 with measured values: R1 mark↔card **12.00px**
+  (both layers, every viewport), R2 mark↔text **3.91px** (was 0 — this is F-G3), R3 row↔row **19.50px /
+  6.50px**, R4 entry↔entry **31.50px / 18.50px = 2.85× R3**, R5 text↔wrap-edge **37 columns at 360px**.
+  R3 and R4 already had relationship-shaped assertions and are **not** re-based; R1's needs its
+  hardcoded `12` replaced by a read of `--mark-inset` plus an equality clause; R2 and R5 need the checks
+  named below.
+- **The indent is deliberately not a sixth relationship.** It kept moving the other five. It stays at
+  1ch with its existing assertion and is now independent of all of them.
+- **Both constraints hold — measured, not derived.** The 12px equality survives at 12px in both layers;
+  the 37-column floor holds at 360px with 2.4px to spare; all of L1–L11 still set exactly two rows at
+  360/375/390/393; 320px is unchanged at two whole entries; entry grouping, row pitch and the core height
+  are untouched. §7.1 rule 1's fallback **did not fire**, so nothing was traded.
+- **No column is lost** at 360, 375, 390 or `--bp-wide` (76 there, against L3's 74). Two counts fall by
+  one: 393px → 41, which is the figure §7.1's own table already carried, and the landscape terminal
+  column → 39, which §12 had already pre-authorised in writing as "margin spent, not a defect."
+- **The narration mark does not move**, in either layout. The equality holds at its accepted value, so
+  there is nothing for that layer to follow. §9.1 now also states that mark↔*text* is deliberately
+  per-layer and why — an unstated difference between these two layers is what produced the flush-tick
+  finding originally.
+- **The shaped advance measures 7.83px**, not the 7.847 the §7.1 tables derived on. Every figure in that
+  table is now a measurement and the floor's pixel equivalent is 289.7. This is also why the assertions
+  bind on **column counts** and report pixels — a hundredth of a pixel must not fail a correct build.
+
+**Summary — B, the pennant seats.** `brand-seats.md`. **6 × 9px at every page seat**, chosen because 9px
+is the section rule's own end-tick height (so the separator reads as one machined assembly) and because at
+that size the mark puts 23% *less* ink on the page than the square while reading stronger. 8 × 12 was
+rendered and rejected as badging. Bottom edge on the baseline, `--gap-hairline` to the words unchanged.
+**The underscore is a drawn 1ch × 2px bar three pixels under the baseline, inside the wordmark's own text
+run** — as a flex item it takes the lockup's 12px gap and reads as a floating dash, which I rendered
+before ruling. **The header's accessible name stays exactly `MUSTER`**; both marks are `aria-hidden`, and
+because the underscore is a drawn box rather than a character there is no text node to announce, so the
+ruling and the mechanism agree. Favicon is the founder's house tile restated at a 16-unit viewBox (the
+exact `data:` URI is in §6). **Footer lockup ruled out** — DEC-037.4, REQ-006.
+
+**Assertions the build must re-base — by file and line.** These pass today and will not survive the
+change; every one is re-based to keep failing when its relationship is violated, never deleted.
+
+| Site | Today | Re-base to |
+|---|---|---|
+| `verify-shell.mjs:372` | `tagMark.w === 8 && tagMark.h === 8` | 6 × 9, height **equal to `.rule__tick`'s** (the shared measure), `clip-path` not `none`. Plus a new check that `.tag`'s rendered block size is unchanged |
+| `verify-shell.mjs:607–617` (`ACCENT_PAIR`) | reads the *line's* rect as the mark | read `.log__mark`'s own box; narration's is still its entry's border-box edge. Mechanism-agnostic by design |
+| `verify-shell.mjs:615` (`pairOK`) | `Math.abs(p.terminal - 12) < 0.5` — the hardcoded value | equality of the two insets **plus** `terminal >= 4 × markWidth`, with the expected figure read from `--mark-inset`. Fixes all three call sites (`:783`, `:811`, `:1021`) at once |
+| `verify-shell.mjs:676`, consumed at `:709` | `tick: css(lines[i], "border-inline-start-color")` | the mark element's `background-color`, and that it exists on exactly L4 and L9 |
+| `verify-shell.mjs:880`, `1126`, `1186`, `1268` | `rect.width - border-inline-start-width` | drop the subtraction — the term is now always 0, and leaving it in implies the mark is still in the flow. Derive the first row from the log's content box and assert `firstRow === logContentWidth` |
+| `verify-shell.mjs:1126` (the `ink` clause) | "the first character sits at the same x as before" | it deliberately moved. Assert it sits at `--mark-inset + --mark-width + --mark-clear` from the card and the first row still clears 74 columns |
+| `verify-shell.mjs:1298` | reports "split sized to deliver 40" | still `>= 37`; the reported figure is now 39 |
+| `qa-independent-audit.mjs:735` | `s.borderInlineStartWidth + " " + s.borderInlineStartColor` | the mark element's `inlineSize` + `backgroundColor` |
+| `qa-independent-audit.mjs:825–828` | `/^2px/.test(k.tick)` | the mark's measured width and colour. **`accentRgb` at `:824` is assigned and never read** — delete it rather than re-base it; it is a fossil of the value-assertion pattern |
+| `qa-independent-audit.mjs:264` | decorative sweep omits the new marks | add `.log__mark` and `.brand__rule` |
+
+**Two new checks, because nothing existing covers them**: R2 (the mark clears the timestamp on L4 *and*
+L9 — the property that measured 0 in the build the founder gated), and that `.brand__rule` carries no
+animation or transition in either motion path.
+
+**One trap to hand over explicitly**: the mark must be painted with `background-color`, never `color`.
+`qa-independent-audit.mjs` builds its small-rust-text audit from elements whose `color` resolves to the
+accent, so a mark painted with `color` joins that set and fails as sub-AA text.
+
+**Cross-engine.** My measurements are Blink-only — I am shipping a spec, not a build. Two constructions
+carry real WebKit risk and are named where they live: **`align-self: baseline` on an empty flex item**
+(no text to synthesise a baseline from — `brand-seats.md` §11) and the absolutely-positioned mark's
+`inset-block: 0` against a line box that the reveal also transforms. Verify both in WebKit **and** Blink
+before filing; a Blink-only pass is not a pass.
+
+**Would Apple ship this? — Yes, and the honest reason is that the mechanism is subtractive.** The fix
+removes a CSS value rather than adding one, which is why nothing adjacent moved. On the mark itself: at
+3.91px a 2px rule sits about half a character clear of the text, which is the marginal-change-bar idiom a
+diff gutter uses — I rendered a key-beat frame in both layouts before writing it down, and it reads as a
+mark in its own gutter rather than as a thin compromise. On the pennant: 6 × 9 is the size that reads as
+punctuation instead of badging, and I rejected the arithmetically-obvious 8 × 12 for that reason. The one
+place I would not claim excellence is R5's margin — 2.4px at 360px is thin, and it is thin because the
+budget genuinely has no more room, not because it was spent carelessly. That is stated in §9.2 rather
+than smoothed over.
+
+**Verification run this session.** Both probes ran foreground against the real page in headless Blink,
+before/after, at 320 / 360 / 375 / 390 / 393 / 667×375 landscape / 960 / 1440, plus rendered key-beat
+frames at 375px and desktop and six rendered underscore treatments in both themes. Probes lived in
+`/tmp`, deliberately: `verify-shell.mjs:527` globs `styles/` and `scripts/` entirely, so a probe file
+placed there would have joined the shipped set and the zero-request surface.
+
+**The baseline is confirmed green, this session, foreground**: `bash scripts/test.sh` ✅ GREEN
+(both engines) and `node tests/qa-independent-audit.mjs` **106/106, exit 0**. This step ships no code, so
+that is a baseline rather than a result — the ten re-bases above are the Developer's to land, and they are
+what will turn parts of it red until they do.
+
+**Revision log:**
+- 2026-07-26: Self-review caught that the acceptance criterion asks for the five relationships' values to
+  be *shown* to hold, not derived. §7.1's table was carrying figures derived on a 7.847px advance; every
+  figure is now measured and the advance is recorded as 7.83px, which moved the floor's pixel equivalent
+  and is why the assertions bind on column counts instead.
+- 2026-07-26: Self-review caught that the first underscore treatment I specified — a third flex item of
+  `.brand` — would inherit the lockup's 12px gap. Rendered, confirmed, and restructured into
+  `.brand__word` before filing rather than after.
 
 ### 2026-07-26 HO-018 — §1 and §3 copy; SP3 shortened and measured clear at 320px
 **Type:** handoff

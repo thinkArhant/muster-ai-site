@@ -150,9 +150,9 @@ Every narration claim must trace to a corpus line (Content cites; QA diffs). The
 
 Two columns above `--bp-wide`: terminal ~60% / narration rail ~36ch, `--gap-block` between. Terminal height fixed to fit all twelve lines + chrome (no scrollback, no layout shift as lines reveal — lines occupy space from load; reveal is opacity only).
 
-**The desktop terminal is at least 74 columns at every width from `--bp-wide` up**, which is what makes the twelve-lines-fit guarantee hold: the rail takes a fixed width rather than a share, so the terminal's line region measures **78 columns at `--bp-wide` and 79 from ~1200px up** at `--text-terminal` (a `0` advance of 7.847px at 13px). The longest corpus line (L3) is 74 characters. Every line therefore sets one row on desktop, the wrap rule in §7.1 is inert there, and nothing scrolls in either axis. **Any change that makes the terminal column proportional rather than fixed puts this guarantee at risk and must re-derive it at `--bp-wide`, not at 1280px.**
+**The desktop terminal is at least 74 columns at every width from `--bp-wide` up**, which is what makes the twelve-lines-fit guarantee hold: the rail takes a fixed width rather than a share, so the terminal's content box measures **78 columns at `--bp-wide` and 79 from ~1200px up** at `--text-terminal` (a measured `0` advance of 7.83px at 13px). The longest corpus line (L3) is 74 characters. Every line therefore sets one row on desktop, the wrap rule in §7.1 is inert there, and nothing scrolls in either axis. **Any change that makes the terminal column proportional rather than fixed puts this guarantee at risk and must re-derive it at `--bp-wide`, not at 1280px.**
 
-**Three widths are in play and the file names them apart.** The **terminal's content box** is what the 78/79 columns above measure. The **line region** — §7.1's term, and the one its tables use — is that less the log's 12px accent gutter (§9.1). The **row a character actually gets** is the line region less the line's own 2px tick, with a continuation row one further `ch` in for the hanging indent. So at `--bp-wide` the 78-column content box gives a line region of 600.1px and a **first row of 76 columns** against L3's 74: the margin is two columns, not four. The distinction is stated because it is the size of a whole horizontal budget — a later change costed against the 78 would push a corpus line to a second row on desktop and break the twelve-lines-fit guarantee. Every desktop figure above this paragraph is a content-box figure; every figure in §7.1 is a line-region figure, and each table says which.
+**Two widths are in play and the file names them apart.** The **terminal's content box** is what the 78/79 columns above measure. The **line region** — §7.1's term, and the one its tables use — is that less the log's inline-start gutter, which is the accent mark's whole footprint: the mark's inset, the mark, and the mark's clearance from the text (§9.2). The line region *is* the first row a character gets, because the mark sits outside the text flow and takes nothing from it; a continuation row is one `ch` narrower for the hanging indent. So at `--bp-wide` the 78-column content box gives a line region and a **first row of 76 columns** against L3's 74: the margin is two columns, not four. The distinction is stated because it is the size of a whole horizontal budget — a later change costed against the 78 would push a corpus line to a second row on desktop and break the twelve-lines-fit guarantee. Every desktop figure above this paragraph is a content-box figure; every figure in §7.1 is a line-region figure, and each table says which.
 
 Everything above §7.1 is the desktop layout and applies only at `--bp-wide` and wider.
 
@@ -164,21 +164,23 @@ Four rules follow from that priority. Together they resolve a real collision: a 
 
 1. **Lines soft-wrap. They never truncate and they never scroll sideways.** The line region is `white-space: pre-wrap` — which preserves the corpus's own inter-column padding exactly while permitting a break at a space — with a **1ch hanging indent** (`padding-inline-start: 1ch; text-indent: -1ch`) so a continuation row still begins one character in from its entry's own text edge. Neither the terminal's own region nor the page body scrolls horizontally, at any viewport.
 
-   **The log carries a `--gap-hairline` inline-start gutter at every viewport, and it is where the accent mark lives** (§9.1). The gutter is on the log, not on the line, because the accent tick is a `border-inline-start` on the line and a border sits *outside* padding: gutter the line and the text moves while the tick stays welded to the frame. The inline-end edge stays unpadded — it is a wrap edge, and every pixel taken there is a pixel that can push a corpus line to a third row.
+   **The log carries an inline-start gutter at every viewport, and it is the accent mark's whole footprint** — the mark's 12px inset from the card, the 2px mark, and the mark's 0.5ch clearance from the text: **17.91px** in total (§9.2). The gutter is on the log rather than on the line because the mark is positioned against the line's own box, so a gutter on the line would carry the mark along with the text and the mark would stop being 12px from the card. The inline-end edge stays unpadded — it is a wrap edge, and every pixel taken there is a pixel that can push a corpus line to a third row.
 
    **Wrapping is not a fidelity cost, and that is the whole reason it is the payer.** A soft wrap inserts no character and removes none: the rendered text still diffs byte-clean against the corpus, where truncation and ellipsis would not. `overflow-wrap: break-word` is set as a backstop only — the longest token in the corpus is 18 characters against a narrowest specified column of 31, so it never fires; if a future line did force it, a broken token is still preferable to an overflow.
 
-   **The two-row constant, and the floor that protects it.** At 375px the line's first row measures **311.0px — 39 characters** at `--text-terminal` and a continuation row **303.2px — 38**, so on a phone **every log line but the terminal-state line sets exactly two rows**. That constant is what makes the window below deterministic. It is not a fact about 375px: measured against the corpus line by line, all of L1–L11 hold at two rows down to a first row of **37 columns (290.3px) and a continuation of 36 (282.5px)**, and L3 — 74 characters, the longest — is the line that breaks first below it. **37/36 is the horizontal floor; anything above it is margin.** The floor is what binds, not whatever a given viewport happens to give: a change costed against the current column count will either refuse a fix that fits or spend room that is not there.
+   **The two-row constant, and the floor that protects it.** At 375px the line's first row measures **307.1px — 39 characters** at `--text-terminal` and a continuation row **299.3px — 38**, so on a phone **every log line but the terminal-state line sets exactly two rows**. That constant is what makes the window below deterministic. It is not a fact about 375px: measured against the corpus line by line, all of L1–L11 hold at two rows down to a first row of **37 columns (289.7px) and a continuation of 36 (281.9px)**, and L3 — 74 characters, the longest — is the line that breaks first below it. **37/36 is the horizontal floor; anything above it is margin.** The floor is what binds, not whatever a given viewport happens to give: a change costed against the current column count will either refuse a fix that fits or spend room that is not there.
 
-   | Viewport | Line region | First row / continuation | Margin over the floor |
+   | Viewport | Line region = first row | First row / continuation | Margin over the floor |
    |---|---|---|---|
-   | 375 | 313.0px | 311.0px = **39** / 303.2px = **38** | 20.7px |
-   | 360 (tightest) | 298.0px | 296.0px = **37** / 288.2px = **36** | 5.7px |
-   | 390 | 328.0px | 326.0px = **41** / 318.2px = **40** | 35.7px |
-   | 393 | 331.0px | 329.0px = **41** / 321.2px = **40** | 38.7px |
-   | landscape terminal column | 316.2px | 314.2px = **40** / 306.4px = **39** | 23.9px |
+   | 375 | 307.1px | **39** / 299.3px = **38** | 17.4px |
+   | 360 (tightest) | 292.1px | **37** / 284.3px = **36** | 2.4px |
+   | 390 | 322.1px | **41** / 314.3px = **40** | 32.4px |
+   | 393 | 325.1px | **41** / 317.3px = **40** | 35.4px |
+   | landscape terminal column | 310.3px | **39** / 302.4px = **38** | 20.6px |
 
-   Line region is the viewport less the 48px page gutter, the terminal's 2px borders and the log's 12px accent gutter; the first row is that less the line's 2px tick, and a continuation row is the first row less the 1ch indent. **360px is the tightest viewport and its margin is 5.7px — under one column.** The figures are derived on a uniform monospace advance, and four corpus glyphs (`·` `✓` `×` `→`) can come from a fallback face, so the build measures the row count at 360 / 375 / 390 / 393 rather than trusting the table (§12). If measurement puts any of L1–L11 at three rows, **the gutter yields — not fidelity, not the entry count**: reduce it, in both layers together so §9.1's single inset survives, to the largest value that holds the constant, and record the measured figure here. Reducing it costs the narration card nothing — a smaller inline inset widens the card's measure, which can only relieve its six-line budget.
+   Line region is the viewport less the 48px page gutter, the terminal's 2px borders and the log's 17.91px accent-mark footprint (§9.2). It *is* the first row, because the mark sits outside the text flow; a continuation row is the first row less the 1ch indent. **360px is the tightest viewport and its margin is 2.4px — under a third of a column.** Every figure above is measured at the stated viewport, not derived: **the shaped advance of `--text-terminal` is 7.83px**, which is what puts the floor's pixel equivalent at 289.7. Four corpus glyphs (`·` `✓` `×` `→`) can come from a fallback face, so the build measures the row count at 360 / 375 / 390 / 393 rather than trusting the table (§12), and the assertions bind on the **column count** rather than on a pixel figure precisely so an advance that differs by a hundredth of a pixel cannot fail a correct build.
+
+   **The fallback below does not fire at any viewport in the table, and that is a measurement rather than an assumption.** All of L1–L11 measure exactly two rows at 360 / 375 / 390 / 393, so the gutter holds its full 17.91px and §9.1's invariant holds at 12px. If a change ever does put any of L1–L11 at three rows, **the gutter yields — not fidelity, not the entry count**: reduce the mark's *inset*, never its clearance from the text, which is the relationship that keeps the mark off the timestamp. Reduce it in both layers together so §9.1's single inset survives, to the largest value that holds the constant, and record the measured figure here. Reducing it costs the narration card nothing — a smaller inline inset widens the card's measure, which can only relieve its six-line budget.
 
 2. **Wrapped rows group into entries, and the grouping is visible at a glance.** Below `--bp-wide` a log entry is two rows, so a single leading value cannot serve: whatever separates row from row inside an entry also separates entry from entry, and eight rows read as eight things rather than four. The one value is therefore split into the two it was standing in for — rows set at `--lead-micro` (1.5) inside an entry, and entries are separated by `--gap-hairline` applied as `margin-block-start` to every line but the first.
 
@@ -253,11 +255,12 @@ Four notes on the budget itself. The terminal → card gap is `--gap-flow` rathe
   │  21:16  mkt      share card     │  gap. Continuation rows indent
   │   written · HO-031              │  1ch. First row is 39 characters
   └─────────────────────────────────┘  here; nothing truncates and
-    ↑ 12px accent gutter, empty on      nothing scrolls sideways
-      these three. On L4 and L9 the
-      rust tick sits in it — clear of
-      the frame, the same 12px in as
-      the narration bar below
+    ↑ 17.91px accent-mark gutter,       nothing scrolls sideways
+      empty on these three. On L4 and
+      L9 the rust tick sits in it —
+      12px from the frame, the same
+      12px as the narration bar below,
+      and 3.91px clear of the timestamp
   ┌─────────────────────────────────┐
   │ ▌ N3 — the PM re-checked the    │  narration card: fixed
   │   developer's work with its     │  6-line height, holds its
@@ -287,7 +290,7 @@ The wrapped rows above are illustrative of the shape, not of where the break fal
 | 1 | Section tag | Shell motif — `<h2>` `§02 · WATCH IT SHIP` (final wording: Content) |
 | 2 | Beat indicator | `--text-label` `--muted`; updates per beat; `aria-hidden` (state is announced by content itself, §11) |
 | 3 | Terminal | `--surface`, 1px `--hair` border, sharp corners, registration `+` marks at two corners. Chrome bar: `--text-micro` label + live indicator (the shell's pulse dot — motion element 2's terminal instance) |
-| 4 | Log lines | `--text-terminal`. Stamp `--muted` · role `--ink` · detail `--ink` (the log is content here, not ambience) · key-beat emphasis per §9. `<ol>`, one `<li>` per corpus line. `white-space: pre-wrap` with a 1ch hanging indent at every viewport (§7.1 rule 1) — inert on desktop, where no line reaches the column width. Rows set at `--lead-terminal` above `--bp-wide` and `--lead-micro` below it, with a `--gap-hairline` separator between entries below it only (§7.1 rule 2) |
+| 4 | Log lines | `--text-terminal`. Stamp `--muted` · role `--ink` · detail `--ink` (the log is content here, not ambience) · key-beat emphasis per §9. `<ol>`, one `<li>` per corpus line. `white-space: pre-wrap` with a 1ch hanging indent at every viewport (§7.1 rule 1) — inert on desktop, where no line reaches the column width. Rows set at `--lead-terminal` above `--bp-wide` and `--lead-micro` below it, with a `--gap-hairline` separator between entries below it only (§7.1 rule 2). The line carries no `border-inline-start`: the key-beat mark is a separate empty `aria-hidden` element positioned outside the text flow, and every measurement of this edge is §9.2's |
 | 5 | Narration entries | `--text-body`, `--ink` always (never muted, never dimmed). Sans — the plain-English track is visually the *readable* layer against the mono terminal |
 | 6 | Active marker | 2px `--accent` left bar + beat tag `--text-micro` `--muted`. Position/shape channel — colour is not the sole indicator. Inset `--gap-hairline` from the card's inner edge, the same as the terminal's key-beat tick (§9) |
 | 7 | Chain totals readout | Shell readout-cell motif, static values present from load (no count-up here — §2's numbers are evidence in a log context; count-up stays on §1/§5 readouts). Scope label `--text-micro` `--muted` mandatory. **Position is per-viewport**: inside the two-column core at ≥ `--bp-wide`; immediately below the playback core under it, where it is evidence rather than a playback layer (§7.1 rule 3). **Value scale is per-viewport**: `--text-readout` at ≥ `--bp-wide`, where the column has the room; `--text-micro` below it, on width — the value string is 43 characters against a 327px column at 375px, and it must set on one line without wrapping to a third strip row. **Tracking is the lever that makes it fit and is part of the spec, not an implementation detail**: at `--track-micro` the 43 characters set 351.7px and overflow the column; at `0.02em` they set 295.0px and clear it with room. The scope label keeps `--track-micro` — it is shorter and it is a label. Where this row and §7.1 disagree, §7.1 wins — the mobile guarantee rests on that budget. Copy: the strings in `section-02-narration.md` §5, which is authoritative for §2's chrome, per copy-rules (exact numbers; wave scope; never wall-clock framing) |
@@ -308,7 +311,7 @@ The wrapped rows above are illustrative of the shape, not of where the break fal
 
 Derived from the shell's measured rust rules — rust at 13px would sit below AA small-text in dark theme, so key-beat emphasis never relies on small rust text:
 
-- **Key-beat lines (L4, L9)**: role token and verdict word (`pm ✓` / `PASS`) in **bold `--ink`**; the glyph mark (`✓`) in `--accent` (graphical, ≥3:1 ✓); a 2px `--accent` left tick on the line. Fact in ink at AA, rust as the flag.
+- **Key-beat lines (L4, L9)**: role token and verdict word (`pm ✓` / `PASS`) in **bold `--ink`**; the glyph mark (`✓`) in `--accent` (graphical, ≥3:1 ✓); a 2px `--accent` tick beside the line, **outside its text flow** and clear of the timestamp (§9.2). Fact in ink at AA, rust as the flag.
 - **L12 (terminal state)**: rendered at `1.25rem` bold — large-text class — so `bodh.day · LIVE` may set in `--accent` at AA-large (3.86/4.89 ≥ 3:1 ✓ both themes). The ending gets scale as well as colour; text content stays verbatim corpus.
 - **All other lines**: stamp `--muted`, content `--ink`. No other colour appears in the log.
 
@@ -320,12 +323,86 @@ The 2px rust bar is the same semantic mark in both layers: *this is the one you 
 
 **The invariant is the equality; 12px is its value.** If §7.1 rule 1's fallback fires — measurement puts a corpus line at three rows and the gutter has to yield — it yields *in both layers together*, and the two insets stay equal at whatever value survives. The rule is what never bends. The number can, once, and rule 1 says by how much and requires the surviving figure to be recorded there.
 
-- **Terminal**: the log carries the 12px as an inline-start gutter (§7.1 rule 1) and the line's own indent falls to 1ch. Above `--bp-wide` this is exactly cost-free — the line's inset was already `--gap-hairline` + the hanging indent, so moving the `--gap-hairline` share from the line to the log leaves every character at the same x and every desktop column count unchanged, while the tick steps off the frame. Below `--bp-wide` it is paid for out of measured horizontal margin, and rule 1 states the floor it must not cross.
-- **Narration**: the phone card already complies — its padding *is* `--gap-hairline`. The desktop card does not: its padding is `--gap-flow`, which puts the bar at 24px. The card's inline-start padding drops to `--gap-hairline` and the entry's own inline-start padding takes the difference, so the prose sits where it sat and the rail measure is unchanged; only the bar moves.
+- **Terminal**: the log's inline-start gutter opens the 12px and the mark is positioned inside it, outside the text flow (§9.2). The mark's distance from the card is therefore the log's business and nothing else's — no property of a line can move it.
+- **Narration**: the phone card's padding *is* `--gap-hairline`. The desktop card's inline-start padding is `--gap-hairline` with the entry's own padding taking the difference, so the prose sits at the rail's measure and only the bar sits at 12px. Both layouts reach 12px by their own route, which is why the rule is stated as a distance rather than as a stylesheet value.
 
 **Why an inset at all, rather than making both flush.** Flush is the cheaper consistency and it is the wrong one: a 2px rust bar abutting a 1px `--hair` border reads as a 3px stretch of frame that changes colour, so the mark stops being a mark on an entry and becomes a defect in the card. Only some entries carry the mark, which makes the flush reading worse still — a fragment of frame that changes colour part-way down. The mark gets a gutter of its own in both layers.
 
-**The rule is stated as a distance from the card because a stylesheet makes it easy to get wrong.** `border-inline-start` sits *outside* `padding-inline-start`, so inline padding on the line insets that line's text and leaves the mark welded to the frame; the inset has to come from the container. That is a trap at every viewport, not only where the layout is tight, and the desktop mismatch it produces is the wider one — a flush tick against a rail bar sitting `--gap-flow` in.
+**The rule is stated as a distance from the card, and the mechanism must put that distance out of reach of the line.** A mark drawn as `border-inline-start` on the line is welded to whatever the line's box does, and the line's box is where the hanging indent lives: a mark correct at 12px from the card then sits at 0 from the text, because a border falls *outside* padding and the indent is padding. §9.2 is the mechanism; this rule is what it has to deliver.
+
+**Mark-to-text distance is per-layer, and the difference is deliberate.** The terminal's is 0.5ch (3.91px); the narration's is `--gap-hairline` on a phone and `--gap-flow` on desktop. They are not made equal and should not be: the shared rule is the mark's distance from its *card*, which is what makes the two read as the same mark, and the mark's distance from its *text* is a typographic decision inside each layer — mono at 13px inside a 37-column budget where every pixel is priced, against sans at 17px in a free measure. Stated here because an unstated difference between these two layers is exactly what produced the flush-tick finding in the first place.
+
+### 9.2 The terminal's left edge, as a system
+
+This edge carries five distinct relationships in about forty pixels, and they are the kind that a
+stylesheet naturally collapses onto two or three shared values. Where it does, satisfying one of them
+moves the others silently, and an assertion written against the value that was named passes anyway — the
+relationship it was meant to protect is not the thing it tests. So the five are named here, each with a
+measured value and one assertion, and each **reachable from exactly one place** (DEC-032).
+
+**The mechanism, and why it is the whole fix.** The mark leaves the text flow. It is a real element,
+absolutely positioned against its own line, and the log's inline-start padding opens the room it sits in:
+
+```css
+.log {
+  --mark-inset: var(--gap-hairline);   /* R1 — mark to card   */
+  --mark-width: 2px;                   /*      the mark itself */
+  --mark-clear: 0.5ch;                 /* R2 — mark to text   */
+  padding-inline-start: calc(var(--mark-inset) + var(--mark-width) + var(--mark-clear));
+  padding-inline-end: 0;               /* R5 — the wrap edge  */
+}
+.log__line  { position: relative; padding-inline-start: 1ch; text-indent: -1ch; }  /* the indent, alone */
+.log__mark  {                        /* on L4 and L9 only, aria-hidden, empty */
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(-1 * (var(--mark-width) + var(--mark-clear)));
+  inline-size: var(--mark-width);
+  background-color: var(--accent);
+}
+```
+
+`inset-inline-start` resolves against the line's padding box, which the log's padding has already placed
+at `inset + width + clear` from the card; stepping back by `width + clear` lands the mark at `inset`
+exactly. **The hanging indent cannot reach the mark.** `padding-inline-start: 1ch` with
+`text-indent: -1ch` puts the first row at the line's padding-box edge and a continuation row 1ch in, but
+the line's padding box is fixed by the log — so the indent is free to take any value without the mark
+moving a pixel. That independence is the whole mechanism; everything else here follows from it.
+
+Three consequences worth stating, because each is a thing a build would otherwise have to discover:
+
+- **`.log__line` carries no `border-inline-start`.** With no border in the flow, the line's rendered
+  width *is* the first row's available width, which is why §7.1 names two widths rather than three.
+- **The mark is painted with `background-color`, never `color`.** `qa-independent-audit.mjs` collects
+  elements whose `color` resolves to the accent to audit small rust text; a mark painted with `color`
+  would join that set and be failed as sub-AA text.
+- **The mark is empty and `aria-hidden`,** so it adds no character to the line and the byte-clean corpus
+  diff is untouched. It exists only on L4 and L9.
+
+**The five relationships.**
+
+| # | Relationship | Where it lives | Measured | Assertion |
+|---|---|---|---|---|
+| **R1** | **mark ↔ card** | `--mark-inset` on `.log` | **12.00px**, both layers, every viewport | The mark's inline-start edge measures the *same* distance from its own card's inner edge in the terminal and in the narration, and that distance is at least 4× the mark's own width. The expected figure is **read from `--mark-inset`**, never hardcoded — if §7.1 rule 1's fallback ever fires, the check follows it and still fails on inequality |
+| **R2** | **mark ↔ text** | `--mark-clear` on `.log` | **3.91px** (0.5ch at 7.83px) | On L4 *and* L9, the gap between the mark's inline-end edge and the line's leftmost text ink is greater than zero and equals the computed `--mark-clear`. It is the only relationship here that no other assertion on the page detects, and a mechanism that couples the mark to the text flow drives it to exactly 0 |
+| **R3** | **row ↔ row**, inside an entry | `line-height: --lead-micro` on `.log` | pitch **19.50px**, whitespace **6.50px** | Already asserted, and correctly — as a ratio against R4, not as a value. No re-base |
+| **R4** | **entry ↔ entry** | `margin-block-start: --gap-hairline` on `.log__line + .log__line` | pitch **31.50px**, whitespace **18.50px**, **2.85×** R3 | Already asserted as `ratio ≥ 2 && separator > 0.5`, taking the *smallest* gap in the chain so one lost boundary fails rather than averaging away. No re-base |
+| **R5** | **text ↔ wrap edge** | the log's content width; `padding-inline-end: 0` | first row = line region; **37 columns at 360px**, 39 at 375, 41 at 390/393, 76 at `--bp-wide` | The measured column count clears §7.1's 37-column floor, no line's `scrollWidth` exceeds its `clientWidth`, and neither the log nor the document scrolls horizontally. Asserted as a **column count**, reported as pixels |
+
+**The hanging indent is deliberately not one of the five.** It is the sixth thing at this edge — 1ch
+(7.83px), with its own assertion that a continuation row starts one indent right of its entry's first row
+— and it is independent of every relationship above. Naming it apart is the point: listed as a sixth
+relationship, the next change to it would be costed against R1 and R2 again, which is the coupling the
+mechanism exists to prevent.
+
+**Why 0.5ch, and why the clearance is the last thing that may grow.** At 360px the mark's whole footprint
+may not exceed 17.7px before the first row drops under 37 columns and L3 breaks to a third row. 12px of
+that is R1, which §7.1 forbids fidelity or the entry count to pay for; 2px is the mark itself. 0.5ch is
+the largest half-column the remainder holds, and it leaves 2.4px. The alternative — R1 at 8px, buying 8px
+of clearance — is rejected on three counts: it spends the one value at this edge that two layers share, it
+drags the narration card's inline padding along with it to keep the pair equal, and it arrives at the same
+2px of margin. 3.91px is not a compromise but an idiom: a 2px rule with about half a character of air is
+what a change bar in a diff gutter is, and this component is a terminal. It was rendered at a key-beat
+frame in both layouts before it was written down.
 
 ## 10. Responsive behavior
 
@@ -364,19 +441,21 @@ The 2px rust bar is the same semantic mark in both layers: *this is the one you 
 - [ ] **Mobile fidelity**: no truncation, no ellipsis, no re-flowing of the corpus's own inter-column padding. Soft-wrap inserts and removes no character — each line's text content still diffs byte-clean
 - [ ] Continuation rows carry the 1ch hanging indent; no continuation row can be mistaken for a new entry (no row but an entry's first begins at the entry's text edge). **Assert the indent and the separator as two properties, not one.** At 1ch the indent is ~7.8px, which groups rows only alongside the entry separator that rule 2 sets — the vertical cue is what carries the grouping and the indent confirms it. A build that silently loses the separator therefore leaves a horizontal cue too small to stand alone, and a check that tests only one of the two would pass it
 - [ ] **Entry separation, measured not eyeballed** — at 375 × 553 the gap between two entries is at least **2×** the gap between two rows inside one entry (spec'd: 18.5px against 6.5px). Report both numbers. Fidelity, budget and parity assertions can all pass against a log that reads as an undifferentiated run of rows, so this property has to be asserted directly or it is not covered at all
-- [ ] **The two-row constant is measured, not inherited** — no corpus line sets more than two rows at 360 / 375 / 390 / 393px. 360px is the tightest viewport (5.7px of margin over §7.1's 37-column floor) and is the one that must be measured rather than derived, because four corpus glyphs can come from a fallback face
-- [ ] **The accent mark measures the same distance from its card's inner edge in both layers** — 12px in the terminal and 12px in the narration card, at 375px and at 1280px. Report as a pair (§9.1). Measure the desktop pair **in the playback state as well as the static one**: the rail's inset is set in more than one place there, so a mark that is right with no JS can still be wrong while the chain runs. If §7.1 rule 1's fallback has fired, the pair must still be *equal* and must match the figure recorded in rule 1
-- [ ] Desktop text position is unchanged by the accent gutter: the log's first character sits at the same x as before the gutter moved from the line to the log, and the desktop column count is unchanged
+- [ ] **The two-row constant is measured, not inherited** — no corpus line sets more than two rows at 360 / 375 / 390 / 393px. 360px is the tightest viewport (2.4px of margin over §7.1's 37-column floor) and is the one that must be measured rather than derived, because four corpus glyphs can come from a fallback face
+- [ ] **R1 — the accent mark measures the same distance from its card's inner edge in both layers**, at 375px and at 1280px. Measure the terminal's mark from **the mark element's own box**: the line does not carry the mark, so a measurement of the line's edge measures the text's position instead. Report as a pair (§9.1). Measure the desktop pair **in the playback state as well as the static one** — the rail's inset is set in more than one place there, so a mark that is right with no JS can still be wrong while the chain runs. Read the expected figure from `--mark-inset` rather than hardcoding 12, and floor it at 4× the mark's width: the assertion is the *equality*, and 12 is only its value
+- [ ] **R2 — the mark clears the timestamp.** On L4 and L9, the gap between the mark's inline-end edge and the line's leftmost text ink is `--mark-clear` and is greater than zero. Nothing else on this list detects it
+- [ ] **R5 — the desktop first row sits 17.91px in from the terminal's inner edge and still clears 74 columns.** The log's first character sits at `--mark-inset + --mark-width + --mark-clear` from the card, measured, and the first row measures ≥74 columns against L3's 74
 - [ ] **Nothing scrolls horizontally** — neither the page body nor the terminal's own region — at 375px, 320px, and 200% zoom
 - [ ] The window never clips an entry part-way through its rows, and never comes to rest inside an inter-entry gap
 - [ ] The totals strip renders below the playback core on mobile, above it in the desktop two-column layout, and its value line never wraps to a third strip row
 - [ ] Desktop is unchanged: the log's **first row** measures ≥74 columns at `--bp-wide` and above (the content box is 78 there — assert the row, which is the width L3 actually has to fit in, not the box), no line wraps, and all twelve fit without scrollback
-- [ ] Landscape phone (667×375) renders the two-column arrangement with the terminal in the wider column, its first row at **≥37 characters** (§7.1's floor) and **3 terminal entries** visible. Report the measured column count: the 55/41 split is sized to *deliver* 40 and that extra margin is the point of the split, but 40 is a derived target with under a tenth of a column of headroom, so a measured 39 is margin spent, not a defect. 36 is a defect
+- [ ] Landscape phone (667×375) renders the two-column arrangement with the terminal in the wider column, its first row at **≥37 characters** (§7.1's floor) and **3 terminal entries** visible. Report the measured column count: **it measures 39**, which is margin and not a defect — the 55/41 split is sized to deliver comfortably above the 37 floor, and holding two columns clear of it is what the split is for. 36 is a defect
+- [ ] **Every relationship assertion in §9.2 fails when its relationship is violated.** Prove it per assertion, not in aggregate: an assertion that cannot fail is the blind-by-construction failure this section has already paid for twice, and R2 in particular is new code asserting a new property
 - [ ] The terminal scroll container is focusable and arrow-key scrollable in the vertical axis, with an accessible name
 
 ## 13. Provenance
 
-From the seed (locked): the two-layer structure, the six-beat sequence, the "condensed" label, the honest-beat requirement, the no-overclaim boundary, scripted HTML/CSS/JS with no tooling dependency, ending on `bodh.day` live. From the beat inventory (measured): all real durations, hazards, and line-to-beat mapping, with the chain end at the corpus's measured `21:43:15`. Designed here (the craft): the 48 s comprehension-weighted compression model, per-beat dwells and their stated deviations, the gate hold, the sync contract and word budgets, the ink-plus-mark emphasis system, the narration-first mobile model and its height budget, the split of the log's single leading value into a row pitch and an entry separator, and the one-inset rule for the accent mark. From the direction reference (feel only): terminal chrome density and feed rhythm — its muted feed text and rust feed words are deliberately not inherited (see `page-shell.md` §13).
+From the seed (locked): the two-layer structure, the six-beat sequence, the "condensed" label, the honest-beat requirement, the no-overclaim boundary, scripted HTML/CSS/JS with no tooling dependency, ending on `bodh.day` live. From the beat inventory (measured): all real durations, hazards, and line-to-beat mapping, with the chain end at the corpus's measured `21:43:15`. Designed here (the craft): the 48 s comprehension-weighted compression model, per-beat dwells and their stated deviations, the gate hold, the sync contract and word budgets, the ink-plus-mark emphasis system, the narration-first mobile model and its height budget, the split of the log's single leading value into a row pitch and an entry separator, the one-inset rule for the accent mark, and §9.2's left-edge system — the five relationships, the mark out of the text flow, and 0.5ch as the largest clearance the 37-column floor holds. From the direction reference (feel only): terminal chrome density and feed rhythm — its muted feed text and rust feed words are deliberately not inherited (see `page-shell.md` §13).
 
 Founder-set: the 48 s chain length; the beat shares that give QA's validation 14.48% and fund the wow beat from the gate hold rather than from QA; narration-first as the mobile priority order; the totals strip's stillness; **that a phone reader never makes a sideways gesture to finish a log line** — the constraint the mobile window is sized around; and **that a phone reader can tell where one log entry ends and the next begins at a glance**, which is what rule 2's split serves.
 

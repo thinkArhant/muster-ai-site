@@ -73,91 +73,6 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 UI/UX (web): Terminal spacing system and brand seats
-
-```
-Role: ui-ux
-Model: claude-opus-5
-
-**Task:** Close the defect class that cost three Sprint-1 rounds, and specify the pennant seats.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — the Gate 3 verdict; its finding F-G3 is the tick collision (note the
-  ID is reused by an earlier verdict in the same file — take the Gate 3 one)
-- `knowledge-base/decision-log.md` — DEC-031, DEC-032, DEC-034
-- `knowledge-base/design-specs/web/section-02-replay.md` §7.1 and §9.1 — your own deliverable. **§7.1
-  carries the horizontal floor: 37 first-row columns, with only 5.7px of margin at 360px.** §9.1 carries
-  the 12px equality invariant
-- `knowledge-base/design-specs/web/page-shell.md` §8 and §9 — both still specify the square and "one
-  accent glyph permitted"; both are stale and yours to amend
-- `knowledge-base/brand-guidelines.md` §4, `knowledge-base/design-specs/brand/` — read-only artwork
-- `styles/replay.css` — `.log` at line 116, `.log__line` at 164, `.narration__entry` at 230
-- `tests/verify-shell.mjs` and `tests/qa-independent-audit.mjs` — read these before specifying
-  assertions; they are what your spec must be expressible in
-
-**A — the terminal's left edge, as a system.** Name and measure all five relationships: tick↔card,
-tick↔text, row↔row, entry↔entry, text↔wrap edge.
-
-**The two constraints that make this hard, stated so you do not discover them:**
-1. **The 12px equality invariant holds** (§9.1: *"the accent mark is inset 12px from the inner edge of
-   its own card, in both layers, at every viewport — the invariant is the equality"*). The founder
-   accepted Gate 3 partly for this. A mark placed *inside* the log's 12px gutter would sit at less than
-   12px and break it
-2. **The horizontal budget is 5.7px at 360px** before L3 goes to three rows and the 3-entry phone
-   guarantee collapses
-
-So the requirement is an **outcome, not the mechanism DEC-032 sketched**: the tick must clear the
-timestamp legibly, the equality must survive, and the 37-column floor must hold.
-
-**Your own spec already rules the tie-break — use it rather than re-deriving one.** §7.1 rule 1: if
-measurement puts any of L1–L11 at three rows, *"the gutter yields — not fidelity, not the entry count:
-reduce it, in both layers together so §9.1's single inset survives, to the largest value that holds the
-constant, and record the measured figure here."* And §9.1: *"the invariant is the equality; 12px is its
-value ... the rule is what never bends. The number can, once."* So the gutter may drop below 12px if it
-must — **as long as both layers move together and stay equal**, and the surviving figure is recorded in
-rule 1. Fidelity and the entry count are never the payer.
-
-**Also rule**: does `.narration__entry`'s active mark (`styles/replay.css:232`) move too?
-`verify-shell.mjs:617` asserts the two sides are equal, so changing one and not the other is a defect
-either way.
-
-**One assertion per relationship**, expressed so a developer can implement it. Note that several
-existing checks assert the *value* rather than the relationship (three sites hardcode `12`) — say which
-existing assertions must be re-based rather than kept.
-
-**B — the pennant seats** (DEC-031). Header lockup `pennant + MUSTER_` with a **static** rust underscore
-— it never blinks, the curl owns the only cursor. Five section separators take the pennant.
-**`brand-guidelines.md` §4 also names a footer lockup that DEC-031 omits — rule on it and say which
-wins.** Icon seats including the **favicon** (currently an inline data-URI rust square at 16×16 — specify
-the pennant's path and viewBox at that size).
-
-Sized **optically**: the pennant is 470×703 ≈ 1:1.5 where the square is 8×8. Drawn as
-`clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 81.79%, 0 100%)` — no inline SVG, no new request.
-Never on a pole.
-
-**Specify the underscore's accessible name.** Today the header announces "MUSTER". Is the underscore a
-text character (announced) or a drawn mark (`aria-hidden`)? Unspecified, it changes what every screen
-reader says on every page.
-
-**Deliverable:** amended `section-02-replay.md` and `page-shell.md` (§8 and §9 included);
-`knowledge-base/design-specs/web/brand-seats.md`; HO-019.
-
-**Acceptance criteria:**
-- Five relationships named with measured values; the 12px equality and the 37-column floor both shown to
-  hold, or the trade stated explicitly
-- The narration mark ruled on
-- Existing assertions that must be re-based, listed by file and line
-- Footer lockup ruled; favicon specified at 16px; underscore's accessible name specified
-- `page-shell.md` §8 and §9 no longer describe the square or "one accent glyph"
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-019 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 UI/UX (web): §1 hero design
 
 ```
@@ -172,7 +87,11 @@ elements. Content's candidates now exist; specify against them.
 - `knowledge-base/design-specs/web/section-01-copy.md` — the real headline candidates (HO-018)
 - `knowledge-base/design-specs/web/page-shell.md` — inherit the token system, do not re-derive
 - `knowledge-base/design-specs/web/section-02-replay.md` §9 — the hero terminal inherits the terminal
-  component and emphasis rules from here
+  component and emphasis rules from here. **§9.2 is new and binds you**: the terminal's left edge is a
+  five-relationship system, the key-beat mark sits outside the text flow, and any terminal you specify
+  inherits `--mark-inset` / `--mark-width` / `--mark-clear` rather than re-deriving a left edge
+- `knowledge-base/design-specs/web/brand-seats.md` — the pennant seats (HO-019). §1 carries no separator
+  pennant (the hero has no stencil tag), so do not add one
 - `knowledge-base/bodh-sprint4-corpus.md` — read-only; the real log lines the hero terminal streams
 - `knowledge-base/brand-guidelines.md` §4, `knowledge-base/foundational-assumptions.md`
 - `knowledge-base/design-specs/README.md` — the spec structure every other spec follows
@@ -196,7 +115,7 @@ elements. Content's candidates now exist; specify against them.
 - **Scope adjacency (A-005)**: the wave-scope terminal sits beside whole-product BODH figures in one
   viewport. Say how the two are kept visually distinct — this is the page's likeliest factual failure
 - Rust permitted at display size (DEC-017); no thirteenth palette value (A-006); motion budget stays at
-  three elements plus the cursor
+  three elements plus the cursor — **the header underscore is static and is not a slot** (DEC-037.2)
 - **State which choices came from `direction-reference.html` as feel cues** versus the seed's locked
   values (A-003) — it never ships and must not leak in as spec
 - The `VERIFY ⎘` chip's `href` and accessible name, given the file lands later in this sprint
@@ -206,6 +125,9 @@ elements. Content's candidates now exist; specify against them.
 
 **On completion:** File HO-020 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 UI/UX (web): §4 spec-sheet rendering
 
@@ -708,6 +630,14 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-26 — Step: UI/UX terminal spacing system and brand seats (HO-019). The terminal's left edge is
+  five named relationships with one assertion each and the key-beat mark out of the text flow, so the
+  indent can no longer move it — 12px equality held at 12px, 37-column floor held at 360px with 2.4px
+  spare, no column lost at 360/375/390/`--bp-wide`, measured before and after at eight viewports.
+  Pennant seats at 6×9, the underscore drawn rather than typed, header accessible name ruled `MUSTER`,
+  footer lockup ruled out (DEC-036, DEC-037). Ten harness sites listed for re-base by file and line.
+  **Awaiting PM review at the Wave 1 review step; REQ-006 asks PM to reconcile `brand-guidelines.md` §4.**
 
 - 2026-07-26 — Step: Content §1 and §3 copy (HO-018). Four headline candidates with announced strings
   (B, the repaired founder edit-mark, recommended), §3 with the CrewAI/AutoGen clause ruled named and

@@ -137,7 +137,8 @@ One idea per screen. Full-width hairline section rules span the viewport; conten
 
 | Motif | Spec |
 |---|---|
-| **Stencil section tag** | `§02 · WATCH IT SHIP` — `--text-label`, `--muted`, preceded by an 8×8px `--accent` square. Semantically the section's `<h2>` (visually a label; the heading tree is real) |
+| **Brand mark — the pennant** | The 6×9px `--accent` pennant, drawn as a `clip-path` on a plain box, `aria-hidden`. It seats in the header lockup and at all five section separators. Full spec — geometry, sizing, the header lockup and its underscore, the favicon, and the seats it deliberately does **not** take — is `design-specs/web/brand-seats.md` |
+| **Stencil section tag** | `§02 · WATCH IT SHIP` — `--text-label`, `--muted`, preceded by the pennant at `--gap-hairline`. Semantically the section's `<h2>` (visually a label; the heading tree is real) |
 | **Hairline rule with machined end-ticks** | 1px `--hair` line, full-width, with 9×1px perpendicular ticks at both ends of the centered tag. Decorative: `aria-hidden` on the rule construction, never information-bearing |
 | **Registration marks** | `+` glyphs, `--muted`, `--text-micro`, at the outer corners of instrument surfaces (terminal, readout strips). Sparse — two per surface maximum, `aria-hidden` |
 | **Instrument readout cell** | `--surface` card, `--hair` 1px border, sharp corners. Key: `--text-micro` `--muted`. Value: `--text-readout` `--accent` flat, tabular. Sub-line: `--text-micro` `--muted`. Unmeasured value: `--ink` em-dash + sub-line "measured at launch" — dashes never count up |
@@ -152,8 +153,13 @@ Sticky at top, `height: 3rem`, opaque `--ground`, 1px `--hair` bottom rule. Cont
 
 | Slot | Element | Owner |
 |---|---|---|
-| Left | Brand wordmark — mono, uppercase, `--ink`, one accent glyph permitted | Content (copy), this spec (treatment) |
+| Left | Brand lockup — the 6×9px pennant, the `MUSTER` wordmark in mono uppercase `--ink`, and a **static** rust underscore. Both marks are `aria-hidden`, so the header's accessible name is exactly `MUSTER`. Geometry and rationale: `brand-seats.md` §4 | Content (the wordmark string), `brand-seats.md` (treatment) |
 | Right | `⟨pulse dot⟩ OPERATIONAL` — dot per §10.2, word in `--muted` | this spec |
+
+The lockup carries two graphical marks and no accent *text* — rust at `--text-label` would measure
+4.19/4.35 and fail AA small text (§2.3.2). The underscore is a drawn 2px bar rather than a typed `_`
+because a typed one sets at `--hair` weight and at a font-dependent depth across the mono fallback stack;
+`brand-seats.md` §4 states that ruling and its accessible-name consequence.
 
 **No theme control ships.** Theme selection is the reader's system preference, honoured via
 `prefers-color-scheme` (§2.1). Both themes are first-class, and neither is something the reader is asked
@@ -166,6 +172,12 @@ stays in the CSS for QA to force either theme; nothing in the UI sets it.
 The complete motion inventory of the page. **A fourth live element is a deviation (A-007).** Every path is `prefers-reduced-motion`-gated and every reduced path renders complete content.
 
 **Scope (settled): the §2 replay is content playback, not a live element.** The "exactly three" budget governs *ambient* page motion — the motion that runs because the page is open. The replay is user-facing content mandated by §2 itself: scroll-triggered, plays once, holds a complete end state, and renders its full transcript with motion off. It is specified in `section-02-replay.md` and occupies no slot here. The budget is closed at three plus the curl cursor.
+
+**The header underscore is not a live element and never becomes one.** It is a static rust bar in the
+brand lockup (§9). The `curl` cursor owns the only blink on the page, and animating the underscore — the
+obvious "improvement" to make, since it looks like a terminal caret — is a fourth live element and a
+deviation. `brand-seats.md` §11 asserts it carries no animation and no transition, in the default path as
+well as under reduced motion.
 
 Motion tokens:
 
@@ -207,6 +219,7 @@ Readout metric values count from 0 to their exact value over `--countup-duration
 | Pulse | double-ring pulse | solid lamp + label |
 | Count-up | rolls to exact value | exact value immediately |
 | Cursor | blinks | solid block |
+| Header underscore | static | static — the same mark, unchanged |
 | §2 replay | timed playback | complete transcript (see replay spec) |
 
 ## 11. Accessibility foundation
@@ -224,7 +237,7 @@ Readout metric values count from 0 to their exact value over `--countup-duration
 
 ```
 ┌─────────────────────────────────────────────┐
-│ STATUS BAR  MUSTER          ● OPERATIONAL   │ sticky, opaque
+│ STATUS BAR  ▌MUSTER_        ● OPERATIONAL   │ sticky, opaque
 ├─────────────────────────────────────────────┤
 │  §1 HERO (h1, roster formation, curl,       │
 │      terminal preview, dual readout)        │
@@ -250,6 +263,8 @@ Section internals ship with their own specs; the shell builds the chrome above w
 The direction reference (`design-specs/direction-reference.html`) was read for mood, density, and rhythm only. It is not a build target and none of it ships.
 
 **Locked by the seed (authoritative):** all twelve hex values · mono/sans pairing and duties · tracked-uppercase stencil labels · metrics in tabular mono rust · grain + top vignette · all motifs in §8 · matte/sharp/opaque surface rules · exactly three motion elements + cursor · 64ch reading column · full-width section rules · spacious as overriding constraint.
+
+**Founder-authored, not seed-locked:** the pennant and its five-point geometry, supplied as artwork in `design-specs/brand/`, and the four rulings about where it seats. Sizing at each seat is craft and is decided in `brand-seats.md` §2 — the artwork gives a silhouette and a ratio, not a page size.
 
 **Taken from the reference as feel cues (re-derived here, own values):** the calm density and section rhythm · tag-above-kicker composition · terminal chrome with dot caps and label bar · end-tick rule construction · registration-mark sparseness · pulse-lamp concept (execution deliberately stronger, §10.2) · grain rendered as faint tooth rather than visible noise.
 

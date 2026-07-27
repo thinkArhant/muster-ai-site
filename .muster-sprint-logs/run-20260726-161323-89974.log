@@ -62,3 +62,151 @@
   ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
   🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -5
   🧪 bash   git add index.html knowledge-base/design-specs/web/section-01-copy.md knowledge-base/design-specs/web/section-03-copy.md
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD 2>&1 | tail -3; git status --short
+  💬 Step complete. The Content step ran end to end: deliverables written, harnesses green, HO-018 filed, queue advanced. **What shipped** - **`section-01-copy.md`** — four §1 headline candidates, each wit
+    📖 ×17 · ✏️  ×12 · 📝 ×2 · 🧪 ×19
+  ✓ 51 turns · $10.2 · peak ctx 161k/1M 16% · out 52k  (success)
+  ✓ [33;1mCONTENT[0m · [1m22m 8s[0m · advanced → 2026-07-26 UI/UX (web): Terminal spacing system and brand seats (UI-UX) · handoff HO-018 filed ✓
+    run so far: 22m 8s · $10.20 · 1 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 2
+▶ [36;1mUI-UX[0m · 2026-07-26 UI/UX (web): Terminal spacing system and brand seats  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh ui-ux auto
+  💬 Binding to UI/UX for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/ui-ux.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/ui-ux/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/ui-ux.md
+  🧪 bash   wc -l knowledge-base/wave-review.md knowledge-base/decision-log.md knowledge-base/design-specs/web/section-02-replay.md 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  🧪 bash   grep -n "F-G3\|Gate 3\|## \|### " knowledge-base/wave-review.md | head -60
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  💬 Now the decisions and the actual CSS.
+  🧪 bash   grep -n "DEC-031\|DEC-032\|DEC-034" knowledge-base/decision-log.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 Now the CSS the spec must move.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/replay.css
+  🧪 bash   sed -n '1,80p' knowledge-base/brand-guidelines.md
+  🧪 bash   sed -n '80,140p' knowledge-base/brand-guidelines.md; echo "=== brand svgs ==="; for f in knowledge-base/design-specs/bra
+  🧪 bash   sed -n '1,60p' index.html; echo "=== motifs.css ==="; cat styles/motifs.css
+  🧪 bash   cat styles/chrome.css; echo "=== tokens ==="; cat styles/tokens.css; echo "=== footer in index ==="; sed -n '200,237p' i
+  🧪 bash   cd tests && for L in 372 527 533 617 676 709 716 783 811 880 997 1021 1126 1186 1268 1298; do echo "--- verify-shell.mjs
+  🧪 bash   cd tests && grep -n "border-inline-start\|borderInlineStart\|tagMark\|8x8\|=== 8\|brand__mark\|tag__mark" verify-shell.m
+  🧪 bash   grep -n "border-inline-start\|borderInlineStart\|tagMark\|8x8\|brand__mark\|tag__mark\|log__line--key\|narration__entry\
+  ⚠️  tool returned an error
+  🧪 bash   pwd; ls
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 && grep -n "border-inline-start\|borderInli
+  🧪 bash   sed -n '190,215p;275,295p' tests/verify-shell.mjs; echo "=== qa 725-745 ==="; sed -n '725,745p' tests/qa-independent-aud
+  🧪 bash   sed -n '860,880p;895,960p' tests/verify-shell.mjs
+  🧪 bash   cat scripts/test.sh 2>/dev/null | head -40; echo "=== lib ==="; ls tests/lib; sed -n '1,50p' tests/lib/cdp.mjs
+  🧪 bash   sed -n '50,200p' tests/lib/cdp.mjs
+  🧪 bash   sed -n '200,300p' tests/lib/cdp.mjs; echo "=== PAGE_URL ==="; grep -n "PAGE_URL\|ROOT =" tests/verify-shell.mjs | head
+  📝 write  /tmp/muster-leftedge-probe.mjs
+  🧪 bash   node /tmp/muster-leftedge-probe.mjs 2>&1 | tail -40
+  💬 Measured — the mechanism holds. Now let me look at a key-beat frame, since that's the state under test.
+  📝 write  /tmp/muster-leftedge-shot.mjs
+  🧪 bash   node /tmp/muster-leftedge-shot.mjs 2>&1 | tail -10
+  📖 read   /tmp/leftedge-375-before.png
+  📖 read   /tmp/leftedge-375-after.png
+  🧪 bash   sed -n '1008,1020p' tests/verify-shell.mjs
+  🧪 bash   sed -n '999,1008p' tests/verify-shell.mjs
+  🧪 bash   grep -n "^### DEC-" knowledge-base/decision-log.md | tail -5; echo "=== requests ==="; grep -n "^### \|^## " knowledge-b
+  🧪 bash   cat knowledge-base/design-specs/README.md; echo "=== MUSTER_ refs ==="; grep -rn "MUSTER_\|underscore" knowledge-base/de
+  💬 Now let me render the pennant seats before committing to the optical sizing.
+  📝 write  /tmp/muster-pennant-probe.mjs
+  🧪 bash   node /tmp/muster-pennant-probe.mjs 2>&1 | tail -5
+  📖 read   /tmp/pennant-dark.png
+  🧪 bash   python3 - <<'PY' import re,io,os root="/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" css=""
+  🧪 bash   cat > /tmp/shot2.mjs <<'EOF' import { writeFileSync } from "node:fs"; import { launchChrome } from "/Users/kanwarsandhu/
+  📖 read   /tmp/pennant2-dark.png
+  💬 The underscore needs work — as a flex item it picks up the lockup's 12px gap and reads as a floating dash. Let me test it inside the wordmark run.
+  🧪 bash   python3 - <<'PY' import os root="/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930" css="".join(
+  📖 read   /tmp/us.png
+  🧪 bash   grep -n "accentRgb" tests/qa-independent-audit.mjs; echo "---new-element-checks---"; grep -n "hidden: el.getAttribute\|r
+  💬 Measured and judged. Now writing the deliverables.
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the new §9.2 — the five relationships as one system.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the §12 checklist re-bases.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now `page-shell.md` §8 and §9.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  🧪 bash   grep -n "8×8\|8x8\|accent glyph\|square" knowledge-base/design-specs/web/page-shell.md knowledge-base/design-specs/web/s
+  💬 Clean. Now the decision-log entries and the handoff.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  🧪 bash   grep -n "REQ-0" knowledge-base/agent-requests.md knowledge-base/*.md 2>/dev/null | tail -8; echo "=== resolved tail ==="
+  🧪 bash   grep -rn "REQ-00" knowledge-base/sprint-archive.md knowledge-base/current-sprint.md 2>/dev/null | tail -6
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n -A 40 "Pre-Handoff Self-Review" muster/system-guide.md | head -60
+  🧪 bash   grep -n "Pre-Handoff Self-Review Checklist" muster/system-guide.md
+  🧪 bash   sed -n '448,500p' muster/system-guide.md
+  💬 Running the self-review. Durability discipline (Rule 15) is the item most at risk here.
+  🧪 bash   for f in knowledge-base/design-specs/web/brand-seats.md knowledge-base/design-specs/web/section-02-replay.md knowledge-b
+  💬 Self-review caught Rule 15 violations in my own additions — archaeology in durable specs. Fixing.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the §9.2 narrative and its before/after paragraph.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the §12 checklist items.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  💬 Now the same pass on `brand-seats.md` §2, §5 and §11.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  💬 Now §8's REQ reference and §11's re-base framing.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  🧪 bash   grep -nE "F-G3|F-R[0-9]|HO-01|HO-02|REQ-0|Gate [0-9AB]|Sprint [0-9]|no longer|previously|used to|comes off|down from|it 
+  🧪 bash   grep -nE "^### A-00|^\*\*A-00" knowledge-base/foundational-assumptions.md; echo "=== A-005 A-006 A-007 ==="; grep -n -A 
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/brand-seats.md
+  💬 Now the queue update — my step to Done, next step promoted.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 That edit made a mess of the queue. Let me look and fix it properly.
+  🧪 bash   grep -n "^## \|^### " knowledge-base/orchestration-queue.md
+  🧪 bash   python3 - <<'PY' p="knowledge-base/orchestration-queue.md" lines=open(p).read().split("\n") # lines are 0-indexed; grep 
+  🧪 bash   sed -n '127,134p;176,184p' knowledge-base/orchestration-queue.md
+  🧪 bash   python3 - <<'PY' p="knowledge-base/orchestration-queue.md" lines=open(p).read().split("\n") # delete 1-indexed lines 132
+  💬 Queue structure is clean. Now the Done entry.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -20
+  🧪 bash   grep -nE "313\.0|311\.0|303\.2|296\.0|290\.3|5\.7px|12px accent gutter|line's 2px tick|7\.847|600\.1" knowledge-base/des
+  🧪 bash   python3 - <<'PY' p="knowledge-base/design-specs/web/section-02-replay.md" s=open(p).read() a="so the terminal's line reg
+  💬 Now the commit lint check and commit.
+  🧪 bash   git status --short && echo "=== diffstat ===" && git diff --stat
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' ui-ux: the terminal's key-beat mark clears the timestamp Closes the defect clas
+  🧪 bash   git log --oneline -1; echo "---"; bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "lint exit: $?"
+  💬 Let me confirm the harness baseline is green so I'm not handing the Developer a red starting point.
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -15
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit.log 2>&1; echo "exit: $?"; tail -3 /tmp/audit.log
+  💬 Both harnesses green. Correcting the handoff — I said I hadn't run them.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   git add -A && git commit -q --amend --no-edit && git log --oneline -1 && git status --short
