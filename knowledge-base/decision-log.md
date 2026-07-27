@@ -424,5 +424,60 @@ for a ruling on the WebKit method for a scroll behaviour), content (none).
 **Touched**: `design-specs/web/page-shell.md` (§7.1 new; §7, §9, §10, §11, §13 amended),
 `agent-requests.md` (HO-022, REQ-007), `orchestration-queue.md`, `decision-log.md`.
 
+---
+
+### DEC-041 — §4 tightened by five words; §5 renders two cards and no growth sentence; §6's "nothing else" is an inventory (2026-07-26)
+
+**Decision 1 — the §4 tightening is five words, and the number is reported rather than engineered.**
+The founder's locked draft loses four constructions across 420 row words: a nominalization (`the thing
+that actually breaks` → `what actually breaks`), one `and` in a three-clause series, `has to own` →
+`must own`, and `reserved for judgment` → `for judgment`. Sentence count is unchanged at 30 — no
+sentence deleted, split, merged, or moved — and all four titles and stamps are untouched, so §4's
+measured line counts hold exactly rather than as ceilings. The rejected alternative was a larger,
+better-looking delta: reaching it means cutting clauses the founder wrote deliberately, which is
+rewriting under a tightening label. Verification is a word-level diff of all 16 seed rows against all
+16 shipped rows, not a claim.
+
+**Decision 2 — §5 renders two readout cards, and the provenance line is prose.** A readout cell is an
+instrument surface with a key and a value; the provenance line has neither, and framing founder
+testimony as telemetry is the error §4's spec already refuses when it keeps registration marks off the
+spec-sheets. The section is three prose lines plus two cards.
+
+**Decision 3 — §5's cards carry operator attention and commit-days, the two measured figures the page
+otherwise never shows.** `OPERATOR ATTENTION 4.8 h` and `COMMIT-DAYS 4` (`Jul 11–18`) are the seed's
+supporting stats, and commit-days are additionally the named checkable fallback for elapsed time.
+`ACTIVE BUILD 9.3 h` repeats §1 deliberately as the denominator the other two are read against, and
+must render byte-identically to §1's string — two renderings of one measurement is the drift this page
+cannot afford. No ratio, percentage, or difference is printed: the cells sit side by side and the
+reader does the arithmetic. The fallback if the repeat is judged wrong is pre-authored — drop
+`ACTIVE BUILD` from both cards, no other string changes.
+
+**Decision 4 — "the list is growing" is carried by the card format, never by a sentence.** The seed
+asks for the growing-list message and in the same breath bans the hype; a sentence asserting future
+growth is an unmeasured claim about the future on a page whose entire proposition is checkability. A
+list that can take a third card is the claim. No placeholder card, no "next", no ghost slot.
+
+**Decision 5 — §6's "Nothing else" is stated as an inventory.** §6 is the lead line, the `curl`,
+`cd my-product && claude`, and one GitHub link. Excluded by name so the exclusions can be checked: no
+`VERIFY ⎘` chip (§6 makes no measured claim for one to verify), no copy-to-clipboard control, no
+license line, no requirements list, no second CTA. A rendered `$` prompt glyph is decorative —
+`aria-hidden`, outside the selectable command text — because a `$` inside the copied string breaks the
+command.
+
+**Rationale**: the seed's §4 guidance ("~4–6 sentences") is not met by its own locked draft, which runs
+7–8; that gap is reported for a founder ruling rather than closed by deleting sentences. Every other
+call above follows from rules already committed: R4 and R5 on dashes and scope labels, R8 on naming the
+team as AI ("its own team" → "its own **AI** team", one word), R9 on the single CTA, and R12 verified
+by string equality across four files rather than by fetching.
+
+**Impact**: developer (builds §4, §5 and §6 from these strings; §5 has no separate design spec, so its
+copy file is the content inventory), ui-ux (none — §4's spec predates and matches this copy), qa
+(scope labels, dashes, `curl` byte-equality, and §4's stamp-has-no-digit case), pm (three review items:
+§4's sentence-count divergence, §4's no-date stamp, and §5's `ACTIVE BUILD` repeat), content (none).
+
+**Touched**: `design-specs/web/section-04-copy.md`, `design-specs/web/section-05-copy.md`,
+`design-specs/web/section-06-copy.md`, `agent-requests.md` (HO-023), `orchestration-queue.md`,
+`decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

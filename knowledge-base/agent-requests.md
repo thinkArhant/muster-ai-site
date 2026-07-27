@@ -61,6 +61,80 @@ later reader cannot mistake a Blink-only result for parity.
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-26 HO-023 — §4, §5 and §6 copy: the founder's draft tightened by five words, and two inventory rulings
+
+**Type:** handoff
+**Producer:** content
+**Deliverable:** `knowledge-base/design-specs/web/section-04-copy.md`,
+`knowledge-base/design-specs/web/section-05-copy.md`,
+`knowledge-base/design-specs/web/section-06-copy.md`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Summary:**
+
+- **§4 is tightened by five words out of 420, and the small number is the finding.** Four edits, each
+  named in the file with its before/after: `the thing that actually breaks` → `what actually breaks`
+  (−2), one `and` → comma in a three-clause series (−1), `has to own` → `must own` (−1, modal
+  preserved because the sentence's claim is an obligation the trade-off buys), `prose is reserved for
+  judgment` → `prose is for judgment` (−1, which is also Muster's own coinage). Everything else is
+  word-identical to the seed. The draft carries almost no fat; manufacturing a bigger delta would mean
+  cutting clauses the founder wrote on purpose.
+- **"Tightened, not rewritten" is verified mechanically, not asserted.** A script extracts all 16 row
+  values from the seed and all 16 from the copy file, aligns them, and prints a word-level diff: the
+  three diffs above and nothing else. Sentence count is **30 → 30** — no sentence deleted, split,
+  merged, or moved. Per-decision row totals: 123→119, 105→104, 89→89, 103→103. All four titles and all
+  four stamps are untouched, so `section-04-decisions.md`'s measured line counts hold exactly rather
+  than as ceilings.
+- **Two findings on the §4 draft, neither fixed by me.** (1) The draft runs **7–8 sentences per
+  decision against the seed's own "~4–6"** guidance; closing that gap means deleting two sentences per
+  decision, which is a cut, and cutting founder copy needs the founder's word. (2) Decision 4's stamp
+  carries no date and must never gain one — Bodh's launch date exists in the corpus and inserting it
+  would fabricate a provenance stamp for a decision, not a deploy.
+- **§5 ships two readout cards, not three: the provenance line is prose.** It has no key and no value,
+  and a readout cell is an instrument surface — this is the same distinction `section-04-decisions.md`
+  makes when it keeps registration marks off the spec-sheets. Founder testimony must not dress as
+  telemetry.
+- **§5's cards carry the two measured figures the page otherwise never shows** — `OPERATOR ATTENTION
+  4.8 h` and `COMMIT-DAYS 4` (`Jul 11–18`) — beside `ACTIVE BUILD 9.3 h` as their denominator. The
+  9.3 h repeat of §1 is deliberate and must render byte-identically to §1's string; a second rendering
+  of one measurement is the drift this page cannot afford. **PM has a real call here**: if the repeat
+  is judged wrong, the fallback is pre-authored in the file — drop `ACTIVE BUILD` from both cards, no
+  other string changes.
+- **"The list is growing" is carried by the card format, not by a sentence.** The seed says the list
+  grows and in the same breath bans the hype; a sentence asserting future growth is an unmeasured
+  claim on a page whose proposition is checkability. No third placeholder card, no "next", no ghost
+  slot.
+- **§6 is the lead line, the `curl`, `cd my-product && claude`, and one GitHub link — nothing else.**
+  The seed's "Nothing else" is stated as an inventory: no `VERIFY ⎘` chip (§6 makes no measured claim
+  for one to verify), no copy-to-clipboard control, no license line, no requirements list. Two build
+  notes the strings depend on: a rendered `$` prompt glyph must be `aria-hidden` and outside the
+  selectable command text, and the `cd my-product` argument tracks the `curl`'s `bash -s my-product`.
+- **The `curl` was verified by string equality, not by fetching** — byte-equal across
+  `copy-rules.md` R12, `product-spec-seed.md` §6, `section-01-copy.md` §8 and `section-06-copy.md`.
+
+**Mechanical checks run before filing** (script over the shipping strings only — fenced blocks and
+backticked table values, so the files' own commentary can't launder a pass):
+
+| Check | Result |
+|---|---|
+| `curl` byte-equality across four files | equal |
+| §4 seed-vs-shipped word diff, all 16 rows | 3 diffs, all documented; 420 → 415 |
+| §4 sentence count | 30 → 30 |
+| §4 titles + stamps verbatim; `product` stamp digit-free | pass |
+| §5 provenance line byte-identical to the seed | pass |
+| Wave-scope tokens (`$24.73`, `289`, `~64`) in §4/§5/§6 shipping strings | none |
+| §5 scope labels + dashes + `measured at launch` present | pass |
+| Stated word counts recomputed (§5 ×3, §6 ×1) | all match |
+| Banned adjectives, `proven`, `coming soon`, `muster.build`, `!` | none |
+
+**Self-review notes:** no code or shipped file changed, so no harness run applies to this step; the
+three deliverables are copy files. Durability (Rule 15): no handoff, sprint, or gate reference appears
+in any of the three files. Open questions are the two §4 findings and the §5 `ACTIVE BUILD` call
+above — all three are review items, none blocks the next step. No cascade edit was mine to make:
+`agent-context/content.md` still carries this step as upcoming, and it is PM-owned.
+
 ### 2026-07-26 HO-022 — scroll-snap specified: one section at a time, with §2's exemption proven rather than declared
 **Type:** handoff
 **Producer:** ui-ux

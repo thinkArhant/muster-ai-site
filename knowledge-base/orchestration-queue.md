@@ -73,54 +73,6 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Content (web): §4, §5 and §6 copy
-
-```
-Role: content
-Model: claude-opus-5
-
-**Task:** Write §4, §5 and §6. Lighter than §1/§3 — §4 is founder-authored and §6 is one command.
-
-**Inputs:**
-- `knowledge-base/product-spec-seed.md` §4, §5, §6 — read-only
-- `knowledge-base/agent-skills/content/copy-rules.md`
-- `knowledge-base/brand-guidelines.md` §5 — the banned-word list
-- `knowledge-base/bodh-sprint4-corpus.md` — read-only; §5's Bodh claims trace here
-- `knowledge-base/agent-context/content.md`
-
-**§4 — the four decisions are locked draft.** Tighten only. Never inflate, never reorder, never add a
-fifth. R7 permits first person here. **"Tightened, not rewritten" is checkable**: every original
-sentence's subject and claim survive, no sentence is deleted, and you state the before/after word count
-per decision so PM can verify rather than judge.
-
-**§5 — Bodh, the provenance line, this site.** The provenance line is founder-supplied first person and
-is the other permitted first-person place — preserve it. The source app stays unnamed; no status, no
-"coming soon". This site's readout is dashes. No growing-list hype.
-
-**§6 — one `curl`**, byte-identical to this string:
-`curl -fsSL https://raw.githubusercontent.com/thinkArhant/muster-ai/main/scripts/setup-project.sh | bash -s my-product`
-then `cd my-product && claude`, and **one GitHub link** (seed §6). `muster.build` is fictional and must
-never appear (DEC-010, R12).
-
-**Deliverable:** `knowledge-base/design-specs/web/section-04-copy.md`,
-`knowledge-base/design-specs/web/section-05-copy.md`,
-`knowledge-base/design-specs/web/section-06-copy.md`; HO-023.
-
-**Acceptance criteria:**
-- §4: per-decision before/after word counts stated; argument order unchanged
-- §5's provenance line preserved verbatim; scope labels correct; THIS SITE dashed
-- §6 carries the exact `curl` string above — verify by string equality against `copy-rules.md`, not by
-  fetching
-- Every factual claim traces to the corpus or the seed; a claim neither supports is cut, not softened
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-023 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Developer (web): Shell — spacing system and brand mark
 
 ```
@@ -173,6 +125,9 @@ these, which you must **re-base so they still fail when their relationship is vi
 
 **On completion:** File HO-024 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): Gate A sample render
 
@@ -504,6 +459,15 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-26 — Step: Content §4, §5 and §6 copy (HO-023). §4 tightened by **five words of 420** with a
+  word-level seed-vs-shipped diff as the evidence and sentence count unchanged at 30 — titles and stamps
+  untouched, so §4's measured line counts hold exactly; §5 ships two readout cards plus three prose lines
+  (the provenance line is prose, never a cell) and carries operator attention and commit-days, the two
+  measured figures the page otherwise never shows; §6's "Nothing else" stated as an inventory, `curl`
+  byte-equal across four files by string equality (DEC-041). **Awaiting PM review at the Wave 1 review
+  step; three review items — §4's draft runs 7–8 sentences against the seed's own "~4–6", decision 4's
+  stamp must never gain a date, and §5's `ACTIVE BUILD 9.3 h` repeat of §1 has a pre-authored fallback.**
 
 - 2026-07-26 — Step: UI/UX scroll-snap spec (HO-022). One idea per screen as a scrolling behaviour:
   proximity snap on the document scroller, `--scroll-pad` at bar + one rhythm so a section's rule never
