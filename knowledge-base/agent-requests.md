@@ -31,6 +31,85 @@ which way the omission went.
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-26 HO-021 — §4 specified: four spec-sheets buildable from the file, with zero rust text
+**Type:** handoff
+**Producer:** ui-ux
+**Deliverable:** `knowledge-base/design-specs/web/section-04-decisions.md` (new); amended
+`knowledge-base/design-specs/web/page-shell.md` (§8 spec-sheet motif row — the two-option mechanism
+clause settled to the surviving branch); DEC-039
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Summary:**
+
+- **Buildable from itself, and the numbers are rendered, not derived.** A probe page in the real
+  tokens (all four sheets, seed-draft strings) was measured in headless Blink at
+  320/360/375/390/960/1280, both themes screenshotted, and the announced structure read from the AX
+  tree. The spec carries the measurements: card **903.31px** with prose at **685.31px = 64ch** at
+  1280, single-column prose 21.6–28.4ch across phones, per-sheet title line counts as ceilings, zero
+  horizontal scroll everywhere.
+- **The 64ch ruling** (DEC-039.1): the reading column governs the prose being read, not the artifact
+  containing it — the `<dd>` column takes `--read-max` and the card exceeds it by exactly the fixed
+  6rem label column + gap + padding. Squeezing the card into 64ch would cut real prose to ~50ch.
+- **The emphasis system under the failed pair** (DEC-039.2): **zero rust text in §4** — the banned
+  filled-rust move is replaced by a 2px `--accent` bar inset `--gap-hairline` from the card's inner
+  edge on each Mechanism row (the accent-mark idiom's third seat, measured 12.00px on all four
+  sheets) plus the label in ink bold. Painted `background-color`, never `color`, so the audit's
+  rust-text sweep (verified keyed on computed `color`) never sees it. Deliberately NOT a member of
+  §2's two-layer inset equality.
+- **The stamp is one text slot, not a date field** (DEC-039.3): all four seed shapes — including
+  `product — Bodh` with no date — render as one text run; the no-date case ships exactly as
+  supplied, no invented date, no dash (dashes are for unmeasured metrics; a stamp is provenance).
+  Parens don't render; the stamp construction is the enclosure.
+- **First person typographically** (DEC-039.4): founder voice in sans sentence case full-ink (titles
+  bold at kicker scale — the only bold sans-at-kicker text on the page), machine chrome in mono
+  tracked uppercase; no quotes, no pull-quote styling, no per-sheet attribution.
+- **Announced structure measured**: 4-item list (`role="list"` restores WebKit semantics), each item
+  h3 (full title sentence, `<em>` included in the computed name) → stamp → a description list of
+  exactly 4 term/definition pairs. Strongest-first is the seed's order and the spec forbids
+  reordering.
+- **12 relationship assertions** (§12), each with a stated failure mode — including "the `product`
+  stamp contains no digit" (the no-date case must never gain a date) and a whole-section static
+  assertion (no animation, zero focusable elements). **No existing harness site re-bases** — nothing
+  asserts `#the-decisions` beyond the shell placeholder, whose counts drop symmetrically; two build
+  pointers filed in §13 (the audit's 64ch probe gains its ideal permanent target; the marks join the
+  decorative sweep).
+
+**Interface note for review**: `section-04-copy.md` does not exist yet — it lands with the §4/§5/§6
+copy step. The spec's §3 copy contract names the exact six strings per decision it consumes (title,
+stamp content, four row values), and all measurements were taken against the seed's locked draft, so
+they are ceilings under "tighten, never inflate."
+
+**Cross-engine.** Measurements are Blink-only — this ships a spec, not a build. Three constructions
+carry named WebKit risk, each stated where it lives: `<dl>`-with-`<div>`-wrappers AX exposure and
+the weak VoiceOver description-list announcement (§3 — verify the term/definition pairs announce),
+the label/stamp casing divergence (Blink announces rendered uppercase, WebKit source case — all
+string assertions case-insensitive, §11), and `inset-inline-start` with a token calc on the mark's
+`::before` (§7). Verify all three in WebKit and Blink before filing the build.
+
+**Verification run this session.** Probe page and scripts in `/tmp` (deliberately — `styles/` and
+`scripts/` are globbed into the shipped set): rendered measurement at six viewports, dark + light
+full-page screenshots at 375 and 1280, `Accessibility.getFullAXTree` for headings, list, and dl
+structure, and corrected-geometry re-measurement. No shipped file was touched this session (spec and
+knowledge-base only), so the harnesses' state is unchanged from the green baseline confirmed at
+HO-019.
+
+**Would Apple ship this? — Yes, because the system has no special cases.** One construction absorbs
+all four stamp shapes; the odd one (no date) costs nothing because the stamp was never a date field;
+the emphasis system needs zero rust text; a fifth decision is one more `<li>`. The honest
+reservations: the longest title runs 6 lines at 320px (5 at 375) — a lot of bold display on the
+smallest phones, accepted because the titles are the section's skim layer and the rendered sample
+will show it either reads or shouts; and the longest stamp wraps to two lines on phones, accepted
+rather than forking the micro token's tracking for one string.
+
+**Revision log:**
+- 2026-07-26: Probe caught the mechanism mark sitting at 11px from the card's inner edge — the inset
+  calc carried a spurious `- 1px` border term (the row's coordinate space is already inside the
+  border). Corrected to the token-only calc; re-measured 12.00px on all four sheets.
+- 2026-07-26: Self-review caught two durability violations in the spec (a founder-gate reference and
+  a "today" framing in the harness section) — reworded to current-truth before filing.
+
 ### 2026-07-26 HO-020 — §1 specified: the verdict fits the fold, measured, and the headline announces clean
 **Type:** handoff
 **Producer:** ui-ux

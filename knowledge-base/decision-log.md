@@ -333,5 +333,47 @@ review rules otherwise the clause ships cut, not softened, with no copy session 
 `pre-launch-checklist.md` (320px item resolved), `decision-log.md`. PM cascade note: stale SP3 counts
 (24 words / 139 total) remain in `agent-context/content.md` (PM-owned) — flagged in HO-018.
 
+---
+
+### DEC-039 — §4's spec-sheets: the value column is the reading column; rust marks, never rust text; the stamp is one slot (2026-07-26)
+
+**Decision 1 — what `64ch` means for a two-column label/value construction.** The reading-column
+ruling (DEC-023) governs the prose being read, not the artifact containing it: the sheet's value
+column takes `max-inline-size: var(--read-max)` and the card exceeds 64ch by exactly the fixed 6rem
+label column + gap + padding (measured 903.31px card / 685.31px prose at 1280). The declined
+alternative — the whole card inside 64ch — would cut the actual prose measure to ~50ch, inverting
+what the ruling protects.
+
+**Decision 2 — the emphasis system under the failed pair.** `--ink` on `--accent` measures 3.43/2.79
+and bans filled rust; §4 goes further: **zero rust text in the section**. The mechanism row is marked
+by a 2px `--accent` bar inset `--gap-hairline` (12px) from its card's inner edge — the accent-mark
+idiom's third seat (§2's log and narration are the first two) — plus the label in ink bold. The mark
+paints with `background-color`, never `color`, so the audit's small-rust-text sweep never sees it.
+It is not a member of §2's two-layer inset equality; that invariant stays scoped to its two
+synchronized layers.
+
+**Decision 3 — the stamp is a single text slot, not a structured date field.** All four seed stamp
+shapes (three with dates, `product — Bodh` without) render as one text run in `--text-micro`; the
+no-date case renders exactly as supplied — no invented date, no dash (the dash idiom is for
+unmeasured metrics; a stamp is provenance). The seed's enclosing parentheses do not render: the
+stamp construction is the enclosure.
+
+**Decision 4 — first person, typographically.** The founder's voice (titles, row prose) renders in
+`--font-sans`, sentence case, full-ink — titles bold at `--text-kicker`; the machine grammar around
+it (labels, stamps, rules, mark) stays mono tracked uppercase. No quotation marks, pull-quote
+styling, or per-sheet attribution — decoration would convert testimony into testimonial. The
+`≥19px-bold rust` branch in the shell's motif table is declined and the table now records the
+surviving branch.
+
+**Rationale**: All four rulings follow from constraints already on record — DEC-023, the shell's
+measured contrast table, rule 4 (no invented values), and R7 — executed against rendered
+measurements (probe at 320–1280, both themes, Blink AX tree for announced structure).
+
+**Impact**: developer (builds §4 and the Gate A sample from the spec), qa (assertion list §12,
+audit-sweep note §13), content (§4 copy supplies title/stamp/rows per the spec's copy contract), pm.
+
+**Touched**: `design-specs/web/section-04-decisions.md` (new), `design-specs/web/page-shell.md` (§8
+motif row), `agent-requests.md` (HO-021), `orchestration-queue.md`, `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

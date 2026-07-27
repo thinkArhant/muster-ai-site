@@ -145,7 +145,7 @@ One idea per screen. Full-width hairline section rules span the viewport; conten
 | **Registration marks** | `+` glyphs, `--muted`, `--text-micro`, at the outer corners of instrument surfaces (terminal, readout strips). Sparse — two per surface maximum, `aria-hidden` |
 | **Instrument readout cell** | `--surface` card, `--hair` 1px border, sharp corners. Key: `--text-micro` `--muted`. Value: `--text-readout` `--accent` flat, tabular. Sub-line: `--text-micro` `--muted`. Unmeasured value: `--ink` em-dash + sub-line "measured at launch" — dashes never count up |
 | **Chip** | `--text-micro`, 1px border. Default: `--hair` border, `--muted` text. Emphasis (e.g. `VERIFY ⎘`): `--accent` border, **`--ink` text**, rust glyph — rust text at chip size would fail AA (§2.3) |
-| **Spec-sheet rows** | Label column `--text-label` `--muted` + `--hair` row rules; value cells `--ink`. Mechanism row value in `--accent` at ≥19px bold, or ink with rust marker. Full detail ships with the decisions-section spec |
+| **Spec-sheet rows** | Label column `--text-label` `--muted` + `--hair` row rules; value cells `--ink`. Mechanism row: ink text with a rust graphical mark — never rust text (the ≥19px-bold rust branch is declined; §4 is body prose). Full detail: `design-specs/web/section-04-decisions.md` |
 | **`OPERATIONAL` status bar** | See §9. Sticky, opaque, hairline-ruled |
 | **Roster formation** | PM hub + eight plates on a bus-bar — hero-scoped; ships with the hero spec. The bus-bar `+` terminals reuse registration-mark styling |
 

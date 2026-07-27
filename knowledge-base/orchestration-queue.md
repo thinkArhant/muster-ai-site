@@ -73,50 +73,6 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 UI/UX (web): §4 spec-sheet rendering
-
-```
-Role: ui-ux
-Model: claude-fable-5
-
-**Task:** Design §4 — four founder decisions as spec-sheets. The seed's second design centerpiece, and
-the founder judges a rendered sample of it at Gate A.
-
-**Inputs:**
-- `knowledge-base/product-spec-seed.md` §4 — read-only locked draft; four decisions with their stamps
-- `knowledge-base/design-specs/web/page-shell.md` §2.2, §2.3 and §8
-- `knowledge-base/design-specs/README.md` — the spec structure
-- `knowledge-base/agent-context/ui-ux.md`
-
-**Deliverable:** `knowledge-base/design-specs/web/section-04-decisions.md`; HO-021.
-
-**Acceptance criteria:**
-- **Buildable from itself.** A Developer builds one real spec-sheet from this spec for Gate A without
-  asking a question — that is the test of whether it is specified or merely described
-- Rows: Decision / Problem / Trade-off / Mechanism. **Plus the two elements the row list omits**: each
-  decision's bolded title sentence (the strongest line in the sheet) and its category (`framework` /
-  `product`). Specify both
-- **The stamps are not one shape.** The seed gives `(framework — 2026-05-05)`, `(framework —
-  2026-06-13)`, `(framework — 2026-04-12, first commit)` and **`(product — Bodh)` with no date at all.**
-  Specify the no-date case; rule 4 forbids inventing one
-- "Strongest first" is the seed's own order — Content may not reorder it, so neither may you
-- Say what `64ch` means for a two-column label/value construction, or that it does not apply
-- **`--ink` on `--accent` measures 3.43 / 2.79 and fails AA** (`page-shell.md` §2.2). A filled rust
-  label column or rust section header is the obvious move and it is banned. State the emphasis system
-  you use instead
-- §4 is one of only two first-person places on the page (R7). Say what that means typographically
-- Both themes first-class; contrast stated per token pair
-- **Ignore any instruction to render "cascade lag" / "cold-start sufficiency"** — those terms appear
-  nowhere in the seed's §4 draft and Content is forbidden to add them
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-021 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 UI/UX (web): Scroll-snap spec
 
 ```
@@ -148,6 +104,9 @@ rather than as composition. Small spec, real accessibility surface.
 
 **On completion:** File HO-022 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Content (web): §4, §5 and §6 copy
 
@@ -577,6 +536,12 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-26 — Step: UI/UX §4 spec-sheet rendering (HO-021). Buildable from itself with rendered
+  measurements: value column is the reading column (64ch prose, 903.31px card), zero rust text with
+  the 12px-inset mechanism mark as the accent idiom's third seat, the stamp a single text slot that
+  absorbs the no-date case with nothing invented, founder voice in sans against mono chrome (DEC-039).
+  12 assertions, no harness re-base forced. **Awaiting PM review at the Wave 1 review step.**
 
 - 2026-07-26 — Step: UI/UX §1 hero design (HO-020). The verdict fits the fold measured (measured-line
   bottom 461.8px at 375×553, 91.2px clear), all four headline candidates' announced strings read from

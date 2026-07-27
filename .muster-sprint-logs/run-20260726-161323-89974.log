@@ -310,3 +310,81 @@
   🧪 bash   git status --short; echo ---; git show --stat --oneline c7d770c | head -15
   🧪 bash   git log -1 --format=%B c7d770c
   🧪 bash   git add knowledge-base/design-specs/web/section-01-hero.md knowledge-base/design-specs/web/page-shell.md knowledge-base/
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; rm /tmp/hero-probe.html /tmp/hero-probe.mjs
+  💬 **Step complete — the §1 hero spec is delivered, filed as HO-020, and the queue now points at the §4 spec-sheet step.** Committed as `50bf8d4` (`ui-ux: the hero is specified and its fold budget is mea
+    📖 ×20 · ✏️  ×9 · 📝 ×3 · 🧪 ×20
+  ✓ 53 turns · $15.95 · peak ctx 254k/1M 25% · out 94k  (success)
+  ✓ [36;1mUI-UX[0m · [1m24m 17s[0m · advanced → 2026-07-26 UI/UX (web): §4 spec-sheet rendering (UI-UX) · handoff HO-020 filed ✓
+    run so far: 1h 26m · $49.47 · 3 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 5
+▶ [36;1mUI-UX[0m · 2026-07-26 UI/UX (web): §4 spec-sheet rendering  [2m[claude-fable-5][0m
+  ⚙  session start
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 The Next Step is the §4 spec-sheet design, `Role: ui-ux`. Binding to UI/UX for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh ui-ux auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/ui-ux.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/ui-ux/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/ui-ux.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/product-spec-seed.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/README.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/ui-component-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  🧪 bash   grep -n "Pre-Handoff Self-Review" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/syste
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-01-hero.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/system-guide.md
+  🧪 bash   grep -n "DEC-023\|DEC-035\|64ch" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-bas
+  🧪 bash   grep -n "DEC-023" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log-
+  🧪 bash   grep -n "^## \|^### " /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-sp
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log-archive.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-02-replay.md
+  🧪 bash   grep -n -i "decision\|§04\|sec-4\|section-4\|s4\b" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-16
+  🧪 bash   grep -rn -i "decision\|spec-sheet\|sheet" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/test
+  🧪 bash   sed -n 150,200p /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  🧪 bash   grep -n "data-shell-placeholder\|slot" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.h
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  🧪 bash   ls /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/ /Users/kanwarsandhu/Desktop/TA-must
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/tokens.css
+  🧪 bash   grep -n "^\.\|^ \.\|{" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css | head 
+  🧪 bash   grep -n "instrument\|\.slot\|\.read\b\|t-body\|t-label\|t-micro\|t-kicker\|section__body\|container" /Users/kanwarsandhu
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  📝 write  /tmp/s4-probe.html
+  📝 write  /tmp/s4-probe.mjs
+  🧪 bash   cd /tmp && node s4-probe.mjs 2>&1 | tail -80
+  🧪 bash   cd /tmp && node s4-probe.mjs 2>&1 | head -200
+  🧪 bash   cd /tmp && node -e " const { execSync } = require('child_process'); " ; sed -n '1,1p' /dev/null; node s4-probe.mjs 2>/de
+  💬 All viewports measured, no overflow anywhere. Now checking the renders visually before ruling on title scale:
+  📖 read   /tmp/s4-dark-375.png
+  📖 read   /tmp/s4-dark-1280.png
+  📖 read   /tmp/s4-light-1280.png
+  💬 Both themes render correctly. Now fixing the mark inset (drop the stray `-1px`) and running the accessibility-tree probe to verify the announced structure:
+  ✏️  edit   /tmp/s4-probe.html
+  📝 write  /tmp/s4-ax.mjs
+  🧪 bash   cd /tmp && node s4-ax.mjs 2>&1 | head -60
+  🧪 bash   grep -n "^### DEC-" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-lo
+  🧪 bash   sed -n '1,40p' /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  🧪 bash   tail -30 /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md; wc -l
+  💬 All measurements and structure checks are done. Writing the spec now — the main deliverable:
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-04-decisions.md
+  💬 Spec written. Now the small shell amendment — settling the spec-sheet motif row's two-option mechanism clause to the ruling:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  💬 Now the decision-log entry:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  🧪 bash   grep -n "DEC-\|HO-\|Sprint\|sprint\|wave\|Wave\|today\|gate\|Gate" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-04-decisions.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-04-decisions.md
+  🧪 bash   grep -n "log__mark\|decorative\|color.*accent\|accentRgb\|rustText\|rust" /Users/kanwarsandhu/Desktop/TA-muster-ai-site-
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-04-decisions.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now the queue update — my step to Done, scroll-snap promoted to Next Step:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   git -C /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 status --short && git -C /Users/kanwars
+  🧪 bash   git -C /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 add -A && git -C /Users/kanwarsandhu/De
