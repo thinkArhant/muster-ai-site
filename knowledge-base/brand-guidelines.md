@@ -155,7 +155,9 @@ after the curl. Reduced-motion paths render complete content, never a degraded s
 **Permitted recognition hook**: "context engineering" — exactly one, for reader orientation.
 
 **Insider terms** (*cascade lag*, *cold-start sufficiency*): permitted only where they earn their
-meaning, which is §4. Never at hero altitude.
+meaning. §4 was that place; with §4 ruled plain-language (DEC-043), no section on the page satisfies
+the condition, so the terms do not appear on the page. Reversible on founder request. Never at hero
+altitude in any case.
 
 **Attribution naming — non-negotiable:**
 

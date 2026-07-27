@@ -66,8 +66,17 @@ for s in work:
         defect("NO-BLOCKED-PATH", f'"{s["title"]}" does not tell a blocked agent what to do instead of halting')
 
 # --- 3. handoff IDs: contiguity, and every consumed ID has a producer ----------
-produced = {}   # HO-id -> index of producing step
+# The queue is a living document: completed steps are summarized into the run log
+# outside any fence. An ID that appears there was produced by a finished step and
+# is neither an orphan nor a gap.
+outside = src
+for m in re.finditer(r"^### (.+?)\n+```\n(.*?)\n```", src, re.S | re.M):
+    outside = outside.replace(m.group(0), "")
+
+produced = {}   # HO-id -> index of producing step (-1 = completed, in the run log)
 consumed = {}   # HO-id -> list of consuming step indices
+for ho in set(re.findall(r"HO-(\d{3})", outside)):
+    produced.setdefault(ho, -1)
 for i, s in enumerate(steps):
     for ho in set(re.findall(r"HO-(\d{3})", s["body"])):
         if re.search(rf"File HO-{ho}\b|;\s*HO-{ho}\b|HO-{ho}\.\s*$", s["body"], re.M):
@@ -105,9 +114,15 @@ for i, s in enumerate(steps):
     inp = re.search(r"\*\*Inputs:?\*\*(.*?)(?:\n\*\*|\Z)", s["body"], re.S)
     if not inp:
         continue
+    last_dir = ""
     for p in re.findall(r"`([^`\s]+\.[a-z]{2,4})`", inp.group(1)):
         base = os.path.basename(p)
-        on_disk = os.path.exists(os.path.join(ROOT, p))
+        # A bare filename continuing a path list inherits the previous entry's
+        # directory: `a/b/x.md`, `y.md` means a/b/y.md.
+        if "/" in p:
+            last_dir = os.path.dirname(p)
+        on_disk = os.path.exists(os.path.join(ROOT, p)) or \
+            ("/" not in p and last_dir and os.path.exists(os.path.join(ROOT, last_dir, p)))
         if on_disk:
             continue
         if base in created:

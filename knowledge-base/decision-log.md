@@ -540,7 +540,9 @@ defect in three places after it closed), pm (the Gate A packet), marketing/legal
 
 ---
 
-### DEC-035 — §4 is written for a non-technical reader; the rest of the page is not (2026-07-27)
+### DEC-043 — §4 is written for a non-technical reader; the rest of the page is not (2026-07-27)
+<!-- Originally misnumbered DEC-035, which belongs to the 07-26 SP3/§3 copy rulings. Renumbered 2026-07-27; both external DEC-035 references (pre-launch-checklist, queue run log) mean the original. -->
+
 
 **Decision**: Founder ruling at Gate A. **§4 only** is rewritten for a non-technical audience — VC
 readers and people evaluating the founder to hire — in their language and materially shorter. Every
@@ -581,6 +583,67 @@ length and states the measured height.
 **Touched**: `wave-review.md`, `orchestration-queue.md`, `current-sprint.md`,
 `agent-context/{content,ui-ux}.md`, `agent-skills/content/copy-rules.md` (R11 consequence),
 `product-spec.md` (§4 reader).
+
+---
+
+### DEC-044 — §4's four decisions are selected from ten candidates; every date verified in the framework repo (2026-07-27)
+
+**Decision**: the DEC-043 re-selection is complete. Ten candidate decisions were generated and
+stress-tested in a founder-run session outside this project's telemetry (per the Gate A item 2C
+sourcing plan); PM adopted the stress-tested four and made the two rulings that round left open.
+The shipping four, strongest first:
+
+1. **Tiered reading** — *"I optimized what each agent reads, not how they talk"* — architecture.
+   Stamp: **2026-04-24** (`03ba0ce`, "slim bootstrap: keep routing behavior, cut ~600 tokens/session").
+2. **Determinism + model economics, merged** — a rule a script can check may not live in prose, and
+   *therefore* premium models buy judgment, not correctness — systems thinking. Stamp: **2026-06-13**
+   (`c7bbde8`, pillar-budget gate + CI).
+3. **Growth caps** — every file the agents read was capped in the first commit, before the failure was
+   ever experienced — systems thinking. Stamp: **2026-04-12** (`216fa50`, initial extraction; the
+   commit itself contains the growth-cap rule).
+4. **Attention architecture** — human attention is the scarcest input, so the run halts at designed
+   gates and never asks mid-flight; specialists cannot escalate past PM to the founder — architecture.
+   Stamp: **2026-06-07** (`78490b7`, "Muster v4 — autonomous sprint execution (#29)").
+
+**Ruling 1 — the tiered-reading stamp is 2026-04-24, not the seed's 2026-05-05.** Both commits are
+real; the choice is which a hostile reader clicks through to. `03ba0ce` *is* the claim — a measured
+optimization of what agents read, with the number in the commit message. `11164fd` (05-05) is a
+16-skill batch a skeptic would have to interpret. On a page whose argument is checkability, the
+cleaner click-through wins. 04-12 was declined for this slot because slot 3 already owns the
+first-commit stamp, and two identical dates would dilute the independent-arrival story the stamps
+tell silently.
+
+**Ruling 2 — slot 4 is attention architecture; the feedback loop is the named alternate.** The
+founder's own bar for this section was explicit: the reader must see that he understands *tokens and
+human time*. Slots 1–3 are all token economy; without slot 4 the human-attention half of the bar is
+uncovered. It also explains a number already on the page — §5's 4.8 h operator attention — so the
+page starts reading as designed rather than assembled, and framed as attention economics it does not
+restate §2's on-screen `Role: halt` (the redundancy that disqualified the plain "halt design"
+candidate). The feedback loop (sprint retro → GitHub issue → next framework release; three public
+releases titled from field retros) is the strongest cut and the documented swap-in if the founder
+prefers to signal compounding over attention discipline.
+
+**Merge accepted in slot 2**: model inversion ("once correctness was mechanical, I stopped paying
+premium models to be careful," 2026-06-12) is a corollary of determinism with an adjacent date; as a
+separate slot the pair read as one thought told twice. Merged, its payoff line lands inside the
+determinism entry, which is the single strongest this-person-understands-the-AI-game signal of the ten.
+
+**Evidence is verified, not inherited.** PM ran `git log` against the framework repo
+(`~/Desktop/TA-muster-ai`) for all five load-bearing commits — `216fa50` · `03ba0ce` · `11164fd` ·
+`c7bbde8` · `78490b7` — and every hash, date and message matches the research. The remaining six
+candidates and their evidence are preserved in the Gate A record (wave-review.md item 2C) for the
+Content step.
+
+**Consequences.** The seed's decision 4 (Bodh) is out per DEC-043; no shipping decision is dateless,
+so DEC-039's no-date stamp special case retires with it. All four stamps now carry dates —
+UI/UX's one-slot stamp construction is unchanged, only its no-date branch goes unused. Coverage
+holds: architecture (1, 4), systems thinking (2, 3). Content writes the four in plain language under
+DEC-043's guardrail — plainer words, not bigger claims; every trade-off survives.
+
+**Impact**: Content, UI/UX, Developer, QA, PM.
+
+**Touched**: `decision-log.md`, `wave-review.md` (Gate A item 2C), `brand-guidelines.md` (§5
+insider-terms cascade per DEC-043).
 
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

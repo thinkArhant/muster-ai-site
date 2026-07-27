@@ -361,9 +361,81 @@ return to finished work); the **feedback loop** (a project offers its telemetry 
 close → filed as a GitHub issue → XO prepares the PR for the next framework version); and
 **environment-variable knobs** the operator tunes to preference.
 
-**How this is being sourced**: the founder runs the candidate-generation in a separate session, so the
-exploration does not enter this project's telemetry or token budget. PM supplies the brief, receives the
-ten candidates with evidence, narrows to the final set, and only then does Content write.
+**How this was sourced**: the founder ran candidate-generation and a stress-test round in a separate
+session, so the exploration never entered this project's telemetry or token budget. Ten candidates came
+back with git evidence; the stress test (against the founder's own bar — *does the reader see he
+understands tokens AND human time?*) revised the recommended four. PM adopted the revised four, made
+the two rulings that round left open, and **verified every load-bearing commit citation by running
+`git log` against the framework repo directly** — all five hashes, dates and messages match. Recorded
+as **DEC-044**.
+
+**SELECTED — the four that ship, strongest first.** Content writes each as Decision / Problem /
+Trade-off / Mechanism, in plain language per amendment A; the trade-off is load-bearing and survives.
+The material below is the source of truth for the Content fix step.
+
+**1 · Tiered reading — architecture. Stamp: 2026-04-24.**
+- *Decision (founder's voice)*: "I optimized what each agent reads, not how they talk."
+- *Problem*: multi-agent frameworks obsess over messaging; the real ceiling was each agent's context
+  window filling with what it didn't need.
+- *Trade-off*: agents never share a conversation — every cross-role question costs a file write and a
+  session, and PM becomes a deliberate serialization point.
+- *Mechanism*: three-layer read architecture (brain file / PM-curated agent-context / skills loaded
+  per-task); PM as sole context-router.
+- *Evidence*: architecture in first commit `216fa50`; stamp commit `03ba0ce` — "slim bootstrap: keep
+  routing behavior, cut ~600 tokens/session." Stamp ruled to 04-24 over the seed's 05-05: the commit
+  *is* the claim with the number in the message, the cleaner hostile click-through.
+
+**2 · Determinism + model economics, merged — systems thinking. Stamp: 2026-06-13.**
+- *Decision*: "If a rule can be checked by a script, it isn't allowed to live in prose" — and once
+  correctness was mechanical, premium models stopped being paid to be careful.
+- *Problem*: a real field failure — a model skipped its closeout commit ("first prose-trust failure
+  observed in the field"); prose compliance degrades as files grow.
+- *Trade-off*: floors can't flex — a legitimate exception still trips the gate — and every scripted
+  rule ships with a regression fixture. Judgment stays in prose; the split itself must be maintained.
+- *Mechanism*: pillar-budget gate + CI (`c7bbde8`), commit floor, queue-lint, handoff lint — bash
+  floors under prose judgment; model routing inverted so cheap models run routine steps and premium
+  needs explicit sign-off.
+- *Payoff line (the strongest AI-economics signal of the ten)*: the floors don't move, so premium
+  models buy judgment, not correctness.
+
+**3 · Growth caps — systems thinking. Stamp: 2026-04-12, the first commit.**
+- *Decision*: "I capped the size of every file the agents read — before I wrote almost anything else."
+- *Problem*: accumulating files silently eat the context window; the failure is invisible until an
+  agent is terminal. Later proven in the field — one uncapped file hit 1,382 lines and buried the one
+  open request.
+- *Trade-off*: agents permanently lose history — nothing older than the current sprint is in view —
+  and every new file must ship with a cap or it's a leak.
+- *Mechanism*: caps + archive rules in commit one (`216fa50` literally contains the growth-cap rule);
+  later a CI gate that fails the build on growth.
+- *Why it holds a slot*: unfalsifiable foresight — the first-commit date does work no other candidate's
+  date can do. It survived a hostile click-through in the research round.
+
+**4 · Attention architecture — architecture. Stamp: 2026-06-07.**
+- *Decision*: human attention is the scarcest input, so the run gets designed gates — it halts, never
+  asks, never guesses.
+- *Problem*: unattended agents that hit ambiguity either guess (ship wrong) or stall waiting for a
+  human who isn't there — and a run that pings its operator constantly spends the one resource that
+  doesn't scale.
+- *Trade-off*: the founder deliberately never sees the mechanical layer, and no mid-run steering
+  exists — every ambiguity is paid for up front at planning time.
+- *Mechanism*: `Role: halt` wave gates; specialists cannot escalate past PM to the founder; gate
+  packets curated down to the human-judgment residue; resume only after a written verdict.
+- *Evidence*: `78490b7` — "Muster v4 — autonomous sprint execution (#29)."
+- *Why it took slot 4 (DEC-044 ruling 2)*: slots 1–3 cover the token economy; this covers the
+  human-time half of the founder's bar, and it explains §5's 4.8 h operator-attention figure — the
+  page starts reading as designed, not assembled. Framed as attention economics it does not restate
+  §2's on-screen `Role: halt`.
+
+**Named alternate, documented swap**: the **feedback loop** (sprint close → telemetry + retro →
+GitHub issue → XO prepares the next-version PR; three public releases titled from field-retro
+findings — the most independently checkable evidence of the ten). Swaps in for slot 4 if the founder
+prefers to signal compounding (the VC moat read) over attention discipline. One-word override at any
+point before the §3/§4 build step.
+
+**The six cut, with reasons, so they are not re-litigated**: halt design (absorbed into 4's framing;
+alone it restates §2), model inversion (merged into 2), self-healing 429 boundary (a sub-decision of
+4), docs-describe-the-present and one-file-one-writer (real, but inside-baseball — most translation
+for least reader payoff), config-knobs-earn-existence (smallest blast radius of the ten).
 
 **3. Copy —** *awaiting*
 
