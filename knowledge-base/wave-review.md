@@ -298,7 +298,49 @@ and the announced string is unaffected because the strike is hidden and rust is 
 unselected candidates; UI/UX re-measures against §3's fold budget and specifies the accent scope. This
 is a variant of an approved candidate — it rides the existing path, no rebuild of the sample.
 
-**2. §4 spec-sheet —** *awaiting*
+**2. §4 SPEC-SHEET — PASSES, WITH TWO AMENDMENTS.**
+
+*"It reads as a spec for sure"* — the concept holds and the rendering is accepted. The Decision /
+Problem / Trade-off / Mechanism structure stays, as does the no-rust-text emphasis system (forced by
+measurement: ink-on-rust is 3.43:1 dark and 2.79:1 light, both under the floor).
+
+**A — §4 is written for a different reader than the rest of the page. §4 ONLY.**
+The founder's ruling: §4's readers are non-technical — VC, and people evaluating him to hire. The copy
+is rewritten in their language and **shorter**, because that reader will not work for it. The rest of
+the page keeps the `product-spec.md` target reader (*the skeptical technical cold reader*) unchanged —
+§2 is proof and §3 is mechanism, and both stay technical.
+
+*This is coherent rather than a compromise*: §4's job in the scroll is *"shows the judgment behind
+it"* — it is the section where a reader decides whether to trust the person, which is precisely what a
+VC or a hiring manager is there to decide.
+
+**The guardrail, stated because the ask has the same shape as one that nearly went wrong before.**
+"Write it for VCs" is the same instruction shape as "something that would amaze them," which nearly
+inflated SP7 in Sprint 1. **Plainer words, not bigger claims.** Translating jargon for a non-technical
+reader is the job; making the decisions sound more impressive than they were is the one unrecoverable
+brand failure on a page whose whole argument is checkability. Every trade-off stated in the seed's
+draft survives the rewrite — a decision that loses its cost stops being a decision.
+
+**Cascade, settled here by the seed's own logic.** Seed rule 11 permits insider terms (*cascade lag*,
+*cold-start sufficiency*) "only where they earn their meaning," and `product-spec.md` records that
+they earn it in §4. With §4 in plain language, nowhere on the page satisfies rule 11's condition — so
+they drop out by the rule rather than by override. §3 is the only alternative home and is one
+paragraph long. Reversible if the founder wants them kept.
+
+**B — Four sheets must not exceed one screen, and the layout is decided AFTER the copy is rewritten.**
+The founder does not want §4 taller than a single screen and raised horizontal scroll as the likely
+answer. Correct instinct, wrong order: **copy length determines which layouts exist at all.** Four
+sheets at the current 4–6 sentences cannot share a screen by any arrangement; at two or three short
+lines each, a 2×2 grid may fit at desktop and a carousel may be unnecessary.
+
+*For UI/UX when it picks*: horizontal scroll is **not** ruled out by Sprint 1's §2 ruling. That
+removed sideways dragging *within a line of text*; scrolling *between discrete cards* is a different
+and normal pattern. But it carries a real cost — readers miss content that sits off-screen sideways,
+and a carousel is a lot of machinery on a page arguing for restraint. Judge it against the rewritten
+length, and state the measured height either way.
+
+**One thing to keep watching**: the longest decision title runs six lines at 320px today. The rewrite
+should retire that on its own; if it does not, it is a finding.
 
 **3. Copy —** *awaiting*
 

@@ -538,5 +538,49 @@ defect in three places after it closed), pm (the Gate A packet), marketing/legal
 **Touched**: `wave-review.md`, `agent-requests.md`, `brand-guidelines.md`, `agent-context/content.md`,
 `triage-log.md`, `orchestration-queue.md`, `retrospective.md`, `founder-notices.md`, `decision-log.md`.
 
+---
+
+### DEC-035 — §4 is written for a non-technical reader; the rest of the page is not (2026-07-27)
+
+**Decision**: Founder ruling at Gate A. **§4 only** is rewritten for a non-technical audience — VC
+readers and people evaluating the founder to hire — in their language and materially shorter. Every
+other section keeps `product-spec.md`'s target reader, *the skeptical technical cold reader*. §4 must
+also fit **one screen**, and its layout is chosen only after the rewrite, against the real word count.
+
+**Rationale**: §4's job in the scroll is *"shows the judgment behind it"* — it is where a reader decides
+whether to trust the person who built the thing, which is exactly what a VC or a hiring manager is
+there to decide. So a different reader for this one section is coherent rather than a compromise. §2 is
+proof and §3 is mechanism; both stay technical, and a page-wide audience change was explicitly
+considered and rejected because it would cascade into §1's headline, §3's argument and the copy rules.
+
+**The guardrail, recorded because the ask has a dangerous shape.** "Write it for VCs" is the same
+instruction shape as "something a VC would want to hear that would amaze them," which nearly inflated
+SP7 in Sprint 1 (DEC-024). **Plainer words, not bigger claims.** Every trade-off in the seed's locked
+draft survives the rewrite — a decision that loses its cost stops being a decision and becomes a boast.
+An inflated §4 is a blocking finding at PM review, however well it reads.
+
+**Consequence for the locked draft.** Seed §4 is founder-authored and previously "tighten only, never
+inflate." This ruling supersedes that for §4 alone: Content may now restructure and cut substantially.
+The four decisions, their order (strongest first), and every stated trade-off are still fixed.
+
+**Cascade, settled by the seed's own logic rather than by override.** Seed rule 11 permits insider terms
+(*cascade lag*, *cold-start sufficiency*) "only where they earn their meaning," and `product-spec.md`
+records §4 as where they earn it. With §4 in plain language, no section on the page satisfies rule 11's
+condition, so the terms drop out under the rule rather than against it. §3 is the only alternative home
+and is one paragraph long. Reversible on founder request.
+
+**Layout is sequenced, not deferred.** Copy length determines which layouts are available: four sheets
+at 4–6 sentences cannot share a screen by any arrangement; at two or three short lines a 2×2 grid may
+fit at desktop. Horizontal scroll is **not** barred by DEC-025 — that removed sideways dragging *within
+a line of text*, whereas scrolling *between discrete cards* is a different pattern — but it costs
+discoverability and adds machinery to a page arguing for restraint. UI/UX decides against the rewritten
+length and states the measured height.
+
+**Impact**: Content, UI/UX, Developer, QA, PM.
+
+**Touched**: `wave-review.md`, `orchestration-queue.md`, `current-sprint.md`,
+`agent-context/{content,ui-ux}.md`, `agent-skills/content/copy-rules.md` (R11 consequence),
+`product-spec.md` (§4 reader).
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
