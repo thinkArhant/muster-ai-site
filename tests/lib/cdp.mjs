@@ -89,11 +89,21 @@ export async function launchChrome() {
   };
 }
 
+/* The handshake gets a deadline for the same reason every reply below does:
+   Chrome can print its DevTools endpoint and still never complete the upgrade,
+   and an await with no ceiling turns that into a run that never ends. */
+const HANDSHAKE_TIMEOUT_MS = 30000;
+
 async function connect(url) {
   const socket = new WebSocket(url);
   await new Promise((resolve, reject) => {
-    socket.addEventListener("open", resolve, { once: true });
-    socket.addEventListener("error", reject, { once: true });
+    const timer = setTimeout(
+      () => reject(new Error(`CDP handshake timeout: ${url} did not open within ${HANDSHAKE_TIMEOUT_MS} ms`)),
+      HANDSHAKE_TIMEOUT_MS
+    );
+    timer.unref?.();
+    socket.addEventListener("open", () => { clearTimeout(timer); resolve(); }, { once: true });
+    socket.addEventListener("error", (event) => { clearTimeout(timer); reject(event); }, { once: true });
   });
 
   let nextId = 1;

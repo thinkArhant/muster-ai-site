@@ -10,6 +10,94 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-29 HO-033 — the audit can no longer hang: its last unbounded wait is bounded and named
+
+**Type:** handoff
+**Producer:** QA
+**Deliverable:** `tests/qa-independent-audit.mjs`, `tests/verify-webkit.mjs`, `tests/lib/cdp.mjs`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+- [ ] Developer — FYI only; no shipped file was touched
+
+**The headline, stated plainly first**
+
+The audit **already exited zero when this step opened** — 108/108, twice, before a line was changed.
+So the step's literal deliverable was satisfied on arrival, and OBS-006 was right to ask whether it
+still had a subject. It did, but a different one than the brief assumed: the audit could still
+**hang**, and a harness that can hang without saying so is not repaired just because today's run
+happened to finish. That is what this step closed.
+
+**The cause, named with evidence**
+
+`quickLook()` invoked `execFileSync("qlmanage", …)` with **no timeout**. That is the run's only
+unbounded external wait, and its failure mode is exactly the reported symptom: this file collects
+every result and prints the whole report at the end, so a stalled render produces **zero output**,
+forever, indistinguishable from "still working." `cdp.mjs`'s `send()` deadline (HO-026) does not
+reach it — a synchronous child process is not a CDP reply.
+
+Proven, not argued, by planting the stall and watching both behaviours:
+
+- **Pre-fix**: a `qlmanage` shim that sleeps was put first on `PATH`. The audit reached it ~6 min in
+  and then sat **blocked inside it for 120 s straight** (sampled every 5 s), with **0 lines of
+  output**, and had to be killed. It was never going to exit.
+- **Post-fix**: the identical plant now **fails named in 60 s, exit 1** —
+  `QuickLook timeout: qlmanage did not return for dark-s02 within 60000 ms (waited 60002 ms, source …)`.
+  Same plant, same machine, opposite outcome.
+
+**The brief's leading hypothesis was tested and is not supported.** The step named the injected 250 ms
+`SAMPLER` interval competing with the replay under the 375 × 553 chain, and said to bisect it rather
+than assume it. Bisected: a worktree at `bded0dd` — the exact commit at which the hang was reported
+(HO-025 / REQ-008), carrying that same `SAMPLER` and that same mobile chain — **runs green, 106/106,
+exit 0**. The mobile chain also holds its timing in every run here (worst drift 16.4 ms). Nothing
+supports the sampler as the cause, and it was not changed.
+
+**What that leaves honest, and what it does not**
+
+The original hang is **not reproducible from the committed tree**. So this is not a claim that the
+unbounded `qlmanage` wait is provably the thing that hung that session — nobody can claim that now,
+and inventing a culprit would be worse than saying so. What is proven: it was the one wait in the run
+with no ceiling, it fails exactly the way the report described, and it is the kind of stall a machine
+under load produces (`qlmanage` is a client of a system daemon, not a self-contained renderer). It can
+no longer hang silently, and if it stalls again the run says which render and for how long.
+
+**Scope**
+
+- `tests/qa-independent-audit.mjs` — bounded render, named error. No check added, removed, or altered;
+  the count is 108/108 either side of the change, so **no criterion needs re-justification**.
+- `tests/verify-webkit.mjs` — the identical unbounded `qlmanage` call, given the identical guard. A
+  deliberate companion fix, disclosed rather than folded in quietly: it is the same defect in the
+  suite that gates every step, and leaving the twin unbounded would have been a half-fix.
+- `tests/lib/cdp.mjs` — the WebSocket handshake awaited `open` with no deadline (the reply path has
+  had one since HO-026; the handshake did not). Same class, 30 s ceiling.
+
+**No shipped file was touched** — the repair is entirely in the audit's own machinery, and the page's
+behaviour is byte-identical.
+
+**Verification**
+
+- `node tests/qa-independent-audit.mjs` — **exit 0, 108/108, twice consecutively**, post-fix.
+- `bash scripts/test.sh` — **GREEN both engines, 273/273 + 27/27**, post-fix.
+- Planted stall goes red, named, in 60 s (above). Scratch worktree and `PATH` shim removed; tree
+  carries only the three harness files.
+
+**Revision log:**
+- 2026-07-29: Filed. Self-review caught: the first draft was going to report "the audit exits zero,
+  cause was fixed upstream in HO-026" — which is true and useless, because it names no mechanism and
+  leaves the hang able to recur unnamed. Re-scoped to the wait itself. Open question: OBS-014 below.
+
+**Observations** (non-blocking, for PM):
+- OBS-014 — the reported hang (REQ-008) does not reproduce from the committed tree: the audit at
+  `bded0dd`, the commit it was reported against, exits zero 106/106 today. Two sessions saw it hang,
+  so the report was not wrong; it was environment-dependent.   Severity: low
+  Evidence: worktree run at `bded0dd`, 106/106 exit 0; the pre/post plant results above.
+  Suggested action: none beyond noting it at the build review — the structural fix stands on its own
+  evidence and does not depend on that diagnosis being settled. This also closes OBS-006's question
+  ("does the queued audit-repair step still have a subject?"): it did, and this is what it was.
+- `muster-requests-lint.sh` reads 764/300 on the Active budget with this entry filed. That is OBS-010
+  unchanged, not a new finding: six handoffs are in review against a single queued PM review step,
+  which is the plan's shape. No entry here is closed-but-unswept.
+
 ### 2026-07-29 HO-029 — the page comes to rest on section starts
 
 **Type:** handoff

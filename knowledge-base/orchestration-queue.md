@@ -64,45 +64,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-28 QA (web): The independent audit exits zero
-
-```
-Role: qa
-Model: claude-opus-5
-
-**Task:** Repair `tests/qa-independent-audit.mjs` so it exits zero. This is deliberately its own
-step (DEC-050): it is an unbounded renderer bisect — mechanical debugging, no taste — and folding
-it into the full-page sweep risks a context-starved sweep doing rushed reads, the exact failure
-"verify against the state under test" exists to prevent.
-
-**Inputs:**
-- `tests/qa-independent-audit.mjs` · `tests/lib/cdp.mjs` (its `send()` timeout landed with the
-  §1+§6 step, HO-026 — so the stall now fails named instead of hanging)
-- `scripts/replay.js` — the leading, unproven hypothesis is the audit's injected 250 ms `SAMPLER`
-  interval competing with the replay under the 375 × 553 mobile chain. **Bisect it, do not assume
-  it.**
-- `knowledge-base/agent-requests.md` — HO-026's report of what the named failure now says
-
-**Deliverable:** the audit exits zero on the built page, with the cause named and the fix scoped to
-the audit's own machinery (an audit repair must never change page behaviour to pass); HO-033.
-
-**Acceptance criteria:**
-- `node tests/qa-independent-audit.mjs` exits zero, run twice consecutively (a flaky pass is not a
-  pass)
-- The cause is stated with evidence, not inferred; if the fix touched any criterion, each touched
-  criterion is re-justified
-- `bash scripts/test.sh` still green — the repair changed no shipped file's behaviour
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-033 in `agent-requests.md` (file under this exact ID — the fix round
-already took HO-031/032, so higher IDs existing in the ledger is not an error). Run the Pre-Handoff
-Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 QA (web): Full-page sweep
 
 ```
@@ -166,6 +127,9 @@ naming the failing check, and file HO-030 with what you found.
 **On completion:** File HO-030 in `agent-requests.md` — under this exact ID; higher IDs in the
 ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 PM: Review the build and assemble the Gate B packet
 
@@ -233,6 +197,15 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-29 — Step: QA independent audit (HO-033). The audit can no longer hang: its one unbounded
+  external wait — `execFileSync("qlmanage")` with no timeout — is bounded and named, proven by
+  planting a stalling `qlmanage` (pre-fix: blocked 120 s straight, zero output, killed; post-fix:
+  red in 60 s with the render named). **The brief's `SAMPLER` hypothesis was bisected and is not
+  supported** — the audit at `bded0dd`, the commit it was reported hanging at, runs 106/106 exit 0.
+  Exit 0 twice at 108/108; `scripts/test.sh` GREEN both engines (273/273 + 27/27). No shipped file
+  touched. **Awaiting PM review at the build-review step; OBS-014 records that the original hang does
+  not reproduce from the committed tree, and closes OBS-006's question.**
 
 - 2026-07-29 — Step: Developer scroll-snap (HO-029). The page now comes to rest on section starts —
   four declarations in the user agent, no script touching the page's scroll position (asserted
@@ -339,14 +312,6 @@ with no verification behind it is how that happened.
   candidate B sets FOUR lines at 320px with a lone `WITH` orphan against §4.1's stated three,
   `styles/tokens.css` still carries the pre-amendment `--text-display` floor, and REQ-008: the
   independent audit HANGS and cannot exit zero.**
-
-- 2026-07-26 — Step: Developer shell spacing system and brand mark (HO-024). The Gate 3 tick collision is
-  closed by taking the mark out of the text flow — R1 holds at 12.00px in both layers, R2 measures 3.91px
-  on L4 and L9 where it measured 0, the 37-column floor holds at 360px, and the hardcoded `12` is gone
-  from all four accent-pair sites. Pennant seated at 6×9 in the header, all five separators and the
-  favicon via `clip-path`, adding no request; the underscore is drawn and static and the header still
-  announces exactly `MUSTER`. §2 byte-clean and unchanged. Both harnesses green, both engines.
-  **Awaiting PM review at the Wave 1 review step; OBS-005 bears on how REQ-007 is settled.**
 
 
 

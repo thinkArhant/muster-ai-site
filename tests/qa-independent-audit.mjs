@@ -1663,11 +1663,38 @@ function webkitCopy(theme, css, label) {
   webkitTemps.push(path);
   return path;
 }
+/* Every WebKit render is taken under a deadline. `qlmanage` is a client of a
+   system daemon, not a self-contained renderer: when quicklookd is wedged or
+   saturated the command never returns, and an unbounded `execFileSync` turns
+   that into a process that runs forever. It reads as "still going" rather than
+   as a failure, because this file prints its whole report at the end — one
+   stalled render and the run produces no output at all, for as long as anyone
+   is willing to wait. A hang is a failure and should say so, with the render
+   that stalled named. The ceiling sits far above a legitimate render (these
+   take single-digit seconds) — it bounds a wedged daemon, not a slow page. */
+const QUICKLOOK_TIMEOUT_MS = 60000;
+
 function quickLook(sourcePath, label) {
   const outDir = join(ARTIFACTS, "qa-webkit-" + label);
   rmSync(outDir, { recursive: true, force: true });
   mkdirSync(outDir, { recursive: true });
-  execFileSync("qlmanage", ["-t", "-s", "1400", "-o", outDir, sourcePath], { stdio: "pipe" });
+  const startedAt = Date.now();
+  try {
+    execFileSync("qlmanage", ["-t", "-s", "1400", "-o", outDir, sourcePath], {
+      stdio: "pipe",
+      timeout: QUICKLOOK_TIMEOUT_MS,
+      killSignal: "SIGKILL"
+    });
+  } catch (err) {
+    if (err.code === "ETIMEDOUT" || err.signal === "SIGKILL") {
+      throw new Error(
+        `QuickLook timeout: qlmanage did not return for ${label} within ` +
+          `${QUICKLOOK_TIMEOUT_MS} ms (waited ${Date.now() - startedAt} ms, source ${sourcePath}). ` +
+          `The WebKit renders run against the system QuickLook daemon; a wedged daemon stalls here.`
+      );
+    }
+    throw err;
+  }
   const rendered = join(outDir, sourcePath.split("/").pop() + ".png");
   if (!existsSync(rendered)) throw new Error(`QuickLook produced no render for ${label}`);
   const buffer = readFileSync(rendered);

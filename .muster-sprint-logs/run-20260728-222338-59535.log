@@ -733,3 +733,100 @@
   🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -5; echo "=== requests lint ==="; bash muster/scripts/muster-reques
   ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
   🧪 bash   git add -A && git status --short
+  🧪 bash   git commit -q -F - <<'EOF' developer: the page comes to rest on section starts Proximity snap on the document scroller —
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "exit=$?"
+  💬 Step complete and committed. **What shipped** — `styles/{base,tokens,chrome,replay}.css`, `index.html` (§2's exemption class), `tests/verify-shell.mjs`: - **Four declarations, entirely in the user age
+    📖 ×26 · ✏️  ×32 · 📝 ×5 · 🧪 ×61 · ⚠️  ×6
+  ✓ 125 turns · $13.45 · peak ctx 232k/1M 23% · out 90k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m1h 32m[0m · advanced → 2026-07-28 QA (web): The independent audit exits zero (QA) · handoff HO-029 filed ✓
+    run so far: 4h 43m · $90.06 · 5 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 6
+▶ [32;1mQA[0m · 2026-07-28 QA (web): The independent audit exits zero  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh qa auto
+  💬 Binding to QA for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/qa.md
+  🧪 bash   node tests/qa-independent-audit.mjs; echo "EXIT=$?"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  💬 The audit already exits zero (108/108). Its premise may be stale — HO-026 reported repairing it. Let me confirm with a second run plus the full harness, and dig into what actually fixed it.
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit-run2.txt 2>&1; echo "AUDIT2_EXIT=$?"; tail -3 /tmp/audit-run2.txt; echo
+  🧪 bash   git log --oneline -12 -- tests/qa-independent-audit.mjs tests/lib/cdp.mjs
+  🧪 bash   git show --stat e974566 -- tests/ | head -30; echo "=== cdp.mjs diff ==="; git show e974566 -- tests/lib/cdp.mjs | head 
+  🧪 bash   git show --stat e974566 -- tests/ | tail -12; echo "=== audit diff in e974566 ==="; git show e974566 -- tests/qa-indepen
+  🧪 bash   git log --oneline -20; echo "=== SAMPLER history ==="; git log --oneline -S'SAMPLER' -- tests/qa-independent-audit.mjs; 
+  🧪 bash   git log --oneline --diff-filter=A -- samples/gate-a.html; echo "=== all commits since ==="; git log --oneline e4b06d7..H
+  💬 Both green. Now the real work: the step demands the cause be **named with evidence, not inferred**. Let me reproduce the hang at the commit where it was reported (HO-025 = `bded0dd`).
+  🧪 bash   git worktree add /tmp/wt-ho025 bded0dd 2>&1 | tail -3; ls /tmp/wt-ho025/tests/
+  🧪 bash   cd /tmp/wt-ho025 && node tests/qa-independent-audit.mjs > /tmp/ho025-audit.txt 2>&1 & pid=$! ( sleep 420; kill -9 $pid 2
+  💬 The audit at HO-025's own commit exits **zero, 106/106** — so the reported hang is not deterministic in that tree. Let me examine the wait machinery.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -n 'while\|USER_DATA\|user-data-dir\|
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -rn 'qlmanage\|spawnSync\|execFile\|e
+  💬 `qlmanage` at line 1670 is invoked with **no timeout** — an unbounded external-process wait, and the CDP deadline doesn't cover it. Let me read it.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  💬 Cause candidate identified. Now I'll prove the mechanism rather than assert it — plant a stalling `qlmanage` and watch the audit hang.
+  🧪 bash   mkdir -p /tmp/qlshim && printf '#!/bin/sh\nsleep 900\n' > /tmp/qlshim/qlmanage && chmod +x /tmp/qlshim/qlmanage && echo 
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 PATH=/tmp/qlshim:$PATH node tests/qa-indepe
+  ⚠️  tool returned an error
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; wc -l /tmp/audit-stall.txt; tail -5 /tmp/a
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 rm -f /tmp/audit-stall.txt PATH=/tmp/qlshim
+  🔧 ToolSearch
+  🧪 bash   pid=43493; i=0; while kill -0 $pid 2>/dev/null && [ $i -lt 72 ]; do sleep 5; i=$((i+1)); done if kill -0 $pid 2>/dev/nul
+  💬 While that runs, let me prepare the handoff context.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; wc -l knowledge-base/agent-requests.md; gr
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -n 'Pre-Handoff Self-Review' -A 40 mu
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -rn 'Pre-Handoff Self-Review' muster/
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -n 'Pre-Handoff Self-Review Checklist
+  🧪 bash   wc -l < /tmp/audit-stall.txt; ps -p 43493 > /dev/null 2>&1 && echo "audit STILL RUNNING" || echo "audit exited"; pgrep -
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -n 'quickLook(\|catch\|process.exit\|
+  📖 read   /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/73cb320f-218b-419c-b614-f2883ccb48af/tasks/bd4q9ow3h.output
+  💬 The stalled run confirms the symptom shape: total silence (the audit prints only at the end). Let me apply the fix while it runs out its watchdog.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  📖 read   /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/73cb320f-218b-419c-b614-f2883ccb48af/tasks/bd4q9ow3h.output
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   ps -p 43493 >/dev/null 2>&1 && echo "audit STILL RUNNING (hung)" || echo "audit exited"; cat /private/tmp/claude-501/-Us
+  🧪 bash   pid=43493; seen=0; i=0 while [ $i -lt 150 ]; do if ! kill -0 $pid 2>/dev/null; then echo "AUDIT EXITED after ~$((i*5))s"
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; for f in tests/qa-independent-audit.mjs te
+  📖 read   /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/73cb320f-218b-419c-b614-f2883ccb48af/tasks/b3g113t2f.output
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -n '^### A-0\|^## ' knowledge-base/fo
+  📖 read   /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/73cb320f-218b-419c-b614-f2883ccb48af/tasks/b3g113t2f.output
+  💬 I'll wait for the watcher to report rather than poll.
+  🧪 bash   i=0; while [ $i -lt 40 ]; do if [ -s /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-2
+  💬 The shim was reached. Waiting for the block confirmation.
+  🧪 bash   out=/private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/73cb320f-218b-419c
+  💬 Pre-fix behaviour reproduced and named: **blocked inside `qlmanage`, zero output, indefinitely.** Now the post-fix run with the same planted stall — it must go red instead.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 kill -9 43493 2>/dev/null; pkill -f '/tmp/q
+  💬 Fails named in 60 s instead of hanging forever. Now the clean acceptance runs.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 ls -a | grep -c '^\.qa-webkit' || true echo
+  ⚠️  tool returned an error
+  💬 Both clean runs pass post-fix. `test.sh` was cut by the 10-minute ceiling — running it on its own.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; bash scripts/test.sh > /tmp/testsh2.txt 2>
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -E '[0-9]+/[0-9]+' /tmp/testsh2.txt |
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -nE 'checks|passed|PASS|verify-' /tmp
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; cat /tmp/testsh2.txt | tail -30
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; grep -E '[0-9]+/[0-9]+ ' .test-logs/run-20
+  💬 All acceptance criteria are met. Filing the handoff.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now the queue: move this step to Done and promote the full-page sweep.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Now the self-review checks and lints.
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; ls muster/scripts/ | grep -i lint; echo "=
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; bash muster/scripts/muster-lint-handoff.sh
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; git add -A && git commit -q -F - <<'EOF' q

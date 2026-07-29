@@ -35,13 +35,31 @@ function check(name, passed, detail) {
   results.push({ name, passed: Boolean(passed), detail });
 }
 
+/* Bounded for the same reason the audit's renders are: `qlmanage` talks to a
+   system daemon, and a wedged daemon never returns. Unbounded, that stalls the
+   suite silently instead of failing it. Far above a legitimate render. */
+const QUICKLOOK_TIMEOUT_MS = 60000;
+
 function renderWithQuickLook(sourcePath, label) {
   const outDir = join(ARTIFACTS, "webkit-" + label);
   rmSync(outDir, { recursive: true, force: true });
   mkdirSync(outDir, { recursive: true });
-  execFileSync("qlmanage", ["-t", "-s", String(RENDER_WIDTH), "-o", outDir, sourcePath], {
-    stdio: "pipe"
-  });
+  const startedAt = Date.now();
+  try {
+    execFileSync("qlmanage", ["-t", "-s", String(RENDER_WIDTH), "-o", outDir, sourcePath], {
+      stdio: "pipe",
+      timeout: QUICKLOOK_TIMEOUT_MS,
+      killSignal: "SIGKILL"
+    });
+  } catch (err) {
+    if (err.code === "ETIMEDOUT" || err.signal === "SIGKILL") {
+      throw new Error(
+        `QuickLook timeout: qlmanage did not return for ${label} within ` +
+          `${QUICKLOOK_TIMEOUT_MS} ms (waited ${Date.now() - startedAt} ms, source ${sourcePath}).`
+      );
+    }
+    throw err;
+  }
   const name = sourcePath.split("/").pop() + ".png";
   const rendered = join(outDir, name);
   if (!existsSync(rendered)) throw new Error(`QuickLook produced no render for ${sourcePath}`);
