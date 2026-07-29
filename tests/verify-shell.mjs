@@ -1683,6 +1683,411 @@ try {
     narrowEntries.every(([, m]) => m.marks.every((k) => Math.abs(k.inset - m.hairline) < 0.5 && k.width === 2 && k.clearance > 0)),
     narrowEntries.map(([w, m]) => `${w}px: insets ${m.marks.map((k) => k.inset).join("/")} against ${m.hairline}`).join(" · "));
 
+  /* ================================================================= §5 ===
+     Shipped with Muster — the page's ONLY site for the whole-product number
+     set, and its only counting cells.
+
+     Two sources of truth, and neither is this file. The strings come off
+     Content's deliverable; the four BODH figures are additionally diffed
+     against the founder-authored seed's Measured data table, which is the
+     document the copy file itself cites. A number that drifted in the copy
+     file would still be caught, because the page is checked against the
+     measurement and not only against the transcription of it.
+     ======================================================================= */
+
+  /* Three fenced prose lines, then the card table. The table is parsed rather
+     than retyped for the same reason the fences are: a retyped em dash or a
+     transposed scope label is exactly the class of drift this catches. */
+  const s05Copy = (() => {
+    const lines = copyFile("section-05-copy.md");
+    const at = lines.findIndex((l) => /^## 3\. The three prose lines/.test(l));
+    const end = lines.findIndex((l, i) => i > at && /^## 4\./.test(l));
+    const prose = fencesIn(lines.slice(at, end));
+
+    const tableAt = lines.findIndex((l) => /^### 4\.1 Card strings/.test(l));
+    const tableEnd = lines.findIndex((l, i) => i > tableAt && /^\| Claim \|/.test(l));
+    const rows = lines.slice(tableAt, tableEnd)
+      .filter((l) => l.startsWith("|") && !/^\|\s*-+/.test(l))
+      .map((l) => l.split("|").slice(1, -1).map((c) => c.trim()));
+    /* Cell text is the backticked run; the parentheticals beside it are the
+       copy file talking to its reader, not strings that ship. */
+    const cellOf = (row, col) => (row[col].match(/`([^`]*)`/) || [])[1] ?? null;
+    const pick = (label, col) => cellOf(rows.find((r) => r[0] === label), col);
+    const card = (col) => ({
+      scope: pick("Card label", col),
+      keys: [1, 2, 3, 4].map((n) => pick(`Key ${n}`, col)),
+      values: [1, 2, 3, 4].map((n) => pick(`Value ${n}`, col)),
+      sub: pick("Sub-line", col)
+    });
+    return { prose, cards: [card(1), card(2)] };
+  })();
+
+  /* The seed's Measured data table — founder-authored, read-only, and the
+     origin of every figure §5 prints. Read as `label -> { value, note }` from
+     the BODH column, with the parenthetical split off: "4 (Jul 11–18)" is a
+     commit-day count and the window it covers, and §5 renders both. */
+  const SEED_MEASURED = (() => {
+    const lines = readFileSync(join(ROOT, "knowledge-base", "product-spec-seed.md"), "utf8").split("\n");
+    const at = lines.findIndex((l) => /^## Measured data/.test(l));
+    const end = lines.findIndex((l, i) => i > at && /^## /.test(l));
+    const out = {};
+    lines.slice(at, end === -1 ? lines.length : end)
+      .filter((l) => l.startsWith("|") && !/^\|\s*-+/.test(l) && !/^\|\s*\|/.test(l))
+      .forEach((l) => {
+        const cells = l.split("|").slice(1, -1).map((c) => c.trim());
+        if (cells.length < 2) return;
+        const m = cells[1].match(/^([^(]*?)\s*(?:\(([^)]*)\))?$/);
+        out[cells[0]] = { value: (m?.[1] || cells[1]).trim(), note: (m?.[2] || "").trim() };
+      });
+    return out;
+  })();
+  evidence.s05Seed = SEED_MEASURED;
+
+  const SHIPPED = `(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const css = (el, p) => getComputedStyle(el).getPropertyValue(p).trim();
+    const section = document.querySelector("#shipped-with-muster");
+    const body = section.querySelector(".section__body");
+    const cards = [...body.querySelectorAll(".shipped__card")];
+
+    const accentRgb = (() => {
+      const p = document.createElement("span");
+      p.style.color = "var(--accent)";
+      document.body.appendChild(p);
+      const v = css(p, "color");
+      p.remove();
+      return v;
+    })();
+
+    /* What assistive technology would read: the text an aria-hidden subtree
+       contributes is not text, and that difference is the whole posture. */
+    const atText = (root) => {
+      let out = "";
+      const walk = (node) => {
+        if (node.nodeType === 3) { out += node.nodeValue; return; }
+        if (node.nodeType !== 1) return;
+        if (node.getAttribute("aria-hidden") === "true") return;
+        [...node.childNodes].forEach(walk);
+      };
+      walk(root);
+      return out.replace(/\\s+/g, " ").trim();
+    };
+
+    const lineCount = (el) => r2(el.getBoundingClientRect().height / parseFloat(css(el, "line-height")));
+
+    const readCell = (cell) => {
+      const key = cell.querySelector(".readout__key");
+      const value = cell.querySelector(".readout__value");
+      const target = cell.querySelector("[data-countup]");
+      const box = cell.getBoundingClientRect();
+      return {
+        key: key.textContent.trim(),
+        keyLines: lineCount(key),
+        keyColour: css(key, "color"),
+        value: value.textContent.replace(/\\s+/g, " ").trim(),
+        state: target ? target.getAttribute("data-countup-state") : "no-engine",
+        ariaHidden: target ? target.getAttribute("aria-hidden") : null,
+        colour: css(value, "color"),
+        fontSize: css(value, "font-size"),
+        tabular: css(value, "font-variant-numeric"),
+        animation: css(value, "animation-name"),
+        transition: css(value, "transition-duration"),
+        subs: [...cell.querySelectorAll(".readout__sub")].map((s) => s.textContent.trim()),
+        announced: atText(cell),
+        top: r2(box.top),
+        height: r2(box.height)
+      };
+    };
+
+    const readCard = (card) => ({
+      scope: card.querySelector(".shipped__scope").textContent.trim(),
+      scopeRects: card.querySelector(".shipped__scope").getClientRects().length,
+      caption: card.querySelector(".shipped__caption") ? card.querySelector(".shipped__caption").textContent.trim() : null,
+      captions: card.querySelectorAll(".shipped__caption").length,
+      regmarks: card.querySelectorAll(".regmark").length,
+      surface: css(card, "background-color"),
+      border: css(card, "border-top-width"),
+      cells: [...card.querySelectorAll(".shipped__cell")].map(readCell),
+      overflow: r2(card.scrollWidth - card.clientWidth)
+    });
+
+    const moving = [...section.querySelectorAll("*")].filter((el) => {
+      const a = css(el, "animation-name");
+      const t = parseFloat(css(el, "transition-duration")) || 0;
+      return (a && a !== "none") || t > 0;
+    }).map((el) => (el.className || el.tagName) + " [" + css(el, "animation-name") + "]");
+
+    /* Byte-count of a figure across the WHOLE page, with the sections that
+       carry it named. Two renderings of one measurement is the drift this
+       page cannot afford, so the count is the assertion. */
+    const siteOf = (needle) => {
+      const all = document.body.textContent;
+      return {
+        count: all.split(needle).length - 1,
+        sections: [...document.querySelectorAll("main > section")]
+          .filter((s) => s.textContent.includes(needle)).map((s) => s.id)
+      };
+    };
+
+    return {
+      wide: matchMedia("(min-width: 60rem)").matches,
+      reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
+      accentRgb,
+      inkRgb: css(document.body, "color"),
+      mutedRgb: css(document.querySelector(".readout__key"), "color"),
+      lines: [...body.querySelectorAll(".shipped__line")].map((p) => ({
+        text: p.textContent.replace(/\\s+/g, " ").trim(),
+        colour: css(p, "color"),
+        cap: r2(parseFloat(css(p, "max-width"))),
+        rendered: r2(p.getBoundingClientRect().width)
+      })),
+      readMax: (() => {
+        const p = document.createElement("span");
+        p.style.cssText = "position:absolute;visibility:hidden;inline-size:var(--read-max)";
+        body.appendChild(p);
+        const w = r2(p.getBoundingClientRect().width);
+        p.remove();
+        return w;
+      })(),
+      bodyChildren: [...body.children].map((el) => el.className),
+      cards: cards.map(readCard),
+      cardCount: cards.length,
+      /* R9: §5 asks for nothing. No link, no chip, no control. */
+      focusable: [...section.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+        .map((el) => el.className || el.tagName),
+      headings: [...section.querySelectorAll("h1,h2,h3,h4,h5,h6")].map((h) => h.tagName),
+      moving,
+      standIns: document.querySelectorAll(".a11y-value").length,
+      /* The posture, page-wide: there is no live region anywhere on this page,
+         and §5's counting cells are the reason the question comes up at all. */
+      liveRegions: [...document.querySelectorAll("[aria-live], [role=status], [role=alert], [role=log], [role=timer], [role=marquee], [aria-atomic]")]
+        .map((el) => (el.className || el.tagName) + "[" + (el.getAttribute("aria-live") || el.getAttribute("role")) + "]"),
+      sites: { activeBuild: siteOf("9.3 h"), cost: siteOf("$147"), attention: siteOf("4.8 h") },
+      /* Wave-scope figures must not appear in §5 (copy file §1, R5). */
+      waveScope: ["~64", "289", "$24.73"].filter((n) => section.textContent.includes(n)),
+      sectionText: section.textContent.replace(/\\s+/g, " ").trim(),
+      viewport: { scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }
+    };
+  })()`;
+
+  await page.setViewport({ width: 1280, height: 900 });
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.goto(PAGE_URL);
+  const s05 = await page.eval(SHIPPED);
+  evidence.s05Wide = s05;
+  writeFileSync(join(ARTIFACTS, "blink-dark-s05-1280.png"), await page.screenshot({ fullPage: true }));
+
+  /* --- §5: the strings, verbatim from the deliverable --- */
+  check("§5 ships the three prose lines verbatim, the provenance line among them as prose",
+    s05Copy.prose.length === 3 && s05.lines.length === 3 &&
+      s05.lines.every((l, i) => l.text === s05Copy.prose[i]) &&
+      s05.lines.every((l) => l.colour === s05.inkRgb),
+    `${s05.lines.length}/3 lines, all equal: ${s05.lines.every((l, i) => l.text === s05Copy.prose[i])} · ${JSON.stringify(s05.lines.map((l) => l.text.slice(0, 28)))}`);
+  check("§5 renders two cards and only two — the provenance line is never a readout cell",
+    s05.cardCount === 2 && s05.bodyChildren.filter((c) => /shipped__line/.test(c)).length === 3 &&
+      s05.cards.every((c) => c.cells.length === 4),
+    `${s05.cardCount} cards of ${s05.cards.map((c) => c.cells.length).join("/")} cells, ${s05.bodyChildren.length} elements in the section body`);
+  check("§5 both cards carry the same four keys, in the same order, from the copy file",
+    s05.cards.every((card, i) => card.cells.every((cell, j) => cell.key === s05Copy.cards[i].keys[j])) &&
+      s05.cards[0].cells.map((c) => c.key).join("|") === s05.cards[1].cells.map((c) => c.key).join("|"),
+    s05.cards[0].cells.map((c) => c.key).join(" · "));
+  check("§5 both cards are scope-labelled, and neither label breaks mid-phrase",
+    s05.cards.every((card, i) => card.scope === s05Copy.cards[i].scope && card.scopeRects === 1),
+    s05.cards.map((c) => `${JSON.stringify(c.scope)} in ${c.scopeRects} rect(s)`).join(" · "));
+
+  /* --- §5: the figures, against the founder's own measurement --- */
+  const SEED_KEYS = { "ACTIVE BUILD": "Active build", "OPERATOR ATTENTION": "Operator attention", "COMMIT-DAYS": "Commit-days", "COST · API LIST": "Cost (API list)" };
+  const bodhCells = s05.cards[0].cells;
+  const seedFor = (key) => SEED_MEASURED[SEED_KEYS[key]];
+  check("§5's four BODH figures are byte-equal to the seed's Measured data table",
+    bodhCells.length === 4 && bodhCells.every((cell) => {
+      const seed = seedFor(cell.key);
+      return Boolean(seed) && cell.value === seed.value;
+    }),
+    bodhCells.map((c) => `${c.key} ${JSON.stringify(c.value)} vs seed ${JSON.stringify(seedFor(c.key)?.value)}`).join(" · "));
+  check("§5 carries the commit-day window the seed states, under the count it qualifies",
+    bodhCells[2].subs.length === 1 && bodhCells[2].subs[0] === seedFor("COMMIT-DAYS").note &&
+      bodhCells.filter((c) => c.subs.length).length === 1,
+    `${JSON.stringify(bodhCells[2].subs)} vs seed note ${JSON.stringify(seedFor("COMMIT-DAYS").note)}`);
+  /* The primary-site rule: §1 gave up its readout at Gate A, so each of these
+     figures now has exactly one home and this is it. A second rendering
+     anywhere on the page fails here, whatever it says. */
+  check("§5 is the page's only site for 9.3 h, $147 and 4.8 h — one rendering each",
+    ["activeBuild", "cost", "attention"].every((k) =>
+      s05.sites[k].count === 1 && s05.sites[k].sections.join("") === "shipped-with-muster"),
+    Object.entries(s05.sites).map(([k, v]) => `${k} ×${v.count} in [${v.sections.join(",")}]`).join(" · "));
+  check("§5 mixes no scope: no wave-scope figure appears in the section",
+    s05.waveScope.length === 0, s05.waveScope.join(", ") || "no ~64 / 289 / $24.73");
+
+  /* --- §5: measured is rust, unmeasured is ink and says so --- */
+  const dashCells = s05.cards[1].cells;
+  check("§5 measured values are flat rust at the readout size, tabular",
+    bodhCells.every((c) => c.colour === s05.accentRgb && c.tabular.includes("tabular-nums") &&
+      parseFloat(c.fontSize) >= 24),
+    bodhCells.map((c) => `${c.value} ${c.colour} ${c.fontSize} ${c.tabular}`).join(" · "));
+  check("§5 unmeasured values are ink em-dashes with one card-level sub-line, never a placeholder",
+    dashCells.every((c) => c.value === s05Copy.cards[1].values[0] && c.colour === s05.inkRgb) &&
+      s05.cards[1].caption === s05Copy.cards[1].sub && s05.cards[1].captions === 1 &&
+      s05.cards[0].caption === null,
+    `${dashCells.map((c) => c.value).join("")} in ${dashCells[0].colour} · caption ${JSON.stringify(s05.cards[1].caption)} ×${s05.cards[1].captions}`);
+  check("§5 dashes never animate: the engine sees them and refuses",
+    dashCells.every((c) => c.state === "static" && c.animation === "none" && parseFloat(c.transition) === 0 && c.ariaHidden === null),
+    dashCells.map((c) => `${c.state}/${c.animation}`).join(" · "));
+  check("§5 declares no motion of its own — the count-up is the section's whole inventory",
+    s05.moving.length === 0, s05.moving.join(" | ") || "no animation, no transition");
+  check("§5 asks for nothing: no link, no chip, no control, and no heading below the h2",
+    s05.focusable.length === 0 && s05.headings.join(",") === "H2",
+    `${JSON.stringify(s05.focusable)} · headings ${s05.headings.join(",")}`);
+  check("§5 cards are instrument surfaces: two registration marks each, hairline-bordered",
+    s05.cards.every((c) => c.regmarks === 2 && c.border === "1px"),
+    s05.cards.map((c) => `${c.regmarks} marks, ${c.border} border`).join(" · "));
+
+  /* --- §5: the relationship the section's argument rests on. Two scopes are
+     only comparable if they line up key for key; a key that grew to two lines
+     would break that, so both the alignment and its precondition are read off
+     the render rather than assumed from the token. --- */
+  check("§5 the two cards align key for key — equal cell heights, and equal tops side by side",
+    s05.cards[0].cells.every((cell, i) => Math.abs(cell.height - s05.cards[1].cells[i].height) < 0.5) &&
+      (!s05.wide || s05.cards[0].cells.every((cell, i) => Math.abs(cell.top - s05.cards[1].cells[i].top) < 0.5)),
+    s05.cards[0].cells.map((c, i) => `${c.key}: ${c.height}px @${c.top} vs ${s05.cards[1].cells[i].height}px @${s05.cards[1].cells[i].top}`).join(" · "));
+  check("§5 every key sets on one line at desktop, which is what the shared cell size assumes",
+    s05.cards.every((c) => c.cells.every((cell) => cell.keyLines === 1)),
+    s05.cards.map((c) => c.cells.map((cell) => cell.keyLines).join("")).join(" / "));
+  check("§5 prose sits at the seed-locked 64ch column",
+    s05.lines.every((l) => Math.abs(l.cap - s05.readMax) < 0.5 && l.rendered <= l.cap + 0.5),
+    `cap ${s05.lines[0].cap}px against --read-max ${s05.readMax}px, widest rendered ${Math.max(...s05.lines.map((l) => l.rendered))}px`);
+
+  /* --- §5: the live-region posture, verified during playback ---
+     The claim is not "no aria-live in the markup" — it is that the cell's
+     accessible text is the measured value at every instant, including the
+     1.2 seconds the visible digits spend wrong. So the roll is watched frame
+     by frame: the visible string changes many times, the announced string
+     must not change at all. Remove the shroud in count-up.js and the second
+     half of this goes red while the first half still passes. --- */
+  const roll = await page.eval(`(async () => {
+    const atText = (root) => {
+      let out = "";
+      const walk = (node) => {
+        if (node.nodeType === 3) { out += node.nodeValue; return; }
+        if (node.nodeType !== 1) return;
+        if (node.getAttribute("aria-hidden") === "true") return;
+        [...node.childNodes].forEach(walk);
+      };
+      walk(root);
+      return out.replace(/\\s+/g, " ").trim();
+    };
+    const cards = document.querySelectorAll(".shipped__card");
+    const targets = [...cards[0].querySelectorAll("[data-countup]")];
+    const cells = targets.map((t) => t.closest(".shipped__cell"));
+    document.querySelector(".shipped").scrollIntoView({ block: "center" });
+    const seen = [];
+    const heard = [];
+    const t0 = performance.now();
+    while (performance.now() - t0 < 2400) {
+      seen.push(targets.map((t) => t.textContent).join("|"));
+      heard.push(cells.map(atText).join("|"));
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+    return {
+      distinctSeen: [...new Set(seen)].length,
+      distinctHeard: [...new Set(heard)],
+      states: targets.map((t) => t.getAttribute("data-countup-state")),
+      landed: targets.map((t) => t.textContent),
+      ariaHidden: targets.map((t) => t.getAttribute("aria-hidden")),
+      standInsLeft: document.querySelectorAll(".a11y-value").length
+    };
+  })()`);
+  evidence.s05Roll = roll;
+
+  check("§5 counts up on the real page: every measured cell fires and lands on its exact string",
+    roll.states.every((s) => s === "done") &&
+      roll.landed.join("|") === s05Copy.cards[0].values.join("|") &&
+      roll.distinctSeen > 5,
+    `${roll.states.join("/")} · landed ${JSON.stringify(roll.landed)} · ${roll.distinctSeen} distinct rendered frames`);
+  check("§5's announced value never changes while the visible one rolls — no live region, no wrong number",
+    roll.distinctHeard.length === 1 &&
+      s05Copy.cards[0].values.every((v) => roll.distinctHeard[0].includes(v)),
+    `${roll.distinctSeen} visible states against ${roll.distinctHeard.length} announced: ${JSON.stringify(roll.distinctHeard)}`);
+  check("§5 leaves nothing behind: the shroud and its stand-in are gone once the roll settles",
+    roll.standInsLeft === 0 && roll.ariaHidden.every((a) => a === null),
+    `${roll.standInsLeft} stand-in(s), aria-hidden ${JSON.stringify(roll.ariaHidden)}`);
+  check("no live region anywhere on the page — the posture is silence, not politeness",
+    s05.liveRegions.length === 0, s05.liveRegions.join(", ") || "none");
+
+  /* --- §5: the same claim, read out of the accessibility tree instead of
+     computed from the DOM. The roll is re-run deliberately slowly so the
+     tree is fetched while a wrong number is on screen; the tree must not
+     contain it. --- */
+  const midVisible = await page.eval(`(() => {
+    const el = document.querySelector("#shipped-with-muster [data-countup]");
+    el.removeAttribute("data-countup-state");
+    window.__axSpec = MusterCountUp.parse("9.3 h");
+    MusterCountUp.run(el, window.__axSpec, 9000);
+    return el.textContent;
+  })()`);
+  const axTree5 = await page.call("Accessibility.getFullAXTree");
+  const ax5 = (axTree5.nodes || []).filter((n) => n.ignored !== true);
+  const ax5Names = ax5.map((n) => (n?.name?.value || "").replace(/\s+/g, " ").trim());
+  const ax5Values = ax5.map((n) => String(n?.value?.value ?? "").replace(/\s+/g, " ").trim());
+  const axRolling = [...ax5Names, ...ax5Values].filter((n) => /^\d+\.\d\s?h$/.test(n));
+  const axLive = ax5.filter((n) => (n.properties || []).some((p) => p.name === "live" && p.value?.value && p.value.value !== "off"))
+    .map((n) => `${n.role?.value}:${(n.name?.value || "").slice(0, 24)}`);
+  const settled = await page.eval(`(() => {
+    const el = document.querySelector("#shipped-with-muster [data-countup]");
+    MusterCountUp.settle(el, window.__axSpec);
+    return { text: el.textContent, hidden: el.getAttribute("aria-hidden"), standIns: document.querySelectorAll(".a11y-value").length };
+  })()`);
+  evidence.s05Ax = { midVisible, rollingNamesInTree: axRolling, live: axLive, settled };
+
+  check("§5 mid-roll: the accessibility tree carries the measured values and no intermediate one",
+    ax5Names.includes("9.3 h") && ax5Names.includes("4.8 h") && ax5Names.includes("$147") &&
+      axRolling.every((n) => n === "9.3 h" || n === "4.8 h") && axLive.length === 0,
+    `visible ${JSON.stringify(midVisible)} while the tree carries ${JSON.stringify([...new Set(axRolling)])} · ${axLive.length} live region(s)`);
+  check("§5 settles back to the authored string with the tree left clean",
+    settled.text === "9.3 h" && settled.hidden === null && settled.standIns === 0,
+    JSON.stringify(settled));
+
+  /* --- §5 under reduced motion: the exact values, immediately, and no
+     shroud — there is nothing to shroud when nothing rolls. --- */
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+  await page.goto(PAGE_URL);
+  const s05Still = await page.eval(SHIPPED);
+  evidence.s05Reduced = s05Still;
+  check("§5 at reduced motion: every value renders exactly and immediately, nothing shrouded",
+    s05Still.reducedMotion &&
+      s05Still.cards[0].cells.every((c, i) => c.state === "static" && c.value === s05Copy.cards[0].values[i]) &&
+      s05Still.cards[1].cells.every((c) => c.state === "static") &&
+      s05Still.standIns === 0 && s05Still.cards[0].cells.every((c) => c.ariaHidden === null),
+    `${s05Still.cards[0].cells.map((c) => c.state).join("/")} · ${JSON.stringify(s05Still.cards[0].cells.map((c) => c.value))}`);
+
+  /* --- §5 in light theme and across the phone widths --- */
+  await page.setMedia({ colorScheme: "light", reducedMotion: "no-preference" });
+  await page.goto(PAGE_URL);
+  const s05Light = await page.eval(SHIPPED);
+  evidence.s05Light = s05Light;
+  check("§5 holds the rust/ink split in the light theme too",
+    s05Light.cards[0].cells.every((c) => c.colour === s05Light.accentRgb) &&
+      s05Light.cards[1].cells.every((c) => c.colour === s05Light.inkRgb) &&
+      s05Light.cards[0].cells.every((c, i) => c.value === s05.cards[0].cells[i].value),
+    `measured ${s05Light.cards[0].cells[0].colour} (accent ${s05Light.accentRgb}) · unmeasured ${s05Light.cards[1].cells[0].colour} (ink ${s05Light.inkRgb})`);
+
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  const s05Narrow = {};
+  for (const width of [320, 360, 375, 390]) {
+    await page.setViewport({ width, height: 553, deviceScaleFactor: 1, mobile: true });
+    await page.goto(PAGE_URL);
+    s05Narrow[width] = await page.eval(SHIPPED);
+    if (width === 375) writeFileSync(join(ARTIFACTS, "blink-dark-s05-375.png"), await page.screenshot({ fullPage: true }));
+  }
+  evidence.s05Narrow = s05Narrow;
+  const s05Widths = Object.entries(s05Narrow);
+  check("§5 stacks below --bp-wide with no sideways gesture, and both scope labels still hold one line",
+    s05Widths.every(([, m]) => !m.wide &&
+      m.viewport.scrollWidth <= m.viewport.clientWidth &&
+      m.cards.every((c) => c.scopeRects === 1 && c.overflow <= 0) &&
+      m.cards[0].cells.every((cell, i) => Math.abs(cell.height - m.cards[1].cells[i].height) < 0.5)),
+    s05Widths.map(([w, m]) => `${w}px: doc ${m.viewport.scrollWidth}/${m.viewport.clientWidth}, scope rects ${m.cards.map((c) => c.scopeRects).join("")}, card overflow ${m.cards.map((c) => c.overflow).join("/")}`).join(" · "));
+
   await page.setViewport({ width: 1440, height: 900 });
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
   await page.goto(PAGE_URL);

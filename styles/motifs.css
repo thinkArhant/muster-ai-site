@@ -136,21 +136,19 @@
    Instrument readout cell.
    A measured value is flat rust, tabular, at the readout size — never tinted,
    never glowing. An unmeasured one is an ink em-dash and says so.
+
+   The cell carries no surface of its own: it is seated on `.instrument`
+   above, which is what a readout card IS. Repeating the surface, border and
+   inset here would give a cell inside a card two frames and two sources of
+   truth for one inset.
    -------------------------------------------------------------------------- */
 
-.readout {
-  background-color: var(--surface);
-  border: 1px solid var(--hair);
-  padding: var(--gap-flow);
-}
-
+/* Key and sub-line are micro type and take it from .t-micro on the element,
+   like every other micro run on the page; what belongs here is only what the
+   cell adds to it. A second copy of the type scale is a second place for it
+   to drift. */
 .readout__key {
-  font-family: var(--font-mono);
-  font-size: var(--text-micro);
-  line-height: var(--lead-micro);
-  text-transform: uppercase;
-  letter-spacing: var(--track-micro);
-  color: var(--muted);
+  display: block;
 }
 
 .readout__value {
@@ -163,6 +161,8 @@
   color: var(--accent);
 }
 
+/* Ink, never accent: an unmeasured value is a claim about what will be
+   measured, not a metric. */
 .readout__value--unmeasured {
   color: var(--ink);
 }
@@ -170,12 +170,6 @@
 .readout__sub {
   display: block;
   margin-block-start: var(--gap-hairline);
-  font-family: var(--font-mono);
-  font-size: var(--text-micro);
-  line-height: var(--lead-micro);
-  text-transform: uppercase;
-  letter-spacing: var(--track-micro);
-  color: var(--muted);
 }
 
 /* --------------------------------------------------------------------------
@@ -205,15 +199,6 @@
 
 .chip__glyph {
   color: var(--accent);
-}
-
-/* --------------------------------------------------------------------------
-   Shell scaffolding — every element carrying data-shell-placeholder is
-   removed as its section lands. Nothing here is page content.
-   -------------------------------------------------------------------------- */
-
-.slot {
-  margin-block-start: var(--gap-major);
 }
 
 /* --------------------------------------------------------------------------

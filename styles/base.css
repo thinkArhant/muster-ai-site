@@ -156,6 +156,21 @@ time {
   font-variant-numeric: tabular-nums;
 }
 
+/* Read but not seen. The count-up's stand-in — the exact final value, held in
+   the accessibility tree for the 1.2 seconds the visible digits spend being
+   wrong (scripts/count-up.js). No page content uses this: an element only
+   ever carries it while a number is rolling, and only the engine creates it.
+   Absolutely positioned and one pixel, so it costs no layout and cannot move
+   the cell it stands in for. */
+.a11y-value {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
 /* --------------------------------------------------------------------------
    Layout
    -------------------------------------------------------------------------- */

@@ -24,6 +24,8 @@ const GROUND = { dark: "#13140D", light: "#DBD8C6" };
 const ACCENT = { dark: "#C05A32", light: "#A0451F" };
 const INK = { dark: "#E6E3D3", light: "#191B10" };
 const SURFACE = { dark: "#1B1D13", light: "#E7E4D4" };
+const MUTED = { dark: "#8C9075", light: "#55583F" };
+const HAIR = { dark: "#2C2F22", light: "#BDB9A3" };
 
 const results = [];
 const evidence = {};
@@ -394,6 +396,114 @@ try {
       bars.length
         ? `${bars.length} rust bar(s) of ${bars.map((b) => b.w + "×" + b.h).join(", ")}px — ${seats.map((s) => s.seat + "/" + s.pad + " = " + s.ratio).join(", ")} of the card's padding, against the 12-in-24 midpoint the token seats it at`
         : "no 2px rust bar found in §4 — the mark is painted with background-color and may not have rasterised"
+    );
+  }
+
+  /* --- §5 in WebKit. QuickLook runs no JavaScript, so what it rasterises IS
+         the no-JS path: the authored text, which is the exact measured value —
+         the count-up never ran and had nothing to restore. Two claims are
+         worth the render, and both are colour, which is the one thing a
+         rasteriser can be asked directly.
+
+         A measured value is rust. An unmeasured one is an INK em-dash, and
+         the difference is the page's whole posture about its own numbers: a
+         dash painted rust reads as a metric that happens to be zero. With the
+         prose lines hidden, every remaining ink pixel in the section belongs
+         to one of the four dashes — keys, scope labels and the caption are all
+         muted, the measured values are accent, the rules are hair — so "four
+         ink clusters, all dash-shaped, and no accent one among them" is a
+         complete statement about the section rather than a spot check. --- */
+  const clustersIn = (image, matches, floor) => {
+    const hits = new Set();
+    for (let y = 0; y < image.height; y++) {
+      for (let x = 0; x < image.width; x++) {
+        if (matches(rgbAt(image, x, y))) hits.add(x + "," + y);
+      }
+    }
+    const seen = new Set();
+    const boxes = [];
+    for (const key of hits) {
+      if (seen.has(key)) continue;
+      const stack = [key];
+      const cell = [];
+      while (stack.length) {
+        const k = stack.pop();
+        if (seen.has(k) || !hits.has(k)) continue;
+        seen.add(k);
+        const [cx, cy] = k.split(",").map(Number);
+        cell.push([cx, cy]);
+        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) stack.push(cx + dx + "," + (cy + dy));
+      }
+      if (cell.length < floor) continue;
+      const xs = cell.map((c) => c[0]);
+      const ys = cell.map((c) => c[1]);
+      const box = { l: Math.min(...xs), r: Math.max(...xs), t: Math.min(...ys), b: Math.max(...ys), n: cell.length };
+      box.w = box.r - box.l + 1;
+      box.h = box.b - box.t + 1;
+      boxes.push(box);
+    }
+    return boxes.sort((a, b) => a.t - b.t || a.l - b.l);
+  };
+
+  /* Every pixel is assigned to the nearest locked palette value rather than
+     matched within a tolerance of one. Antialiasing between ink and surface
+     has no true colour to be within tolerance OF, and a threshold tight
+     enough to exclude it also excludes the core of a 2px-thick em dash. */
+  const classifier = (theme) => {
+    const palette = Object.entries({
+      ground: GROUND[theme], surface: SURFACE[theme], ink: INK[theme],
+      accent: ACCENT[theme], muted: MUTED[theme], hair: HAIR[theme]
+    }).map(([name, hex]) => [name, hexRgb(hex)]);
+    const d2 = (c, t) => (c[0] - t[0]) ** 2 + (c[1] - t[1]) ** 2 + (c[2] - t[2]) ** 2;
+    return (c) => palette.reduce((best, e) => (d2(c, e[1]) < d2(c, best[1]) ? e : best))[0];
+  };
+
+  for (const theme of ["dark", "light"]) {
+    const target = hexLuminance(GROUND[theme]);
+    const nearest = classifier(theme);
+    /* The prose is hidden alongside the other sections: its own em dashes set
+       at body size in ink and would otherwise join the dash inventory. The
+       status bar goes with them for the same reason — MUSTER is six ink
+       letters, and the claim below is about EVERY ink cluster in the frame. */
+    const withS5 = decodePng(renderWithQuickLook(
+      themedCopy(theme, { hide: [...pageWithout("#shipped-with-muster"), ".shipped__line", ".statusbar"], label: theme + "-s05" }), theme + "-s05"));
+    const control = decodePng(renderWithQuickLook(
+      themedCopy(theme, { hide: [...PAGE, ".statusbar"], label: theme + "-s05control" }), theme + "-s05control"));
+
+    const s5Ink = inkShare(withS5, target);
+    const baseInk = inkShare(control, target);
+
+    /* A dash is a bar: many times wider than it is tall. No glyph in this
+       palette at this size has that shape, and no rule does either — rules
+       are hair, not ink. */
+    const isDash = (b) => b.w >= 4 * b.h && b.w >= 6 && b.h <= 8;
+    const inkClusters = clustersIn(withS5, (c) => nearest(c) === "ink", 8);
+    const accentClusters = clustersIn(withS5, (c) => nearest(c) === "accent", 8);
+    const inkDashes = inkClusters.filter(isDash);
+    const accentDashes = accentClusters.filter(isDash);
+
+    evidence[theme + "S05"] = {
+      render: `${withS5.width}x${withS5.height}`,
+      inkShare: s5Ink, controlInkShare: baseInk,
+      inkClusters: inkClusters.map((b) => `${b.w}×${b.h}@${b.l},${b.t}`),
+      accentClusterCount: accentClusters.length,
+      accentMass: accentClusters.reduce((n, b) => n + b.n, 0)
+    };
+
+    check(
+      `WebKit sets §5's readout cards (${theme})`,
+      withS5.width > 0 && s5Ink - baseInk > 0.3,
+      `ink ${s5Ink}% against ${baseInk}% on the same page with every section hidden — +${Math.round((s5Ink - baseInk) * 100) / 100} percentage points`
+    );
+    check(
+      `WebKit renders §5's measured values in rust, with no JavaScript run (${theme})`,
+      accentClusters.length >= 4 && accentDashes.length === 0,
+      `${accentClusters.length} rust clusters, ${accentClusters.reduce((n, b) => n + b.n, 0)} px of accent ink — the authored strings, since QuickLook ran no count-up`
+    );
+    check(
+      `WebKit renders §5's four unmeasured values as ink em-dashes, never rust (${theme})`,
+      inkDashes.length === 4 && inkClusters.length === inkDashes.length && accentDashes.length === 0,
+      `${inkClusters.length} ink cluster(s) in the section, ${inkDashes.length} of them dash-shaped: ${inkDashes.map((b) => b.w + "×" + b.h).join(", ") || "none"} · rust dashes ${accentDashes.length}`
     );
   }
 

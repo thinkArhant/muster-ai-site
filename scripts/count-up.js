@@ -1,14 +1,14 @@
 /* ==========================================================================
-   Scroll-triggered count-up — motion element 3.
+   Scroll-triggered count-up — motion element 2 of the page's two.
 
    Progressive enhancement: the element's authored text IS the exact final
    value. With JS off, with motion reduced, or with no IntersectionObserver,
    that authored text is simply what stays on screen. The animation only ever
    replaces a value it can restore character for character.
 
-   Usage:  <span class="readout__value" data-countup>9.3</span>
-           <span class="readout__value" data-countup>$147</span>
-           <span class="readout__value readout__value--unmeasured">—</span>
+   Usage:  <span data-countup>9.3 h</span>
+           <span data-countup>$147</span>
+           <span data-countup>—</span>          (unmeasured: never animates)
 
    Rules this file enforces:
      - Decimals roll as decimals; 9.3 animates 0.0 -> 9.3, never 0 -> 9.
@@ -17,6 +17,23 @@
      - The cell is sized by its final value before the first frame, so the
        count-up causes zero layout shift.
      - Fires once per page load, at >=55% cell visibility.
+
+   THE LIVE-REGION POSTURE — decided here, and the decision is "none".
+
+   No counting cell carries `aria-live`, and none ever will. A polite region
+   over a rolling number re-announces on every frame: 1.2 seconds of ease-out
+   cubic is dozens of announcements of numbers that were never true, and the
+   last thing a screen reader would say is the only thing worth saying. An
+   assertive region is worse — it interrupts.
+
+   But silence alone is not enough, because a reader can land on the cell
+   mid-roll and be read an intermediate. So the digits are taken OUT of the
+   accessibility tree for exactly as long as they are lying: while a cell
+   rolls, the animating span is `aria-hidden` and a visually hidden stand-in
+   holding the exact final string sits beside it. The accessible text of the
+   cell is therefore the measured value at every instant of the page's life,
+   announced once, in document order, like any other text. Both the attribute
+   and the stand-in are gone by the time the roll settles.
    ========================================================================== */
 
 (function (global) {
@@ -101,6 +118,31 @@
     el.style.minInlineSize = "";
   }
 
+  /* ---- the accessible value, while the visible one is still wrong -------- */
+
+  /* Hides the rolling digits from assistive technology and puts the exact
+     final string in their place. No live region is involved: this is ordinary
+     static text that happens to be swapped for the truth while the picture
+     catches up. */
+  function shroud(el, spec) {
+    if (el._musterStandIn) return;
+    var doc = el.ownerDocument;
+    var standIn = doc.createElement("span");
+    standIn.className = "a11y-value";
+    standIn.textContent = spec.source;
+    el.setAttribute("aria-hidden", "true");
+    if (el.parentNode) el.parentNode.insertBefore(standIn, el.nextSibling);
+    el._musterStandIn = standIn;
+  }
+
+  function unshroud(el) {
+    el.removeAttribute("aria-hidden");
+    if (el._musterStandIn) {
+      if (el._musterStandIn.parentNode) el._musterStandIn.parentNode.removeChild(el._musterStandIn);
+      el._musterStandIn = null;
+    }
+  }
+
   /* ---- animation -------------------------------------------------------- */
 
   function run(el, spec, duration) {
@@ -120,6 +162,7 @@
       }
 
       el.setAttribute("data-countup-state", "running");
+      shroud(el, spec);
       el.textContent = format(0, spec);
       global.requestAnimationFrame(frame);
     });
@@ -130,6 +173,7 @@
     el.textContent = spec.source;
     el.setAttribute("data-countup-state", "done");
     unlockWidth(el);
+    unshroud(el);
   }
 
   /* ---- wiring ----------------------------------------------------------- */
@@ -209,6 +253,7 @@
     format: format,
     easeOutCubic: easeOutCubic,
     run: run,
+    settle: settle,
     refresh: refresh
   };
 

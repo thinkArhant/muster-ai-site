@@ -334,12 +334,84 @@
       <span class="rule__line rule__line--grow" aria-hidden="true"></span>
     </div>
     <div class="container section__body">
-      <!-- SHELL PLACEHOLDER — removed when §5 lands. -->
-      <div class="instrument slot" data-shell-placeholder>
-        <span class="regmark regmark--tl" aria-hidden="true">+</span>
-        <span class="regmark regmark--br" aria-hidden="true">+</span>
-        <p class="t-body read">Readout cards and the provenance line ship with their own spec. This card is
-          shell scaffolding and is removed when the section lands.</p>
+
+      <!-- Three prose lines, then the cards. The middle line is the founder's
+           own sentence, preserved verbatim, and it renders as PROSE: a readout
+           cell is an instrument surface, and founder testimony must not dress
+           as telemetry. That is why §5 has two cards and not three.
+
+           `bodh.day` is text and not a link. §5 carries no CTA — the page has
+           one, in §6 — and a second destination here would be a second ask on
+           the section whose whole job is to hand over receipts. -->
+      <p class="t-body read shipped__line">Bodh — a shipped iOS app and web landing, live at bodh.day. The replay above is its website wave.</p>
+      <p class="t-body read shipped__line">Muster was extracted mid-build from a production iOS app — the framework existed as working practice before it existed as a repo.</p>
+      <p class="t-body read shipped__line">This page — built with Muster by its own AI team, and measured with the same meter.</p>
+
+      <!-- Two scopes, same four keys, same order, read key for key across the
+           pair. Every value sits beside its own scope label: this is the one
+           place on the page where BODH and THIS SITE are adjacent, which is
+           exactly why neither is ever stated without saying which it is.
+
+           The authored text of each value IS its exact final value. The
+           count-up replaces a string it can restore character for character,
+           so no-JS, reduced motion and a paused roll all render the measured
+           number and never an intermediate one. -->
+      <div class="shipped">
+
+        <div class="instrument shipped__card">
+          <span class="regmark regmark--tl" aria-hidden="true">+</span>
+          <span class="regmark regmark--br" aria-hidden="true">+</span>
+          <p class="t-label shipped__scope">BODH · IDEA → LIVE</p>
+          <dl class="shipped__cells">
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">ACTIVE BUILD</dt>
+              <dd class="readout__value"><span data-countup>9.3 h</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">OPERATOR ATTENTION</dt>
+              <dd class="readout__value"><span data-countup>4.8 h</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">COMMIT-DAYS</dt>
+              <dd class="readout__value"><span data-countup>4</span></dd>
+              <dd class="t-micro readout__sub">Jul 11–18</dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">COST · API LIST</dt>
+              <dd class="readout__value"><span data-countup>$147</span></dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- The dashes are ink, not rust: an unmeasured value is a claim about
+             what will be measured, not a metric. They carry data-countup on
+             purpose — the engine's refusal to animate a value with no digits
+             is then a property of the shipped page rather than of a fixture. -->
+        <div class="instrument shipped__card">
+          <span class="regmark regmark--tl" aria-hidden="true">+</span>
+          <span class="regmark regmark--br" aria-hidden="true">+</span>
+          <p class="t-label shipped__scope">THIS SITE · SPEC → LIVE</p>
+          <dl class="shipped__cells">
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">ACTIVE BUILD</dt>
+              <dd class="readout__value readout__value--unmeasured"><span data-countup>—</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">OPERATOR ATTENTION</dt>
+              <dd class="readout__value readout__value--unmeasured"><span data-countup>—</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">COMMIT-DAYS</dt>
+              <dd class="readout__value readout__value--unmeasured"><span data-countup>—</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">COST · API LIST</dt>
+              <dd class="readout__value readout__value--unmeasured"><span data-countup>—</span></dd>
+            </div>
+          </dl>
+          <p class="t-micro readout__sub shipped__caption">measured at launch</p>
+        </div>
+
       </div>
     </div>
   </section>

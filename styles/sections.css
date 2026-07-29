@@ -1,15 +1,17 @@
 /* ==========================================================================
    SECTIONS — §1 the sparse hero, §3 the insight, §4 the decisions,
-   §6 get started.
+   §5 shipped with Muster, §6 get started.
 
    Spacing is one-sided here as everywhere: every gap is a margin-block-start
    on the following element. A margin-bottom in this codebase is a defect.
 
-   Nothing in this file animates. §1, §3 and §4 hold no seat in the page's
-   motion inventory (two live elements — the OPERATIONAL pulse and §5's
-   count-up — plus §6's curl cursor, which is styled in motifs.css and gated
-   there). §4's snap settle is the user agent finishing the reader's own
-   gesture, not an element animation, and it is off under reduced motion.
+   Nothing in this file animates. The page's motion inventory is two live
+   elements — the OPERATIONAL pulse and §5's count-up — plus §6's curl cursor;
+   the pulse and the cursor are styled and gated in motifs.css, and the
+   count-up is JS (scripts/count-up.js), which gates itself. §5 therefore
+   holds the second seat without a single declaration here. §4's snap settle
+   is the user agent finishing the reader's own gesture, not an element
+   animation, and it is off under reduced motion.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -496,6 +498,65 @@
 @media (min-width: 60rem) and (prefers-reduced-motion: reduce) {
   .sheets {
     scroll-snap-type: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   §5 — shipped with Muster. Three prose lines, then two readout cards.
+
+   The section's argument is a side-by-side read: same four keys, same order,
+   one scope each. So every cell is the same three tracks — key, value,
+   sub-line — and the sub-line's track is reserved whether or not that cell
+   has one. Only one of the eight cells carries a sub-line today; without the
+   reserve the two cards would go ragged from the third row down and the
+   comparison the section exists to make would be reading across a step. The
+   harness asserts the alignment, not the figure.
+   -------------------------------------------------------------------------- */
+
+.shipped__line + .shipped__line {
+  margin-block-start: var(--gap-flow);
+}
+
+.shipped {
+  display: grid;
+  gap: var(--gap-flow);
+  margin-block-start: var(--gap-major);
+}
+
+/* A scope label never breaks mid-phrase — the same rule §1's remnant holds
+   its own to, and the reason both cards state their scope on one line. */
+.shipped__scope {
+  white-space: nowrap;
+}
+
+.shipped__cells {
+  margin-block-start: var(--gap-flow);
+}
+
+/* --sub-row is the micro line box plus the gap a sub-line hangs at — both
+   read off the tokens, so a type-scale change moves the reserve with it. */
+.shipped__cell {
+  --sub-row: calc(var(--text-micro) * var(--lead-micro) + var(--gap-hairline));
+  display: grid;
+  grid-template-rows: auto auto minmax(var(--sub-row), auto);
+}
+
+.shipped__cell + .shipped__cell {
+  margin-block-start: var(--gap-flow);
+  border-block-start: 1px solid var(--hair);
+  padding-block-start: var(--gap-flow);
+}
+
+/* The card-level sub-line: it qualifies the whole scope, not one value, so it
+   sits at the card's foot rather than four times over under four dashes. */
+.shipped__caption {
+  margin-block-start: var(--gap-flow);
+}
+
+/* Wide: the two scopes stand side by side, which is the comparison. */
+@media (min-width: 60rem) {
+  .shipped {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

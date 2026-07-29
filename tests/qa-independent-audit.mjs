@@ -217,9 +217,25 @@ const AUDIT = `(() => {
      not classList: a muted READING paragraph still fails, which is the rule,
      while an item inside a label container is correctly not one. */
   const mutedProse = [...document.querySelectorAll(readingSelectors)].filter((el) => {
-    const isLabel = el.closest(".t-label, .t-micro, .status, .statusbar");
+    const isLabel = el.closest(".t-label, .t-micro, .status, .statusbar, .readout__value");
     return !isLabel && hex(parse(cs(el).color)) !== inkHex;
   }).map((el) => (el.className || el.tagName) + " -> " + cs(el).color);
+
+  /* An instrument readout VALUE is not prose, and it is the one thing on this
+     page that is deliberately neither ink nor muted: page-shell.md §8 sets it
+     in --accent at --text-readout, flat and tabular, with an --ink em-dash
+     when the metric is unmeasured. It leaves the full-ink rule above for a
+     STRICTER one rather than for nothing — every value is collected here and
+     asserted against §8 and against §2.3's 24px floor for accent text, so the
+     exclusion cannot hide a rust label or a tinted number. */
+  const readoutValues = [...document.querySelectorAll(".readout__value")].map((el) => ({
+    what: el.className,
+    colour: hex(parse(cs(el).color)),
+    size: parseFloat(cs(el).fontSize),
+    tabular: cs(el).fontVariantNumeric,
+    unmeasured: el.classList.contains("readout__value--unmeasured"),
+    text: el.textContent.trim()
+  }));
 
   /* --- RUST NEVER SETS SMALL TEXT (§2.3.1/§2.3.2). Any element whose own text
      renders in --accent below the 24px floor is a defect unless it is a
@@ -333,7 +349,7 @@ const AUDIT = `(() => {
   const transitions = running.filter((a) => !a.animationName)
     .map((a) => (a.effect?.target?.className || "?") + ":" + (a.transitionProperty || "?"));
 
-  return { vw, overflowing, unmasked, mutedProse, smallRust, accentHex, inkHex, headings, sections,
+  return { vw, overflowing, unmasked, mutedProse, readoutValues, smallRust, accentHex, inkHex, headings, sections,
            graphicalRust, links, imgs, ruleParts, bottomMargins, glass, shadows, rounded, gradients,
            statusBar: { h: Math.round(bar.getBoundingClientRect().height * 100) / 100, pos: cs(bar).position,
                         opaque: barBg.a === 1, bg: hex(barBg), border: cs(bar).borderBottomWidth + " " + hex(parse(cs(bar).borderBottomColor)) },
@@ -476,6 +492,13 @@ try {
     `${darkRequests.length} loads: ${darkRequests.map((r) => r.url.startsWith("data:") ? "data:(grain/icon)" : r.url.split("/").pop()).join(", ")}`);
   check("no runtime errors (dark)", page.consoleErrors.length === 0, page.consoleErrors.join("; ") || "none");
   check("full-ink rule: no muted prose", dark.mutedProse.length === 0, dark.mutedProse.join(" | ") || "every p/li is --ink");
+  /* The other side of that exclusion: readout values are held to §8 and to
+     §2.3's 24px accent floor, which is a harder rule than the one they left. */
+  check("every readout value is flat accent (or an ink dash) at or above the 24px accent floor, tabular",
+    dark.readoutValues.length > 0 &&
+      dark.readoutValues.every((v) => v.size >= 24 && /tabular-nums/.test(v.tabular) &&
+        v.colour === (v.unmeasured ? dark.inkHex : dark.accentHex)),
+    dark.readoutValues.map((v) => `${JSON.stringify(v.text)} ${v.colour} @${v.size}px`).join(" · ") || "no readout values on the page");
   check("no rust sets small text except the two glyphs the specs exempt as graphical marks",
     dark.smallRust.length === 0 && dark.graphicalRust.length === 2 &&
       !dark.graphicalRust.some((g) => /UNMARKED/.test(g)),
@@ -588,9 +611,11 @@ try {
   check("light palette resolves to the seed's locked values",
     ["ground", "surface", "ink", "muted", "hair", "accent"].every((k) => light.tokens["--" + k].toUpperCase() === SEED.light[k]),
     JSON.stringify(["ground", "surface", "ink", "muted", "hair", "accent"].map((k) => light.tokens["--" + k])));
-  check("light theme also passes the full-ink and small-rust rules",
-    light.mutedProse.length === 0 && light.smallRust.length === 0 && light.graphicalRust.length === 2,
-    `mutedProse ${light.mutedProse.length}, informational smallRust ${light.smallRust.length}, graphical ${light.graphicalRust.length}`);
+  check("light theme also passes the full-ink, small-rust and readout-value rules",
+    light.mutedProse.length === 0 && light.smallRust.length === 0 && light.graphicalRust.length === 2 &&
+      light.readoutValues.length === dark.readoutValues.length &&
+      light.readoutValues.every((v) => v.size >= 24 && v.colour === (v.unmeasured ? light.inkHex : light.accentHex)),
+    `mutedProse ${light.mutedProse.length}, informational smallRust ${light.smallRust.length}, graphical ${light.graphicalRust.length}, readout values ${light.readoutValues.length} (${light.readoutValues.filter((v) => v.unmeasured).length} unmeasured, in ${light.inkHex})`);
 
   /* ---------- keyboard: real Tab, real :focus-visible ---------- */
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
