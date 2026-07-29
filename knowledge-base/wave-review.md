@@ -540,7 +540,23 @@ internal wrap without overflow at 320px, one line at desktop. Content rewrites
 `section-03-copy.md` from this block; the file's old §5 named-competitor ruling and fallback are
 void per DEC-047.
 
-**§5, §6 —** *awaiting the founder's read.*
+**§5 CLOSED — provenance confirmed, cost row in, stress-tested against the seed's purpose
+(DEC-048).** The founder confirmed the provenance line verbatim and ruled the cost row **in**:
+both cards gain a fourth key — `COST · API LIST` → `$147` (BODH) / `—` (THIS SITE). This repairs
+the cascade DEC-046 opened: when all of Bodh left §1, `$147` lost its only home, and the copy
+file's "no cost figure appears in §5" note was written when §1 carried it. PM stress-tested the
+final inventory against the seed's §5 message — *real products come out of this, the list is
+growing, and this page is one of them* — with §5 now bearing the page's entire whole-product
+number set (9.3 h · 4.8 h · 4 commit-days · $147): each message clause has a carrier, the growing
+list stays format-not-sentence, and the attention figure now sits beside the build and cost
+figures it needs as denominators. No further change needed.
+
+*Content's cascade list for the fix round (stale rationales, not string changes)*: §3.3's "lives
+in the footer and in §1's subline" (subline is dead — DEC-045); §4.2's "repeats §1 deliberately /
+§1's harness asserts `9.3 h`" (§1 carries no number — the byte-equality assertion re-bases onto
+§5 as primary); the R3/§6-verification "no cost figure in §5" note (superseded by the cost row).
+
+**§6 —** *awaiting the founder's read.*
 
 **4. FORMATION — SETTLED.** The hub is **PM**; the bus-bar carries the **seven specialists**
 (Developer · UI/UX · QA · Content · Marketing · Legal · Research). No role appears twice, and it reads

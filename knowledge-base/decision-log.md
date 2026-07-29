@@ -742,5 +742,30 @@ design spec by ruling), Developer, QA (the copy-rules R11 hook check re-bases), 
 **Touched**: `wave-review.md`, `brand-guidelines.md` §6, `agent-context/content.md`,
 `decision-log.md`, `samples/s03-insight.html`.
 
+---
+
+### DEC-048 — §5 takes the cost row; the page's $147 comes home (2026-07-28)
+
+**Decision**: founder rulings at Gate A — the provenance line ships verbatim as supplied, and §5's
+readout cards gain a fourth key: `COST · API LIST` → `$147` on the BODH card, `—` with
+`measured at launch` on THIS SITE.
+
+**Why the row exists**: DEC-046 removed §1's readout, which was the page's only `$147`. Without
+this row, "shipped for $147" — the page's most quotable number — existed nowhere on the page.
+§5's copy-file rule "no cost figure appears in §5" was written when §1 carried the figure and is
+superseded with its premise. R3's vocabulary carries over intact: API list price, never
+subscription spend, no baseline, label byte-identical to §1's former cell (`COST · API LIST`).
+
+**Stress-test recorded**: against the seed's §5 message with §5 now bearing all whole-product
+numbers — every message clause has a carrier; the growing list remains format-not-sentence; 9.3 h
+and $147 sit beside 4.8 h as its denominators; `bodh.day` lives in the Bodh prose line. §5 needs
+nothing else. Byte-equality harness for `9.3 h`/`$147` re-bases from §1 onto §5 as the primary
+site.
+
+**Impact**: Content (card strings + three stale rationales listed in `wave-review.md`), Developer,
+QA (assertion re-base), PM.
+
+**Touched**: `wave-review.md` (Gate A item 3 — §5 CLOSED), `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
