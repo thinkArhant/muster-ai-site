@@ -1,511 +1,457 @@
 # §1 — Hero: the five-second verdict
 
-**Surface type**: page section (§1 of 6) — the page's opening claim and its proof, in one screen
-**Consumers**: Developer (builds §1 and the rendered headline samples from this file), QA (derives validation scope), PM (reviews against the copy file and the seed), the founder (selects the headline from rendered candidates)
-**Inherits**: every token in `page-shell.md`; the terminal component, emphasis rules and left-edge system in `section-02-replay.md` §9–§9.2; the pennant rulings in `brand-seats.md`. One shell token is amended by this spec (§4.1) — the amendment lives in `page-shell.md` §3 and the measurement that forced it lives here.
+**Surface type**: page section (§1 of 6) — the sparse hero: the claim and the team, nothing else
+**Consumers**: Developer (builds §1 from this file), QA (derives validation scope), PM (reviews against the copy file and the gate rulings), the founder (judges the assembled page at the gate)
+**Inherits**: every token in `page-shell.md`; the pennant rulings in `brand-seats.md`. The display-floor amendment lives in `page-shell.md` §3 and the measurement that forced it lives here (§4.1).
 **Copy**: every string in this section is `design-specs/web/section-01-copy.md`'s, verbatim. This file specifies treatment, never wording.
-**Authority**: `product-spec-seed.md` §1 is the element inventory; nothing is added to it and nothing dropped. `bodh-sprint4-corpus.md` (read-only) is the only source of terminal content.
+**Authority**: the founder's gate rulings recorded in `decision-log.md` DEC-045 and DEC-046 govern this section's inventory; they supersede `product-spec-seed.md` §1's fuller element list and its "measured line visible without scrolling" guarantee (the seed is founder-authored and read-only; the founder's gate ruling is its amendment mechanism). `brand-guidelines.md` §3 records the same deviation.
 
 ---
 
 ## 1. What §1 is
 
-The message that must land in five seconds: *one person plus a governed AI team ships real
-products — here is the measured proof.* Eight elements carry it: the eyebrow facts, the headline,
-the subline, the measured line, the dual build readout with its `VERIFY ⎘` chip, the streaming
-terminal, the roster formation, and one `curl`. The hero carries no stencil tag and no separator
-pennant — its `<h1>` is the section's heading (`page-shell.md` §11, `brand-seats.md` §5).
+A YC-grade first screen: **eyebrow · headline · formation. Nothing else above the fold.** The
+five-second verdict is the claim correcting itself in front of the reader and the team that does
+the work, drawn as a formation. Measured proof deliberately lands at the first scroll — §2's
+replay and §5's cards carry every number; §1 carries none (DEC-045).
 
-## 2. Content hierarchy
+**§1 contains no Bodh material** (DEC-046): no Bodh numeral, no Bodh label, no corpus line, no
+terminal. §2 is the page's only terminal. The only measurement scope present in §1 is THIS SITE,
+rendered as dashes in the below-fold remnant.
 
-1. **Headline + subline** — the claim, and who does the work (AI, named as such)
-2. **The measured line** — the proof sentence; **visible without scrolling** (seed §1), enforced by §3's budget
-3. **The dual build readout + `VERIFY ⎘`** — the receipts, scope-labelled, checkable
-4. **The streaming terminal** — real work happening, previewing §2
-5. **The formation** — the eight roles; this IS the roster (no separate roster section exists)
-6. **The `curl`** — the action; §6 owns the canonical instance and the page's only cursor
-7. **Eyebrow facts** — orientation: open source · runs in Claude Code · v4 · MIT
+## 2. Content hierarchy and inventory
 
-Document order follows this ranking exactly, at every viewport: the verdict stack (7 → 1 → 1 → 2),
-then 3, then 4, then 5, then 6. Whole-product proof (2, 3) is kept contiguous and the wave-scope
-terminal (4) sits after it, never interleaved — that ordering is part of the scope system (§10).
+1. **Headline** — the claim, edited in front of the reader: struck `a human`, rust `an AI`
+2. **The formation** — the section's centerpiece: PM hub, bus-bar, seven specialists; this IS the
+   roster (no separate roster section exists)
+3. **Formation caption** — `8 AI AGENTS · 1 OPERATOR`, the hero's only statement of the 8/1 fact
+4. **The THIS SITE remnant** — the self-referential proof posture: dashes, `measured at launch`,
+   `VERIFY ⎘` (below the fold)
+5. **The curl** — the action; §6 owns the canonical instance and the page's only cursor
+6. **Eyebrow facts** — orientation: open source · runs in Claude Code · v4 · MIT
+
+Document order at every viewport: eyebrow → h1 → formation + caption → remnant → curl. **The
+complete inventory is these five blocks.** No subline, no measured line, no readout BODH row, no
+hero terminal — an element added between the headline and the formation is a defect, not a
+refinement (DEC-045/046).
 
 ## 3. Above-the-fold budget — the falsifiability contract
 
-"Visible without scrolling" binds as a measured budget at a named viewport, the same discipline as
-the §2 mobile budget. **The budget case is 375 × 553 — iPhone SE, mobile Safari, toolbars shown**
-(the visual viewport, not the 667px device height). Figures below are rendered measurements in
-headless Blink against the real tokens with the §4.1 floor in force, not derivations:
+The budget case is **375 × 553** — iPhone SE, mobile Safari, toolbars shown (the visual viewport).
+Figures are rendered measurements in headless Blink against the real tokens with the §4.1 floor in
+force (`samples/s01-hero-recomposed.html` is the rendered record); none is a derivation. y = distance
+from page top (48px bar + 96px hero padding = 144px to first content).
 
-| Item | Derivation | px |
-|---|---|---|
-| Sticky status bar | shell §9, `3rem` | 48.0 |
-| Hero top padding | `--gap-section` floor (`.section--hero`) | 96.0 |
-| Eyebrow | 2 lines × (`--text-label` 12px × 1.4) — wraps below ~459px viewport | 33.6 |
-| Eyebrow → h1 | `--gap-hairline` | 12.0 |
-| Headline (candidate B, the longest with D) | 3 lines × (28px × `--lead-display` 1.05) | 88.2 |
-| h1 → subline | `--gap-flow` | 24.0 |
-| Subline | 2 lines × (`--text-lead` 17px × 1.6) | 54.4 |
-| Subline → measured line | `--gap-flow` | 24.0 |
-| **Measured line (primary form), bottom edge** | 3 lines × 27.2 | **461.8** |
+| Element · bottom edge | 320px | 375px | 1280px |
+|---|---|---|---|
+| Eyebrow (lines) | 177.6 (2L) | 177.6 (2L) | 160.8 (1L) |
+| Headline (lines) | 277.8 (3L) | 248.4 (2L) | 315.6 (2L) |
+| Hub plate | 364.2 | 334.8 | 402.0 |
+| Last whole plate above the 553 fold | plate 3 · 515.3 | plate 4 · 536.3 | n/a — full row at 465.4 |
+| Formation caption | 757.4 | 728.0 | 505.9 |
+| Remnant strip | 1073.7 | 1044.3 | 731.8 |
+| Curl card | 1271.1 | 1217.0 | 830.4 |
 
-**The measured line's bottom edge sits at 461.8px against the 553px fold — 91.2px clear.** The
-guarantee therefore holds on any portrait viewport with ≥462px of visual height at ≥360px width
-(at 320px width the stack runs taller — bottom edge 507.9px — so the floor there is 508px).
-Desktop: at 1280 × 700 the bottom edge measures 427.6px, and the readout's first row and the
-terminal chrome are also on screen. **Landscape phone (667 × 331 visual) cannot hold the full
-verdict stack** — the measured line's bottom edge lands at ~439px — and this spec does not contort
-the hero to claim otherwise: the budget names its cases rather than asserting "every viewport,"
-which is unfalsifiable. What is above the landscape fold is the eyebrow, the headline and the
-subline's first line.
+**What the first screen holds, stated honestly:**
 
-The **primary** measured-line form ships at every viewport — measured, it fits the budget case
-with 91px to spare, so the compact form is not spent. The compact form is the named fallback if a
-future change tightens this budget; whoever spends it records the new bottom-edge figure here.
+- **375 × 553**: eyebrow, headline, the hub, and four whole specialist plates; the fold cuts
+  plate 5 (bottom 586.7). **The ladder cuts at the fold and the first measured figure arrives on
+  scroll** — accepted by the founder at the gate with this measurement in front of him (DEC-045).
+  The cut is designed, not suffered: the ladder's spine runs through the fold line, so the crop
+  reads as *more below*, which is the only scroll cue the sparse screen needs.
+- **320 floor**: the same stack holds with the headline at three whole-phrase lines and three
+  whole plates above the fold (plate 3 bottom 515.3). No overflow at any width (document
+  `scrollWidth` clean at 320/360/375/390 — measured).
+- **1280 × 700 desktop**: the entire first screen — eyebrow, headline, the full formation and its
+  caption — sits above the fold with **194.1px clear** (caption bottom 505.9). The remnant's head
+  enters at 577.9 and its card crosses the 700 line (bottom 731.8): the strip is the desktop
+  scroll cue, cut by the fold exactly as the ladder is on the phone.
+- **Landscape phone (667 × 331 visual)** cannot hold the formation: eyebrow and headline fit
+  (headline bottom 263.8, 2L), the hub lands just under the fold (bottom 350.2). The budget names
+  its cases rather than asserting "every viewport."
 
-## 4. The headline
+**§1 carries no measured figure at all.** The section's only numerals are the eyebrow's `v4` and
+the caption's `8` / `1` — on a phone the first screen carries no numeral beyond the version tag.
+The page's first measured number is §2's, which is one scroll away and labelled with its scope.
 
-Four candidates exist in the copy file; one ships after selection and the others leave the copy
-file. All four set in `--text-display` — mono bold, uppercase (`text-transform`, source text stays
+## 4. The headline — settled, locked
+
+One string, founder-ruled from rendered candidates (`section-01-copy.md` §2 — no other candidate
+exists). Set in `--text-display` — mono bold, uppercase (`text-transform`; source text stays
 sentence case), `--track-display`, `--lead-display`, `--ink`. The h1 keeps `id="hero-title"` and
-the section keeps `aria-labelledby="hero-title"` (landmark tree and the existing harness contrast
-probe both key on it).
+the section keeps `aria-labelledby="hero-title"`.
 
-### 4.1 The display floor — re-measured against the real strings
+### 4.1 The display floor — measured against the settled string
 
-`--text-display` is amended in `page-shell.md` §3 to `clamp(1.75rem, 6.5vw, 4.25rem)`. The prior
-floor (2.4rem = 38.4px) was set before any real headline string existed; measured against the
-candidates it produces a 14-character line at 360px, which sets candidate B on **four to five
-broken lines** and **overflows the 320px viewport inside the unbreakable struck phrase** — a
-horizontal-scroll defect no wrap rule can fix at that size. At the 28px floor, measured in Blink
-at 320/360/375/390: A and C set 2 lines, B and D set 3, nothing overflows, and every line is a
-whole phrase (§4.2). The ceiling (4.25rem) and the growth slope (6.5vw) are untouched; above
-~431px the rendered size is identical to before. 28px bold keeps every accent use in this section
-at AA-large (≥19px bold — shell §2.2).
+`--text-display` is amended in `page-shell.md` §3 to `clamp(1.75rem, 6.5vw, 4.25rem)`. At the 28px
+floor the settled headline sets **3 whole-phrase lines at 320px and 2 lines at 375/390** with no
+overflow (measured; the breaks match the copy file's table exactly). A 2.4rem floor sets a
+14-character display line at 360px and overflows the 320px viewport inside an unbreakable phrase —
+the defect class the amendment removes. Ceiling and slope untouched; rendered size is identical
+above ~431px. 28px bold keeps the accent phrase at AA-large (≥19px bold — shell §2.2).
 
 ### 4.2 Break units — lines are phrases, never accidents
 
-Wrapping is controlled by `white-space: nowrap` on phrase spans, not by `<br>`:
+Wrapping is controlled by `white-space: nowrap` on the two treated phrase spans, never by `<br>`:
+the struck phrase `a human` is one unbreakable unit, the accent phrase `an AI` is another, and
+`team.` rides the natural wrap. Measured composition: `Ship a product / with a human / an AI team.`
+at 320px; two lines at 375px and above with the entire substitution on one line, so the edit reads
+as a single gesture. Each treated span renders as a **single fragment** at every measured width
+(`getClientRects().length === 1` at 320/360/375/390) — a strike or an accent broken mid-phrase is
+a defect.
 
-- **Candidate B**: the struck phrase `a human team` and the accent phrase `AI agents.` are each one
-  unbreakable unit. Measured composition: 3 lines at 360–390px (`SHIP A PRODUCT` / `WITH A HUMAN
-  TEAM` / `AI AGENTS.`), 2 lines at desktop (`SHIP A PRODUCT WITH` / `A HUMAN TEAM AI AGENTS.`).
-  A strike or an accent that breaks mid-phrase is a defect.
-- **Candidate D**: `muster` is the accent unit; natural wrap otherwise (3 lines on phones).
-- **Candidates A and C**: natural wrap; the sentence boundary is where the break falls at every
-  measured viewport (2 lines phone and desktop).
+### 4.3 Markup and announced string
 
-### 4.3 Markup and announced string, per candidate
+```html
+<h1 id="hero-title">Ship a product with
+  <s aria-hidden="true" class="h1__cut">a human</s>
+  <span class="h1__accent">an AI</span> team.</h1>
+```
 
-Struck text is announced as ordinary text by every screen reader, so candidate B's accessible name
-is built by exclusion: the struck phrase is `aria-hidden` and the computed heading name is the
-post-edit sentence. Verified against the Blink AX tree (`Accessibility.getFullAXTree`), not
-asserted.
-
-| Candidate | Markup | Computed accessible name |
-|---|---|---|
-| A | `<h1 id="hero-title">Ship a product. Without a team.</h1>` | `Ship a product. Without a team.` |
-| B | `<h1 id="hero-title">Ship a product with <s aria-hidden="true" class="h1__cut">a human team</s> <span class="h1__accent">AI agents.</span></h1>` | `Ship a product with AI agents.` — the struck phrase absent |
-| C | `<h1 id="hero-title">Ship a product. The team is <span class="h1__accent">AI.</span></h1>` | `Ship a product. The team is AI.` |
-| D | `<h1 id="hero-title">Ship a product with a <span class="h1__accent">muster</span> of AI agents.</h1>` | `Ship a product with a muster of AI agents.` |
-
-- **Case caveat, cross-engine**: Blink computes the name from rendered text, so `text-transform`
-  uppercases it (`SHIP A PRODUCT WITH AI AGENTS.` — measured); WebKit computes from source text
-  (sentence case). The words are identical; any equality assertion on the announced string is
-  **case-insensitive and word-exact**.
-- **B's treatment**: the struck phrase is `--ink` with `text-decoration: line-through` at
+- **Computed accessible name**: `Ship a product with an AI team.` — the struck phrase is excluded
+  by `aria-hidden`; verified against the AX tree (`Accessibility.getFullAXTree`), never by
+  assertion. Case caveat, cross-engine: Blink computes the name from rendered (uppercased) text,
+  WebKit from source text — equality assertions are **case-insensitive and word-exact**.
+- **Accent scope is exactly `an AI`** — struck = removed, rust = replacement, plain = unchanged.
+  `team` is the constant that survives the edit; accenting it would blur the one idea the headline
+  makes. Colour affects no layout: the measured line counts above hold for any span colouring.
+- **Strike treatment**: `--ink` with `text-decoration: line-through` at
   `text-decoration-thickness: 0.06em` (≈1.7px at the floor, ≈4px at the ceiling — an edit mark,
-  not a hairline). The accent phrase is `--accent` — bold ≥28px is AA-large in both themes
-  (4.19/4.35 on `--ground` ≥ 3:1). `<s>` is the element (content no longer accurate), not `<del>`
-  (no document edit happened).
-- **B's copy behaviour, stated**: selection ignores `aria-hidden`, so select-and-copy yields the
-  full visible sentence including the struck phrase. That is the visible truth and is accepted;
-  only the *announced* string excludes the edit.
-- C and D's accent words carry no aria treatment — their names equal their text.
+  not a hairline). `<s>` is the element (content no longer accurate), not `<del>`.
+- **Copy behaviour, accepted**: select-and-copy yields the full visible sentence including the
+  struck phrase (`section-01-copy.md` §2 records the posture). Only the announced string excludes
+  the edit.
 
-## 5. Eyebrow, subline, measured line
+## 5. The eyebrow
 
-- **Eyebrow**: `--text-label`, `--muted`, tracked uppercase, above the h1 — the page's opening
-  stencil. Markup is a list so the `·` separators are never announced (copy file requirement):
-  four `<li>` facts, separators drawn by CSS — `content: "·"; content: "·" / "";` (the second
-  declaration strips it from the AX tree; engines without alt-text syntax fall back to the first
-  and still render). Each fact is a nowrap unit; below ~459px the list wraps at fact boundaries
-  to two lines (budgeted in §3). Announced: the four facts, nothing else.
-- **Subline**: `--text-lead`, sans, `--ink` (read prose — full-ink, A-007). One string, shared by
-  all candidates; it is what disambiguates candidate A's "without a team" against the roster one
-  viewport below.
-- **The measured line**: `--text-lead`, sans, `--ink`, primary form (§3). The numeral groups
-  (`9.3 hours`, `$147`) set bold with `tabular-nums`; **they stay ink, not rust** — `--text-lead`
-  is 17px on phones, below every rust floor, and per-viewport colour switching is exactly the kind
-  of shared-value coupling this project retired. Rust proof lives one block down in the readout,
-  where the 24px floor is structural. The `→` in `idea → live` stays a text character (announced
-  "right arrow" by VoiceOver — honest, and it keeps find-in-page and selection intact; an
-  aria-label override on prose is not worth that cost).
+`--text-label`, `--muted`, tracked uppercase, above the h1 — the page's opening stencil. Markup is
+a list so the `·` separators are never announced: four `<li>` facts, separators drawn by CSS
+(`content: "·"; content: "·" / "";` — alt-text syntax strips them from the AX tree; engines
+without it fall back and still render). Each fact is a nowrap unit; below ~459px the list wraps at
+fact boundaries to two lines (budgeted in §3). Announced: the four facts, nothing else.
 
-## 6. The dual build readout and the `VERIFY ⎘` chip
+## 6. The formation — the centerpiece
 
-Shell instrument-cell motif (`page-shell.md` §8). Two row-groups, **THIS SITE above BODH** (seed
-§1), each group scope-labelled with the copy file's strings. Strings, order and dashes are the copy
-file's §7 table verbatim.
+The section's visual anchor and the seed's concept visual: a command hub and a bus-bar carrying
+the roster. **Hub = `PM`; the bus-bar carries the seven specialists** — the settled reading in
+which no role appears twice and the visual tells the architecture's truth: PM coordinates,
+specialists execute.
 
-- **Group label**: `--text-label`, `--muted` — `THIS SITE · SPEC → LIVE` / `BODH · IDEA → LIVE`.
-- **Cells** (three per group): key `--text-micro` `--muted` (`ACTIVE BUILD` · `COST · API LIST` ·
-  `SHIPPED`); value `--text-readout`, tabular. BODH values `--accent` flat (24px floor = AA-large,
-  both themes). Unmeasured values are `--ink` em-dashes — **dashes never render accent and never
-  animate**.
-- **THIS SITE caption**: `measured at launch` — `--text-micro`, `--muted`, once under the group.
-  Deliberate motif deviation, stated: the motif puts a sub-line under each unmeasured cell; here
-  one caption serves the row's two dashes, because the copy file defines one row caption and
-  repeating it twice in 48px is noise the restraint rule forbids.
-- **Layout**: ≥ `--bp-wide`, cells set three-across per group. Below it each group is a stack of
-  key/value rows (key left, value right-aligned, `--hair` rules between) — measured, `bodh.day`
-  at the 24px value floor does not fit a third of a phone column, and shrinking the value type to
-  force the grid would break the rust floor. Two registration `+` marks (tl, br) on the block —
-  the shell's per-surface maximum.
-- **Count-up** (motion element 3, shell §10.3): the two numeric BODH values only. `9.3 h` rolls
-  `0.0 → 9.3` with the unit static; `$147` rolls `0 → 147` with the `$` static; final frame
-  renders the copy string exactly. `bodh.day`, `THIS PAGE` and every dash render static. Triggered
-  once at ≥55% cell visibility; reduced motion renders final values immediately. Whatever
-  `aria-live` posture the build rules for these cells, assistive tech must never receive
-  intermediate frames — the announced value is the final string or nothing.
+### 6.1 Construction — wide (≥ `--bp-wide`)
+
+- **Hub plate**: `--surface`, **1px `--accent` border** (3.86/4.89 on surface ≥ 3:1 both themes),
+  text `PM` in `--text-label` mono tracked uppercase, `--ink`, **weight 700**. The hub's
+  distinction rides on position (seated above the bus), DOM order (first), weight, and the accent
+  border — colour is never the sole channel. Seated centered over the bus (`inset-inline-start:
+  50%`, translated), with a 1px `--hair` stem `--gap-hairline` (12px) tall from hub to bus.
+- **Bus-bar**: 1px `--hair` horizontal rule spanning exactly the plate row's width (measured
+  676.4px at 1280 — the relationship is bus width = row width, not the figure). Registration `+`
+  marks (`--text-micro`, `--muted`, `aria-hidden`) at both bus ends — the shell's regmark
+  grammar, two per surface, marking the formation as an instrument reading of the org.
+- **Plates**: seven, one flex row, `--gap-hairline` gaps, each `--surface` with 1px `--hair`
+  border, role name `--text-label` `--ink` tracked uppercase (the names are content, not
+  captions), padding `--gap-hairline` inline / `calc(var(--rhythm) / 3)` block. Locked full role
+  names in the locked order: `DEVELOPER · UI/UX · QA · CONTENT · MARKETING · LEGAL · RESEARCH`.
+  A 1px `--hair` stem 12px tall drops from the bus to each plate's center.
+- **Alignment ruling**: the formation block is intrinsic-width and **start-aligned in the
+  container**, like every reading passage on the page; the hub is centered *within the formation*,
+  over its bus. Centering the block in the container would detach the page's one diagram from the
+  reading edge everything else hangs on.
+
+### 6.2 Construction — the phone ladder (< `--bp-wide`)
+
+Hub on top; a 1px `--hair` **spine** at `inset-inline-start: var(--gap-hairline)` (12px — the same
+value family as the page's mark-inset idiom) descending from the hub's bottom edge; plates stacked
+at `--gap-hairline` gaps, indented 36px (12px spine seat + 24px stem), each with a `--rhythm`-wide
+(24px) horizontal stem from spine to plate at the plate's vertical center. Measured: plate pitch
+50.4px, ladder 391.1px tall × 146.5px wide at 375.
+
+**The spine terminates at the last plate's stem line** — it never trails past Research. At the 375
+fold it is mid-ladder (plate 5 cut), which is the designed scroll cue (§3).
+
+### 6.3 Markup and announced structure
+
+```html
+<div class="formation__diagram" role="group" aria-label="PM and seven specialist AI roles">
+  <span class="formation__hub">PM</span>
+  <div class="formation__bus" aria-hidden="true"></div>
+  <ul class="formation__plates" aria-label="The seven specialist roles">
+    <li>Developer</li> … <li>Research</li>
+  </ul>
+</div>
+<p class="formation__caption">8 AI agents · 1 operator</p>
+```
+
+- Announced: the group's name, then `PM`, then a **7-item list** of the specialist names — the
+  hub/bus hierarchy told structurally, matching the settled reading (a flat 8-item list would
+  erase the one thing the visual says). `list-style: none` strips list semantics in WebKit VoiceOver,
+  so the `<ul>` carries `role="list"`; verify VoiceOver announces 7 items before filing.
+- Bus, spine, stems and regmarks are CSS constructions (borders and pseudo-elements) —
+  decorative rhythm at 1.36:1, carrying nothing the text and order do not; none reaches the AX
+  tree.
+- **Caption**: `8 AI AGENTS · 1 OPERATOR` — `--text-micro`, `--muted`, uppercase, at `--gap-flow`
+  below the diagram, start-aligned with it. The R8 attribution at hero altitude and the hero's
+  only 8/1 statement (no subline exists). True in both hub readings; exact under the settled one.
+
+## 7. The THIS SITE remnant — a one-row instrument strip
+
+**Ruling: the remnant renders as a single-row instrument strip** — the shell's readout-cell motif
+(`page-shell.md` §8) at its smallest honest size: one `--surface` card, 1px `--hair` border,
+`--gap-hairline` padding, two registration marks (tl, br).
+
+| Zone | Content (all strings `section-01-copy.md` §5) |
+|---|---|
+| Head row | `THIS SITE · SPEC → LIVE` (`--text-label` `--muted`, **nowrap** — a scope label never breaks mid-phrase) · `VERIFY ⎘` chip at the row's inline end |
+| Cells | `ACTIVE BUILD` → `—` · `COST · API LIST` → `—` · `SHIPPED` → `THIS PAGE` — keys `--text-micro` `--muted`, values `--text-readout` mono **`--ink`** tabular |
+| Caption | `measured at launch` — `--text-micro` `--muted`, once under the cells |
+
+- **Why one row and not less**: a dash without its key asserts nothing — the cell labels are what
+  make the dashes *claims* (unmeasured, will be measured) rather than punctuation. Folding the
+  labels away was considered and rejected.
+- **Why one row and not a full card**: §5 owns the measured story and renders the full THIS SITE
+  card beside BODH's; a second full readout here would show the same instrument twice a scroll
+  apart. The remnant is *posture* — this page measures itself and invites checking — so it takes
+  the motif's smallest form: one row, one caption, one chip.
+- **Honest cost, carried from the gate ruling** (DEC-046): without a measured BODH row beside
+  them, the dashes lose the contrast that made the idiom self-evident. The caption and the chip
+  now carry that meaning alone; §5 restores the side-by-side contrast one scroll later.
+- **Layout**: at ≥ `--bp-wide`, the three cells set three-across (key over value); below it they
+  stack as key/value rows (key left, value right) with `--hair` rules between — measured strip
+  height 153.9px at 1280, 244.3px at 375. The head row wraps below ~390px: the label holds as one
+  unit and the chip drops to its own right-aligned row (`margin-inline-start: auto`) — the scope
+  label never breaks.
+- **Dashes are inert**: `--ink` em-dashes, no animation, no transition, identical in every state.
+  They never render accent and never count up.
 - **The chip**: shell emphasis chip — `--accent` border, `--ink` text, rust glyph. Markup:
   `<a class="chip chip--emph" href="VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span aria-hidden="true">⎘</span></a>`.
-  **`href` is `VERIFY.md`** — same-origin, a click is user navigation, so A-004's zero-runtime-
-  request claim is untouched; no prefetch attributes ever. The accessible name is ruled:
-  **`Verify these numbers — VERIFY.md`** (contains the visible label "VERIFY" — WCAG 2.5.3
-  holds). It seats at the readout block's top-right, beside the THIS SITE group label: the chip
-  belongs to the numbers it verifies, not to the page chrome. 44px hit area via padding; the
-  visual stays chip-sized.
+  Same-origin `href`; a click is user navigation, so A-004's zero-runtime-request claim is
+  untouched; no prefetch attributes ever. 44px hit area via padding; the visual stays chip-sized.
+  It is §1's **only interactive element**.
 
-## 7. The hero terminal
+The remnant sits at `--gap-major` below the caption — the section's one idea-group seam: claim +
+team above it, receipts + command below it. The remnant → curl gap is `--gap-block`.
 
-The terminal is §2's component, not a sibling of it. It inherits, and never re-derives: the
-`.log` left-edge system and its custom properties `--mark-inset` / `--mark-width` / `--mark-clear`
-(`section-02-replay.md` §9.2 — one gutter system, two instances), soft-wrap with the 1ch hanging
-indent, entry grouping (`--lead-micro` rows + `--gap-hairline` entry separators below `--bp-wide`;
-`--lead-terminal` above), the §9 emphasis system, minute-precision stamps in `--muted` with
-content in `--ink`, `<ol>` markup with no `aria-live`, and byte-clean corpus fidelity.
+## 8. The curl
 
-- **Content**: all twelve corpus lines, verbatim. **L12 renders as one corpus line** — the `─────`
-  divider is its stamp column — at §9's terminal-state scale (1.25rem bold; `bodh.day · LIVE` may
-  set `--accent` at AA-large). L4 and L9 carry the key-beat treatment: bold-ink role/verdict,
-  `--accent` glyph, the positioned mark element — on the same `--mark-inset` as §2's, which is what
-  makes the two terminals read as one instrument.
-- **Chrome**: the shared label strings (copy file §9): `BODH · SPRINT 4 — CONDENSED FROM THE REAL
-  BUILD LOG` at ≥ `--bp-wide`, `CONDENSED FROM THE REAL BUILD LOG` below. Always visible. The
-  `RUN` lamp is a seat of motion element 2 (the OPERATIONAL pulse — one element, multiple seats:
-  status bar, this terminal, §2's terminal). Two registration marks.
-- **Geometry**: below `--bp-wide` the terminal is a window of **3 whole entries** (§2's window
-  semantics: whole entries only, instant advance by entry pitch, never resting mid-entry, earlier
-  lines reachable in the terminal's own vertical overflow, `tabindex="0"` + accessible name +
-  visible focus ring). At `--bp-wide` and above, all twelve lines render with no window — the
-  container is wide enough that every line sets one row (measured: ≥104 columns at the 960px
-  container against L3's 74). The two-column arrangement (§8) engages at 1200px, where a fixed
-  623px terminal column still holds one-row entries; the terminal column is **fixed, not a
-  share** — the same guarantee mechanism as §2's desktop layout.
-- **Accessible name**: the `<ol>` is labelled `Bodh Sprint 4 build log, condensed from the real
-  build log`.
+The copy file's §6 string, byte-identical to the verified form, in a `--surface` card with 1px
+`--hair` border, `--gap-hairline` padding, `--text-terminal` mono, `--ink`. It closes the section:
+claim → team → posture → command.
 
-### 7.1 Playback — the ambient stream (motion element 1)
+- **No cursor** — the §6 curl owns the page's only blink. **No `$` prompt glyph.**
+- **Wrapping**: `overflow-wrap: anywhere` — the URL is one ~85-character token; the page scrolls
+  horizontally nowhere. Selection yields the exact string at every viewport (measured card
+  heights: 50.7px at 1280 — one line; 124.8px at 375 — three).
+- §6 reuses this treatment and adds the cursor; the two instances are one string, asserted equal.
 
-The stream is ambient preview, not the replay: no narration, no controls, no beat structure. The
-reader who wants the story gets it in §2; this element's job is *real work, streaming, ending
-shipped*.
+## 9. Layout
 
-**Schedule**: uniform **1.40s cadence**, with two exceptions that are facts, not pacing: the
-same-stamp pairs L1/L2 and L9/L10 reveal exactly one `--reveal` cadence (0.35s) apart — the
-simultaneity rule inherited from §2 §5.1 — and the gap before L12 is **2.80s (2 × cadence)**, the
-gate's silence in miniature.
-
-| t (s) | 0.00 | 0.35 | 1.75 | 3.15 | 4.55 | 5.95 | 7.35 | 8.75 | 10.15 | 10.50 | 11.90 | 14.70 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Line | L1 | L2 | L3 | L4 | L5 | L6 | L7 | L8 | L9 | L10 | L11 | L12 |
-
-Reveals are the shell's `--reveal` micro-reveal, opacity-only over lines that occupy their space
-from load — nothing reflows. The stream completes in ~15s: inside a reader's first dwell on the
-hero, fast enough to read as activity, slow enough that any line can be read (in the 3-entry
-window a line stays visible ≥3 cadences ≈ 4.2s; on desktop all lines persist). It **plays once per
-page load and does not loop** — a real log that replays itself reads as a screensaver, and the
-page's whole posture is that this output is evidence. The resting state is the log ended at
-`deploy · bodh.day · LIVE`, which is the strongest still frame the hero can hold.
-
-**Trigger**: starts when the terminal first reaches ≥50% visibility, pauses if it leaves (>50%
-out) or the document hides, resumes where it stopped — no motion runs unwatched. End state:
-complete log; below `--bp-wide` the window rests on L10 / L11 / L12 with the rest in scrollback.
-
-**Reduced motion / no JS**: no stream, no reveals — the complete log renders immediately in its
-end state. Complete content, not a subset; every line rendered and reachable.
-
-## 8. Layout
-
-### Wireframe — desktop ≥1200px
+### Wireframe — desktop ≥ `--bp-wide`
 
 ```
 │ STATUS BAR  ▌MUSTER_                        ● OPERATIONAL │
 │                                                           │
 │  OPEN SOURCE · RUNS IN CLAUDE CODE · V4 · MIT         (1) │
-│  SHIP A PRODUCT WITH A̶ ̶H̶U̶M̶A̶N̶ ̶T̶E̶A̶M̶ AI AGENTS.        (2) │
-│  One operator. Eight AI roles. The queue is the       (3) │
-│  org chart.                                               │
-│  Bodh — a shipped App Store + web product — idea →    (4) │
-│  live: 9.3 hours of active build, $147 in AI tokens.      │
+│  SHIP A PRODUCT WITH                                  (2) │
+│  A̶ ̶H̶U̶M̶A̶N̶ AN AI TEAM.                                     │
 │                                                           │
-│  ┌ READOUT ─────────────────┐  ┌ TERMINAL ── 623px ────┐  │
-│  │ + THIS SITE · SPEC→LIVE  │  │ + BODH · SPRINT 4 —   │  │
-│  │        [VERIFY ⎘] (6)    │  │   CONDENSED FROM THE  │  │
-│  │  —      —     THIS PAGE  │  │   REAL BUILD LOG ● RUN│  │
-│  │  measured at launch      │  │───────────────────────│  │
-│  │ BODH · IDEA → LIVE   (5) │  │ 20:38 muster  sprint… │  │
-│  │  9.3 h  $147  bodh.day + │  │ 20:38 ui-ux   produc… │  │
-│  └──────────────────────────┘  │ … (12 lines, stream)  │  │
-│                                │ ───── deploy bodh.day │  │
-│                                │        · LIVE     (7) │  │
-│                                └───────────────────────┘  │
-│            ┌──────┐                                       │
-│            │  PM  │                (8) hub plate          │
-│  +─────────┴┬───┬────┬────┬────┬────┬────┬──────────+     │
-│  ┌────────┐┌┴──┐┌┴──┐┌┴───┐┌┴────┐┌┴───┐┌┴──────┐         │
-│  │DEVELOPER││UI/UX││QA││CONTENT││MARKETING││LEGAL││RESEARCH│
-│            8 AI AGENTS · 1 OPERATOR       (9)             │
-│                                                           │
-│  ┌ curl -fsSL https://raw.githubusercontent.com/… ┐ (10)  │
+│                    ┌──────┐                               │
+│                    │  PM  │           (3) hub, accent     │
+│  +─────────────────┴──┬───┴──────────────────────+        │
+│  ┌─────────┐┌─────┐┌──┴┐┌───────┐┌─────────┐┌─────┐┌────────┐
+│  │DEVELOPER││UI/UX││QA ││CONTENT││MARKETING││LEGAL││RESEARCH│
+│  8 AI AGENTS · 1 OPERATOR             (4)                 │
+│ ─ ─ ─ ─ ─ ─ ─ 700px fold ─ ─ ─ ─ ─ ─ (194.1px clear) ─ ─  │
+│  ┌ + THIS SITE · SPEC → LIVE            [VERIFY ⎘] ┐ (5)  │
+│  │  ACTIVE BUILD    COST · API LIST    SHIPPED     │      │
+│  │  —               —                  THIS PAGE   │      │
+│  │  measured at launch                           + │      │
+│  └─────────────────────────────────────────────────┘      │
+│  ┌ curl -fsSL https://raw.githubusercontent.com/… ┐ (6)   │
 └───────────────────────────────────────────────────────────┘
 ```
-
-Between `--bp-wide` and 1200px the readout/terminal row stacks (readout, then terminal, both full
-container width); everything else is unchanged. The two-column condition is 1200px because that is
-the measured width at which a fixed 623.3px terminal column (74 columns + the 17.91px gutter +
-padding + borders) coexists with a readout column that still sets three cells — a section-scoped
-condition, not new page chrome.
 
 ### Wireframe — phone 375 × 553
 
 ```
    OPEN SOURCE · RUNS IN                 (1) eyebrow, wraps at
    CLAUDE CODE · V4 · MIT                    fact boundaries
-   SHIP A PRODUCT                        (2) 3 lines, whole
-   WITH A̶ ̶H̶U̶M̶A̶N̶ ̶T̶E̶A̶M̶                        phrases (§4.2)
-   AI AGENTS.
-   One operator. Eight AI roles.         (3) subline
-   The queue is the org chart.
-   Bodh — a shipped App Store + web      (4) measured line —
-   product — idea → live: 9.3 hours          bottom edge 461.8px,
-   of active build, $147 in AI tokens.       91.2px above the fold
-  ─ ─ ─ ─ ─ ─ fold at 553px ─ ─ ─ ─ ─
-   ┌ THIS SITE · SPEC → LIVE  [VERIFY ⎘]┐(5)(6) readout as
-   │ ACTIVE BUILD               —       │    stacked key/value
-   │ COST · API LIST            —       │    rows below --bp-wide
-   │ SHIPPED               THIS PAGE    │
-   │  measured at launch                │
-   │ BODH · IDEA → LIVE                 │
-   │ ACTIVE BUILD             9.3 h     │
-   │ COST · API LIST          $147      │
-   │ SHIPPED                bodh.day    │
-   └────────────────────────────────────┘
-   ┌ CONDENSED FROM THE REAL      ● RUN ┐(7) window of 3 whole
-   │ BUILD LOG                          │    entries; earlier
-   │────────────────────────────────────│    lines in scrollback
-   │  21:35  pm       handoffs accepted │
-   │   · deploy packet → founder        │
-   │  21:43  gate     Role: halt ·      │
-   │   awaiting operator                │
-   │  ─────  deploy   bodh.day · LIVE   │
-   └────────────────────────────────────┘
-   ┌ PM ┐                               (8) hub, then the
-   ├──┬─┘                                   vertical bus ladder
-   │ ┌┴─────────┐
-   │ │DEVELOPER │  … (7 plates)
-   8 AI AGENTS · 1 OPERATOR             (9)
-   ┌ curl -fsSL https://raw.githubuser… ┐(10) soft-wraps, no
-   │ content.com/… | bash -s my-product │    cursor, no prompt
-   └────────────────────────────────────┘
+   SHIP A PRODUCT WITH                   (2) 2 lines, whole
+   A̶ ̶H̶U̶M̶A̶N̶ AN AI TEAM.                       phrases (§4.2)
+   ┌ PM ┐                                (3) hub, then the
+   │└──┬─┘                                   ladder: spine +
+   ├───┤ DEVELOPER │                         24px stems,
+   ├───┤ UI/UX     │                         50.4px pitch
+   ├───┤ QA        │
+   ├───┤ CONTENT   │                     fold cuts plate 5 —
+  ─│─ ─│─ fold at 553px ─ ─ ─ ─ ─            the spine runs on:
+   ├───┤ MARKETING │                         the scroll cue
+   ├───┤ LEGAL     │
+   └───┤ RESEARCH  │
+   8 AI AGENTS · 1 OPERATOR              (4)
+   ┌ + THIS SITE · SPEC → LIVE ┐         (5) label nowrap;
+   │              [VERIFY ⎘]   │             chip on its own
+   │ ACTIVE BUILD           —  │             right-aligned row
+   │ COST · API LIST        —  │             cells as stacked
+   │ SHIPPED         THIS PAGE │             key/value rows
+   │ measured at launch      + │
+   └───────────────────────────┘
+   ┌ curl -fsSL https://raw.gith… ┐      (6) soft-wraps, no
+   └──────────────────────────────┘          cursor, no prompt
 ```
-
-`--gap-major` separates the readout block (whole-product scope) from the terminal (wave scope) —
-§10. Other inter-block gaps are `--gap-block`.
 
 ### Annotations
 
 | # | Element | Spec |
 |---|---|---|
 | 1 | Eyebrow | §5 — list markup, separators drawn and unannounced, facts nowrap |
-| 2 | Headline | §4 — `id="hero-title"`, candidate treatment, break units, announced string |
-| 3 | Subline | §5 — `--text-lead` ink, full-ink rule |
-| 4 | Measured line | §5 — primary form, bold ink numerals, tabular; the fold guarantee (§3) |
-| 5 | Dual readout | §6 — THIS SITE above BODH, scope labels, dashes ink and static |
-| 6 | `VERIFY ⎘` chip | §6 — `href="VERIFY.md"`, name `Verify these numbers — VERIFY.md` |
-| 7 | Hero terminal | §7 — §2's component, 12 corpus lines, once-per-load stream, no loop |
-| 8 | Formation | §9 — hub + bus-bar, built to the hub-is-PM reading |
-| 9 | Formation caption | copy §6 — `8 AI AGENTS · 1 OPERATOR`, `--text-micro` `--muted` |
-| 10 | The curl | §11 — exact string, wraps, no cursor, no prompt glyph |
+| 2 | Headline | §4 — settled string, break units, announced name from the AX tree |
+| 3 | Formation | §6 — hub `PM` accent-bordered bold; bus + regmarks; ladder below `--bp-wide` |
+| 4 | Caption | §6.3 — `8 AI AGENTS · 1 OPERATOR`, micro muted, the only 8/1 statement |
+| 5 | Remnant strip | §7 — one-row instrument strip; dashes ink and inert; chip to `VERIFY.md` |
+| 6 | The curl | §8 — exact string, wraps, no cursor, no prompt glyph |
 
-## 9. The formation
+Gaps, one-sided throughout: eyebrow → h1 `--gap-hairline` · h1 → formation `--gap-block` ·
+diagram → caption `--gap-flow` · caption → remnant `--gap-major` (the idea-group seam) ·
+remnant → curl `--gap-block`.
 
-The seed's concept visual: a command hub and a bus-bar formation, carrying the roster as labels.
-**Built to the hub-is-PM reading**: hub plate `PM`, seven specialist plates on the bus — the
-reading in which no role appears twice. The alternative (hub `OPERATOR`, eight plates) is pending
-a founder ruling recorded in the orchestration queue; both label sets are final in the copy file,
-and switching is a **label change, not a redesign** — same plate component, same bus, the list
-gains one item and its accessible label changes with it.
+## 10. Motion — §1 is fully static
 
-- **Markup**: a `<ul>` labelled `The eight AI roles` — eight `<li>` plates in the copy file's
-  order, `PM` first. Announced: the eight role names as a list. The bus, stems and terminals are
-  CSS construction (borders and pseudo-elements with no content) — nothing decorative reaches the
-  AX tree.
-- **Plate**: `--surface`, 1px `--hair` border, sharp corners; role name `--text-label`, `--ink`
-  (the names are the roster's content, not captions), tracked uppercase; padding `--gap-hairline`
-  inline, `calc(var(--rhythm) / 3)` block. Locked full role names only — never abbreviations.
-- **Hub plate**: 1px `--accent` border (4.19/4.35 on ground ≥ 3:1 graphical, both themes), first
-  in DOM and visually seated above the bus on a stem. Its distinction rides on **position and
-  order as well as colour** — colour is never the sole channel.
-- **Bus-bar**: 1px `--hair` horizontal rule; 1 × 12px `--hair` stems from bar to each plate and
-  from hub to bar; registration `+` marks (`--text-micro` `--muted`, `aria-hidden`) at both bar
-  ends — the shell's regmark styling reused, per the shell motif table. The hairline construction
-  is decorative rhythm at 1.36:1 and carries no information the list text and order do not.
-- **Caption**: `8 AI AGENTS · 1 OPERATOR` below the formation — `--text-micro`, `--muted`,
-  uppercase. It is the R8 attribution at hero altitude and it is true in both hub readings.
-- **Responsive**: one horizontal bus row at ≥ `--bp-wide` (measured: seven plates set ~673px
-  against the 864px container at the breakpoint). Below it the formation is a vertical ladder —
-  hub on top, spine down the inline-start edge, plates stacked at `--gap-hairline` gaps, stems
-  from spine to plate. Same DOM, same reading order, both orientations.
+**No element in §1 animates, transitions, or streams. The section holds no seat in the page's
+motion inventory.** The dashes are inert; the chip has no hover animation (underline-weight
+changes are not transitions); the formation is still; the hero curl has no cursor.
 
-## 10. Scope adjacency (A-005) — how wave and whole-product stay distinct
+The page-level budget this section re-states (`page-shell.md` §10): **two live ambient elements —
+the OPERATIONAL pulse (element 1) and the §5 count-up (element 2) — plus the §6 curl cursor.**
+The stream seat that a hero terminal would occupy does not exist: §2 is the page's only terminal
+(DEC-046), and a new ambient element anywhere is a deviation requiring written justification
+(A-007). The count-up engine and its `aria-live` posture are decided and verified where the
+page's only counting cells live — §5's cards — not here.
 
-The wave-scope terminal and the whole-product BODH figures share one viewport. This is the page's
-likeliest factual failure, and it is handled structurally, not by hoping labels are read:
+Reduced motion / no JS: §1 renders identically — there is nothing to degrade. Complete content in
+all four states (default, end, reduced, no-JS).
 
-1. **Contiguous scope blocks, never interleaved.** The whole-product story (measured line +
-   readout) is one unbroken run; the wave-scope terminal follows it. No BODH aggregate sits below
-   the terminal and no wave artifact sits above it, at any viewport.
-2. **`--gap-major` at the scope seam.** The readout → terminal gap is the page's idea-group gap,
-   one step up from every other inter-block gap in the section: the seam is spatial as well as
-   labelled.
-3. **Every surface carries its own scope in its own chrome**: the measured line's scope is inline
-   (`idea → live`), the readout rows are scope-labelled (`SPEC → LIVE` / `IDEA → LIVE`), the
-   terminal's chrome label says what it streams — always visible, inherited from §2.
-4. **No wave numeral exists in §1.** The chain totals (`~64` minutes, `289` calls, `$24.73`)
-   appear nowhere in this section — the corpus lines the terminal streams carry timestamps and
-   counts of their own facts, but the wave's aggregate figures belong to §2's totals strip alone.
-   Asserted, not trusted (§13).
-5. **Different component grammar.** Whole-product numbers live only in instrument cells; the wave
-   lives only in the log. A reader who never reads a label still never sees the two scopes in the
-   same visual form.
+## 11. Both themes, contrast — stated per token pair
 
-## 11. The curl
+Every pair is the shell's measured table (§2.2); this section introduces no new pair.
 
-The copy file's §8 string, byte-identical to the verified form, in a `--surface` card with 1px
-`--hair` border and `--gap-hairline` padding, `--text-terminal` mono, `--ink`. It closes the
-section: claim → proof → team → command.
+| Element | Pair | Dark | Light | Floor |
+|---|---|---|---|---|
+| Headline (incl. struck phrase), curl text | `--ink` on `--ground` / `--surface` | 14.37 / 13.23 | 12.15 / 13.64 | 4.5 ✓ AAA |
+| Accent phrase `an AI` (display bold ≥28px) | `--accent` on `--ground` | 4.19 | 4.35 | AA-large ✓ (≥19px bold) |
+| Eyebrow, caption, keys, strip caption | `--muted` on `--ground` / `--surface` | 5.61 / 5.16 | 5.13 / 5.76 | 4.5 ✓ (labels/captions) |
+| Plate names, `THIS PAGE`, dashes | `--ink` on `--surface` | 13.23 | 13.64 | 4.5 ✓ AAA |
+| Hub border, chip border (graphical) | `--accent` on `--surface` | 3.86 | 4.89 | 3.0 ✓ UI |
+| Bus, spine, stems, rules | `--hair` | decorative | decorative | never information-bearing alone |
 
-- **No cursor** — the §6 curl owns the page's only blink. **No `$` prompt glyph** — a prompt
-  invites copy-paste damage and adds a character the command does not have; the command stands
-  alone.
-- **Wrapping**: `overflow-wrap: anywhere` — the URL is one ~85-character token, wider than every
-  phone column, and the page scrolls horizontally nowhere. A soft wrap adds and removes nothing;
-  selection yields the exact string at every viewport.
-- §6 reuses this treatment and adds the cursor; the two instances are one string, asserted equal.
+No text on filled rust anywhere; no rust text below the AA-large floor — the accent appears in §1
+only as the headline phrase (display bold), the hub and chip borders, and the chip glyph beside
+ink text.
 
-## 12. Both themes, states, accessibility
+## 12. States and accessibility
 
-- **Both themes first-class** (A-006), no thirteenth value. Contrast pairs used here, from the
-  shell's measured table: ink on ground 14.37/12.15 (headline, subline, measured line, curl);
-  muted on ground 5.61/5.13 (eyebrow, captions, keys); accent on ground at display bold and at
-  readout scale — AA-large 4.19/4.35; accent border on surface 3.86/4.89 ≥ 3:1 (hub plate, chip);
-  ink on surface 13.23/13.64 (plates, terminal, curl). No text on filled rust anywhere.
-- **Motion inventory closes at three plus the cursor** (A-007): element 1 is §7.1's stream,
-  element 2's seats here are the status-bar dot and the terminal `RUN` lamp, element 3 is the
-  readout count-up (§6 of this file). The hero curl has no cursor; the header underscore is static and is not a slot; the
-  formation, readout dashes, chip and headline carry no animation or transition.
-- **States**: default (stream per §7.1); end (complete log, counted-up values); reduced motion
-  (end state immediately — complete content, lamp solid, values exact); no JS (identical to
-  reduced motion). The dashes render identically in all four.
-- **Accessibility**: one `<h1>`, the section's label; heading tree unchanged (h1 → §02's h2, no
-  skips). Interactive inventory is exactly two elements — the `VERIFY ⎘` chip and, below
-  `--bp-wide`, the terminal's focusable scroll region — both with visible focus rings and 44px
-  targets. Announced strings are ruled in §4.3 (headline), §5 (eyebrow), §6 (chip), §7 (log), §9
-  (formation). Forced colors: plates and chip carry real borders; the key-beat marks and pennant
-  drop (decorative, correct); state rides on text everywhere.
+- **States**: one. §1 has no playback, no count-up, no end state — default, reduced-motion and
+  no-JS renders are identical (§10).
+- **Landmarks/headings**: one `<h1>`, the section's label via `aria-labelledby="hero-title"`;
+  heading tree h1 → §02's h2, no skips; the hero carries no stencil tag and no separator pennant
+  (`brand-seats.md` §5).
+- **Interactive inventory: exactly one element** — the `VERIFY ⎘` chip. Visible focus ring (2px
+  `--accent`, 3px offset), ≥44px hit area. Nothing else in §1 is focusable — there is no
+  terminal scroll region.
+- **Announced strings ruled**: headline (§4.3), eyebrow (§5), formation (§6.3), chip (§7). The
+  formation announces group → `PM` → 7-item specialist list; the caption is plain text.
+- **Forced colors**: hub and chip carry real borders and survive; bus, spine, stems and regmarks
+  drop (decorative, correct); the strike survives as `text-decoration`; state rides on text
+  everywhere.
+- **200% zoom**: the stack reflows on the ladder path with no horizontal scroll (same
+  construction as the measured phone layouts).
 
 ## 13. Assertions
 
-Each is the relationship it protects, one probe each; every one must fail when its relationship is
-violated.
+Each protects one relationship, one probe each; every one must fail when its relationship is
+violated. The fold budget's load-bearing relationships (§3) are 1–5.
 
-1. **The announced headline** — the h1's AX-tree name equals the shipped candidate's announced
-   string, case-insensitive word-exact; for candidate B the struck phrase's words appear in the
-   rendered text but not in the name. Fails if the strike enters the name or the treatment is
-   dropped.
-2. **The fold guarantee** — at 375 × 553, the measured line's bottom edge ≤ the visual viewport
-   height. Read the element, not this file's figure, so the check follows any future stack change.
-3. **One gutter system, two terminals** — the hero log's computed `--mark-inset` /
-   `--mark-width` / `--mark-clear` equal §2's, and the hero's L4/L9 marks measure the same inset
-   from their card as §2's (the R1 equality, third instance).
-4. **Scope separation** — the strings `$24.73`, `289` and `~64` do not occur within `#hero`; the
-   readout → terminal gap ≥ the section's other inter-block gaps.
-5. **Rust floor** — every element whose `color` resolves to `--accent` inside `#hero` measures
-   ≥24px, or ≥19px bold, or is a single-glyph graphical mark whose meaning is carried by adjacent
-   ink text (the log's `✓`, the chip's `⎘` — shell §2.3.2). The headline accent, readout values
-   and L12 pass the size clause; any rust *word* below the floor fails.
-6. **Dashes are inert** — unmeasured cells render `--ink`, carry no animation, and their text is
-   the em-dash before, during and after playback.
-7. **Count-up exactness** — after playback (and immediately under reduced motion) the numeric
-   cells' text equals the copy strings `9.3 h` and `$147` byte-exact.
-8. **The stream schedule** — pair reveals at one `--reveal` cadence; the L11 → L12 interval
-   measures 2× the uniform cadence; the stream never restarts within a page load.
-9. **Window discipline** — below `--bp-wide` the window holds 3 whole entries, never rests
-   mid-entry, and the scroll region is focusable with an accessible name.
-10. **The curl** — `#hero`'s curl text, §6's curl text and the verified string are byte-equal;
-    no horizontal scroll of page or card at 320/360/375.
-11. **Eyebrow silence** — no `·` in the eyebrow's AX names (the separators are style, not
+1. **The announced headline** — the h1's AX-tree name equals `Ship a product with an AI team.`
+   case-insensitive word-exact; the struck words appear in the rendered text and not in the name.
+   Fails if the strike enters the name or the treatment is dropped.
+2. **Phrase units hold** — `.h1__cut` and `.h1__accent` each report exactly one client rect at
+   320/360/375/390. Fails on any mid-phrase break — the no-orphan relationship the settled
+   string was chosen for.
+3. **The fold guarantee** — at 375 × 553: the hub plate's bottom edge and the fourth plate's
+   bottom edge ≤ the visual viewport height; at 320 × 553 the third plate's. Read the elements,
+   never this file's figures, so the check follows any future stack change.
+4. **Stack integrity** — the h1's next rendered sibling block is the formation diagram (nothing
+   ships between claim and team); eyebrow → h1 gap computes `--gap-hairline`; h1 → formation gap
+   computes `--gap-block`; caption → remnant gap computes `--gap-major` and is ≥ every other
+   inter-block gap in the section (the idea-group seam).
+5. **The sparse negative** — within `#hero`: none of the strings `9.3`, `4.8`, `$147`, `$24.73`,
+   `289`, `~64`, `bodh` (case-insensitive) occurs; no `<ol>` and no element with a terminal/log
+   class exists; the section's text content contains no digits other than the eyebrow's `4` and
+   the caption's `8` and `1`. Fails the moment any Bodh material or measured figure re-enters §1.
+6. **Formation integrity** — the diagram announces: hub text `PM` first, then a list of exactly
+   seven items equal to the locked names in the locked order; the hub's computed border-color is
+   the accent and its font-weight ≥ 700 (distinction is never colour alone); bus, spine, stem and
+   regmark constructions are absent from the AX tree.
+7. **Formation modes** — below `--bp-wide`: each plate's top edge ≥ the previous plate's bottom
+   edge (the ladder stacks). At ≥ `--bp-wide`: all seven plates share one row (equal top edges)
+   and the bus's rendered width equals the plate row's width. Fails if the bus detaches from the
+   row it diagrams.
+8. **Remnant honesty** — the two unmeasured cells render `--ink` em-dashes with no animation and
+   no transition in default and reduced paths; the caption `measured at launch` occurs exactly
+   once in the strip; the scope label reports exactly one client rect at 320/375 (a scope label
+   never breaks mid-phrase).
+9. **The chip** — accessible name contains the visible label `VERIFY` (WCAG 2.5.3); `href`
+   resolves to same-origin `VERIFY.md`; hit area ≥ 44 × 44 on coarse pointers; it is the only
+   focusable element inside `#hero`.
+10. **Hero static** — zero elements inside `#hero` carry a non-`none` animation or a non-default
+    transition, in default **and** reduced-motion paths (the brand-rule static-assertion pattern,
+    applied to the whole section).
+11. **The curl** — `#hero`'s curl text, §6's curl text and the verified string are byte-equal; no
+    horizontal scroll of page or card at 320/360/375/390.
+12. **Eyebrow silence** — no `·` in the eyebrow's AX names (the separators are style, not
     content).
-12. **Formation integrity** — eight list items, the locked names in the locked order, hub first;
-    every bus/stem/terminal construction absent from the AX tree.
-13. **Hero motion closes** — no animated or transitioning element inside `#hero` outside the log
-    reveals, the `RUN` lamp and the count-up cells (the brand-rule static assertion pattern,
-    applied to the section).
 
 ## 14. Existing harness sites this section re-bases
 
-The checks below pass against the shell placeholder and will not survive §1 landing; re-base,
-never delete:
-
 | Site | Today | Re-base to |
 |---|---|---|
-| `qa-independent-audit.mjs:346` | reads `#hero .instrument p` (the shell placeholder) for the 64ch reading-measure probe | the placeholder leaves with §1 — re-target to a rendered body paragraph (`.slot .t-body`, §2's narration entries, until §3's prose lands) |
-| `verify-shell.mjs:264` | `contrastOf("#hero-title")` | no re-base — the id survives on the real h1 (required by §4) |
-| placeholder counts (`verify-shell.mjs:314,426`; `qa-independent-audit.mjs:303,586,607`) | compare `[data-shell-placeholder]` counts across states | no re-base — counts drop symmetrically when the placeholder leaves |
-| `styles/tokens.css` `--text-display` | `clamp(2.4rem, 6.5vw, 4.25rem)` | the amended clamp (§4.1) — no harness asserts the old value (verified by grep); the audit's token evidence report updates itself |
+| `styles/tokens.css` `--text-display` | pre-amendment `clamp(2.4rem, 6.5vw, 4.25rem)` | the amended clamp (§4.1), landing **with** its assertion: the headline sets without overflow at 320px — assert the relationship, never the literal `1.75rem` |
+| `qa-independent-audit.mjs:352` | reads `#hero .instrument p` (the shell placeholder) for the reading-measure probe | the placeholder leaves with §1 and no `.instrument` remains in `#hero` — re-target to a rendered body paragraph (§2's narration entries until §3 lands; §3's paragraph is the permanent target — the page's largest single body of reading prose at the full 64ch measure) |
+| `verify-shell.mjs:281` | `contrastOf("#hero-title")` | no re-base — the id survives on the real h1 (§4) |
+| placeholder counts (`verify-shell.mjs`, `qa-independent-audit.mjs`) | compare `[data-shell-placeholder]` counts across states | no re-base — counts drop symmetrically when the placeholder leaves |
+| any fold assertion keyed on a measured line or readout row inside `#hero` | none ship yet (the fold contract entered the harness with the previous hero spec's build step, which did not run) | build §13.3 as written against the sparse stack — no assertion may reference the retired elements |
 
-## 15. Provenance — reference feel vs. locked values
+## 15. Provenance — what is locked vs. decided here
 
-**Locked by the seed (authoritative)**: the §1 element inventory in full; the measured line
-visible without scrolling; THIS SITE above BODH with scope labels; the eight named roles on the
-formation as the roster; the hub + bus-bar concept; one `curl`; the terminal streaming the real
-run-log with rust key beats; the `VERIFY ⎘` chip to `VERIFY.md`; the eyebrow facts; the three
-motion elements; every colour, face and surface rule via the shell.
+**Locked by founder rulings** (`decision-log.md`): the sparse above-fold inventory —
+eyebrow · headline · formation, nothing else (DEC-045); all Bodh material out, §2 as the page's
+only terminal (DEC-046); the settled headline string, spans and announced name
+(`section-01-copy.md` §2 records the ruling); hub = PM with the seven specialists on the bus
+(`section-01-copy.md` §4); the phone reality — ladder cut at
+the fold, first measured figure on scroll — accepted with the measurement on the table.
 
-**From the copy file**: every string, including the announced strings' content and the primary/
-compact measured-line forms.
+**Locked by the seed and shell**: the hub + bus-bar concept and the roster-as-formation; every
+colour, face, surface and spacing rule; the eyebrow facts; one `curl`; the `VERIFY ⎘` chip to
+`VERIFY.md`.
 
-**Decided here (the craft)**: the display floor re-measured against the real candidates (§4.1);
-the break-unit system and per-candidate markup (§4.2–4.3); ink-bold numerals in the measured
-line; the fold budget and its named cases; the readout's stacked-row phone grammar and the
-one-caption deviation; the chip's `href` and accessible name; the 1.40s/0.35s/2.80s stream
-schedule, once-per-load no-loop ruling, and 3-entry window; the 1200px two-column condition with
-a fixed terminal column; the hub-is-PM construction and the formation's ladder; the `--gap-major`
-scope seam; the curl's no-prompt, no-cursor, wrap-anywhere treatment.
+**From the copy file**: every string, including announced-string content and the remnant strings.
 
-**From the direction reference, as feel cues only (A-003 — it never ships)**: the eyebrow-above-
-headline opening; the hub-plate / stem / bus-bar schematic grammar as a visual idiom (the concept
-itself is the seed's); the calm density of the terminal card. **Present in the reference and
-deliberately not inherited**: the curl living inside the terminal with a `$` prompt and cursor
-(the hero curl has neither — §6 owns the cursor, and the setup command did not produce the Bodh
-log the terminal streams); `https://muster.build/setup.sh` (host does not exist); the `amber`
-class (the accent is rust); count-up on unmeasured THIS SITE values (`~$300`, `~4 H` — invented
-numbers, the exact thing rule 4 bans; ours are static ink dashes); the `PM · CONTEXT HUB` plate in
-rust text at 12px (fails AA small text — our hub is an accent *border* with ink text); the
-abbreviated plate names (`DEV`, `UX`, `MKT` — the role names are locked full forms); the
-four-cell readout with an `Operators` column (the copy file's three cells are the readout).
+**Decided here (the craft)**: the fold budget and its named cases, re-measured for the sparse
+stack; the formation's design pass — hub centered over a row-width bus with regmarks, 12px stems
+on the rhythm scale, the start-aligned intrinsic-width block, the ladder spine terminating at the
+last stem and running through the fold as the scroll cue, hub weight-700 + accent border as the
+multi-channel distinction; the announced group → `PM` → 7-list structure; the remnant ruled as a
+one-row instrument strip with its why (labels make dashes claims; §5 owns the full card; the
+lost-contrast cost carried openly); the nowrap scope label + chip-drop wrap rule; the
+`--gap-major` idea-group seam; §1 ruled fully static with the page budget re-stated at two live
+elements + cursor; the display floor re-measured against the settled string (§4.1).
 
-Nothing in this file is open except the formation's hub ruling, which is a label swap by
-construction (§9).
+**From the direction reference, as feel cues only (A-003 — it never ships)**: the
+eyebrow-above-headline opening; the hub-plate / stem / bus-bar schematic grammar as a visual
+idiom. **Present in the reference and deliberately not inherited**: the curl inside a terminal
+with prompt and cursor (no terminal exists in §1; §6 owns the cursor); `https://muster.build/…`
+(host does not exist); the `amber` class (the accent is rust); the `PM · CONTEXT HUB` plate in
+rust text at 12px (fails AA small — our hub is an accent *border* with ink text at weight 700);
+abbreviated plate names (`DEV`, `UX`, `MKT` — the role names are locked full forms); any
+count-up on unmeasured values (our dashes are static ink).
+
+Nothing in this file is open.

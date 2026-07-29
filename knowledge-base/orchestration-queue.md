@@ -64,62 +64,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-28 UI/UX: Gate A fix round — the sparse hero and §4's one-screen layout
-
-```
-Role: ui-ux
-Model: claude-fable-5
-
-**Task:** Recompose §1 to the sparse-hero ruling and rule §4's layout against the rewritten copy.
-The founder chose the composition from a rendered comparison and **explicitly deferred the
-formation's visual refinement to this step** — the design pass is the point, not a formality.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — Gate A verdict: item 3's §1 block and the fix-round inventory
-- `knowledge-base/decision-log.md` — DEC-043 through DEC-049
-- `samples/s01-sparse-hero.html` — Option A as the founder judged it. Composition is settled; its
-  formation render is a **placeholder to improve on**, never a build target
-- `knowledge-base/design-specs/web/section-01-hero.md` (to revise) · `section-04-decisions.md`
-  (to amend) · `page-shell.md` · `knowledge-base/brand-guidelines.md`
-- The four copy files as revised by HO-031 — §4's measured lengths are this step's layout input
-
-**Deliverable:** revised `section-01-hero.md`; amended `section-04-decisions.md`; a `page-shell.md`
-amendment homing the §3 kicker wrap rule; HO-032.
-
-**Acceptance criteria:**
-- **§1 above the fold**: eyebrow · headline · formation + caption, nothing else (DEC-045). No Bodh
-  anywhere in the section (DEC-046): no measured line, no BODH readout row, no hero terminal. Below
-  the fold: the THIS SITE remnant (dashes · `measured at launch` · `VERIFY ⎘`) and the curl — rule
-  the remnant's form (a one-row readout, or something smaller) and state why.
-- **The formation is the section's centerpiece and receives the real design pass** — hub `PM`
-  (accent border), bus-bar with registration marks, seven specialist plates, caption
-  `8 AI AGENTS · 1 OPERATOR`; vertical ladder below `--bp-wide`. Make it worth the promotion.
-- **New fold budget, measured** — the sparse stack at 375 × 553 and the 320 floor as rendered
-  figures, not derivations. Name the phone reality honestly: the ladder cuts at the fold and the
-  first number arrives on scroll — accepted by the founder at the gate (DEC-045).
-- **§10 scope adjacency is deleted, not rewritten** — no wave/whole-product adjacency exists in §1
-  any more (DEC-046). The motion budget is re-stated: the hero terminal's seat is gone, and the
-  count-up + `aria-live` posture moves to §5's cards.
-- **§4 layout**: four sheets, one screen at desktop (DEC-043 amendment B), decided against
-  HO-031's measured lengths. Horizontal scroll between cards is permitted (DEC-025 barred in-line
-  text dragging, not card paging) but costs discoverability — judge it and state the measured
-  height either way. **Rule §4's phone behaviour explicitly** — stacked, paged, or otherwise —
-  with its measured cost; Gate B judges desktop AND phone, and an unruled phone layout is a
-  Gate B bounce waiting to happen. Remove the no-date stamp special case: all four stamps carry
-  dates (DEC-044).
-- **The §3 kicker wrap rule homed in `page-shell.md`**: each kicker sentence an
-  unbreakable-preferred unit (inline-block span, the headline's mechanism family), behaviour as
-  measured in the verdict — sentence-boundary break at 375px, internal wrap without overflow at 320.
-- One harness assertion named per relationship the new fold budget depends on (DEC-032 practice).
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-032 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Developer (web): §1 and §6
 
 ```
@@ -196,6 +140,9 @@ unaffected; only the coordinate was.
 already took HO-031/032, so higher IDs in the ledger are not an error. Run the Pre-Handoff
 Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): §3 and §4
 
@@ -465,6 +412,15 @@ with no verification behind it is how that happened.
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 
+- 2026-07-28 — Step: UI/UX Gate A fix round (HO-032). §1 recomposed to the sparse hero with the
+  formation's real design pass and a rendered fold budget (four whole plates above the 375 fold,
+  every figure re-rendered and reproduced); the remnant ruled a one-row instrument strip; §1 fully
+  static with the motion budget re-stated at two live elements + cursor; §4 ruled a horizontal
+  paged track at desktop (612.1px content bottom — the only candidate that fits one screen) and
+  stacked on phone with its cost stated (DEC-051); kicker wrap rule homed in `page-shell.md` §3;
+  `scripts/test.sh` re-run GREEN. Awaiting PM review at the build-review step; two DEC-046 cascade
+  gaps in PM-owned files flagged as OBS-002/003.
+
 - 2026-07-28 — Step: Content Gate A fix round (HO-031). All four copy files carry the verdict: §1 is
   the settled headline with zero Bodh material, §3 is the closed 90/90 block byte-exact, §4 is
   re-authored plain from DEC-044's four at 44/42/44/44 words per sheet (ceiling 45 — nothing
@@ -551,12 +507,4 @@ with no verification behind it is how that happened.
   floor measurably overflowed 320px (DEC-038), the hero terminal ruled as §2's component streaming all
   twelve lines once with no loop, formation built hub-is-PM. 13 assertions, 4 harness re-base sites.
   **Awaiting PM review at the Wave 1 review step.**
-
-- 2026-07-26 — Step: UI/UX terminal spacing system and brand seats (HO-019). The terminal's left edge is
-  five named relationships with one assertion each and the key-beat mark out of the text flow, so the
-  indent can no longer move it — 12px equality held at 12px, 37-column floor held at 360px with 2.4px
-  spare, no column lost at 360/375/390/`--bp-wide`, measured before and after at eight viewports.
-  Pennant seats at 6×9, the underscore drawn rather than typed, header accessible name ruled `MUSTER`,
-  footer lockup ruled out (DEC-036, DEC-037). Ten harness sites listed for re-base by file and line.
-  **Awaiting PM review at the Wave 1 review step; REQ-006 asks PM to reconcile `brand-guidelines.md` §4.**
 

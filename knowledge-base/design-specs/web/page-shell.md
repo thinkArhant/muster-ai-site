@@ -83,6 +83,15 @@ Type scale — six steps, plus two component-scoped sizes (deliberate; the compo
 
 **The display floor is a measured value, not a taste value.** 1.75rem (28px) is the largest floor at which the longest real headline candidate sets on three whole-phrase lines at 360px with no overflow at 320px; a 2.4rem floor produces a 14-character display line on phones, which breaks any nine-word headline into four or more lines and overflows inside an unbreakable phrase. The slope and ceiling are untouched — rendered size is identical above ~431px. The hero spec (`section-01-hero.md` §4) owns the wrap system the floor is measured against.
 
+**Kicker sentences wrap at sentence boundaries.** A multi-sentence kicker renders each sentence as
+an `inline-block` span — the headline's phrase-unit mechanism family (`section-01-hero.md` §4.2)
+applied at kicker scale. `inline-block` is wrap-preferred, not unbreakable: a line break lands at a
+sentence boundary wherever the viewport allows, and a sentence wider than the viewport wraps
+internally rather than overflowing. Measured on §3's two-sentence kicker (*The product grows. The
+briefing doesn't.*): one line at desktop, a sentence-boundary break at 375px, internal wrap with no
+overflow at 320px. The spans are style-only — sentence punctuation already separates them, so the
+announced string is unchanged.
+
 **The leading in a component-scoped pairing is the one-row case.** `--text-terminal` is scaled for an instrument entry that sets one row, and 1.9 is the leading for that entry. Where a component's entry sets more than one row, a single leading value cannot both separate rows inside an entry and separate one entry from the next — it gives identical whitespace on both sides of an entry boundary, and the entries stop reading as entries. Such a component states its own row pitch and its own entry separator, and the pairing above is the default it departs from. The size never moves and no token is added; only the leading is component-overridable, and only where an entry wraps. `section-02-replay.md` §7.1 rule 2 is the instance.
 
 **Full-ink rule (binding, A-007):** any paragraph meant to be read — body, lead, kicker, narration — is `--ink`. `--muted` is for `--text-label` and `--text-micro` elements only. A muted paragraph is a defect.
@@ -204,6 +213,8 @@ Turning it off costs no content. No section moves, no composition changes, nothi
 
 The counter-argument, stated and rejected: snapping is position selection rather than animation, and a reader who uses it for orientation loses an aid. Rejected because the aid is a refinement on a composition that already separates sections by 96–168px of air and a full-width ruled tag. Orientation does not depend on it. `--scroll-pad` stays on regardless, so anchors and find-in-page still land clear of the bar.
 
+§4's sheet track — the page's one nested snap container (`section-04-decisions.md` §8.1) — follows the same ruling in the same media query: its x snap is off under reduced motion, and paging by plain scroll is unaffected.
+
 #### Phone and desktop both
 
 Snapping applies at every viewport. The mechanism and its bound are identical on both, and the pull is a fixed fraction of the snapport, so it scales with the screen rather than needing a rule per screen. Gating it on `--bp-wide` would key an interaction decision to a page-*chrome* breakpoint; the honest reasons to exclude phones — fling momentum and dynamic browser toolbars — are pointer and platform properties, not width, and neither changes whether the resting position is the right one. On a phone, section boundaries are also where snapping earns the most: it is the arrival at a new section, under a sticky bar, that is otherwise half-scrolled.
@@ -223,7 +234,7 @@ Keyboard, driven with real key events: ten `ArrowDown` presses from the top of t
 
 #### It takes no slot in the motion budget
 
-Scroll-snap is not one of §10's three live elements and does not become a fourth. That budget governs *ambient* motion — what runs because the page is open. Snapping runs only in direct response to the reader's own scroll, stops when they stop, and is off entirely under reduced motion.
+Scroll-snap is not one of §10's live elements and does not become another. That budget governs *ambient* motion — what runs because the page is open. Snapping runs only in direct response to the reader's own scroll, stops when they stop, and is off entirely under reduced motion.
 
 #### Assertions — relationships, not values
 
@@ -232,7 +243,7 @@ Scroll-snap is not one of §10's three live elements and does not become a fourt
 | A1 | `document.scrollingElement` is the root element and its computed `scroll-snap-type` is exactly `"y"` | the declaration is moved to `body`/`<main>` (silently inert), the axis changes, or someone sets `mandatory`. **`y proximity` serialises as `"y"`** — `proximity` is the initial strictness and is omitted; an assertion on the literal `"y proximity"` fails a correct build, and `mandatory` serialises in full, so this one string covers both properties |
 | A2 | computed `scroll-padding-block-start` = measured `.statusbar` height + computed `--rhythm` | the bar's height and the padding drift apart. Never hardcode 72 |
 | A3 | with a section snapped, its `.rule__line` top − `.statusbar` bottom ≥ `--gap-hairline` | the section's rule creeps back into the bar's rule |
-| A4 | exactly the `.section` elements other than §2 compute `start`; §2 computes `none`; **no other element in the document computes a non-`none` `scroll-snap-align`** | a snap-align is added inside §4, the terminal, or a card |
+| A4 | exactly the `.section` elements other than §2 compute `start`; §2 computes `none`; **no element outside §4's sheet track computes a non-`none` `scroll-snap-align`**. The track's sheets snap on their own x axis to the track — their nearest scroll container (`section-04-decisions.md` §8.1) — and never bind to the root; inside §4 the assertion instead checks that the nearest scroll container of every snap area is the track, not the document | a snap-align is added inside the terminal or a card, or a §4 sheet's snap starts binding to the document's y axis |
 | A5 | every snap area computes `scroll-snap-stop: normal` | `always` is introduced |
 | A6 | §2's terminal log — the `<ol>` that carries its own `overflow` and `tabindex` — computes `scroll-snap-type: none` | the section's own scrollback starts quantising. `scroll-snap-type` is not inherited, so this holds by default; the assertion is there because a nested scroller silently gaining snap is invisible until a reader is inside it |
 | A7 | sweeping rest positions across §2, every sampled position where the playback core is ≥90% visible rests where it was put | the exemption is weakened or a neighbouring snap position moves close enough to disturb playback |
@@ -263,7 +274,7 @@ The feature is `scroll-snap-type` on `:root`, two `scroll-snap-align` declaratio
 | **Chip** | `--text-micro`, 1px border. Default: `--hair` border, `--muted` text. Emphasis (e.g. `VERIFY ⎘`): `--accent` border, **`--ink` text**, rust glyph — rust text at chip size would fail AA (§2.3) |
 | **Spec-sheet rows** | Label column `--text-label` `--muted` + `--hair` row rules; value cells `--ink`. Mechanism row: ink text with a rust graphical mark — never rust text (the ≥19px-bold rust branch is declined; §4 is body prose). Full detail: `design-specs/web/section-04-decisions.md` |
 | **`OPERATIONAL` status bar** | See §9. Sticky, opaque, hairline-ruled |
-| **Roster formation** | PM hub + eight plates on a bus-bar — hero-scoped; ships with the hero spec. The bus-bar `+` terminals reuse registration-mark styling |
+| **Roster formation** | PM hub seated over a bus-bar carrying the seven specialist plates — hero-scoped; ships with the hero spec (`section-01-hero.md` §6). The bus-bar `+` terminals reuse registration-mark styling |
 
 ## 9. Status bar (shell chrome)
 
@@ -272,7 +283,7 @@ Sticky at top, `block-size: var(--bar-h)` (3rem), opaque `--ground`, 1px `--hair
 | Slot | Element | Owner |
 |---|---|---|
 | Left | Brand lockup — the 6×9px pennant, the `MUSTER` wordmark in mono uppercase `--ink`, and a **static** rust underscore. Both marks are `aria-hidden`, so the header's accessible name is exactly `MUSTER`. Geometry and rationale: `brand-seats.md` §4 | Content (the wordmark string), `brand-seats.md` (treatment) |
-| Right | `⟨pulse dot⟩ OPERATIONAL` — dot per §10.2, word in `--muted` | this spec |
+| Right | `⟨pulse dot⟩ OPERATIONAL` — dot per §10.1, word in `--muted` | this spec |
 
 The lockup carries two graphical marks and no accent *text* — rust at `--text-label` would measure
 4.19/4.35 and fail AA small text (§2.3.2). The underscore is a drawn 2px bar rather than a typed `_`
@@ -285,11 +296,14 @@ to choose on arrival: the page's argument is restraint — one CTA, no badges, n
 that adds a decision nobody asked to make cuts against it. The `:root[data-theme]` escape hatch in §2.1
 stays in the CSS for QA to force either theme; nothing in the UI sets it.
 
-## 10. Motion — exactly three live elements, plus the curl cursor
+## 10. Motion — exactly two live elements, plus the curl cursor
 
-The complete motion inventory of the page. **A fourth live element is a deviation (A-007).** Every path is `prefers-reduced-motion`-gated and every reduced path renders complete content.
+The complete motion inventory of the page. **A third live element is a deviation requiring written
+justification (A-007).** Every path is `prefers-reduced-motion`-gated and every reduced path renders
+complete content. No stream element exists anywhere: §2 is the page's only terminal (DEC-046), its
+replay is content playback (below), and §1 is fully static (`section-01-hero.md` §10).
 
-**Scope (settled): the §2 replay is content playback, not a live element.** The "exactly three" budget governs *ambient* page motion — the motion that runs because the page is open. The replay is user-facing content mandated by §2 itself: scroll-triggered, plays once, holds a complete end state, and renders its full transcript with motion off. It is specified in `section-02-replay.md` and occupies no slot here. The budget is closed at three plus the curl cursor.
+**Scope (settled): the §2 replay is content playback, not a live element.** The budget governs *ambient* page motion — the motion that runs because the page is open. The replay is user-facing content mandated by §2 itself: scroll-triggered, plays once, holds a complete end state, and renders its full transcript with motion off. It is specified in `section-02-replay.md` and occupies no slot here. The budget is closed at two plus the curl cursor.
 
 **Section snapping is not a live element either** (§7.1). It is the user agent settling a scroll the reader started, it stops when they stop, and it is off entirely under reduced motion — ambient it is not.
 
@@ -308,10 +322,7 @@ Motion tokens:
 --reveal: 350ms ease-out;    /* single micro-reveal used by replay line entries */
 ```
 
-### 10.1 Hero terminal stream (element 1)
-Streams the real run-log with rust *markers* on key beats. Specified in `section-01-hero.md` §7; it inherits the terminal component and emphasis rules from `section-02-replay.md` §9, including the §9.2 left-edge system.
-
-### 10.2 OPERATIONAL pulse (element 2)
+### 10.1 OPERATIONAL pulse (element 1)
 Appears in the status bar and as the terminal live indicator. **Clearly alive at a glance — subtlety is a defect here:**
 
 - Core: 8px circle, solid `--accent`, never below 85% opacity.
@@ -319,8 +330,8 @@ Appears in the status bar and as the terminal live indicator. **Clearly alive at
 - Core brightness oscillates 100% → 85% → 100% in the same period.
 - Reduced motion: static solid `--accent` core at 100% + the `OPERATIONAL` word — state fully communicated without the animation (text channel, not colour-alone).
 
-### 10.3 Scroll-triggered count-up (element 3)
-Readout metric values count from 0 to their exact value over `--countup-duration`, ease-out cubic, triggered once per page load at ≥55% cell visibility. Scope: the hero dual readout and the shipped-with cards; the replay section's totals strip is deliberately static (see `section-02-replay.md` §7, annotation 7).
+### 10.2 Scroll-triggered count-up (element 2)
+Readout metric values count from 0 to their exact value over `--countup-duration`, ease-out cubic, triggered once per page load at ≥55% cell visibility. Scope: §5's shipped-with cards — the page's only counting cells. §1's remnant renders inert dashes that never animate (`section-01-hero.md` §7), and the replay section's totals strip is deliberately static (see `section-02-replay.md` §7, annotation 7). The count-up engine's `aria-live` posture is decided and verified against §5's real cells.
 
 - **Decimals roll as decimals**: 9.3 animates 0.0 → 9.3 with one decimal place preserved throughout; the final frame renders the exact source string.
 - Tabular numerals; the cell is sized by its final value — zero layout shift.
@@ -328,14 +339,13 @@ Readout metric values count from 0 to their exact value over `--countup-duration
 - Dashes (unmeasured metrics) never animate.
 - Reduced motion: final values render immediately.
 
-### 10.4 Curl cursor (permitted extra)
+### 10.3 Curl cursor (permitted extra)
 8×17px block, `--accent`, after the curl command; blinks at `--cursor-period`, `steps(1)`. Reduced motion: solid, static. `aria-hidden`.
 
 ### Reduced-motion summary table
 
 | Element | Default | `prefers-reduced-motion: reduce` |
 |---|---|---|
-| Hero stream | streams | complete log rendered static |
 | Pulse | double-ring pulse | solid lamp + label |
 | Count-up | rolls to exact value | exact value immediately |
 | Cursor | blinks | solid block |
@@ -361,8 +371,8 @@ Readout metric values count from 0 to their exact value over `--countup-duration
 ┌─────────────────────────────────────────────┐
 │ STATUS BAR  ▌MUSTER_        ● OPERATIONAL   │ sticky, opaque
 ├─────────────────────────────────────────────┤
-│  §1 HERO (h1, roster formation, curl,       │
-│      terminal preview, dual readout)        │
+│  §1 HERO (h1, roster formation, THIS SITE   │
+│      remnant, curl)                         │
 │ ──┤ §02 · WATCH IT SHIP ├────────────────── │ rule + stencil tag (h2)
 │  §2 the replay …                            │
 │ ──┤ §03 · THE INSIGHT ├──────────────────── │
@@ -384,7 +394,7 @@ Section internals ship with their own specs; the shell builds the chrome above w
 
 The direction reference (`design-specs/direction-reference.html`) was read for mood, density, and rhythm only. It is not a build target and none of it ships.
 
-**Locked by the seed (authoritative):** all twelve hex values · mono/sans pairing and duties · tracked-uppercase stencil labels · metrics in tabular mono rust · grain + top vignette · all motifs in §8 · matte/sharp/opaque surface rules · exactly three motion elements + cursor · 64ch reading column · full-width section rules · spacious as overriding constraint.
+**Locked by the seed (authoritative):** all twelve hex values · mono/sans pairing and duties · tracked-uppercase stencil labels · metrics in tabular mono rust · grain + top vignette · all motifs in §8 · matte/sharp/opaque surface rules · a closed, exactly-enumerated motion budget + cursor (§10 holds the count at two — the founder's §1 gate ruling, DEC-046, retired the stream seat the seed's count included) · 64ch reading column · full-width section rules · spacious as overriding constraint.
 
 **Founder-authored, not seed-locked:** the pennant and its five-point geometry, supplied as artwork in `design-specs/brand/`, and the four rulings about where it seats. Sizing at each seat is craft and is decided in `brand-seats.md` §2 — the artwork gives a silhouette and a ratio, not a page size.
 

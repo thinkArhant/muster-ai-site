@@ -122,8 +122,8 @@ via the baseline, which every face has. Its 1ch length tracks the resolved face'
 the mark stays the width of one character position whatever font wins.
 
 **The underscore is not a motion element.** It is static. The `curl` cursor owns the only blink on the
-page (DEC-031, DEC-015), and the motion budget stays closed at three plus that cursor. A blinking header
-underscore is a fourth live element and a deviation.
+page (DEC-031, DEC-015), and the motion budget stays closed at two plus that cursor. A blinking header
+underscore is a new live element and a deviation.
 
 ### 4.1 The accessible name — ruled
 

@@ -832,5 +832,32 @@ before the run:
 
 **Touched**: `orchestration-queue.md`, `retrospective.md` (FF-001 addendum), `decision-log.md`.
 
+### DEC-051 — §4 ships as a horizontal paged track at desktop, stacked on the phone (2026-07-28)
+
+**Decision**: exercising the layout call DEC-043 delegated to UI/UX, §4's four sheets ride a
+horizontal paged track at ≥ `--bp-wide` — `--sheet-w: 40rem` pages, x-proximity snap scoped to the
+track, 360px of the next sheet visible as the paging affordance, the track as the section's single
+named tab stop — and stack at `--gap-major` below it. Decided against the rewritten copy's real
+lengths from three candidates rendered with the shipping strings (`samples/s04-one-screen.html`):
+the track's content bottom measures 612.1px at 1280 × 700 (684.1px snapped under the bar — one
+screen); stacked measures 2060.6px (~3 screens) and a 2×2 grid 1256.9px (~1.8), both failing
+DEC-043. Horizontal card paging is permitted ground — DEC-025 barred in-line text dragging, not
+paging between discrete cards.
+
+**Phone, ruled explicitly**: stacked, cost stated — sheets measure 631.8–660.7px at 375, the
+section about five phone screens. Paging was rejected on the phone because a sheet exceeds the
+553px fold, and horizontally paging cards that also scroll vertically is two-axis navigation of
+clipped documents.
+
+**Cascades**: `page-shell.md` §7.1 A4 re-scoped (the track is the page's one nested snap
+container; its snap turns off under reduced motion with the page's); `--sheet-pad` = 24px at every
+viewport is part of the one-screen budget; the audit's 64ch reading-measure probe re-targets §3's
+paragraph, since §4's track prose renders ~46 rendered characters by design.
+
+**Impact**: Developer (§3+§4 build), QA (track assertions join the sweep), PM.
+
+**Touched**: `design-specs/web/section-04-decisions.md`, `design-specs/web/page-shell.md`,
+`agent-requests.md` (HO-032).
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
