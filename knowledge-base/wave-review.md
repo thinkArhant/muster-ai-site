@@ -478,9 +478,69 @@ than hidden).
 
 **§1 is CLOSED.**
 
-**§3, §5, §6 —** *awaiting the founder's read. §3 note: with the subline deleted, §3's paragraph
-is now the first full prose on the page, and the only prose statement of the 8-roles/1-operator
-fact — its opening clause is no longer redundant with §1.*
+**§3 — RE-RULED (DEC-047), founder verdict from an out-of-band critique session.**
+
+**Ruling 1 — no named competitors anywhere on the page.** The CrewAI/AutoGen clause is dead, and
+so is its pre-authored "every multi-agent framework…" fallback (a universal claim one
+counterexample kills). Supersedes the "clause ships named" ruling this packet carried under
+"Settled without you" item 5, and DEC-035 decision 2.
+
+**Ruling 2 — §3's contrast is Muster vs bare Claude Code**, the reader's own lived experience:
+used bare, the operator is the memory system — every session gets re-briefed by hand, and the
+briefing grows with the product. Muster moves that job into the system: decisions land in the
+knowledge base, each session reads a curated per-role slice, file caps keep the slice bounded.
+**The compounding claim is §3's new spine**: the bigger the product, the more the system carries.
+Each contrast now appears exactly once on the page — bare-Claude in §3, the framework contrast
+only in §4 decision 1's title, unnamed.
+
+**Honesty boundaries (hard):** no comparative token/benchmark claims vs bare Claude Code —
+mechanism claims only (persistent knowledge base, curated per-role slice, capped reads). Never
+disparage Claude Code: the claim is about WHO carries the context at production scale, not
+capability. The scaling claim renders as architecture, not promise: *the knowledge base grows
+with the product; what a session reads stays bounded.*
+
+**Kept from the prior draft:** "a small always-on tier, the rest on demand, most of it never"
+(verbatim); the floor beat (mechanics as scripts, judgment in prose → holds on cheap models); the
+8-roles/1-operator + files-and-queue fact (now the page's only prose statement of it);
+"context engineering" at most once, and if spent in §3 it attaches to the curated-slice sentence
+("— context engineering, per role"), never as a standalone flourish.
+
+**Founder starting material (tighten freely, never inflate).** Kickers:
+K1 `The product grows. The briefing doesn't.` · K2 `You stop being the memory between sessions.`
+· K3 `A team that briefs itself.` Founder's pick: **K1**. Paragraph (script-measured **90/90
+words**, zero numerals, zero banned words, zero first person):
+
+> Muster puts eight AI roles under one human operator, coordinating through markdown files and a
+> work queue. Used bare, Claude Code makes you the memory: every new session starts with what you
+> re-explain, and the re-explaining grows with the product. Muster moves that job into the system.
+> Decisions land in a knowledge base; each session reads a curated slice — a small always-on tier,
+> the rest on demand, most never. The product grows; what a session reads stays bounded. Mechanics
+> run as scripts, judgment in prose — it holds on cheap models.
+
+**Sensitive sentence, watched at render**: "makes you the memory" must read as the operator's job,
+never Claude Code's capability; if it reads as a dig rendered, the soft form is pre-authored:
+*"the context lives in your head and your prompts."*
+
+**§3 CLOSED — founder confirmed against the render, 2026-07-28**: K1 + the paragraph, hook **IN**
+(attached to the curated-slice sentence, ships as ink), sentence **KEPT**. The final string,
+90/90 words (`samples/s03-insight.html` is the rendered record):
+
+> Muster puts eight AI roles under one human operator, coordinating through markdown files and a
+> queue. Used bare, Claude Code makes you the memory: every session starts with re-explaining, and
+> the re-explaining grows with the product. Muster moves that job into the system. Decisions land
+> in a knowledge base; each session reads a curated slice — a small always-on tier, the rest on
+> demand, most never — context engineering, per role. The product grows; what a session reads
+> stays bounded. Mechanics run as scripts, judgment in prose — it holds on cheap models.
+
+*Hook funding, applied by PM and listed for Content's re-verification at the fix round (−4)*:
+"every new session" → "every session" · "what you re-explain" → "re-explaining" · "a work queue" →
+"a queue". *Kicker wrap rule for the build*: each K1 sentence is an unbreakable-preferred unit
+(inline-block span, the headline's mechanism family) — measured: sentence-boundary break at 375px,
+internal wrap without overflow at 320px, one line at desktop. Content rewrites
+`section-03-copy.md` from this block; the file's old §5 named-competitor ruling and fallback are
+void per DEC-047.
+
+**§5, §6 —** *awaiting the founder's read.*
 
 **4. FORMATION — SETTLED.** The hub is **PM**; the bus-bar carries the **seven specialists**
 (Developer · UI/UX · QA · Content · Marketing · Legal · Research). No role appears twice, and it reads

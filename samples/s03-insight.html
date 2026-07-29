@@ -3,31 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>§3 rendered — the bare-Claude contrast</title>
+<title>§3 finalized — the bare-Claude contrast</title>
 <!--
-  §3 DECISION SAMPLE — THIS FILE NEVER SHIPS.
+  §3 FINAL RECORD — THIS FILE NEVER SHIPS.
 
-  DEC-047 re-ruled §3: no named competitors on the page; the contrast is
-  Muster vs bare Claude Code; the compounding claim is the spine. This file
-  renders the founder's starting material in the page's real tokens so the
-  remaining §3 calls are made against type, not imagination:
+  DEC-047 re-ruled §3 (no named competitors; contrast is Muster vs bare
+  Claude Code; compounding claim as spine). The founder then confirmed
+  against the rendered candidates: K1 kicker + the paragraph, the
+  "context engineering, per role" hook IN, the "makes you the memory"
+  sentence KEPT. This file now shows the finalized composition only.
 
-    Exhibit 1 — the shipping composition: §03 tag · K1 kicker · paragraph
-    Exhibit 2 — kicker alternatives K2 and K3 at the same scale
-    Exhibit 3 — the "context engineering, per role" hook attached. It costs
-                4 words (94/90) — rendered so the founder can feel whether
-                the hook earns the funding Content would have to find.
+  Finalization deltas, applied by PM and listed for review (Content
+  re-verifies at the fix round):
+    - hook attached costs 4 words; funded by three trims, -4 total:
+        "every new session"        -> "every session"
+        "what you re-explain"      -> "re-explaining"
+        "a work queue"             -> "a queue"
+      re-measured 90/90 words; zero numerals, banned words, first person.
+    - K1 wraps only at the sentence boundary: each sentence is an
+      inline-block span, so it stays whole where it fits (375px+) and
+      wraps internally only where it cannot (320px). Same mechanism
+      family as the headline's phrase spans.
 
-  Watched sentence: "Used bare, Claude Code makes you the memory" — must
-  read as the operator's job, never a capability dig. Judge it in Exhibit 1;
-  the pre-authored soft form is in wave-review.md.
+  The hook renders as ink here — its shipping form.
 
-  Tokens: styles/tokens.css verbatim (kicker/body scales; no display-floor
-  amendment needed — §3 sets no --text-display type). Paragraph at the
-  64ch reading column per DEC-023. Dark theme only: the questions are
-  length, wrap and tone; contrast is machine-verified elsewhere.
-  Sources: wave-review.md Gate A item 3 (§3, DEC-047 material) ·
-  page-shell.md (tag, kicker, reading column).
+  Tokens: styles/tokens.css verbatim (kicker/body scales). Paragraph at
+  the 64ch reading column per DEC-023. Dark theme only.
+  Sources: wave-review.md Gate A item 3 (§3, CLOSED) · page-shell.md.
 -->
 <style>
 :root {
@@ -131,13 +133,13 @@ body {
 .section-tag b { color: var(--accent); font-weight: 400; }
 
 .kicker { margin-block-start: var(--gap-flow); }
+/* Sentence-boundary wrap: whole where it fits, internal wrap only where it cannot. */
+.kicker__s { display: inline-block; }
 .para { margin-block-start: var(--gap-flow); }
-.hook { color: var(--accent); }
 
 .exhibit { margin-block-start: var(--gap-major); padding-block-start: var(--gap-block); border-block-start: 1px solid var(--hair); }
 .exhibit:first-of-type { margin-block-start: 0; border-block-start: 0; padding-block-start: 0; }
 .exhibit__tag { color: var(--accent); margin-block-end: var(--gap-flow); }
-.alt + .alt { margin-block-start: var(--gap-block); }
 
 .report table { border-collapse: collapse; font-family: var(--font-mono); font-size: var(--text-label); }
 .report th, .report td { border: 1px solid var(--hair); padding: 0.5em 0.9em; text-align: left; font-weight: 400; color: var(--ink); }
@@ -148,36 +150,31 @@ body {
 <body>
 <div class="container">
 
-  <p class="t-micro">§3 rendered · DEC-047 material · this file never ships</p>
+  <p class="t-micro">§3 finalized · founder-confirmed 2026-07-28 · this file never ships</p>
 
-  <!-- ================= EXHIBIT 1 — the shipping composition ============= -->
+  <!-- ===================== THE FINAL COMPOSITION ======================== -->
   <section class="exhibit">
-    <p class="t-micro exhibit__tag">Exhibit 1 · as §3 would ship — K1 + the 90-word paragraph</p>
+    <p class="t-micro exhibit__tag">§3 as it ships — K1 · 90/90 words · hook in · sentence kept</p>
     <div id="ship">
       <p class="t-label section-tag">§03 · <b>THE INSIGHT</b></p>
-      <h2 class="t-kicker kicker" id="k1">The product grows. The briefing doesn't.</h2>
-      <p class="t-body para" id="para">Muster puts eight AI roles under one human operator, coordinating through markdown files and a work queue. Used bare, Claude Code makes you the memory: every new session starts with what you re-explain, and the re-explaining grows with the product. Muster moves that job into the system. Decisions land in a knowledge base; each session reads a curated slice — a small always-on tier, the rest on demand, most never. The product grows; what a session reads stays bounded. Mechanics run as scripts, judgment in prose — it holds on cheap models.</p>
+      <h2 class="t-kicker kicker" id="k1"><span class="kicker__s">The product grows.</span> <span class="kicker__s">The briefing doesn't.</span></h2>
+      <p class="t-body para" id="para">Muster puts eight AI roles under one human operator, coordinating through markdown files and a queue. Used bare, Claude Code makes you the memory: every session starts with re-explaining, and the re-explaining grows with the product. Muster moves that job into the system. Decisions land in a knowledge base; each session reads a curated slice — a small always-on tier, the rest on demand, most never — context engineering, per role. The product grows; what a session reads stays bounded. Mechanics run as scripts, judgment in prose — it holds on cheap models.</p>
     </div>
   </section>
 
-  <!-- ================= EXHIBIT 2 — kicker alternatives ================== -->
+  <!-- ================== WHAT CHANGED AT FINALIZATION ===================== -->
   <section class="exhibit">
-    <p class="t-micro exhibit__tag">Exhibit 2 · the two alternates, same scale</p>
-    <div class="alt">
-      <p class="t-micro">K2</p>
-      <h2 class="t-kicker" id="k2">You stop being the memory between sessions.</h2>
+    <p class="t-micro exhibit__tag">Finalization record</p>
+    <div class="overflow-x report">
+    <table>
+      <tr><th>ruling</th><th>outcome</th></tr>
+      <tr><td>kicker</td><td>K1 — founder pick, confirmed against render</td></tr>
+      <tr><td>"context engineering" hook</td><td>IN — attached to the curated-slice sentence, ships as ink</td></tr>
+      <tr><td>"makes you the memory"</td><td>KEPT — reads as the operator's job, not a capability dig</td></tr>
+      <tr><td>hook funding, −4 words</td><td>"every new session" → "every session" · "what you re-explain" → "re-explaining" · "a work queue" → "a queue"</td></tr>
+      <tr><td>K1 phone wrap</td><td>sentence-boundary spans — never breaks mid-sentence where a sentence fits the column</td></tr>
+    </table>
     </div>
-    <div class="alt">
-      <p class="t-micro">K3</p>
-      <h2 class="t-kicker" id="k3">A team that briefs itself.</h2>
-    </div>
-  </section>
-
-  <!-- ================= EXHIBIT 3 — the hook, funded or dropped =========== -->
-  <section class="exhibit">
-    <p class="t-micro exhibit__tag">Exhibit 3 · "context engineering" attached — 94/90 words, Content must find 4 if kept</p>
-    <p class="t-body para" id="para-hook">Muster puts eight AI roles under one human operator, coordinating through markdown files and a work queue. Used bare, Claude Code makes you the memory: every new session starts with what you re-explain, and the re-explaining grows with the product. Muster moves that job into the system. Decisions land in a knowledge base; each session reads a curated slice — a small always-on tier, the rest on demand, most never<span class="hook"> — context engineering, per role</span>. The product grows; what a session reads stays bounded. Mechanics run as scripts, judgment in prose — it holds on cheap models.</p>
-    <p class="t-micro" style="margin-block-start: var(--gap-flow)">the rust span is the addition — it is ink on the real page; rust here only so the eye finds it</p>
   </section>
 
   <!-- ======================= MEASURED REPORT ============================ -->
@@ -185,15 +182,14 @@ body {
     <p class="t-micro exhibit__tag">Measured report — headless Blink, this file, real tokens</p>
     <div class="overflow-x">
     <table>
-      <tr><th>element</th><th>375px</th><th>1280px</th></tr>
-      <tr><td>K1 kicker — lines</td><td data-m="k1-375">2</td><td data-m="k1-1280">1</td></tr>
-      <tr><td>K2 kicker — lines</td><td data-m="k2-375">3</td><td data-m="k2-1280">1</td></tr>
-      <tr><td>K3 kicker — lines</td><td data-m="k3-375">2</td><td data-m="k3-1280">1</td></tr>
-      <tr><td>paragraph — lines</td><td data-m="p-375">15</td><td data-m="p-1280">7</td></tr>
-      <tr><td>paragraph + hook — lines</td><td data-m="ph-375">15</td><td data-m="ph-1280">7</td></tr>
+      <tr><th>element</th><th>320px</th><th>375px</th><th>1280px</th></tr>
+      <tr><td>K1 — lines</td><td data-m="k1-320">3</td><td data-m="k1-375">2</td><td data-m="k1-1280">1</td></tr>
+      <tr><td>K1 — breaks mid-sentence?</td><td data-m="kb-320">yes — 2nd sentence exceeds the column; wraps within itself, no overflow</td><td data-m="kb-375">no — breaks at the sentence boundary</td><td data-m="kb-1280">no — one line</td></tr>
+      <tr><td>paragraph — lines</td><td data-m="p-320">18</td><td data-m="p-375">15</td><td data-m="p-1280">7</td></tr>
+      <tr><td>horizontal overflow</td><td data-m="o-320">none</td><td data-m="o-375">none</td><td data-m="o-1280">none</td></tr>
     </table>
     </div>
-    <p class="t-micro" style="margin-block-start: var(--gap-hairline)">word counts, script-measured: paragraph 90/90 · with hook 94/90 · K1 6 · K2 7 · K3 5</p>
+    <p class="t-micro" style="margin-block-start: var(--gap-hairline)">word count, script-measured: 90/90 · zero numerals · zero banned words · zero first person</p>
   </section>
 
 </div>

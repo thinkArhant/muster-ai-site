@@ -707,5 +707,40 @@ chrome-label pair in `section-01-copy.md` §9.
 
 **Touched**: `wave-review.md` (Gate A item 3 — §1 CLOSED), `decision-log.md`.
 
+---
+
+### DEC-047 — §3 contrasts with bare Claude Code; no named competitor exists on the page (2026-07-27)
+
+**Decision**: founder ruling at Gate A, produced with an out-of-band critique session. (1) **No
+named competitors anywhere on the page** — the CrewAI/AutoGen clause dies, and so does the
+pre-authored generalized fallback, because "every multi-agent framework optimizes talk" is a
+universal claim one counterexample kills. (2) **§3's contrast becomes Muster vs bare Claude Code**:
+used bare, the operator is the memory system and the re-briefing grows with the product; Muster
+moves that job into the system (knowledge base + curated per-role slice + capped reads). The
+compounding claim — *the product grows; what a session reads stays bounded* — is the section's
+spine. The framework-field contrast survives once, unnamed, as §4 decision 1's title.
+
+**Supersedes**: DEC-035 decision 2 (clause ships named) and the Gate A packet's "Settled without
+you" item 5. The seed's §3 instruction to fold the CrewAI/AutoGen contrast is superseded by its
+author at his gate, the DEC-043/045 mechanism.
+
+**Honesty boundaries carried into the copy**: mechanism claims only, no comparative benchmarks vs
+bare Claude Code (unmeasured); never a capability dig at Claude Code (Muster runs on it; bare
+Claude Code has CLAUDE.md); scaling rendered as architecture, not promise.
+
+**Starting material**: founder-supplied kickers (K1 "The product grows. The briefing doesn't." —
+his pick · K2 · K3) and a 90-word paragraph, verified 90/90 words, zero numerals, banned words,
+first person. Full text and the watched sensitive sentence in `wave-review.md` Gate A item 3.
+The open sub-decision (spend or drop the "context engineering" hook) was **resolved 2026-07-28**:
+hook IN — measured to cost zero rendered lines, funded to 90/90 by three PM trims recorded in
+`wave-review.md`; K1 confirmed with a sentence-boundary wrap rule; the watched sentence kept.
+**§3 is closed.**
+
+**Impact**: Content (rewrite `section-03-copy.md` from this material), UI/UX (none — §3 has no
+design spec by ruling), Developer, QA (the copy-rules R11 hook check re-bases), PM.
+
+**Touched**: `wave-review.md`, `brand-guidelines.md` §6, `agent-context/content.md`,
+`decision-log.md`, `samples/s03-insight.html`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
