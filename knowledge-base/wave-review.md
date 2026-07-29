@@ -258,8 +258,9 @@ Six items reached me that a founder gate did not need to spend attention on:
 3. **Copy** — all five sections, as one list of findings.
 4. **Formation** — hub = PM (recommended), or hub = operator?
 
-**Status:** IN PROGRESS — recorded item by item as the founder settles each, so nothing is held only in
-conversation. The gate is not complete until all four carry a decision.
+**Status: COMPLETE — 2026-07-28. All four items carry a decision; the fix-round inventory is at
+the end of the findings.** Recorded item by item as the founder settled each, so nothing is held
+only in conversation.
 
 **Findings:**
 
@@ -556,12 +557,44 @@ in the footer and in §1's subline" (subline is dead — DEC-045); §4.2's "repe
 §1's harness asserts `9.3 h`" (§1 carries no number — the byte-equality assertion re-bases onto
 §5 as primary); the R3/§6-verification "no cost figure in §5" note (superseded by the cost row).
 
-**§6 —** *awaiting the founder's read.*
+**§6 CLOSED — approved as written, 2026-07-28.** No string changes, no inventory changes; the
+"nothing else" rulings stand. Item 3 is complete.
 
 **4. FORMATION — SETTLED.** The hub is **PM**; the bus-bar carries the **seven specialists**
 (Developer · UI/UX · QA · Content · Marketing · Legal · Research). No role appears twice, and it reads
 true to the architecture: PM coordinates, specialists execute. The seed's "eight plates" phrasing is
 superseded for the visual; the roster is still eight roles and copy still says eight.
+
+---
+
+### Fix-round inventory — what resume routes before Wave 2 builds
+
+Every ruling above traces to a decision: DEC-043 (§4 audience) · DEC-044 (§4's four) · DEC-045
+(sparse hero) · DEC-046 (all Bodh out of §1) · DEC-047 (§3 bare-Claude) · DEC-048 (§5 cost row).
+
+**Content** — one step, four files:
+- `section-01-copy.md`: settled headline replaces the four candidates (struck `a human` · rust
+  `an AI` · plain `team.`, announced `Ship a product with an AI team.`); subline, measured line,
+  readout BODH row and terminal chrome labels deleted; THIS SITE row, caption, eyebrow, curl stand.
+- `section-03-copy.md`: rewritten to the closed §3 block (final 90/90 string above); old
+  named-competitor ruling and fallback void.
+- `section-04-copy.md`: rewritten from DEC-044's four in plain language under DEC-043's guardrail —
+  plainer words, never bigger claims; every trade-off survives; stamps are the four verified dates.
+- `section-05-copy.md`: cost row per DEC-048; three stale rationales cleaned (listed at §5's close).
+
+**UI/UX** — one step, two specs:
+- `section-01-hero.md`: sparse recomposition (DEC-045/046) — formation as centerpiece with its
+  real design pass, new fold budget, THIS SITE-remnant ruling, §10 scope-adjacency deleted, motion
+  budget re-stated (the hero terminal's seat is gone).
+- §4 layout after the rewritten copy's length is known (one screen — DEC-043 amendment B); the §3
+  kicker's sentence-boundary wrap rule needs a spec home (§3 has no design spec — page-shell or
+  the build brief).
+
+**Developer/QA re-bases, riding their existing steps**: `9.3 h`/`$147` byte-equality re-anchors
+from §1 to §5 as primary; hero fold assertions re-base to the sparse stack; the headline
+announced-string assertion tracks the settled string.
+
+**Gate B is unchanged**: the assembled page, desktop and phone, one pass.
 
 <!-- Founder writes the verdict here, then runs muster/scripts/muster-sprint-resume.sh. Two forms: -->
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
