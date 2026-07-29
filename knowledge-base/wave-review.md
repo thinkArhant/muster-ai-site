@@ -567,7 +567,13 @@ superseded for the visual; the roster is still eight roles and copy still says e
 
 ---
 
-### Fix-round inventory — what resume routes before Wave 2 builds
+### Fix-round inventory — ROUTED 2026-07-28 (DEC-049)
+
+**This inventory is already in the queue.** The interactive PM routed it at the gate: Content
+HO-031 sits in `## Next Step`, UI/UX HO-032 leads `## Upcoming`, the four build briefs are re-cut,
+and the Gate A halt step is retired. The founder runs `muster/scripts/muster-sprint-run.sh`
+directly. **If a resume-spawned PM reads this: the verdict is consumed — verify the queue matches
+this inventory and change nothing.**
 
 Every ruling above traces to a decision: DEC-043 (§4 audience) · DEC-044 (§4's four) · DEC-045
 (sparse hero) · DEC-046 (all Bodh out of §1) · DEC-047 (§3 bare-Claude) · DEC-048 (§5 cost row).

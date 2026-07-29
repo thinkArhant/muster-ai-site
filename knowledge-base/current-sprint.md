@@ -28,6 +28,14 @@ markdown file. §4's spec-sheet copy is likewise inseparable from its rendering.
 with a Developer step that builds the candidates as a static sample. Gate A becomes looking, not
 imagining, and §4's rendering gets founder judgment without spending a third gate.
 
+**Gate A closed 2026-07-28 (DEC-043–049), and it reshaped the page**: headline settled
+(`Ship a product with ~~a human~~ an AI team.`); §1 becomes the **sparse hero** — eyebrow · headline ·
+formation, all Bodh material out, §2 now the page's only terminal; §4's four decisions re-selected
+from ten candidates, written plain for VCs/hiring, every stamp git-verified; §3 rebuilt on the
+bare-Claude contrast, closed at 90/90; §5 takes the cost row (`$147`'s only home); §6 approved as
+written. The fix round was routed at the gate by the interactive PM — Wave 2 now opens with Content
+HO-031 then UI/UX HO-032 before any build.
+
 **Everything else never reaches the founder.** Spec conformance, contrast, cross-engine parity, zero
 network requests, reduced-motion completeness and corpus fidelity are all machine-verifiable (DEC-009).
 
@@ -69,6 +77,8 @@ accepts:
 | §1 and §3 copy | The headline candidates *are* a Gate A artifact and the founder picks one |
 | §1 hero design | Authors the treatment every §1 element inherits; accepted at Gate A |
 | §4 spec-sheet rendering | The seed's second design centerpiece; its rendered output is judged at Gate A |
+| Gate A fix — copy (HO-031) | Re-authors §4 from scratch for the VC/hiring reader — the founder's centerpiece ask (DEC-049) |
+| Gate A fix — design (HO-032) | The sparse-hero recomposition and the formation's real design pass, explicitly founder-deferred to this step (DEC-049) |
 
 **Deliberately not premium — the terminal spacing system.** It remediates the class that failed three
 times, which makes the instinct loud and wrong: DEC-004 reserves premium for judgment, and this step is
@@ -182,10 +192,15 @@ the GitHub raw URL (DEC-010).
   - **Acceptance criteria**: all five relationships implemented with their assertions in `scripts/test.sh`; the gate-3 tick collision resolved; pennant in the header and five separators; favicon data-URI swapped; zero new network requests
   - **Blocks every section build.**
 
-- [ ] **§1 + §6** — Priority: HIGH, Effort: L, Platform: web
-- [ ] **§3 + §4** — Priority: HIGH, Effort: L, Platform: web
-- [ ] **§5** — Priority: MED, Effort: M, Platform: web
+- [ ] **§1 + §6** — Priority: HIGH, Effort: M, Platform: web — §1 is the sparse hero (DEC-045/046)
+- [ ] **§3 + §4** — Priority: HIGH, Effort: L, Platform: web — new §4 copy (DEC-044), HO-032 layout
+- [ ] **§5** — Priority: MED, Effort: M, Platform: web — four-key cards; owns count-up/`aria-live`
 - [ ] **Scroll-snap** — Priority: MED, Effort: S, Platform: web — builds last
+
+### Gate A fix round (precedes every build — DEC-049)
+
+- [ ] **Content: four copy files re-cut to the verdict** — HO-031, `claude-fable-5`
+- [ ] **UI/UX: sparse hero + §4 one-screen layout** — HO-032, `claude-fable-5`, after HO-031
 
 ### QA
 

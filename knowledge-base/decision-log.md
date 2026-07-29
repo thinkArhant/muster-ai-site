@@ -767,5 +767,39 @@ QA (assertion re-base), PM.
 
 **Touched**: `wave-review.md` (Gate A item 3 — §5 CLOSED), `decision-log.md`.
 
+---
+
+### DEC-049 — The Gate A fix round is routed at the gate, and the plan is re-cut to the rulings (2026-07-28)
+
+**Decision 1 — routing happens interactively, not on resume.** `muster-sprint-resume.sh` spawns a
+headless PM (up to 150 turns) to translate the verdict into fix steps. This verdict spans six
+decisions and cross-section cascades; a cold PM re-deriving it is the most expensive and
+highest-risk path available. The interactive PM — holding full gate context — routed it instead:
+two fix steps inserted (Content HO-031 → UI/UX HO-032, in that order because §4's layout is decided
+against measured copy lengths), the Gate A halt step retired, and the founder runs
+`muster-sprint-run.sh` directly. The queue's resolved-comment block records that the steps ARE the
+verdict's consumption, so any accidentally-spawned resume PM verifies and changes nothing.
+
+**Decision 2 — four build briefs re-cut, because a stale brief is how rework happens.** §1+§6:
+sparse-hero inventory with explicit negatives (no measured line, BODH value, or terminal), fold
+assertions re-based, the `aria-live` bullet removed. §3+§4: treatment-vs-copy-vs-layout separated —
+the Gate A sample stays authoritative for *treatment only*; DEC-044 copy; HO-032 layout; kicker
+wrap asserted. §5: four-key cards, and it inherits both the count-up/`aria-live` decision and the
+`9.3 h`/`$147` byte-equality anchor (the page's only counting cells and only whole-product numbers
+live there now). QA/PM review: handoff ranges extended to HO-032, Gate A negatives added to the
+copy matrix, and the §4 inflation check made explicit.
+
+**Decision 3 — the two fix steps run premium (`claude-fable-5`) under DEC-004's two-clause test.**
+Both are foundation-critical creation the founder explicitly judges: HO-031's core is §4's copy —
+the section aimed at VCs and hiring, re-authored from scratch; HO-032 is the hero recomposition
+with the formation's real design pass, which the founder explicitly deferred to this step. The
+four build steps stay `claude-opus-5`: they are correctness against specs, which no model tier
+changes.
+
+**Impact**: content, ui-ux, developer, qa, pm.
+
+**Touched**: `orchestration-queue.md` (two new steps, four briefs, preamble, Founder Decisions,
+Done), `wave-review.md` (routing note), `current-sprint.md`, `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

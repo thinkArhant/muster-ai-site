@@ -1,6 +1,6 @@
 run: run-20260726-161323-89974
-state: running step 11
-step: 2026-07-26 PM: Review Wave 1 and build the Gate A packet
+state: halted: halt (2026-07-27 Gate A — founder review: copy and rendered samples)
+step: 2026-07-27 Gate A — founder review: copy and rendered samples
 step started: 2026-07-27 01:45:27
-last completed: 2026-07-26 Developer (web): Gate A sample render · 86 turns · $10.67 · out 70k · 1h 22m
-totals: 10 attempt(s) · 758 turns · $111.75
+last completed: 2026-07-26 PM: Review Wave 1 and build the Gate A packet · 86 turns · $8.84 · out 57k · 20m 18s
+totals: 11 attempt(s) · 844 turns · $120.59

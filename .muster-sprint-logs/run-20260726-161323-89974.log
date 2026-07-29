@@ -1019,3 +1019,38 @@
   🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 grep -E 'every phone width clears|the two-r
   💬 Self-review complete. Committing.
   🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 git add -A && git status --short
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 git commit -q -F - <<'EOF' pm: gate a asks 
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930 bash muster/scripts/muster-commit-lint.sh H
+  💬 Step complete. All three lints green, tree clean, `Role: halt` set on Next Step — the loop stops at the planned gate. ## What I did **Reviewed all eight Wave 1 handoffs — accepted, no revisions.** Acc
+    📖 ×19 · ✏️  ×8 · 📝 ×1 · 🧪 ×57 · ⚠️  ×1
+  ✓ 86 turns · $8.84 · peak ctx 202k/1M 20% · out 57k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-27 pm: **Gate A is live and it is four questions, not a review pile** — open `samples/gate-a.html` in a browser first (one file, fetches nothing, real tokens), then `wave-review.md`. Pick a headline, judge the §4 spec-sheet as an artifact, read all five sections' copy as one list, and rule the formation. Everything else Wave 1 raised is settled: all eight handoffs accepted with no revision, every word budget recounted, all eight contrast pairs recomputed, your §4 diff re-derived independently at −5 words of 420 with all 30 sentences intact, and both spacing assertions broken on purpose to confirm they can still fail. One thing is honestly not green and needs nothing from you — the second, independent harness (`qa-independent-audit.mjs`) hangs rather than fails; it is diagnosed, ruled, and scheduled, and the primary harness is green on both engines. The §1 headline is the one real trade: candidate B is your own edit mark repaired and it announces clean to a screen reader, but at 320px it sets four lines with a lone `WITH` that cannot be engineered away.
+  📌 '## Founder Decisions' changed this step — review knowledge-base/orchestration-queue.md
+  ✓ [35;1mPM[0m · [1m20m 18s[0m · advanced → 2026-07-27 Gate A — founder review: copy and rendered samples
+    run so far: 4h 53m · $120.59 · 9 steps
+───────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════
+⛔ HALT — 2026-07-27 Gate A — founder review: copy and rendered samples   (Role: halt)
+
+   The loop stopped for founder input — nothing is wrong.
+   • Wave gate: review knowledge-base/wave-review.md, write your verdict in its
+     ## Verdict section, then run: bash muster/scripts/muster-sprint-resume.sh
+     (from this worktree).
+   • PM escalation: see '## Founder Decisions' in knowledge-base/orchestration-queue.md, answer, then re-run
+     muster-sprint-run.sh.
+═══════════════════════════════════════════════════════════
+── run summary ────────────────────────────────────────────
+  2026-07-26 Content (web): §1 and §    51    $10.2   16%    52k  22m 8s
+  2026-07-26 UI/UX (web): Terminal spa   119   $18.17   31%   121k  40m 1s
+  2026-07-26 UI/UX (web): §1 hero des    53   $15.95   25%    94k 24m 17s
+  2026-07-26 UI/UX (web): §4 spec-she    67    $14.5   21%    69k 18m 48s
+  2026-07-26 UI/UX (web): Scroll-snap     81    $9.06   19%    79k 24m 58s
+  2026-07-26 Content (web): §4, §5 a    53    $5.62   17%    55k 12m 56s
+  2026-07-26 Developer (web): Shell �   121   $11.11   20%    65k 47m 46s
+  2026-07-26 Developer (web): Gate A s    86   $10.67   23%    70k  1h 22m
+  2026-07-26 PM: Review Wave 1 and bui    86    $8.84   20%    57k 20m 18s
+  2026-07-27 Gate A — founder review  halt
+───────────────────────────────────────────────────────────
+  11 steps · 844 turns · $120.59 · out 745k · 4h 53m wall · stopped: halt (2026-07-27 Gate A — founder review: copy and rendered samples)
+  📣 1 founder notice(s) this run — read knowledge-base/founder-notices.md

@@ -184,9 +184,12 @@ agency cost baseline — state the number and let the reader run their own compa
 **The differentiator, in one clause**: every multi-agent framework optimizes how agents talk to each
 other; Muster optimizes what each one *reads*.
 
-**The contrast with CrewAI / AutoGen** folds into a single clause in §3 — no comparison table, no
-teardown, no named-competitor scoreboard. The restraint is itself positioning: a page that argues
-against competitors is a page that isn't showing its own proof.
+**No named competitors anywhere on the page (DEC-047).** §3's contrast is Muster vs **bare Claude
+Code** — about who carries the context at production scale, never about capability, because Muster
+runs on Claude Code and disparaging the platform is both wrong and self-defeating. The framework-field
+contrast ("optimizes what agents read, not how they talk") survives only in §4's first decision title,
+unnamed. No comparison table, no teardown, no named-competitor scoreboard. The restraint is itself
+positioning: a page that argues against competitors is a page that isn't showing its own proof.
 
 **Where the moat actually is:**
 

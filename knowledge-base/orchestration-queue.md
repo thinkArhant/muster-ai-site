@@ -17,6 +17,9 @@ corpus fidelity are all machine-verifiable (DEC-009).
   and its accessible name — against real candidate strings, not a hypothesis.
 - **The shell lands before the Gate A sample.** The sample renders in the page's real tokens, so the
   tokens must be final first. It also retires the §2 defect class before the founder spends a gate.
+- **The Gate A fix round precedes every build, Content before UI/UX.** §4's one-screen layout is decided
+  against the rewritten copy's measured lengths, and the §1 build needs the recomposed hero spec — the
+  same copy-before-design dependency, applied to the fix round (DEC-049).
 - **Scroll-snap builds last.** It cannot be validated before sections exist to snap between, and it is
   the likeliest thing to be rejected at Gate B.
 
@@ -43,26 +46,11 @@ THIS SITE metrics remain dashes until the founder supplies a snapshot (seed rule
 <!-- Format: - [DATE] [Agent]: [Question] -->
 <!-- Autonomous runs: this section is non-halting on its own — observation and scope escalations park here while the loop keeps running. PM is the sole party that summons the founder: only PM (after assessing a block per the Decision Autonomy Matrix) writes the question here AND sets the Next Step block's `Role:` to `halt`. A specialist that hits a block routes it to a `Role: pm` assessment step instead of halting. There is no checkbox convention. -->
 
-### §1's formation: eight roles, nine seats. Which is it?
-
-**Non-halting — asked at Gate A, which is now live.** Two read-only founder sources disagree and neither
-can be edited. `product-spec-seed.md` line 58 says *"the **eight named roles as labels** on the concept
-visual (PM command hub + bus-bar formation)"*. Line 224 and `brand-guidelines.md` say *"the roster as a
-formation (**PM hub + eight plates** on a bus-bar)"* — one hub plus eight plates is nine seats for eight
-roles.
-
-**PM recommendation, now with the argument that settles it**: the hub is PM and the bus-bar carries the
-**seven specialists**. Line 58 says the labels on the visual *are the eight named roles* — hub = PM puts
-exactly eight role labels there. The alternative (hub = the human operator, eight plates = the eight AI
-roles) puts **nine** labels on it, one of which — `OPERATOR` — is not a role, so it cannot be the reading
-line 58 describes. It also reads truest to what Muster is: PM coordinates, specialists execute.
-
-**Not blocking**: §1 is specified and built to that reading; if the founder picks the other at Gate A it
-is a label swap, not a redesign, and both label sets are written and final.
-
 **The eight role names** are settled and need no ruling — PM · Developer · UI/UX · QA · Content ·
-Marketing · Legal · Research. They were enumerated nowhere in the knowledge-base; they now live in
-`copy-rules.md` → scope table.
+Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
+
+<!-- Resolved 2026-07-27 — Formation: hub is PM, bus-bar carries the seven specialists. Founder ruling, Gate A item 4. -->
+<!-- Resolved 2026-07-28 — Gate A COMPLETE, all four items. Headline: B amended (struck `a human`, rust `an AI`, plain `team.`). §4: four re-selected decisions, plain language (DEC-043, DEC-044). §1: sparse hero, all Bodh out (DEC-045, DEC-046). §3: bare-Claude contrast, closed at 90/90 (DEC-047). §5: cost row in (DEC-048). Fix round routed at the gate by the interactive PM (DEC-049) — the steps below ARE the verdict's consumption. -->
 
 <!-- Resolved 2026-07-26 — Reading column: option A, `64ch` ships as the CSS value. See DEC-023. -->
 <!-- Resolved 2026-07-26 — Brand mark: header lockup is pennant + `MUSTER_` with a static underscore; five section separators take the pennant; icon seats as supplied; never on a pole. See DEC-031. -->
@@ -76,40 +64,109 @@ Marketing · Legal · Research. They were enumerated nowhere in the knowledge-ba
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-27 Gate A — founder review: copy and rendered samples
+### 2026-07-28 Content: Gate A fix round — four copy files re-cut to the verdict
 
 ```
-Role: halt
+Role: content
+Model: claude-fable-5
 
-**Gate:** All five sections' copy, plus rendered §1 headline candidates and one real §4 spec-sheet.
+**Task:** Apply the Gate A verdict to four copy files. The verdict's **Fix-round inventory** in
+`knowledge-base/wave-review.md` is the authoritative list; this brief compresses it. The verdict was
+routed into the queue at the gate (DEC-049) — do not re-derive it, apply it.
 
-Batched by design — judge everything needing taste in one sitting and return one list. It sits before
-any section is built, because copy is a build input and reviewing it afterwards is how rework happens.
+**Inputs:**
+- `knowledge-base/wave-review.md` — Gate A verdict: items 1–4, the closed §3 block (the final 90/90
+  string), item 2C (§4's four selected decisions with their evidence), and the fix-round inventory
+- `knowledge-base/decision-log.md` — DEC-043 through DEC-049
+- `knowledge-base/design-specs/web/section-01-copy.md`, `section-03-copy.md`, `section-04-copy.md`,
+  `section-05-copy.md`
+- `knowledge-base/agent-skills/content/copy-rules.md` · `knowledge-base/agent-context/content.md`
 
-**Open `samples/gate-a.html` in a browser first.** One file, fetches nothing, renders all four headline
-candidates and a real §4 spec-sheet in both themes against the page's shipping tokens, with the
-machine's own measurements printed beside each.
+**Deliverable:** the four files revised; HO-031.
 
-**What needs your word — four things:**
-1. **Pick the §1 headline** from the rendered candidates. Recommendation: B, accepting a lone `WITH`
-   orphan at 320px. A is a free fallback and needs no rebuild.
-2. **Judge the §4 spec-sheet rendering** — does it read as a specification or as a quote block?
-3. **Read all five sections' copy** and return findings as one list.
-4. **Rule on §1's formation** — see `## Founder Decisions`: hub = PM (recommended) or hub = operator.
+**Acceptance criteria:**
+- **§1**: the settled headline replaces the four candidates — visible
+  `Ship a product with ~~a human~~ an AI team.`, struck `a human` (ink, `aria-hidden`), rust on
+  `an AI` only, plain ink `team.`; announced string `Ship a product with an AI team.` **Delete**: the
+  subline, the measured line, the readout's BODH row, the terminal chrome labels (§9). **Keep
+  verbatim**: eyebrow, formation labels + caption, the THIS SITE row strings with `measured at
+  launch` and `VERIFY ⎘`, the curl.
+- **§3**: rewritten to the closed block — K1 kicker + the exact 90/90 paragraph quoted in the
+  verdict, byte-for-byte; the old named-competitor ruling and its fallback are removed (DEC-047: no
+  named competitor anywhere on the page); the kicker's sentence-boundary wrap requirement stated for
+  the build; word count re-verified by script.
+- **§4**: rewritten from the four selected decisions in verdict item 2C — tiered reading
+  (2026-04-24) · determinism + model economics merged (2026-06-13) · growth caps (2026-04-12) ·
+  attention architecture (2026-06-07), strongest-first in that order. Audience per DEC-043: the
+  non-technical reader — VC, hiring. **Plainer words, never bigger claims**: every trade-off
+  survives, and a decision that loses its cost is a blocking defect at PM review. Shape:
+  Decision / Problem / Trade-off / Mechanism; stamps are exactly the four verified dates; Muster
+  only — no Bodh, no Arogh; first person per R7. Materially shorter than the seed's draft: state a
+  per-sheet word budget with rationale, aiming at DEC-043's one-screen goal — the layout is decided
+  by the next step against your measured lengths.
+- **§5**: both cards gain key 4 `COST · API LIST` — `$147` (BODH) / `—` with `measured at launch`
+  (THIS SITE), per DEC-048; the three stale rationales listed at the verdict's §5 close are cleaned;
+  no other string changes.
+- Every numeral quoted from its cited source; budgets script-measured; no banned word; the
+  copy-rules matrix run on all four files before filing.
 
-Everything else Wave 1 raised is settled and stated in the packet, including one thing that is NOT
-green: `qa-independent-audit.mjs` hangs. It is ruled, scheduled, and needs nothing from you —
-`scripts/test.sh`, the primary harness, is green on both engines.
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
-**Read:** `knowledge-base/wave-review.md` and write your verdict in its `## Verdict` section.
-
-**Resume:** write your verdict, then run `muster/scripts/muster-sprint-resume.sh` from inside the sprint
-worktree. Resume spawns a PM that turns your findings into fix steps — that is how the list gets
-consumed, so use `resume` rather than re-running the driver.
+**On completion:** File HO-031 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
+
+### 2026-07-28 UI/UX: Gate A fix round — the sparse hero and §4's one-screen layout
+
+```
+Role: ui-ux
+Model: claude-fable-5
+
+**Task:** Recompose §1 to the sparse-hero ruling and rule §4's layout against the rewritten copy.
+The founder chose the composition from a rendered comparison and **explicitly deferred the
+formation's visual refinement to this step** — the design pass is the point, not a formality.
+
+**Inputs:**
+- `knowledge-base/wave-review.md` — Gate A verdict: item 3's §1 block and the fix-round inventory
+- `knowledge-base/decision-log.md` — DEC-043 through DEC-049
+- `samples/s01-sparse-hero.html` — Option A as the founder judged it. Composition is settled; its
+  formation render is a **placeholder to improve on**, never a build target
+- `knowledge-base/design-specs/web/section-01-hero.md` (to revise) · `section-04-decisions.md`
+  (to amend) · `page-shell.md` · `knowledge-base/brand-guidelines.md`
+- The four copy files as revised by HO-031 — §4's measured lengths are this step's layout input
+
+**Deliverable:** revised `section-01-hero.md`; amended `section-04-decisions.md`; a `page-shell.md`
+amendment homing the §3 kicker wrap rule; HO-032.
+
+**Acceptance criteria:**
+- **§1 above the fold**: eyebrow · headline · formation + caption, nothing else (DEC-045). No Bodh
+  anywhere in the section (DEC-046): no measured line, no BODH readout row, no hero terminal. Below
+  the fold: the THIS SITE remnant (dashes · `measured at launch` · `VERIFY ⎘`) and the curl — rule
+  the remnant's form (a one-row readout, or something smaller) and state why.
+- **The formation is the section's centerpiece and receives the real design pass** — hub `PM`
+  (accent border), bus-bar with registration marks, seven specialist plates, caption
+  `8 AI AGENTS · 1 OPERATOR`; vertical ladder below `--bp-wide`. Make it worth the promotion.
+- **New fold budget, measured** — the sparse stack at 375 × 553 and the 320 floor as rendered
+  figures, not derivations. Name the phone reality honestly: the ladder cuts at the fold and the
+  first number arrives on scroll — accepted by the founder at the gate (DEC-045).
+- **§10 scope adjacency is deleted, not rewritten** — no wave/whole-product adjacency exists in §1
+  any more (DEC-046). The motion budget is re-stated: the hero terminal's seat is gone, and the
+  count-up + `aria-live` posture moves to §5's cards.
+- **§4 layout**: four sheets, one screen (DEC-043 amendment B), decided against HO-031's measured
+  lengths. Horizontal scroll between cards is permitted (DEC-025 barred in-line text dragging, not
+  card paging) but costs discoverability — judge it and state the measured height either way.
+  Remove the no-date stamp special case: all four stamps carry dates (DEC-044).
+- **The §3 kicker wrap rule homed in `page-shell.md`**: each kicker sentence an
+  unbreakable-preferred unit (inline-block span, the headline's mechanism family), behaviour as
+  measured in the verdict — sentence-boundary break at 375px, internal wrap without overflow at 320.
+- One harness assertion named per relationship the new fold budget depends on (DEC-032 practice).
+
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
+
+**On completion:** File HO-032 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+```
 
 ### 2026-07-26 Developer (web): §1 and §6
 
@@ -117,11 +174,14 @@ consumed, so use `resume` rather than re-running the driver.
 Role: developer
 Model: claude-opus-5
 
-**Task:** Build §1 and §6. They pair because both carry the `curl` and the `VERIFY ⎘` chip.
+**Task:** Build §1 and §6. They pair because both carry the `curl` and the `VERIFY ⎘` chip. §1 is
+the **sparse hero** ruled at Gate A (DEC-045/046): eyebrow · headline · formation above the fold,
+THIS SITE remnant + curl below it — no measured line, no readout BODH row, no hero terminal.
 
 **Inputs:**
-- `knowledge-base/wave-review.md` — **the Gate A verdict, which carries the founder's headline choice**
-- `knowledge-base/design-specs/web/section-01-hero.md`, `section-01-copy.md`, `section-06-copy.md`
+- `knowledge-base/design-specs/web/section-01-hero.md` **as revised by HO-032** and
+  `section-01-copy.md` **as revised by HO-031**, plus `section-06-copy.md`
+- `knowledge-base/wave-review.md` — the Gate A verdict, for rulings the specs cite
 - `knowledge-base/agent-context/developer.md`
 - `tests/verify-shell.mjs`
 
@@ -160,19 +220,22 @@ unaffected; only the coordinate was.
 `tests/verify-shell.mjs`; HO-026.
 
 **Acceptance criteria:**
-- The founder's chosen headline, with the accessible name the spec defines — **verify the computed name
-  via `Accessibility.getFullAXTree`** (`tests/lib/cdp.mjs` exposes a raw CDP `call`), not by assertion
-- The measured line visible without scrolling, against the spec's stated pixel budget
-- Dual readout with THIS SITE dashed and scope-labelled; the eight named roles on the formation, built
-  to whichever reading the founder ruled at Gate A; the §1 terminal stream per spec
-- **Decide the count-up cells' `aria-live` posture** and re-verify the engine against real page cells
-  rather than the fixture — `pre-launch-checklist.md` says this sprint is when that becomes decidable
+- The settled headline — struck `a human` (`aria-hidden`), rust `an AI`, plain `team.` — with the
+  announced string `Ship a product with an AI team.`: **verify the computed name via
+  `Accessibility.getFullAXTree`** (`tests/lib/cdp.mjs` exposes a raw CDP `call`), not by assertion
+- The sparse stack per the revised hero spec, against its stated fold budget — and **nothing beyond
+  its inventory**: no measured line, no BODH value, no terminal in §1 (DEC-046). The formation built
+  hub = `PM`, seven specialist plates, to the revised spec's design
+- The THIS SITE remnant in the form HO-032 ruled, dashes inert and scope-labelled
 - §6: the exact `curl` string, `cd my-product && claude`, one GitHub link
 - The `VERIFY ⎘` chip wired to `VERIFY.md` at repo root — **and write that file** (a short, honest
   index of what a reader can check and where). It is a hard launch blocker and the chip 404s without it
-- Motion budget closed at three plus the cursor; reduced-motion complete
-- `bash scripts/test.sh` green with the amended check. The audit must **complete** — exit zero, or
-  fail named within its new timeout. A hang is a failure, not a pending result
+- Motion budget as the revised hero spec re-states it (the hero terminal's seat is gone);
+  reduced-motion complete. The count-up `aria-live` decision is **not** this step's — it moved to §5
+  with the page's only counting cells
+- `bash scripts/test.sh` green with the amended check, fold assertions re-based to the sparse stack.
+  The audit must **complete** — exit zero, or fail named within its new timeout. A hang is a
+  failure, not a pending result
 - Cross-engine WebKit and Blink before filing
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
@@ -186,20 +249,27 @@ unaffected; only the coordinate was.
 Role: developer
 Model: claude-opus-5
 
-**Task:** Build §3 and §4. §4 is the spec-sheet rendering the founder approved at Gate A.
+**Task:** Build §3 and §4. §4's spec-sheet **treatment** (structure, rows, the no-rust-text emphasis
+system) was approved at Gate A; its **copy** was re-selected (DEC-044) and its **layout** re-ruled
+(DEC-043: four sheets, one screen) — build the approved treatment with the new copy in the layout
+HO-032 ruled.
 
 **Inputs:**
-- `knowledge-base/wave-review.md` — the Gate A verdict on the §4 sample
-- `knowledge-base/design-specs/web/section-04-decisions.md`, `section-03-copy.md`, `section-04-copy.md`
-- `samples/gate-a.html` — the approved spec-sheet, as the reference for what was signed off
+- `knowledge-base/design-specs/web/section-04-decisions.md` **as amended by HO-032**,
+  `section-03-copy.md` and `section-04-copy.md` **as revised by HO-031**
+- `knowledge-base/design-specs/web/page-shell.md` — carries the §3 kicker wrap rule after HO-032
+- `samples/gate-a.html` — reference for the approved sheet *treatment* only; its decision-1 copy is
+  superseded by DEC-044
 
 **Deliverable:** `index.html` (§3 and §4), `styles/` as needed; HO-027.
 
 **Acceptance criteria:**
-- §4's four spec-sheets render as approved at Gate A — divergence from the judged sample is a defect
-- Title sentence, category, and the four rows all present; the no-date stamp case handled per spec
-- "Strongest first" is the seed's order and does not change
-- §3's prose in the reading column at `64ch` (DEC-023)
+- §4's four sheets carry DEC-044's decisions in DEC-044's order, in the treatment approved at
+  Gate A — divergence from the treatment or from HO-032's one-screen layout is a defect
+- Decision / Problem / Trade-off / Mechanism rows all present; all four stamps carry dates (the
+  no-date case no longer exists — DEC-044)
+- §3: the kicker wraps only at the sentence boundary per the page-shell rule, **asserted**; the
+  paragraph byte-identical to the closed 90/90 string; prose at `64ch` (DEC-023)
 - Both themes; contrast verified; cross-engine; `scripts/test.sh` green and the audit **completes**
   (zero, or named-red within its timeout — never a hang; DEC-042)
 
@@ -214,18 +284,25 @@ Model: claude-opus-5
 Role: developer
 Model: claude-opus-5
 
-**Task:** Build §5 — shipped with Muster.
+**Task:** Build §5 — shipped with Muster. After Gate A, §5 carries the page's entire whole-product
+number set: it is the primary site for `9.3 h` and `$147` (DEC-048), and it owns the page's only
+counting cells.
 
 **Inputs:**
-- `knowledge-base/design-specs/web/section-05-copy.md` with its PM review
+- `knowledge-base/design-specs/web/section-05-copy.md` **as revised by HO-031** (four keys per card,
+  including `COST · API LIST`)
 - `knowledge-base/design-specs/web/page-shell.md` §8 — the readout-cell motif
 
 **Deliverable:** `index.html` (§5), `styles/` as needed; HO-028.
 
 **Acceptance criteria:**
-- Bodh, the provenance line, and this site as readout cards using the shell motif
-- THIS SITE dashed; scope labels present beside their values
-- Count-up is motion element 3, already in budget — same `aria-live` posture decided for §1
+- Three prose lines and two four-key cards per the revised copy file; THIS SITE dashed with
+  `measured at launch`; scope labels beside their values; dashes never animate
+- **Decide the count-up cells' `aria-live` posture here** and verify the engine against real page
+  cells, not the fixture — this moved from the §1 step when the hero lost its readout
+  (`pre-launch-checklist.md` names this sprint as when it becomes decidable)
+- The `9.3 h` / `$147` byte-equality assertions re-base onto §5 as the primary site (they formerly
+  anchored on §1)
 - Both themes; cross-engine; `scripts/test.sh` green and the audit **completes** (zero, or named-red
   within its timeout — never a hang; DEC-042)
 
@@ -273,7 +350,8 @@ Model: claude-opus-5
 **Task:** Validate the content-complete page end to end. One sweep, not one per section.
 
 **Inputs:**
-- `knowledge-base/agent-requests.md` — HO-024 through HO-029
+- `knowledge-base/agent-requests.md` — HO-024 through HO-032 (HO-031/032 are the Gate A fix round;
+  the specs and copy they revised are the baseline this sweep verifies against)
 - Every section spec and copy file — derive scope from the specs directly, so a dev-charter omission does
   not also blind QA
 - `knowledge-base/bodh-sprint4-corpus.md` — read-only fidelity baseline
@@ -308,7 +386,9 @@ harness since.
 - **Run the `curl` against the live repo and record the result** — `pre-launch-checklist.md` requires it
   confirmed working, not assumed. This is the only step where the agent may make a network request
 - Copy rules as a text matrix across all sections: no `muster.build`, no cross-scope aggregates, scope
-  labels present, THIS SITE dashed
+  labels present, THIS SITE dashed — and the Gate A negatives: **no Bodh material in §1** (no measured
+  line, no BODH row, no hero terminal — DEC-046), **no named competitor anywhere** (DEC-047),
+  `9.3 h`/`$147` byte-equal with §5 as primary (DEC-048), "context engineering" exactly once, in §3
 
 **If a check fails:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step
 naming the failing check, and file HO-030 with what you found.
@@ -325,7 +405,7 @@ Model: claude-opus-5
 **Task:** Review Wave 2, then build the Gate B packet.
 
 **Inputs:**
-- `knowledge-base/agent-requests.md` — HO-024 through HO-030
+- `knowledge-base/agent-requests.md` — HO-024 through HO-032, HO-030 being QA's sweep
 - Every section spec, and the Gate A verdict in `knowledge-base/wave-review.md`
 
 **Deliverable:** review verdicts on HO-024 through HO-030 in `knowledge-base/agent-requests.md`, and the
@@ -333,7 +413,11 @@ Gate B packet written into `knowledge-base/wave-review.md`.
 
 **Acceptance criteria:**
 - **Re-run both harnesses yourself.** A summary is not evidence
-- Confirm §4 as built matches the sample approved at Gate A
+- Confirm §4 as built carries DEC-044's four decisions in the Gate A treatment and HO-032's layout —
+  and that no trade-off was inflated away (DEC-043's guardrail: an impressive-but-costless decision
+  is a blocking defect)
+- Confirm §1 is the sparse hero and nothing more — its whole above-fold inventory is eyebrow,
+  headline, formation (DEC-045/046)
 - Confirm every relationship assertion exists **and would fail if violated**; confirm QA actually planted
   a fetching reference and saw it go red
 - **Look at renders of the states under test** — including a key-beat frame for the tick, which is the
@@ -375,6 +459,17 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-28 — Step: Gate A, processed at the gate (DEC-043–049). All four items ruled interactively
+  with the founder against rendered evidence: headline B amended (`~~a human~~` struck, rust `an AI`,
+  plain `team.`, 3/3/2/2/2 lines measured); §4's four decisions re-selected from ten candidates with
+  every stamp verified by `git log` against the framework repo; §1 ruled the sparse hero with **all**
+  Bodh material out (measured line, readout row, hero terminal — §2 becomes the page's only
+  terminal); §3 rebuilt on the bare-Claude contrast and closed at 90/90 with the recognition hook in;
+  §5 closed with the cost row restoring the page's only `$147`; §6 approved as written. **The fix
+  round was routed here by the interactive PM rather than by resume's headless PM** — two fix steps
+  (Content HO-031, UI/UX HO-032) inserted, four build briefs re-cut to the rulings, the halt step
+  retired. Run `muster/scripts/muster-sprint-run.sh` directly; the verdict is already consumed.
 
 - 2026-07-27 — Step: PM Wave 1 review and the Gate A packet (DEC-042). **All eight handoffs accepted with
   no revision**, and the acceptance is re-derived rather than read: the §4 seed-vs-shipped diff

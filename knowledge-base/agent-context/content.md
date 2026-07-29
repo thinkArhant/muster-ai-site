@@ -101,8 +101,10 @@ A strong idea — it resolves the ambiguity visually instead of spending words, 
 - **Length budgets.** None exist for §1/§3, unlike §2's narration. **Set them** — state a word count and
   rationale per string. PM recounts against your stated budget rather than against nothing.
 - **The eight role labels**: PM · Developer · UI/UX · QA · Content · Marketing · Legal · Research.
-- **§3's CrewAI/AutoGen clause** rests on the founder's own survey. Research is unstaffed this sprint —
-  if no research lands before §3 builds, the clause ships **cut, not softened**.
+- **§3 is re-ruled at Gate A (DEC-047): no named competitors anywhere on the page.** The CrewAI/AutoGen
+  clause and its pre-authored fallback are both dead. §3's contrast is Muster vs **bare Claude Code** —
+  who carries the context at production scale, never a capability dig. Founder-supplied starting
+  material and the honesty boundaries live in `wave-review.md` Gate A item 3 (§3).
 - **SP3 fits §2's narration card at 320px** — 19 words, measured 5 rendered lines against the 6-line
   card. Any future growth in that string re-opens the defect; a replacement aims under six lines at 320px.
 
