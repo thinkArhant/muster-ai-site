@@ -297,3 +297,140 @@
   🧪 bash   bash muster/scripts/muster-lint-handoff.sh; echo "handoff-lint exit=$?"; echo "=== final verification ==="; bash scripts
   💬 Everything green after the final edits. Committing:
   🧪 bash   git add -A && git status --porcelain | head -20
+  🧪 bash   cat tests/artifacts/.gitignore 2>/dev/null; git check-ignore -v tests/artifacts/webkit-dark-s06-check.png 2>&1 | head -2
+  🧪 bash   git commit -q -F - <<'EOF' developer: the first screen makes its claim and hands over the proof §1 ships as the sparse h
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "commit-lint exit=$?"; git status --porcelain | head
+  💬 Step complete. Both harnesses green, handoff filed, queue advanced, committed. ## What shipped **§1 — the sparse hero.** Eyebrow · headline · formation above the fold; the THIS SITE remnant strip and 
+    📖 ×19 · ✏️  ×51 · 📝 ×2 · 🧪 ×77 · ⚠️  ×1
+  ✓ 150 turns · $22.74 · peak ctx 332k/1M 33% · out 118k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m58m 7s[0m · advanced → 2026-07-26 Developer (web): §3 and §4 (DEVELOPER) · handoff HO-026 filed ✓
+    run so far: 1h 17m · $41.97 · 2 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 3
+▶ [34;1mDEVELOPER[0m · 2026-07-26 Developer (web): §3 and §4  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh developer auto
+  💬 Binding to Developer for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  🧪 bash   ls -la && echo "---STYLES---" && ls -la styles/ scripts/ tests/ 2>/dev/null && echo "---SPECS---" && ls knowledge-base/d
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-03-copy.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-04-copy.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-04-decisions.md
+  🧪 bash   wc -l knowledge-base/design-specs/web/page-shell.md && grep -n "^#\{1,3\} " knowledge-base/design-specs/web/page-shell.m
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/tokens.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  🧪 bash   ls -la samples/ && echo "---" && ls tests/lib tests/fixtures tools/
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/samples/s03-insight.html
+  🧪 bash   grep -rn "kicker" knowledge-base/design-specs/web/*.md knowledge-base/decision-log.md knowledge-base/brand-guidelines.md
+  🧪 bash   sed -n '770,800p' knowledge-base/decision-log.md; echo "=== SEED §3 ==="; grep -n "insight\|Insight\|INSIGHT" knowledge-
+  🧪 bash   sed -n '90,120p' knowledge-base/product-spec-seed.md; echo "=== shell §12 skeleton ==="; sed -n '368,400p' knowledge-bas
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/samples/s04-one-screen.html
+  🧪 bash   cat scripts/test.sh; echo "=== verify-shell outline ==="; grep -n "^// ===\|^const CHECKS\|^async function \|^function \
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -n "check(\"" tests/verify-shell.mjs | sed -n '1,40p'; echo "..."; grep -n "check(\"" tests/verify-shell.mjs | tail
+  🧪 bash   grep -n "hero\|HERO\|§1\|§6\|getstarted\|formation" tests/verify-shell.mjs | head -60
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -n "shell-placeholder\|placeholder" tests/verify-shell.mjs tests/qa-independent-audit.mjs tests/verify-webkit.mjs |
+  🧪 bash   sed -n '355,395p' tests/qa-independent-audit.mjs
+  🧪 bash   grep -n "instrument\|\.slot\|\.chip\|regmark" styles/motifs.css styles/chrome.css | head -40
+  🧪 bash   sed -n '100,145p;180,240p' styles/motifs.css
+  🧪 bash   sed -n '395,420p' tests/qa-independent-audit.mjs; echo "=== checks referencing reading/instrument ==="; grep -n "typical
+  🧪 bash   grep -n " check(\"" tests/qa-independent-audit.mjs | sed -E 's/^([0-9]+): check\("([^"]+)".*/\1 \2/' | head -120
+  🧪 bash   sed -n '280,345p' tests/qa-independent-audit.mjs
+  🧪 bash   sed -n '230,280p' tests/qa-independent-audit.mjs
+  🧪 bash   sed -n '200,232p' tests/qa-independent-audit.mjs; echo "=== check 459 ==="; sed -n '455,470p' tests/qa-independent-audit
+  🧪 bash   sed -n '180,202p' tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  💬 Now I'll build §3 and §4. Starting with the markup.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  🧪 bash   cat > /tmp/probe-s34.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -20
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | tail -8
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the harness additions.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | grep -E "^FAIL|checks passed|Error" | head -30
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the keyboard reachability check:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | grep -E "^FAIL|checks passed|Error" | head -30
+  🧪 bash   cat > /tmp/probe-scroll.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-a
+  🧪 bash   cat > /tmp/probe-scroll2.mjs <<'EOF' import { launchChrome } from "/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | grep -E "^FAIL|checks passed|Error" | head -20
+  🧪 bash   cp styles/sections.css /tmp/sections.css.bak python3 - <<'EOF' import re p="styles/sections.css" s=open(p).read() s=s.re
+  🧪 bash   cp /tmp/sections.css.bak styles/sections.css cp index.html /tmp/index.html.bak python3 - <<'EOF' p="index.html" s=open(p
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now the WebKit half — cross-engine is mandatory here.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   node tests/verify-webkit.mjs 2>&1 | tail -25
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   python3 - <<'EOF' p="tests/verify-webkit.mjs" s=open(p, encoding="utf-8").read() s=s.replace("const onlyʼ = (keep)","con
+  💬 Now the mark-seat measurement needs to find the card edge, not any inked pixel:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   node tests/verify-webkit.mjs 2>&1 | grep -E "§3|§4|checks passed|FAIL"
+  🧪 bash   python3 - <<'EOF' p="tests/verify-webkit.mjs" s=open(p,encoding="utf-8").read() s=s.replace('const INK = { dark: "#E6E3D
+  🧪 bash   python3 - <<'PYEOF' p="tests/verify-webkit.mjs" s=open(p,encoding="utf-8").read() old = """ const found = rows.map((y) =
+  🧪 bash   python3 - <<'PYEOF' p="tests/verify-webkit.mjs" s=open(p,encoding="utf-8").read() start = s.index(" /* The card is opaqu
+  🧪 bash   cp styles/sections.css /tmp/sections.css.bak2 python3 - <<'EOF' p="styles/sections.css" s=open(p).read() s=s.replace(" i
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -6; echo "=== AUDIT RUN 1 ==="; node tests/qa-independent-audit.mjs 2>&1 | tail -2; ech
+  🧪 bash   grep -E "checks passed" .test-logs/run-20260729-001458.log; echo "=== copy fidelity double-check ==="; node -e ' const f
+  🧪 bash   git status --short | head -20; ls -la tests/artifacts/ | grep -E "s0304|s03|s04" 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/webkit-dark-s04.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/webkit-light-s03.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/webkit-light-s04.png
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 40 muster/system-guide.md | head -60
+  🧪 bash   grep -n "## Pre-Handoff Self-Review Checklist" -A 30 muster/system-guide.md
+  🧪 bash   sed -n '290,310p' tests/verify-shell.mjs; echo "=== contrast checks ==="; sed -n '442,450p' tests/verify-shell.mjs; echo
+  🧪 bash   grep -n '\.slot \.t-body\|contrast\.find' tests/verify-shell.mjs tests/qa-independent-audit.mjs
+  🧪 bash   python3 - <<'PYEOF' p="tests/verify-shell.mjs" s=open(p,encoding="utf-8").read() s=s.replace(''' contrastOf(".slot .t-bo
+  🧪 bash   grep -nE "^### A-00|^\*\*A-00" knowledge-base/foundational-assumptions.md | head -20
+  🧪 bash   git diff --stat; echo "=== verify founder-authored files untouched ==="; git status --short knowledge-base/ | grep -E "p
+  🧪 bash   sed -n '1,60p' knowledge-base/agent-requests.md
+  🧪 bash   sed -n '60,140p' knowledge-base/agent-requests.md
+  🧪 bash   sed -n '140,175p' knowledge-base/agent-requests.md; echo "===== SECTION HEADS ====="; grep -n "^## " knowledge-base/agen
+  💬 Now filing HO-027.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   node -e ' const r=require("./tests/artifacts/blink-report.json"); console.log("snapped:", JSON.stringify(r.evidence.s04R
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now the queue update.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   grep -n "^## \|^### " knowledge-base/orchestration-queue.md | sed -n '1,25p'
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   grep -c "^- 20" knowledge-base/orchestration-queue.md; ls muster/scripts/ | grep -i lint
+  🧪 bash   python3 - <<'PYEOF' p="knowledge-base/orchestration-queue.md" s=open(p,encoding="utf-8").read() old = """ - 2026-07-26 —
+  🧪 bash   git stash push -q knowledge-base/agent-requests.md && bash muster/scripts/muster-requests-lint.sh; echo "rc=$? (before H
+  🧪 bash   python3 - <<'PYEOF' p="knowledge-base/agent-requests.md" s=open(p,encoding="utf-8").read() start=s.index("### 2026-07-29
+  🧪 bash   python3 - <<'PYEOF' p="knowledge-base/agent-requests.md" s=open(p,encoding="utf-8").read() s=s.replace("""- OBS-010 — `m
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -4; echo "=== AUDIT ==="; node tests/qa-independent-audit.mjs 2>&1 | tail -2; echo "===
+  🧪 bash   grep -E "checks passed" .test-logs/run-20260729-002956.log; rm -f /tmp/probe-s34.mjs /tmp/probe-scroll.mjs /tmp/probe-sc

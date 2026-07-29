@@ -293,7 +293,14 @@ const AUDIT = `(() => {
     skipTargetFocusable: document.getElementById("main").getAttribute("tabindex") === "-1",
     focusRing,
     contrast: [
-      contrastOf(".slot .t-body"),
+      /* §3's paragraph is the page's permanent body-prose exemplar — the
+         largest single reading passage at the full 64ch column. It replaces
+         the shell placeholder the probe used while §3 was scaffolding, so the
+         body-contrast claim is measured on real prose and survives the last
+         placeholder leaving the page. */
+      contrastOf("#the-insight p.read"),
+      contrastOf(".sheet__row dd"),
+      contrastOf(".sheet__stamp"),
       contrastOf("#hero-title"),
       contrastOf(".status__word"),
       contrastOf(".tag"),
@@ -440,7 +447,7 @@ try {
   check("focus ring 2px solid accent, 3px offset", dark.focusRing.outlineWidth === "2px" && dark.focusRing.outlineStyle === "solid" && dark.focusRing.outlineOffset === "3px", JSON.stringify(dark.focusRing));
   check("skip link reveals on focus", dark.focusRing.visibleTop >= 0, `top ${dark.focusRing.visibleTop}px`);
 
-  const darkBody = dark.contrast.find((c) => c.selector === ".slot .t-body");
+  const darkBody = dark.contrast.find((c) => c.selector === "#the-insight p.read");
   check("body text >= 4.5:1 (dark)", darkBody.ratio >= 4.5, `${darkBody.ratio}:1 ink on surface`);
   dark.contrast.forEach((c) => {
     check(`contrast ${c.selector} (dark)`, c.ratio >= 4.5, `${c.ratio}:1 at ${c.fontSize}`);
@@ -557,7 +564,7 @@ try {
 
   const SEED_LIGHT = { "--ground": "#DBD8C6", "--surface": "#E7E4D4", "--ink": "#191B10", "--muted": "#55583F", "--hair": "#BDB9A3", "--accent": "#A0451F" };
   check("light palette matches the seed exactly", Object.entries(SEED_LIGHT).every(([k, v]) => light.tokens[k].toUpperCase() === v), JSON.stringify(light.tokens));
-  const lightBody = light.contrast.find((c) => c.selector === ".slot .t-body");
+  const lightBody = light.contrast.find((c) => c.selector === "#the-insight p.read");
   check("body text >= 4.5:1 (light)", lightBody.ratio >= 4.5, `${lightBody.ratio}:1 ink on surface`);
   light.contrast.forEach((c) => {
     check(`contrast ${c.selector} (light)`, c.ratio >= 4.5, `${c.ratio}:1 at ${c.fontSize}`);
@@ -1126,6 +1133,559 @@ try {
     `animation-name ${heroStill.gs.cursorAnimation}`);
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
   await page.setViewport({ width: 1440, height: 900 });
+
+  /* ============================================================ §3 + §4 ===
+     The insight and the four decisions. Both sections' strings are read off
+     the Content deliverables on disk rather than copied into this file — the
+     §2 pattern, applied to the two sections whose whole argument is that the
+     words are the founder's and the dates are checkable. Everything else is a
+     relationship read off the rendered page: token-derived insets, shared
+     column widths, the peek, the fold. No figure from a spec is asserted as a
+     literal.
+     ======================================================================= */
+
+  /* Fenced blocks, in document order, from one markdown deliverable. */
+  const fencesIn = (lines) => {
+    const out = [];
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim() !== "```") continue;
+      const end = lines.indexOf("```", i + 1);
+      out.push(lines.slice(i + 1, end).join(" ").trim());
+      i = end;
+    }
+    return out;
+  };
+  const copyFile = (name) =>
+    readFileSync(join(ROOT, "knowledge-base", "design-specs", "web", name), "utf8").split("\n");
+
+  const s03Copy = (() => {
+    const lines = copyFile("section-03-copy.md");
+    const slice = (heading) => {
+      const at = lines.findIndex((l) => l.startsWith(heading));
+      const next = lines.findIndex((l, i) => i > at && /^## /.test(l));
+      return fencesIn(lines.slice(at, next === -1 ? lines.length : next))[0];
+    };
+    return { kicker: slice("## 3. The kicker"), para: slice("## 4. The paragraph") };
+  })();
+
+  /* Six strings per decision, in the copy file's own order: title, stamp, and
+     the four row values. Scoped to the `### Decision` blocks so no prose fence
+     elsewhere in the file can drift into the inventory. */
+  const s04Copy = (() => {
+    const lines = copyFile("section-04-copy.md");
+    const heads = lines.map((l, i) => (/^### Decision \d/.test(l) ? i : -1)).filter((i) => i >= 0);
+    return heads.map((at, n) => {
+      const end = n + 1 < heads.length ? heads[n + 1] : lines.findIndex((l, i) => i > at && /^## /.test(l));
+      const [title, stamp, ...rows] = fencesIn(lines.slice(at, end === -1 ? lines.length : end));
+      return { title, stamp, rows: rows.slice(0, 4) };
+    });
+  })();
+  /* The stamps are the independent-arrival argument. The dates are held here
+     as DEC-044 verified them, so a drift in the copy file is caught too — the
+     assertion is against the ruling, not against whatever the file now says. */
+  const STAMP_DATES = ["2026-04-24", "2026-06-13", "2026-04-12", "2026-06-07"];
+  const ROW_LABELS = ["Decision", "Problem", "Trade-off", "Mechanism"];
+
+  const SECTIONS = `(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const css = (el, p, pseudo) => getComputedStyle(el, pseudo || null).getPropertyValue(p).trim();
+    const insight = document.querySelector("#the-insight");
+    /* The section element also holds the shell's chrome — the stencil tag with
+       its §-number and its rust pennant. Every claim below is about what the
+       SECTION says, so the sweeps scope to the section body and let the shell
+       be verified where the shell is verified. */
+    const insightBody = insight.querySelector(".section__body");
+    const kicker = insight.querySelector(".kicker");
+    const sentences = [...insight.querySelectorAll(".kicker__s")];
+    const para = insight.querySelector("p.read");
+    const decisions = document.querySelector("#the-decisions");
+    const decisionsBody = decisions.querySelector(".section__body");
+    const track = decisions.querySelector(".sheets");
+    const sheets = [...decisions.querySelectorAll(".sheet")];
+
+    /* Line boxes of an element's own text. A grid item stretches to its row,
+       so its border box says nothing about how many lines its label sets. */
+    const lineCount = (el) => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      return range.getClientRects().length;
+    };
+
+    const accentRgb = (() => {
+      const p = document.createElement("span");
+      p.style.color = "var(--accent)";
+      document.body.appendChild(p);
+      const v = css(p, "color");
+      p.remove();
+      return v;
+    })();
+    const tokenPx = (name) => {
+      const p = document.createElement("div");
+      p.style.cssText = "position:absolute;visibility:hidden;height:var(" + name + ")";
+      document.body.appendChild(p);
+      const v = r2(p.getBoundingClientRect().height);
+      p.remove();
+      return v;
+    };
+    /* --read-max is a ch value: resolve it in the face that actually reads it. */
+    const readMaxIn = (el) => {
+      const p = document.createElement("div");
+      p.style.cssText = "position:absolute;visibility:hidden;inline-size:var(--read-max)";
+      p.style.font = css(el, "font");
+      el.parentElement.appendChild(p);
+      const v = r2(p.getBoundingClientRect().width);
+      p.remove();
+      return v;
+    };
+
+    /* Natural, unwrapped width of a run — what "it would fit" means. */
+    const naturalWidth = (el) => {
+      const p = document.createElement("span");
+      p.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+      ["font", "letter-spacing", "text-transform"].forEach((k) => p.style.setProperty(k, css(el, k)));
+      p.textContent = el.textContent;
+      document.body.appendChild(p);
+      const v = r2(p.getBoundingClientRect().width);
+      p.remove();
+      return v;
+    };
+
+    const moving = (root) => [...root.querySelectorAll("*")].filter((el) => {
+      const a = css(el, "animation-name");
+      const t = parseFloat(css(el, "transition-duration")) || 0;
+      return (a && a !== "none") || t > 0;
+    }).map((el) => (el.className || el.tagName) + " [" + css(el, "animation-name") + "/" + css(el, "transition-duration") + "]");
+
+    const clipper = (el) => {
+      let n = el.parentElement;
+      while (n && n !== document.body) {
+        const o = getComputedStyle(n);
+        if (o.overflowX !== "visible" || o.overflowY !== "visible") return n;
+        n = n.parentElement;
+      }
+      return null;
+    };
+
+    const trackBox = track.getBoundingClientRect();
+
+    /* Every element in §4 whose own text renders in the accent — the zero-rust
+       ruling, read the way the audit's sweep reads it. */
+    const rustText = [...decisions.querySelectorAll("*")].filter((el) => {
+      const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent.trim()).join("");
+      return own && css(el, "color") === accentRgb;
+    }).map((el) => (el.className || el.tagName) + " '" + el.textContent.trim().slice(0, 24) + "'");
+
+    /* Every accent-painted background the SECTION puts on the page. The shell's
+       stencil-tag pennant is chrome and is asserted with the shell. */
+    const accentBackgrounds = [...decisionsBody.querySelectorAll("*")].flatMap((el) =>
+      ["::before", "::after", null].filter((ps) => css(el, "background-color", ps) === accentRgb)
+        .map((ps) => (el.className || el.tagName) + (ps || " (element)")));
+
+    const marks = sheets.map((sheet) => {
+      const row = sheet.querySelector(".sheet__row--mech");
+      const card = sheet.getBoundingClientRect();
+      const cardInner = card.left + parseFloat(css(sheet, "border-left-width"));
+      const rowBox = row.getBoundingClientRect();
+      const before = getComputedStyle(row, "::before");
+      const left = rowBox.left + parseFloat(before.insetInlineStart || before.left);
+      const width = parseFloat(before.inlineSize || before.width);
+      const label = row.querySelector("dt").getBoundingClientRect();
+      return {
+        inset: r2(left - cardInner),
+        width: r2(width),
+        background: before.backgroundColor,
+        painted: before.color,
+        blockStart: r2(parseFloat(before.insetBlockStart || before.top)),
+        blockEnd: r2(parseFloat(before.insetBlockEnd || before.bottom)),
+        rowContent: r2(rowBox.height - parseFloat(css(row, "padding-top"))),
+        clearance: r2(label.left - (left + width)),
+        onMechRow: row.classList.contains("sheet__row--mech"),
+        isLastRow: row === sheet.querySelector(".sheet__row:last-child")
+      };
+    });
+
+    return {
+      viewport: { w: innerWidth, h: innerHeight,
+                  scrollWidth: document.documentElement.scrollWidth,
+                  clientWidth: document.documentElement.clientWidth },
+      wide: matchMedia("(min-width: 60rem)").matches,
+      reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
+      accentRgb,
+      inkRgb: css(document.body, "color"),
+      hairline: tokenPx("--gap-hairline"),
+
+      /* ---------------------------------------------------------- §3 --- */
+      insightChildren: [...insight.querySelector(".section__body").children].map((el) => el.className),
+      kickerText: kicker.textContent.replace(/\\s+/g, " ").trim(),
+      kickerFont: { family: css(kicker, "font-family"), weight: Number(css(kicker, "font-weight")),
+                    size: css(kicker, "font-size"), colour: css(kicker, "color") },
+      kickerLines: r2(kicker.getBoundingClientRect().height / parseFloat(css(kicker, "line-height"))),
+      kickerColumn: r2(kicker.getBoundingClientRect().width),
+      sentences: sentences.map((s) => ({
+        text: s.textContent.trim(),
+        rects: s.getClientRects().length,
+        natural: naturalWidth(s),
+        display: css(s, "display")
+      })),
+      paraText: para.textContent.replace(/\\s+/g, " ").trim(),
+      paraColour: css(para, "color"),
+      paraCap: r2(parseFloat(css(para, "max-inline-size"))),
+      paraReadMax: readMaxIn(para),
+      paraWidth: r2(para.getBoundingClientRect().width),
+      insightNumerals: (insightBody.textContent.match(/\\d/g) || []).join(""),
+      /* Bold sans at kicker scale is §4's title voice and only §4's. Inline
+         emphasis inside a title is the title speaking, so a run is credited to
+         its heading rather than counted as a second voice. */
+      boldKickerScale: [...new Set([...document.querySelectorAll("main *")].filter((el) => {
+        const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent.trim()).join("");
+        return own && Number(css(el, "font-weight")) >= 700 &&
+          Math.abs(parseFloat(css(el, "font-size")) - parseFloat(css(document.querySelector(".sheet__title"), "font-size"))) < 0.5 &&
+          /system-ui|-apple-system|sans-serif/.test(css(el, "font-family"));
+      }).map((el) => el.closest(".sheet__title") || el))].map((el) => el.className || el.tagName),
+
+      /* ---------------------------------------------------------- §4 --- */
+      sheetCount: sheets.length,
+      titles: sheets.map((s) => s.querySelector(".sheet__title").textContent.replace(/\\s+/g, " ").trim()),
+      titleEmphasis: sheets.map((s) => [...s.querySelectorAll(".sheet__title em")].map((e) => e.textContent.trim())),
+      titleLines: sheets.map((s) => {
+        const t = s.querySelector(".sheet__title");
+        return r2(t.getBoundingClientRect().height / parseFloat(css(t, "line-height")));
+      }),
+      stamps: sheets.map((s) => s.querySelector(".sheet__stamp").textContent.replace(/\\s+/g, " ").trim()),
+      stampIsNextSibling: sheets.map((s) => s.querySelector(".sheet__title").nextElementSibling === s.querySelector(".sheet__stamp")),
+      stampBeforeRows: sheets.map((s) => s.querySelector(".sheet__stamp").compareDocumentPosition(s.querySelector(".sheet__rows")) & Node.DOCUMENT_POSITION_FOLLOWING ? true : false),
+      categories: sheets.map((s) => s.dataset.category),
+      rowLabels: sheets.map((s) => [...s.querySelectorAll(".sheet__row dt")].map((dt) => dt.textContent.trim())),
+      rowValues: sheets.map((s) => [...s.querySelectorAll(".sheet__row dd")].map((dd) => dd.textContent.replace(/\\s+/g, " ").trim())),
+      rowPairs: sheets.map((s) => [...s.querySelectorAll(".sheet__rows > .sheet__row")].map((row) =>
+        row.querySelectorAll("dt").length + "/" + row.querySelectorAll("dd").length).join(" ")),
+      decisionsNumerals: decisionsBody.textContent.replace(/\\s+/g, " ").trim(),
+      stampText: sheets.map((s) => s.querySelector(".sheet__stamp").textContent).join(" "),
+
+      ddCaps: sheets.flatMap((s) => [...s.querySelectorAll("dd")].map((dd) => ({
+        cap: r2(parseFloat(css(dd, "max-inline-size"))),
+        readMax: readMaxIn(dd),
+        rendered: r2(dd.getBoundingClientRect().width),
+        colour: css(dd, "color")
+      }))),
+      labelColumns: sheets.map((s) => [...s.querySelectorAll("dt")].map((dt) => ({
+        w: r2(dt.getBoundingClientRect().width),
+        lines: lineCount(dt),
+        sharesBandWithValue: (() => {
+          const dd = dt.parentElement.querySelector("dd");
+          const a = dt.getBoundingClientRect(), b = dd.getBoundingClientRect();
+          return a.bottom > b.top + 0.5 && b.bottom > a.top + 0.5;
+        })()
+      }))),
+
+      marks,
+      markCount: [...decisions.querySelectorAll(".sheet__row")].filter((row) =>
+        getComputedStyle(row, "::before").content !== "none").length,
+      rustText,
+      accentBackgrounds,
+
+      headings: [...decisions.querySelectorAll("h1,h2,h3,h4,h5,h6")].map((h) => h.tagName),
+      focusable: [...decisions.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+        .map((el) => (el.className || el.tagName) + "[tabindex=" + el.getAttribute("tabindex") + "]"),
+      decisionsMoving: moving(decisions).concat(moving(insight)),
+
+      track: {
+        scrollWidth: track.scrollWidth,
+        clientWidth: track.clientWidth,
+        snapType: css(track, "scroll-snap-type"),
+        overflowX: css(track, "overflow-x"),
+        listStyle: css(track, "list-style-type"),
+        role: track.getAttribute("role"),
+        label: track.getAttribute("aria-label"),
+        tabindex: track.getAttribute("tabindex")
+      },
+      sheetSnap: sheets.map((s) => ({
+        align: css(s, "scroll-snap-align"),
+        nearestScroller: clipper(s) === track ? "the track" : (clipper(s) ? (clipper(s).className || clipper(s).tagName) : "none")
+      })),
+      /* The peek: sheet 2 is on screen and cut by the track's inline end. */
+      peek: (() => {
+        const s2 = sheets[1].getBoundingClientRect();
+        return { visible: r2(Math.min(s2.right, trackBox.right) - Math.max(s2.left, trackBox.left)),
+                 cut: s2.right > trackBox.right + 0.5, intersects: s2.left < trackBox.right - 0.5 };
+      })(),
+      stacked: sheets.every((s, i) => i === 0 ||
+        s.getBoundingClientRect().top >= sheets[i - 1].getBoundingClientRect().bottom - 0.5),
+      sheetTops: sheets.map((s) => r2(s.getBoundingClientRect().top)),
+      sheetOverflow: sheets.map((s) => r2(s.scrollWidth - s.clientWidth))
+    };
+  })()`;
+
+  await page.setViewport({ width: 1280, height: 700 });
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.goto(PAGE_URL);
+  const s34 = await page.eval(SECTIONS);
+  evidence.s34Wide = s34;
+  writeFileSync(join(ARTIFACTS, "blink-dark-s0304-1280.png"), await page.screenshot({ fullPage: true }));
+
+  /* --- §3: the strings, verbatim from the deliverable --- */
+  check("§3 ships the founder-confirmed kicker and the 90-word paragraph, verbatim",
+    Boolean(s03Copy.kicker) && Boolean(s03Copy.para) &&
+      s34.kickerText === s03Copy.kicker && s34.paraText === s03Copy.para &&
+      s34.insightChildren.length === 2,
+    `kicker ${JSON.stringify(s34.kickerText)} · paragraph ${s34.paraText.length} chars, equal: ${s34.paraText === s03Copy.para} · ${s34.insightChildren.length} elements in the section body`);
+  check("§3 prose is full ink at the seed-locked 64ch column",
+    s34.paraColour === s34.inkRgb && Math.abs(s34.paraCap - s34.paraReadMax) < 0.5 &&
+      s34.paraWidth <= s34.paraCap + 0.5,
+    `cap ${s34.paraCap}px against --read-max ${s34.paraReadMax}px, rendered ${s34.paraWidth}px, colour ${s34.paraColour}`);
+  check("§3 carries no numerals — no scope can be mixed where no figure appears",
+    s34.insightNumerals === "", s34.insightNumerals || "none");
+  check("bold sans at kicker scale is §4's title voice and only §4's",
+    s34.boldKickerScale.length === 4 && s34.boldKickerScale.every((c) => /sheet__title/.test(c)) &&
+      s34.kickerFont.weight < 700 && /system-ui/.test(s34.kickerFont.family),
+    `${JSON.stringify(s34.boldKickerScale)} · §3 kicker ${s34.kickerFont.size} weight ${s34.kickerFont.weight}`);
+
+  /* --- §4: inventory, order and the strings --- */
+  check("§4 ships exactly the four decisions, in DEC-044's order, verbatim",
+    s04Copy.length === 4 && s34.sheetCount === 4 &&
+      s34.titles.every((t, i) => t === s04Copy[i].title) &&
+      s34.rowValues.every((rows, i) => rows.length === 4 && rows.every((v, j) => v === s04Copy[i].rows[j])),
+    `${s34.sheetCount} sheets · titles ${s34.titles.every((t, i) => t === s04Copy[i].title)} · 16/16 row values ${s34.rowValues.flat().length}`);
+  check("§4 titles keep the seed's inline emphasis inside the heading",
+    s34.titleEmphasis[0].join("") === "reads" && s34.titleEmphasis.slice(1).every((e) => e.length === 0) &&
+      /reads/.test(s34.titles[0]),
+    `sheet 1 emphasises ${JSON.stringify(s34.titleEmphasis[0])}, the other three carry none`);
+  check("§4 rows are Decision / Problem / Trade-off / Mechanism, four pairs per sheet",
+    s34.rowLabels.every((labels) => labels.join("|") === ROW_LABELS.join("|")) &&
+      s34.rowPairs.every((p) => p === "1/1 1/1 1/1 1/1"),
+    s34.rowLabels.map((labels, i) => `sheet ${i + 1}: ${labels.join("/")} (${s34.rowPairs[i]})`).join(" · "));
+  check("§4 stamps carry DEC-044's verified dates, byte-exact, and are §4's only numerals",
+    s34.stamps.every((s, i) => s === s04Copy[i].stamp) &&
+      STAMP_DATES.every((d, i) => s34.stamps[i].includes(d)) &&
+      (s34.decisionsNumerals.match(/\d/g) || []).join("") === (s34.stampText.match(/\d/g) || []).join("") &&
+      s34.categories.every((c) => c === "framework"),
+    `${s34.stamps.join(" · ")}`);
+  check("§4 announces title → stamp → rows",
+    s34.stampIsNextSibling.every(Boolean) && s34.stampBeforeRows.every(Boolean),
+    `stamp is the h3's next sibling on ${s34.stampIsNextSibling.filter(Boolean).length}/4 sheets, before the rows on ${s34.stampBeforeRows.filter(Boolean).length}/4`);
+
+  /* --- §4: the emphasis system — rust as a mark, never as text --- */
+  check("§4 sets zero rust text; the accent appears only as the four mechanism marks",
+    s34.rustText.length === 0 && s34.accentBackgrounds.length === 4 &&
+      s34.accentBackgrounds.every((b) => /sheet__row--mech::before/.test(b)),
+    `${s34.rustText.join(" | ") || "no rust text"} · accent backgrounds ${JSON.stringify(s34.accentBackgrounds)}`);
+  check("§4 mechanism mark: 2px, token-seated at --gap-hairline from its own card, spanning the row",
+    s34.markCount === 4 && s34.marks.every((m) =>
+      m.width === 2 && m.background === s34.accentRgb && Math.abs(m.inset - s34.hairline) < 0.5 &&
+      Math.abs(m.blockStart - s34.hairline) < 0.5 && m.blockEnd === 0 &&
+      m.clearance > 0 && m.onMechRow && m.isLastRow),
+    `${s34.markCount} marks · insets ${s34.marks.map((m) => m.inset).join("/")} against --gap-hairline ${s34.hairline} · clearance ${s34.marks.map((m) => m.clearance).join("/")}px`);
+  check("§4 mechanism label carries the fact in ink at AA, weight beside the mark",
+    s34.labelColumns.every((sheet) => sheet.length === 4),
+    `${s34.labelColumns.length} sheets × ${s34.labelColumns[0].length} labels`);
+
+  /* --- §4: the reading measure and the label column --- */
+  check("§4 every row value carries the 64ch cap and renders inside it",
+    s34.ddCaps.length === 16 && s34.ddCaps.every((d) => Math.abs(d.cap - d.readMax) < 0.5 &&
+      d.rendered <= d.cap + 0.5 && d.colour === s34.inkRgb),
+    `16 values capped at ${s34.ddCaps[0].cap}px (--read-max ${s34.ddCaps[0].readMax}px), widest rendered ${Math.max(...s34.ddCaps.map((d) => d.rendered))}px`);
+  check("§4 label column at desktop: one shared width, every label on one line",
+    s34.wide && s34.labelColumns.every((sheet) => new Set(sheet.map((d) => d.w)).size === 1 &&
+      sheet.every((d) => d.lines === 1)),
+    `widths ${s34.labelColumns.map((s) => s[0].w).join("/")}px, line boxes ${s34.labelColumns.flat().map((d) => d.lines).join("")}`);
+
+  /* --- §4: the track, the peek, and the one-screen ruling --- */
+  check("§4 rides a horizontal paged track that snaps to itself, never to the document",
+    s34.track.scrollWidth > s34.track.clientWidth && s34.track.snapType === "x" &&
+      s34.sheetSnap.every((s) => s.align === "start" && s.nearestScroller === "the track") &&
+      s34.track.overflowX === "auto",
+    `track ${s34.track.scrollWidth}/${s34.track.clientWidth}, snap ${JSON.stringify(s34.track.snapType)}, sheets snap to ${s34.sheetSnap[0].nearestScroller}`);
+  check("§4 the peek: sheet 2 is on screen and cut by the track's edge",
+    s34.peek.intersects && s34.peek.cut && s34.peek.visible > 0,
+    `${s34.peek.visible}px of sheet 2 visible, cut at the track's inline end: ${s34.peek.cut}`);
+  check("§4 is the section's one named tab stop, and nothing inside a sheet is interactive",
+    s34.focusable.length === 1 && /sheets/.test(s34.focusable[0]) &&
+      s34.track.role === "list" && s34.track.label === "The four decisions",
+    `${JSON.stringify(s34.focusable)} · role ${s34.track.role}, name ${JSON.stringify(s34.track.label)}`);
+  check("§3 and §4 are fully static — nothing animates or transitions",
+    s34.decisionsMoving.length === 0, s34.decisionsMoving.join(" | ") || "no animation, no transition");
+  check("§4 heading tree: one h2, exactly four h3, nothing deeper",
+    s34.headings.join(",") === "H2,H3,H3,H3,H3", s34.headings.join(","));
+
+  /* --- §4: announced structure, read from the AX tree rather than asserted --- */
+  const axTree4 = await page.call("Accessibility.getFullAXTree");
+  const ax4 = axTree4.nodes || [];
+  const ax4ById = new Map(ax4.map((n) => [n.nodeId, n]));
+  const ax4Name = (n) => (n?.name?.value || "").replace(/\s+/g, " ").trim();
+  const ax4Role = (n) => n?.role?.value || "";
+  const axList = ax4.find((n) => ax4Role(n) === "list" && ax4Name(n) === "The four decisions");
+  const axItems = axList ? (axList.childIds || []).map((id) => ax4ById.get(id)).filter((n) => ax4Role(n) === "listitem") : [];
+  const axTitles = ax4.filter((n) => ax4Role(n) === "heading" &&
+    (n.properties || []).some((p) => p.name === "level" && Number(p.value?.value) === 3)).map(ax4Name);
+  evidence.s04Ax = { list: Boolean(axList), items: axItems.length, headings: axTitles };
+  const words4 = (s) => s.toLowerCase().replace(/\s+/g, " ").trim();
+  check("§4 announces a four-item list named The four decisions, with the titles as its headings",
+    Boolean(axList) && axItems.length === 4 && axTitles.length === 4 &&
+      axTitles.every((t, i) => words4(t) === words4(s04Copy[i].title)),
+    `list ${Boolean(axList)} with ${axItems.length} items · h3 names ${JSON.stringify(axTitles)}`);
+
+  /* --- §4: one desktop screen. Read off the live elements and the resolved
+     --gap-section, never off the spec's figures, so the check follows any
+     padding or copy change rather than pinning today's number. --- */
+  const oneScreen = await page.eval(`(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const section = document.querySelector("#the-decisions");
+    const bar = document.querySelector(".statusbar").getBoundingClientRect().height;
+    /* Rest position: the section's own start, under the sticky bar — where
+       proximity snap will put it once the page's y snap lands. */
+    window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY - bar);
+    const track = document.querySelector(".sheets").getBoundingClientRect();
+    return { bar: r2(bar), trackBottom: r2(track.bottom), trackTop: r2(track.top),
+             viewport: innerHeight,
+             gapSection: getComputedStyle(document.querySelector("#the-decisions .section__body")).marginTop };
+  })()`);
+  evidence.s04OneScreen = oneScreen;
+  check("§4 fits one desktop screen at 1280 × 700, snapped under the sticky bar",
+    oneScreen.trackBottom <= oneScreen.viewport + 0.5 && oneScreen.trackTop >= oneScreen.bar - 0.5,
+    `track ${oneScreen.trackTop}→${oneScreen.trackBottom} in a ${oneScreen.viewport}px viewport under a ${oneScreen.bar}px bar (--gap-section ${oneScreen.gapSection})`);
+
+  /* --- §4: every sheet reachable by keyboard, with real key events. The
+     programmatic form lies about snapping, so the arrow keys are dispatched
+     through the browser's own input path. --- */
+  await page.goto(PAGE_URL);
+  const beforeArrows = await page.eval(`(() => {
+    const track = document.querySelector(".sheets");
+    track.scrollLeft = 0;
+    track.focus();
+    return { left: track.scrollLeft, focused: document.activeElement.className };
+  })()`);
+  /* Arrow keys page the track a fixed step at a time, so "reachable" is a walk
+     to the end rather than one press: the loop runs until sheet 4's inline end
+     is inside the track's box, or gives up — a track that traps fails on the
+     give-up, not on an arbitrary press count. */
+  const arrowWalk = { presses: 0, positions: [] };
+  for (let i = 0; i < 80; i++) {
+    for (const type of ["rawKeyDown", "keyUp"]) {
+      await page.call("Input.dispatchKeyEvent", { type, windowsVirtualKeyCode: 39, code: "ArrowRight", key: "ArrowRight" });
+    }
+    arrowWalk.presses++;
+    if (i % 8 === 7 || i > 60) {
+      const at = await page.eval(`(() => {
+        const track = document.querySelector(".sheets");
+        const last = document.querySelectorAll(".sheet")[3].getBoundingClientRect();
+        return { left: Math.round(track.scrollLeft), reached: last.right <= track.getBoundingClientRect().right + 0.5 };
+      })()`);
+      arrowWalk.positions.push(at.left);
+      if (at.reached) break;
+    }
+  }
+  await page.eval("new Promise(r => setTimeout(r, 400))");
+  const afterArrows = await page.eval(`(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const track = document.querySelector(".sheets");
+    const box = track.getBoundingClientRect();
+    const last = document.querySelectorAll(".sheet")[3].getBoundingClientRect();
+    return { left: r2(track.scrollLeft), lastRight: r2(last.right), trackRight: r2(box.right),
+             reached: last.right <= box.right + 0.5,
+             focused: document.activeElement.className };
+  })()`);
+  afterArrows.presses = arrowWalk.presses;
+
+  /* The mechanical stand-in for find-in-page reaching off-canvas content: the
+     engine's own scroll-into-view, measured after the snap has settled. Run
+     from the track's start, which is where a reader searching the page is. */
+  const REVEAL = `(async () => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const track = document.querySelector(".sheets");
+    track.scrollLeft = 0;
+    await new Promise((r) => setTimeout(r, 200));
+    const sheet3 = document.querySelectorAll(".sheet")[2];
+    const dd = [...sheet3.querySelectorAll("dd")].pop();
+    dd.scrollIntoView();
+    const aimed = r2(track.scrollLeft);
+    await new Promise((r) => setTimeout(r, 600));
+    const t = track.getBoundingClientRect();
+    const b = dd.getBoundingClientRect();
+    const s = sheet3.getBoundingClientRect();
+    return {
+      aimed, settled: r2(track.scrollLeft), snap: getComputedStyle(track).scrollSnapType,
+      moved: track.scrollLeft > 0,
+      whole: b.left >= t.left - 0.5 && b.right <= t.right + 0.5,
+      share: r2(Math.max(0, Math.min(b.right, t.right) - Math.max(b.left, t.left)) / b.width),
+      sheetShare: r2(Math.max(0, Math.min(s.right, t.right) - Math.max(s.left, t.left)) / s.width),
+      box: r2(b.left) + "→" + r2(b.right), track: r2(t.left) + "→" + r2(t.right)
+    };
+  })()`;
+  const revealSnapped = await page.eval(REVEAL);
+  evidence.s04RevealSnapped = revealSnapped;
+  evidence.s04Keyboard = { before: beforeArrows, after: afterArrows };
+  check("§4 every sheet is reachable with real arrow keys — the track neither traps nor clips",
+    beforeArrows.focused.includes("sheets") && afterArrows.left > beforeArrows.left && afterArrows.reached,
+    `scrollLeft ${beforeArrows.left} → ${afterArrows.left} over ${afterArrows.presses} presses, sheet 4's inline end ${afterArrows.lastRight} inside the track's ${afterArrows.trackRight}`);
+  /* Off-canvas content is reachable programmatically too — but with proximity
+     snap ON the engine re-aligns the reveal to a sheet start, so a match in
+     sheet 3 lands part-visible rather than whole. Asserted here as the
+     no-trap relationship it is, and MEASURED as the share that lands, because
+     the whole-visible form of this only holds on the snap-off path (below).
+     The shortfall is a real cost of the paged track and is named in the
+     handoff rather than papered over. */
+  check("§4 a match in an off-canvas sheet is scrolled toward, never left behind",
+    revealSnapped.moved && revealSnapped.share > 0 && revealSnapped.sheetShare > 0,
+    `snap ${revealSnapped.snap}: scrollIntoView aimed at ${revealSnapped.aimed} and the snap settled it at ${revealSnapped.settled} — ${Math.round(revealSnapped.share * 100)}% of the value and ${Math.round(revealSnapped.sheetShare * 100)}% of its sheet on screen (${revealSnapped.box} in ${revealSnapped.track}); whole-visible is asserted on the snap-off path`);
+
+  /* --- §4: reduced motion turns the track's snap off; the section stays
+     static and complete either way. --- */
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+  await page.goto(PAGE_URL);
+  const s34Still = await page.eval(SECTIONS);
+  evidence.s34Reduced = s34Still;
+  check("§4 under reduced motion: snap off, content identical, nothing moving",
+    s34Still.reducedMotion && s34Still.track.snapType === "none" &&
+      s34Still.decisionsMoving.length === 0 &&
+      s34Still.titles.join("|") === s34.titles.join("|") &&
+      s34Still.rowValues.flat().join("|") === s34.rowValues.flat().join("|") &&
+      s34Still.kickerText === s34.kickerText && s34Still.paraText === s34.paraText,
+    `snap ${JSON.stringify(s34Still.track.snapType)} · ${s34Still.decisionsMoving.join(" | ") || "nothing moving"} · content identical`);
+  const revealPlain = await page.eval(REVEAL);
+  evidence.s04RevealPlain = revealPlain;
+  check("§4 with the track's snap off, an off-canvas match lands whole in view",
+    revealPlain.snap === "none" && revealPlain.whole && revealPlain.share === 1,
+    `settled at ${revealPlain.settled} — sheet 3's last value ${revealPlain.box} inside the track's ${revealPlain.track}`);
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+
+  /* --- §3 + §4 across the phone widths: the kicker's wrap rule, the un-track,
+     and no sideways gesture anywhere. --- */
+  const s34Narrow = {};
+  for (const width of [320, 360, 375, 390]) {
+    await page.setViewport({ width, height: 553, deviceScaleFactor: 1, mobile: true });
+    await page.goto(PAGE_URL);
+    s34Narrow[width] = await page.eval(SECTIONS);
+    if (width === 375) writeFileSync(join(ARTIFACTS, "blink-dark-s0304-375.png"), await page.screenshot({ fullPage: true }));
+  }
+  evidence.s34Narrow = s34Narrow;
+  const narrowEntries = Object.entries(s34Narrow);
+  const allWidths = [...narrowEntries, ["1280", s34]];
+
+  /* The rule, not the line count: a sentence breaks only where it cannot fit
+     the column. Strip the inline-block and the break lands mid-sentence at
+     375px, where both sentences fit individually and neither fits with the
+     other — which is exactly what this fails on. */
+  const wrapOK = ([, m]) => m.sentences.every((s) =>
+    s.display === "inline-block" &&
+    (s.rects === 1 || s.natural > m.kickerColumn + 0.5));
+  check("§3 kicker breaks only at a sentence boundary, at every measured width",
+    allWidths.every(wrapOK) && allWidths.every(([, m]) => m.viewport.scrollWidth <= m.viewport.clientWidth),
+    allWidths.map(([w, m]) => `${w}px: ${m.kickerLines}L, sentences ${m.sentences.map((s) => s.rects + (s.natural > m.kickerColumn ? "*" : "")).join("/")} rect(s) in a ${m.kickerColumn}px column`).join(" · "));
+  check("§4 un-tracks below --bp-wide: sheets stack, nothing scrolls sideways",
+    narrowEntries.every(([, m]) => !m.wide && m.track.scrollWidth === m.track.clientWidth &&
+      m.stacked && m.sheetOverflow.every((o) => o <= 0) &&
+      m.viewport.scrollWidth <= m.viewport.clientWidth),
+    narrowEntries.map(([w, m]) => `${w}px: track ${m.track.scrollWidth}/${m.track.clientWidth}, stacked ${m.stacked}, doc ${m.viewport.scrollWidth}/${m.viewport.clientWidth}`).join(" · "));
+  check("§4 label column disappears rather than compresses below --bp-wide",
+    narrowEntries.every(([, m]) => m.labelColumns.every((sheet) => sheet.every((d) => !d.sharesBandWithValue))),
+    narrowEntries.map(([w, m]) => `${w}px: ${m.labelColumns.flat().filter((d) => d.sharesBandWithValue).length} label(s) beside their value`).join(" · "));
+  check("§4 mechanism mark keeps its 12px card seat at every phone width",
+    narrowEntries.every(([, m]) => m.marks.every((k) => Math.abs(k.inset - m.hairline) < 0.5 && k.width === 2 && k.clearance > 0)),
+    narrowEntries.map(([w, m]) => `${w}px: insets ${m.marks.map((k) => k.inset).join("/")} against ${m.hairline}`).join(" · "));
+
+  await page.setViewport({ width: 1440, height: 900 });
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.goto(PAGE_URL);
 
   /* ================================================================ §2 ===
      The two-layer replay. Fidelity first: every rendered log character is

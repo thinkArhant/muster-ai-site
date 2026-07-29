@@ -231,13 +231,21 @@
       <span class="rule__line rule__line--grow" aria-hidden="true"></span>
     </div>
     <div class="container section__body">
-      <!-- SHELL PLACEHOLDER — removed when §3 lands. -->
-      <div class="instrument slot" data-shell-placeholder>
-        <span class="regmark regmark--tl" aria-hidden="true">+</span>
-        <span class="regmark regmark--br" aria-hidden="true">+</span>
-        <p class="t-body read">Kicker and one paragraph ship with their own spec. This card is shell
-          scaffolding and is removed when the section lands.</p>
-      </div>
+
+      <!-- Each sentence is its own inline-block span, so a line break lands at
+           a sentence boundary wherever the viewport allows and a sentence too
+           wide for the column wraps inside itself rather than overflowing —
+           the headline's phrase-unit mechanism at kicker scale. The spans are
+           style-only: the punctuation already separates the sentences, so the
+           announced string is unchanged. The kicker is a statement, not a
+           heading; §3's heading is the stencil tag above it. -->
+      <p class="t-kicker kicker"><span class="kicker__s">The product grows.</span> <span class="kicker__s">The briefing doesn't.</span></p>
+
+      <!-- The page's largest single body of reading prose, at the full 64ch
+           column. §3 carries no numerals by design: the argument here is
+           mechanism, and the numbers stay where their scope labels live. -->
+      <p class="t-body read insight__para">Muster puts eight AI roles under one human operator, coordinating through markdown files and a queue. Used bare, Claude Code makes you the memory: every session starts with re-explaining, and the re-explaining grows with the product. Muster moves that job into the system. Decisions land in a knowledge base; each session reads a curated slice — a small always-on tier, the rest on demand, most never — context engineering, per role. The product grows; what a session reads stays bounded. Mechanics run as scripts, judgment in prose — it holds on cheap models.</p>
+
     </div>
   </section>
 
@@ -252,13 +260,66 @@
       <span class="rule__line rule__line--grow" aria-hidden="true"></span>
     </div>
     <div class="container section__body">
-      <!-- SHELL PLACEHOLDER — removed when §4 lands. -->
-      <div class="instrument slot" data-shell-placeholder>
-        <span class="regmark regmark--tl" aria-hidden="true">+</span>
-        <span class="regmark regmark--br" aria-hidden="true">+</span>
-        <p class="t-body read">Four spec-sheets ship with their own spec. This card is shell scaffolding
-          and is removed when the section lands.</p>
-      </div>
+
+      <!-- An <ol> because the order is meaningful — strongest first, and never
+           reordered. `list-style: none` strips list semantics in WebKit
+           VoiceOver, hence the explicit role. At desktop the list is the paged
+           track: it is the section's one tab stop, so a keyboard reader can
+           scroll sheets 2–4 into view. Below --bp-wide it un-tracks and the
+           sheets stack; the attribute stays, costing one named, skippable stop
+           on a list that no longer scrolls.
+
+           Sheets carry no registration marks: those are instrument grammar,
+           and these are documents. Founder testimony must not dress as
+           telemetry. -->
+      <ol class="sheets" role="list" tabindex="0" aria-label="The four decisions">
+
+        <li class="sheet" data-category="framework">
+          <h3 class="sheet__title">I optimized what each agent <em>reads</em>, not how they talk.</h3>
+          <span class="sheet__stamp t-micro">framework — 2026-04-24</span>
+          <dl class="sheet__rows">
+            <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Each agent gets a curated brief: what its task needs, nothing more.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>What breaks isn't the talking — it's each agent reading too much.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>Agents never talk directly — every question between roles costs a file and a session.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Three reading tiers; the PM routes context.</dd></div>
+          </dl>
+        </li>
+
+        <li class="sheet" data-category="framework">
+          <h3 class="sheet__title">Any rule a script can check, a script enforces.</h3>
+          <span class="sheet__stamp t-micro">framework — 2026-06-13</span>
+          <dl class="sheet__rows">
+            <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Mechanics live in scripts; judgment stays in prose.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>AI follows written instructions unevenly — one model skipped a required step.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>Hard floors can't flex: a legitimate exception still trips the gate.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Automated gates hold the floors, so premium models buy judgment, not correctness.</dd></div>
+          </dl>
+        </li>
+
+        <li class="sheet" data-category="framework">
+          <h3 class="sheet__title">I capped every file the agents read — before almost anything else.</h3>
+          <span class="sheet__stamp t-micro">framework — 2026-04-12, first commit</span>
+          <dl class="sheet__rows">
+            <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Every file the agents read has a hard size cap.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>Shared files grow quietly; eventually agents mostly reread their own history.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>Agents lose sight of anything older than the current sprint.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Size caps plus archive rules, and a build gate that fails on growth.</dd></div>
+          </dl>
+        </li>
+
+        <li class="sheet" data-category="framework">
+          <h3 class="sheet__title">The system treats my attention as the scarcest resource.</h3>
+          <span class="sheet__stamp t-micro">framework — 2026-06-07</span>
+          <dl class="sheet__rows">
+            <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Runs halt at planned gates — never interrupt, never guess.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>Unattended agents guess wrong or stall — and pinging me constantly doesn't scale.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>No steering mid-run — every ambiguity is paid up front, at planning.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Gates carry only the judgment calls; work resumes on a written verdict.</dd></div>
+          </dl>
+        </li>
+
+      </ol>
+
     </div>
   </section>
 

@@ -64,45 +64,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Developer (web): §3 and §4
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Build §3 and §4. §4's spec-sheet **treatment** (structure, rows, the no-rust-text emphasis
-system) was approved at Gate A; its **copy** was re-selected (DEC-044) and its **layout** re-ruled
-(DEC-043: four sheets, one screen) — build the approved treatment with the new copy in the layout
-HO-032 ruled.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/section-04-decisions.md` **as amended by HO-032**,
-  `section-03-copy.md` and `section-04-copy.md` **as revised by HO-031**
-- `knowledge-base/design-specs/web/page-shell.md` — carries the §3 kicker wrap rule after HO-032
-- `samples/gate-a.html` — reference for the approved sheet *treatment* only; its decision-1 copy is
-  superseded by DEC-044
-
-**Deliverable:** `index.html` (§3 and §4), `styles/` as needed; HO-027.
-
-**Acceptance criteria:**
-- §4's four sheets carry DEC-044's decisions in DEC-044's order, in the treatment approved at
-  Gate A — divergence from the treatment or from HO-032's one-screen layout is a defect
-- Decision / Problem / Trade-off / Mechanism rows all present; all four stamps carry dates (the
-  no-date case no longer exists — DEC-044)
-- §3: the kicker wraps only at the sentence boundary per the page-shell rule, **asserted**; the
-  paragraph byte-identical to the closed 90/90 string; prose at `64ch` (DEC-023)
-- Both themes; contrast verified; cross-engine; `scripts/test.sh` green and the audit **completes**
-  (zero, or named-red within its timeout — never a hang; DEC-042)
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-027 in `agent-requests.md` — under this exact ID; higher IDs in the
-ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Developer (web): §5
 
 ```
@@ -136,6 +97,9 @@ counting cells.
 **On completion:** File HO-028 in `agent-requests.md` — under this exact ID; higher IDs in the
 ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): Scroll-snap
 
@@ -335,6 +299,19 @@ with no verification behind it is how that happened.
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 
+- 2026-07-29 — Step: Developer §3 and §4 (HO-027). §3 reads as one passage — kicker and paragraph
+  byte-equal to the copy file, zero numerals, the 64ch column measured — and its sentence-boundary
+  wrap is asserted as a rule rather than a line count. §4 ships DEC-044's four decisions verbatim
+  in order on the Gate A treatment, in HO-032's paged track: all four sheets equalised at 473.33px,
+  the 360.0px peek reproduced, the mechanism mark 2px at a token-read 12.00px seat with zero rust
+  text, and the track's bottom edge inside a 700px screen under the sticky bar. Contrast measured
+  in both themes at the spec's own figures (13.23/13.64 ink, 5.16/5.76 muted). `scripts/test.sh`
+  GREEN both engines (**230/230 + 21/21**); the audit exits zero, 107/107, twice. Six assertions
+  planted and watched go red. **Awaiting PM review at the build-review step; OBS-009 asks PM to
+  rule one clause of `section-04-decisions.md` §12.16 — with the track's proximity snap on, a
+  `scrollIntoView()` on off-canvas content lands the match part-visible, and no declaration in the
+  section's ruling overrides that.**
+
 - 2026-07-28 — Step: Developer §1 and §6 (HO-026). The sparse hero, the command and the proof link
   ship: the headline's computed name read from the AX tree (`SHIP A PRODUCT WITH AN AI TEAM.`, the
   struck phrase absent), the formation announcing hub `PM` → seven specialists with the bus width
@@ -431,9 +408,4 @@ with no verification behind it is how that happened.
   REQ-007 asks PM to rule the WebKit method — `qlmanage` cannot scroll, so two downstream steps'
   cross-engine criteria are unsatisfiable as written.**
 
-- 2026-07-26 — Step: UI/UX §4 spec-sheet rendering (HO-021). Buildable from itself with rendered
-  measurements: value column is the reading column (64ch prose, 903.31px card), zero rust text with
-  the 12px-inset mechanism mark as the accent idiom's third seat, the stamp a single text slot that
-  absorbs the no-date case with nothing invented, founder voice in sans against mono chrome (DEC-039).
-  12 assertions, no harness re-base forced. **Awaiting PM review at the Wave 1 review step.**
 

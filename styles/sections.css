@@ -1,12 +1,15 @@
 /* ==========================================================================
-   SECTIONS — §1 the sparse hero, §6 get started.
+   SECTIONS — §1 the sparse hero, §3 the insight, §4 the decisions,
+   §6 get started.
 
    Spacing is one-sided here as everywhere: every gap is a margin-block-start
    on the following element. A margin-bottom in this codebase is a defect.
 
-   Nothing in this file animates. §1 holds no seat in the page's motion
-   inventory (two live elements — the OPERATIONAL pulse and §5's count-up —
-   plus §6's curl cursor, which is styled in motifs.css and gated there).
+   Nothing in this file animates. §1, §3 and §4 hold no seat in the page's
+   motion inventory (two live elements — the OPERATIONAL pulse and §5's
+   count-up — plus §6's curl cursor, which is styled in motifs.css and gated
+   there). §4's snap settle is the user agent finishing the reader's own
+   gesture, not an element animation, and it is off under reduced motion.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -339,6 +342,161 @@
 
 .curl .cursor {
   margin-inline-start: 0.5ch;
+}
+
+/* --------------------------------------------------------------------------
+   §3 — the insight. A kicker and one paragraph, nothing else.
+
+   The kicker is sans at kicker scale in the reading weight. Bold sans at this
+   scale is §4's title voice and only §4's — one bold face at one size is what
+   makes the four decision titles recognizable as a person speaking.
+   -------------------------------------------------------------------------- */
+
+/* Wrap-preferred, not unbreakable: a sentence that fits the column stays
+   whole, a sentence wider than the column wraps inside itself rather than
+   overflowing. Without this the break lands mid-sentence. */
+.kicker__s {
+  display: inline-block;
+}
+
+.insight__para {
+  margin-block-start: var(--gap-flow);
+}
+
+/* --------------------------------------------------------------------------
+   §4 — the decisions. Four spec-sheets: title, stamp, four labelled rows.
+
+   Phone first — the sheets stack, each roughly a screen. At --bp-wide the
+   list becomes a horizontal paged track so four ideas share one desktop
+   screen, with the next sheet visibly cut at the container edge: the peek is
+   the paging affordance, and there is no other machinery.
+   -------------------------------------------------------------------------- */
+
+.sheets {
+  /* Sheet-scoped, not global. --sheet-pad is load-bearing on the track: at
+     --gap-block the track measures ~48px taller and its bottom crosses the
+     desktop fold, so the value is part of the one-screen budget. */
+  --sheet-pad: var(--gap-flow);
+  --sheet-label-col: 6rem;
+  --sheet-w: 40rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sheet {
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: var(--sheet-pad);
+}
+
+.sheet + .sheet {
+  margin-block-start: var(--gap-major);
+}
+
+/* The founder's voice renders in the reading face; the machine grammar around
+   it stays mono and tracked. That contrast IS "a person wrote this, the
+   instrument recorded it". */
+.sheet__title {
+  font-family: var(--font-sans);
+  font-size: var(--text-kicker);
+  line-height: var(--lead-kicker);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sheet__stamp {
+  display: block;
+  margin-block-start: var(--gap-hairline);
+}
+
+.sheet__rows {
+  margin-block-start: var(--gap-flow);
+}
+
+/* Single column below --bp-wide: the label column disappears rather than
+   compresses. A 96px column at 320px would leave ~21ch of prose beside it. */
+.sheet__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sheet__row dd {
+  margin-block-start: calc(var(--rhythm) / 4);
+  max-inline-size: var(--read-max);
+}
+
+.sheet__row + .sheet__row {
+  margin-block-start: var(--gap-hairline);
+  border-block-start: 1px solid var(--hair);
+  padding-block-start: var(--gap-hairline);
+}
+
+/* The mechanism emphasis: rust as a graphical mark only. --ink on --accent
+   fails every body floor, so the fact is carried in ink at AA (weight, and
+   the last-row position) and the accent is the flag beside it. The mark is
+   painted with background-color and never with color — the small-rust-text
+   sweep is keyed on computed colour, and a mark painted with colour would
+   join that set and fail. */
+.sheet__row--mech {
+  position: relative;
+}
+
+.sheet__row--mech::before {
+  content: "";
+  position: absolute;
+  /* Token-derived, so a padding change moves the mark's room, not its 12px
+     seat from the card's inner edge — the accent-mark idiom's third seat. */
+  inset-inline-start: calc(var(--gap-hairline) - var(--sheet-pad));
+  inline-size: 2px;
+  inset-block: var(--gap-hairline) 0;
+  background-color: var(--accent);
+}
+
+.sheet__row--mech dt {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+@media (min-width: 60rem) {
+  .sheets {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--sheet-w);
+    gap: var(--gap-flow);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+  }
+
+  .sheet {
+    scroll-snap-align: start;
+  }
+
+  .sheet + .sheet {
+    margin-block-start: 0;
+  }
+
+  .sheet__row {
+    grid-template-columns: var(--sheet-label-col) minmax(0, var(--read-max));
+    column-gap: var(--gap-flow);
+  }
+
+  /* Optically aligns the mono cap-height with the sans ascender across the
+     column gap. */
+  .sheet__row dt {
+    padding-block-start: 0.15rem;
+  }
+
+  .sheet__row dd {
+    margin-block-start: 0;
+  }
+}
+
+/* Snapping is off with the page's own — same profile: a post-gesture user-agent
+   glide. Paging by plain scroll is unaffected. */
+@media (min-width: 60rem) and (prefers-reduced-motion: reduce) {
+  .sheets {
+    scroll-snap-type: none;
+  }
 }
 
 /* --------------------------------------------------------------------------

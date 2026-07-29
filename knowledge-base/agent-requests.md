@@ -10,6 +10,133 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-29 HO-027 — §3 and §4 built: the insight reads, and four decisions share one screen
+**Type:** handoff
+**Producer:** Developer
+**Deliverable:** `index.html` (§3, §4), `styles/sections.css`, `tests/verify-shell.mjs`,
+`tests/verify-webkit.mjs`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+- [ ] QA — consumes the built sections at the full-page sweep (not a review gate)
+
+**What shipped**
+
+- **Every string is read off the Content deliverables at test time and compared byte for byte** —
+  §3's kicker and paragraph, and all 24 of §4's (four titles, four stamps, sixteen row values), in
+  the copy files' own order. A retyped em dash or a smart quote shows as a diff against the
+  deliverable instead of passing as prose. The four stamp dates are additionally held against
+  DEC-044's own values, so a drift in the copy file is caught rather than blessed.
+- **§3 is the kicker and one paragraph, nothing else.** Section body carries **zero numerals**,
+  asserted; prose capped and rendered at 685.31px against the 64ch token.
+- **The kicker's wrap rule is asserted as a rule, not a line count**: each sentence is an
+  `inline-block` span, and a sentence may break internally only where its natural width exceeds
+  the column. One line at desktop, a sentence-boundary break at 320/360/375/390, one client rect
+  per sentence at all five widths, no document overflow.
+- **§3's kicker is deliberately not §4's voice.** The shell's type table sets `--text-kicker` in
+  sans and `section-04-decisions.md` §4 makes the sheet titles "the only bold sans-at-kicker-scale
+  text on the page" — asserted: a sweep of `main` for bold sans at the title's size returns exactly
+  the four `.sheet__title`s, and §3's kicker computes weight 400. `samples/s03-insight.html`
+  renders its kicker in a locally-redefined mono bold; that record settled copy, and its class
+  definitions are not the shell's.
+- **§4's emphasis system: rust as a mark, zero rust text.** No element in `#the-decisions` resolves
+  `color` to the accent; the accent appears in the section body only as the four marks'
+  `background-color`. Each is 2px wide, seated 12.00px from its own card's inner edge — read from
+  the resolved `--gap-hairline`, never a literal — spanning the row's content block with 10px of
+  clearance. Same figures at all four phone widths.
+- **The one-screen ruling holds, measured off the live elements.** At 1280 × 700, scrolled to §4's
+  rest under the 48px bar, the track's bottom sits at 636.36px of 700. All four sheets equalise at
+  473.33px, the sheet page is 640px, the prose column 470px under its 64ch cap, the label column a
+  shared 96px with every label on one line box, and **the peek is 360.0px of sheet 2, on screen and
+  cut by the track's inline end** — the spec's figures reproduced exactly.
+- **The track snaps to itself, never to the document**: `scroll-snap-type` computes `x`, every
+  sheet computes `scroll-snap-align: start` with the track as nearest scroll container, and under
+  `prefers-reduced-motion: reduce` it computes `none` with content byte-identical. Below
+  `--bp-wide` the track un-tracks — `scrollWidth === clientWidth`, sheets stack, no label shares a
+  band with its value, nothing scrolls sideways.
+- **Keyboard**: real `ArrowRight` events walk `scrollLeft` 0 → 1608 until sheet 4's inline end is
+  inside the track. `#the-decisions` exposes exactly one focusable element, and the AX tree reports
+  a four-item list named `The four decisions` whose h3 names equal the copy titles — including the
+  `<em>` on *reads*, present in sheet 1's computed name and absent from the other three.
+
+**One measured cost of the paged track, stated rather than absorbed** (PM review item, OBS-009)
+
+`section-04-decisions.md` §12.16 asks that `scrollIntoView()` on sheet 3's last value "land it
+fully visible", as the stand-in for find-in-page reaching off-canvas content. **With proximity snap
+on it does not, and no declaration in the section's ruling overrides that.** From the track's start
+the call settles at scrollLeft 664 — a sheet start, not the position that reveals the match —
+leaving 46% of the value and 56% of its sheet on screen. With the track's snap off, which is
+exactly the reduced-motion path, the same call settles at 919 and lands the value whole. Two checks
+ship rather than one: *a match in an off-canvas sheet is scrolled toward, never left behind*
+(asserted, with the share that lands in its detail) and *with the track's snap off, an off-canvas
+match lands whole* (asserted). The arrow-key half of §12.16 is asserted in full. Whether that cost
+buys a mechanism is UI/UX's call, so nothing was invented to paper over it.
+
+**Two probes re-targeted, one of them a latent crash**
+
+- The Blink body-contrast probe read `.slot .t-body` — a shell placeholder. Two of the three left
+  with this step and the last leaves with §5, at which point `contrast.find(...)` returns
+  `undefined` and the harness throws rather than fails. It now reads `#the-insight p.read`, the
+  page's permanent body-prose exemplar; §4's row value and stamp joined the measured set. Ink on
+  surface **13.23 / 13.64**, muted on surface **5.16 / 5.76** — the spec's §9 table, reproduced.
+- The WebKit mark measurement had to be scale-free. QuickLook lays out at its own width and rasters
+  to the requested size, so the 12px seat measured 17px in both themes (the raster is ~1.37×). The
+  relationship is scale-free as a proportion — `--sheet-pad` is 24px and the mark is seated at
+  `--gap-hairline`, so it sits at the **midpoint of the card's padding**: both themes measure
+  17/35 = **0.486**, and painting the mark with `color` makes the rust bars vanish from the render
+  entirely, which the check names.
+
+**Verification**
+
+- `bash scripts/test.sh` **GREEN both engines** — **230/230 Blink** (was 197/197) and **21/21
+  WebKit** (was 15/15); 39 checks added.
+- `node tests/qa-independent-audit.mjs` **exit 0, 107/107, twice consecutively**, with no audit
+  check needing a change.
+- **Every load-bearing assertion was planted and watched go red**, tree reverted clean each time:
+  `display: inline` on the kicker sentences (red at four widths), an `8px` literal in the mark's
+  inset (red at five, naming 8 against a token of 12), the mark painted with `color` (accent-
+  background inventory empty in Blink; no rust bar found in WebKit, both themes), a transposed
+  stamp date, a dropped `<em>`, and a renamed row label.
+- **Cross-engine, looked at rather than inferred**: `tests/artifacts/webkit-{dark,light}-s04.png`,
+  `webkit-{dark,light}-s03.png`, `blink-dark-s0304-{1280,375}.png`. WebKit renders sheet 1 whole
+  with sheet 2 cut at the container edge, the rust bar on the mechanism row, the ink-bold
+  `MECHANISM` label against three muted ones, and the stamps in tracked micro — identical
+  composition to Blink in both themes. Each WebKit section render hides every other section and is
+  compared against a control with **that** section hidden too: hiding a section pulls the next one
+  up into a fixed frame, so a with/without pair that leaves the rest of the page standing measures
+  the section that moved, not the one under test.
+
+**Would Apple ship this?** Yes, with one reservation. §3 says the thing and stops; §4 turns four
+paragraphs of founder prose into documents a stranger can skim in eight seconds, and the cropped
+second sheet is the only thing on the page that asks the reader to act — it earns that by showing
+them what they would get. The reservation is the one above: a ⌘F match in an off-canvas sheet lands
+half on screen, and "you found it, now nudge it" is not the standard the rest of this page holds.
+
+**Revision log:**
+- 2026-07-29: Filed. Self-review caught and fixed: the title-voice check counted the `<em>` inside
+  sheet 1's title as a fifth bold voice (runs are now credited to their heading); three
+  section-scoped sweeps — numerals, stamp digits, accent backgrounds — were reading the shell's own
+  stencil tag, which carries a §-number and a rust pennant, and now scope to the section body; and
+  the label-column line count divided a grid item's stretched border box by its line height,
+  reporting 3.44 lines for a one-line label. Open question: the snap/find-in-page cost above.
+
+**Observations** (non-blocking, for PM):
+- OBS-009 — `section-04-decisions.md` §12.16's `scrollIntoView()` clause cannot be satisfied while
+  the track's proximity snap is on; spec and build now disagree on that one clause.   Severity: med
+  Evidence: `tests/artifacts/blink-report.json` → `evidence.s04RevealSnapped` (settles 664, 46% of
+  the value visible) and `s04RevealPlain` (settles 919, whole). The spec was not edited — UI/UX
+  owns that file.
+  Suggested action: PM rules at the build-review step — amend §12.16 to the two checks that
+  shipped, or spend a mechanism on it.
+- OBS-010 — `muster-requests-lint.sh` is red on the Active-section budget (426/300) and will stay
+  red until the build-review step sweeps.   Severity: low
+  Evidence: it measured exactly 300/300 before this handoff was filed, so no handoff this step
+  could file would have kept it green. Four handoffs (HO-026, HO-031, HO-032, HO-027) are
+  in-review against a single queued PM review step — the plan's own shape, not an accumulation of
+  closed entries. Trading the review evidence PM needs for a line count is the wrong trade.
+  Suggested action: PM sweeps to Resolved at the build-review step; no earlier action is available
+  to a specialist.
+
 ### 2026-07-28 HO-026 — §1 and §6 built: the sparse hero, the command, and the proof link
 **Type:** handoff
 **Producer:** Developer

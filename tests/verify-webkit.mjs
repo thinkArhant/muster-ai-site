@@ -23,6 +23,7 @@ const RENDER_WIDTH = 1400;
 const GROUND = { dark: "#13140D", light: "#DBD8C6" };
 const ACCENT = { dark: "#C05A32", light: "#A0451F" };
 const INK = { dark: "#E6E3D3", light: "#191B10" };
+const SURFACE = { dark: "#1B1D13", light: "#E7E4D4" };
 
 const results = [];
 const evidence = {};
@@ -257,6 +258,142 @@ try {
       `grain and ground survive under §2 in WebKit (${theme})`,
       patch !== null && patch.stdDev > 0.2,
       patch ? `patch at ${patch.x},${patch.y} mean ${patch.mean} stdDev ${patch.stdDev}` : "no ground patch found"
+    );
+  }
+
+  /* --- §3 and §4 in WebKit. Two claims are worth the render here rather than
+         an ink count alone.
+
+         §3's is content: the kicker and a 90-word paragraph must actually set,
+         in an engine that computes `ch` and `inline-block` wrapping its own way.
+
+         §4's is geometry, and it is the one construction in the section with
+         real cross-engine risk: the mechanism mark is an absolutely positioned
+         pseudo-element seated by `inset-inline-start: calc(--gap-hairline -
+         --sheet-pad)` — logical properties, a negative calc, and a background
+         paint. Blink measures it with a DOM probe QuickLook cannot run, so it
+         is measured off the pixels instead: rust clusters that are ~2px wide
+         and many times taller than wide are marks, and their distance from the
+         card's inked left edge is the 12px seat. That is the stronger evidence
+         anyway — the claim is about where the mark visibly sits. --- */
+  const markSeats = (image, theme) => {
+    const accent = hexRgb(ACCENT[theme]);
+    const hits = new Set();
+    for (let y = 0; y < image.height; y++) {
+      for (let x = 0; x < image.width; x++) {
+        if (isNear(rgbAt(image, x, y), accent, 14)) hits.add(x + "," + y);
+      }
+    }
+    const seen = new Set();
+    const bars = [];
+    for (const key of hits) {
+      if (seen.has(key)) continue;
+      const stack = [key];
+      const cell = [];
+      while (stack.length) {
+        const k = stack.pop();
+        if (seen.has(k) || !hits.has(k)) continue;
+        seen.add(k);
+        const [cx, cy] = k.split(",").map(Number);
+        cell.push([cx, cy]);
+        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) stack.push(cx + dx + "," + (cy + dy));
+      }
+      const xs = cell.map((c) => c[0]);
+      const ys = cell.map((c) => c[1]);
+      const box = { l: Math.min(...xs), r: Math.max(...xs), t: Math.min(...ys), b: Math.max(...ys) };
+      box.w = box.r - box.l + 1;
+      box.h = box.b - box.t + 1;
+      /* A 2px bar plus up to a column of antialiasing each side, and taller
+         than it is wide by an order of magnitude — no glyph or tick in this
+         palette has that shape. */
+      if (box.w <= 4 && box.h >= 8 * box.w) bars.push(box);
+    }
+    return bars.sort((a, b) => a.t - b.t);
+  };
+
+  /* One section on screen at a time, against a control with that section also
+     hidden. Hiding a section pulls the next one up into the frame, so a
+     "with / without" pair that leaves the rest of the page standing measures
+     the section that moved, not the section under test — the control has to be
+     the same page minus one section, with nothing else free to take its place. */
+  const PAGE = ["#hero", "#watch-it-ship", "#the-insight", "#the-decisions", "#shipped-with-muster", "#get-started", ".pagefoot"];
+  const pageWithout = (keep) => PAGE.filter((s) => s !== keep);
+
+  for (const theme of ["dark", "light"]) {
+    const target = hexLuminance(GROUND[theme]);
+    const withS3 = decodePng(renderWithQuickLook(
+      themedCopy(theme, { hide: pageWithout("#the-insight"), label: theme + "-s03" }), theme + "-s03"));
+    const withS4 = decodePng(renderWithQuickLook(
+      themedCopy(theme, { hide: pageWithout("#the-decisions"), label: theme + "-s04" }), theme + "-s04"));
+    const control = decodePng(renderWithQuickLook(
+      themedCopy(theme, { hide: PAGE, label: theme + "-s34control" }), theme + "-s34control"));
+
+    const s3Ink = inkShare(withS3, target);
+    const s4Ink = inkShare(withS4, target);
+    const baseInk = inkShare(control, target);
+    const bars = markSeats(withS4, theme);
+    evidence[theme + "S0304"] = {
+      s3InkShare: s3Ink, s4InkShare: s4Ink, controlInkShare: baseInk,
+      marks: bars.map((b) => ({ w: b.w, h: b.h, l: b.l, t: b.t }))
+    };
+
+    check(
+      `WebKit sets §3's kicker and paragraph (${theme})`,
+      withS3.width > 0 && s3Ink - baseInk > 0.5,
+      `${withS3.width}x${withS3.height}px · ink ${s3Ink}% with §3 against ${baseInk}% on the same page with every section hidden`
+    );
+    check(
+      `WebKit sets §4's spec-sheets (${theme})`,
+      withS4.width > 0 && s4Ink - baseInk > 1,
+      `ink ${s4Ink}% against ${baseInk}% — +${Math.round((s4Ink - baseInk) * 100) / 100} percentage points over the section-less control`
+    );
+    /* The seat, read off the pixels: the mark's left edge against the card's
+       own inked left edge on the same rows. The card border is --hair over
+       --surface — too close to ground for a colour match — so the edge is
+       taken as the leftmost non-ground pixel in the mark's row band, which is
+       that border. */
+    /* QuickLook lays the page out at its own width and rasters the result to
+       the requested size, so a raster distance is not a CSS distance — the
+       lockup check above survives that by comparing two features in the same
+       raster space, and this one has to do the same. The relationship §7 fixes
+       is scale-free when stated as a proportion: --sheet-pad is 24px and the
+       mark is seated at --gap-hairline, 12px, so the mark sits at the MIDPOINT
+       of the card's padding. Measured here as exactly that — the surface run
+       from the card's border to the mark, against the run from the border to
+       the row label's first ink. A mark that migrated, lost its token or was
+       painted with `color` instead of a background moves or erases that
+       midpoint. */
+    const surface = hexRgb(SURFACE[theme]);
+    const ink = hexRgb(INK[theme]);
+    const seats = bars.map((bar) => {
+      const floor = Math.max(0, bar.l - 90);
+      const rows = [0.15, 0.3, 0.45].map((f) => Math.round(bar.t + f * bar.h));
+      const pairs = rows.map((y) => {
+        let x = bar.l - 1;
+        /* Step off the mark's own antialiasing, which blends accent into
+           surface and matches neither, then cross the card's padding. */
+        while (x >= floor && !isNear(rgbAt(withS4, x, y), surface, 6)) x--;
+        while (x >= floor && isNear(rgbAt(withS4, x, y), surface, 6)) x--;
+        if (x <= floor) return null;
+        const border = x;
+        /* The label's first ink, right of the mark: the padding edge. */
+        let label = null;
+        for (let px = bar.r + 2; px < Math.min(withS4.width, bar.r + 90); px++) {
+          if (isNear(rgbAt(withS4, px, y), ink, 40)) { label = px; break; }
+        }
+        return label === null ? null : { seat: bar.l - 1 - border, pad: label - border };
+      }).filter(Boolean);
+      if (!pairs.length) return null;
+      const best = pairs.sort((a, b) => a.pad - b.pad)[0];
+      return { seat: best.seat, pad: best.pad, ratio: Math.round((best.seat / best.pad) * 1000) / 1000 };
+    }).filter(Boolean);
+
+    check(
+      `WebKit seats §4's mechanism marks 12px inside their card (${theme})`,
+      bars.length >= 1 && seats.length === bars.length && seats.every((s) => Math.abs(s.ratio - 0.5) <= 0.07),
+      bars.length
+        ? `${bars.length} rust bar(s) of ${bars.map((b) => b.w + "×" + b.h).join(", ")}px — ${seats.map((s) => s.seat + "/" + s.pad + " = " + s.ratio).join(", ")} of the card's padding, against the 12-in-24 midpoint the token seats it at`
+        : "no 2px rust bar found in §4 — the mark is painted with background-color and may not have rasterised"
     );
   }
 
