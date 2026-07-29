@@ -830,3 +830,118 @@
   🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; bash muster/scripts/muster-lint-handoff.sh
   ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
   🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; git add -A && git commit -q -F - <<'EOF' q
+  🧪 bash   cd /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; bash muster/scripts/muster-commit-lint.sh 
+  💬 Step complete. ## What the step actually was The audit **already exited zero when the step opened** — 108/108, twice, before a line changed. The literal deliverable was satisfied on arrival. But it co
+    📖 ×16 · ✏️  ×9 · 🧪 ×42 · ⚠️  ×2
+  ✓ 69 turns · $4.93 · peak ctx 129k/1M 12% · out 35k  (success)
+  ✓ [32;1mQA[0m · [1m54m 35s[0m · advanced → 2026-07-26 QA (web): Full-page sweep (QA) · handoff HO-033 filed ✓
+    run so far: 5h 38m · $94.99 · 6 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 7
+▶ [32;1mQA[0m · 2026-07-26 QA (web): Full-page sweep  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh qa auto
+  💬 Binding to QA for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/qa.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/qa.md
+  🧪 bash   ls -la && echo "--- scripts ---" && ls scripts/ tools/ 2>/dev/null && echo "--- tests ---" && ls tests/ 2>/dev/null
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/test.sh
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -30
+  🧪 bash   grep -cE "^(PASS|FAIL)" .test-logs/run-20260729-040218.log; grep -E "checks passed|^FAIL" .test-logs/run-20260729-040218
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit1.log 2>&1; echo "exit=$?"; tail -5 /tmp/audit1.log
+  🧪 bash   ls -la tests/lib tests/fixtures tests/artifacts; echo "--- README ---"; cat tests/README.md
+  🧪 bash   grep -nE "^### (HO|REQ|OBS)-|^## " knowledge-base/agent-requests.md | tail -60
+  🧪 bash   grep -nE "^\*\*(HO|REQ|OBS)-|^(HO|REQ|OBS)-|^\*\*ID" knowledge-base/agent-requests.md | head -60
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  🧪 bash   node -e ' const r=JSON.parse(require("fs").readFileSync("tests/artifacts/qa-independent-report.json","utf8")); const ks=
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/VERIFY.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/count-up.js
+  🧪 bash   grep -n "200%" tests/verify-shell.mjs tests/qa-independent-audit.mjs | head -20; echo "---"; grep -n "zoom" tests/verify
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  🧪 bash   node tests/qa-fullpage-sweep.mjs 2>&1 | tail -60
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  💬 Now the motion inventory — the 44 "(transition)" entries are §2's one-shot reveal, which DEC-015 already rules is not an ambient element. Recutting the check to separate looping motion from one-shot t
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  💬 Now the reduced-motion and no-JS blocks — including the navigation crash when page scripts are disabled:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  🧪 bash   node tests/qa-fullpage-sweep.mjs 2>&1 | tail -70
+  🧪 bash   node -e ' const r=JSON.parse(require("fs").readFileSync("tests/artifacts/qa-sweep-report.json","utf8")); const a=r.evide
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  🧪 bash   node tests/qa-fullpage-sweep.mjs > /tmp/sweep2.log 2>&1; echo "exit=$?"; head -30 /tmp/sweep2.log; echo "..."; tail -12 
+  🧪 bash   grep -nE 'check\("' tests/verify-shell.mjs | grep -iE "equal|derive|token|relation|same|matches|against|ratio|midpoint|s
+  🧪 bash   grep -n "scroll-pad\|--bar-h\|--mark-clear\|--mark-inset\|--text-display\|--gap-hairline\|--sheet-pad" styles/*.css | he
+  🧪 bash   grep -n "bar-h\|scroll-pad\|text-display" styles/tokens.css; echo "--- s04 mark ---"; grep -n "sheet__mark\|--mark\|inse
+  🧪 bash   sed -n 530,560p styles/sections.css; echo "=== bus ==="; grep -rn "formation__bus" styles/ | head
+  💬 Now the falsifiability work. Planting violations against the relationship assertions, batch 1 — the token derivations:
+  🧪 bash   git status --porcelain styles/ index.html && cp styles/tokens.css /tmp/tokens.bak && cp styles/replay.css /tmp/replay.ba
+  🧪 bash   node tests/verify-shell.mjs > /tmp/plant1.log 2>&1; echo "exit=$?"; grep -E "^FAIL" /tmp/plant1.log | head -30; echo "--
+  🧪 bash   cp /tmp/tokens.bak styles/tokens.css && cp /tmp/replay.bak styles/replay.css && cp /tmp/sections.bak styles/sections.css
+  🧪 bash   node tests/verify-shell.mjs > /tmp/plant2a.log 2>&1; echo "shell exit=$?"; grep -E "^FAIL" /tmp/plant2a.log | head -20; 
+  🧪 bash   grep -n -B12 '§2.s exemption holds as a property' tests/verify-shell.mjs | tail -20
+  🧪 bash   sed -n 3128,3136p tests/verify-shell.mjs
+  🧪 bash   node -e ' const r=JSON.parse(require("fs").readFileSync("tests/artifacts/blink-report.json","utf8")); const s=r.evidence
+  💬 Reverting the markup plants and running the required guard plant — a fetching reference, planted to prove the amended `http(s)` check can still go red:
+  🧪 bash   cp /tmp/index.bak index.html && git status --porcelain index.html && echo "INDEX REVERTED CLEAN" && \ cp styles/sections
+  🧪 bash   node tests/verify-shell.mjs > /tmp/plant3.log 2>&1; echo "exit=$?"; grep -E "^FAIL" /tmp/plant3.log; echo "--- sweep net
+  🧪 bash   grep -n -B18 'cross-origin hrefs are anchors only' tests/verify-shell.mjs | tail -24
+  🧪 bash   cp /tmp/index.bak index.html && cp /tmp/sections.bak styles/sections.css && git status --porcelain index.html styles/ &&
+  💬 Now the corpus integrity proof, the WebKit half, and the live `curl` — the one network request this step is permitted:
+  🧪 bash   echo "=== corpus: working tree vs HEAD ===" && git diff --stat HEAD -- knowledge-base/bodh-sprint4-corpus.md knowledge-b
+  🧪 bash   echo "=== the curl, run against the live repo ===" && curl -fsSL https://raw.githubusercontent.com/thinkArhant/muster-ai
+  🧪 bash   node tests/verify-webkit.mjs > /tmp/webkit.log 2>&1; echo "exit=$?"; grep -E "^(PASS|FAIL)" /tmp/webkit.log | sed 's/ */
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -3; echo "=== sweep ==="; node tests/qa-fullpage-sweep.mjs 2>&1 | tail -2; echo "=== au
+  🔧 ToolSearch
+  🧪 bash   until grep -q "audit exit=" /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-1
+  💬 While that runs, checking the launch checklist items this sweep is supposed to close:
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  📖 read   /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/51fdfbe3-f9af-44f7-a5ab-d039529d5b8e/tasks/bkrkevt7s.output
+  🧪 bash   grep -E "checks passed" .test-logs/run-20260729-044703.log
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  📖 read   /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/51fdfbe3-f9af-44f7-a5ab-d039529d5b8e/tasks/bkrkevt7s.output
+  💬 Green across all three harnesses on the reverted tree. One gap in my own sweep — the footer is outside `main` and my matrix never swept it, and that is exactly where a placeholder still ships:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-fullpage-sweep.mjs
+  🧪 bash   node tests/qa-fullpage-sweep.mjs > /tmp/sweep3.log 2>&1; echo "exit=$?"; grep -E "^RPRT" -A1 /tmp/sweep3.log; tail -2 /t
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n -A40 "Pre-Handoff Self-Review" muster/system-guide.md | head -60
+  🧪 bash   grep -n -A30 "^## Pre-Handoff Self-Review\|^### Pre-Handoff Self-Review\|Self-Review Checklist" muster/system-guide.md |
+  🧪 bash   sed -n 460,472p muster/system-guide.md
+  🧪 bash   grep -n "OBS-\|HO-0\|REQ-\|Sprint\|sprint" tests/qa-fullpage-sweep.mjs; echo "=== A-007 ==="; grep -n -A6 "A-007" knowle
+  🧪 bash   python3 - <<'EOF' import re, io p="tests/qa-fullpage-sweep.mjs" s=open(p).read() s=s.replace(""" /* Not an assertion: th
+  🧪 bash   grep -n -A4 "^### A-00[45678]" knowledge-base/foundational-assumptions.md | grep -iE "A-00|live motion|Notes|three live|
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   node tests/qa-fullpage-sweep.mjs > /tmp/sweep4.log 2>&1; echo "exit=$?"; tail -2 /tmp/sweep4.log; echo "=== requests lin
+  🧪 bash   grep -n "Awaiting PM review at the build-review step; three items" knowledge-base/orchestration-queue.md; sed -n '300,31
+  💬 Now the queue: my step to Done, PM's build review promoted to Next Step.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Now promoting the PM build-review step into Next Step:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   grep -n "^## \|^### \|^```$\|^Role: \|RETIRED" knowledge-base/orchestration-queue.md | sed -n '1,60p'
+  🧪 bash   grep -nE '^## |^### |^```|^Role: |RETIRED' knowledge-base/orchestration-queue.md | sed -n '1,60p'
+  🧪 bash   sed -n '137,146p;266,274p' knowledge-base/orchestration-queue.md
+  🧪 bash   sed -i '' '141,271d' knowledge-base/orchestration-queue.md && grep -nE '^## |^### |^```|^Role: |RETIRED' knowledge-base/
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -8; echo "=== Done entries count ==="; awk '/^## Done/,0' knowledge
+  🧪 bash   git status --porcelain
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' qa: the whole page checks out, and the checks can fail Every acceptance criteri

@@ -10,6 +10,178 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-29 HO-030 — the content-complete page swept end to end: every criterion measured, and every load-bearing check watched to fail
+
+**Type:** handoff
+**Producer:** QA
+**Deliverable:** `tests/qa-fullpage-sweep.mjs` (new), `knowledge-base/pre-launch-checklist.md`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+- [ ] Developer — FYI: OBS-015 is a defect in `verify-shell.mjs`'s reported evidence, not in its verdicts.
+  No shipped file was touched by this step.
+
+**The result, stated first: every acceptance criterion passes.** Three harnesses on the reverted tree —
+`scripts/test.sh` **GREEN both engines (273/273 Blink + 27/27 WebKit)**, `qa-independent-audit.mjs`
+**exit 0, 108/108**, and the new sweep **42/42 with 2 measurements reported**. Two things are open and
+neither is a failing check: OBS-015 below, and the footer placeholder that no sprint step owns.
+
+**What the new file is for.** The section harnesses assert §2, the palette and the accessibility floors.
+Six criteria had no instrument at all: the copy matrix across the whole page *and* `VERIFY.md`, §4's
+stamps, the motion budget as a count, the counting cells' announced value during playback, scroll-snap
+as behaviour, and complete content with motion off / JS off section by section rather than for §2 alone.
+`tests/qa-fullpage-sweep.mjs` is those, written from the specs rather than from the build harness.
+
+**Per criterion**
+
+- **Cross-engine parity — PASS, with the Blink-only half named.** WebKit (27/27, QuickLook) carries real
+  geometry, not just ink: the header pennant sits **0px off the wordmark's baseline** in both themes,
+  §4's mechanism marks measure **17/35 = 0.486 of the card's padding** in both themes against the
+  12-in-24 midpoint the token seats them at, §5 renders **14 rust clusters of measured digits and 4 ink
+  dash clusters (26×3–26×4 px), zero rust dashes**, both themes — and QuickLook ran no JavaScript, so
+  that is the no-JS path rendering the authored values. Ground and grain agree across engines (Blink
+  mean 20.12/σ2.847 · WebKit 19.834/σ2.563). **Blink-only, stated plainly**: everything behavioural or
+  computed — the AX tree, network instrumentation, playback timing, the count-up, scroll-snap, keyboard
+  paging, 200% zoom, and every mobile-width measurement (`qlmanage` renders at a fixed ~1024² and runs
+  no JS). §1's formation and §6 have WebKit renders looked at by eye (HO-026) but no WebKit assertion.
+  The scroll-snap WebKit half is a **labelled manual check** at Gate B by ruling (DEC-042), not reported
+  as a mechanical result.
+- **Zero runtime network requests — PASS, and the guard was proven able to fail.** Clean tree: 10 loads,
+  all `file:`/`data:`, none external, dark and light and through a full playback. **A fetching reference
+  was planted and the run went red naming both sites exactly** — `index.html:441 img[src]` and
+  `styles/sections.css:162 css url()/@import` — with the DOM guard also red
+  (`IMG[src]=https://raw.githubusercontent.com/…`) and three zero-request checks red alongside. Plant
+  removed, tree reverted clean, re-run green. **The §6 anchor stayed permitted throughout**, which is
+  what makes this a narrowing and not a deletion.
+- **Contrast, landmarks, focus — PASS.** Eight text pairs recomputed from resolved colours in both
+  themes, every one over 4.5:1: dark 14.37 / 13.23 / 5.61 / 5.16, light 12.15 / 13.64 / 5.76 / 5.13
+  (body prose · §4 row values · §1 caption · micro labels). Header/main/footer are siblings, all six
+  sections labelled by a heading they contain, one `h1`, `lang=en`. **Seven keyboard stops driven by
+  real Tab presses, every one painting a 2px ring** — skip link, VERIFY chip, log, narration list,
+  playback control, §4 track, GitHub link.
+- **The §1 headline's accessible name — PASS, read from the AX tree.** `Accessibility.getPartialAXTree`
+  computes `SHIP A PRODUCT WITH AN AI TEAM.` while the rendered text is
+  `Ship a product with a human an AI team.` — the struck phrase absent from the name, present in the
+  render. Planted red: with `aria-hidden` off the strike, the name carries the struck phrase.
+- **Reduced motion and no-JS — PASS, all six sections.** Character-identical to the motion path in every
+  section under `prefers-reduced-motion: reduce` (0 animations running) and with script execution
+  disabled (`window.MusterCountUp` confirmed `undefined` first, so the condition is real). **Two strings
+  legitimately differ and are measured rather than diffed away**: the playback control, which the spec
+  says is absent because there is nothing to control (motion path offers `⏭ SHOW FULL LOG`, static paths
+  offer nothing), and the beat indicator's live position — motion at load reads `BEAT 01 / 06 · QUEUE
+  ADVANCES`, static reads `BEAT 06 / 06 · THE HUMAN GATE`, the end state, `aria-hidden` either way.
+- **§2 fidelity and corpus integrity — PASS, proven from git.** The audit diffs all twelve rendered log
+  lines and all ten narration slots byte-clean. Independently: `git diff HEAD` on
+  `bodh-sprint4-corpus.md`, `product-spec-seed.md` and `direction-reference.html` is **empty**; the
+  corpus's entire history is **two founder commits** (`5d3b33c`, `025842c` — Kanwar Sandhu) and its
+  working-tree blob hash `3cdf654e…` equals `HEAD:`'s. No agent has touched founder source.
+- **Relationship assertions — PASS, each family planted and watched go red.** Eight violations across
+  three runs, tree reverted clean each time. `--scroll-pad` hardcoded to `48px` → *"scroll padding is
+  the measured bar plus one rhythm, never a hardcoded 72"* red, and three further relationships red with
+  it (bar-rule clearance dropped to 8.3px against the 12px floor; reduced-motion padding; the
+  start-aligned pull). `--text-display` floor raised → §1's fold guarantee red at **both** 375 and 320.
+  `--mark-clear: 0ch` → R2 red at three playback states. §4's mark inset written as a literal `8px` →
+  red at desktop **and all four phone widths, naming 8 against a token of 12**. §5's reserved sub-line
+  track removed → cross-card alignment red (`COMMIT-DAYS 112px vs 83.5px`). §2's exemption class removed
+  → the snap-set check red. A stamp transposed to `2026-06-31` → red in both harnesses. One character
+  changed in §6's curl → *"the curl is one string in three places"* red. **13 checks red on the first
+  batch, 5 on the second, 6 on the guard batch.**
+- **Scroll-snap — PASS on all three.** Keyboard paging: real `PageDown` events walk 4083px of scroll to
+  the end in **7 presses, strictly advancing, no repeated rest** (`mandatory` was the failure mode this
+  guards, and it took 60 presses at 375×553 when the Developer planted it). Find-in-page: **0 of 165
+  text leaves land off screen under centre-if-needed**, which is what the engine's own find does. 200%
+  zoom (720×450 @2): every section's last content lands whole and clear of the bar, `scrollWidth 720 ≤
+  clientWidth 720`. Every section start comes to rest clear of the bar (+48 to +227.91px).
+- **`VERIFY.md` — PASS.** Present at repo root, 77 lines; §1's chip `href` reads `VERIFY.md` and the
+  target exists, asserted rather than eyeballed. **Hard launch blocker ticked.**
+- **The curl, actually run — PASS.** `HTTP 200`, **16377 bytes**, no redirect (effective URL is the one
+  the page prints). What comes back is a real bash script — `#!/usr/bin/env bash`, `set -euo pipefail` —
+  and it **parses clean under `bash -n`**. Deliberately **not executed**: proving the URL serves the
+  setup script does not require running a project generator. §6's GitHub link answers 200. **Hard
+  launch blocker ticked.** This was the one network request the step permits.
+- **The copy matrix — PASS, across all sections, the header, the footer and `VERIFY.md`.** No
+  `muster.build`; **20 competitor names swept, zero hits** (DEC-047); no banned adjective, no exclamation
+  mark; "proven"/"guaranteed" absent (R6); **"context engineering" exactly once, in §3**. Gate A
+  negatives hold: **§1 carries none of the eight Bodh tokens** — no measured line, no BODH row, no hero
+  terminal (DEC-046). `9.3 h`, `$147` and `4.8 h` each appear **exactly once on the whole page, all
+  three in §5** (DEC-048); no wave-scope figure (`~64`, `289`, `$24.73`) in §1 or §5. All three scope
+  labels ride with their values; THIS SITE is four em-dashes with `measured at launch` beside it and no
+  numeral in the card. `VERIFY.md` states the three scopes separately, its THIS SITE row is
+  `— · measured at launch` with no numeral past the scope column, it carries no cross-scope aggregate,
+  its curl is byte-equal to R12's verified form, and its `8 AI agents · 1 operator` line is qualified as
+  roster size rather than this build's participation.
+- **§4's four stamps — PASS, byte-exact and in DEC-044's order.** `framework — 2026-04-24` ·
+  `framework — 2026-06-13` · `framework — 2026-04-12, first commit` · `framework — 2026-06-07`.
+- **The motion budget as a count — PASS.** Enumerated off the built page, not impressed: **three looping
+  seats, all pulse or cursor** — `#header pulse`, `#watch-it-ship pulse`, `#get-started cursor` (the
+  lamp is one motif at two seats, drawn by `pulse-ring ×4` + `pulse-core ×2`; `cursor-blink ×1`). The
+  count-up is ambient element two: JS, gated, one-shot per load, 8 cells. **The 44 running transitions
+  are all inside `#watch-it-ship`** — §2's opacity reveal, which ends, and which DEC-015 already rules is
+  not a fourth ambient element. Nothing over budget.
+- **The counting cells' live-region posture — PASS, verified during playback.** Across one roll the
+  visible string takes **76 distinct states and the announced string takes one** — `ACTIVE BUILD 9.3 h`
+  — settling on the authored `9.3 h`. Read independently mid-roll from `Accessibility.getFullAXTree`
+  while the cell visibly showed `5.9 h`: the tree carries `9.3 h` and `4.8 h`, **no intermediate, and
+  zero nodes with a live property**. A page-wide sweep of `aria-live`, `aria-atomic` and the five live
+  roles returns nothing. Matches HO-028's stated posture and DEC-052 exactly.
+
+**The one finding: a failure detail that cannot report a failure** (OBS-015)
+
+Planting §2's snap exemption away turned *"§2's exemption holds as a property"* **red** — correctly —
+while printing `1280x900: 0 of 13 gated rests moved · 375x553: 0 of 3 gated rests moved`. The `0` is a
+**literal in the template string**, not the measured count. The run's own report says
+`moved: 12` at 1280×900. The verdict is sound and the assertion is falsifiable — this step proved that —
+but **the figure is a constant, and HO-029 quotes that exact string as its evidence** that the exemption
+holds. PM should read that line as "the check was green," not as a measurement. Same class, milder: the
+zero-request checks print `none external` inside their own red output while listing the two planted
+resources. Both are in `verify-shell.mjs`; **nothing was edited** — it is the Developer's file and HO-029
+is in front of PM right now.
+
+**Two measurements reported, not asserted**
+
+- **OBS-013 re-derived independently**: **20 of 165 text leaves** land off screen start-aligned with
+  snapping on. The Developer measured 20 of 128 — same twenty, different denominator (a different leaf
+  predicate), so the two agree rather than conflict.
+- **The footer placeholder still ships**: `PROVENANCE LINE AND LINKS SHIP WITH THEIR OWN SPEC.` renders
+  as the last string a reader meets after the curl. That is OBS-012, corroborated. It is reported rather
+  than asserted **on purpose** — a red check would misreport a known open item as a sweep failure.
+
+**Verification**
+
+- `bash scripts/test.sh` — **GREEN both engines, 273/273 + 27/27**, on the reverted tree.
+- `node tests/qa-independent-audit.mjs` — **exit 0, 108/108**, twice this session.
+- `node tests/qa-fullpage-sweep.mjs` — **42/42, exit 0**, 2 measurements reported.
+- `git status --porcelain index.html styles/` empty after every plant batch.
+
+**Revision log:**
+- 2026-07-29: Filed. Self-review caught and fixed four defects in this sweep's own checks before any of
+  them were relied on: three regexes written with double-escaped `\\d` in plain Node source (so the §4
+  stamp check matched a literal backslash and could never have failed on a transposed date); a
+  reduced-motion content diff that counted the playback control and the beat indicator as missing
+  content, which would have reported a spec-mandated absence as a defect; a `measured at launch` check
+  written case-sensitive against text the page sets in uppercase; and a motion inventory that counted
+  §2's 44 one-shot transitions as ambient elements. **The copy matrix originally swept `main` only** —
+  the footer, which is where the one placeholder lives, was outside it. Now swept.
+
+**Observations** (non-blocking, for PM):
+- OBS-015 — `verify-shell.mjs`'s §2-exemption check prints a hardcoded `0` where its measured `moved`
+  count belongs, so its evidence line reads identically on a red run and a green one.   Severity: low
+  Evidence: with the exemption planted away the check went red while printing "0 of 13 gated rests
+  moved"; `tests/artifacts/blink-report.json` → `evidence.snapS2Sweep` recorded `moved: 12` at 1280×900
+  and `moved: 0` at 375×553 in that same run. The zero-request checks print `none external` on red the
+  same way.
+  Suggested action: PM routes a one-line fix to Developer, and discounts the quoted figure in HO-029's
+  §2-exemption bullet when reviewing it. The assertion itself is sound and falsifiable — proven here.
+- OBS-003 corroborated with a measurement, not just a read. `foundational-assumptions.md` A-007's notes
+  still say "Exactly three live motion elements plus the curl cursor — a fourth is a deviation." The
+  built page runs **three looping seats — the pulse motif at two seats and one cursor — plus the JS
+  count-up**, which is the amended two-elements-plus-cursor budget, not three. The page is right and
+  A-007's notes are stale; a future agent measuring against A-007 as written would either report a false
+  deviation or accept a real one.   Severity: med (unchanged)
+  Evidence: `tests/artifacts/qa-sweep-report.json` → `evidence.motion`.
+  Suggested action: as OBS-003 already says — PM amends A-007's notes. Noted here because this step is
+  the first time the count was measured off the built page rather than read off a spec.
+
 ### 2026-07-29 HO-033 — the audit can no longer hang: its last unbounded wait is bounded and named
 
 **Type:** handoff

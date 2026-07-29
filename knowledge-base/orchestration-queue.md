@@ -64,73 +64,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 QA (web): Full-page sweep
-
-```
-Role: qa
-Model: claude-opus-5
-
-**Task:** Validate the content-complete page end to end. One sweep, not one per section.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-024 through HO-033 (HO-031/032 are the Gate A fix round;
-  the specs and copy they revised are the baseline this sweep verifies against; HO-033 repaired
-  the audit)
-- Every section spec and copy file — derive scope from the specs directly, so a dev-charter omission does
-  not also blind QA
-- `knowledge-base/bodh-sprint4-corpus.md` — read-only fidelity baseline
-
-**The audit repair is NOT this step's** — HO-033 (the preceding step) already made
-`qa-independent-audit.mjs` exit zero. This sweep *runs* it as the independent cross-check; if it is
-red or hangs here, that is a finding against HO-033, re-pointed to PM, not something to debug
-inside the sweep.
-
-**Deliverable:** HO-030 in `agent-requests.md` — per-criterion pass/fail with evidence.
-
-**Acceptance criteria:**
-- Cross-engine parity on WebKit **and** Blink, with evidence per engine; state plainly what remains
-  Blink-only. **The WebKit harness can measure rendered geometry**, not just ink — colour-clustering a
-  QuickLook PNG reads a static relationship off the pixels (OBS-005). Use that for any static geometry a
-  spec calls cross-engine-critical. It does **not** reach scroll-snap, which is a behaviour: that half is
-  a manual Safari pass, labelled manual (DEC-042)
-- **Zero runtime network requests** with evidence. Confirm the amended `http(s)` check still catches a
-  fetching reference — **plant one and prove it goes red**, then remove it. A guard that cannot fail is
-  not a guard
-- Contrast ≥4.5:1 body text in both themes; landmarks and focus states verified
-- **The §1 headline's computed accessible name**, read from the AX tree, not asserted
-- Reduced-motion and no-JS render complete content across every section
-- §2 fidelity byte-clean; corpus unmodified, proven from git
-- **All relationship assertions green, and each verified to fail when violated**
-- Scroll-snap: keyboard paging, find-in-page, 200% zoom each verified working
-- `VERIFY.md` exists at repo root and the §1 chip resolves to it
-- **Run the `curl` against the live repo and record the result** — `pre-launch-checklist.md` requires it
-  confirmed working, not assumed. This is the only step where the agent may make a network request
-- Copy rules as a text matrix across all sections **and across `VERIFY.md`** — the verification
-  index is the page's honesty mechanism and is exactly where a scope slip would be read by the
-  skeptic it exists for (DEC-050): no `muster.build`, no cross-scope aggregates, scope labels
-  present, THIS SITE dashed — and the Gate A negatives: **no Bodh material in §1** (no measured
-  line, no BODH row, no hero terminal — DEC-046), **no named competitor anywhere** (DEC-047),
-  `9.3 h`/`$147` byte-equal with §5 as primary (DEC-048), "context engineering" exactly once, in §3
-- **The four §4 stamps byte-exact** — `2026-04-24` · `2026-06-13` · `2026-04-12` · `2026-06-07`
-  (DEC-044): the stamps are the independent-arrival argument, and a transposed date on the one
-  section whose premise is checkable dates is a launch-grade defect
-- **Enumerate the live motion elements on the built page** against the budget HO-032 re-stated —
-  a count, not an impression; an over-budget page reads at Gate B as "feels busy," which is
-  checkable, not taste (DEC-050)
-- **The counting cells' live-region behaviour matches HO-028's stated posture**, verified during
-  playback, not read off the markup — a polite region re-announcing every frame is screen-reader
-  spam that every other check passes (DEC-050)
-
-**If a check fails:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step
-naming the failing check, and file HO-030 with what you found.
-
-**On completion:** File HO-030 in `agent-requests.md` — under this exact ID; higher IDs in the
-ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 PM: Review the build and assemble the Gate B packet
 
 ```
@@ -147,7 +80,8 @@ Model: claude-opus-5
 Gate B packet written into `knowledge-base/wave-review.md`.
 
 **Acceptance criteria:**
-- **Re-run both harnesses yourself.** A summary is not evidence
+- **Re-run both harnesses yourself.** A summary is not evidence. `tests/qa-fullpage-sweep.mjs` is a
+  third runner as of HO-030 and re-runs the same way
 - Confirm §4 as built carries DEC-044's four decisions in the Gate A treatment and HO-032's layout —
   and that no trade-off was inflated away (DEC-043's guardrail: an impressive-but-costless decision
   is a blocking defect)
@@ -155,13 +89,20 @@ Gate B packet written into `knowledge-base/wave-review.md`.
   headline, formation (DEC-045/046)
 - Confirm every relationship assertion exists **and would fail if violated**; confirm QA actually planted
   a fetching reference and saw it go red
+- **OBS-015 is a review input, not just an observation**: HO-029's §2-exemption evidence quotes a string
+  whose count is a literal in the harness's template. Read that bullet knowing the figure is a constant
+  before accepting the handoff, and rule where the one-line fix lands
 - **Look at renders of the states under test** — including a key-beat frame for the tick, which is the
   exact miss that cost Sprint 1 a round
 - Confirm `VERIFY.md` exists, the curl was really run, **and read VERIFY.md's own contents against
   the copy rules** — scope labels, no cross-scope aggregate, no unmeasured claim (DEC-050). It is
   developer-authored and no Content session ever touches it; this review is the only judgment pass
-  it gets
+  it gets. QA ran it as a text matrix and it passed; the judgment pass is still owed
 - Confirm nothing reaches the founder that a machine could have settled
+- **Three open items are PM's to rule before the packet closes**: the footer's shell placeholder, which
+  no sprint step owns and which is the last string a reader meets after the curl (OBS-012); OBS-009 and
+  OBS-013, the two halves of one snap/reveal trade; and A-007's stale motion count (OBS-003), now
+  measured off the built page and disagreeing with the assumption as written
 - **Gate B packet**: the assembled page, desktop and phone, as one batch. Say what to look at and in what
   order. **Include the iPhone ask** — `pre-launch-checklist.md` carries a hard blocker only the founder's
   device can close: §2 on a real iPhone in Safari with toolbars shown, both layers on screen for the
@@ -170,6 +111,9 @@ Gate B packet written into `knowledge-base/wave-review.md`.
 **On completion:** Write the packet into `wave-review.md`. Run the Pre-Handoff Self-Review Checklist.
 Promote the gate by writing the Gate B block into `## Next Step`.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Gate B — founder review: the assembled page
 
@@ -197,6 +141,14 @@ with no verification behind it is how that happened.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-29 — Step: QA full-page sweep (HO-030). **Every acceptance criterion passes**, with every
+  load-bearing check watched to fail when violated: `scripts/test.sh` GREEN both engines (273/273 +
+  27/27), the independent audit exit 0 at 108/108, and a new `tests/qa-fullpage-sweep.mjs` 42/42.
+  The `http(s)` guard was proven able to go red, the curl was really run (HTTP 200, script parses),
+  and two hard launch blockers are ticked. **Awaiting PM review at the build-review step; OBS-015 —
+  the §2-exemption check's failure detail prints a hardcoded `0` where its measured count belongs,
+  which is the exact figure HO-029 quotes as evidence.**
 
 - 2026-07-29 — Step: QA independent audit (HO-033). The audit can no longer hang: its one unbounded
   external wait — `execFileSync("qlmanage")` with no timeout — is bounded and named, proven by
@@ -299,19 +251,6 @@ with no verification behind it is how that happened.
   **Gate A is live: four things need the founder's word, and one thing is honestly not green** — the
   independent audit hangs, which is stated in the packet rather than omitted.
 
-- 2026-07-27 — Step: Developer Gate A sample render (HO-025). Gate A is now something to look at:
-  `samples/gate-a.html` sets all four headline candidates and one real §4 spec-sheet in both themes
-  against the page's real tokens, with the machine's readings printed beside them. **All four announced
-  strings read out of the Blink AX tree match their ruling — candidate B announces
-  `SHIP A PRODUCT WITH AI AGENTS.` with the struck phrase absent from the name and present in the
-  render.** §4 measured 685.31px prose column in a 903.31px card, 2px accent mark at 12.00px from the
-  card's inner edge, zero rust text in both themes — matching the spec's own figures exactly. 51/51
-  checks, `scripts/test.sh` green both engines, WebKit render verified. One blind check was found and
-  fixed: the per-pane overflow probe was proven to fail by planting a 220-char nowrap element and seeing
-  it go red on the offending pane only. **Awaiting PM review at the Wave 1 review step; three items —
-  candidate B sets FOUR lines at 320px with a lone `WITH` orphan against §4.1's stated three,
-  `styles/tokens.css` still carries the pre-amendment `--text-display` floor, and REQ-008: the
-  independent audit HANGS and cannot exit zero.**
 
 
 

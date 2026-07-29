@@ -11,12 +11,15 @@
   - Milestone gate: [beta / submission / launch]
 -->
 
-- [ ] **`VERIFY.md` at repo root** — Blocker: hard, Source: pm, Added: 2026-07-24
+- [x] **`VERIFY.md` at repo root** — RESOLVED 2026-07-29, Source: qa, Added: 2026-07-24
   - `product-spec-seed.md` → Verification requires `VERIFY.md`: the measurement method in ~5 lines,
     links to the committed metrics files, and "rerun it yourself." The §1 hero's `VERIFY ⎘` chip links
     to it, so a missing file ships a dead proof link on the one claim the page asks readers to check.
-  - Deferred out of Sprint 1 because §1 is not in scope. Lands with §1 in Sprint 2.
-  - Milestone gate: launch
+  - The file ships (77 lines) and the chip resolves to it: §1's `href` reads `VERIFY.md` and the
+    target exists in the repo, asserted rather than eyeballed. Its own text was run through the copy
+    matrix — three scopes stated separately, THIS SITE dashed with no numeral in its row, no
+    cross-scope aggregate, the curl byte-equal to the page's, and the `8 AI agents · 1 operator` line
+    qualified as roster size rather than this build's participation.
 
 - [ ] **THIS SITE measured numbers replace dashes** — Blocker: hard, Source: pm, Added: 2026-07-24
   - The dual build readout ships dashes ("measured at launch") until real numbers exist. Per seed
@@ -26,11 +29,15 @@
     *spec → live* per rule 5 so it is never conflated with BODH's *idea → live*.
   - Milestone gate: launch
 
-- [ ] **Curl command copy-paste-verified against the live repo** — Blocker: hard, Source: pm, Added: 2026-07-24
+- [x] **Curl command copy-paste-verified against the live repo** — RESOLVED 2026-07-29, Source: qa, Added: 2026-07-24
   - Seed rule 12 (real URLs only) and §6. The command must be run and confirmed working, not assumed.
-    If the founder's domain has landed by launch, confirm which URL ships — the GitHub raw URL is the
-    stated fallback until then.
-  - Milestone gate: launch
+  - Run against the live repo, not assumed: `HTTP 200`, 16377 bytes, no redirect — the effective URL is
+    the one the page prints. What comes back is a real bash script (`#!/usr/bin/env bash`,
+    `set -euo pipefail`) and it parses clean under `bash -n`. It was **not executed**: proving the URL
+    serves the setup script does not require running a project generator. §6's GitHub link also
+    answers 200.
+  - Still open at launch if the founder's domain lands: confirm which URL ships. The GitHub raw URL is
+    the stated fallback and is what is verified above.
 
 - [x] **Reading column resolved to a real measure** — RESOLVED 2026-07-26, Source: pm, Added: 2026-07-25
   - Founder ruled at the Wave 3 gate after comparing the shipped width against 65- and 70-character

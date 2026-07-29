@@ -1,6 +1,6 @@
 run: run-20260728-222338-59535
-state: running step 6
-step: 2026-07-28 QA (web): The independent audit exits zero
-step started: 2026-07-29 03:07:05
-last completed: 2026-07-26 Developer (web): Scroll-snap · 125 turns · $13.45 · out 90k · 1h 32m
-totals: 5 attempt(s) · 612 turns · $90.06
+state: running step 7
+step: 2026-07-26 QA (web): Full-page sweep
+step started: 2026-07-29 04:01:41
+last completed: 2026-07-28 QA (web): The independent audit exits zero · 69 turns · $4.93 · out 35k · 54m 35s
+totals: 6 attempt(s) · 681 turns · $94.99
