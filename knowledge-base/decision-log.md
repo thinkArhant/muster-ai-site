@@ -801,5 +801,36 @@ changes.
 **Touched**: `orchestration-queue.md` (two new steps, four briefs, preamble, Founder Decisions,
 Done), `wave-review.md` (routing note), `current-sprint.md`, `decision-log.md`.
 
+---
+
+### DEC-050 — An external stress test finds seven gaps; all seven are fixed in the plan (2026-07-28)
+
+**Decision**: the founder ran the re-cut plan through an out-of-band reviewer session (repo access,
+no stake in the plan). It returned seven findings; PM triaged all seven as real and applied them
+before the run:
+
+1. **VERIFY.md gets a content review** — it was developer-authored with only existence checks;
+   now it is in QA's copy-rules matrix and PM review reads its contents. The verification index
+   carrying a scope slip was the exact failure the page exists to avoid.
+2. **§4's ceiling is numeric**: ≤ 45 words per sheet across the row bodies, title ≤ 12, derived
+   from the verdict's own fit math — "materially shorter" without a number let a premium step
+   write unfittable copy.
+3. **§4's phone behaviour must be ruled** by HO-032 explicitly — Gate B judges both surfaces and
+   only desktop was bound.
+4. **The motion budget is enumerated at the sweep**, a count against HO-032's stated budget, not
+   an impression.
+5. **The counting cells' live-region behaviour is verified during playback** against HO-028's
+   stated posture — it was decided and self-verified inside the same step.
+6. **The four §4 stamps are byte-asserted** in the text matrix — the independent-arrival argument
+   was load-bearing and unasserted.
+7. **The audit repair is its own step (HO-033)** ahead of the sweep — an unbounded bisect inside
+   the sweep risked a context-starved matrix; mechanical debugging and full-page judgment now
+   never share a window. Sweep and PM-review ranges extend to HO-033; every filing step states its
+   exact HO ID so the fix round's out-of-order 031/032 is never "corrected" by a cold agent.
+
+**Impact**: content, ui-ux, developer, qa, pm.
+
+**Touched**: `orchestration-queue.md`, `retrospective.md` (FF-001 addendum), `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

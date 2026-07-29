@@ -101,9 +101,12 @@ routed into the queue at the gate (DEC-049) — do not re-derive it, apply it.
   non-technical reader — VC, hiring. **Plainer words, never bigger claims**: every trade-off
   survives, and a decision that loses its cost is a blocking defect at PM review. Shape:
   Decision / Problem / Trade-off / Mechanism; stamps are exactly the four verified dates; Muster
-  only — no Bodh, no Arogh; first person per R7. Materially shorter than the seed's draft: state a
-  per-sheet word budget with rationale, aiming at DEC-043's one-screen goal — the layout is decided
-  by the next step against your measured lengths.
+  only — no Bodh, no Arogh; first person per R7. **Hard ceiling: ≤ 45 words per sheet across the
+  four row bodies, title ≤ 12** — derived from the verdict's own fit math (amendment B: two to
+  three short lines per row is what lets four sheets share a desktop screen). State each sheet's
+  measured count. If a decision cannot make its point under the ceiling, flag it in the handoff
+  rather than exceed — the layout step decides against your real lengths, and "materially shorter"
+  without a number is how a premium step lands unfittable.
 - **§5**: both cards gain key 4 `COST · API LIST` — `$147` (BODH) / `—` with `measured at launch`
   (THIS SITE), per DEC-048; the three stale rationales listed at the verdict's §5 close are cleaned;
   no other string changes.
@@ -154,10 +157,13 @@ amendment homing the §3 kicker wrap rule; HO-032.
 - **§10 scope adjacency is deleted, not rewritten** — no wave/whole-product adjacency exists in §1
   any more (DEC-046). The motion budget is re-stated: the hero terminal's seat is gone, and the
   count-up + `aria-live` posture moves to §5's cards.
-- **§4 layout**: four sheets, one screen (DEC-043 amendment B), decided against HO-031's measured
-  lengths. Horizontal scroll between cards is permitted (DEC-025 barred in-line text dragging, not
-  card paging) but costs discoverability — judge it and state the measured height either way.
-  Remove the no-date stamp special case: all four stamps carry dates (DEC-044).
+- **§4 layout**: four sheets, one screen at desktop (DEC-043 amendment B), decided against
+  HO-031's measured lengths. Horizontal scroll between cards is permitted (DEC-025 barred in-line
+  text dragging, not card paging) but costs discoverability — judge it and state the measured
+  height either way. **Rule §4's phone behaviour explicitly** — stacked, paged, or otherwise —
+  with its measured cost; Gate B judges desktop AND phone, and an unruled phone layout is a
+  Gate B bounce waiting to happen. Remove the no-date stamp special case: all four stamps carry
+  dates (DEC-044).
 - **The §3 kicker wrap rule homed in `page-shell.md`**: each kicker sentence an
   unbreakable-preferred unit (inline-block span, the headline's mechanism family), behaviour as
   measured in the verdict — sentence-boundary break at 375px, internal wrap without overflow at 320.
@@ -240,7 +246,9 @@ unaffected; only the coordinate was.
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
-**On completion:** File HO-026 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+**On completion:** File HO-026 in `agent-requests.md` — under this exact ID; the Gate A fix round
+already took HO-031/032, so higher IDs in the ledger are not an error. Run the Pre-Handoff
+Self-Review Checklist.
 ```
 
 ### 2026-07-26 Developer (web): §3 and §4
@@ -275,7 +283,8 @@ HO-032 ruled.
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
-**On completion:** File HO-027 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+**On completion:** File HO-027 in `agent-requests.md` — under this exact ID; higher IDs in the
+ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
 ```
 
 ### 2026-07-26 Developer (web): §5
@@ -308,7 +317,8 @@ counting cells.
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
-**On completion:** File HO-028 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+**On completion:** File HO-028 in `agent-requests.md` — under this exact ID; higher IDs in the
+ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
 ```
 
 ### 2026-07-26 Developer (web): Scroll-snap
@@ -338,7 +348,44 @@ between, and it is the likeliest thing to be rejected at Gate B.
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
-**On completion:** File HO-029 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+**On completion:** File HO-029 in `agent-requests.md` — under this exact ID; higher IDs in the
+ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
+```
+
+### 2026-07-28 QA (web): The independent audit exits zero
+
+```
+Role: qa
+Model: claude-opus-5
+
+**Task:** Repair `tests/qa-independent-audit.mjs` so it exits zero. This is deliberately its own
+step (DEC-050): it is an unbounded renderer bisect — mechanical debugging, no taste — and folding
+it into the full-page sweep risks a context-starved sweep doing rushed reads, the exact failure
+"verify against the state under test" exists to prevent.
+
+**Inputs:**
+- `tests/qa-independent-audit.mjs` · `tests/lib/cdp.mjs` (its `send()` timeout landed with the
+  §1+§6 step, HO-026 — so the stall now fails named instead of hanging)
+- `scripts/replay.js` — the leading, unproven hypothesis is the audit's injected 250 ms `SAMPLER`
+  interval competing with the replay under the 375 × 553 mobile chain. **Bisect it, do not assume
+  it.**
+- `knowledge-base/agent-requests.md` — HO-026's report of what the named failure now says
+
+**Deliverable:** the audit exits zero on the built page, with the cause named and the fix scoped to
+the audit's own machinery (an audit repair must never change page behaviour to pass); HO-033.
+
+**Acceptance criteria:**
+- `node tests/qa-independent-audit.mjs` exits zero, run twice consecutively (a flaky pass is not a
+  pass)
+- The cause is stated with evidence, not inferred; if the fix touched any criterion, each touched
+  criterion is re-justified
+- `bash scripts/test.sh` still green — the repair changed no shipped file's behaviour
+
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
+
+**On completion:** File HO-033 in `agent-requests.md` (file under this exact ID — the fix round
+already took HO-031/032, so higher IDs existing in the ledger is not an error). Run the Pre-Handoff
+Self-Review Checklist.
 ```
 
 ### 2026-07-26 QA (web): Full-page sweep
@@ -350,20 +397,17 @@ Model: claude-opus-5
 **Task:** Validate the content-complete page end to end. One sweep, not one per section.
 
 **Inputs:**
-- `knowledge-base/agent-requests.md` — HO-024 through HO-032 (HO-031/032 are the Gate A fix round;
-  the specs and copy they revised are the baseline this sweep verifies against)
+- `knowledge-base/agent-requests.md` — HO-024 through HO-033 (HO-031/032 are the Gate A fix round;
+  the specs and copy they revised are the baseline this sweep verifies against; HO-033 repaired
+  the audit)
 - Every section spec and copy file — derive scope from the specs directly, so a dev-charter omission does
   not also blind QA
 - `knowledge-base/bodh-sprint4-corpus.md` — read-only fidelity baseline
 
-**You own the audit's repair, and it is a deliverable of this step (REQ-008, DEC-042).**
-`qa-independent-audit.mjs` stalls in the 375 × 553 mobile chain — Node blocked at 0% CPU, its Chrome
-child spinning at ~105%. The transport half was fixed upstream (`cdp.mjs`'s `send()` now times out), so
-you will see a named failure rather than silence. **Find why the renderer saturates and fix it.** The
-leading hypothesis, unproven, is the audit's own injected 250 ms `SAMPLER` interval competing with
-`scripts/replay.js` under the mobile chain — bisect it rather than assume it. The audit must exit zero
-by the end of this step; it is the independent cross-check and the sprint has been running on one
-harness since.
+**The audit repair is NOT this step's** — HO-033 (the preceding step) already made
+`qa-independent-audit.mjs` exit zero. This sweep *runs* it as the independent cross-check; if it is
+red or hangs here, that is a finding against HO-033, re-pointed to PM, not something to debug
+inside the sweep.
 
 **Deliverable:** HO-030 in `agent-requests.md` — per-criterion pass/fail with evidence.
 
@@ -385,15 +429,27 @@ harness since.
 - `VERIFY.md` exists at repo root and the §1 chip resolves to it
 - **Run the `curl` against the live repo and record the result** — `pre-launch-checklist.md` requires it
   confirmed working, not assumed. This is the only step where the agent may make a network request
-- Copy rules as a text matrix across all sections: no `muster.build`, no cross-scope aggregates, scope
-  labels present, THIS SITE dashed — and the Gate A negatives: **no Bodh material in §1** (no measured
+- Copy rules as a text matrix across all sections **and across `VERIFY.md`** — the verification
+  index is the page's honesty mechanism and is exactly where a scope slip would be read by the
+  skeptic it exists for (DEC-050): no `muster.build`, no cross-scope aggregates, scope labels
+  present, THIS SITE dashed — and the Gate A negatives: **no Bodh material in §1** (no measured
   line, no BODH row, no hero terminal — DEC-046), **no named competitor anywhere** (DEC-047),
   `9.3 h`/`$147` byte-equal with §5 as primary (DEC-048), "context engineering" exactly once, in §3
+- **The four §4 stamps byte-exact** — `2026-04-24` · `2026-06-13` · `2026-04-12` · `2026-06-07`
+  (DEC-044): the stamps are the independent-arrival argument, and a transposed date on the one
+  section whose premise is checkable dates is a launch-grade defect
+- **Enumerate the live motion elements on the built page** against the budget HO-032 re-stated —
+  a count, not an impression; an over-budget page reads at Gate B as "feels busy," which is
+  checkable, not taste (DEC-050)
+- **The counting cells' live-region behaviour matches HO-028's stated posture**, verified during
+  playback, not read off the markup — a polite region re-announcing every frame is screen-reader
+  spam that every other check passes (DEC-050)
 
 **If a check fails:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step
 naming the failing check, and file HO-030 with what you found.
 
-**On completion:** File HO-030 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+**On completion:** File HO-030 in `agent-requests.md` — under this exact ID; higher IDs in the
+ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
 ```
 
 ### 2026-07-26 PM: Review the build and assemble the Gate B packet
@@ -405,7 +461,7 @@ Model: claude-opus-5
 **Task:** Review Wave 2, then build the Gate B packet.
 
 **Inputs:**
-- `knowledge-base/agent-requests.md` — HO-024 through HO-032, HO-030 being QA's sweep
+- `knowledge-base/agent-requests.md` — HO-024 through HO-033, HO-030 being QA's sweep
 - Every section spec, and the Gate A verdict in `knowledge-base/wave-review.md`
 
 **Deliverable:** review verdicts on HO-024 through HO-030 in `knowledge-base/agent-requests.md`, and the
@@ -422,7 +478,10 @@ Gate B packet written into `knowledge-base/wave-review.md`.
   a fetching reference and saw it go red
 - **Look at renders of the states under test** — including a key-beat frame for the tick, which is the
   exact miss that cost Sprint 1 a round
-- Confirm `VERIFY.md` exists and the curl was really run
+- Confirm `VERIFY.md` exists, the curl was really run, **and read VERIFY.md's own contents against
+  the copy rules** — scope labels, no cross-scope aggregate, no unmeasured claim (DEC-050). It is
+  developer-authored and no Content session ever touches it; this review is the only judgment pass
+  it gets
 - Confirm nothing reaches the founder that a machine could have settled
 - **Gate B packet**: the assembled page, desktop and phone, as one batch. Say what to look at and in what
   order. **Include the iPhone ask** — `pre-launch-checklist.md` carries a hard blocker only the founder's

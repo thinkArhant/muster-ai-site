@@ -122,6 +122,21 @@ needed it. The framework should make R1 and R3 cheap and automatic, so that the 
 is reserved for the judgment-shaped question it is actually good at — *what would a cold reader have to
 invent?* — rather than spent re-deriving line numbers a script could have checked.
 
+### Addendum (2026-07-28) — the second data point confirms R2's cheap form
+
+After Gate A the plan was stress-tested again, this time as **one out-of-band reviewer session**
+with repo access and a self-contained brief (context, decisions, plan, and an explicit "what to
+stress" list), instead of three parallel subagents. Result: **seven findings, all seven real and
+adopted** (DEC-050) — including two of the judgment-shaped kind no lint reaches (a
+developer-authored honesty file that no copy review ever touched; a "one screen" constraint bound
+to no viewport). Cost: roughly one session against the ~300k-token triple-agent audit, with a
+**higher hit rate per token than any of the three original agents**. The mechanically-checkable
+class was near-absent this time because `plan-lint.py` had already eaten it — which is R1 and R2
+working as the recommendation intended: the script takes the reference class, one well-briefed
+external reader takes the judgment class. For the core team: the brief's shape mattered — it named
+what was already settled (so the reviewer spent nothing re-litigating taste) and asked five
+specific gap classes. A reusable brief template may be worth shipping alongside R2.
+
 ---
 
 ## FF-002 — PM solved a framework problem locally instead of routing it upstream
