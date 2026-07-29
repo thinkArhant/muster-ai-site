@@ -49,6 +49,19 @@ THIS SITE metrics remain dashes until the founder supplies a snapshot (seed rule
 **The eight role names** are settled and need no ruling — PM · Developer · UI/UX · QA · Content ·
 Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 
+- [2026-07-29] [PM]: **Gate B, item 1 — does the footer ship the seed's copy as written?** The footer
+  currently renders a shell placeholder and cannot ship (DEC-054, hard launch blocker). The seed
+  specifies the content in full, so no design question is open — but its "8 agents, 1 operator" line
+  collides with item 2.
+- [2026-07-29] [PM]: **Gate B, item 2 — may the page say eight agents built it?** Measured: five roles
+  ran (pm 43 · developer 13 · ui-ux 9 · qa 7 · content 5 commits; marketing, legal and research never
+  invoked). §1's `8 AI agents · 1 operator` captions a diagram of eight role names and is defensible as
+  roster size; the seed's footer line states participation outright and is not true of this build.
+  Roster framing, true-participation framing, or both stated separately? PM recommends keeping §1's
+  caption and rewriting the footer line. See DEC-054.
+- [2026-07-29] [PM]: **Gate B, item 3 — the three phone checks**, in the Next Step block below. Two are
+  taste; the §2 playback one closes a hard launch blocker no harness on this machine can reach.
+
 <!-- Resolved 2026-07-27 — Formation: hub is PM, bus-bar carries the seven specialists. Founder ruling, Gate A item 4. -->
 <!-- Resolved 2026-07-28 — Gate A COMPLETE, all four items. Headline: B amended (struck `a human`, rust `an AI`, plain `team.`). §4: four re-selected decisions, plain language (DEC-043, DEC-044). §1: sparse hero, all Bodh out (DEC-045, DEC-046). §3: bare-Claude contrast, closed at 90/90 (DEC-047). §5: cost row in (DEC-048). Fix round routed at the gate by the interactive PM (DEC-049) — the steps below ARE the verdict's consumption. -->
 
@@ -64,70 +77,24 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 PM: Review the build and assemble the Gate B packet
-
-```
-Role: pm
-Model: claude-opus-5
-
-**Task:** Review Wave 2, then build the Gate B packet.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-024 through HO-033, HO-030 being QA's sweep
-- Every section spec, and the Gate A verdict in `knowledge-base/wave-review.md`
-
-**Deliverable:** review verdicts on HO-024 through HO-030 in `knowledge-base/agent-requests.md`, and the
-Gate B packet written into `knowledge-base/wave-review.md`.
-
-**Acceptance criteria:**
-- **Re-run both harnesses yourself.** A summary is not evidence. `tests/qa-fullpage-sweep.mjs` is a
-  third runner as of HO-030 and re-runs the same way
-- Confirm §4 as built carries DEC-044's four decisions in the Gate A treatment and HO-032's layout —
-  and that no trade-off was inflated away (DEC-043's guardrail: an impressive-but-costless decision
-  is a blocking defect)
-- Confirm §1 is the sparse hero and nothing more — its whole above-fold inventory is eyebrow,
-  headline, formation (DEC-045/046)
-- Confirm every relationship assertion exists **and would fail if violated**; confirm QA actually planted
-  a fetching reference and saw it go red
-- **OBS-015 is a review input, not just an observation**: HO-029's §2-exemption evidence quotes a string
-  whose count is a literal in the harness's template. Read that bullet knowing the figure is a constant
-  before accepting the handoff, and rule where the one-line fix lands
-- **Look at renders of the states under test** — including a key-beat frame for the tick, which is the
-  exact miss that cost Sprint 1 a round
-- Confirm `VERIFY.md` exists, the curl was really run, **and read VERIFY.md's own contents against
-  the copy rules** — scope labels, no cross-scope aggregate, no unmeasured claim (DEC-050). It is
-  developer-authored and no Content session ever touches it; this review is the only judgment pass
-  it gets. QA ran it as a text matrix and it passed; the judgment pass is still owed
-- Confirm nothing reaches the founder that a machine could have settled
-- **Three open items are PM's to rule before the packet closes**: the footer's shell placeholder, which
-  no sprint step owns and which is the last string a reader meets after the curl (OBS-012); OBS-009 and
-  OBS-013, the two halves of one snap/reveal trade; and A-007's stale motion count (OBS-003), now
-  measured off the built page and disagreeing with the assumption as written
-- **Gate B packet**: the assembled page, desktop and phone, as one batch. Say what to look at and in what
-  order. **Include the iPhone ask** — `pre-launch-checklist.md` carries a hard blocker only the founder's
-  device can close: §2 on a real iPhone in Safari with toolbars shown, both layers on screen for the
-  whole playback. He is already on his phone at this gate; asking costs nothing and closes it
-
-**On completion:** Write the packet into `wave-review.md`. Run the Pre-Handoff Self-Review Checklist.
-Promote the gate by writing the Gate B block into `## Next Step`.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Gate B — founder review: the assembled page
 
 ```
 Role: halt
 
 **Gate:** The whole page, desktop and phone, in one pass. §1 through §6, the brand mark, the spacing
-system, and scroll-snap.
+system, and scroll-snap. **Three things need your word** — the packet opens with them: the footer
+placeholder that ships today, the page's "8 agents" claim against the five roles that actually ran,
+and the phone asks below.
 
 **Also asked here, and it closes a hard launch blocker:** open §2 on your iPhone in Safari with the
 toolbars showing and confirm both layers stay on screen for the whole playback. No harness on this
 machine can prove it. **While you are there — does section snapping fight your scroll?** That is the
 WebKit half of scroll-snap, and it is a manual check by ruling: `qlmanage` cannot scroll, and iOS
 momentum is exactly where a proximity pull is most likely to feel wrong (REQ-007, DEC-042).
+**And one more, ten seconds:** Find on Page for a phrase in the middle of §4 or §5 (`scarcest`,
+`commit-days`) and see whether the match lands on screen. Chrome always does — measured, 0 of 165.
+Safari's find alignment is the one thing DEC-053's ruling leaves unverified.
 
 **Read:** `knowledge-base/wave-review.md` and write your verdict in its `## Verdict` section.
 
@@ -138,9 +105,35 @@ three Sprint-1 fix rounds each satisfied their criterion and broke something adj
 with no verification behind it is how that happened.
 ```
 
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
+_Empty — Gate B is the sprint's last step. Resume turns the founder's verdict
+into the fix round._
+
+
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-29 — Step: PM Wave 2 review and the Gate B packet (DEC-053, DEC-054, DEC-055). **All eight
+  handoffs accepted with no revision**, and the acceptance is re-derived rather than read: all three
+  runners re-run by PM on the shipped tree (`scripts/test.sh` GREEN both engines 273/273 + 27/27, the
+  independent audit exit 0 at 108/108, the full-page sweep exit 0 at 42/42), §4's word counts
+  independently recounted and reproduced exactly (44/42/44/44 and 10/9/11/9), §1's above-fold inventory
+  checked element by element against DEC-045/046, and the key-beat tick looked at in a frame that can
+  actually display it — L4 and L9 carry the rust tick clear of the timestamp. **Two violations planted
+  by PM and watched go red**, tree reverted clean: a fetching `<img src="https://…">` turned four checks
+  red naming `index.html:131 img[src]` with the §6 anchor still permitted, and §2's exemption removed
+  turned its check red — **which reproduced OBS-015 firsthand**, the check printing "0 of 13 gated rests
+  moved" on the red run. HO-029's §2 bullet was therefore read as "the check was green," never as a
+  measurement. **Three rulings closed**: the snap/reveal trade ruled once for both axes (amend the two
+  spec clauses, spend no mechanism — DEC-053), A-007's and `brand-guidelines.md`'s stale motion count
+  fixed directly in the PM-owned files (DEC-055), and the footer placeholder accepted as a hard launch
+  blocker (DEC-054). `muster-requests-lint.sh` back to green — 764 active lines to 6.
+  **Gate B is live: three things need the founder's word, and one of them is a number on the page that
+  the page's own public artifacts contradict** — five roles built this site, not eight.
 
 - 2026-07-29 — Step: QA full-page sweep (HO-030). **Every acceptance criterion passes**, with every
   load-bearing check watched to fail when violated: `scripts/test.sh` GREEN both engines (273/273 +

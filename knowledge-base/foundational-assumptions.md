@@ -103,10 +103,11 @@ Twelve palette values total; a thirteenth colour is a deviation requiring writte
 **Touchpoints**: `product-spec-seed.md` → Design direction, `brand-guidelines.md` §4,
 `agent-context/ui-ux.md`, `design-specs/web/page-shell.md`
 
-**Notes**: Palettes, type pairing, texture, the three motion elements, motifs, surface rules, and
-layout are settled. Design work is craft in execution, not exploration of alternatives. Exactly three
-live motion elements plus the curl cursor — a fourth is a deviation. Any paragraph meant to be read is
-full-ink; muted tone is for labels and captions only.
+**Notes**: Palettes, type pairing, texture, the motion budget, motifs, surface rules, and layout are
+settled. Design work is craft in execution, not exploration of alternatives. Exactly two live motion
+elements — the pulse motif and the readout count-up — plus the curl cursor; a third is a deviation.
+One-shot chains that end, such as the replay, are not ambient elements and do not spend the budget.
+Any paragraph meant to be read is full-ink; muted tone is for labels and captions only.
 
 ### A-008: The page collects no user data, so no privacy policy or terms are required
 

@@ -945,3 +945,125 @@
   🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -8; echo "=== Done entries count ==="; awk '/^## Done/,0' knowledge
   🧪 bash   git status --porcelain
   🧪 bash   git add -A && git commit -q -F - <<'EOF' qa: the whole page checks out, and the checks can fail Every acceptance criteri
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "lint exit=$?"
+  💬 The QA full-page sweep is complete. Every acceptance criterion passes. **Three harnesses green on the reverted tree** - `scripts/test.sh` — 273/273 Blink + 27/27 WebKit - `qa-independent-audit.mjs` — 
+    📖 ×17 · ✏️  ×22 · 📝 ×1 · 🧪 ×54
+  ✓ 96 turns · $10.67 · peak ctx 222k/1M 22% · out 70k  (success)
+  ✓ [32;1mQA[0m · [1m1h 3m[0m · advanced → 2026-07-26 PM: Review the build and assemble the Gate B packet (PM) · handoff HO-030 filed ✓
+    run so far: 6h 41m · $105.66 · 7 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 8
+▶ [35;1mPM[0m · 2026-07-26 PM: Review the build and assemble the Gate B packet  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the mandated first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  💬 Greenfield ongoing. Running housekeeping.
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Binding to PM for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh pm auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/pm.md
+  💬 Starting the harness now (long pole) alongside PM bootstrap reads.
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -60
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/pm.md
+  💬 Suite is GREEN. Pulling the counts and the other two runners.
+  🧪 bash   grep -nE "([0-9]+/[0-9]+)|engine|webkit|blink|WebKit|Blink|PASS|FAIL" .test-logs/run-20260729-050519.log | tail -40
+  🧪 bash   wc -l knowledge-base/agent-requests.md knowledge-base/wave-review.md knowledge-base/decision-log.md knowledge-base/curre
+  💬 273/273 + 27/27 GREEN, both engines. Now the other two runners.
+  🧪 bash   echo "=== independent audit ==="; node tests/qa-independent-audit.mjs 2>&1 | tail -12; echo "AUDIT EXIT: ${PIPESTATUS[0]
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/VERIFY.md
+  💬 All three runners green. Now the handoff ledger.
+  🧪 bash   node tests/qa-independent-audit.mjs >/dev/null 2>&1; echo "AUDIT EXIT: $?"; node tests/qa-fullpage-sweep.mjs >/dev/null 
+  🧪 bash   grep -n "^## \|^### \|^- \*\*ID\|^\*\*ID\|^### HO-\|^### REQ-\|^### OBS-\|^## Active\|^## Resolved" knowledge-base/agent
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 HO-024/025 were closed at the Wave 1 review; the live set is HO-026 through HO-033. Now verifying the claims rather than reading them.
+  🧪 bash   grep -n "DEC-04[3-9]\|DEC-05[0-2]" knowledge-base/decision-log.md | head -40
+  🧪 bash   grep -n "id=\"hero\"\|id=\"the-decisions\"\|id=\"watch-it-ship\"\|id=\"the-insight\"\|id=\"shipped-with-muster\"\|id=\"g
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  💬 §4's four decisions, order, and word counts reproduce (44/11+... = 44/42/44/44, titles 10/9/11/9). Now §1 and the footer.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  💬 §1 is sparse as ruled; the footer placeholder is real. Now OBS-015 in the source, and the render inventory.
+  🧪 bash   grep -n "gated rests moved" tests/verify-shell.mjs; echo "---context---"; grep -n "gated rests moved" -B 22 tests/verify
+  🧪 bash   ls -la tests/artifacts/ | head -50
+  💬 OBS-015 confirmed at `tests/verify-shell.mjs:3130` — `0 of ${r.gated.length}` where `${r.moved.length}` belongs. Now looking at the actual renders.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-hero-375.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s0304-1280.png
+  🧪 bash   grep -rn "the tick\|key-beat\|key beat" knowledge-base/ --include=*.md | head -20
+  🧪 bash   grep -n "tick" knowledge-base/design-specs/web/*.md | head -30
+  💬 "The tick" is §2's key-beat tick — the Sprint-1 flush-tick defect class. Looking at a frame that can actually display it.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s02-end.png
+  💬 That frame shows the key-beat tick exactly — L4 `pm ✓` and L9 `qa … PASS` each carry the 2px rust tick clear of the timestamp, not flush. Now the phone and light states.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/blink-dark-s0304-375.png
+  💬 Now re-deriving rather than trusting: planting two violations myself to confirm the load-bearing checks can actually go red.
+  🧪 bash   cp index.html /tmp/index.html.bak perl -0pi -e 's/<section id="watch-it-ship" class="section section--no-snap"/<section 
+  🧪 bash   bash scripts/test.sh 2>&1 | grep -iE "^FAIL|gated rests moved|none external|http\(s\)|external|snap" | head -30; echo "=
+  💬 Running it twice in one call was my error — it blew the timeout. Checking interim output.
+  🧪 bash   cat /private/tmp/claude-501/-Users-kanwarsandhu-Desktop-TA-muster-ai-site-sprint-auto-20260725-163930/154cd72e-81bd-4ca9
+  💬 The plant proves all three: the fetching guard goes red naming the site, the §2 exemption check goes red, and it prints `0 of 13 gated rests moved` **on the red run** — OBS-015 reproduced firsthand. K
+  🔧 ToolSearch
+  🔧 TaskStop
+  🧪 bash   pkill -f "verify-shell.mjs" 2>/dev/null; pkill -f "verify-webkit.mjs" 2>/dev/null; sleep 2; cp /tmp/index.html.bak index
+  💬 Tree reverted clean. Re-confirming green on the reverted tree.
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -6
+  🧪 bash   grep -cE "^PASS" .test-logs/run-20260729-053335.log; grep -E "checks passed" .test-logs/run-20260729-053335.log
+  🧪 bash   grep -n "R12\|R6\|R3 \|^### R\|^| R" knowledge-base/agent-skills/content/copy-rules.md | head -30
+  🧪 bash   grep -n "^## R" knowledge-base/agent-skills/content/copy-rules.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  💬 Suite GREEN on the reverted tree (273/273 + 27/27). Now the PM-owned cascade gaps and the remaining observations.
+  🧪 bash   grep -n "instrument" index.html | head; echo "--- A-007 ---"; grep -n "A-007" -A 12 knowledge-base/foundational-assumpti
+  🧪 bash   grep -n "footer\|Footer\|provenance\|Provenance\|authorship\|@gmail\|github.com/thinkArhant" knowledge-base/product-spec
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/product-spec-seed.md
+  💬 The seed fully specifies the footer — and its line credits 8 agents with speccing this build, when `.populated` records 5 roles ever ran. Noting that for the fix round. Now the PM-owned cascade gaps.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/brand-guidelines.md
+  💬 Fixing the two PM-owned cascade gaps (OBS-002, OBS-003) now.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/brand-guidelines.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  🧪 bash   grep -n "^## \|^# " knowledge-base/wave-review.md
+  🧪 bash   sed -n '1,20p' knowledge-base/wave-review.md; echo "=== tail ==="; tail -25 knowledge-base/wave-review.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  💬 One more thing to verify before I write the packet — whether the page's own roster claim is true of this build.
+  🧪 bash   git log --format="%s" | sed -E 's/^([a-z/-]+):.*/\1/' | sort | uniq -c | sort -rn
+  💬 Five roles built this page — pm, developer, ui-ux, qa, content. Marketing, Legal and Research never ran. That makes the page's `8 AI agents` caption a Gate B item. Writing the packet.
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  💬 Now the review verdicts and the Active-section sweep.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📝 write  /tmp/new-resolved.md
+  🧪 bash   python3 - <<'PY' lines = open('knowledge-base/agent-requests.md').read().split('\n') new_resolved = open('/tmp/new-resol
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh; echo "LINT EXIT: $?"; echo "=== tail ==="; tail -6 knowledge-base/agent-req
+  💬 Lint green — Active 6/300, closing OBS-010. Now the decision records.
+  🧪 bash   tail -22 knowledge-base/decision-log.md
+  🧪 bash   python3 - <<'PY' p = 'knowledge-base/decision-log.md' s = open(p).read() new = '''### DEC-053 — Proximity snap keeps its
+  🧪 bash   grep -n "^## \|^- \[" knowledge-base/pre-launch-checklist.md | head -30
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  💬 Now the queue advance and the founder notice.
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() old_next_start = s.index('### 2026-07-26 PM:
+  💬 The promotion swapped the wrong way. Fixing.
+  🧪 bash   python3 - <<'PY' p='knowledge-base/orchestration-queue.md' s=open(p).read() empty = "_Empty — Gate B is the sprint's las
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1; echo "QUEUE LINT EXIT: $?"
+  🧪 bash   ls knowledge-base/founder-notices.md 2>&1 && tail -5 knowledge-base/founder-notices.md
+  🧪 bash   cat >> knowledge-base/founder-notices.md <<'EOF' - 2026-07-29 pm: **Gate B is live — the page is built and it is three q
+  💬 Now the Pre-Handoff Self-Review Checklist.
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 40 muster/system-guide.md | head -60
+  🧪 bash   grep -n "^## Pre-Handoff Self-Review Checklist" -A 45 muster/system-guide.md
+  🧪 bash   grep -n "Self-Review Checklist" muster/system-guide.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/system-guide.md
+  💬 Running the checklist's verification items.
+  🧪 bash   for d in DEC-005 DEC-015 DEC-022 DEC-023 DEC-025 DEC-027 DEC-032 DEC-034 DEC-042 DEC-043 DEC-044 DEC-045 DEC-046 DEC-047
+  🧪 bash   grep -n "^### A-00" knowledge-base/foundational-assumptions.md; echo "--- roster/agent-count mentions ---"; grep -n "eig
+  💬 All DEC references resolve; no assumption contradicts the Gate B items. Checking the sprint board.
+  🧪 bash   grep -n "Gate B\|build review\|Wave 2\|^## \|^- \[" knowledge-base/current-sprint.md | head -40
+  💬 The board is stale — all those shipped. Updating it.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  🧪 bash   python3 - <<'PY' p='knowledge-base/current-sprint.md' s=open(p).read() for old,new in [ ('- [ ] **§1 + §6** —','- [x] **
+  🧪 bash   git status --porcelain
+  💬 No shipped file touched — correct for a review step. Committing.
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the whole page clears review; gate B asks three things All eight Wave 2 han

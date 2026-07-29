@@ -889,5 +889,113 @@ during playback, not off the markup), PM.
 **Touched**: `scripts/count-up.js`, `styles/base.css`, `index.html` (§5), `tests/verify-shell.mjs`,
 `pre-launch-checklist.md`, `agent-requests.md` (HO-028).
 
+### DEC-053 — Proximity snap keeps its bounded pull; the two spec clauses that assume otherwise are amended (2026-07-29)
+
+**Decision**: `page-shell.md` §7.1's A11 and `section-04-decisions.md` §12.16 both require that a
+start-aligned `scrollIntoView()` land its target fully visible. With proximity snapping on it does
+not — the pull carries a target up to 180px past on the y-axis, and leaves 46% of §4's off-canvas
+value visible on the x-axis. Both clauses are amended to the two checks that shipped. **No mechanism
+is spent, and snapping is not weakened.**
+
+**Why the clauses are wrong rather than the build.** They were written against a hypothesis about
+what find-in-page does, and the hypothesis is wrong about the alignment. Chrome's find uses
+centre-if-needed, under which **0 of 165 text leaves land off screen** — a centred match sits half a
+viewport from either edge, which is more than the pull can spend. The page ships exactly one
+start-aligned mechanism, fragment links, and every fragment target it has is a section start, which
+is itself a snap position: `#main` lands at +0px at both viewports, asserted. The residual is a
+target deep inside a section reached start-aligned, **which nothing on this page does**.
+
+**Why not buy it.** The only cures are script on the scroll position or per-element scroll margins.
+The first is what §7.1 forbids outright and what "no script reads, writes or intercepts the page's
+scroll position" is asserted against; the second prices every future element against a case no
+reader meets. Removing snapping entirely would cost the composition's own rule — one idea per
+screen, true of where the page stops — to satisfy a clause describing no real interaction.
+
+**What is honestly not covered**: Safari's find alignment is unmeasured, because `qlmanage` cannot
+scroll. It is added to the Gate B phone ask rather than assumed to match Blink. If Safari uses
+start-alignment the ruling is revisited with a real measurement behind it.
+
+**Consequences**: OBS-009 and OBS-013 are one ruling, not two — they are the x- and y-axis halves of
+the same trade. The spec amendments are UI/UX's to make and land in the Gate B fix round; the build
+is correct as shipped and needs no change.
+
+**Impact**: UI/UX (owns both spec files), Developer, QA, PM.
+
+**Touched**: `decision-log.md`, `wave-review.md` (Gate B packet), `agent-requests.md` (HO-027,
+HO-029 verdicts).
+
+---
+
+### DEC-054 — The footer placeholder cannot ship, and the page's "8 agents" needs the founder's word (2026-07-29)
+
+**Decision**: the footer's shell placeholder is a launch blocker and is recorded as one. The
+adjacent question — whether the page may say eight agents built it — is a founder call and goes to
+Gate B rather than being settled here.
+
+**The placeholder.** `Provenance line and links ship with their own spec.` renders as the last string
+a cold reader meets after the curl. No sprint step ever owned footer copy. On a page whose argument
+is that a governed AI team ships finished work, a visible TODO in the footer refutes the page more
+efficiently than a critic could. `product-spec-seed.md` → Footer already specifies the content in
+full, so no design question is open; the fix needs Content for voice and Developer for the build.
+
+**The count, measured.** `git log` on this branch by commit subject: pm 43 · developer 13 · ui-ux 9 ·
+qa 7 · content 5 · marketing, legal and research **zero — never invoked, all three null in
+`agent-context/.populated`**. **Five roles built this page, not eight.** The seed's footer line
+("Specced, written, and reviewed by Muster's AI team — 8 agents, 1 operator") states the
+participation reading outright and is not true of this build. §1's caption `8 AI agents · 1 operator`
+captions a diagram of eight role names and is defensible as roster size; `VERIFY.md` already carries
+that qualifier, and the sweep asserts it stays. But the reader meets the hero long before
+`VERIFY.md`, and R7 bars Content from inflating a founder-supplied passage — so the fix round cannot
+simply transcribe the seed.
+
+**Why this is the founder's and not PM's**: it is a claim about him and his build, the seed is
+founder-authored and read-only, and the two defensible framings (roster size versus true
+participation) are a voice decision, not a correctness one. What PM owes the gate is the measured
+count, and that is supplied. **PM's recommendation is recorded in the packet**: keep §1's caption,
+rewrite the footer line to the true participation.
+
+**Consequences**: OBS-012 accepted and escalated. Also routed to the fix round, each with its file
+and line: OBS-015 (`tests/verify-shell.mjs:3130` prints a literal `0` where the measured
+`r.moved.length` belongs, so the §2-exemption check's evidence reads identically red and green —
+reproduced firsthand by PM), OBS-011 (`section-05-copy.md` §6's R4 prose says three em-dashes where
+the table it describes carries four; the table is what ships and what the harness parses) and
+OBS-007 (`section-06-copy.md` §4.2's inventory aside disagrees with `section-01-hero.md` §12 and
+with the build).
+
+**Impact**: Content, Developer, UI/UX, QA, PM.
+
+**Touched**: `decision-log.md`, `wave-review.md` (Gate B packet), `pre-launch-checklist.md`,
+`agent-requests.md` (HO-026, HO-028, HO-030 verdicts).
+
+---
+
+### DEC-055 — A-007's motion budget is corrected to the count the built page actually runs (2026-07-29)
+
+**Decision**: `foundational-assumptions.md` A-007 and `brand-guidelines.md` §4 are amended to the
+two-live-elements-plus-cursor budget. Both still carried "exactly three live motion elements plus
+the curl cursor," which DEC-046 retired when the hero terminal left §1, and `brand-guidelines.md`
+additionally still described the formation as "PM hub + eight plates."
+
+**Measured off the built page, not read off a spec** (the first time that has been done): three
+looping seats, all pulse or cursor — `#header` pulse, `#watch-it-ship` pulse, `#get-started` cursor —
+which is the pulse *motif* at two seats, plus the JS count-up as ambient element two. §2's 44 running
+transitions are its one-shot opacity reveal, which ends, and which DEC-015 already rules is not an
+ambient element. The page is inside budget; the documents had drifted.
+
+**Why it mattered enough to fix now**: A-007 is a cross-cutting assumption every role checks its
+deliverable against. Left stale, an agent measuring the page against A-007 as written would either
+report a false deviation or accept a real one. The assumption's *principle* — a new ambient element
+is a deviation — is unchanged, which is why the specs that cite A-007 by principle need no edit.
+
+**Consequences**: closes OBS-002 and OBS-003. Both were cascade gaps in PM-owned files, so PM fixed
+them directly rather than routing them.
+
+**Impact**: UI/UX, Developer, QA, Content, PM.
+
+**Touched**: `foundational-assumptions.md` (A-007), `brand-guidelines.md` (§4 motion + motifs rows),
+`decision-log.md`, `agent-requests.md` (HO-032 verdict).
+
+---
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

@@ -192,19 +192,19 @@ the GitHub raw URL (DEC-010).
   - **Acceptance criteria**: all five relationships implemented with their assertions in `scripts/test.sh`; the gate-3 tick collision resolved; pennant in the header and five separators; favicon data-URI swapped; zero new network requests
   - **Blocks every section build.**
 
-- [ ] **§1 + §6** — Priority: HIGH, Effort: M, Platform: web — §1 is the sparse hero (DEC-045/046)
-- [ ] **§3 + §4** — Priority: HIGH, Effort: L, Platform: web — new §4 copy (DEC-044), HO-032 layout
-- [ ] **§5** — Priority: MED, Effort: M, Platform: web — four-key cards; owns count-up/`aria-live`
-- [ ] **Scroll-snap** — Priority: MED, Effort: S, Platform: web — builds last
+- [x] **§1 + §6** — Priority: HIGH, Effort: M, Platform: web — §1 is the sparse hero (DEC-045/046)
+- [x] **§3 + §4** — Priority: HIGH, Effort: L, Platform: web — new §4 copy (DEC-044), HO-032 layout
+- [x] **§5** — Priority: MED, Effort: M, Platform: web — four-key cards; owns count-up/`aria-live`
+- [x] **Scroll-snap** — Priority: MED, Effort: S, Platform: web — builds last
 
 ### Gate A fix round (precedes every build — DEC-049)
 
-- [ ] **Content: four copy files re-cut to the verdict** — HO-031, `claude-fable-5`
-- [ ] **UI/UX: sparse hero + §4 one-screen layout** — HO-032, `claude-fable-5`, after HO-031
+- [x] **Content: four copy files re-cut to the verdict** — HO-031, `claude-fable-5`
+- [x] **UI/UX: sparse hero + §4 one-screen layout** — HO-032, `claude-fable-5`, after HO-031
 
 ### QA
 
-- [ ] **Full-page sweep** — Priority: HIGH, Effort: L, Platform: web
+- [x] **Full-page sweep** — Priority: HIGH, Effort: L, Platform: web
   - **Acceptance criteria**: cross-engine WebKit **and** Blink; zero runtime network requests; contrast in both themes; reduced-motion and no-JS render complete content; §2 fidelity still byte-clean; all relationship assertions green; audit exits zero
   - Red build: halt to PM, do not advance
 

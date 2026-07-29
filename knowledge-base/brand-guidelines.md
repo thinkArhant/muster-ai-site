@@ -136,12 +136,13 @@ rounded-friendly styling.
 
 **Motifs**: stencil section tags (`§01 · THE INSIGHT`) · hairline rules with machined end-ticks ·
 registration `+` marks · instrument-readout metric cells · decisions as spec-sheets · the roster as a
-formation (PM hub + eight plates on a bus-bar) · an `OPERATIONAL` status bar.
+formation (PM hub + seven specialist plates on a bus-bar) · an `OPERATIONAL` status bar.
 
-**Motion — three live elements, nothing else**, all `prefers-reduced-motion`-gated: the hero terminal
-streaming the real run-log with rust highlights on key beats; the OPERATIONAL dot's rust pulse; and
-scroll-triggered count-up on readout metrics (decimals roll as decimals). Plus the blinking cursor
-after the curl. Reduced-motion paths render complete content, never a degraded subset.
+**Motion — two live elements, nothing else**, all `prefers-reduced-motion`-gated: the OPERATIONAL
+dot's rust pulse, and scroll-triggered count-up on readout metrics (decimals roll as decimals). Plus
+the blinking cursor after the curl. The replay terminal streaming the real run-log with rust
+highlights on key beats is a one-shot chain, not an ambient element. Reduced-motion paths render
+complete content, never a degraded subset.
 
 **Layout**: one idea per screen; reading column ~64ch; full-width hairline section rules.
 

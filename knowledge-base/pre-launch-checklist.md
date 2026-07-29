@@ -29,6 +29,16 @@
     *spec → live* per rule 5 so it is never conflated with BODH's *idea → live*.
   - Milestone gate: launch
 
+- [ ] **The footer ships real copy, not the shell placeholder** — Blocker: hard, Source: pm, Added: 2026-07-29
+  - `Provenance line and links ship with their own spec.` currently renders as the last string a cold
+    reader meets after the curl. No sprint step ever owned footer copy. See DEC-054.
+  - `product-spec-seed.md` → Footer specifies the content in full — authorship line,
+    `thinkArhant@gmail.com`, GitHub profile, and links to repo · queue · handoffs · decision log ·
+    VERIFY. No design question is open; this needs Content for voice and Developer for the build.
+  - Blocked on the Gate B ruling for the seed's "8 agents, 1 operator" line: five roles built this
+    page, so that line cannot be transcribed as written (R7 bars inflating a founder-supplied passage).
+  - Milestone gate: launch
+
 - [x] **Curl command copy-paste-verified against the live repo** — RESOLVED 2026-07-29, Source: qa, Added: 2026-07-24
   - Seed rule 12 (real URLs only) and §6. The command must be run and confirmed working, not assumed.
   - Run against the live repo, not assumed: `HTTP 200`, 16377 bytes, no redirect — the effective URL is
