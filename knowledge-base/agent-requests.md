@@ -10,6 +10,166 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-28 HO-026 — §1 and §6 built: the sparse hero, the command, and the proof link
+**Type:** handoff
+**Producer:** Developer
+**Deliverable:** `index.html` (§1, §6), `styles/sections.css` (new), `styles/tokens.css`,
+`VERIFY.md` (new, repo root), `tests/verify-shell.mjs`, `tests/lib/cdp.mjs`,
+`tests/qa-independent-audit.mjs`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+- [ ] QA — consumes the built page and the amended guards at the full-page sweep (not a review gate)
+
+**What shipped**
+
+- **§1, the sparse hero.** Eyebrow · headline · formation above the fold; the THIS SITE remnant
+  strip and the curl below it. Nothing else — no measured line, no BODH row, no terminal. The
+  section's whole element inventory is asserted, negatively as well as positively: within `#hero`
+  none of `9.3`, `4.8`, `$147`, `$24.73`, `289`, `~64`, `bodh` occurs, there is no `<ol>` and no
+  terminal/log element, and the only digits in the section's text are the eyebrow's `4` and the
+  caption's `8` and `1`.
+- **The headline announces what it should.** Rendered text is
+  `Ship a product with a human an AI team.`; the computed accessible name, read from
+  `Accessibility.getFullAXTree` rather than asserted, is `SHIP A PRODUCT WITH AN AI TEAM.` — the
+  struck phrase absent from the name and present in the render. The comparison is
+  case-insensitive and word-exact: Blink computes the name from rendered (uppercased) text and
+  WebKit from source text.
+- **The formation announces the architecture it draws** — group → `PM` → a list of exactly seven
+  specialists in the locked order, verified out of the AX tree; the hub's distinction is border
+  colour **and** weight 700 **and** position; bus, spine, stems and registration marks reach the
+  AX tree nowhere. At ≥`--bp-wide` the seven plates share one row and the bus's rendered width
+  equals the plate row's, measured — 676.38px against 676.38px. Below it the ladder stacks.
+- **The fold contract holds, read off the elements rather than off the spec's figures.** At
+  375 × 553 the hub (331.17) and four whole plates (plate 4 at 518.36) are above the fold, with
+  plate 5 cut at 565.16 — the designed scroll cue. At 320 × 553 the hub (360.56) and three plates
+  (500.95). No horizontal scroll at 320/360/375/390.
+- **§6.** The lead line, the exact `curl` with the page's only cursor, `cd my-product && claude`
+  adjacent and unannotated, and one GitHub link whose visible text is its destination. §6's
+  interactive inventory is exactly one element.
+- **The curl is one string in three places** — `copy-rules.md` R12, §1, §6 — asserted by reading
+  R12 off disk at test time and comparing bytes, never by fetching.
+- **`VERIFY.md` at repo root**, which the §1 chip resolves to: the method in five lines, the three
+  scopes stated separately with THIS SITE dashed, an index of what is committed in this repo and
+  what each artifact holds, and the two commands a reader can run. This closes a hard launch
+  blocker (`pre-launch-checklist.md`); it is developer-authored and has had no content pass.
+- **The `--text-display` floor landed with its assertion, not alone.** `clamp(1.75rem, 6.5vw,
+  4.25rem)` in `styles/tokens.css`, guarded by the relationship it exists for rather than by its
+  literal value: the headline sets without overflow at 320/360/375/390 — 3L, 3L, 2L, 2L at 28px,
+  h1 overflow 0 at every width — and both treated phrases report exactly one client rect at each,
+  so no strike or accent can break mid-phrase.
+
+**The `http(s)` ruling, implemented as a narrowing (DEC-034)**
+
+The check was **amended, never deleted**, and it is now default-deny. Every `http(s)` occurrence in
+a shipped file is classified from what precedes it; exactly two classes pass — a URL as inert text
+(a comment included), and the value of an `href` on an anchor. `url()`, `@import`, `src`, `srcset`,
+`poster`, `data`, `<link href>`, `<script src>` and a `fetch()` argument are fetching references and
+fail. The DOM-side guard needed the same narrowing and got it, plus a new one: a cross-origin `href`
+passes only on an `<a>`, and **any prefetch/preload/preconnect hint fails**, because it would fetch
+without a click and would otherwise walk straight through the anchor allowance.
+
+**The guard was proven to fail.** A planted `<img src="https://…">` and `url("https://…")` turned
+the run red naming both sites exactly (`index.html:313 img[src]`, `styles/sections.css:22 css
+url()/@import`) alongside three zero-external-request failures. Tree reverted clean, re-run green;
+the permitted §6 anchor stayed permitted throughout.
+
+**The two Wave 1 rulings that landed here (DEC-042)**
+
+1. **`cdp.mjs`'s `send()` has a deadline.** Every reply is awaited under a 180 s ceiling and
+   rejects naming the method, the elapsed time and the message id. The ceiling is deliberately far
+   above any legitimate call — this harness awaits a real 48-second replay chain inside one
+   `Runtime.evaluate` — so it catches a transport that has stopped answering rather than bounding
+   how long a page may take.
+2. **The display floor** — above, with its assertion.
+
+**The independent audit — reported as a result, not a pending item**
+
+`node tests/qa-independent-audit.mjs` **completes and exits zero**, run twice consecutively
+(107/107, ~2m55s each). It did not hang, and no CDP timeout fired — the stall did not reproduce on
+this build once the transport deadline was in place. On its first run after §1/§6 landed it exited 1
+with eight named failures; two were real defects in this build and six were assertions whose subject
+had changed. All eight are resolved:
+
+- **Real defect** — the `VERIFY` chip and §6's link measured 79×26 and 300×14 on a coarse pointer.
+  §6's link now carries the shell's `.link-block` idiom; both measure ≥44 × 44.
+- **The coarse-pointer probe was blind.** A mobile viewport is not a coarse pointer:
+  `matchMedia("(pointer: coarse)")` reported **false**, so the hit-area rule never matched and the
+  check measured the fine-pointer visual — it would have passed a page with no such rule at all.
+  Measured three ways: mobile viewport false, `setEmulatedMedia` with a `pointer` feature false,
+  `setTouchEmulationEnabled` true. It now uses touch emulation and **asserts it is on** first.
+- **The full-ink rule** read `classList`, so §1's eyebrow — four `<li>` facts inside a `.t-label`
+  list, inheriting muted from it — read as four muted paragraphs. Now `closest`: a muted *reading*
+  paragraph still fails, which is the rule.
+- **The small-rust rule** had one named graphical exemption (the corpus ✓). The chip's `⎘` is the
+  second, named by `page-shell.md` §8's chip motif. Both are asserted with what makes them safe —
+  aria-hidden or redundant with ink text beside them, each against the 3:1 non-text floor in both
+  themes. Three contrast checks partition the same way.
+- **The animation inventory** reads pulse ×6 **plus exactly one `cursor-blink`** and fails on
+  anything else.
+- **The tab-order check** asserted a fixed three-stop list. Two things defeat a list: the stop set
+  grows as sections ship, and §2's narration list is a scroll container, which Chrome makes
+  keyboard-focusable **with no `tabindex` attribute at all** — unenumerable by any attribute
+  selector, and only a scroll container in some states. It now drives real Tab keys and compares
+  each stop with the last by `compareDocumentPosition`: focus advances in document order and never
+  revisits. A trap or a reorder still fails.
+- **The replay control's focus ring** depended on the input modality an unrelated earlier block
+  happened to leave the engine in — `:focus-visible` on a programmatically focused element is
+  modality-dependent, so a real focus regression could have hidden behind a reordering. One real
+  key press now sets keyboard modality first.
+- **The reading-measure probe** read `#hero .instrument p`, which left with the section. It follows
+  a rendered body paragraph now, and the `.instrument` inset probe was decoupled from it. That
+  inset check also gained a length guard: with no `.instrument` present its `every()` would have
+  reported a pass on nothing measured.
+
+**Verification**
+
+- `bash scripts/test.sh` **GREEN, both engines** — 197/197 Blink, 15/15 WebKit (was 168/168 + 15/15;
+  29 checks added).
+- `node tests/qa-independent-audit.mjs` **exit 0, 107/107, twice consecutively.**
+- **Cross-engine, looked at rather than inferred**: `tests/artifacts/blink-dark-hero-1280.png`,
+  `blink-dark-hero-375.png`, `webkit-dark.png` and `webkit-dark-s06-check.png` (§6 rendered alone
+  through QuickLook, since the WebKit thumbnail only reaches the top of the page). Both engines
+  render the strike, the rust substitution, the hub/bus/regmark construction, the ladder cut at the
+  fold, the remnant's dashes and chip, and §6's cursor identically.
+- Registration-mark sparseness is now grouped by the surface each mark hangs on rather than by the
+  `.instrument` class, so §1's remnant is covered the moment it ships instead of sitting outside
+  the rule: `remnant 2 · terminal 2 · slot 2 · slot 2 · slot 2`.
+
+**Would Apple ship this?** Yes. The first screen is one claim, one diagram, and nothing that needs
+explaining — and the claim edits itself in front of the reader, which is the whole argument in one
+gesture. The page asks to be checked and then hands over the file that lets you do it. What is
+deliberately unpolished: `VERIFY.md` is a developer's index and reads like one.
+
+**Revision log:**
+- 2026-07-28: Filed. Self-review caught and fixed: one overclaim in `VERIFY.md` (that every scope's
+  figures come from the meter — the wave's per-step figures come from the sprint driver); a
+  first-draft "who built this" line that read `8 agents, 1 operator` as a description of *this*
+  build, which is roster size stated as wave participation — the exact scope slip the file exists to
+  catch; and five archaeology phrasings in code comments (Rule 15) re-cut to current truth. Two
+  AX-name comparisons were written case-sensitive and failed on Blink's uppercasing; both now match
+  the cross-engine rule the hero spec states.
+
+**Observations** (non-blocking, for PM):
+- OBS-006 — the queued QA step (audit repair, HO-033) is premised on an unbounded renderer bisect,
+  and the audit now exits zero twice with no timeout fired.   Severity: med
+  Evidence: `.test-logs/audit-post-s01e.log`, `audit-post-s01f.log` — exit 0, 107/107 both runs,
+  ~2m55s each; the first post-§1 run (`audit-post-s01.log`) also completed, at 175 s, with eight
+  named failures and no CDP timeout.
+  Suggested action: PM rules at the build-review step whether that step still has a subject. The
+  queue was not touched — scope changes are not this step's to make.
+- OBS-007 — `section-06-copy.md` §4.2 states "§1's interactive inventory is exactly two elements and
+  §6's is one"; `section-01-hero.md` §12 rules §1's inventory at exactly one, the `VERIFY ⎘` chip.
+  Severity: low
+  Evidence: the two spec files; the build follows the hero spec and asserts the chip is `#hero`'s
+  only focusable element.
+  Suggested action: PM reconciles the copy file's aside at review.
+- OBS-008 — the audit's `.instrument` inset check loses its subject when the last shell placeholder
+  leaves (after §5 lands).   Severity: low
+  Evidence: the check now fails loudly with "no .instrument surface on the page — re-target this
+  probe" rather than passing vacuously on an empty set.
+  Suggested action: PM routes the re-target to whichever step retires the final placeholder.
+
 ### 2026-07-28 HO-031 — Gate A fix round: four copy files re-cut to the verdict
 **Type:** handoff
 **Producer:** Content

@@ -211,9 +211,13 @@ const AUDIT = `(() => {
   const inkHex = hex(parse(cs(document.body).color));
   const mutedTok = cs(document.documentElement).getPropertyValue("--muted").trim();
   const readingSelectors = "p, li, dd, blockquote";
+  /* A label's type is set on the element that owns the type token, and a list
+     of labels sets it on the list — §1's eyebrow is four <li> facts inside a
+     .t-label <ul>, and each fact inherits the muted colour from it. Closest,
+     not classList: a muted READING paragraph still fails, which is the rule,
+     while an item inside a label container is correctly not one. */
   const mutedProse = [...document.querySelectorAll(readingSelectors)].filter((el) => {
-    const isLabel = el.classList.contains("t-label") || el.classList.contains("t-micro") ||
-                    el.classList.contains("status") || el.closest(".statusbar");
+    const isLabel = el.closest(".t-label, .t-micro, .status, .statusbar");
     return !isLabel && hex(parse(cs(el).color)) !== inkHex;
   }).map((el) => (el.className || el.tagName) + " -> " + cs(el).color);
 
@@ -231,14 +235,25 @@ const AUDIT = `(() => {
     if (hex(parse(cs(el).color)) !== accentHex) return false;
     return !(size >= 24 || (size >= 19 && weight >= 700));
   });
-  /* Replay spec §9 declares exactly one exception and states its floor: the
-     corpus's own ✓ glyph is a graphical mark, redundant with the line's 2px
-     accent mark and its bold ink token, and is held to 3:1 rather than 4.5:1.
-     It is separated here rather than waved through — the count is asserted. */
-  const graphicalRust = rustRuns.filter((el) => el.classList.contains("log__glyph"))
-    .map((el) => (el.className || el.tagName) + " @" + cs(el).fontSize + " '" + el.textContent.trim() + "' in " +
-                 (el.closest(".log__line--key") ? "a key-beat line that also carries a mark and a bold token" : "AN UNMARKED LINE"));
-  const smallRust = rustRuns.filter((el) => !el.classList.contains("log__glyph"))
+  /* Two glyphs are named exceptions, each held to the 3:1 non-text floor
+     rather than 4.5:1, and each separated here rather than waved through —
+     what makes them safe is asserted, not assumed:
+       - the corpus's ✓ (replay spec §9), redundant with the line's 2px accent
+         mark and its bold ink token;
+       - the VERIFY chip's ⎘ (page-shell §8's chip motif — accent border, INK
+         text, rust glyph), which is aria-hidden and sits beside the ink word
+         that carries the meaning.
+     A rust run that is neither remains a defect. */
+  const GLYPH_CLASSES = ["log__glyph", "chip__glyph"];
+  const isGlyph = (el) => GLYPH_CLASSES.some((c) => el.classList.contains(c));
+  const graphicalRust = rustRuns.filter(isGlyph).map((el) => {
+    const redundant = el.classList.contains("log__glyph")
+      ? (el.closest(".log__line--key") ? "a key-beat line that also carries a mark and a bold token" : "AN UNMARKED LINE")
+      : (el.getAttribute("aria-hidden") === "true" && /VERIFY/.test(el.parentElement.textContent)
+          ? "an aria-hidden mark beside the ink word VERIFY" : "AN UNMARKED CHIP");
+    return (el.className || el.tagName) + " @" + cs(el).fontSize + " '" + el.textContent.trim() + "' in " + redundant;
+  });
+  const smallRust = rustRuns.filter((el) => !isGlyph(el))
     .map((el) => (el.className || el.tagName) + " @" + cs(el).fontSize + " '" + el.textContent.trim().slice(0, 30) + "'");
 
   /* --- headings, landmarks, names --- */
@@ -349,7 +364,15 @@ try {
      character — so a 64ch column does not render 64 characters of prose. This
      breaks the real line into words at the rendered width and counts. */
   const MEASURE = `(() => {
-    const p = document.querySelector("#hero .instrument p");
+    /* The reading measure is taken from a rendered body paragraph at the full
+       64ch column — §3's is the permanent target; while shell placeholders
+       remain they carry the same column and stand in for it. The
+       instrument-inset probe below measures .instrument directly rather than
+       this paragraph's ancestor, so the two can move apart without either
+       going blind. */
+    const p = document.querySelector("#the-insight p.read") ||
+              document.querySelector(".instrument p.read") ||
+              document.querySelector("main p.read");
     const st = getComputedStyle(p);
     const width = p.getBoundingClientRect().width;
     const text = p.textContent.replace(/\\s+/g, " ").trim();
@@ -366,11 +389,12 @@ try {
     if (cur) per.push(cur.length);
     span.remove();
     const full = per.slice(0, -1);
-    const inst = p.closest(".instrument");
+    const inst = document.querySelector(".instrument");
     return { colWidth: Math.round(width * 10) / 10, lines: per.length,
+             probe: p.closest("section") ? p.closest("section").id : "?",
              charsPerLine: per, typicalChars: full.length ? Math.round(full.reduce((a, b) => a + b, 0) / full.length) : per[0],
-             instrumentPadding: getComputedStyle(inst).paddingLeft,
-             instrumentOuter: Math.round(inst.getBoundingClientRect().width * 10) / 10 };
+             instrumentPadding: inst ? getComputedStyle(inst).paddingLeft : null,
+             instrumentOuter: inst ? Math.round(inst.getBoundingClientRect().width * 10) / 10 : null };
   })()`;
 
   const overflowReport = [];
@@ -410,16 +434,21 @@ try {
      raggedness that no threshold can own. The build was fixed in this wave
      too, so this is not red going green on a threshold alone. */
   const phones = measures.filter((m) => m.width <= 375);
-  const insetShare = phones.map((m) => ({
+  const insetShare = phones.filter((m) => m.instrumentPadding !== null).map((m) => ({
     label: m.label,
     inset: Math.round(parseFloat(m.instrumentPadding) * 2 * 10) / 10,
     card: m.instrumentOuter,
     share: Math.round((parseFloat(m.instrumentPadding) * 2 / m.instrumentOuter) * 1000) / 10
   }));
   evidence.instrumentInset = insetShare;
+  /* The length guard is the point of a check that can fail: when the last
+     .instrument surface leaves the page the assertion has no subject, and an
+     empty `every` would report a pass on nothing measured. */
   check(".instrument spends no more than 20% of its width on horizontal inset at <= 375px",
-    insetShare.every((p) => p.share <= 20),
-    insetShare.map((p) => `${p.label}: ${p.inset}/${p.card} = ${p.share}%`).join(" · "));
+    insetShare.length > 0 && insetShare.every((p) => p.share <= 20),
+    insetShare.length
+      ? insetShare.map((p) => `${p.label}: ${p.inset}/${p.card} = ${p.share}%`).join(" · ")
+      : "no .instrument surface on the page — re-target this probe");
   report("prose characters per line on a phone (reported, not asserted)",
     phones.map((p) => {
       const m = measures.find((x) => x.label === p.label);
@@ -447,10 +476,11 @@ try {
     `${darkRequests.length} loads: ${darkRequests.map((r) => r.url.startsWith("data:") ? "data:(grain/icon)" : r.url.split("/").pop()).join(", ")}`);
   check("no runtime errors (dark)", page.consoleErrors.length === 0, page.consoleErrors.join("; ") || "none");
   check("full-ink rule: no muted prose", dark.mutedProse.length === 0, dark.mutedProse.join(" | ") || "every p/li is --ink");
-  check("no rust sets small text except the corpus glyph §9 exempts as a graphical mark",
-    dark.smallRust.length === 0 && dark.graphicalRust.length === 1 && !/UNMARKED/.test(dark.graphicalRust[0]),
+  check("no rust sets small text except the two glyphs the specs exempt as graphical marks",
+    dark.smallRust.length === 0 && dark.graphicalRust.length === 2 &&
+      !dark.graphicalRust.some((g) => /UNMARKED/.test(g)),
     dark.smallRust.length ? dark.smallRust.join(" | ")
-      : `0 informational rust runs; 1 graphical: ${dark.graphicalRust[0]} (accent resolves ${dark.accentHex})`);
+      : `0 informational rust runs; ${dark.graphicalRust.length} graphical: ${dark.graphicalRust.join(" | ")} (accent resolves ${dark.accentHex})`);
   check("decorative rule/mark constructions are aria-hidden",
     dark.ruleParts.every((p) => p.hidden), dark.ruleParts.filter((p) => !p.hidden).map((p) => p.cls).join(", ") || `${dark.ruleParts.length}/${dark.ruleParts.length} hidden`);
   check("no rendered bottom margin anywhere (one-sided spacing)", dark.bottomMargins.length === 0, dark.bottomMargins.join(" | ") || "none");
@@ -493,10 +523,17 @@ try {
      count is three. Elements 1 and 3 are still not instantiated, so this is
      evidence that nothing ambient runs which the pulse does not own — not that
      the three-element budget is filled. */
-  check("only the pulse animates: every running animation is the pulse, across the two lamps the specs name",
-    dark.lamps === 2 && dark.anims.length === 6 && dark.anims.every((n) => /^pulse-(ring|core)$/.test(n)) &&
-      dark.anims.filter((n) => n === "pulse-core").length === 2,
-    `${dark.lamps} .pulse lamps (status bar + §2 terminal live indicator) × 2 rings + 1 core = ${dark.anims.length}: ${dark.anims.join(", ")}`);
+  /* The budget is two live elements plus the curl cursor, the named permitted
+     extra (page-shell §10.3). So every running animation must be either the
+     pulse or that single cursor, and there must be exactly one cursor — a
+     further ambient element fails, which is the relationship this exists
+     for. */
+  check("only the pulse and the one curl cursor animate, across the two lamps the specs name",
+    dark.lamps === 2 && dark.anims.filter((n) => /^pulse-(ring|core)$/.test(n)).length === 6 &&
+      dark.anims.filter((n) => n === "pulse-core").length === 2 &&
+      dark.anims.filter((n) => n === "cursor-blink").length === 1 &&
+      dark.anims.every((n) => /^(pulse-(ring|core)|cursor-blink)$/.test(n)),
+    `${dark.lamps} .pulse lamps (status bar + §2 terminal live indicator) × 2 rings + 1 core, plus §6's cursor = ${dark.anims.length}: ${dark.anims.join(", ")}`);
   check("§2's reveal is a transition on the transcript, not a fourth ambient motion element (DEC-015)",
     dark.transitions.every((t) => /log__line|narration__entry/.test(t)),
     `${dark.transitions.length} transitions, all on log lines and narration entries — opacity and transform only`);
@@ -535,22 +572,24 @@ try {
   evidence.light = light;
   writeFileSync(join(ARTIFACTS, "qa-blink-light-1440.png"), await page.screenshot());
 
+  const GLYPHS = ["log__glyph", "chip__glyph"];
   for (const [theme, live] of [["dark", liveDark], ["light", liveLight]]) {
-    const prose = live.filter((r) => r.el !== "log__glyph");
+    const prose = live.filter((r) => !GLYPHS.includes(r.el));
     const fails = prose.filter((r) => r.ratio < (r.large ? 3 : 4.5));
     check(`every rendered text run meets its WCAG floor (${theme})`, fails.length === 0,
       fails.map((f) => `${f.el} ${f.ratio}:1 @${f.size}px`).join(" | ") ||
       `${prose.length} text runs, worst ${Math.min(...prose.map((r) => r.ratio))}:1`);
-    const glyphs = live.filter((r) => r.el === "log__glyph");
-    check(`the one graphical rust glyph clears the 3:1 non-text floor (${theme})`,
-      glyphs.length === 1 && glyphs[0].ratio >= 3,
-      glyphs.map((g) => `${g.ratio}:1 @${g.size}px — below the 4.5:1 text floor by design (§9), redundant with the mark and the bold token`).join("") || "no glyph found");
+    const glyphs = live.filter((r) => GLYPHS.includes(r.el));
+    check(`both graphical rust glyphs clear the 3:1 non-text floor (${theme})`,
+      glyphs.length === 2 && glyphs.every((g) => g.ratio >= 3),
+      glyphs.map((g) => `${g.el} ${g.ratio}:1 @${g.size}px`).join(" · ") +
+        " — below the 4.5:1 text floor by design, each redundant with ink text beside it");
   }
   check("light palette resolves to the seed's locked values",
     ["ground", "surface", "ink", "muted", "hair", "accent"].every((k) => light.tokens["--" + k].toUpperCase() === SEED.light[k]),
     JSON.stringify(["ground", "surface", "ink", "muted", "hair", "accent"].map((k) => light.tokens["--" + k])));
   check("light theme also passes the full-ink and small-rust rules",
-    light.mutedProse.length === 0 && light.smallRust.length === 0 && light.graphicalRust.length === 1,
+    light.mutedProse.length === 0 && light.smallRust.length === 0 && light.graphicalRust.length === 2,
     `mutedProse ${light.mutedProse.length}, informational smallRust ${light.smallRust.length}, graphical ${light.graphicalRust.length}`);
 
   /* ---------- keyboard: real Tab, real :focus-visible ---------- */
@@ -579,11 +618,44 @@ try {
   const tabOrder = await page.eval(`(() => [...document.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])')]
     .map((el) => (el.className || el.tagName) + ":" + (el.getAttribute("tabindex") ?? "0")))()`);
   evidence.tabOrder = tabOrder;
-  /* Three stops now, and each is required: the skip link, the log's scroll
-     container (WCAG 2.1.1 — replay spec §11), and the one replay control. */
-  check("no keyboard trap: focus order is DOM order — skip link, log scroll region, replay control",
-    tabOrder.length === 3 && tabOrder[0].startsWith("skip-link") && tabOrder[1].startsWith("log") &&
-      tabOrder[2].startsWith("control"), tabOrder.join(" → "));
+  /* The stop list grows as sections ship, so a fixed expected list would fail
+     a correct build every time one arrives. The relationship that holds
+     whatever ships is asserted instead: real Tab keys visit every focusable
+     exactly once, in document order. A trap repeats a stop; a tabindex that
+     reorders the page diverges from document order; both fail. */
+  /* A fresh load, so the sequential-navigation starting point is the document
+     and not wherever the skip-link test left focus. */
+  await page.goto(PAGE_URL);
+  /* Each stop is compared with the one before it by compareDocumentPosition,
+     not by its index in a queried list. Two things defeat a list: §2's
+     narration list is a scroll container, which Chrome makes keyboard-
+     focusable with no tabindex attribute at all (WCAG 2.1.1, and correct), so
+     no attribute selector can enumerate it; and it is a scroll container only
+     in some states and breakpoints, so the set is not constant during a
+     traversal. Document order is the relationship that must hold regardless:
+     focus advances, and never returns to something it already visited. */
+  await page.eval(`(() => { window.__qaPrev = null; window.__qaSeen = []; })()`);
+  const walked = [];
+  for (let i = 0; i < tabOrder.length + 2; i++) {
+    await tab();
+    walked.push(await page.eval(`(() => {
+      const el = document.activeElement;
+      if (!el || el === document.body || el === document.documentElement) return { at: "(document)", follows: null, repeat: false };
+      const prev = window.__qaPrev;
+      const follows = prev ? Boolean(prev.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) : true;
+      const repeat = window.__qaSeen.includes(el);
+      window.__qaSeen.push(el);
+      window.__qaPrev = el;
+      return { at: (el.className || el.tagName) + ":" + (el.getAttribute("tabindex") ?? "implicit"), follows, repeat };
+    })()`));
+  }
+  const stops = walked.filter((w) => w.at !== "(document)");
+  evidence.tabWalked = { domOrderAtStart: tabOrder, walked };
+  check("no keyboard trap: real Tab visits every focusable once, in DOM order",
+    stops.length > 0 && stops[0].at.startsWith("skip-link") &&
+      stops.every((s) => s.follows === true) && !stops.some((s) => s.repeat),
+    `DOM-enumerable at start: ${tabOrder.join(" → ")}  |  tabbed: ${walked.map((w) => w.at).join(" → ")}` +
+      ` (each stop follows the last in document order: ${stops.every((s) => s.follows)})`);
 
   /* ---------- reduced motion: complete content, string-for-string ---------- */
   await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
@@ -613,16 +685,33 @@ try {
     offline.textInventory === dark.textInventory && offline.placeholders.length === dark.placeholders.length && page.consoleErrors.length === 0,
     `${offline.placeholders.length} slots, identical text, ${page.consoleErrors.length} errors, ${offlineShot.length} byte render`);
 
-  /* ---------- coarse pointer ---------- */
+  /* ---------- coarse pointer ----------
+     A mobile viewport is not a coarse pointer: setDeviceMetricsOverride
+     changes the size, not the pointer, so `@media (pointer: coarse)` never
+     matched here and the rule that grows every hit area to 44px was never
+     actually exercised — the check reported the fine-pointer visual instead
+     and would have passed a page with no hit-area rule at all.
+
+     Measured three ways before choosing: a mobile viewport alone reports
+     pointer: coarse false, `Emulation.setEmulatedMedia` does not carry
+     `pointer` as a feature (also false), and touch emulation reports true.
+     So touch emulation is what puts the page in the state this check
+     names. */
   await page.setViewport({ width: 375, height: 553, mobile: true });
+  await page.call("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
   await page.goto(PAGE_URL);
+  const pointerState = await page.eval(`matchMedia("(pointer: coarse)").matches`);
+  check("the coarse-pointer probe actually runs on a coarse pointer",
+    pointerState === true, `matchMedia("(pointer: coarse)") reports ${pointerState}`);
   const coarse = await page.eval(`(() => [...document.querySelectorAll('a[href],button')].map((el) => {
     const r = el.getBoundingClientRect(); el.focus(); const f = el.getBoundingClientRect();
     return { cls: el.className, w: Math.round(f.width), h: Math.round(f.height) }; }))()`);
   evidence.coarse = coarse;
   check("interactive targets meet 44px on a coarse pointer (or are keyboard-only)",
-    coarse.every((t) => (t.w >= 44 && t.h >= 44) || t.cls === "skip-link"),
+    coarse.length > 0 && coarse.every((t) => (t.w >= 44 && t.h >= 44) || t.cls === "skip-link"),
     coarse.map((t) => `${t.cls} ${t.w}x${t.h}`).join(" · ") + " — skip-link is keyboard-only by construction");
+  await page.call("Emulation.setTouchEmulationEnabled", { enabled: false });
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
 
   /* ======================================================================
      §2 — the two-layer replay.
@@ -1072,7 +1161,16 @@ try {
         windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
   };
   /* Measured before it is pressed: activating the skip control replaces the
-     control, and a detached button measures 0 by any ruler. */
+     control, and a detached button measures 0 by any ruler.
+
+     The Tab first, deliberately: `:focus-visible` on a programmatically
+     focused element depends on the engine's current input modality, so
+     whether this check saw the page's 2px keyboard ring or the user-agent
+     default depended on whatever ran before it — which is how a real focus
+     regression could hide behind an unrelated reordering. One real key press
+     puts the engine in keyboard modality, which is the state this check is
+     about. */
+  await tab();
   const before = await page.eval(`(() => { const btn = document.querySelector(".replay__controls button");
     btn.focus();
     return { hit: document.activeElement === btn, skipLabel: btn.textContent,
@@ -1481,15 +1579,16 @@ try {
   evidence.s02Light = { l12: lightS02.l12, key: lightS02.key };
   writeFileSync(join(ARTIFACTS, "qa-s02-light-1440.png"), await page.screenshot());
   for (const [theme, live] of [["dark", await (async () => { await page.setMedia({ colorScheme: "dark" }); await page.goto(PAGE_URL); return page.eval(LIVE); })()], ["light", liveLightS02]]) {
-    /* Same partition as the earlier sweep, applied here too: the corpus tick is
-       a graphical mark held to the 3:1 non-text floor by replay spec §9, and it
-       is asserted separately above rather than waved through in either place. */
-    const prose = live.filter((r) => r.el !== "log__glyph");
+    /* Same partition as the first contrast sweep: the corpus tick and the
+       VERIFY chip's glyph are graphical marks held to the 3:1 non-text floor,
+       and both are asserted separately rather than waved through in either
+       place. */
+    const prose = live.filter((r) => !GLYPHS.includes(r.el));
     const fails = prose.filter((r) => r.ratio < (r.large ? 3 : 4.5));
     check(`with §2 rendered, every text run still meets its WCAG floor (${theme})`, fails.length === 0,
       fails.map((f) => `${f.el} ${f.ratio}:1 @${f.size}px "${f.text}"`).join(" | ") ||
         `${prose.length} text runs, worst ${Math.min(...prose.map((r) => r.ratio))}:1 ` +
-        `(the ✓ glyph is measured against its own 3:1 floor above)`);
+        `(the two graphical glyphs are measured against their own 3:1 floor above)`);
   }
   check("§2 renders in both themes with the same twelve lines and the same L12 treatment",
     lightS02.lineText.join("\n") === CORPUS_LINES.join("\n") && lightS02.l12.size === s02.l12.size,

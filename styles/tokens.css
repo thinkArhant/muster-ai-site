@@ -57,7 +57,15 @@
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  --text-display: clamp(2.4rem, 6.5vw, 4.25rem);
+  /* The floor is a measured value, not a taste value: 1.75rem (28px) is the
+     largest floor at which the settled headline sets on whole-phrase lines at
+     320-390px with no overflow inside an unbreakable phrase. A 2.4rem floor
+     sets a 14-character display line at 360px and overflows 320px mid-phrase.
+     Slope and ceiling are the seed's; rendered size is identical above
+     ~431px, so the floor governs phones only.
+     The relationship this floor exists for is asserted in verify-shell.mjs
+     (the headline sets without overflow at 320px), never the literal value. */
+  --text-display: clamp(1.75rem, 6.5vw, 4.25rem);
   --lead-display: 1.05;
   --text-kicker: clamp(1.5rem, 3.5vw, 2.25rem);
   --lead-kicker: 1.3;

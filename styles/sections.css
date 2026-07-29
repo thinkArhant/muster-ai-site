@@ -1,0 +1,358 @@
+/* ==========================================================================
+   SECTIONS — §1 the sparse hero, §6 get started.
+
+   Spacing is one-sided here as everywhere: every gap is a margin-block-start
+   on the following element. A margin-bottom in this codebase is a defect.
+
+   Nothing in this file animates. §1 holds no seat in the page's motion
+   inventory (two live elements — the OPERATIONAL pulse and §5's count-up —
+   plus §6's curl cursor, which is styled in motifs.css and gated there).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   §1.1 Eyebrow — four facts, separators drawn rather than typed.
+
+   `content: "·" / ""` gives the glyph an empty alternative text, so it renders
+   and is not announced. Engines without the alt-text syntax drop that
+   declaration as invalid and fall back to the plain one above it, which still
+   renders. The separator hangs off the END of its fact rather than the start
+   of the next, so a wrap puts a whole fact at the head of the new line.
+   -------------------------------------------------------------------------- */
+
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.7ch;
+  padding: 0;
+  list-style: none;
+}
+
+.eyebrow > li {
+  white-space: nowrap;
+}
+
+.eyebrow > li:not(:last-child)::after {
+  content: "·";
+  content: "·" / "";
+  padding-inline-start: 0.7ch;
+}
+
+/* --------------------------------------------------------------------------
+   §1.2 Headline — the edit mark.
+
+   The strike is an edit mark, not a hairline: 0.06em resolves to ~1.7px at
+   the display floor and ~4px at the ceiling. Both treated phrases are nowrap
+   so a line break can never land inside the removal or its replacement.
+   Colour affects no layout — the measured line counts hold whatever the spans
+   are painted.
+   -------------------------------------------------------------------------- */
+
+.hero__title {
+  margin-block-start: var(--gap-hairline);
+}
+
+.h1__cut {
+  color: var(--ink);
+  text-decoration: line-through;
+  text-decoration-thickness: 0.06em;
+  white-space: nowrap;
+}
+
+.h1__accent {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   §1.3 The formation — hub over a bus-bar carrying seven specialists.
+
+   Phone first: hub on top, a spine down the inline-start edge at the page's
+   12px mark seat, a 24px stem from spine to each plate. The spine ends at the
+   LAST plate's stem line rather than trailing past it — one derived value,
+   --plate-block, is what lets it do that. It runs through the phone fold
+   deliberately: the cut ladder is the section's only scroll cue.
+
+   The block is intrinsic-width and start-aligned in the container, like every
+   reading passage on the page; the hub is centred within the formation, over
+   its own bus. Centring the block would detach the page's one diagram from
+   the reading edge everything else hangs on.
+   -------------------------------------------------------------------------- */
+
+.formation {
+  margin-block-start: var(--gap-block);
+
+  /* label line box + block padding both sides + both hairline borders */
+  --plate-block: calc(
+    var(--text-label) * var(--lead-label) + 2 * (var(--rhythm) / 3) + 2px
+  );
+}
+
+.formation__diagram {
+  position: relative;
+  inline-size: fit-content;
+}
+
+/* Distinction is never colour alone: position (seated above the bus), DOM
+   order (first), weight 700, and the accent border all carry it. */
+.formation__hub {
+  display: inline-block;
+  position: relative;
+  background-color: var(--surface);
+  border: 1px solid var(--accent);
+  padding: calc(var(--rhythm) / 3) var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink);
+}
+
+.formation__plates {
+  position: relative;
+  padding: 0;
+  list-style: none;
+}
+
+.formation__plates > li {
+  position: relative;
+  inline-size: max-content;
+  margin-inline-start: calc(var(--gap-hairline) + var(--rhythm));
+  margin-block-start: var(--gap-hairline);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: calc(var(--rhythm) / 3) var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink);
+}
+
+/* The spine. Ends half a plate short of the list's bottom edge — which is the
+   last plate's stem line — so the ladder terminates machined rather than
+   trailing past Research. */
+.formation__plates::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: var(--gap-hairline);
+  inset-block-start: -1px;
+  inset-block-end: calc(var(--plate-block) / 2);
+  border-inline-start: 1px solid var(--hair);
+}
+
+/* The stem from spine to plate, at the plate's vertical centre. */
+.formation__plates > li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(-1 * var(--rhythm));
+  inset-block-start: 50%;
+  inline-size: var(--rhythm);
+  border-block-start: 1px solid var(--hair);
+}
+
+.formation__bus {
+  display: none;
+}
+
+.formation__caption {
+  margin-block-start: var(--gap-flow);
+}
+
+/* Wide: the hub sits centred over a bus-bar that spans exactly the plate
+   row's width, with the shell's registration marks at both bus ends. */
+@media (min-width: 60rem) {
+  .formation__plates::before {
+    display: none;
+  }
+
+  .formation__hub {
+    inset-inline-start: 50%;
+    translate: -50% 0;
+  }
+
+  /* hub → bus stem */
+  .formation__hub::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 50%;
+    inset-block-start: 100%;
+    block-size: var(--gap-hairline);
+    border-inline-start: 1px solid var(--hair);
+  }
+
+  .formation__bus {
+    display: block;
+    position: relative;
+    margin-block-start: var(--gap-hairline);
+    border-block-start: 1px solid var(--hair);
+  }
+
+  .formation__bus::before,
+  .formation__bus::after {
+    content: "+";
+    position: absolute;
+    inset-block-start: -0.85em;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    line-height: 1;
+    color: var(--muted);
+  }
+
+  .formation__bus::before {
+    inset-inline-start: -2px;
+  }
+
+  .formation__bus::after {
+    inset-inline-end: -2px;
+  }
+
+  .formation__plates {
+    display: flex;
+    gap: var(--gap-hairline);
+    padding-block-start: var(--gap-hairline);
+  }
+
+  .formation__plates > li {
+    margin: 0;
+  }
+
+  /* bus → plate stem */
+  .formation__plates > li::before {
+    inset-inline-start: 50%;
+    inset-block-start: calc(-1 * var(--gap-hairline));
+    inline-size: 0;
+    block-size: var(--gap-hairline);
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--hair);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   §1.4 THIS SITE remnant — the readout motif at its smallest honest size.
+
+   --gap-major above it is the section's one idea-group seam: claim and team
+   above, receipts and command below.
+   -------------------------------------------------------------------------- */
+
+.remnant {
+  position: relative;
+  margin-block-start: var(--gap-major);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: var(--gap-hairline);
+}
+
+.remnant__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--gap-hairline);
+}
+
+/* A scope label never breaks mid-phrase. Below ~390px the head wraps instead
+   and the chip drops to its own right-aligned row. */
+.remnant__scope {
+  white-space: nowrap;
+}
+
+.remnant__head .chip {
+  margin-inline-start: auto;
+}
+
+.remnant__cells {
+  margin-block-start: var(--gap-hairline);
+}
+
+.remnant__cell {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-hairline);
+}
+
+.remnant__cell + .remnant__cell {
+  margin-block-start: var(--gap-hairline);
+  border-block-start: 1px solid var(--hair);
+  padding-block-start: var(--gap-hairline);
+}
+
+/* Ink, never accent: an unmeasured value is a claim about what will be
+   measured, not a metric. Static in every state — no animation, no
+   transition, and the count-up engine never sees it. */
+.remnant__value {
+  font-family: var(--font-mono);
+  font-size: var(--text-readout);
+  line-height: var(--lead-readout);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.remnant__caption {
+  margin-block-start: var(--gap-hairline);
+}
+
+@media (min-width: 60rem) {
+  .remnant__cells {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--gap-flow);
+  }
+
+  .remnant__cell {
+    display: block;
+  }
+
+  .remnant__cell + .remnant__cell {
+    margin-block-start: 0;
+    border-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  .remnant__value {
+    display: block;
+    margin-block-start: calc(var(--rhythm) / 4);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   §1.5 / §6 The curl card — one treatment, two instances.
+
+   §6's adds the cursor and nothing else. `overflow-wrap: anywhere` because the
+   command is one ~85-character token: it soft-wraps rather than scrolling the
+   page sideways, and selection still yields the exact string.
+   -------------------------------------------------------------------------- */
+
+.curl {
+  margin-block-start: var(--gap-block);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: var(--text-terminal);
+  line-height: var(--lead-terminal);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.curl .cursor {
+  margin-inline-start: 0.5ch;
+}
+
+/* --------------------------------------------------------------------------
+   §6 — get started. The lead line, the two commands, one link.
+   -------------------------------------------------------------------------- */
+
+.getstarted__then {
+  margin-block-start: var(--gap-hairline);
+}
+
+.getstarted__link {
+  margin-block-start: var(--gap-block);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  letter-spacing: var(--track-label);
+}

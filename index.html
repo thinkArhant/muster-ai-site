@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="styles/chrome.css">
 <link rel="stylesheet" href="styles/motifs.css">
 <link rel="stylesheet" href="styles/replay.css">
+<link rel="stylesheet" href="styles/sections.css">
 </head>
 <body>
 
@@ -48,17 +49,87 @@
      target, so the skip would be silent for keyboard users there. -->
 <main id="main" tabindex="-1">
 
+  <!-- §1 — the sparse hero. Above the fold: eyebrow, headline, formation.
+       Nothing else. Every measured figure on this page lands one scroll down
+       (§2's replay, §5's cards); §1 carries none, and carries no Bodh
+       material at all — §2 is the page's only terminal. -->
   <section id="hero" class="section section--hero" aria-labelledby="hero-title">
     <div class="container">
-      <h1 class="t-display" id="hero-title" data-shell-placeholder>Ship a product. Without a team.</h1>
-      <!-- SHELL PLACEHOLDER — removed when §1 lands. -->
-      <div class="instrument slot" data-shell-placeholder>
+
+      <!-- A list, so the separators can be drawn rather than typed: the
+           alt-text syntax (content: "·" / "") keeps them out of the
+           accessible name, and each fact is a nowrap unit so a narrow
+           viewport wraps at fact boundaries. list-style: none strips list
+           semantics in WebKit VoiceOver, hence the explicit role. -->
+      <ul class="eyebrow t-label" role="list">
+        <li>open source</li>
+        <li>runs in Claude Code</li>
+        <li>v4</li>
+        <li>MIT</li>
+      </ul>
+
+      <!-- The claim editing itself in front of the reader. The struck phrase
+           is aria-hidden, so the computed name is the post-edit sentence
+           only — screen readers otherwise read struck text as ordinary text.
+           Both treated phrases are nowrap units and no <br> appears: the
+           line breaks are the wrap system's, so they hold at any width. -->
+      <h1 class="t-display hero__title" id="hero-title">Ship a product with <s class="h1__cut" aria-hidden="true">a human</s> <span class="h1__accent">an AI</span> team.</h1>
+
+      <!-- The formation is the roster: hub is PM, the bus-bar carries the
+           seven specialists. Announced as group → PM → a 7-item list, which
+           is the architecture the diagram draws; a flat 8-item list would
+           erase it. Bus, spine and stems are CSS constructions and reach
+           the accessibility tree nowhere. -->
+      <div class="formation">
+        <div class="formation__diagram" role="group" aria-label="PM and seven specialist AI roles">
+          <span class="formation__hub">PM</span>
+          <div class="formation__bus" aria-hidden="true"></div>
+          <ul class="formation__plates" role="list" aria-label="The seven specialist roles">
+            <li>Developer</li>
+            <li>UI/UX</li>
+            <li>QA</li>
+            <li>Content</li>
+            <li>Marketing</li>
+            <li>Legal</li>
+            <li>Research</li>
+          </ul>
+        </div>
+        <p class="t-micro formation__caption">8 AI agents · 1 operator</p>
+      </div>
+
+      <!-- The THIS SITE remnant: the readout motif at its smallest honest
+           size. The cell labels are what make the dashes claims rather than
+           punctuation. §5 owns the full card and the measured contrast
+           beside it. Dashes are ink, static, and never count up. -->
+      <div class="remnant">
         <span class="regmark regmark--tl" aria-hidden="true">+</span>
         <span class="regmark regmark--br" aria-hidden="true">+</span>
-        <p class="t-body read">Hero content — roster formation, the measured line, the curl, the streaming
-          terminal, the dual readout — ships with its own spec. This card is shell scaffolding and is
-          removed when the section lands.</p>
+        <div class="remnant__head">
+          <span class="t-label remnant__scope">THIS SITE · SPEC → LIVE</span>
+          <a class="chip chip--emphasis" href="VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span class="chip__glyph" aria-hidden="true">⎘</span></a>
+        </div>
+        <dl class="remnant__cells">
+          <div class="remnant__cell">
+            <dt class="t-micro remnant__key">ACTIVE BUILD</dt>
+            <dd class="remnant__value">—</dd>
+          </div>
+          <div class="remnant__cell">
+            <dt class="t-micro remnant__key">COST · API LIST</dt>
+            <dd class="remnant__value">—</dd>
+          </div>
+          <div class="remnant__cell">
+            <dt class="t-micro remnant__key">SHIPPED</dt>
+            <dd class="remnant__value">THIS PAGE</dd>
+          </div>
+        </dl>
+        <p class="t-micro remnant__caption">measured at launch</p>
       </div>
+
+      <!-- The command, closing the section. No cursor and no prompt glyph —
+           §6's instance owns the page's only blink, and a `$` inside the
+           selectable text would break what the reader copies. -->
+      <p class="curl"><span class="curl__cmd" data-curl>curl -fsSL https://raw.githubusercontent.com/thinkArhant/muster-ai/main/scripts/setup-project.sh | bash -s my-product</span></p>
+
     </div>
   </section>
 
@@ -223,13 +294,19 @@
       <span class="rule__line rule__line--grow" aria-hidden="true"></span>
     </div>
     <div class="container section__body">
-      <!-- SHELL PLACEHOLDER — removed when §6 lands. -->
-      <div class="instrument slot" data-shell-placeholder>
-        <span class="regmark regmark--tl" aria-hidden="true">+</span>
-        <span class="regmark regmark--br" aria-hidden="true">+</span>
-        <p class="t-body read">The curl, its cursor, and one GitHub link ship with their own spec. This card
-          is shell scaffolding and is removed when the section lands.</p>
-      </div>
+      <p class="t-lead read">One command. No signup, no framework install, no API wiring — markdown files and Claude Code.</p>
+
+      <!-- Two commands, adjacent and unannotated: the project name in the
+           second is the first's `bash -s` argument, so a reader who edits one
+           must edit the other. The curl string is byte-identical to §1's and
+           to the verified form in copy-rules.md — asserted by equality, never
+           by fetching. -->
+      <p class="curl getstarted__curl"><span class="curl__cmd" data-curl>curl -fsSL https://raw.githubusercontent.com/thinkArhant/muster-ai/main/scripts/setup-project.sh | bash -s my-product</span><span class="cursor" aria-hidden="true"></span></p>
+      <p class="curl getstarted__then"><span class="curl__cmd">cd my-product &amp;&amp; claude</span></p>
+
+      <!-- The link text is the URL, so the accessible name and the
+           destination are the same string and nothing needs an aria-label. -->
+      <p class="getstarted__link"><a class="link-block" href="https://github.com/thinkArhant/muster-ai">github.com/thinkArhant/muster-ai</a></p>
     </div>
   </section>
 

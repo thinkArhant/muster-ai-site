@@ -170,12 +170,23 @@ const AUDIT = `(() => {
     .filter((el) => css(el, "box-shadow") !== "none")
     .map((el) => el.className + "::" + css(el, "box-shadow"));
 
-  /* --- external references anywhere in the DOM --- */
+  /* --- external references anywhere in the DOM ---
+     The claim is about what the page REQUESTS at runtime, not about what it
+     displays. An href on an anchor is a destination the reader chooses to
+     travel to; nothing is fetched until they click, and §6 ships one. Every
+     other attribute here — and href on anything that is not an anchor, which
+     is how <link> pulls a stylesheet — is resolved by the engine with no
+     reader action at all. Those stay banned, and are collected separately so
+     the permitted ones remain visible in the evidence rather than invisible. */
   const externalRefs = [];
+  const readerNavigations = [];
   document.querySelectorAll("*").forEach((el) => {
     ["src", "href", "srcset", "poster", "data"].forEach((attr) => {
       const v = el.getAttribute && el.getAttribute(attr);
-      if (v && /^(https?:)?\\/\\//i.test(v)) externalRefs.push(el.tagName + "[" + attr + "]=" + v);
+      if (!v || !/^(https?:)?\\/\\//i.test(v)) return;
+      const site = el.tagName + "[" + attr + "]=" + v;
+      if (attr === "href" && el.tagName === "A") readerNavigations.push(site);
+      else externalRefs.push(site);
     });
   });
 
@@ -216,8 +227,13 @@ const AUDIT = `(() => {
   const brandWord = document.querySelector(".brand__word");
   const pulse = document.querySelector(".pulse");
   const pulseBox = pulse.getBoundingClientRect();
-  const regmarksPerSurface = [...document.querySelectorAll(".instrument")]
-    .map((el) => el.querySelectorAll(".regmark").length);
+  /* Grouped by the surface each mark actually hangs on rather than by the
+     .instrument class, so a new instrument surface — §1's remnant strip is the
+     first — is covered the moment it ships instead of silently sitting outside
+     the sparseness rule. */
+  const regmarksPerSurface = [...new Set([...document.querySelectorAll(".regmark")]
+    .map((m) => m.parentElement))]
+    .map((el) => ({ on: el.className || el.tagName, marks: el.querySelectorAll(".regmark").length }));
 
   /* --- reading column --- */
   const read = document.querySelector(".read");
@@ -288,6 +304,12 @@ const AUDIT = `(() => {
     glass,
     shadows,
     externalRefs,
+    readerNavigations,
+    /* A prefetch/preload/dns-prefetch hint fetches without a click and would
+       walk straight past the anchor allowance above. */
+    prefetchHints: [...document.querySelectorAll("link[rel], a[rel]")]
+      .map((el) => el.getAttribute("rel"))
+      .filter((rel) => /prefetch|preload|preconnect|dns-prefetch|prerender/i.test(rel)),
     fontFaces,
     loadedFonts: document.fonts ? document.fonts.size : 0,
     statusBar: {
@@ -428,7 +450,15 @@ try {
   check("no glass (backdrop-filter)", dark.glass.length === 0, dark.glass.join(", ") || "none");
   check("no shadows", dark.shadows.length === 0, dark.shadows.join(" | ") || "none");
   check("status bar opaque, sticky, 48px, hairline-ruled", dark.statusBar.opaque && dark.statusBar.position === "sticky" && dark.statusBar.height === 48, JSON.stringify(dark.statusBar));
-  check("no external references in the DOM", dark.externalRefs.length === 0, dark.externalRefs.join(", ") || "none");
+  /* What the page may not do is REQUEST something at runtime. A cross-origin
+     href on an anchor is a place the reader can choose
+     to go and fetches nothing until they choose it; §6 ships exactly one. Every
+     engine-resolved reference — src, srcset, poster, data, and href on anything
+     that is not an anchor — still fails here, and so does any prefetch hint,
+     which would fetch without a click and slip past the allowance. */
+  check("no engine-resolved external reference in the DOM", dark.externalRefs.length === 0, dark.externalRefs.join(", ") || "none");
+  check("no prefetch/preload hints (they fetch without a click)", dark.prefetchHints.length === 0, dark.prefetchHints.join(", ") || "none");
+  check("cross-origin hrefs are anchors only, and stay inert until clicked", dark.readerNavigations.every((r) => r.startsWith("A[href]")) && darkRequests.every(isLocal), `${dark.readerNavigations.length} reader-navigable link(s): ${dark.readerNavigations.join(", ") || "none"}`);
   check("no @font-face, no loaded webfonts", dark.fontFaces === 0 && dark.loadedFonts === 0, `${dark.fontFaces} font-face rules, ${dark.loadedFonts} loaded`);
   check("grain is a self-contained data URI", dark.texture.grainIsDataUri, dark.texture.grainSize);
   check("texture is aria-hidden, behind content, inert", dark.texture.ariaHidden === "true" && dark.texture.zIndex === "-1" && dark.texture.pointerEvents === "none", JSON.stringify({ z: dark.texture.zIndex, pe: dark.texture.pointerEvents }));
@@ -493,7 +523,7 @@ try {
     bm.rule.animation === "none" && parseFloat(bm.rule.transition) === 0,
     `animation-name ${bm.rule.animation}, transition-duration ${bm.rule.transition}`);
   check("the header's accessible name is exactly MUSTER", bm.name === "MUSTER", JSON.stringify(bm.name));
-  check("registration marks: two per instrument surface", dark.motifs.regmarksPerSurface.every((n) => n === 2), JSON.stringify(dark.motifs.regmarksPerSurface));
+  check("registration marks: two per instrument surface", dark.motifs.regmarksPerSurface.length > 0 && dark.motifs.regmarksPerSurface.every((s) => s.marks === 2), JSON.stringify(dark.motifs.regmarksPerSurface));
   check("pulse lamp is an 8px circle", dark.motifs.pulse.w === 8 && dark.motifs.pulse.h === 8 && dark.motifs.pulse.radius === "50%", JSON.stringify(dark.motifs.pulse));
   check("OPERATIONAL word present (state not colour-alone)", dark.motifs.operationalWord === "OPERATIONAL", dark.motifs.operationalWord);
   /* The token is the seed-locked 64ch. Capacity is reported alongside it because
@@ -648,16 +678,57 @@ try {
 
   /* ---------- 7. shipped output hygiene ---------- */
   const shipped = ["index.html", ...readdirSync(join(ROOT, "styles")).map((f) => join("styles", f)), ...readdirSync(join(ROOT, "scripts")).map((f) => join("scripts", f))];
-  const httpHits = [];
   const hexHits = [];
+
+  /* The zero-external-requests claim is about what the page FETCHES, and §6
+     must ship the setup command's URL as text and the repository as a link.
+     So this check is narrowed to fetching references rather than deleted —
+     deleting it would take the mechanical guard off the page's most
+     load-bearing published claim.
+
+     Default is deny. Every http(s) occurrence in a shipped file is classified
+     from what precedes it, and only two classes are permitted: the URL as
+     inert text (including inside a comment), and the value of an `href` on an
+     anchor. Anything the engine resolves on its own — url(), @import, src,
+     srcset, poster, data, <link href>, <script src>, a fetch() argument — is a
+     fetching reference and fails. */
+  const fetchingRefs = [];
+  const inertRefs = [];
   for (const rel of shipped) {
     const text = readFileSync(join(ROOT, rel), "utf8");
     text.split("\n").forEach((line, i) => {
-      if (/https?:\/\//i.test(line) && !/xmlns=|^\s*(\/\*|\*|<!--)/.test(line)) httpHits.push(`${rel}:${i + 1}`);
+      const scan = /https?:\/\//gi;
+      let m;
+      while ((m = scan.exec(line))) {
+        const site = `${rel}:${i + 1}`;
+        const before = line.slice(0, m.index);
+        /* the SVG namespace is a identifier, never fetched */
+        if (/xmlns(:\w+)?\s*=\s*["']?$/.test(before)) continue;
+        if (/(?:url\(|@import\s+(?:url\()?)\s*["']?$/i.test(before)) {
+          fetchingRefs.push(`${site} css url()/@import`);
+          continue;
+        }
+        const attr = before.match(/([a-zA-Z][\w:-]*)\s*=\s*["']?$/);
+        if (attr) {
+          const name = attr[1].toLowerCase();
+          const tag = (before.match(/<([a-zA-Z][\w-]*)(?![^<]*>)/) || [])[1]?.toLowerCase();
+          if (name === "href" && tag === "a") { inertRefs.push(`${site} <a href> (reader navigation)`); continue; }
+          fetchingRefs.push(`${site} ${tag || "?"}[${name}]`);
+          continue;
+        }
+        if (/\b(?:fetch|import|importScripts|open)\s*\(\s*["'`]$/.test(before)) {
+          fetchingRefs.push(`${site} script fetch`);
+          continue;
+        }
+        inertRefs.push(`${site} text`);
+      }
+    });
+    text.split("\n").forEach((line, i) => {
       if (/#[0-9a-fA-F]{6}\b/.test(line) && rel !== "styles/tokens.css" && !/data:image\/svg/.test(line)) hexHits.push(`${rel}:${i + 1}`);
     });
   }
-  check("no http(s) URL in any shipped file", httpHits.length === 0, httpHits.join(", ") || "none");
+  evidence.shippedUrls = { fetching: fetchingRefs, inert: inertRefs };
+  check("no fetching http(s) reference in any shipped file", fetchingRefs.length === 0, fetchingRefs.join(", ") || `none — ${inertRefs.length} inert: ${inertRefs.join(", ") || "none"}`);
   check("raw hex appears only in the token block", hexHits.length === 0, hexHits.join(", ") || "none");
   check("no build-system artifacts", !existsSync(join(ROOT, "package.json")) && !existsSync(join(ROOT, "node_modules")) && !existsSync(join(ROOT, "dist")), "no package.json / node_modules / dist");
   const cssText = shipped.filter((f) => f.endsWith(".css")).map((f) => readFileSync(join(ROOT, f), "utf8")).join("\n");
@@ -680,6 +751,381 @@ try {
   vignette.forEach((v) => {
     check(`vignette floor keeps labels >= 4.5:1 (${v.theme})`, v.mutedRatio >= 4.5, `muted ${v.mutedRatio}:1, ink ${v.inkRatio}:1 at ${v.alpha * 100}% black`);
   });
+
+  /* ============================================================ §1 + §6 ===
+     The sparse hero and the command that closes the page. Every check below
+     protects one relationship and reads it off the rendered page — never off
+     a figure copied out of the spec, so the check follows any future change
+     to the stack rather than pinning it in place.
+     ======================================================================= */
+
+  /* The curl is verified by equality against the authority on disk, never by
+     fetching: three instances of one string — copy-rules R12, §1, §6. */
+  const VERIFIED_CURL = (readFileSync(join(ROOT, "knowledge-base", "agent-skills", "content", "copy-rules.md"), "utf8")
+    .match(/Current verified form:\s*\n\s*`([^`]+)`/) || [])[1];
+
+  const HERO = `(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const css = (el, p) => getComputedStyle(el).getPropertyValue(p).trim();
+    const hero = document.querySelector("#hero");
+    const h1 = document.querySelector("#hero-title");
+    const eyebrow = hero.querySelector(".eyebrow");
+    const formation = hero.querySelector(".formation");
+    const diagram = hero.querySelector(".formation__diagram");
+    const hub = hero.querySelector(".formation__hub");
+    const bus = hero.querySelector(".formation__bus");
+    const plates = [...hero.querySelectorAll(".formation__plates > li")];
+    const caption = hero.querySelector(".formation__caption");
+    const remnant = hero.querySelector(".remnant");
+    const scope = hero.querySelector(".remnant__scope");
+    const values = [...hero.querySelectorAll(".remnant__value")];
+    const chip = hero.querySelector(".chip");
+    const heroCurl = hero.querySelector(".curl");
+    const gs = document.querySelector("#get-started");
+
+    const accentRgb = (() => {
+      const p = document.createElement("span");
+      p.style.color = "var(--accent)";
+      document.body.appendChild(p);
+      const v = css(p, "color");
+      p.remove();
+      return v;
+    })();
+    const tokenPx = (name) => {
+      const p = document.createElement("div");
+      p.style.cssText = "position:absolute;visibility:hidden;height:var(" + name + ")";
+      hero.appendChild(p);
+      const v = r2(p.getBoundingClientRect().height);
+      p.remove();
+      return v;
+    };
+
+    /* A live element is one that is animating or would transition. Read both,
+       in whatever motion state the page is in when this runs. */
+    const moving = [...hero.querySelectorAll("*")].filter((el) => {
+      const a = css(el, "animation-name");
+      const t = parseFloat(css(el, "transition-duration")) || 0;
+      return (a && a !== "none") || t > 0;
+    }).map((el) => (el.className || el.tagName) + " [" + css(el, "animation-name") + "/" + css(el, "transition-duration") + "]");
+
+    const marginTop = (el) => r2(parseFloat(css(el, "margin-top")));
+    const bottom = (el) => r2(el.getBoundingClientRect().bottom);
+
+    return {
+      viewport: { w: innerWidth, h: innerHeight,
+                  scrollWidth: document.documentElement.scrollWidth,
+                  clientWidth: document.documentElement.clientWidth },
+      wide: matchMedia("(min-width: 60rem)").matches,
+
+      /* --- headline --- */
+      h1Text: h1.textContent.replace(/\\s+/g, " ").trim(),
+      h1Lines: Math.round(h1.getBoundingClientRect().height / parseFloat(css(h1, "line-height"))),
+      h1Overflow: r2(h1.scrollWidth - h1.clientWidth),
+      h1FontSize: css(h1, "font-size"),
+      cutRects: hero.querySelector(".h1__cut").getClientRects().length,
+      accentRects: hero.querySelector(".h1__accent").getClientRects().length,
+      cutDecoration: css(hero.querySelector(".h1__cut"), "text-decoration-line"),
+      accentColour: css(hero.querySelector(".h1__accent"), "color"),
+      accentRgb,
+
+      /* --- eyebrow: the separators are drawn, so they are never in the text --- */
+      eyebrowFacts: [...eyebrow.children].map((li) => li.textContent.trim()),
+      eyebrowSeparatorsInText: /·/.test(eyebrow.textContent),
+
+      /* --- stack integrity --- */
+      afterH1: h1.nextElementSibling ? h1.nextElementSibling.className : null,
+      formationFirstChild: formation.firstElementChild.className,
+      gaps: {
+        eyebrowToH1: marginTop(h1),
+        h1ToFormation: marginTop(formation),
+        diagramToCaption: marginTop(caption),
+        captionToRemnant: marginTop(remnant),
+        remnantToCurl: marginTop(heroCurl)
+      },
+      tokens: {
+        hairline: tokenPx("--gap-hairline"),
+        flow: tokenPx("--gap-flow"),
+        block: tokenPx("--gap-block"),
+        major: tokenPx("--gap-major")
+      },
+
+      /* --- the sparse negative --- */
+      heroText: hero.textContent.replace(/\\s+/g, " ").trim(),
+      heroOrderedLists: hero.querySelectorAll("ol").length,
+      heroTerminals: hero.querySelectorAll('[class*="terminal"], [class*="log"]').length,
+
+      /* --- formation --- */
+      hubText: hub.textContent.trim(),
+      hubBorder: css(hub, "border-top-color"),
+      hubWeight: Number(css(hub, "font-weight")),
+      plateNames: plates.map((li) => li.textContent.trim()),
+      plateTops: plates.map((li) => r2(li.getBoundingClientRect().top)),
+      plateBottoms: plates.map(bottom),
+      hubBottom: bottom(hub),
+      busWidth: bus ? r2(bus.getBoundingClientRect().width) : null,
+      busDisplay: bus ? css(bus, "display") : null,
+      plateRowWidth: plates.length
+        ? r2(Math.max(...plates.map((li) => li.getBoundingClientRect().right)) -
+             Math.min(...plates.map((li) => li.getBoundingClientRect().left)))
+        : null,
+      captionText: caption.textContent.trim(),
+
+      /* --- remnant --- */
+      scopeRects: scope.getClientRects().length,
+      dashCells: values.filter((v) => v.textContent.trim() === "—").map((v) => ({
+        colour: css(v, "color"),
+        animation: css(v, "animation-name"),
+        transition: css(v, "transition-duration")
+      })),
+      inkRgb: (() => {
+        const p = document.createElement("span");
+        p.style.color = "var(--ink)";
+        document.body.appendChild(p);
+        const v = css(p, "color");
+        p.remove();
+        return v;
+      })(),
+      remnantCaptions: [...remnant.querySelectorAll("*")]
+        .filter((el) => el.textContent.trim() === "measured at launch").length,
+
+      /* --- chip --- */
+      chipLabel: chip.textContent.replace(/\\s+/g, " ").trim(),
+      chipAria: chip.getAttribute("aria-label"),
+      chipHref: chip.getAttribute("href"),
+      chipResolved: chip.href,
+      chipBox: { w: r2(chip.getBoundingClientRect().width), h: r2(chip.getBoundingClientRect().height) },
+      heroFocusable: [...hero.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+        .map((el) => el.className || el.tagName),
+
+      /* --- motion --- */
+      heroMoving: moving,
+      reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
+
+      /* --- the curl, both instances --- */
+      curls: [...document.querySelectorAll("[data-curl]")].map((el) => el.textContent),
+      heroCurlHasCursor: Boolean(heroCurl.querySelector(".cursor")),
+      heroCurlPrompt: /^\\s*\\$/.test(heroCurl.textContent),
+      curlScrolls: [...document.querySelectorAll(".curl")].map((el) => r2(el.scrollWidth - el.clientWidth)),
+
+      /* --- §6 --- */
+      gs: {
+        lead: gs.querySelector(".t-lead").textContent.replace(/\\s+/g, " ").trim(),
+        then: gs.querySelector(".getstarted__then").textContent.trim(),
+        cursorAnimation: css(gs.querySelector(".cursor"), "animation-name"),
+        cursorBox: { w: r2(gs.querySelector(".cursor").getBoundingClientRect().width),
+                     h: r2(gs.querySelector(".cursor").getBoundingClientRect().height) },
+        cursorHidden: gs.querySelector(".cursor").getAttribute("aria-hidden"),
+        links: [...gs.querySelectorAll("a")].map((a) => ({ text: a.textContent.trim(), href: a.getAttribute("href") })),
+        focusable: [...gs.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])')].length
+      }
+    };
+  })()`;
+
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.setViewport({ width: 1280, height: 700 });
+  await page.goto(PAGE_URL);
+  const heroWide = await page.eval(HERO);
+  evidence.heroWide = heroWide;
+  writeFileSync(join(ARTIFACTS, "blink-dark-hero-1280.png"), await page.screenshot());
+
+  /* --- 1. the announced headline, read from the accessibility tree ---
+     Asserting the markup would only prove the markup. The name is what a
+     screen reader says, so it comes from the engine's own computation.
+     Cross-engine caveat: Blink computes the name from rendered (uppercased)
+     text and WebKit from source text, so the comparison is case-insensitive
+     and word-exact. */
+  await page.call("Accessibility.enable");
+  const axTree = await page.call("Accessibility.getFullAXTree");
+  const axNodes = axTree.nodes || [];
+  const axById = new Map(axNodes.map((n) => [n.nodeId, n]));
+  const axName = (n) => (n?.name?.value || "").replace(/\s+/g, " ").trim();
+  const axRole = (n) => n?.role?.value || "";
+  const axHeading = axNodes.find((n) => axRole(n) === "heading" &&
+    (n.properties || []).some((p) => p.name === "level" && Number(p.value?.value) === 1));
+  const announced = axName(axHeading);
+  const words = (s) => s.toLowerCase().replace(/\s+/g, " ").trim();
+  evidence.heroAnnounced = { announced, rendered: heroWide.h1Text };
+
+  check("§1 headline announces the post-edit sentence, from the AX tree",
+    words(announced) === words("Ship a product with an AI team.") &&
+      !/a human/i.test(announced) && /a human/i.test(heroWide.h1Text),
+    `AX name ${JSON.stringify(announced)} · rendered ${JSON.stringify(heroWide.h1Text)}`);
+
+  /* --- 6. the formation, announced as the architecture it draws --- */
+  const LOCKED_PLATES = ["Developer", "UI/UX", "QA", "Content", "Marketing", "Legal", "Research"];
+  const axGroup = axNodes.find((n) => axName(n) === "PM and seven specialist AI roles");
+  const axLeaves = (node, out = []) => {
+    const kids = (node?.childIds || []).map((id) => axById.get(id)).filter(Boolean);
+    if (!kids.length) {
+      const nm = axName(node);
+      if (nm) out.push(nm);
+      return out;
+    }
+    kids.forEach((k) => axLeaves(k, out));
+    return out;
+  };
+  const axFormation = axGroup ? axLeaves(axGroup) : [];
+  const axListChildren = axGroup
+    ? (axGroup.childIds || []).map((id) => axById.get(id)).filter((n) => axRole(n) === "list")
+        .map((n) => (n.childIds || []).map((id) => axById.get(id)).filter((c) => axRole(c) === "listitem").length)
+    : [];
+  evidence.heroFormationAx = { announced: axFormation, listItemCounts: axListChildren };
+
+  /* Case-insensitive for the reason the headline check is: Blink computes the
+     name from rendered text, which text-transform has uppercased, and WebKit
+     from the source text. Word-exact and order-exact is the real contract. */
+  check("§1 formation announces hub PM then exactly the seven specialists, in order",
+    words(axFormation.join("|")) === words(["PM", ...LOCKED_PLATES].join("|")) &&
+      axListChildren.length === 1 && axListChildren[0] === 7,
+    `${JSON.stringify(axFormation)} · list carries ${JSON.stringify(axListChildren)} items`);
+  check("§1 formation distinguishes the hub by more than colour",
+    heroWide.hubText === "PM" && heroWide.hubBorder === heroWide.accentRgb && heroWide.hubWeight >= 700,
+    `hub ${heroWide.hubText}, border ${heroWide.hubBorder} (accent ${heroWide.accentRgb}), weight ${heroWide.hubWeight}`);
+  check("§1 bus, spine, stems and registration marks stay out of the AX tree",
+    !axFormation.some((n) => /^[+|]$/.test(n)),
+    `${axFormation.length} announced nodes, none decorative`);
+
+  /* --- 12. eyebrow silence: the separators are style, not content --- */
+  const EYEBROW_FACTS = ["open source", "runs in Claude Code", "v4", "MIT"];
+  const axAllNames = new Set(axNodes.map((n) => words(axName(n))));
+  check("§1 eyebrow announces four facts and no separator",
+    heroWide.eyebrowFacts.join("|") === EYEBROW_FACTS.join("|") &&
+      !heroWide.eyebrowSeparatorsInText &&
+      EYEBROW_FACTS.every((f) => axAllNames.has(words(f))),
+    `${JSON.stringify(heroWide.eyebrowFacts)}, separators in text: ${heroWide.eyebrowSeparatorsInText}`);
+
+  /* --- 4. stack integrity: nothing ships between the claim and the team --- */
+  check("§1 stack: the headline is followed by the formation and nothing else",
+    heroWide.afterH1 === "formation" && heroWide.formationFirstChild === "formation__diagram",
+    `h1 → ${heroWide.afterH1} → ${heroWide.formationFirstChild}`);
+  check("§1 gaps compute to their rhythm tokens, seam widest",
+    heroWide.gaps.eyebrowToH1 === heroWide.tokens.hairline &&
+      heroWide.gaps.h1ToFormation === heroWide.tokens.block &&
+      heroWide.gaps.diagramToCaption === heroWide.tokens.flow &&
+      heroWide.gaps.captionToRemnant === heroWide.tokens.major &&
+      heroWide.gaps.remnantToCurl === heroWide.tokens.block &&
+      heroWide.gaps.captionToRemnant >= Math.max(heroWide.gaps.eyebrowToH1, heroWide.gaps.h1ToFormation, heroWide.gaps.diagramToCaption, heroWide.gaps.remnantToCurl),
+    JSON.stringify(heroWide.gaps) + " against " + JSON.stringify(heroWide.tokens));
+
+  /* --- 5. the sparse negative: the gate ruling, as a check that can fail --- */
+  const BODH_MATERIAL = [/9\.3/, /4\.8/, /\$147/, /\$24\.73/, /289/, /~?64/, /bodh/i];
+  const bodhHits = BODH_MATERIAL.filter((re) => re.test(heroWide.heroText)).map(String);
+  const strayDigits = [...heroWide.heroText.matchAll(/\d/g)].map((m) => m[0]).filter((d) => !["4", "8", "1"].includes(d));
+  check("§1 carries no Bodh material and no measured figure",
+    bodhHits.length === 0 && heroWide.heroOrderedLists === 0 && heroWide.heroTerminals === 0 && strayDigits.length === 0,
+    `${bodhHits.join(" ") || "no Bodh material"} · ${heroWide.heroOrderedLists} <ol> · ${heroWide.heroTerminals} terminal/log elements · stray digits ${JSON.stringify(strayDigits)}`);
+
+  /* --- 7. formation modes: the bus diagrams the row it spans --- */
+  check("§1 formation at wide: one plate row, bus spanning exactly it",
+    heroWide.wide && new Set(heroWide.plateTops).size === 1 &&
+      heroWide.busDisplay !== "none" && Math.abs(heroWide.busWidth - heroWide.plateRowWidth) < 0.5,
+    `${new Set(heroWide.plateTops).size} row(s), bus ${heroWide.busWidth}px vs plate row ${heroWide.plateRowWidth}px`);
+  check("§1 formation plate names are the locked full forms, in the locked order",
+    heroWide.plateNames.join(" · ") === LOCKED_PLATES.join(" · ") && heroWide.captionText === "8 AI agents · 1 operator",
+    `${heroWide.plateNames.join(" · ")} / caption ${JSON.stringify(heroWide.captionText)}`);
+
+  /* --- 8. remnant honesty --- */
+  check("§1 remnant: two ink dashes, inert, with their caption exactly once",
+    heroWide.dashCells.length === 2 &&
+      heroWide.dashCells.every((d) => d.colour === heroWide.inkRgb && d.animation === "none" && parseFloat(d.transition) === 0) &&
+      heroWide.remnantCaptions === 1,
+    `${heroWide.dashCells.length} dashes ${JSON.stringify(heroWide.dashCells)} · caption ×${heroWide.remnantCaptions}`);
+
+  /* --- 9. the chip: §1's only interactive element, and the proof link --- */
+  check("§1 VERIFY chip is the section's only focusable element and resolves to VERIFY.md",
+    heroWide.heroFocusable.length === 1 && /chip/.test(heroWide.heroFocusable[0]) &&
+      heroWide.chipHref === "VERIFY.md" && heroWide.chipResolved.startsWith("file://") &&
+      /VERIFY\b/.test(heroWide.chipAria) && /VERIFY/.test(heroWide.chipLabel),
+    `${JSON.stringify(heroWide.heroFocusable)} · href ${heroWide.chipHref} · name ${JSON.stringify(heroWide.chipAria)}`);
+  /* The chip is the page's proof link; without the file behind it the one
+     claim the page asks readers to check is a 404. */
+  check("VERIFY.md exists at the repo root the chip points at",
+    existsSync(join(ROOT, "VERIFY.md")), join(ROOT, "VERIFY.md"));
+
+  /* --- 10 / 11. §1 is fully static; the curl is one string --- */
+  check("§1 is fully static — nothing in the section animates or transitions",
+    heroWide.heroMoving.length === 0, heroWide.heroMoving.join(" | ") || "no animation, no transition");
+  check("the curl is one string in three places: copy-rules R12, §1, §6",
+    Boolean(VERIFIED_CURL) && heroWide.curls.length === 2 && heroWide.curls.every((c) => c === VERIFIED_CURL),
+    `${heroWide.curls.length} instances, byte-equal to R12: ${heroWide.curls.every((c) => c === VERIFIED_CURL)}`);
+  check("§1's curl carries no cursor and no prompt glyph (§6 owns the blink)",
+    !heroWide.heroCurlHasCursor && !heroWide.heroCurlPrompt,
+    `cursor ${heroWide.heroCurlHasCursor}, prompt ${heroWide.heroCurlPrompt}`);
+
+  /* --- §6 --- */
+  const gsLead = "One command. No signup, no framework install, no API wiring — markdown files and Claude Code.";
+  check("§6 ships the lead line, both commands and exactly one link",
+    heroWide.gs.lead === gsLead && heroWide.gs.then === "cd my-product && claude" &&
+      heroWide.gs.links.length === 1 && heroWide.gs.focusable === 1 &&
+      heroWide.gs.links[0].text === "github.com/thinkArhant/muster-ai" &&
+      heroWide.gs.links[0].href === "https://github.com/thinkArhant/muster-ai",
+    `${JSON.stringify(heroWide.gs.then)} · ${JSON.stringify(heroWide.gs.links)}`);
+  check("§6's cursor is the page's only blink, 8×17, aria-hidden",
+    heroWide.gs.cursorAnimation === "cursor-blink" && heroWide.gs.cursorHidden === "true" &&
+      heroWide.gs.cursorBox.w === 8 && heroWide.gs.cursorBox.h === 17,
+    JSON.stringify(heroWide.gs));
+
+  /* --- 2 / 3 / the display floor: the phrase and fold relationships, read
+     across the widths the wrap system was measured at. The floor lands with
+     this, not alone: an unguarded token in the shipped set is exactly the
+     drift the project exists to prevent, and the guarded relationship is the
+     one the floor exists for — the headline sets without overflow at 320px. */
+  const heroNarrow = {};
+  for (const [label, width] of [["320", 320], ["360", 360], ["375", 375], ["390", 390]]) {
+    await page.setViewport({ width, height: 553, deviceScaleFactor: 1, mobile: true });
+    await page.goto(PAGE_URL);
+    heroNarrow[label] = await page.eval(HERO);
+    if (width === 375) writeFileSync(join(ARTIFACTS, "blink-dark-hero-375.png"), await page.screenshot());
+  }
+  evidence.heroNarrow = heroNarrow;
+
+  const widths = Object.entries(heroNarrow);
+  check("§1 headline sets without overflow at every measured phone width (the display floor's own relationship)",
+    widths.every(([, m]) => m.h1Overflow <= 0 && m.viewport.scrollWidth <= m.viewport.clientWidth),
+    widths.map(([w, m]) => `${w}px: ${m.h1Lines}L at ${m.h1FontSize}, h1 overflow ${m.h1Overflow}, doc ${m.viewport.scrollWidth}/${m.viewport.clientWidth}`).join(" · "));
+  check("§1 treated phrases never break mid-phrase",
+    widths.every(([, m]) => m.cutRects === 1 && m.accentRects === 1),
+    widths.map(([w, m]) => `${w}: cut ${m.cutRects} / accent ${m.accentRects} rect(s)`).join(" · "));
+  check("§1 scope label never breaks mid-phrase",
+    widths.every(([, m]) => m.scopeRects === 1),
+    widths.map(([w, m]) => `${w}: ${m.scopeRects}`).join(" · "));
+  check("§1 the curl card wraps rather than scrolling sideways",
+    widths.every(([, m]) => m.curlScrolls.every((s) => s <= 0)),
+    widths.map(([w, m]) => `${w}: ${JSON.stringify(m.curlScrolls)}`).join(" · "));
+  /* The fold contract, read off the elements rather than off the spec's
+     figures: at 375 the hub and four whole plates are above the fold, at 320
+     the hub and three. The ladder is CUT there by design — that crop is the
+     scroll cue — so this asserts what must be above it, never that all of it
+     is. */
+  check("§1 fold guarantee at 375 × 553: hub and four whole plates above the fold",
+    heroNarrow["375"].hubBottom <= 553 && heroNarrow["375"].plateBottoms[3] <= 553,
+    `hub ${heroNarrow["375"].hubBottom}, plate 4 ${heroNarrow["375"].plateBottoms[3]}, plate 5 ${heroNarrow["375"].plateBottoms[4]} against a 553px fold`);
+  check("§1 fold guarantee at 320 × 553: hub and three whole plates above the fold",
+    heroNarrow["320"].hubBottom <= 553 && heroNarrow["320"].plateBottoms[2] <= 553,
+    `hub ${heroNarrow["320"].hubBottom}, plate 3 ${heroNarrow["320"].plateBottoms[2]} against a 553px fold`);
+  check("§1 formation stacks as a ladder below --bp-wide",
+    widths.every(([, m]) => !m.wide && m.busDisplay === "none" &&
+      m.plateTops.every((t, i) => i === 0 || t >= m.plateBottoms[i - 1] - 0.5)),
+    widths.map(([w, m]) => `${w}: wide ${m.wide}, bus ${m.busDisplay}`).join(" · "));
+
+  /* --- §1 static under reduced motion too: the whole-section form of the
+     brand rule's static assertion. A transition that only exists in one path
+     is still a live element in that path. --- */
+  await page.setViewport({ width: 1280, height: 700 });
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+  await page.goto(PAGE_URL);
+  const heroStill = await page.eval(HERO);
+  evidence.heroReduced = heroStill;
+  check("§1 stays fully static under reduced motion, with identical content",
+    heroStill.reducedMotion && heroStill.heroMoving.length === 0 &&
+      heroStill.heroText === heroWide.heroText &&
+      heroStill.dashCells.every((d) => d.animation === "none" && parseFloat(d.transition) === 0),
+    `${heroStill.heroMoving.join(" | ") || "nothing moving"} · content identical: ${heroStill.heroText === heroWide.heroText}`);
+  check("§6's cursor renders solid and static under reduced motion",
+    heroStill.gs.cursorAnimation === "none" && heroStill.gs.cursorBox.w === 8,
+    `animation-name ${heroStill.gs.cursorAnimation}`);
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.setViewport({ width: 1440, height: 900 });
 
   /* ================================================================ §2 ===
      The two-layer replay. Fidelity first: every rendered log character is

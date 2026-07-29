@@ -64,86 +64,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Developer (web): §1 and §6
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Build §1 and §6. They pair because both carry the `curl` and the `VERIFY ⎘` chip. §1 is
-the **sparse hero** ruled at Gate A (DEC-045/046): eyebrow · headline · formation above the fold,
-THIS SITE remnant + curl below it — no measured line, no readout BODH row, no hero terminal.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/section-01-hero.md` **as revised by HO-032** and
-  `section-01-copy.md` **as revised by HO-031**, plus `section-06-copy.md`
-- `knowledge-base/wave-review.md` — the Gate A verdict, for rulings the specs cite
-- `knowledge-base/agent-context/developer.md`
-- `tests/verify-shell.mjs`
-
-**RULING YOU NEED BEFORE YOU START (DEC-034).** `verify-shell.mjs:533` fails any shipped file containing
-an `http(s)` URL. §6 must ship the GitHub `curl` URL and one GitHub link, so this check **will** go red.
-**Amend it, never delete it.** The distinction that matters is A-004's actual claim — what the page
-*requests at runtime*:
-- **Permitted**: a URL as inert text, or as an `href` the reader clicks. Neither fetches anything.
-- **Still banned, and the check must still catch these**: `src`, `@import`, `url()`, `<link>`,
-  `<script src>`, or any attribute the browser resolves without user action.
-Narrow the check to fetching references. Weakening it to a blanket allow removes the mechanical guard on
-the page's most load-bearing published claim.
-
-**The line number above is stale** — the `no http(s) URL in any shipped file` check is at
-**`verify-shell.mjs:660`**, and the shipped-set glob it keys on is at **`:650`** (both moved when the
-shell step re-based the harness). Both coordinates were re-confirmed at the Wave 1 review. The ruling is
-unaffected; only the coordinate was.
-
-**TWO THINGS RULED AT WAVE 1 REVIEW THAT LAND IN THIS STEP (DEC-042).**
-
-1. **Give `tests/lib/cdp.mjs`'s `send()` a timeout.** It has none (`:115–123`), so a CDP reply that never
-   arrives blocks the process forever — which is why `qa-independent-audit.mjs` currently *hangs* rather
-   than fails, costing anyone who runs it twenty minutes of silence. Reject the pending promise with a
-   message naming the method and the elapsed time. You are fixing the transport, not the audit's
-   assertions; the renderer diagnosis is QA's and is scheduled at the sweep. **After it lands, run the
-   audit**: if it still stalls it now goes red with a method on it, and you report that as a result
-   rather than losing the step to it.
-2. **Land the amended `--text-display` floor in `styles/tokens.css`** — `clamp(1.75rem, 6.5vw, 4.25rem)`,
-   per `page-shell.md` §3 and `section-01-hero.md` §14. It was deliberately held back from the Gate A
-   sample step because **no harness asserts the clamp at all** (verified by grep). So it lands **with an
-   assertion**, not alone: an unguarded token in the shipped set is the drift this project exists to
-   prevent. Assert the relationship the floor exists for — the headline sets without overflow at 320px —
-   not the literal string `1.75rem`.
-
-**Deliverable:** `index.html` (§1 and §6), `styles/`, `scripts/` as needed, amended
-`tests/verify-shell.mjs`; HO-026.
-
-**Acceptance criteria:**
-- The settled headline — struck `a human` (`aria-hidden`), rust `an AI`, plain `team.` — with the
-  announced string `Ship a product with an AI team.`: **verify the computed name via
-  `Accessibility.getFullAXTree`** (`tests/lib/cdp.mjs` exposes a raw CDP `call`), not by assertion
-- The sparse stack per the revised hero spec, against its stated fold budget — and **nothing beyond
-  its inventory**: no measured line, no BODH value, no terminal in §1 (DEC-046). The formation built
-  hub = `PM`, seven specialist plates, to the revised spec's design
-- The THIS SITE remnant in the form HO-032 ruled, dashes inert and scope-labelled
-- §6: the exact `curl` string, `cd my-product && claude`, one GitHub link
-- The `VERIFY ⎘` chip wired to `VERIFY.md` at repo root — **and write that file** (a short, honest
-  index of what a reader can check and where). It is a hard launch blocker and the chip 404s without it
-- Motion budget as the revised hero spec re-states it (the hero terminal's seat is gone);
-  reduced-motion complete. The count-up `aria-live` decision is **not** this step's — it moved to §5
-  with the page's only counting cells
-- `bash scripts/test.sh` green with the amended check, fold assertions re-based to the sparse stack.
-  The audit must **complete** — exit zero, or fail named within its new timeout. A hang is a
-  failure, not a pending result
-- Cross-engine WebKit and Blink before filing
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-026 in `agent-requests.md` — under this exact ID; the Gate A fix round
-already took HO-031/032, so higher IDs in the ledger are not an error. Run the Pre-Handoff
-Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Developer (web): §3 and §4
 
 ```
@@ -179,6 +99,9 @@ HO-032 ruled.
 **On completion:** File HO-027 in `agent-requests.md` — under this exact ID; higher IDs in the
 ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): §5
 
@@ -412,6 +335,19 @@ with no verification behind it is how that happened.
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 
+- 2026-07-28 — Step: Developer §1 and §6 (HO-026). The sparse hero, the command and the proof link
+  ship: the headline's computed name read from the AX tree (`SHIP A PRODUCT WITH AN AI TEAM.`, the
+  struck phrase absent), the formation announcing hub `PM` → seven specialists with the bus width
+  equal to the plate row, the fold contract measured (hub + four whole plates above 553 at 375, hub
+  + three at 320), the remnant's dashes inert, and `VERIFY.md` written at repo root — a hard launch
+  blocker closed. The `http(s)` guard was **narrowed, not deleted** (fetching references fail, an
+  inert URL and an `<a href>` pass, prefetch hints fail) and **proven to go red** with planted
+  references. `cdp.mjs`'s `send()` now has a named deadline and the `--text-display` floor landed
+  with its own assertion. `scripts/test.sh` GREEN both engines (197/197 + 15/15); **the independent
+  audit exits zero, 107/107, twice consecutively** — two real defects and six changed-subject
+  assertions fixed on the way. Awaiting PM review at the build-review step; OBS-006 asks PM to rule
+  whether the queued audit-repair step still has a subject.
+
 - 2026-07-28 — Step: UI/UX Gate A fix round (HO-032). §1 recomposed to the sparse hero with the
   formation's real design pass and a rendered fold budget (four whole plates above the 375 fold,
   every figure re-rendered and reproduced); the remnant ruled a one-row instrument strip; §1 fully
@@ -500,11 +436,4 @@ with no verification behind it is how that happened.
   the 12px-inset mechanism mark as the accent idiom's third seat, the stamp a single text slot that
   absorbs the no-date case with nothing invented, founder voice in sans against mono chrome (DEC-039).
   12 assertions, no harness re-base forced. **Awaiting PM review at the Wave 1 review step.**
-
-- 2026-07-26 — Step: UI/UX §1 hero design (HO-020). The verdict fits the fold measured (measured-line
-  bottom 461.8px at 375×553, 91.2px clear), all four headline candidates' announced strings read from
-  the AX tree with B's struck phrase absent, the display floor amended to 1.75rem after the shipped
-  floor measurably overflowed 320px (DEC-038), the hero terminal ruled as §2's component streaming all
-  twelve lines once with no loop, formation built hub-is-PM. 13 assertions, 4 harness re-base sites.
-  **Awaiting PM review at the Wave 1 review step.**
 

@@ -112,12 +112,46 @@ async function connect(url) {
     for (const listener of listeners) listener(message);
   });
 
-  function send(method, params = {}, sessionId) {
+  /* Every reply is awaited under a deadline. Without one, a CDP call whose
+     reply never arrives blocks the process forever — the harness reads as
+     "still running" rather than as a failure, and a stalled run costs whoever
+     started it the whole wall-clock before anyone knows something is wrong.
+     A hang is a failure, and it should say so with the method on it.
+
+     The ceiling is deliberately far above any legitimate call: this harness
+     awaits a real 48-second replay chain inside a single Runtime.evaluate, so
+     the deadline exists to catch a transport that has stopped answering, not
+     to bound how long a page may take. Override per call where a longer wait
+     is genuinely expected. */
+  const SEND_TIMEOUT_MS = 180000;
+
+  function send(method, params = {}, sessionId, timeoutMs = SEND_TIMEOUT_MS) {
     const id = nextId++;
     const payload = { id, method, params };
     if (sessionId) payload.sessionId = sessionId;
+    const startedAt = Date.now();
     return new Promise((resolve, reject) => {
-      pending.set(id, { resolve, reject });
+      const timer = setTimeout(() => {
+        pending.delete(id);
+        reject(
+          new Error(
+            `CDP timeout: ${method} did not reply within ${timeoutMs} ms ` +
+              `(waited ${Date.now() - startedAt} ms, message id ${id}` +
+              `${sessionId ? `, session ${sessionId}` : ""})`
+          )
+        );
+      }, timeoutMs);
+      timer.unref?.();
+      pending.set(id, {
+        resolve: (value) => {
+          clearTimeout(timer);
+          resolve(value);
+        },
+        reject: (error) => {
+          clearTimeout(timer);
+          reject(error);
+        }
+      });
       socket.send(JSON.stringify(payload));
     });
   }
