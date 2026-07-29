@@ -64,13 +64,19 @@
     `scripts/test.sh` green. The totals-strip third-line wrap at 320px reported by DEC-027.2 also no
     longer reproduces (audit reports the value line at 2 lines, 246.34px of 272px).
 
-- [ ] **Count-up cells have an `aria-live` posture** — Blocker: soft, Source: qa, Added: 2026-07-25
-  - OBS-004: the count-up engine is verified against `tests/fixtures/count-up.html` because the shell
-    instantiates no `[data-countup]` element yet. A mid-roll value carries no `aria-live` guard, so
-    assistive tech reaching a cell during the 1.2s roll would announce an intermediate number.
-  - Decide when a real readout cell ships with §1 or §5 (Sprint 2), and re-verify the engine against
-    page cells rather than the fixture at the same time.
-  - Milestone gate: launch
+- [x] **Count-up cells have an `aria-live` posture** — RESOLVED 2026-07-29, Source: developer, Added: 2026-07-25
+  - Was OBS-004: the engine could only be verified against `tests/fixtures/count-up.html`, because the
+    page instantiated no `[data-countup]` element. Assistive tech reaching a cell during the 1.2s roll
+    would have announced an intermediate number.
+  - **The posture is no live region at all**, and silence alone was not enough. A polite region
+    re-announces every frame; an assertive one interrupts. So the rolling digits leave the
+    accessibility tree instead: while a cell rolls it is `aria-hidden` and a visually hidden stand-in
+    carries the exact final string, both removed when it settles. The cell's accessible text is the
+    measured value at every instant.
+  - Verified against §5's real cells, not the fixture, and during playback rather than off the markup:
+    the visible string takes 100 distinct states across a roll while the announced string takes one,
+    and the accessibility tree read mid-roll carries `9.3 h` and no intermediate. Both halves were
+    watched to go red with the shroud removed.
 
 - [ ] **Deploy serves only the page's own files** — Blocker: soft, Source: developer, Added: 2026-07-25
   - Cloudflare Pages deploying the repo root would publish `knowledge-base/`, `tests/`, `muster/`, and

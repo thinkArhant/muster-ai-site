@@ -64,43 +64,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Developer (web): §5
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Build §5 — shipped with Muster. After Gate A, §5 carries the page's entire whole-product
-number set: it is the primary site for `9.3 h` and `$147` (DEC-048), and it owns the page's only
-counting cells.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/section-05-copy.md` **as revised by HO-031** (four keys per card,
-  including `COST · API LIST`)
-- `knowledge-base/design-specs/web/page-shell.md` §8 — the readout-cell motif
-
-**Deliverable:** `index.html` (§5), `styles/` as needed; HO-028.
-
-**Acceptance criteria:**
-- Three prose lines and two four-key cards per the revised copy file; THIS SITE dashed with
-  `measured at launch`; scope labels beside their values; dashes never animate
-- **Decide the count-up cells' `aria-live` posture here** and verify the engine against real page
-  cells, not the fixture — this moved from the §1 step when the hero lost its readout
-  (`pre-launch-checklist.md` names this sprint as when it becomes decidable)
-- The `9.3 h` / `$147` byte-equality assertions re-base onto §5 as the primary site (they formerly
-  anchored on §1)
-- Both themes; cross-engine; `scripts/test.sh` green and the audit **completes** (zero, or named-red
-  within its timeout — never a hang; DEC-042)
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-028 in `agent-requests.md` — under this exact ID; higher IDs in the
-ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-26 Developer (web): Scroll-snap
 
 ```
@@ -131,6 +94,9 @@ between, and it is the likeliest thing to be rejected at Gate B.
 **On completion:** File HO-029 in `agent-requests.md` — under this exact ID; higher IDs in the
 ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-28 QA (web): The independent audit exits zero
 
@@ -299,6 +265,18 @@ with no verification behind it is how that happened.
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 
+- 2026-07-29 — Step: Developer §5 (HO-028). The page's whole-product number set has one home: `9.3 h`,
+  `4.8 h`, `4` commit-days and `$147` beside BODH, four ink dashes beside THIS SITE, every string
+  parsed out of the copy file and the four figures additionally diffed against the seed's Measured
+  data table. Each figure appears **exactly once on the page**, asserted as a count with the carrying
+  section named. **The count-up's live-region posture is decided (DEC-052): none** — the rolling
+  digits leave the accessibility tree and the exact value stands in, verified during playback against
+  real page cells (100 visible states, one announced) and from the AX tree mid-roll. `scripts/test.sh`
+  GREEN both engines (**256/256 + 27/27**); the audit exits zero, 108/108, twice. Every new
+  load-bearing assertion planted and watched go red. **Awaiting PM review at the build-review step;
+  OBS-011 (a stale dash count in `section-05-copy.md`'s R4 prose) and OBS-012 (the footer still
+  carries a shell placeholder and no sprint step owns footer copy) are PM's to rule.**
+
 - 2026-07-29 — Step: Developer §3 and §4 (HO-027). §3 reads as one passage — kicker and paragraph
   byte-equal to the copy file, zero numerals, the 64ch column measured — and its sentence-boundary
   wrap is asserted as a rule rather than a line count. §4 ships DEC-044's four decisions verbatim
@@ -398,14 +376,5 @@ with no verification behind it is how that happened.
   byte-equal across four files by string equality (DEC-041). **Awaiting PM review at the Wave 1 review
   step; three review items — §4's draft runs 7–8 sentences against the seed's own "~4–6", decision 4's
   stamp must never gain a date, and §5's `ACTIVE BUILD 9.3 h` repeat of §1 has a pre-authored fallback.**
-
-- 2026-07-26 — Step: UI/UX scroll-snap spec (HO-022). One idea per screen as a scrolling behaviour:
-  proximity snap on the document scroller, `--scroll-pad` at bar + one rhythm so a section's rule never
-  abuts the bar's (32.2px / 31.67px measured clear), §2 exempt by modifier and **proven unmoved** across
-  20 sampled rest positions where its playback core is ≥90% visible, snapping OFF under reduced motion
-  (DEC-040). Keyboard verified with real key events — the programmatic form lies. 11 assertions, no
-  harness re-base forced, `scripts/test.sh` green. **Awaiting PM review at the Wave 1 review step;
-  REQ-007 asks PM to rule the WebKit method — `qlmanage` cannot scroll, so two downstream steps'
-  cross-engine criteria are unsatisfiable as written.**
 
 

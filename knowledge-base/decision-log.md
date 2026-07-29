@@ -859,5 +859,35 @@ paragraph, since §4's track prose renders ~46 rendered characters by design.
 **Touched**: `design-specs/web/section-04-decisions.md`, `design-specs/web/page-shell.md`,
 `agent-requests.md` (HO-032).
 
+### DEC-052 — The counting cells carry no live region; the rolling digits leave the accessibility tree (2026-07-29)
+
+**Decision**: exercising the posture call the §5 step delegated to the build, no element on this page
+carries `aria-live`, `aria-atomic`, or a live-region role — and the count-up's accessible text is the
+measured value at every instant regardless. While a cell rolls, its digits are `aria-hidden` and a
+visually hidden stand-in holds the exact final string; both are removed when the roll settles.
+
+**Why neither of the obvious options**: a polite region over a 1.2s ease-out roll re-announces every
+frame — measured at 100 distinct rendered values in one roll — so a screen reader would hear dozens
+of numbers that were never true and the measured one last. Assertive interrupts. But plain silence is
+not enough either: a reader landing on the cell mid-roll is read whatever is on screen, and on a page
+whose entire proposition is that its figures are exact, announcing `5.2 h` for `9.3 h` is the failure
+this page can least afford. Taking the digits out of the tree for exactly as long as they are wrong
+resolves both — the value is announced once, in document order, like any other text.
+
+**Verified during playback, against §5's real cells rather than the fixture**: across one roll the
+visible string takes 100 distinct states and the announced string takes one; the accessibility tree
+read mid-roll (`Accessibility.getFullAXTree`) carries `9.3 h` and `4.8 h` and no intermediate. Both
+halves were watched to go red with the shroud removed, and the live-region sweep with an
+`aria-live="polite"` planted on a cell.
+
+**Cascades**: closes the `pre-launch-checklist.md` count-up item (OBS-004). The unmeasured dash is
+untouched — a value with no digits never animates, so it is never shrouded.
+
+**Impact**: Developer (the engine and every future readout cell), QA (the sweep verifies the posture
+during playback, not off the markup), PM.
+
+**Touched**: `scripts/count-up.js`, `styles/base.css`, `index.html` (§5), `tests/verify-shell.mjs`,
+`pre-launch-checklist.md`, `agent-requests.md` (HO-028).
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

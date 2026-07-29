@@ -10,6 +10,132 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-29 HO-028 — §5 built: the whole-product numbers come home, one scope per card
+
+**Type:** handoff
+**Producer:** Developer
+**Deliverable:** `index.html` (§5), `styles/{sections,motifs,base}.css`, `scripts/count-up.js`,
+`tests/verify-shell.mjs`, `tests/verify-webkit.mjs`, `tests/qa-independent-audit.mjs`,
+`knowledge-base/{pre-launch-checklist,decision-log}.md`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+- [ ] QA — consumes the built section at the full-page sweep (not a review gate); one change lands
+  inside `qa-independent-audit.mjs` and is called out below
+
+**What shipped**
+
+- **Three prose lines and two four-key cards, every string read off the deliverable at test time.**
+  The three prose lines come out of `section-05-copy.md`'s fences and the eight keys, eight values,
+  two scope labels and two sub-lines out of its §4.1 table — parsed, never retyped, so a smart quote
+  or a transposed scope label shows as a diff. The provenance line renders as prose: founder
+  testimony does not dress as telemetry, which is why §5 has two cards and not three.
+- **The four BODH figures are additionally diffed against the founder-authored seed's Measured data
+  table** — `9.3 h`, `4.8 h`, `4`, `$147`, and `Jul 11–18` under the count it qualifies. The page is
+  checked against the measurement, not only against the transcription of it, so a figure that
+  drifted in the copy file is caught rather than blessed.
+- **§5 is the primary site, asserted as a count.** `9.3 h`, `$147` and `4.8 h` each appear **exactly
+  once on the whole page**, and the section that carries each is named — `shipped-with-muster`.
+  §1 gave up its readout at Gate A, so a second rendering anywhere now fails this check whatever it
+  says. No wave-scope figure (`~64`, `289`, `$24.73`) appears anywhere in §5.
+- **Measured is rust, unmeasured is ink.** Card 1's four values are flat accent at 30px, tabular;
+  card 2's four are `--ink` em-dashes under one card-level `measured at launch`, and they carry
+  `data-countup` **on purpose** — the engine's refusal to animate a value with no digits is now a
+  property of the shipped page rather than of a fixture. State `static`, `animation-name: none`,
+  transition 0.
+- **The two cards align key for key.** Every cell is the same three tracks — key, value, sub-line —
+  and the sub-line's track is reserved whether or not that cell has one. Only one of eight cells
+  carries a sub-line today; without the reserve the pair went ragged from the third row down, which
+  is what the first run measured (112px against 83.5px) before the fix. Asserted as the
+  relationship, not the figure: equal cell heights at 320/360/375/390/1280 and equal tops side by
+  side at desktop, with "every key sets on one line" asserted alongside as the precondition the
+  shared track depends on.
+- **§5 declares no motion of its own.** Zero animations and zero transitions in the section; the
+  count-up is JS and gates itself. §5 holds the motion budget's second seat without a declaration in
+  `sections.css`.
+- **R9 holds**: the section exposes no focusable element at all — `bodh.day` is text, not a link.
+  One `<h2>` and nothing deeper.
+
+**The live-region posture — decided, and neither of the obvious options (DEC-052)**
+
+No element on the page carries `aria-live`, `aria-atomic` or a live-region role. A polite region over
+a 1.2s roll re-announces every frame — **measured at 100 distinct rendered values in a single roll**
+— so a screen reader would hear dozens of numbers that were never true and the measured one last.
+Assertive interrupts. Silence alone is not enough either: a reader landing mid-roll is read whatever
+is on screen. So the digits leave the accessibility tree for exactly as long as they are wrong — the
+rolling span is `aria-hidden` and a visually hidden stand-in carries the exact final string, both
+gone when it settles.
+
+**Verified during playback, against real page cells, three ways.** Across one roll the visible string
+takes **100 distinct states and the announced string takes one**. The accessibility tree read
+mid-roll via `Accessibility.getFullAXTree` carries `9.3 h` and `4.8 h` and **no intermediate**, with
+zero nodes carrying a `live` property. And a page-wide sweep finds no live region in the markup. The
+first two are independent: with the shroud removed, "the count-up fires and lands exactly" still
+passes while both accessibility checks go red.
+
+**One change inside QA's audit, and why it is not a hole** (QA review item)
+
+`qa-independent-audit.mjs`'s full-ink rule collects every `p, li, dd` whose colour is not `--ink`. A
+readout **value** is the one thing on this page deliberately neither ink nor muted — `page-shell.md`
+§8 sets it in accent at `--text-readout` — and no such element existed on the page until this step.
+It is excluded from that rule and held to a **stricter** one instead: every readout value is asserted
+accent (or an ink dash) at or above §2.3's 24px accent floor, tabular, in both themes.
+
+Self-review caught that the first version of that rule keyed "unmeasured" on the CSS modifier class,
+which meant **a dash painted rust passed the audit** while both engines' harnesses caught it. It now
+derives unmeasured from the content — no digit means not measured, the same test the count-up engine
+applies — and asserts content and modifier agree. Re-planted; the audit goes red in both themes.
+
+**Verification**
+
+- `bash scripts/test.sh` **GREEN both engines** — **256/256 Blink** (was 230/230) and **27/27
+  WebKit** (was 21/21); 32 checks added.
+- `node tests/qa-independent-audit.mjs` **exit 0, 108/108, twice consecutively**.
+- **Every load-bearing new assertion was planted and watched go red**, tree reverted clean: the
+  shroud removed (announced-value check red with 100 announced states listed; AX-tree check red
+  naming `0.0 h`), `aria-live="polite"` on a cell (live-region sweep red), the unmeasured modifier
+  dropped from one dash (Blink ink-dash check red, light-theme rust/ink split red, **both WebKit §5
+  colour checks red in both themes**, audit red after the fix above). The cross-card alignment check
+  was observed red on its own before the reserved track landed.
+- **Cross-engine, looked at rather than inferred**: `tests/artifacts/webkit-{dark,light}-s05.png`,
+  `s05-desktop-{dark,light}.png`, `s05-phone-dark.png`, `blink-dark-s05-{1280,375}.png`. The WebKit
+  §5 render hides the prose and the status bar as well as the other sections, because the claim it
+  makes is about **every** ink cluster in the frame: four, all dash-shaped (26×3–26×4 px), none rust,
+  against 14 rust clusters of measured digits — which QuickLook rasterised **with no JavaScript run
+  at all**, so what it proves is the no-JS path rendering the exact measured values.
+
+**Would Apple ship this?** Yes. Two scopes, four keys each, read straight across — the reader does
+the arithmetic and the page states no ratio. The one thing I would put in front of the founder is the
+reserved sub-line slot: seven of eight cells carry an empty 28.5px band so the eighth's `Jul 11–18`
+does not push the pair out of alignment. It reads as instrument spacing in the render rather than as
+emptiness, and the alternative — letting the cards go ragged from row three — is worse. It is a
+judgement, not a measurement, and it is visible in `s05-desktop-dark.png`.
+
+**Revision log:**
+- 2026-07-29: Filed. Self-review caught and fixed: the audit's readout rule keyed on the class rather
+  than the content (above); the cross-card alignment failed on the one cell with a sub-line and was
+  fixed with a reserved track rather than by moving the sub-line; the WebKit ink-cluster claim
+  counted the header wordmark's six letters until the status bar joined the hide list. Also removed
+  two now-dead CSS blocks (`.readout`'s duplicate surface, `.slot`) and de-duplicated the readout
+  key/sub type, which is what let the muted sub-lines satisfy the audit's existing rule honestly
+  instead of needing an exemption.
+
+**Observations** (non-blocking, for PM):
+- OBS-011 — `section-05-copy.md` §6's R4 line reads "THIS SITE is three em-dashes"; §4.1's table
+  carries **four** values, the fourth being the `COST · API LIST` row DEC-048 added.   Severity: low
+  Evidence: the table is what shipped and what the harness parses — four dashes render and are
+  asserted. The R4 prose was not updated when the cost row landed. Content owns that file and it was
+  not edited.
+  Suggested action: PM has Content correct the count, or rules the prose non-normative against the
+  table.
+- OBS-012 — the page footer still carries a shell placeholder (`Provenance line and links ship with
+  their own spec`) and **no step in the sprint owns footer copy**.   Severity: med
+  Evidence: `page-shell.md` §12 shows `FOOTER provenance · links`; the seed names an authorship
+  line, an email and a GitHub profile. The remaining queue steps are scroll-snap, the audit repair,
+  the QA sweep and the Gate B packet — none of them. Gate B is "the assembled page", and a
+  placeholder in the footer is the first thing a cold reader's eye lands on after the curl.
+  Suggested action: PM's call — no queue step was added here.
+
 ### 2026-07-29 HO-027 — §3 and §4 built: the insight reads, and four decisions share one screen
 **Type:** handoff
 **Producer:** Developer

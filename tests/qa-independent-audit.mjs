@@ -233,7 +233,13 @@ const AUDIT = `(() => {
     colour: hex(parse(cs(el).color)),
     size: parseFloat(cs(el).fontSize),
     tabular: cs(el).fontVariantNumeric,
-    unmeasured: el.classList.contains("readout__value--unmeasured"),
+    /* Derived from the CONTENT, never from the class: "no digit means not
+       measured" is the same test the count-up engine applies before it
+       refuses to animate a cell. Keyed on the class instead, this check would
+       wave through a dash painted rust the moment someone dropped the
+       modifier — and a rust dash reads as a metric that happens to be zero. */
+    unmeasured: !/[0-9]/.test(el.textContent),
+    modifier: el.classList.contains("readout__value--unmeasured"),
     text: el.textContent.trim()
   }));
 
@@ -497,8 +503,9 @@ try {
   check("every readout value is flat accent (or an ink dash) at or above the 24px accent floor, tabular",
     dark.readoutValues.length > 0 &&
       dark.readoutValues.every((v) => v.size >= 24 && /tabular-nums/.test(v.tabular) &&
+        v.unmeasured === v.modifier &&
         v.colour === (v.unmeasured ? dark.inkHex : dark.accentHex)),
-    dark.readoutValues.map((v) => `${JSON.stringify(v.text)} ${v.colour} @${v.size}px`).join(" · ") || "no readout values on the page");
+    dark.readoutValues.map((v) => `${JSON.stringify(v.text)} ${v.colour} @${v.size}px${v.unmeasured === v.modifier ? "" : " ← content and modifier disagree"}`).join(" · ") || "no readout values on the page");
   check("no rust sets small text except the two glyphs the specs exempt as graphical marks",
     dark.smallRust.length === 0 && dark.graphicalRust.length === 2 &&
       !dark.graphicalRust.some((g) => /UNMARKED/.test(g)),
