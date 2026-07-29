@@ -434,3 +434,302 @@
   🧪 bash   python3 - <<'PYEOF' p="knowledge-base/agent-requests.md" s=open(p,encoding="utf-8").read() s=s.replace("""- OBS-010 — `m
   🧪 bash   bash scripts/test.sh 2>&1 | tail -4; echo "=== AUDIT ==="; node tests/qa-independent-audit.mjs 2>&1 | tail -2; echo "===
   🧪 bash   grep -E "checks passed" .test-logs/run-20260729-002956.log; rm -f /tmp/probe-s34.mjs /tmp/probe-scroll.mjs /tmp/probe-sc
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "commit-lint rc=$?"; git status --short | head
+  💬 §3 and §4 are built, verified in both engines, and the queue has advanced to §5. **What shipped** - **§3 — kicker and one paragraph.** Both strings are read out of `section-03-copy.md` at test time an
+    📖 ×26 · ✏️  ×29 · 🧪 ×62
+  ✓ 118 turns · $16.94 · peak ctx 314k/1M 31% · out 105k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m54m 2s[0m · advanced → 2026-07-26 Developer (web): §5 (DEVELOPER) · handoff HO-027 filed ✓
+    run so far: 2h 11m · $58.91 · 3 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 4
+▶ [34;1mDEVELOPER[0m · 2026-07-26 Developer (web): §5  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh developer auto
+  💬 Binding to Developer for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/section-05-copy.md
+  🧪 bash   ls -la && echo "---styles---" && ls -la styles/ && echo "---scripts---" && ls -la scripts/ && echo "---tests---" && ls -
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  🧪 bash   grep -n "^## \|^### " knowledge-base/design-specs/web/page-shell.md | head -80 && echo "=== wc ===" && wc -l knowledge-b
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/count-up.js
+  🧪 bash   echo "=== data-countup uses ===" && grep -rn "data-countup" --include=*.html --include=*.css --include=*.mjs --include=*
+  🧪 bash   grep -rn "data-countup" tests/ scripts/ styles/ index.html samples/ 2>/dev/null | head -30; echo "=== fixtures ==="; ls 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/tokens.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/motifs.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/test.sh
+  🧪 bash   grep -n "^async function \|^function \|^ // ===\|^/\* ===\|^const SECTION\|^// ---" tests/verify-shell.mjs | head -100
+  🧪 bash   grep -n "^ console.log\|^console.log\|^\s*\/\* -\{10,\}\|^\/\* =\|^ \/\* §" tests/verify-shell.mjs | head -80
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -n "placeholder\|shell-placeholder" tests/verify-shell.mjs tests/verify-webkit.mjs tests/qa-independent-audit.mjs |
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -rn "instrument" styles/*.css index.html | head -20; echo "=== regmarksPerSurface ==="; grep -n "regmarksPerSurface
+  🧪 bash   grep -n "byte-equal\|byteEqual\|VERIFIED_CURL\|copy-rules" tests/verify-shell.mjs | head -30; echo "=== audit ==="; grep
+  🧪 bash   grep -n -i -B4 -A22 "measured data" knowledge-base/product-spec-seed.md | head -60
+  🧪 bash   grep -n "const animations" -A12 tests/verify-shell.mjs | head -20
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -n "^ /\* ---" tests/verify-shell.mjs | sed -n '1,200p'
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   grep -rn "aria-live\|role=\"status\"\|aria-atomic" scripts/ index.html styles/ tests/*.mjs | head
+  🧪 bash   grep -n "s03Copy\|s04Copy\|STAMP_DATES\|ROW_LABELS" tests/verify-shell.mjs | head -20
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now I'll build §5. Starting with the markup:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  💬 Now the CSS:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/motifs.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/motifs.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  💬 Now the count-up engine — the `aria-live` posture decision:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/count-up.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/count-up.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/count-up.js
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/scripts/count-up.js
+  💬 Now the visually-hidden utility in base.css:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  💬 Now the harness. Adding the §5 block:
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -n "timeout\|TIMEOUT\|awaitPromise\|returnByValue" tests/lib/cdp.mjs | head -30
+  🧪 bash   node --check tests/verify-shell.mjs && node --check scripts/count-up.js && echo "SYNTAX OK"
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | tail -60
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | grep -n "^FAIL"
+  💬 Alignment is off on the one cell with a sub-line. Reserving the sub-line track fixes it properly:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | grep -E "^FAIL|checks passed"
+  💬 Now the WebKit half:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   node tests/verify-webkit.mjs 2>&1 | grep -E "^FAIL|^PASS.*§5|checks passed"
+  🧪 bash   node -e "const r=JSON.parse(require('fs').readFileSync('tests/artifacts/webkit-report.json','utf8')); console.log(JSON.s
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-webkit.mjs
+  🧪 bash   node tests/verify-webkit.mjs 2>&1 | grep -E "^FAIL|§5|checks passed"
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | grep -E "^FAIL|checks passed|Error|error" | head -30; echo "EXIT=${PIPESTATUS
+  🧪 bash   grep -n "full-ink rule\|mutedProse" -B30 tests/qa-independent-audit.mjs | grep -n "mutedProse" | head; echo ---; grep -n
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  💬 The audit flags §5's readout values under its "no muted prose" rule. Fixing the sub-lines honestly, and giving the readout value a stricter rule rather than an exemption:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/motifs.css
+  🧪 bash   perl -pi -e 's/<dt class="readout__key">/<dt class="t-micro readout__key">/g' index.html && grep -c 't-micro readout__ke
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit1.txt 2>&1; echo "EXIT=$?"; grep -E "^FAIL|checks passed" /tmp/audit1.tx
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -20
+  🧪 bash   grep -E "checks passed" .test-logs/run-20260729-010522.log
+  💬 Both engines green and the audit exits zero. Committing this as a restore point before planting failures:
+  🧪 bash   git add index.html styles/ scripts/count-up.js tests/verify-shell.mjs tests/verify-webkit.mjs tests/qa-independent-audit
+  💬 Now planting violations to prove the new assertions can fail:
+  🧪 bash   \ perl -0pi -e 's/ shroud\(el, spec\);\n//' scripts/count-up.js && \ perl -0pi -e 's/(<dd class="readout__value readout_
+  🧪 bash   node tests/verify-shell.mjs 2>&1 | grep -E "^FAIL|checks passed"
+  💬 All five targeted checks went red. Now the WebKit and audit halves:
+  🧪 bash   node tests/verify-webkit.mjs 2>&1 | grep -E "^FAIL|checks passed"; echo "--- audit ---"; node tests/qa-independent-audit
+  💬 The audit passed a rust dash — it keyed the rule on the class, not the content. Fixing that:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/qa-independent-audit.mjs
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | grep -E "^FAIL|checks passed"
+  🧪 bash   git checkout -- index.html scripts/count-up.js && grep -c 'aria-live' index.html; grep -c 'shroud(el, spec)' scripts/cou
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -6; echo "--- audit ---"; node tests/qa-independent-audit.mjs 2>&1 | grep -E "^FAIL|che
+  🧪 bash   grep -E "checks passed" .test-logs/run-20260729-011640.log; echo "--- audit second consecutive run ---"; node tests/qa-i
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/webkit-dark-s05.png
+  🧪 bash   grep -n "async screenshot" -A12 tests/lib/cdp.mjs
+  🧪 bash   cat > /tmp/s05shot.mjs <<'EOF' import { launchChrome } from "./tests/lib/cdp.mjs"; import { writeFileSync } from "node:f
+  ⚠️  tool returned an error
+  🧪 bash   P=/Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930; sed -e "s#\"./tests/lib/cdp.mjs\"#\"$P/test
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/s05-desktop-dark.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/s05-phone-dark.png
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A40 muster/system-guide.md | head -60
+  🧪 bash   grep -n "## Pre-Handoff Self-Review Checklist" -A45 muster/system-guide.md
+  🧪 bash   grep -n -i "aria-live\|count-up\|counting" knowledge-base/pre-launch-checklist.md; echo "=== A-list ==="; grep -n "^### 
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/pre-launch-checklist.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/foundational-assumptions.md
+  🧪 bash   grep -n "OBS-002\|OBS-003\|OBS-004\|OBS-005\|OBS-006\|OBS-009" knowledge-base/agent-requests.md | head -20
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "^### DEC-" knowledge-base/decision-log.md | tail -8; echo "=== head of a recent entry ==="; grep -n "^### DEC-0
+  🧪 bash   sed -n '851,890p' knowledge-base/decision-log.md; echo "=== total lines ==="; wc -l knowledge-base/decision-log.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 Now filing HO-028:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "^### 2026" knowledge-base/agent-requests.md | head -12; echo "=== lint ==="; bash muster/scripts/muster-request
+  💬 Now the queue — promoting the scroll-snap step and recording this one as done:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -10; echo "=== structure ==="; grep -n "^## \|^### 20" knowledge-ba
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -4; grep -E "checks passed" .test-logs/run-*.log | tail -2; echo "--- audit ---"; node 
+  🧪 bash   grep -E "checks passed" .test-logs/run-20260729-012921.log
+  🧪 bash   git add knowledge-base/ tests/qa-independent-audit.mjs tests/artifacts/ && git status --short | head -20 && git commit -
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~2..HEAD 2>&1 | tail -5; echo "=== artifacts ignored? ==="; git check-igno
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~2..HEAD; echo "EXIT=$?"
+  💬 §5 is built and both engines are green. **What shipped** The page's whole-product number set now has one home: `9.3 h`, `4.8 h`, `4` commit-days and `$147` beside `BODH · IDEA → LIVE`, four ink em-das
+    📖 ×38 · ✏️  ×34 · 🧪 ×55 · ⚠️  ×1
+  ✓ 128 turns · $17.7 · peak ctx 296k/1M 29% · out 100k  (success)
+  ✓ [34;1mDEVELOPER[0m · [1m59m 43s[0m · advanced → 2026-07-26 Developer (web): Scroll-snap (DEVELOPER) · handoff HO-028 filed ✓
+    run so far: 3h 11m · $76.61 · 4 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 5
+▶ [34;1mDEVELOPER[0m · 2026-07-26 Developer (web): Scroll-snap  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   bash muster/scripts/muster-bind.sh developer auto
+  💬 Binding to Developer for this session.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/developer.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/developer.md
+  🧪 bash   ls && echo "---" && ls styles scripts tests && echo "---" && wc -l knowledge-base/design-specs/web/page-shell.md index.h
+  🧪 bash   grep -n -i "snap" knowledge-base/design-specs/web/page-shell.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/design-specs/web/page-shell.md
+  🧪 bash   grep -n "HO-022\|OBS-009\|HO-029" knowledge-base/agent-requests.md | head -50; echo "---"; wc -l knowledge-base/agent-re
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -rn "bar-h\|scroll-pad\|scroll-padding\|scroll-snap\|scroll-behavior" styles/ index.html | head -40
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/tokens.css
+  🧪 bash   grep -n "statusbar" styles/chrome.css | head -30; echo "=== 48 usages ==="; grep -rn "3rem\|48px" styles/*.css | head -2
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/chrome.css
+  🧪 bash   grep -n "<section\|</section\|class=\"section" index.html | head -40; echo "=== .section rules ==="; grep -rn "^\.sectio
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/sections.css
+  🧪 bash   wc -l tests/*.mjs tests/lib/*.mjs scripts/test.sh; echo "=== test.sh ==="; cat scripts/test.sh
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/lib/cdp.mjs
+  🧪 bash   grep -n "^async function\|^function\|^const \|^ // ===\|^/\* ---\|^/\* ==" tests/verify-shell.mjs | head -80
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  🧪 bash   grep -n "scrollIntoView\|scrollTo\|scrollBy\|scrollTop" tests/verify-shell.mjs tests/qa-independent-audit.mjs scripts/*.
+  🧪 bash   sed -n '40,55p;435,450p' styles/replay.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/tokens.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/chrome.css
+  💬 Now the scroll block in `base.css`:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/styles/base.css
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/index.html
+  🧪 bash   perl -pi -e 's/calc\(100dvh - 3rem\)/calc(100dvh - var(--bar-h))/g' styles/replay.css && grep -n "100dvh" styles/replay.
+  🧪 bash   bash scripts/test.sh
+  ⚠️  tool returned an error
+  🧪 bash   grep -n "refuses to start with the core under the status bar" -B 60 tests/verify-shell.mjs | sed -n '1,90p'
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/probe-snap.mjs
+  🧪 bash   node tests/artifacts/probe-snap.mjs
+  🧪 bash   grep -n "seen" tests/verify-shell.mjs | sed -n '1,20p'; echo ===; grep -n "gatedOut" tests/verify-shell.mjs tests/qa-ind
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   grep -n "scroll\|IntersectionObserver" scripts/replay.js scripts/count-up.js | grep -v "^scripts/replay.js:106\|^scripts
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   node --check tests/verify-shell.mjs 2>&1 | head -5 || node -e "import('./tests/verify-shell.mjs')" 2>&1|head -3
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   node --check tests/verify-shell.mjs && echo SYNTAX-OK
+  🧪 bash   bash scripts/test.sh
+  ⚠️  tool returned an error
+  🧪 bash   grep -n "overflow" styles/replay.css | head -20
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now diagnose the A11 drift:
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/probe-snap.mjs
+  🧪 bash   node tests/artifacts/probe-snap.mjs
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/probe-snap.mjs
+  🧪 bash   node tests/artifacts/probe-snap.mjs
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/probe-snap.mjs
+  🧪 bash   node tests/artifacts/probe-snap.mjs
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  💬 Now replacing the A11 block with the measured, three-part version:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   python3 - <<'EOF' import re p='tests/verify-shell.mjs' s=open(p).read() start=s.index(' const run = async (align) => {')
+  🧪 bash   node --check tests/verify-shell.mjs && bash scripts/test.sh
+  ⚠️  tool returned an error
+  🧪 bash   node -e ' const r=require("./tests/artifacts/blink-report.json"); for (const [k,v] of Object.entries(r.evidence.snapFind
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   node --check tests/verify-shell.mjs && bash scripts/test.sh
+  ⚠️  tool returned an error
+  🧪 bash   node -e ' const r=require("./tests/artifacts/blink-report.json"); for (const [k,v] of Object.entries(r.evidence.snapFind
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ⚠️  tool returned an error
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ⚠️  tool returned an error
+  🧪 bash   grep -n "whole: rect.height" tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  🧪 bash   node --check tests/verify-shell.mjs && bash scripts/test.sh
+  🧪 bash   grep -nE "checks passed" .test-logs/run-20260729-021239.log; echo "=== new snap checks ==="; grep -nE "^PASS.*(snap|scro
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit1.log 2>&1; echo "run1 exit=$?"; tail -3 /tmp/audit1.log; grep -c "^FAIL
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/audit2.log 2>&1; echo "run2 exit=$?"; tail -2 /tmp/audit2.log
+  🧪 bash   cp styles/base.css /tmp/base.bak && cp scripts/count-up.js /tmp/cu.bak python3 - <<'EOF' p='styles/base.css'; s=open(p).
+  🧪 bash   cp /tmp/base.bak styles/base.css && cp /tmp/cu.bak scripts/count-up.js && git diff --stat -- styles/base.css scripts/cou
+  🧪 bash   node -e ' const r=require("./tests/artifacts/blink-report.json"); for (const [k,v] of Object.entries(r.evidence.snapS2Sw
+  🧪 bash   cp /tmp/base.bak styles/base.css && cp /tmp/index.bak index.html && git diff --stat && grep -c "section--no-snap" index.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/probe-snap.mjs
+  🧪 bash   echo "== as built =="; node tests/artifacts/probe-snap.mjs python3 - <<'EOF' t=open('index.html').read().replace('class=
+  🧪 bash   bash scripts/test.sh; echo "---"; grep -nE "checks passed" .test-logs/run-*.log | tail -2
+  🧪 bash   grep -nE "^(PASS|FAIL) (§2's exemption|a snapped section)" .test-logs/run-20260729-024235.log; node tests/qa-independent
+  🧪 bash   node tests/qa-independent-audit.mjs 2>&1 | tail -2; echo "exit=$?"; echo "=== git status ==="; git status --short | head
+  🧪 bash   ls -t tests/artifacts/*.png | head -8; rm -f tests/artifacts/probe-snap.mjs
+  🧪 bash   ls tests/artifacts/ | grep -E "^webkit-(dark|light)-(page|full|s0)" | head
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/webkit-dark-s02.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now filing the handoff:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "bar-h\|scroll-pad\|gap-hairline\|--rhythm" knowledge-base/design-system-reference.md | head
+  🧪 bash   ls knowledge-base/design-system-reference.md 2>/dev/null; head -20 knowledge-base/design-system-reference.md 2>/dev/null
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  💬 Now the Pre-Handoff Self-Review checklist:
+  🧪 bash   grep -n "Pre-Handoff Self-Review" -A 40 muster/system-guide.md | head -60
+  🧪 bash   grep -n "Pre-Handoff Self-Review Checklist" -A 30 muster/system-guide.md | sed -n '1,45p'
+  🧪 bash   sed -n '460,480p' muster/system-guide.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/verify-shell.mjs
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "A-00" knowledge-base/foundational-assumptions.md | head -20
+  🧪 bash   node --check tests/verify-shell.mjs && bash scripts/test.sh
+  💬 Now the queue update:
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   grep -c "^- 2026-07" knowledge-base/orchestration-queue.md; ls muster/scripts/ | grep -i lint
+  🧪 bash   grep -n "^- 2026-07" knowledge-base/orchestration-queue.md | tail -3; wc -l knowledge-base/orchestration-queue.md
+  🧪 bash   sed -n '349,360p' knowledge-base/orchestration-queue.md
+  🧪 bash   python3 - <<'EOF' p='knowledge-base/orchestration-queue.md' lines=open(p).read().split('\n') # lines are 0-indexed; entr
+  🧪 bash   bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -5; echo "=== requests lint ==="; bash muster/scripts/muster-reques
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   git add -A && git status --short

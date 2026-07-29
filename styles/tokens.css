@@ -100,6 +100,16 @@
   --gutter: clamp(1.5rem, 5vw, 4rem);
   --bp-wide: 60rem;
 
+  /* The sticky status bar's height, and the scroll padding derived from it.
+     Tokens because the bar's block-size, the playback core's ceiling and this
+     padding are the same measurement three times over; the bar takes
+     `block-size: var(--bar-h)` so they cannot drift. The padding is the bar
+     PLUS one rhythm: exactly the bar height would park a section's own hairline
+     rule 7.89px under the bar's rule and read as an accidental double rule. The
+     harness asserts the derivation, never the 72. */
+  --bar-h: 3rem;
+  --scroll-pad: calc(var(--bar-h) + var(--rhythm));
+
   /* --- Motion --- */
   --pulse-period: 2.2s;
   --cursor-period: 1.15s;

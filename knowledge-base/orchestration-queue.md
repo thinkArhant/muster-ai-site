@@ -64,40 +64,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Developer (web): Scroll-snap
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Apply scroll-snap across the page. Last build step deliberately — it needs sections to snap
-between, and it is the likeliest thing to be rejected at Gate B.
-
-**Inputs:**
-- `knowledge-base/design-specs/web/page-shell.md` — the scroll-snap spec (HO-022) with its PM review
-
-**Deliverable:** `styles/` (and `index.html` only if the spec requires a container change); HO-029.
-
-**Acceptance criteria:**
-- **Proximity snapping, never JavaScript scroll-jacking**
-- `scroll-padding-block-start` set against the 48px sticky bar so section headings are not clipped
-- Keyboard paging, find-in-page and 200% zoom each **asserted in the harness**, not claimed
-- **§2 exempt** per spec — verify its playback, visibility gate and phone budget are untouched by the
-  snap container
-- Reduced-motion behaviour exactly as the spec rules it
-- `scripts/test.sh` green and the audit **completes** (DEC-042). **Cross-engine here is Blink-measured
-  plus a MANUAL Safari pass, recorded as manual** — `qlmanage` cannot scroll, so there is no mechanical
-  WebKit result for a scroll behaviour and none may be reported as one (REQ-007, DEC-042)
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-029 in `agent-requests.md` — under this exact ID; higher IDs in the
-ledger are not an error. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-28 QA (web): The independent audit exits zero
 
 ```
@@ -133,6 +99,9 @@ the audit's own machinery (an audit repair must never change page behaviour to p
 already took HO-031/032, so higher IDs existing in the ledger is not an error). Run the Pre-Handoff
 Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 QA (web): Full-page sweep
 
@@ -265,6 +234,17 @@ with no verification behind it is how that happened.
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 
+- 2026-07-29 — Step: Developer scroll-snap (HO-029). The page now comes to rest on section starts —
+  four declarations in the user agent, no script touching the page's scroll position (asserted
+  against the shipped source). §2's exemption proven as a property (0 of 13 gated rests moved at
+  1280×900, 0 of 3 at 375×553), keyboard paging, 200% zoom and find-in-page each asserted, reduced
+  motion off with `--scroll-pad` kept. `scripts/test.sh` GREEN both engines (**273/273 + 27/27**);
+  the audit exits zero, 108/108, twice. Eight violations planted, twelve assertions watched go red —
+  including two blind checks found and repaired. **Awaiting PM review at the build-review step;
+  OBS-013 asks PM (with UI/UX) to rule §7.1's A11: a start-aligned `scrollIntoView()` on §4's last
+  value is pulled 180px past it, off screen, while the alignment find-in-page actually uses is
+  unaffected — the same trade as OBS-009, so one ruling covers both.**
+
 - 2026-07-29 — Step: Developer §5 (HO-028). The page's whole-product number set has one home: `9.3 h`,
   `4.8 h`, `4` commit-days and `$147` beside BODH, four ink dashes beside THIS SITE, every string
   parsed out of the copy file and the four figures additionally diffed against the seed's Measured
@@ -368,13 +348,5 @@ with no verification behind it is how that happened.
   announces exactly `MUSTER`. §2 byte-clean and unchanged. Both harnesses green, both engines.
   **Awaiting PM review at the Wave 1 review step; OBS-005 bears on how REQ-007 is settled.**
 
-- 2026-07-26 — Step: Content §4, §5 and §6 copy (HO-023). §4 tightened by **five words of 420** with a
-  word-level seed-vs-shipped diff as the evidence and sentence count unchanged at 30 — titles and stamps
-  untouched, so §4's measured line counts hold exactly; §5 ships two readout cards plus three prose lines
-  (the provenance line is prose, never a cell) and carries operator attention and commit-days, the two
-  measured figures the page otherwise never shows; §6's "Nothing else" stated as an inventory, `curl`
-  byte-equal across four files by string equality (DEC-041). **Awaiting PM review at the Wave 1 review
-  step; three review items — §4's draft runs 7–8 sentences against the seed's own "~4–6", decision 4's
-  stamp must never gain a date, and §5's `ACTIVE BUILD 9.3 h` repeat of §1 has a pre-authored fallback.**
 
 

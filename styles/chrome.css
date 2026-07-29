@@ -30,14 +30,16 @@
 
 /* --------------------------------------------------------------------------
    Status bar — sticky, fully opaque, hairline-ruled. No glass: no blur, no
-   translucency over content. 3rem total including its rule (border-box).
+   translucency over content. --bar-h total including its rule (border-box) —
+   the same token the page's scroll padding is derived from, so the padding
+   cannot drift from the bar it clears.
    -------------------------------------------------------------------------- */
 
 .statusbar {
   position: sticky;
   inset-block-start: 0;
   z-index: 10;
-  block-size: 3rem;
+  block-size: var(--bar-h);
   background-color: var(--ground);
   border-block-end: 1px solid var(--hair);
 }

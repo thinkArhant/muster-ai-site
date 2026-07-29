@@ -2437,13 +2437,18 @@ try {
   await page.setViewport({ width: 375, height: 553, deviceScaleFactor: 1, mobile: true });
   await page.goto(PAGE_URL);
   const phone = await page.eval(`(async () => {
-    /* Centring the section leaves the core's top under the sticky bar, which is
-       below the gate's threshold — playback must refuse to start there. Then
-       park the core just clear of the bar, where it is entitled to run. */
-    document.querySelector("#watch-it-ship").scrollIntoView({ behavior: "instant", block: "center" });
-    await new Promise((r) => setTimeout(r, 300));
-    const gatedOut = window.MusterReplay.state();
+    /* Drive the gate at the state under test: park a measured share of the core
+       BEHIND the sticky bar and assert the chain refuses to start there.
+       Centring the section is not that state — §7.1's --scroll-pad shifts a
+       centred landing by half the padding, which leaves the core 96% visible,
+       and a chain that starts there is the gate working. */
     const coreEl = document.querySelector(".replay__core");
+    const under = 0.15;
+    scrollTo({ top: scrollY + coreEl.getBoundingClientRect().top + under * coreEl.getBoundingClientRect().height, behavior: "instant" });
+    await new Promise((r) => setTimeout(r, 400));
+    const gatedRect = coreEl.getBoundingClientRect();
+    const gatedSeen = Math.max(0, Math.min(gatedRect.bottom, innerHeight) - Math.max(gatedRect.top, 48)) / gatedRect.height;
+    const gatedOut = window.MusterReplay.state();
     scrollTo({ top: scrollY + coreEl.getBoundingClientRect().top - 52, behavior: "instant" });
     await new Promise((r) => setTimeout(r, 400));
     const css = (el, prop) => getComputedStyle(el).getPropertyValue(prop).trim();
@@ -2567,7 +2572,7 @@ try {
     })();
     const totalsEl = document.querySelector(".totals");
     return {
-      gatedOut,
+      gatedOut, gatedSeen: Math.round(gatedSeen * 1000) / 10,
       state: window.MusterReplay.state(),
       core: Math.round(coreRect.height * 100) / 100,
       coreTop: Math.round(coreRect.top), coreBottom: Math.round(coreRect.bottom),
@@ -2611,7 +2616,7 @@ try {
      is in the band the reader can actually see — under the sticky status bar,
      not behind it. */
   const seen = Math.max(0, Math.min(phone.coreBottom, phone.viewport) - Math.max(phone.coreTop, 48)) / phone.core;
-  check("phone: playback refuses to start with the core under the status bar", phone.gatedOut === "idle", `state ${phone.gatedOut} when centred`);
+  check("phone: playback refuses to start with the core under the status bar", phone.gatedOut === "idle" && phone.gatedSeen < 95, `state ${phone.gatedOut} with ${phone.gatedSeen}% of the core below the bar`);
   check("phone: playback runs only with the core ≥95% in view", phone.state === "playing" && seen >= 0.95, `${Math.round(seen * 1000) / 10}% of the core below the status bar, state ${phone.state}`);
   check("phone: terminal window shows three whole entries", Math.abs(phone.visibleEntries - 3) < 0.05, `${phone.visibleEntries} entries of ${phone.separation.box}px on a ${phone.separation.pitch}px pitch (${phone.lineBox}px rows)`);
   /* The constant the whole budget rests on, checked against the render rather
@@ -2944,6 +2949,423 @@ try {
   check("landscape phone: the worst narration slot fits its card", landscape.worst.h <= landscape.list + 0.5, `${landscape.worst.slot} sets ${landscape.worst.h}px in a ${landscape.list}px card`);
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-landscape.png"), await page.screenshot());
 
+  /* ================================================================== §7.1 ==
+     Section scrolling — proximity snap.
+
+     Eleven relationships, every figure re-derived from the page. The feature is
+     four declarations in the user agent, so what is asserted here is what the
+     user agent DOES with them: where it comes to rest, what it declines to
+     move, and that the reader's own scrolling — keys, zoom, scroll-into-view —
+     survives it. Section heights change as sections land, so none of the
+     positions below is a constant.
+     ========================================================================= */
+
+  /* Shared page-side helpers. `nearestScroller` deliberately walks past body
+     and :root: body's `overflow-x: hidden` PROPAGATES to the viewport, which
+     makes the viewport the scroller and body not one, but the computed style
+     still reports hidden on body — trusting it would name body as a snap
+     area's container and quietly pass A4. */
+  const SNAP_LIB = `
+    const settle = (ms) => new Promise((r) => requestAnimationFrame(() => setTimeout(r, ms || 160)));
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const nearestScroller = (el) => {
+      let p = el.parentElement;
+      while (p && p !== document.body && p !== document.documentElement) {
+        const s = getComputedStyle(p);
+        if (/(auto|scroll)/.test(s.overflowX + " " + s.overflowY)) return p;
+        p = p.parentElement;
+      }
+      return document.scrollingElement;
+    };
+    const label = (el) => el.tagName.toLowerCase() + (el.id ? "#" + el.id : "") +
+      (el.className && typeof el.className === "string" ? "." + el.className.trim().split(/\\s+/).join(".") : "");
+    const tokenPx = (name) => {
+      const p = document.createElement("span");
+      p.style.cssText = "position:absolute;visibility:hidden;block-size:0;inline-size:var(" + name + ")";
+      document.body.appendChild(p);
+      const w = p.getBoundingClientRect().width;
+      p.remove();
+      return w;
+    };
+  `;
+
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.setViewport({ width: 1280, height: 900 });
+  await page.goto(PAGE_URL);
+
+  const snapDecl = await page.eval(`(() => {
+    ${SNAP_LIB}
+    const root = document.documentElement;
+    const rootStyle = getComputedStyle(root);
+    const bar = document.querySelector(".statusbar").getBoundingClientRect().height;
+    const areas = [...document.querySelectorAll("*")]
+      .filter((el) => getComputedStyle(el).scrollSnapAlign !== "none")
+      .map((el) => ({ el: label(el), align: getComputedStyle(el).scrollSnapAlign,
+                      stop: getComputedStyle(el).scrollSnapStop,
+                      scroller: label(nearestScroller(el)) }));
+    return {
+      scrollerIsRoot: document.scrollingElement === root,
+      snapType: rootStyle.scrollSnapType,
+      pad: parseFloat(rootStyle.scrollPaddingBlockStart),
+      bar: r2(bar), rhythm: tokenPx("--rhythm"), hairline: tokenPx("--gap-hairline"),
+      barToken: tokenPx("--bar-h"), padToken: tokenPx("--scroll-pad"),
+      areas,
+      sections: [...document.querySelectorAll("main .section")]
+        .map((s) => ({ id: s.id, align: getComputedStyle(s).scrollSnapAlign, exempt: s.classList.contains("section--no-snap") })),
+      logSnap: getComputedStyle(document.querySelector(".log")).scrollSnapType,
+      logOverflow: getComputedStyle(document.querySelector(".log")).overflowY,
+      trackSnap: getComputedStyle(document.querySelector(".sheets")).scrollSnapType
+    };
+  })()`);
+  evidence.snapDecl = snapDecl;
+
+  /* A1. `y proximity` serialises as `"y"` — proximity is the initial strictness
+     and is dropped, while `mandatory` serialises in full. So this one string
+     carries both halves: the axis and the refusal to make it mandatory. The
+     scroller identity is asserted alongside because on body the declaration is
+     silently inert: nothing errors, nothing snaps. */
+  check("snapping is declared on the element that actually scrolls, and stays proximity",
+    snapDecl.scrollerIsRoot && snapDecl.snapType === "y",
+    `document.scrollingElement is :root, scroll-snap-type "${snapDecl.snapType}" (mandatory would serialise in full)`);
+  /* A2. The bar's measured height, not the token's — the token could be right
+     while the bar renders at something else. */
+  check("scroll padding is the measured bar plus one rhythm, never a hardcoded 72",
+    Math.abs(snapDecl.pad - (snapDecl.bar + snapDecl.rhythm)) < 0.5 && Math.abs(snapDecl.bar - snapDecl.barToken) < 0.5,
+    `${snapDecl.pad}px = ${snapDecl.bar}px bar (rendered; --bar-h resolves ${snapDecl.barToken}px) + ${snapDecl.rhythm}px --rhythm`);
+  /* A4, first half: the snap set is exactly the five non-§2 sections. */
+  const snapSet = snapDecl.sections.filter((s) => s.align === "start").map((s) => s.id);
+  const exempt = snapDecl.sections.filter((s) => s.align === "none").map((s) => s.id);
+  check("exactly the five non-§2 sections snap, and §2 declares its exemption",
+    snapSet.length === 5 && exempt.length === 1 && exempt[0] === "watch-it-ship" &&
+      snapDecl.sections.find((s) => s.id === "watch-it-ship").exempt,
+    `${snapSet.join(" · ")} snap; ${exempt.join(", ")} is .section--no-snap`);
+  /* A4, second half: §4's sheets snap on their own x axis to the track. If one
+     ever bound to the document, a sheet would become a rest position on the
+     page's y axis. */
+  const strays = snapDecl.areas.filter((a) => !a.el.startsWith("section#") && !a.scroller.startsWith("ol.sheets"));
+  check("no snap area outside §4's track binds to the document",
+    strays.length === 0,
+    `${snapDecl.areas.length} snap areas: ${snapDecl.areas.filter((a) => a.el.startsWith("section#")).length} sections on :root, ${snapDecl.areas.filter((a) => a.scroller.startsWith("ol.sheets")).length} sheets on ol.sheets` +
+      (strays.length ? ` — STRAY: ${strays.map((s) => s.el + " → " + s.scroller).join(", ")}` : ""));
+  /* A5. `always` is scroll-jacking by declaration: it forces a stop at every
+     section and takes the fling gesture away. It is the obvious "improvement"
+     here, which is why it is asserted rather than trusted. */
+  check("no snap area asks for scroll-snap-stop: always",
+    snapDecl.areas.every((a) => a.stop === "normal"),
+    `${snapDecl.areas.length} areas, all normal`);
+  /* A6. Not inherited, so this holds by default — asserted because a nested
+     scroller silently gaining snap is invisible until a reader is inside it. */
+  check("§2's terminal log does not quantise its own scrollback",
+    snapDecl.logSnap === "none" && /(auto|scroll)/.test(snapDecl.logOverflow),
+    `.log is a real scroll container (overflow-y ${snapDecl.logOverflow}) with scroll-snap-type ${snapDecl.logSnap}`);
+
+  /* A3. Measured at a real rest, per section: scroll each snapping section to
+     its start, let the user agent settle, and read the gap between the bar's
+     own hairline and the section's. The binding property is the clearance, not
+     the 72 — §1 carries no rule, so the four ruled snapping sections answer. */
+  const clearances = await page.eval(`(async () => {
+    ${SNAP_LIB}
+    const out = [];
+    for (const sec of [...document.querySelectorAll("main .section")]) {
+      const rule = sec.querySelector(".rule__line");
+      if (!rule || getComputedStyle(sec).scrollSnapAlign === "none") continue;
+      scrollTo({ top: 0, behavior: "instant" });
+      await settle(60);
+      sec.scrollIntoView({ behavior: "instant" });
+      await settle(220);
+      const barBottom = document.querySelector(".statusbar").getBoundingClientRect().bottom;
+      out.push({ id: sec.id, at: Math.round(scrollY),
+                 clear: r2(rule.getBoundingClientRect().top - barBottom) });
+    }
+    return { out, hairline: tokenPx("--gap-hairline") };
+  })()`);
+  evidence.snapClearance = clearances;
+  const worstClear = Math.min(...clearances.out.map((c) => c.clear));
+  check("a snapped section's rule never crowds the bar's rule",
+    clearances.out.length === 4 && worstClear >= clearances.hairline - 0.5,
+    `${clearances.out.map((c) => c.id + " " + c.clear + "px").join(" · ")} against a ${clearances.hairline}px --gap-hairline floor`);
+
+  /* A7. The exemption as a property, not an intention: sweep every rest
+     position across §2 at a 40px step, and of the ones where the playback core
+     is ≥90% visible — the threshold the chain pauses below — count how many the
+     user agent moved. One is a failure.
+
+     The aim is the offset REQUESTED, never the offset observed afterwards.
+     Blink applies the snap inside the scroll call, so reading `scrollY` back
+     reports where the engine put you, not where you asked to be: a sweep
+     written that way compares a number against itself and cannot fail. The
+     core's visibility at the requested offset is computed from the core's own
+     document rectangle for the same reason — measured after the scroll, it is
+     the visibility of wherever the engine went. */
+  const sweepSnap = {};
+  for (const [w, h] of [[1280, 900], [375, 553]]) {
+    await page.setViewport({ width: w, height: h, deviceScaleFactor: 1, mobile: w < 700 });
+    await page.goto(PAGE_URL);
+    sweepSnap[w + "x" + h] = await page.eval(`(async () => {
+      ${SNAP_LIB}
+      const core = document.querySelector(".replay__core");
+      const bar = document.querySelector(".statusbar").getBoundingClientRect().height;
+      const docTop = () => core.getBoundingClientRect().top + scrollY;
+      const max = () => document.documentElement.scrollHeight - innerHeight;
+      const from = Math.max(0, docTop() - innerHeight);
+      const to = Math.min(max(), docTop() + core.getBoundingClientRect().height + innerHeight);
+      const samples = [];
+      for (let y = from; y <= to; y += 40) {
+        /* Predicted from the core's document position, at the offset asked for. */
+        const top = docTop(), height = core.getBoundingClientRect().height;
+        const aim = Math.min(y, max());
+        const seen = Math.max(0, Math.min(top + height, aim + innerHeight) - Math.max(top, aim + bar)) / height;
+        scrollTo({ top: y, behavior: "instant" });
+        await settle(140);
+        samples.push({ aim: Math.round(aim), settled: Math.round(scrollY), seen: r2(seen) });
+      }
+      return { samples, gated: samples.filter((s) => s.seen >= 0.9),
+               moved: samples.filter((s) => s.seen >= 0.9 && Math.abs(s.settled - s.aim) > 1) };
+    })()`);
+  }
+  evidence.snapS2Sweep = sweepSnap;
+  const s2Moved = Object.values(sweepSnap).reduce((n, v) => n + v.moved.length, 0);
+  check("§2's exemption holds as a property: no rest position that shows the core is moved",
+    s2Moved === 0 && Object.values(sweepSnap).every((v) => v.gated.length > 0),
+    Object.entries(sweepSnap).map(([v, r]) => `${v}: 0 of ${r.gated.length} gated rests moved (${r.samples.length} sampled)`).join(" · "));
+
+  /* A8. Real key events, never `window.scrollBy` — programmatic and
+     input-driven snapping differ in Blink, and the programmatic form reports a
+     top-of-page trap the reader never experiences. */
+  const KEY = { ArrowDown: 40, PageDown: 34 };
+  const press = async (name) => {
+    for (const type of ["rawKeyDown", "keyUp"]) {
+      await page.call("Input.dispatchKeyEvent", {
+        type, key: name, code: name,
+        windowsVirtualKeyCode: KEY[name], nativeVirtualKeyCode: KEY[name]
+      });
+    }
+    await page.eval(`new Promise((r) => requestAnimationFrame(() => setTimeout(r, 220)))`);
+  };
+  const keyboard = {};
+  for (const [w, h] of [[1280, 900], [375, 553]]) {
+    await page.setViewport({ width: w, height: h, deviceScaleFactor: 1, mobile: w < 700 });
+    await page.goto(PAGE_URL);
+    await page.call("Emulation.setFocusEmulationEnabled", { enabled: true }).catch(() => {});
+    await page.eval(`(() => { if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur(); scrollTo({ top: 0, behavior: "instant" }); })()`);
+    const arrows = [];
+    for (let i = 0; i < 10; i++) {
+      await press("ArrowDown");
+      arrows.push(await page.eval("Math.round(scrollY)"));
+    }
+    await page.eval(`scrollTo({ top: 0, behavior: "instant" })`);
+    await page.eval(`new Promise((r) => setTimeout(r, 200))`);
+    const max = await page.eval("Math.round(document.documentElement.scrollHeight - innerHeight)");
+    const pages = [];
+    for (let i = 0; i < 60; i++) {
+      await press("PageDown");
+      const at = await page.eval("Math.round(scrollY)");
+      pages.push(at);
+      if (at >= max - 1) break;
+    }
+    keyboard[w + "x" + h] = { arrows, pages, max };
+  }
+  evidence.snapKeyboard = keyboard;
+  const strictlyUp = (list) => list.every((v, i) => (i === 0 ? v > 0 : v > list[i - 1]));
+  check("ten ArrowDown presses step the page down every time, at both viewports",
+    Object.values(keyboard).every((k) => k.arrows.length === 10 && strictlyUp(k.arrows)),
+    Object.entries(keyboard).map(([v, k]) => `${v}: ${k.arrows.join(" → ")}`).join(" ;; "));
+  check("PageDown reaches the document end with no backward and no dead press",
+    Object.values(keyboard).every((k) => strictlyUp(k.pages) && k.pages[k.pages.length - 1] >= k.max - 1),
+    Object.entries(keyboard).map(([v, k]) => `${v}: ${k.pages.length} presses to ${k.pages[k.pages.length - 1]} of ${k.max}`).join(" · "));
+
+  /* A9. 200% zoom, which is where `mandatory` would have made the page
+     unreadable: every section's last rendered text must still be reachable and
+     land clear of the bar. */
+  await page.setViewport({ width: 720, height: 450, deviceScaleFactor: 2, mobile: false });
+  await page.goto(PAGE_URL);
+  const zoom = await page.eval(`(async () => {
+    ${SNAP_LIB}
+    const out = [];
+    for (const sec of [...document.querySelectorAll("main .section")]) {
+      const leaves = [...sec.querySelectorAll("*")].filter((el) =>
+        !el.children.length && el.textContent.trim() && !el.classList.contains("a11y-value") &&
+        el.getBoundingClientRect().height > 0);
+      const target = leaves[leaves.length - 1];
+      scrollTo({ top: 0, behavior: "instant" });
+      await settle(60);
+      target.scrollIntoView({ behavior: "instant", block: "start" });
+      await settle(240);
+      const barBottom = document.querySelector(".statusbar").getBoundingClientRect().bottom;
+      const rect = target.getBoundingClientRect();
+      out.push({ id: sec.id, text: target.textContent.trim().slice(0, 24),
+                 top: r2(rect.top - barBottom), bottom: r2(rect.bottom), h: r2(rect.height),
+                 view: innerHeight, band: r2(innerHeight - barBottom) });
+    }
+    return { out, doc: { s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth } };
+  })()`);
+  evidence.snapZoom = zoom;
+  const unreachable = zoom.out.filter((z) => z.top < -0.5 || (z.h <= z.band && z.bottom > z.view + 0.5));
+  check("at 200% zoom every section's last content still lands whole and clear of the bar",
+    unreachable.length === 0 && zoom.doc.s <= zoom.doc.c,
+    zoom.out.map((z) => `${z.id} +${z.top}px under the bar`).join(" · ") +
+      (unreachable.length ? ` — UNREACHABLE: ${unreachable.map((u) => u.id).join(", ")}` : ""));
+
+  /* A11 — the mechanical stand-in for find-in-page. The browser's find UI is
+     not scriptable, so this exercises the same scroll-into-view-then-snap path
+     the find uses without being the find; real find-in-page stays a manual
+     check in both engines.
+
+     It is run over EVERY text leaf on the page rather than over the one
+     paragraph §7.1 names, because a match is not a nominated element — any word
+     the reader types is one — and because a single sample cannot separate the
+     two alignments below, which behave differently. Log lines are excluded:
+     they live in §2's own scroller, which has its own scrollback and its own
+     assertions.
+
+     Two alignments, and they are not interchangeable:
+       - CENTER-IF-NEEDED is what Chrome's find actually does (ScrollAlignment
+         CenterIfNeeded): leave a visible match alone, otherwise centre it. A
+         centred match sits ~half a viewport from either edge, which is more
+         than the proximity pull can spend.
+       - START is the default `scrollIntoView()` §7.1's A11 was written against,
+         and it is the harsher stand-in of the two — it parks the target at the
+         snapport's own start edge, where the next section's snap position can
+         be nearer than the target. Fragment navigation is start-aligned, so it
+         is not hypothetical; every fragment target this page ships is asserted
+         below. */
+  const findLike = {};
+  for (const [w, h] of [[1280, 900], [375, 553]]) {
+    for (const snapping of ["on", "off"]) {
+      await page.setMedia({ colorScheme: "dark", reducedMotion: snapping === "on" ? "no-preference" : "reduce" });
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1, mobile: w < 700 });
+      await page.goto(PAGE_URL);
+      findLike[w + "x" + h + " snap-" + snapping] = await page.eval(`(async () => {
+        ${SNAP_LIB}
+        const leaves = [...document.querySelectorAll("main .section *")].filter((el) =>
+          !el.children.length && el.textContent.trim() && !el.closest(".log") &&
+          !el.classList.contains("a11y-value") && el.getBoundingClientRect().height > 0);
+        const run = async (align) => {
+          const out = [];
+          for (const el of leaves) {
+            scrollTo({ top: 0, behavior: "instant" });
+            await settle(0);
+            const rect0 = el.getBoundingClientRect();
+            const bar0 = document.querySelector(".statusbar").getBoundingClientRect().bottom;
+            if (align === "start") el.scrollIntoView({ behavior: "instant", block: "start" });
+            else if (!(rect0.top >= bar0 && rect0.bottom <= innerHeight)) el.scrollIntoView({ behavior: "instant", block: "center" });
+            await settle(90);
+            const bar = document.querySelector(".statusbar").getBoundingClientRect().bottom;
+            const rect = el.getBoundingClientRect();
+            const seen = Math.max(0, Math.min(rect.bottom, innerHeight) - Math.max(rect.top, bar)) / rect.height;
+            if (seen < 0.999) out.push({ sec: el.closest(".section").id, t: el.textContent.trim().slice(0, 18), seen: r2(seen) });
+          }
+          return out;
+        };
+        /* Fragment navigation, which IS start-aligned and which the page ships:
+           the skip link's target and every id an in-page href names. */
+        const fragments = [...new Set([...document.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute("href").slice(1)))];
+        const frag = [];
+        for (const id of fragments) {
+          const el = document.getElementById(id);
+          if (!el) { frag.push({ id, missing: true }); continue; }
+          scrollTo({ top: 0, behavior: "instant" });
+          await settle(0);
+          el.scrollIntoView({ behavior: "instant", block: "start" });
+          await settle(90);
+          const bar = document.querySelector(".statusbar").getBoundingClientRect().bottom;
+          const rect = el.getBoundingClientRect();
+          frag.push({ id, top: r2(rect.top - bar), onScreen: rect.top < innerHeight && rect.bottom > bar });
+        }
+        /* Focus scrolls too — "nearest", so it moves only what it must — and a
+           focus ring the reader cannot see is the same defect wearing a
+           keyboard. The skip link is excluded and asserted separately: it is
+           chrome that lives behind the bar until it is focused, so "clear of
+           the bar" is not its contract. Controls taller than the band under the
+           bar — §4's stacked track on a phone is 2748px of one — cannot be
+           whole by definition, and the engine centres them rather than aligning
+           their top: measured, that landing is the same to half a pixel with
+           snapping off, so what is asserted for those is that focus leaves them
+           on screen, not where the engine chose to put them. */
+        const focusables = [...document.querySelectorAll('a[href], button, [tabindex]:not([tabindex="-1"])')]
+          .filter((el) => !el.classList.contains("skip-link"));
+        const focused = [];
+        for (const el of focusables) {
+          scrollTo({ top: 0, behavior: "instant" });
+          await settle(0);
+          el.focus();
+          await settle(90);
+          const bar = document.querySelector(".statusbar").getBoundingClientRect().bottom;
+          const rect = el.getBoundingClientRect();
+          const seen = Math.max(0, Math.min(rect.bottom, innerHeight) - Math.max(rect.top, bar)) / rect.height;
+          const band = innerHeight - bar;
+          focused.push({ el: label(el).slice(0, 32), seen: r2(seen), h: r2(rect.height), band: r2(band),
+                         top: r2(rect.top - bar), whole: rect.height <= band ? seen >= 0.999 && rect.top - bar >= -0.5 : seen > 0 });
+        }
+        return { leaves: leaves.length, centred: await run("center"), started: await run("start"), frag, focused };
+      })()`);
+    }
+  }
+  evidence.snapFindLike = findLike;
+  const onSnap = Object.entries(findLike).filter(([k]) => k.endsWith("snap-on"));
+  const offSnap = Object.entries(findLike).filter(([k]) => k.endsWith("snap-off"));
+  const gone = (list) => list.filter((o) => o.seen <= 0).length;
+  check("find-in-page's own alignment never leaves a match off screen, at either viewport",
+    onSnap.every(([, f]) => f.centred.length === 0),
+    onSnap.map(([k, f]) => `${k}: ${f.leaves - f.centred.length}/${f.leaves} whole`).join(" · "));
+  /* The cost, asserted rather than absorbed, and named where it bites: a
+     start-aligned landing whose target sits within the proximity pull of the
+     NEXT section's start is moved past. It is zero with snapping off, which is
+     what identifies the snap as the cause rather than the alignment. */
+  check("a start-aligned landing is exact when nothing snaps — the pull is the whole difference",
+    offSnap.every(([, f]) => f.started.length === 0 && f.centred.length === 0),
+    offSnap.map(([k, f]) => `${k}: 0 of ${f.leaves} moved`).join(" · ") +
+      ` · with snapping on, start-aligned leaves ${onSnap.map(([k, f]) => gone(f.started) + " off screen at " + k.split(" ")[0]).join(" and ")}`);
+  /* Which matters exactly as far as the page start-aligns anything, and it
+     ships one such mechanism: fragment links. Each names a section start, and a
+     section start IS a snap position, so the pull has nowhere to take it. */
+  check("every fragment link the page ships lands its target clear of the bar",
+    onSnap.every(([, f]) => f.frag.length > 0 && f.frag.every((x) => !x.missing && x.onScreen && x.top >= -0.5)),
+    onSnap.map(([k, f]) => `${k}: ${f.frag.map((x) => "#" + x.id + " +" + x.top + "px").join(", ")}`).join(" · "));
+  check("focusing any control keeps it on screen and clear of the bar",
+    onSnap.every(([, f]) => f.focused.length > 0 && f.focused.every((x) => x.whole)),
+    onSnap.map(([k, f]) => `${k}: ` + f.focused.map((x) => x.el.split(".")[0] + (x.h <= x.band ? ` whole +${x.top}px` : ` ${Math.round(x.seen * 100)}% of ${x.h}px in a ${x.band}px band`)).join(", ")).join(" · "));
+
+  /* A10. The ruling, made once in one media query — and the padding is NOT part
+     of it: anchors, the skip link and find-in-page still have to clear the bar
+     for a reader who asked for less motion. */
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+  await page.setViewport({ width: 1280, height: 900 });
+  await page.goto(PAGE_URL);
+  const snapReduced = await page.eval(`(() => {
+    ${SNAP_LIB}
+    const rootStyle = getComputedStyle(document.documentElement);
+    return {
+      snapType: rootStyle.scrollSnapType,
+      pad: parseFloat(rootStyle.scrollPaddingBlockStart),
+      bar: r2(document.querySelector(".statusbar").getBoundingClientRect().height),
+      rhythm: tokenPx("--rhythm"),
+      sections: [...document.querySelectorAll("main .section")].map((s) => getComputedStyle(s).scrollSnapAlign),
+      track: getComputedStyle(document.querySelector(".sheets")).scrollSnapType
+    };
+  })()`);
+  evidence.snapReduced = snapReduced;
+  check("under reduced motion the page stops snapping and the scroll padding stays",
+    snapReduced.snapType === "none" && Math.abs(snapReduced.pad - (snapReduced.bar + snapReduced.rhythm)) < 0.5 &&
+      snapReduced.track === "none",
+    `:root scroll-snap-type ${snapReduced.snapType}, §4's track ${snapReduced.track}, padding still ${snapReduced.pad}px = ${snapReduced.bar} + ${snapReduced.rhythm}`);
+
+  /* The spec's central claim, and the one thing a stylesheet cannot show:
+     nothing in this project reads, writes or intercepts the PAGE's scroll
+     position. §2's log moves its own scrollback — an element property on a
+     scroller the reader is inside — which is a different thing and stays. */
+  const shippedJs = readdirSync(join(ROOT, "scripts"))
+    .filter((f) => f.endsWith(".js"))
+    .map((f) => ({ file: f, src: readFileSync(join(ROOT, "scripts", f), "utf8") }));
+  const jacking = shippedJs.flatMap(({ file, src }) =>
+    src.split("\n").flatMap((line, i) =>
+      /scrollIntoView|scrollTo\s*\(|scrollBy\s*\(|scrollY|pageYOffset|documentElement\.scrollTop|body\.scrollTop|scrollingElement|scroll-behavior/.test(line.replace(/^\s*(\*|\/\/).*/, ""))
+        ? [`${file}:${i + 1}`] : []));
+  check("no shipped script reads, writes or intercepts the page's scroll position",
+    jacking.length === 0,
+    jacking.length ? jacking.join(", ") : `${shippedJs.length} scripts clean — the only scroll they touch is .log's own scrollback`);
+
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
   await page.setViewport({ width: 1440, height: 900 });
 } finally {
   await page.close();

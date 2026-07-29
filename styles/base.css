@@ -204,6 +204,66 @@ time {
 }
 
 /* --------------------------------------------------------------------------
+   Scroll landing — where ANY scroll-into-view comes to rest
+
+   Not part of the snap feature below and does not come out with it: anchors,
+   the skip link and the browser's own find-in-page all land under the sticky
+   bar without it, whether or not anything snaps. It stays under reduced motion.
+   -------------------------------------------------------------------------- */
+
+:root {
+  scroll-padding-block-start: var(--scroll-pad);
+}
+
+/* --------------------------------------------------------------------------
+   Section scrolling — proximity snap (page-shell.md §7.1)
+
+   One idea per screen, expressed as where the page comes to rest. The reader
+   scrolls; the page then settles on a section start rather than halfway
+   through a heading. Four declarations, entirely in the user agent: no script
+   in this project reads, writes or intercepts the page's scroll position.
+
+   `scroll-snap-type` goes on :root, not on body. Unlike `overflow` — which
+   body carries here, and which DOES propagate — this one does not: on body it
+   is silently inert, nothing errors and nothing snaps.
+
+   `proximity`, never `mandatory`: §1 and §4's sheets exceed a phone viewport
+   and at 200% zoom every section does, and under `mandatory` the middle of an
+   oversized section is not a valid rest. `scroll-snap-stop` stays `normal` —
+   `always` is scroll-jacking by declaration.
+   -------------------------------------------------------------------------- */
+
+:root {
+  scroll-snap-type: y proximity;
+}
+
+.section {
+  scroll-snap-align: start;
+}
+
+/* §2. Its playback gate is a visibility threshold — the chain starts at ≥95%
+   of the core and pauses below 90% — and proximity snapping is user-agent-
+   thresholded, so it cannot be relied on to DELIVER 95%: a snap that lands the
+   reader at 94% means the section silently never plays. The exemption follows
+   from §2's height at every viewport too, but a height is not a promise, so it
+   is declared. */
+.section--no-snap {
+  scroll-snap-align: none;
+}
+
+/* What is suppressed is not the snap position — it is the glide to it. Every
+   engine animates that adjustment and no author declaration bounds it:
+   `scroll-behavior` governs author-initiated scrolls, not the user agent's
+   snap correction. Unrequested, unbounded, viewport-scale, and it begins after
+   the reader has already stopped. Nothing is hidden by turning it off: the
+   reduced path here simply is the page. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    scroll-snap-type: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Links and focus
    -------------------------------------------------------------------------- */
 

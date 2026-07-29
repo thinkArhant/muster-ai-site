@@ -1,6 +1,6 @@
 run: run-20260728-222338-59535
-state: running step 3
-step: 2026-07-26 Developer (web): §3 and §4
-step started: 2026-07-28 23:41:14
-last completed: 2026-07-26 Developer (web): §1 and §6 · 150 turns · $22.74 · out 118k · 58m 7s
-totals: 2 attempt(s) · 241 turns · $41.97
+state: running step 5
+step: 2026-07-26 Developer (web): Scroll-snap
+step started: 2026-07-29 01:34:59
+last completed: 2026-07-26 Developer (web): §5 · 128 turns · $17.7 · out 100k · 59m 43s
+totals: 4 attempt(s) · 487 turns · $76.61

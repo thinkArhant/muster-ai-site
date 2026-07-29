@@ -10,6 +10,132 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-29 HO-029 — the page comes to rest on section starts
+
+**Type:** handoff
+**Producer:** Developer
+**Deliverable:** `styles/{base,tokens,chrome,replay}.css`, `index.html` (§2's exemption class),
+`tests/verify-shell.mjs`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+- [ ] UI/UX — one clause of `page-shell.md` §7.1 disagrees with the engine; see OBS-013
+- [ ] QA — consumes the built behaviour at the full-page sweep (not a review gate)
+
+**What shipped**
+
+- **Four declarations, entirely in the user agent.** `scroll-snap-type: y proximity` on `:root`,
+  `scroll-snap-align: start` on `.section`, `.section--no-snap` on §2, and the reduced-motion query
+  that turns snapping off. No script reads, writes or intercepts the page's scroll position — and
+  that is now asserted against the shipped source, not stated: the check reads `scripts/*.js` and
+  fails on `scrollTo`, `scrollBy`, `scrollIntoView`, `scrollY`, `pageYOffset`,
+  `documentElement.scrollTop` or `scroll-behavior`. §2's log moving its own scrollback is a
+  different thing and stays.
+- **`--bar-h` and `--scroll-pad` are tokens, and the bar's height now comes out of the token it is
+  derived from.** The status bar's `block-size`, the playback core's ceiling
+  (`calc(100dvh - var(--bar-h))`, two sites in `replay.css` that carried a literal `3rem`) and the
+  scroll padding are the same measurement three times over; they can no longer drift apart. The
+  padding is asserted as the **rendered** bar plus `--rhythm` — 72px = 48 + 24 — never as 72.
+- **§2's exemption is declared in the markup it belongs to**, as a modifier class matching
+  `.section--hero`, and it is proven as a property rather than inferred from §2's height: sweeping
+  every rest position across §2 at a 40px step, **0 of 13 gated rests moved at 1280×900 and 0 of 3
+  at 375×553**.
+- **The snap set is exactly five sections**, §4's four sheets snap to their own track and never to
+  the document (nine snap areas, all `scroll-snap-stop: normal`), and §2's terminal log does not
+  quantise its own scrollback.
+- **Nothing in the motion budget changed.** Snapping is the user agent settling a scroll the reader
+  started; it runs on no timer and is off entirely under reduced motion, where `--scroll-pad` stays
+  on so anchors, the skip link and find-in-page still clear the bar.
+
+**Two harness defects found on the way, both of which would have passed a wrong build**
+
+- **The §2 sweep compared a number against itself.** Blink applies the snap *inside* the scroll
+  call, so reading `scrollY` back after `scrollTo` reports where the engine put you, not where you
+  asked to be. Written that way the sweep could not fail — proven by planting `mandatory` **and
+  removing §2's exemption**, which it passed. The aim is now the offset requested and the core's
+  visibility is computed from its own document rectangle; the same plant now turns it red at **12 of
+  13** gated rests. Worth noting for the spec's own reasoning: the phone half stays at 0 of 3 even
+  with the exemption removed, because §2 is far taller than the snapport there and the oversized-area
+  rule gives its interior back as a free range. §7.1 says a height is not a promise; the sweep is
+  the evidence that the *declaration* is what holds this at desktop.
+- **§2's gate check no longer created the condition it asserted.** It relied on
+  `scrollIntoView({block: "center"})` leaving the core under the bar — true only while nothing
+  declared where a scroll-into-view lands. `--scroll-pad` shifts a centred landing by half the
+  padding, and centring now leaves the core 96% visible, which is the gate correctly running. The
+  contract is unchanged and the setup now parks a measured 15% of the core behind the bar and asserts
+  the chain refuses to start, reporting the share it measured.
+
+**Find-in-page: what was asserted, and the cost that came with it**
+
+§7.1's A11 names one paragraph and the default `scrollIntoView()`. It is run instead over **every
+text leaf on the page** — a match is not a nominated element — under both alignments, because they
+do not behave the same:
+
+- **Centre-if-needed, which is what Chrome's find actually does**: leave a visible match alone,
+  otherwise centre it. **0 of 128 leaves at 1280×900 and 0 of 118 at 375×553 land off screen.** A
+  centred match sits half a viewport from either edge, which is more than the proximity pull can
+  spend.
+- **Start-aligned, the default `scrollIntoView()` A11 was written against**: **20 of 128 at
+  1280×900 and 3 of 118 at 375×553 land off screen entirely.** With snapping off it is 0 of 127 and
+  0 of 126, which is what identifies the pull as the cause rather than the alignment. §7.1's
+  paragraph — §4's last value at desktop — is one of the twenty: the call aims at 2851 and the
+  engine settles it at 3031, §5's own snap start, 180px past, leaving the target above the fold.
+
+The page ships one start-aligned mechanism, fragment links, and every fragment target it has is a
+section start — which *is* a snap position, so the pull has nowhere to take it: `#main` lands at
++0px at both viewports, asserted. Focus scrolling is asserted too. **The residual is a target deep
+inside a section, reached start-aligned, which nothing on this page currently does.** That is
+OBS-013, and nothing was invented to paper over it.
+
+**Verification**
+
+- `bash scripts/test.sh` **GREEN both engines** — **273/273 Blink** (was 256/256) and **27/27
+  WebKit**; 17 checks added.
+- `node tests/qa-independent-audit.mjs` **exit 0, 108/108, twice consecutively.**
+- **Eight violations planted and twelve assertions watched go red**, tree reverted clean each
+  time: the declaration
+  moved to `body` (the scroller reports `scroll-snap-type: none` — the silent-inert trap §7.1
+  names), `y mandatory` (caught on the serialisation, and it also took PageDown to 60 presses
+  without reaching the end at 375×553 and left four sections' last content unreachable at 200%
+  zoom — the spec's two stated reasons for refusing it, measured), a hardcoded `48px` padding (red
+  on the derivation, and it dropped the bar-rule clearance to 8.3px against the 12px floor),
+  `scroll-snap-stop: always`, a `scroll-snap-align` on `.log__line` (12 strays named, each with
+  `ol.log` as its container), §2's exemption removed, the reduced-motion query deleted, and a
+  `global.scrollTo` planted in `count-up.js` (named at `count-up.js:40`).
+- **Cross-engine**: the static page is unchanged in WebKit — 27/27, and `webkit-dark-s02.png` read
+  by eye. **Scroll behaviour has no mechanical WebKit result and none is reported as one**:
+  `qlmanage` cannot scroll (REQ-007, DEC-042). Safari desktop and one iPhone pass are the Gate B
+  ask, recorded as manual.
+
+**Would Apple ship this?** Yes. The feature is four lines that make the composition's own rule —
+one idea per screen — true of where the page stops, and it is removable with zero layout
+consequence. The reservation is OBS-013: on a page that argues by craft, "the find took you past
+it" is not a sentence you want a skeptic to be able to write, even if no link on the page does it
+today.
+
+**Revision log:**
+- 2026-07-29: Filed. Self-review caught and fixed: the §2 sweep's read-it-back aim (a check that
+  could not fail), a focus assertion that demanded "whole and clear of the bar" from a control
+  2748px tall in a 505px band — the engine centres those, measured identical with snapping off —
+  and a `.log` scroll-container assertion written on content overflow, which is true on a phone and
+  false at 1280×900 where the log fits. Open question: OBS-013 below — §7.1's A11 as written cannot
+  be satisfied, and whether that cost buys a mechanism is UI/UX's call.
+
+**Observations** (non-blocking, for PM):
+- OBS-013 — `page-shell.md` §7.1's A11 cannot be satisfied as written: a start-aligned
+  `scrollIntoView()` on §4's last value is pulled 180px past it, off screen. §7.1 §"Proximity,
+  never mandatory" argues proximity's bounded pull "is what keeps a match on screen"; that holds
+  for the alignment find-in-page uses and not for the one A11 names.   Severity: med
+  Evidence: `tests/artifacts/blink-report.json` → `evidence.snapFindLike` — 20 of 128 leaves off
+  screen start-aligned with snapping on, 0 of 127 with it off, 0 of 128 centre-if-needed. The spec
+  was not edited; UI/UX owns that file.
+  Suggested action: PM rules at the build-review step — amend A11 to the two checks that shipped,
+  or spend a mechanism on it. Note this is the second instance of the same trade (OBS-009 is the
+  x-axis half inside §4's track), so the two are one ruling, not two.
+- `muster-requests-lint.sh` reads 676/300 on the Active budget with this entry filed. That is
+  OBS-010 unchanged, not a new finding: five handoffs are in review against a single queued PM
+  review step, which is the plan's shape. No entry here is closed-but-unswept.
+
 ### 2026-07-29 HO-028 — §5 built: the whole-product numbers come home, one scope per card
 
 **Type:** handoff

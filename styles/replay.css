@@ -46,7 +46,7 @@
 
 .replay[data-state="idle"] .replay__core,
 .replay[data-state="playing"] .replay__core {
-  max-block-size: calc(100dvh - 3rem);
+  max-block-size: calc(100dvh - var(--bar-h));
 }
 
 .replay__beat {
@@ -440,7 +440,7 @@
      the payload: it takes the whole column and the terminal's slack goes to it. */
   .replay[data-state="idle"] .replay__core,
   .replay[data-state="playing"] .replay__core {
-    block-size: calc(100dvh - 3rem);
+    block-size: calc(100dvh - var(--bar-h));
   }
 
   .replay__beat {
