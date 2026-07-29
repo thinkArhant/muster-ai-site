@@ -64,63 +64,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-28 Content: Gate A fix round — four copy files re-cut to the verdict
-
-```
-Role: content
-Model: claude-fable-5
-
-**Task:** Apply the Gate A verdict to four copy files. The verdict's **Fix-round inventory** in
-`knowledge-base/wave-review.md` is the authoritative list; this brief compresses it. The verdict was
-routed into the queue at the gate (DEC-049) — do not re-derive it, apply it.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — Gate A verdict: items 1–4, the closed §3 block (the final 90/90
-  string), item 2C (§4's four selected decisions with their evidence), and the fix-round inventory
-- `knowledge-base/decision-log.md` — DEC-043 through DEC-049
-- `knowledge-base/design-specs/web/section-01-copy.md`, `section-03-copy.md`, `section-04-copy.md`,
-  `section-05-copy.md`
-- `knowledge-base/agent-skills/content/copy-rules.md` · `knowledge-base/agent-context/content.md`
-
-**Deliverable:** the four files revised; HO-031.
-
-**Acceptance criteria:**
-- **§1**: the settled headline replaces the four candidates — visible
-  `Ship a product with ~~a human~~ an AI team.`, struck `a human` (ink, `aria-hidden`), rust on
-  `an AI` only, plain ink `team.`; announced string `Ship a product with an AI team.` **Delete**: the
-  subline, the measured line, the readout's BODH row, the terminal chrome labels (§9). **Keep
-  verbatim**: eyebrow, formation labels + caption, the THIS SITE row strings with `measured at
-  launch` and `VERIFY ⎘`, the curl.
-- **§3**: rewritten to the closed block — K1 kicker + the exact 90/90 paragraph quoted in the
-  verdict, byte-for-byte; the old named-competitor ruling and its fallback are removed (DEC-047: no
-  named competitor anywhere on the page); the kicker's sentence-boundary wrap requirement stated for
-  the build; word count re-verified by script.
-- **§4**: rewritten from the four selected decisions in verdict item 2C — tiered reading
-  (2026-04-24) · determinism + model economics merged (2026-06-13) · growth caps (2026-04-12) ·
-  attention architecture (2026-06-07), strongest-first in that order. Audience per DEC-043: the
-  non-technical reader — VC, hiring. **Plainer words, never bigger claims**: every trade-off
-  survives, and a decision that loses its cost is a blocking defect at PM review. Shape:
-  Decision / Problem / Trade-off / Mechanism; stamps are exactly the four verified dates; Muster
-  only — no Bodh, no Arogh; first person per R7. **Hard ceiling: ≤ 45 words per sheet across the
-  four row bodies, title ≤ 12** — derived from the verdict's own fit math (amendment B: two to
-  three short lines per row is what lets four sheets share a desktop screen). State each sheet's
-  measured count. If a decision cannot make its point under the ceiling, flag it in the handoff
-  rather than exceed — the layout step decides against your real lengths, and "materially shorter"
-  without a number is how a premium step lands unfittable.
-- **§5**: both cards gain key 4 `COST · API LIST` — `$147` (BODH) / `—` with `measured at launch`
-  (THIS SITE), per DEC-048; the three stale rationales listed at the verdict's §5 close are cleaned;
-  no other string changes.
-- Every numeral quoted from its cited source; budgets script-measured; no banned word; the
-  copy-rules matrix run on all four files before filing.
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-031 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-28 UI/UX: Gate A fix round — the sparse hero and §4's one-screen layout
 
 ```
@@ -173,6 +116,9 @@ amendment homing the §3 kicker wrap rule; HO-032.
 
 **On completion:** File HO-032 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-26 Developer (web): §1 and §6
 
@@ -519,6 +465,12 @@ with no verification behind it is how that happened.
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 
+- 2026-07-28 — Step: Content Gate A fix round (HO-031). All four copy files carry the verdict: §1 is
+  the settled headline with zero Bodh material, §3 is the closed 90/90 block byte-exact, §4 is
+  re-authored plain from DEC-044's four at 44/42/44/44 words per sheet (ceiling 45 — nothing
+  unfittable, every trade-off intact), §5 takes the `$147` cost row. Awaiting PM review at the
+  build-review step; HO-032 consumes the measured lengths next.
+
 - 2026-07-28 — Step: Gate A, processed at the gate (DEC-043–049). All four items ruled interactively
   with the founder against rendered evidence: headline B amended (`~~a human~~` struck, rust `an AI`,
   plain `team.`, 3/3/2/2/2 lines measured); §4's four decisions re-selected from ten candidates with
@@ -608,12 +560,3 @@ with no verification behind it is how that happened.
   footer lockup ruled out (DEC-036, DEC-037). Ten harness sites listed for re-base by file and line.
   **Awaiting PM review at the Wave 1 review step; REQ-006 asks PM to reconcile `brand-guidelines.md` §4.**
 
-- 2026-07-26 — Step: Content §1 and §3 copy (HO-018). Four headline candidates with announced strings
-  (B, the repaired founder edit-mark, recommended), §3 with the CrewAI/AutoGen clause ruled named and
-  its cut pre-authored, and the SP3 lever pulled — 19 words, measured 5 lines at 320px, both harnesses
-  green (DEC-035). Awaiting PM review at the Wave 1 review step.
-
-- 2026-07-26 — **Sprint 2 planned, then stress-tested and resequenced** (DEC-033, DEC-034). Three
-  blocking sequence defects found by adversarial audit and fixed before the run: copy now precedes the
-  hero design, the shell precedes the Gate A sample, and the `http(s)` harness collision is ruled rather
-  than discovered. `develop` merged; pennant artwork cascaded (DEC-031).

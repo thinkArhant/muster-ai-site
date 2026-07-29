@@ -2,32 +2,39 @@
 
 **Surface type**: every Content-owned string in §4 — four title sentences, four stamps, sixteen row
 values (copy deliverable)
-**Consumers**: Developer (builds the strings verbatim), PM (verifies the tightening against the
-stated counts), QA (fidelity checks), the founder (reviews this copy as rendered)
-**Sources**: every string traces to `product-spec-seed.md` §4 (founder-authored, read-only), which is
-the locked draft. Nothing here is sourced anywhere else — §4 makes no measured claim and carries no
-metric. Governed by `agent-skills/content/copy-rules.md` and `brand-guidelines.md` §5.
+**Consumers**: Developer (builds the strings verbatim), UI/UX (rules the one-screen layout against
+the measured lengths below), PM (reviews against the inflation guardrail), QA (fidelity and stamp
+checks), the founder (reviews this copy as rendered)
+**Sources**: the four decisions, their order, their stamps, and every load-bearing claim come from
+`decision-log.md` DEC-044 (each date verified by `git log` against the framework repo). The audience
+ruling and its guardrail are DEC-043. Governed by `agent-skills/content/copy-rules.md` and
+`brand-guidelines.md` §5.
 
 ---
 
 ## 1. Rules this file is written under
 
-- **Tighten only.** Never inflate, never reorder, never add a fifth decision, never drop a row.
+- **§4's reader is non-technical** (DEC-043): a VC, or someone evaluating the founder to hire. The
+  section's job is to show a systems thinker — the judgment behind the framework. Every other section
+  keeps the skeptical technical cold reader.
+- **Plainer words, never bigger claims** (DEC-043's guardrail). Translating for a non-technical
+  reader is the job; a decision that loses its cost stops being a decision and becomes a boast, and
+  an inflated §4 is a blocking defect at PM review. Every core trade-off survives below.
+- **Muster only.** No Bodh, no Arogh, no product decision — the four decisions are framework
+  decisions (DEC-044).
 - **First person is permitted here** (R7) — §4 is one of exactly two places on the page where it is.
-  The pronoun is the founder's; it is preserved everywhere it appears.
-- **"Tightened, not rewritten" is checkable, not judged.** The three conditions this file holds itself
-  to, all verifiable by reading §5's table beside the seed:
-  1. every original sentence survives — no sentence is deleted, split, merged, or moved;
-  2. every surviving sentence keeps its subject and its claim;
-  3. before/after word counts are stated per decision and per row, script-measured.
+  The voice is the founder's.
+- **Hard ceilings, script-measured**: ≤ 45 words per sheet across the four row bodies; title ≤ 12
+  words. Derived from the one-screen requirement (DEC-043): two to three short lines per row is what
+  lets four sheets share a desktop screen. Measured counts are stated per sheet in §5.
 - **Word counting convention**: whitespace-delimited tokens containing at least one letter or digit;
-  numerals and compounds count as one word; standalone punctuation and separators (`—`, `·`) count as
-  zero. Counts below are script-measured against the seed's text and this file's text.
+  numerals and compounds count as one word; standalone punctuation and separators (`—`, `·`) count
+  as zero.
 - **§4 carries no numerals except the stamps' dates**, so no measurement scope applies and nothing in
   this section can be rounded, scope-mixed, or given false precision.
-- **Insider terms are permitted in §4 and are not used**, because the seed's draft does not use them.
-  R11 licenses *cascade lag* and *cold-start sufficiency* here; licensing is not an instruction to
-  spend it, and adding either word would be inflation of founder copy.
+- **Insider terms do not appear.** With §4 in plain language, no section on the page satisfies R11's
+  earn-their-meaning condition, so *cascade lag* and *cold-start sufficiency* appear nowhere
+  (DEC-043).
 
 ## 2. Section chrome
 
@@ -35,32 +42,22 @@ metric. Governed by `agent-skills/content/copy-rules.md` and `brand-guidelines.m
 - The section has no intro, no kicker, and no closing line (`section-04-decisions.md` §1). This file
   supplies no string for any of them because none exists.
 
-## 3. Mechanical transforms applied to every string
+## 3. Mechanical notes for the build
 
-Three normalizations are applied uniformly. They are not tightening and are excluded from the word
-counts, because they change no word:
-
-1. **Row values open in sentence case.** The seed writes row values as list continuations
-   (`each agent reads only…`); they render as `<dd>` prose sentences, so the first letter is
-   capitalized. No other casing changes — labels and stamps are uppercased by CSS transform, and the
-   source text keeps its own casing (`section-04-decisions.md` §5).
-2. **The stamp's parentheses do not ship.** The seed's `(framework — 2026-05-05)` is source
-   punctuation; the stamp construction is the enclosure. Everything inside the parens ships verbatim,
-   including decision 3's `, first commit` qualifier and decision 4's missing date.
-3. **The title's leading ordinal does not ship.** The seed's `**1.`, `**2.`… is the draft's list
-   numbering; the `<ol>` carries order in markup.
-
-Quotation marks inside decision 2's Trade-off ship as the seed types them — straight, not curly.
-Typographic quotes would be a change to founder text for a reason no reader can check.
+1. **Stamps ship as supplied below** — the stamp construction is one text slot; all four carry dates,
+   and no dateless case exists (DEC-044).
+2. **The title's ordinal does not ship** — the `<ol>` carries order in markup.
+3. **Row labels** (`DECISION` / `PROBLEM` / `TRADE-OFF` / `MECHANISM`) are chrome from
+   `section-04-decisions.md`, uppercased by CSS transform; this file supplies the row values only.
 
 ## 4. The four decisions — shipping strings
 
-Order is the seed's own, strongest first, and is never changed. Each decision supplies six strings:
-title, stamp, and four row values.
+Order is DEC-044's, strongest first, and is never changed. Each decision supplies six strings: title,
+stamp, and four row values.
 
-### Decision 1
+### Decision 1 — tiered reading (architecture)
 
-**Title** (`<h3>`, emphasis preserved as `<em>` on *reads*):
+**Title** (`<h3>`, emphasis as `<em>` on *reads*):
 
 ```
 I optimized what each agent reads, not how they talk.
@@ -69,39 +66,47 @@ I optimized what each agent reads, not how they talk.
 **Stamp** · `data-category="framework"`:
 
 ```
-framework — 2026-05-05
+framework — 2026-04-24
 ```
 
 **Decision**
 
 ```
-Each agent reads only what its current task needs — a small always-on tier, everything else on demand, most of it never; the PM routes context to whoever needs it.
+Each agent gets a curated brief: what its task needs, nothing more.
 ```
 
 **Problem**
 
 ```
-Every multi-agent framework I looked at optimized message-passing. But what actually breaks is the context window — put eight agents in a room, let them all read everything, and each one drowns in context meant for someone else. Quality falls as the window fills.
+What breaks isn't the talking — it's each agent reading too much.
 ```
 
 **Trade-off**
 
 ```
-I gave up the simple thing — every agent sees everything — for a PM that decides what each agent reads. That costs coordination discipline: one role must own context routing.
+Agents never talk directly — every question between roles costs a file and a session.
 ```
 
 **Mechanism**
 
 ```
-The three-tier reading model + the PM as context-translator. The bottleneck was never agent communication; it was agent memory.
+Three reading tiers; the PM routes context.
 ```
 
-### Decision 2
+| Claim | Source |
+|---|---|
+| Title, verbatim | DEC-044 decision 1 (founder's voice) |
+| Stamp 2026-04-24 | DEC-044 ruling 1 — commit `03ba0ce`, "slim bootstrap: keep routing behavior, cut ~600 tokens/session"; verified by `git log` |
+| Reading too much, not talking, is what breaks | DEC-044: the real ceiling was each agent's context window filling with what it didn't need |
+| No shared conversation; a question costs a file and a session | DEC-044 trade-off, intact |
+| Three tiers, PM as router | DEC-044 mechanism (three-layer read architecture; PM as sole context-router) |
+
+### Decision 2 — determinism and model economics (systems thinking)
 
 **Title** (no inline emphasis):
 
 ```
-If a rule can be checked by a script, it isn't allowed to live in prose.
+Any rule a script can check, a script enforces.
 ```
 
 **Stamp** · `data-category="framework"`:
@@ -113,33 +118,42 @@ framework — 2026-06-13
 **Decision**
 
 ```
-Mechanics go in bash; prose is for judgment. Anything a script can verify, a script must.
+Mechanics live in scripts; judgment stays in prose.
 ```
 
 **Problem**
 
 ```
-Prose instructions degrade by model tier — a weaker model skips a rule a stronger one follows. And every rule in prose costs tokens on every read and dilutes the instructions around it.
+AI follows written instructions unevenly — one model skipped a required step.
 ```
 
 **Trade-off**
 
 ```
-I gave up "just tell the model what to do" and paid upfront for deterministic checks — so the rules stop depending on which model is running.
+Hard floors can't flex: a legitimate exception still trips the gate.
 ```
 
 **Mechanism**
 
 ```
-Deterministic gates — size budgets, lints, guard scripts, CI. The payoff is a claim few agent frameworks can make: it runs safely on small, cheap models, because the floors don't move.
+Automated gates hold the floors, so premium models buy judgment, not correctness.
 ```
 
-### Decision 3
+| Claim | Source |
+|---|---|
+| Title | DEC-044 decision 2 ("if a rule can be checked by a script, it isn't allowed to live in prose"), plain form |
+| Stamp 2026-06-13 | DEC-044 — commit `c7bbde8`, pillar-budget gate + CI; verified by `git log` |
+| A model skipped a required step | DEC-044 problem — the recorded field failure (a skipped closeout commit), stated without inflation |
+| Floors can't flex | DEC-044 trade-off, intact |
+| Premium models buy judgment, not correctness | DEC-044 payoff line, near-verbatim — the merged model-economics half |
+| Scripts/prose split | R11 coinage *prose for judgment, scripts for mechanics*, honoured in the Decision row |
+
+### Decision 3 — growth caps (systems thinking)
 
 **Title** (no inline emphasis):
 
 ```
-I capped the size of every file the agents read each session — before I wrote almost anything else.
+I capped every file the agents read — before almost anything else.
 ```
 
 **Stamp** · `data-category="framework"`:
@@ -151,139 +165,131 @@ framework — 2026-04-12, first commit
 **Decision**
 
 ```
-The always-read surface has hard budgets, enforced in CI. When a shared file hits its cap, something gets archived or trimmed — the cap doesn't quietly move.
+Every file the agents read has a hard size cap.
 ```
 
 **Problem**
 
 ```
-Multi-agent systems rot over weeks. Shared files accumulate, and one day the system spends its whole context budget re-reading its own history before doing any real work.
+Shared files grow quietly; eventually agents mostly reread their own history.
 ```
 
 **Trade-off**
 
 ```
-I gave up append-forever convenience for forced discipline. Hitting a cap is friction, on purpose.
+Agents lose sight of anything older than the current sprint.
 ```
 
 **Mechanism**
 
 ```
-Pillar-budget regression in CI. It was the first thing I built, because the failure it prevents is invisible until it's terminal.
+Size caps plus archive rules, and a build gate that fails on growth.
 ```
 
-### Decision 4
+| Claim | Source |
+|---|---|
+| Title | DEC-044 decision 3, plain form — the foresight claim the first-commit stamp makes checkable |
+| Stamp 2026-04-12, first commit | DEC-044 — commit `216fa50` (initial extraction; the commit itself contains the growth-cap rule); verified by `git log` |
+| Silent growth, rereading own history | DEC-044 problem, intact |
+| History lost from view | DEC-044 trade-off (nothing older than the current sprint is in view), intact |
+| Caps + archive rules + gate on growth | DEC-044 mechanism, intact |
+
+*Growth caps* is Muster's own coinage (R11), used as this decision's name in this file's headings —
+the shipping strings carry it as plain description.
+
+### Decision 4 — attention architecture (architecture)
 
 **Title** (no inline emphasis):
 
 ```
-Building a real app with it, I removed the one feature every competitor adds.
+The system treats my attention as the scarcest resource.
 ```
 
-**Stamp** · `data-category="product"` — **the no-date case; it never gains a date**:
+**Stamp** · `data-category="framework"`:
 
 ```
-product — Bodh
+framework — 2026-06-07
 ```
 
 **Decision**
 
 ```
-Bodh shows one mental model a day, and the reader never picks a category — not a filter, not a preference, not an onboarding choice.
+Runs halt at planned gates — never interrupt, never guess.
 ```
 
 **Problem**
 
 ```
-The obvious feature is topic choice. But self-selection is confirmation bias at the library level — people deselect exactly the categories they need most.
+Unattended agents guess wrong or stall — and pinging me constantly doesn't scale.
 ```
 
 **Trade-off**
 
 ```
-I gave up the feature users would ask for, and the personalization story, for the thing that actually works — non-chosen exposure. Choice can be added later; taking it away is a betrayal.
+No steering mid-run — every ambiguity is paid up front, at planning.
 ```
 
 **Mechanism**
 
 ```
-Breadth is absorbed at the library's admission bar, not by user filtering. The same restraint as the framework, applied to a product that ships.
+Gates carry only the judgment calls; work resumes on a written verdict.
 ```
 
-## 5. The tightening report — before/after, per decision and per row
+| Claim | Source |
+|---|---|
+| Title | DEC-044 decision 4 (human attention is the scarcest input), first-person plain form |
+| Stamp 2026-06-07 | DEC-044 — commit `78490b7`, "Muster v4 — autonomous sprint execution (#29)"; verified by `git log` |
+| Guess-or-stall, constant pings don't scale | DEC-044 problem, intact |
+| No mid-run steering; ambiguity paid up front | DEC-044 trade-off, intact |
+| Halt gates, curated packets, written verdict to resume | DEC-044 mechanism (framed as attention economics, not a restatement of §2's on-screen halt) |
 
-Word counts are of the four row values (the title and stamp are untouched in all four decisions and
-are counted separately below).
+## 5. Measured counts — per sheet, against the ceilings
 
-| Decision | Rows: seed → shipped | Δ | Sentences: seed → shipped | Title (unchanged) |
-|---|---|---|---|---|
-| 1 — optimized what each agent reads | 123 → **119** | −4 | 8 → 8 | 10 words |
-| 2 — a rule a script can check | 105 → **104** | −1 | 7 → 7 | 16 words |
-| 3 — capped every always-read file | 89 → **89** | 0 | 8 → 8 | 18 words |
-| 4 — removed the one feature | 103 → **103** | 0 | 7 → 7 | 14 words |
-| **§4 total** | **420 → 415** | **−5** | **30 → 30** | 58 words |
+Row-body totals are the sum of the four row values (Decision + Problem + Trade-off + Mechanism);
+titles are counted separately. Script-measured under the stated convention.
 
-Per row, where a count changed:
-
-| Decision · row | Seed | Shipped | Δ |
+| Decision | Title (≤ 12) | Rows (≤ 45) | Per row (D / P / T / M) |
 |---|---|---|---|
-| 1 · Problem | 46 | 43 | −3 |
-| 1 · Trade-off | 30 | 29 | −1 |
-| 2 · Decision | 17 | 16 | −1 |
+| 1 — tiered reading | 10 | **44** | 12 / 11 / 14 / 7 |
+| 2 — determinism + economics | 9 | **42** | 8 / 11 / 11 / 12 |
+| 3 — growth caps | 11 | **44** | 10 / 11 / 10 / 13 |
+| 4 — attention architecture | 9 | **44** | 9 / 12 / 11 / 12 |
+| **§4 total** | 39 | **174** | — |
 
-Every other row is word-identical to the seed; only the sentence-case transform (§3.1) was applied.
+Longest title is 11 words — short enough that no title approaches a multi-line wall of display type
+at 320px.
 
-### Every edit, stated so it can be checked rather than judged
+## 6. What the ceiling cost, stated for review
 
-1. **1 · Problem** — *"But the thing that actually breaks is the context window"* → *"But what
-   actually breaks is the context window."* Subject and claim identical; `the thing that` is a
-   nominalization `what` carries in two fewer words.
-2. **1 · Problem** — *"put eight agents in a room and let them all read everything, and each one
-   drowns"* → *"put eight agents in a room, let them all read everything, and each one drowns."*
-   Three imperative clauses in a series; the comma does the work the first `and` did.
-3. **1 · Trade-off** — *"one role has to own context routing"* → *"one role must own context
-   routing."* The modal is preserved — `must`, not `owns` — because the sentence's claim is an
-   obligation the trade-off buys, not a description of who happens to own it.
-4. **2 · Decision** — *"prose is reserved for judgment"* → *"prose is for judgment."* Exclusivity is
-   already carried by the sentence that follows (*anything a script can verify, a script must*), and
-   the shorter form is Muster's own coinage as R11 states it: *prose for judgment, scripts for
-   mechanics*.
+Each sheet's core trade-off survives; the ceiling did trim secondary clauses of two DEC-044
+trade-offs, recorded here so the cut is a visible choice rather than a silent one:
 
-**Five words is the honest total, and the small number is the finding.** The draft carries almost no
-fat: every sentence is doing work, and the four edits above are the complete list of places where a
-word could go without a claim going with it. Manufacturing a bigger delta would mean cutting clauses
-the founder wrote on purpose, which is rewriting under a tightening label. Where the seed's prose is
-already tight, this file leaves it alone and says so.
+1. **Decision 2** drops "every scripted rule ships with a regression fixture" and "the split itself
+   must be maintained" — the core cost (floors can't flex; legitimate exceptions trip the gate)
+   ships.
+2. **Decision 3** drops "every new file must ship with a cap or it's a leak" — the core cost
+   (permanent loss of history from view) ships.
 
-## 6. Findings for review
-
-1. **The draft runs 7–8 sentences per decision; the seed's own §4 brief says "~4–6 sentences."** The
-   locked draft does not meet its own guidance, and tightening cannot close the gap — reaching 6
-   would require deleting two sentences per decision, which is rewriting. No sentence was deleted.
-   If the guidance is ruled to bind over the draft, that is a cut rather than a tighten, and cutting
-   founder copy needs the founder's word. **Not blocking**: the section builds from these strings as
-   they stand, and `section-04-decisions.md` measured its line-count ceilings against exactly this
-   text.
-2. **Every title is untouched**, so every measured line count in `section-04-decisions.md` §8 holds
-   exactly rather than as a ceiling — the build can sanity-check against those figures directly.
-3. **Decision 4's stamp carries no date and must never gain one.** The seed supplies `product — Bodh`;
-   Bodh's launch date exists in the corpus (`2026-07-18`) and inserting it here would be a fabricated
-   provenance stamp — the date belongs to the deploy, not to the decision.
+Neither omission changes any claim's size; both are maintenance corollaries of costs that ship. No
+decision needed more than 45 words to make its point — nothing is flagged as unfittable.
 
 ## 7. Verification statement
 
 Checked line by line against `copy-rules.md`:
 
 - **R1 / R4 / R5** — §4 contains no measured value, no metric, and no scope claim. The only numerals
-  are the three stamp dates, quoted from the seed exactly (`2026-05-05`, `2026-06-13`, `2026-04-12`).
-  Nothing is rounded, nothing invented, no scope mixed, no dash-and-caption case arises.
-- **R2 / R3** — no time claim, no cost claim, no human or agency baseline.
-- **R6** — "proven" appears nowhere; no merit claim beyond what the founder wrote.
-- **R7** — first person appears in decisions 1, 2, 3 and 4 as the seed wrote it, and nowhere is a
-  first-person sentence added or amplified.
-- **R8** — no attribution string appears in §4; the section makes no claim about who did the work.
-- **R9 / R10 / R12** — no CTA, no version string, no URL in the section.
-- **R11** — Muster's coinage *prose for judgment, scripts for mechanics* is honoured in 2 · Decision;
-  no insider term is introduced.
+  are the four stamp dates, exactly as DEC-044 verified them: `2026-04-24` · `2026-06-13` ·
+  `2026-04-12` · `2026-06-07`. Nothing is rounded, nothing invented, no scope mixed, no
+  dash-and-caption case arises.
+- **R2 / R3** — no time claim, no cost claim, no human or agency baseline. "Premium models buy
+  judgment" is a design claim about where model spend goes, not a cost figure.
+- **R6** — "proven" appears nowhere; no merit claim beyond the decisions themselves.
+- **R7** — first person appears only as the founder's (titles 1, 3, 4; rows of decision 4); no
+  first-person sentence exists outside §4's permitted place.
+- **R8** — §4 makes no claim about who did the work; no attribution string appears.
+- **R9 / R10 / R12** — no CTA, no version string, no URL in the section. Commit hashes above are
+  documentation for verification, not shipping strings.
+- **R11** — *prose for judgment, scripts for mechanics* is honoured in decision 2's Decision row;
+  no insider term appears anywhere (DEC-043 cascade).
 - **`brand-guidelines.md` §5** — no banned adjective, no exclamation mark, no "coming soon", no
-  superlative. Every word in the section is the founder's or is a deletion of one of his.
+  superlative. Every claim traces to DEC-044; no claim is larger than its source.

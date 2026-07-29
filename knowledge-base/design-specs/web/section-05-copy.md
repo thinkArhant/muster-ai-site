@@ -89,11 +89,11 @@ This page — built with Muster by its own AI team, and measured with the same m
 
 "by its own **AI** team" is R8 applied to the seed's phrase: "its own team" unqualified is the exact
 construction R8 bans, and the fix is one word. The full attribution shape — *8 agents, 1 operator* —
-lives in the footer and in §1's subline; repeating it a third time here would be furniture.
+lives in the footer and in §1's formation caption; repeating it a third time here would be furniture.
 
 ## 4. The readout cards
 
-Two cards, same three keys, same order. Treatment is `page-shell.md` §8's instrument readout cell:
+Two cards, same four keys, same order. Treatment is `page-shell.md` §8's instrument readout cell:
 key `--text-micro` `--muted`, value `--text-readout` `--accent` tabular, sub-line `--text-micro`
 `--muted`; unmeasured values render an `--ink` em-dash with the `measured at launch` sub-line and
 never animate.
@@ -109,6 +109,8 @@ never animate.
 | Value 2 | `4.8 h` | `—` |
 | Key 3 | `COMMIT-DAYS` | `COMMIT-DAYS` |
 | Value 3 | `4` | `—` |
+| Key 4 | `COST · API LIST` | `COST · API LIST` |
+| Value 4 | `$147` | `—` |
 | Sub-line | `Jul 11–18` (under Value 3 only) | `measured at launch` |
 
 | Claim | Source |
@@ -116,29 +118,26 @@ never animate.
 | `9.3 h` active build, BODH scope | Seed → Measured data (BODH column); scope table |
 | `4.8 h` operator attention | Seed → Measured data ("4.8 h (supporting stat)") |
 | `4` commit-days, `Jul 11–18` | Seed → Measured data ("4 (Jul 11–18)") |
+| `$147`, API list price | Seed → Measured data (BODH column); scope table; DEC-048. The key label carries R3's framing so the figure is never read as subscription spend |
 | THIS SITE dashed, `spec → live` | Seed rule 4 and rule 5; A-002 |
 
-### 4.2 Which values §5 carries, and why these three
+### 4.2 Which values §5 carries, and why these four
 
-§1's readout is the receipts at hero altitude: active build, cost, shipped. §5's cards are the same
-product measured for a different question — *what did this cost the person running it?* So §5 carries
-the seed's two **supporting** figures, which appear nowhere else on the page: operator attention and
-commit-days. Commit-days are additionally R2's named checkable fallback for elapsed time, and this is
-the one place the page shows them.
+§5 is the page's primary — and only — site for the whole-product number set (DEC-046, DEC-048): §1
+carries no Bodh numeral, so `9.3 h`, `4.8 h`, `4` commit-days and `$147` live here and nowhere else.
+The cards answer two questions at once: *what did this cost the person running it?* (operator
+attention, commit-days — the seed's two supporting figures) and *what did it cost to make?* (active
+build, API-list cost). Commit-days are additionally R2's named checkable fallback for elapsed time,
+and this is the one place the page shows them.
 
-`ACTIVE BUILD 9.3 h` repeats §1 deliberately, as the anchor the other two are read against — a
-readout of operator attention with no build figure beside it is a number without a denominator. **It
-must render byte-identically to §1's string (`9.3 h`)**: two renderings of one measurement is the
-drift this page cannot afford, and §1's harness already asserts `9.3 h` byte-exact.
+`ACTIVE BUILD 9.3 h` and `COST · API LIST $147` are the anchors the attention figure is read
+against — a readout of operator attention with no build or cost figure beside it is a number without
+a denominator. **The harness asserts `9.3 h` and `$147` byte-exact with §5 as the primary site**:
+two renderings of one measurement is the drift this page cannot afford.
 
 **No derived figure is printed.** The page never states a ratio, a percentage, or a difference between
 these numbers — the cells sit side by side and the reader does the arithmetic, the same posture R3
 takes with cost.
-
-**Pre-authored fallback, if review rules the repeat wrong**: drop `ACTIVE BUILD` from both cards and
-ship two keys — `OPERATOR ATTENTION` and `COMMIT-DAYS`. No other string changes; the section stays
-scope-clean and loses only the denominator. Ruling either way is a card-inventory change, not a copy
-session.
 
 ## 5. Rulings this file makes
 
@@ -157,11 +156,12 @@ session.
 ## 6. Verification statement
 
 - **R1** — every numeral in §5 is quoted exactly from the seed's Measured data table: `9.3 h`, `4.8 h`,
-  `4`, `Jul 11–18`. None is rounded; none is given precision its source lacks; none is derived.
+  `4`, `Jul 11–18`, `$147`. None is rounded; none is given precision its source lacks; none is derived.
 - **R2** — the only time claims are "active build" and commit-days, both as the seed labels them. No
   wall-clock framing, no "built in N hours", and §5 makes no deploy claim at all.
-- **R3** — no cost figure appears in §5 and no human or agency baseline exists anywhere in the
-  section.
+- **R3** — the one cost figure, `$147`, sits under the `COST · API LIST` key, which carries R3's
+  framing in the label itself: API list price, cost-to-replicate, never subscription spend. No human
+  or agency baseline exists anywhere in the section.
 - **R4** — THIS SITE is three em-dashes with `measured at launch`; no placeholder value, and the
   dashes are inert.
 - **R5** — both cards are scope-labelled (`BODH · IDEA → LIVE`, `THIS SITE · SPEC → LIVE`); no claim

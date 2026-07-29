@@ -2,8 +2,8 @@
 
 **Surface type**: the §3 reading passage — kicker plus one paragraph (copy deliverable)
 **Consumers**: Developer (builds the strings verbatim), PM (reviews against the copy rules)
-**Sources**: every claim traces to `product-spec-seed.md` §3 and §4 (founder-authored, read-only) or
-`brand-guidelines.md`; cited per claim below. Copy is governed by
+**Sources**: claims trace to `product-spec-seed.md` §3 and §4 (founder-authored, read-only) and the
+founder ruling recorded in `decision-log.md` DEC-047, cited per claim below. Copy is governed by
 `agent-skills/content/copy-rules.md`.
 
 ---
@@ -13,8 +13,14 @@
 - **Product voice.** §3 is not one of the two permitted first-person places (R7).
 - **§3 carries no numerals**, so no measurement scope applies — deliberately: the argument here is
   mechanism, and the numbers stay where their scope labels live.
-- **One recognition hook** (R11): "context engineering" is spent here, once, and nowhere else on the
-  page.
+- **One recognition hook** (R11): "context engineering" is spent here, once, attached to the
+  curated-slice sentence — never as a standalone flourish — and appears nowhere else on the page.
+- **No named competitor appears anywhere on the page** (DEC-047). §3's contrast is Muster vs **bare
+  Claude Code** — the reader's own lived experience.
+- **Honesty boundaries (hard, DEC-047)**: mechanism claims only — no comparative token or benchmark
+  claim against bare Claude Code, because none is measured. Never a capability dig at Claude Code:
+  Muster runs on it, and the claim is about **who carries the context at production scale**, not about
+  capability. The scaling claim renders as architecture, not promise.
 - **Word counting convention**: as in the sibling copy files — whitespace-delimited tokens containing
   a letter or digit; script-measured.
 
@@ -24,62 +30,50 @@
 
 ## 3. The kicker
 
-**Budget: ≤ 12 words** — one display line; it is the section's five-second read. Written: **10**.
+**Budget: ≤ 12 words** — it is the section's five-second read. Written: **6**.
 
 ```
-A team you govern — not a chat you hope converges.
+The product grows. The briefing doesn't.
 ```
 
 | Claim | Source |
 |---|---|
-| The whole line | Seed §3 message, verbatim shape ("a team you govern — not a chat you hope converges"); `brand-guidelines.md` §3 value proposition 1 |
+| The whole line | Founder-supplied kicker, his pick of three candidates (DEC-047); the compounding claim that is §3's spine |
+
+**Wrap rule for the build** (spec home: `page-shell.md`): each kicker sentence is an
+unbreakable-preferred unit — an inline-block span, the headline's mechanism family. Measured
+behaviour: one line at desktop; sentence-boundary break at 375px; internal wrap without overflow
+at 320px.
 
 ## 4. The paragraph
 
-**Budget: ≤ 90 words** — the seed rules §3 "Short: kicker + one paragraph"; at the 64ch reading
-column, 90 words sets roughly seven lines — one screen, one idea. Written: **85**.
+**Budget: ≤ 90 words.** Written: **90** — founder-confirmed against the render, byte-exact; this
+string may not be re-tightened or re-expanded without a founder ruling.
 
 ```
-Muster wires eight AI roles under one operator — the leverage is in how the work is wired, not in the model. Where CrewAI and AutoGen optimize how agents talk to each other, Muster optimizes what each agent reads: a small always-on tier, everything else on demand, most of it never. The ceiling is the context window, not the conversation — context engineering, not conversation design. And the floor is deterministic. Mechanics run in scripts; judgment lives in prose. That is why it holds on cheap models.
+Muster puts eight AI roles under one human operator, coordinating through markdown files and a queue. Used bare, Claude Code makes you the memory: every session starts with re-explaining, and the re-explaining grows with the product. Muster moves that job into the system. Decisions land in a knowledge base; each session reads a curated slice — a small always-on tier, the rest on demand, most never — context engineering, per role. The product grows; what a session reads stays bounded. Mechanics run as scripts, judgment in prose — it holds on cheap models.
 ```
 
 | Claim | Source |
 |---|---|
-| Eight AI roles, one operator | Seed rule 8 ("8 agents, 1 operator") |
-| The leverage is in how the work is wired, not the model | Seed §3 message, verbatim |
-| CrewAI and AutoGen optimize how agents talk to each other | Seed §3 ("fold the CrewAI/AutoGen contrast into one clause") + the seed's own characterization ("every multi-agent framework optimizes how agents talk to each other"); `brand-guidelines.md` §6 |
-| Optimizes what each agent reads; ceiling is the context window, not the conversation | Seed §3, verbatim |
-| Small always-on tier, everything else on demand, most of it never | Seed §4 decision 1 (founder-authored); `brand-guidelines.md` §6 |
-| Context engineering | R11's one permitted recognition hook |
-| Mechanics run in scripts, judgment in prose; holds on cheap models | Seed §3 close, verbatim shape; seed §4 decision 2 mechanism ("runs safely on small, cheap models") |
+| Eight AI roles, one operator, files and a queue | Seed rule 8 ("8 agents, 1 operator"); seed rule 11 coinage territory (*the queue is the org chart*), stated as fact — the page's only prose statement of it |
+| Used bare, Claude Code makes you the memory; re-explaining grows with the product | DEC-047 ruling 2 — the operator's job under bare use, never a Claude Code capability claim |
+| Muster moves that job into the system; decisions land in a knowledge base; curated per-role slice | DEC-047 mechanism claims (persistent knowledge base, curated per-role slice, capped reads) |
+| A small always-on tier, the rest on demand, most never | Seed §4 decision 1 (founder-authored), kept verbatim in its short form |
+| Context engineering, per role | R11's one permitted recognition hook, attached to the curated-slice sentence |
+| The product grows; what a session reads stays bounded | DEC-047 — the compounding claim rendered as architecture, not promise |
+| Mechanics run as scripts, judgment in prose — holds on cheap models | Seed §3 close, verbatim shape; seed §4 decision 2 mechanism ("runs safely on small, cheap models") |
 
-Order follows the seed's brief exactly: governed team and determinism lead, context-routing supports,
-the competitor contrast folds into one clause, and the close is the deterministic floor.
+**Reading of the sensitive sentence, binding on any future edit**: "makes you the memory" states the
+operator's job when Claude Code is used bare — not a limit of Claude Code. If a future revision needs
+a softer form, the pre-authored replacement is *"the context lives in your head and your prompts."*
 
-## 5. The named-competitor clause — ruling
+## 5. Verification statement
 
-**The clause ships named.** Grounds: the seed itself instructs the fold ("fold the CrewAI/AutoGen
-contrast into one clause"), and the only thing the paragraph attributes to CrewAI and AutoGen is the
-seed's own characterization — they optimize how agents talk to each other. No number, no feature
-scoreboard, no quality claim is made about either, so there is nothing an external review would be
-verifying that the founder-authored source does not already state. No research request is opened.
-
-**The cut, pre-authored.** If review rules that naming competitors needs grounding this page does not
-have, the clause ships **cut, not softened** — the paragraph below is the cut applied, with the
-seed's generalization carrying the contrast and no other word changed (budget ≤ 90, written 63):
-
-```
-Every multi-agent framework optimizes how agents talk to each other; Muster optimizes what each agent reads: a small always-on tier, everything else on demand, most of it never. The ceiling is the context window, not the conversation — context engineering, not conversation design. And the floor is deterministic. Mechanics run in scripts; judgment lives in prose. That is why it holds on cheap models.
-```
-
-(The cut also drops the paragraph's opening clause, whose "eight AI roles under one operator" is
-already the subline's fact — nothing is lost that §1 does not carry.)
-
-## 6. Verification statement
-
-No numerals appear in §3, so nothing can be rounded, precision-inflated, or scope-mixed. No banned
-adjective, no exclamation mark, no "proven," no comparison table, no competitor scoreboard — the
-contrast is one clause, as the seed rules. First person appears nowhere. "Context engineering"
-appears exactly once in this file's shipping string and must appear nowhere else on the page. Insider
-terms (*cascade lag*, *cold-start sufficiency*) do not appear. Every claim cites a founder-authored
-source in place.
+No numerals appear in §3, so nothing can be rounded, precision-inflated, or scope-mixed. No competitor
+is named — here or anywhere on the page (DEC-047) — and no universal claim is made about other
+frameworks. No comparative benchmark against bare Claude Code appears; every contrast claim is a
+mechanism claim. No banned adjective, no exclamation mark, no "proven." First person appears nowhere.
+"Context engineering" appears exactly once in this file's shipping string and must appear nowhere else
+on the page. Insider terms (*cascade lag*, *cold-start sufficiency*) do not appear. Word counts above
+are script-measured under the stated convention.
