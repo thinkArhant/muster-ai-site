@@ -73,50 +73,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-30 Content: Re-gate round — the true word, the model-proof line, one footer sentence, the repetition audit
-
-```
-Role: content
-Model: claude-fable-5
-
-**Task:** Four copy jobs from the re-gate verdict (`knowledge-base/wave-review.md` → "Re-gate
-verdict", findings F-R4, F-R6, F-R8, F-R9 — F-R4 and F-R6 are already RESOLVED there with the
-exact material). Routed at the gate (DEC-059); apply, do not re-derive.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — the re-gate verdict, findings and resolutions
-- `knowledge-base/design-specs/web/footer-copy.md` · `section-05-copy.md` · `section-06-copy.md`
-- `knowledge-base/agent-skills/content/copy-rules.md` · `index.html` (the shipped strings, for the
-  repetition audit)
-
-**Deliverable:** amended copy files; a repetition-audit memo appended to your handoff; HO-038.
-
-**Acceptance criteria:**
-- **F-R4 (blocking):** the provenance line ships exactly as the founder resolved it — "production"
-  becomes "real", every other word identical, verbatim thereafter.
-- **F-R6:** §6's lead line redrawn from the resolved material ONLY — the safe claim is the
-  deterministic-bash/model-proof fact; present tense; no "(yet)", no roadmap, no "coming soon";
-  Claude Code stays stated as the prerequisite. State the word budget.
-- **F-R9:** the footer's two sentences become ONE — team truth (5 of 8 agents, 1 operator, three
-  never invoked) and authorship (designed and built by the founder, solo, shipping his own
-  products) in a single sentence, highest-priority fact first. Draft 2–3 candidates with a
-  recommendation; UI/UX lays it out next step.
-- **F-R8:** the repetition audit — every string that appears more than once on the page, whether
-  each instance earns its seat, what space returns. A MEMO with recommendations, not applied
-  changes; ruled at PM review.
-- `VERIFY.md`'s participation qualifier stays consistent with the new single footer sentence —
-  the merge reopens the consistency check the previous fix round closed.
-- Copy-rules matrix on every touched file; no new numeral anywhere.
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-038 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
-Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-30 UI/UX: Re-gate round — the brand-size mark, the indicator, hierarchy, and the §2 consult
 
 ```
@@ -175,6 +131,9 @@ founder, build nothing.
 **On completion:** File HO-039 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
 Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-30 Developer (web): Re-gate round — build the ruled items and pin the receipts
 
@@ -290,6 +249,16 @@ block in `## Next Step`.
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 
+- 2026-07-30 — Step: Content re-gate copy round (HO-038). F-R4's false word is fixed in copy
+  ("real", byte-equal to the founder's resolved string), §6's lead carries the model-proof claim
+  drawn verbatim from the founder's safe-today material (30 of ≤ 32 words), the footer's two
+  sentences become three one-sentence candidates with A recommended (33 words, team truth first,
+  the role names released to VERIFY.md and the receipts), and the F-R8 repetition audit is a filed
+  memo — one true content repetition on the page (§2's totals, twice), reclaimable only if F-R1
+  needs the room. Suite 280/282 with both reds designed (copy leading the build; HO-040 swaps the
+  strings); audit 108/108; sweep 42/42. **Awaiting UI/UX (HO-039 consumes the candidates and the
+  §6 line) and PM (rules the memo) at their steps.**
+
 - 2026-07-30 — Step: PM fix-round review and the Gate B re-gate (DEC-058). **All four handoffs
   accepted with no revision**, and the acceptance is re-derived rather than read: all three runners
   re-run cold by PM on the shipped tree (`scripts/test.sh` GREEN both engines 282/282 + 27/27, audit
@@ -399,15 +368,4 @@ block in `## Next Step`.
   value is pulled 180px past it, off screen, while the alignment find-in-page actually uses is
   unaffected — the same trade as OBS-009, so one ruling covers both.**
 
-- 2026-07-29 — Step: Developer §5 (HO-028). The page's whole-product number set has one home: `9.3 h`,
-  `4.8 h`, `4` commit-days and `$147` beside BODH, four ink dashes beside THIS SITE, every string
-  parsed out of the copy file and the four figures additionally diffed against the seed's Measured
-  data table. Each figure appears **exactly once on the page**, asserted as a count with the carrying
-  section named. **The count-up's live-region posture is decided (DEC-052): none** — the rolling
-  digits leave the accessibility tree and the exact value stands in, verified during playback against
-  real page cells (100 visible states, one announced) and from the AX tree mid-roll. `scripts/test.sh`
-  GREEN both engines (**256/256 + 27/27**); the audit exits zero, 108/108, twice. Every new
-  load-bearing assertion planted and watched go red. **Awaiting PM review at the build-review step;
-  OBS-011 (a stale dash count in `section-05-copy.md`'s R4 prose) and OBS-012 (the footer still
-  carries a shell placeholder and no sprint step owns footer copy) are PM's to rule.**
 

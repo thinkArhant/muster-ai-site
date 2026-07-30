@@ -28,20 +28,31 @@ deliverable)
 
 ## 3. The lead line
 
-**Budget: ≤ 18 words** — one line at the reading column on desktop, two at phone; §6's job is to get
-out of the way of the command. Written: **15**.
+**Budget: ≤ 32 words** — two lines at the reading column on desktop, three at phone. The old budget
+was ≤ 18 (one line); the second sentence is the founder-ruled model-proof claim (DEC-059), which
+cannot fit a shared line without crushing either fact. Written: **30**.
 
 ```
-One command. No signup, no framework install, no API wiring — markdown files and Claude Code.
+One command. No signup, no framework install, no API wiring — markdown files and Claude Code. The gates are deterministic bash — the framework's correctness doesn't depend on which model runs it.
 ```
 
 | Claim | Source |
 |---|---|
 | One command; no signup, no framework install, no API wiring | Seed §6 message, verbatim shape |
 | Markdown files and Claude Code | Seed §6 ("markdown files + Claude Code"); seed → What this product is ("for Claude Code") |
+| The gates are deterministic bash; the framework's correctness doesn't depend on which model runs it | Founder-supplied roadmap material, the safe-today claim only (DEC-059): *"Muster's gates are deterministic bash over markdown — zero model tokens, model-proof by design; the framework's correctness doesn't depend on which model runs it."* Both clauses are drawn verbatim from it; present tense |
 
 The line states the prerequisite rather than hiding it: Claude Code is required, and a reader who
 does not have it learns that before running anything.
+
+**What the second sentence deliberately does not say** (the founder's own claim line, DEC-059):
+not "runs on any model," not "works beyond Claude Code," no "(yet)," no roadmap, no "coming soon."
+The claim is structural — what the gates are made of — checkable in the repository the section
+links to, not a promise about the future. Two source clauses are dropped, on purpose: "over
+markdown" would put a third "markdown" within two sentences, and "zero model tokens" spends a
+number where the mechanism clause already carries the fact. The sentence strengthens the page's
+holds-on-cheap-models thread (§3's close; brand VP2) rather than repeating it: §3 states that the
+floor holds, this states why — the gates never ask a model to hold it.
 
 ## 4. The commands
 
@@ -104,10 +115,13 @@ excludes:
 
 ## 7. Verification statement
 
-- **R1 / R4 / R5** — §6 contains no measured value, no metric, and no scope claim; nothing can be
-  rounded or scope-mixed.
+- **R1 / R4 / R5** — §6 contains no measured value, no metric, no numeral, and no scope claim;
+  nothing can be rounded or scope-mixed.
 - **R2 / R3** — no time claim, no cost claim, no baseline. §6 does not say how long setup takes.
-- **R6** — "proven" does not appear.
+- **R6** — "proven" does not appear. The lead line's second sentence claims what the gates *are*
+  (deterministic bash), not what the framework achieves — a structural fact a reader can check in
+  the linked repository, inside the founder-drawn claim line (DEC-059), which forbids claiming
+  model-agnostic operation before it exists.
 - **R7** — first person appears nowhere.
 - **R8** — no attribution claim in §6.
 - **R9** — exactly one CTA: the `curl` and one GitHub link. No community furniture.

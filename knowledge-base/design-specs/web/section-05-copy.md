@@ -14,8 +14,8 @@ string. Governed by `agent-skills/content/copy-rules.md` and `brand-guidelines.m
 ## 1. Rules this file is written under
 
 - **Product voice, with one exception.** The provenance line is founder-supplied and is one of the two
-  permitted first-person places (R7). It is preserved exactly as the seed supplies it. Every other
-  string in §5 is product voice.
+  permitted first-person places (R7). It is preserved exactly as the founder supplies it — the seed's
+  line as he amended it at his gate (DEC-059). Every other string in §5 is product voice.
 - **Scope discipline (A-005) is the section's highest risk.** §5 carries **BODH** values and **THIS
   SITE** dashes, each beside its own scope label, and **no wave-scope number at all** — `~64 min`,
   `289` and `$24.73` do not appear in this section. Two scopes sit adjacent here by design, which is
@@ -60,12 +60,13 @@ on the page where the two scopes sit closest.
 out of it in either direction.
 
 ```
-Muster was extracted mid-build from a production iOS app — the framework existed as working practice before it existed as a repo.
+Muster was extracted mid-build from a real iOS app — the framework existed as working practice before it existed as a repo.
 ```
 
 | Claim | Source |
 |---|---|
-| The whole line | Seed §5, provenance line, verbatim (21 words) |
+| The whole line | Seed §5, provenance line, as amended by the founder at his gate — one word, "real" (DEC-059); verbatim thereafter (21 words) |
+| "a real iOS app" | The founder's claim-check of his own line: the source app is nearing MVP, not in production, so "real" is the truthful word and "production" may not appear near this line |
 
 - **The source app stays unnamed.** No status, no roadmap, no "coming soon" (seed §5;
   `brand-guidelines.md` §5).

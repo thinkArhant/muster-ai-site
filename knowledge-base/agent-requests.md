@@ -10,7 +10,101 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-_None — the Gate B fix round (HO-034 · HO-035 · HO-036 · HO-037) is reviewed and resolved below._
+### 2026-07-30 HO-038 — Re-gate copy round: the true word, the model-proof line, one footer sentence, the repetition audit
+**Type:** handoff
+**Producer:** content
+**Deliverable:** `knowledge-base/design-specs/web/section-05-copy.md` (F-R4),
+`knowledge-base/design-specs/web/section-06-copy.md` (F-R6),
+`knowledge-base/design-specs/web/footer-copy.md` (F-R9 + DEC-058 ruling 1), and the F-R8
+repetition-audit memo below
+**Status:** in-review
+**Reviewers:**
+- [ ] UI/UX — pending (consumes the footer candidates and the §6 line at HO-039's layout step)
+- [ ] PM — pending (rules the F-R8 memo at the re-gate review step)
+
+**F-R4 — applied, not re-derived.** The provenance line in `section-05-copy.md` §3.2 is now
+byte-equal to the founder's resolved string: *"Muster was extracted mid-build from a real iOS app —
+the framework existed as working practice before it existed as a repo."* One word changed
+("production" → "real"), every other word identical, 21 words as before; the file states it ships
+verbatim thereafter. The remaining "production iOS app" instances are `index.html:370` (HO-040
+swaps it) and `samples/gate-b-proposed.html` (a UI/UX sample, not a shipped file — QA's
+"production appears nowhere near it" grep should scope to shipped files).
+
+**F-R6 — §6's lead line, drawn from the resolved material only.** Budget restated: **≤ 32 words**
+(was ≤ 18; the founder-ruled claim needs a second sentence — two lines at desktop column, three at
+phone). Written, **30**: *"One command. No signup, no framework install, no API wiring — markdown
+files and Claude Code. The gates are deterministic bash — the framework's correctness doesn't
+depend on which model runs it."* Both new clauses are verbatim from the founder's safe-today claim;
+present tense; no "(yet)", no roadmap, no "coming soon"; Claude Code stays stated as the
+prerequisite in sentence one. Deliberately dropped from the source: "over markdown" (a third
+"markdown" within two sentences) and "zero model tokens" (the mechanism clause already carries the
+fact). The line strengthens §3's holds-on-cheap-models close rather than repeating it: §3 says the
+floor holds, this says why.
+
+**F-R9 — three candidates in `footer-copy.md` §2, recommendation A.**
+- **A (recommended, 33 words)**: *"Specced, written, and reviewed by Muster's AI team — 5 of 8
+  agents, the other three never invoked, 1 operator — and designed and built by Kanwar Sandhu,
+  solo, shipping his own products with it."* Team truth first (the page's audited claim), the
+  counts as an em-dash aside, authorship closing as the signature; "solo" lands beside "AI team" —
+  the thesis in four words. The role names leave the sentence but stay one click away (the receipts
+  row directly beneath) and enumerated in `VERIFY.md`.
+- **B (40 words, at the ceiling)**: keeps all eight names in-sentence — auditable without a click,
+  but reads as a recital.
+- **C (32 words)**: authorship-first — leads the closing line with the human on a page whose thesis
+  is what the AI team shipped.
+Ceiling set at ≤ 40: the split form ran 44 (30 + 14); a merge at or past that has not earned the
+merge. UI/UX rules from renders per the taste-call standard. **VERIFY.md consistency checked under
+all three candidates**: its "Who built this" names the five and the three and says "the footer
+states the participation" — counts agree, no contradiction, no edit needed; with the names out of
+the footer, VERIFY.md's enumeration becomes the on-record naming, which is the right place for it.
+
+**DEC-058 ruling 1 — landed upstream.** `footer-copy.md` §3's lowercase-labels sentence now states
+it is a source-string convention and that the rendered row uppercases by the page's shared
+mono-label transform. Also recorded in §3: F-R10's permalink ruling (the four artifact links pin to
+founder-criterion SHAs; `repo` and `framework` stay), so the copy file and HO-040's build cannot
+drift.
+
+---
+
+**F-R8 — repetition-audit memo (recommendations only; nothing applied; PM rules).**
+Scope: rendered visible strings in `index.html`, including aria-hidden decorative text; exact
+phrases or labelled values appearing 2+ times; single common words excluded; HTML comments and
+`<title>`/meta noted but out of scope (not on the page).
+
+| # | Repeated string | Instances | Verdict |
+|---|---|---|---|
+| 1 | The `curl` command | §1 close · §6 CTA | **Earns both.** Deliberate bookend; harness asserts byte-equality. |
+| 2 | The wave totals (`64 min · 289 API calls · $24.73`) | §2 sp8 narration · §2 totals strip | **The page's one true content repetition** — same three figures twice, a few lines apart. Each earns differently today: sp8 is the playback's spoken close, the strip is static scope-labelled evidence readable without playback. **Keep — but this is §2's one reclaimable seat**: if F-R1's overnight-wave option needs room, cut sp8's totals clause (the strip already carries all three figures + scope label; sp8 would end at the Apple-gate fact). Returns ~14 narration words and one timed beat's reading load. Blast radius: §2 fidelity/timing assertions re-base — Content rewrite + Developer re-assert; not free. |
+| 3 | Page attribution (AI team built this page) | §5 line 3 · footer sentence | **Keep both.** Different jobs: §5 seats the page in the shipped list and ties the dashed card to the meter; the footer carries the measured count. R8 requires the AI qualifier in both seats. The F-R9 merge already returns 11 words from the footer half. |
+| 4 | THIS SITE readout (dashes) | §1 remnant · §5 card 2 | **Earns.** DEC-046's designed pair: remnant is the smallest honest form; §5 owns the full card beside the BODH contrast. |
+| 5 | `measured at launch` + `THIS SITE · SPEC → LIVE` | ×2 each | **Required.** Each instance labels its own dash cluster; a dash without its label is punctuation (R4, A-005). |
+| 6 | Readout keys (`ACTIVE BUILD`, `COST · API LIST`) | ×3 each | **Earns.** Identical keys are the cross-scope comparison mechanism — the columns read key-for-key. |
+| 7 | §2 layer pairs (`bodh.day · LIVE`/sp8, `zero bugs`, `11/11`) | log line + narration | **By construction.** Terminal-vs-narration is the section's two-voice design; the narration narrates the log. |
+| 8 | Narration slot tags (`THREE HANDOFFS` ×3, `THE HUMAN GATE` ×2 + beat indicator) | §2 | **Earns.** Grouping labels, aria-hidden; they tell the reader which beat a card belongs to. |
+| 9 | `SHEET n OF 4` frame | ×4 | **Earns.** Ordinal grammar is the paging channel; values differ, the frame repeats. |
+| 10 | `Claude Code` | eyebrow · §3 · §6 (+2 metadata) | **Earns.** Badge, argument subject, prerequisite — three jobs; the platform's name has no pronoun. Guard applied this round: the §6 redraw dropped "over markdown" so "markdown files" stays at ×2 (§3 mechanism, §6 prerequisite). |
+| 11 | `1 operator` | §1 caption · footer | **Earns.** Roster label vs participation — the scope split is deliberate (R8). |
+| 12 | `Muster` | ×7 prose + wordmark + §5 heading | **Tolerable.** Density peaks in §5 (heading + two lines), but each sentence needs its subject and pronouns would blur the two authorship scopes §5 must keep apart. |
+
+**Memo conclusion**: the page's repetition is almost entirely load-bearing idiom — scope labels,
+readout keys, §2's two-layer design, ordinals. One true content repetition (#2) and one attribution
+overlap (#3), both judged earning their seats. The only space worth reclaiming is sp8's totals
+clause, and only if F-R1 needs the room in §2. No cut is recommended on repetition grounds alone.
+
+**Revision log:**
+- 2026-07-30: Filed. Self-review caught two things fixed before filing: the footer source table
+  briefly carried a "while/—" hedge instead of stating that the founder's DEC-059 phrasing (no
+  "while") governs the merged authorship clause; and `section-05-copy.md` §1 still said the
+  provenance line is preserved "as the seed supplies it" — now "as the founder supplies it," since
+  he amended his own seed word at the gate. All five stated word counts script-measured (21 / 30 /
+  33 / 40 / 32); the provenance string diffed byte-equal against the founder's resolved string in
+  `wave-review.md`. No shipped file touched — `index.html` changes are HO-040's.
+- 2026-07-30: All three runners run after the amendments: `scripts/test.sh` **280/282 with exactly
+  two designed reds** — "§5 ships the three prose lines verbatim" (page still says "production";
+  HO-040 swaps it) and "the footer ships the team line and the authorship line, byte-equal to the
+  deliverable" (page still ships the split form; HO-040 builds the ruled sentence). Both reds are
+  the copy files leading the build, the same designed-red pattern as the Gate B fix round. Audit
+  **exit 0, 108/108**; sweep **exit 0, 42/42**.
 
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
