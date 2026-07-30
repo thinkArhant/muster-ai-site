@@ -77,43 +77,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-29 QA (web): Scoped re-run on the fix round
-
-```
-Role: qa
-Model: claude-opus-5
-
-**Task:** Verify the fix round did not break what it did not touch — the scoped re-run every fix
-chain owes (three Sprint-1 rounds each satisfied their criterion and broke something adjacent).
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-034 through HO-036
-- `knowledge-base/wave-review.md` — the Gate B findings these fixes answer
-
-**Deliverable:** HO-037 in `agent-requests.md` — per-finding pass/fail with evidence.
-
-**Acceptance criteria:**
-- All three runners green on the shipped tree, run by you
-- Every relationship assertion green **and the new alignment assertion proven to fail when
-  violated**
-- The footer: strings byte-equal to `footer-copy.md`, links resolve as written (string check, no
-  fetch), no email anywhere in the shipped set, copy-rules matrix on the footer text
-- The chip href change re-proven inert: plant a fetching reference, watch the guard go red, revert
-- The snap outcome verified as ruled (if removed: no orphan assertion, no `snap` declaration left;
-  if paging: keyboard, find-in-page and reduced-motion each asserted)
-- §2 fidelity still byte-clean; §4's sheets still inside their ceiling and their screen budget;
-  cross-engine on every touched surface, labelled per engine
-- Reduced-motion and no-JS still render complete content
-
-**If a check fails:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment
-step naming the failing check, and file HO-037 with what you found.
-
-**On completion:** File HO-037 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-29 PM: Review the fix round and promote the re-gate
 
 ```
@@ -144,10 +107,27 @@ Model: claude-opus-5
 **On completion:** Write the packet, promote the halt. Run the Pre-Handoff Self-Review Checklist.
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
+_None — the PM review step above is the sprint's last queued step; it promotes the Gate B re-gate._
+
 
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-30 — Step: QA scoped re-run on the fix round (HO-037). **Every acceptance criterion
+  passes and nothing adjacent broke** — all three runners re-run here (suite GREEN both engines
+  282/282 + 27/27, audit 108/108, sweep 42/42), no shipped file touched. Both alignment assertions
+  watched to fail on their own plant (the formation reproduces the founder's finding at −173.81px;
+  the footer check prints `(center)` where `(start)` belongs), the network guard re-proven red on a
+  planted fetching reference with all nine `<a href>` navigations still permitted, the footer's 13
+  string checks parsed out of `footer-copy.md` rather than retyped, the five-role participation
+  re-derived from `git log`, and cross-engine measured per engine on all three touched surfaces —
+  WebKit puts the hub 0.5px off the render axis and shows §4's cut on the frame edge with the dead
+  strip gone. **Awaiting PM review at the fix-round review step; OBS-017 asks PM to rule
+  `footer-copy.md` §3's lowercase-labels sentence against the shipped uppercase transform.**
 
 - 2026-07-30 — Step: Developer Gate B fix round (HO-036). The footer ships true — five roles named, no
   email, the GitHub profile as the contact path — and the placeholder that was a hard launch blocker is
@@ -252,31 +232,4 @@ Model: claude-opus-5
   rule one clause of `section-04-decisions.md` §12.16 — with the track's proximity snap on, a
   `scrollIntoView()` on off-canvas content lands the match part-visible, and no declaration in the
   section's ruling overrides that.**
-
-- 2026-07-28 — Step: Developer §1 and §6 (HO-026). The sparse hero, the command and the proof link
-  ship: the headline's computed name read from the AX tree (`SHIP A PRODUCT WITH AN AI TEAM.`, the
-  struck phrase absent), the formation announcing hub `PM` → seven specialists with the bus width
-  equal to the plate row, the fold contract measured (hub + four whole plates above 553 at 375, hub
-  + three at 320), the remnant's dashes inert, and `VERIFY.md` written at repo root — a hard launch
-  blocker closed. The `http(s)` guard was **narrowed, not deleted** (fetching references fail, an
-  inert URL and an `<a href>` pass, prefetch hints fail) and **proven to go red** with planted
-  references. `cdp.mjs`'s `send()` now has a named deadline and the `--text-display` floor landed
-  with its own assertion. `scripts/test.sh` GREEN both engines (197/197 + 15/15); **the independent
-  audit exits zero, 107/107, twice consecutively** — two real defects and six changed-subject
-  assertions fixed on the way. Awaiting PM review at the build-review step; OBS-006 asks PM to rule
-  whether the queued audit-repair step still has a subject.
-
-- 2026-07-28 — Step: UI/UX Gate A fix round (HO-032). §1 recomposed to the sparse hero with the
-  formation's real design pass and a rendered fold budget (four whole plates above the 375 fold,
-  every figure re-rendered and reproduced); the remnant ruled a one-row instrument strip; §1 fully
-  static with the motion budget re-stated at two live elements + cursor; §4 ruled a horizontal
-  paged track at desktop (612.1px content bottom — the only candidate that fits one screen) and
-  stacked on phone with its cost stated (DEC-051); kicker wrap rule homed in `page-shell.md` §3;
-  `scripts/test.sh` re-run GREEN. Awaiting PM review at the build-review step; two DEC-046 cascade
-  gaps in PM-owned files flagged as OBS-002/003.
-
-
-
-
-
 

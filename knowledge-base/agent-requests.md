@@ -252,6 +252,120 @@ inherited.
   the authorship sentence, which the independent audit then failed on the 44px floor — the fix
   (own line, §6's pattern) is what shipped, and the audit found it before any handoff was written.
 
+### 2026-07-30 HO-037 — Gate B fix round, scoped re-run: nothing adjacent broke, and every load-bearing check was watched to fail
+**Type:** handoff
+**Producer:** qa
+**Deliverable:** this entry — per-criterion pass/fail with evidence · WebKit renders of the three
+touched surfaces (`tests/artifacts/qa-webkit-footer-{dark,light}.png`, `qa-webkit-hero-dark.png`,
+`qa-webkit-s04-track.png` — in the working tree, not in git: `tests/artifacts/` is gitignored by
+design, so re-render rather than expect them from a fresh clone)
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Verdict: every acceptance criterion passes.** No shipped file was changed by this session — the
+tree is byte-identical to `38a00ea` at filing, `git status` confirmed clean after every plant.
+
+**1 — Three runners, re-run here.** `scripts/test.sh` exit 0, GREEN both engines (**282/282 +
+27/27**) · `qa-independent-audit.mjs` exit 0 (**108/108**) · `qa-fullpage-sweep.mjs` exit 0
+(**42/42**). Counts reproduce HO-036's exactly.
+
+**2 — Both alignment assertions watched to fail, one plant each, reverted.**
+- Formation axis: `.formation__diagram` back to `inline-size: fit-content` → exactly one check red,
+  *"§1 formation spans the container…"*, reporting **hub centre 466.19 vs axis 640, delta
+  −173.81px** — the founder's F-B1 finding reproduced to the hundredth of a pixel, so the check
+  measures what he saw rather than a proxy for it.
+- Footer inheritance: `.pagefoot__inner { text-align: center }` → exactly one check red, *"the
+  footer inherits the alignment system…"*, its detail naming all four blocks and printing
+  `(center)` where `(start)` belongs. The detail carries the measurement, not a constant — the
+  check class OBS-015 was about, behaving.
+
+**3 — The footer, against `footer-copy.md`, by a script that parses the copy file rather than
+retyping it. 13/13 pass.** Team line byte-equal (184 chars) · authorship byte-equal (83) · six
+receipts carrying the copy file's **labels and hrefs in its order** · contact link byte-equal ·
+**the §1 chip href byte-equal to the VERIFY receipt** (the drift HO-034 asked to be guarded does
+not exist) · **no email and no `mailto:` in any of the ten shipped files** — swept file-wide, so an
+address in a comment or meta-description would surface; zero hits, and `footer-copy.md` carries
+none either · copy-rules matrix clean (no banned coinage, no `muster.build`, no superlative, no
+`!`), **R7** no first person, **R1/R4/R5** the only numerals are `5`/`8`/`1`, words recounted at
+**30/35** and **14/14** · **R12/A-004** nine `<a href>` navigations, zero `rel`/`src`/`ping`.
+
+**4 — Participation re-derived from git, not read.** pm 49 · developer 14 · ui-ux 10 · qa 7 ·
+content 6; **marketing 0 · legal 0 · research 0**. "5 of 8 agents" and the three named as never
+invoked are true as written.
+
+**5 — The chip's href change re-proven inert.** A fetching `<img src="https://example.com/…">`
+planted in the footer turned **six** checks red across two runners — the file-level one naming
+`index.html:490 img[src]`, the request-level ones listing `planted-pixel.png` among the loads —
+while all nine `<a href>` navigations stayed permitted. Narrowed, not weakened, and not blind.
+
+**6 — The snap outcome is what was ruled.** Zero page-level snap declarations in the shipped set;
+exactly one snap container remains — §4's track (`x proximity`, sheets start-aligned, `none` under
+reduced motion), which is F-B3's mechanism and was ruled to stay. Harness agrees: 4 snap areas,
+all sheets, 0 sections declaring an align. **No orphan assertion**: A1–A11 are each dispositioned
+by name in `verify-shell.mjs`'s §7.1 header and the block builds that inventory (A1 inverted so a
+re-introduction goes red; A2/A8/A9 kept; A3/A4/A10/A11 re-based; A5 re-scoped; A6/A7 retired). The
+sweep's keyboard/find/zoom checks were re-titled, not deleted — `snapType` survives as recorded
+evidence, asserted on nothing. `.section--no-snap` is gone from the markup, class and comment both.
+
+**7 — §2 fidelity unchanged.** 12/12 corpus lines byte-clean, none truncated, padded or re-wrapped,
+and **12/12 byte-clean on the reduced-motion path too**. The corpus file is unmodified — `git
+status` clean, last touched by a founder commit (`025842c`). A-001 holds.
+
+**8 — §4 inside both budgets, recounted here** from the shipped markup under the copy file's own
+convention: sheet 1 **44** (12/11/14/7) · sheet 2 **42** (8/11/11/12) · sheet 3 **44** (10/11/10/13)
+· sheet 4 **44** (9/10/10/15) — all inside 45, sheets 1 and 4 reproducing HO-034's per-row figures
+exactly. Track runs 163.03→636.36 in a 700px viewport under the 48px bar; dead strip **0.0px**.
+
+**9 — Cross-engine on all three touched surfaces, labelled per engine.**
+- **§1 formation.** *Blink (harness):* hub centre − axis **0.0px** at 1280. *WebKit (measured off
+  the pixels of `qa-webkit-hero-dark.png`):* the hub is the band's only rust-bordered box, x
+  669→730, **centre 699.5 against the render axis 700.0 — delta −0.5px**, one raster row of
+  antialiasing. The ruling holds in the engine that could have broken it.
+- **Footer.** *Blink (harness):* four blocks at 128 on the rail at 128, `start`, 0 lockups.
+  *WebKit (rendered and read, both themes):* four blocks on one rail, six receipts in order on one
+  line, contact link on its own line, no email visible.
+- **§4 track.** *Blink (harness):* sheet 1 on the rail at `scrollLeft` 0, sheet 4 on the rail-end
+  fully scrolled, dead strip 0.0px, ordinals self-verifying, gauge asserted as declarations.
+  *WebKit (`qa-webkit-s04-track.png`):* **sheet 2 runs off the physical frame edge with no bare
+  ground before it** — the 128px dead strip the founder judged is visibly gone — `SHEET 1 OF 4`
+  renders on the meta line, the mechanism mark seats inside its card, and F-B4's rewritten
+  trade-off row ships as written. The existing WebKit §4 checks are green in both themes.
+
+**10 — Reduced motion and no-JS still complete.** Reduced motion: complete content in every
+section, nothing animating, transcript byte-clean, §4's snap off with content identical, §5's
+values exact and immediate. No-JS: *"all six sections byte-identical to the motion path."*
+Contrast re-measured in **both** themes (A-006) — body 14.37:1 dark / 12.15:1 light, lowest label
+5.16:1 dark / 5.13:1 light.
+
+**Scope limit, restated rather than inherited:** the gauge's **visible** thumb is observable in
+neither render path on this machine (headless Chrome runs `--hide-scrollbars`; QuickLook
+composites without scrollbars). Asserted as computed style only; the visible rust rail belongs to
+the founder's headed pass. HO-035's and HO-036's limit, still true.
+
+**Observations for PM:**
+- **OBS-017** — `footer-copy.md` §3 says *"Labels ship lowercase as the seed writes them, `VERIFY`
+  uppercase as the seed writes it."* The build renders all six receipts uppercase by transform, so
+  the distinction that sentence draws is invisible to a reader. Nothing fails — source strings are
+  byte-equal and the casing matches every other mono label on the page — but HO-036 flagged this as
+  a one-line change *if* Content meant it as a rendering instruction, and the copy file still reads
+  that way. PM rules: amend the sentence or fork the transform. Not a launch blocker either way.
+- **`muster-requests-lint.sh` is red on the active-line budget** (382 of 300) with all four
+  fix-round handoffs legitimately in review and none sweepable by their producer. PM's next step
+  reviews HO-034 through HO-037 and sweeps them to Resolved, which clears it. Stated rather than
+  left for PM to rediscover.
+
+**Revision log:**
+- 2026-07-30: Self-review caught the first chip-href check using an exact `class="chip"` selector
+  the page has not carried since the emphasis variant landed. It failed rather than passing
+  silently — the behaviour it was written for — but a check that finds its subject by a brittle
+  selector is one edit from blind, so it now matches the class prefix. Re-run before filing.
+- 2026-07-30: The first cross-engine attempt located the bus-bar by scanning for the widest inked
+  row. The dark theme's grain puts stray inked pixels across the full width, so the scan returned a
+  1400px "row" that was texture, not the bar. The method was discarded rather than reported — the
+  hub's accent pixels are unambiguous and are what §9 measures. No number from it appears above.
+- 2026-07-30: Open question listed rather than resolved here — OBS-017.
+
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
 
