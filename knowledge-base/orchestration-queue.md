@@ -49,18 +49,14 @@ THIS SITE metrics remain dashes until the founder supplies a snapshot (seed rule
 **The eight role names** are settled and need no ruling — PM · Developer · UI/UX · QA · Content ·
 Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 
-- [2026-07-29] [PM]: **Gate B, item 1 — does the footer ship the seed's copy as written?** The footer
-  currently renders a shell placeholder and cannot ship (DEC-054, hard launch blocker). The seed
-  specifies the content in full, so no design question is open — but its "8 agents, 1 operator" line
-  collides with item 2.
-- [2026-07-29] [PM]: **Gate B, item 2 — may the page say eight agents built it?** Measured: five roles
-  ran (pm 43 · developer 13 · ui-ux 9 · qa 7 · content 5 commits; marketing, legal and research never
-  invoked). §1's `8 AI agents · 1 operator` captions a diagram of eight role names and is defensible as
-  roster size; the seed's footer line states participation outright and is not true of this build.
-  Roster framing, true-participation framing, or both stated separately? PM recommends keeping §1's
-  caption and rewriting the footer line. See DEC-054.
-- [2026-07-29] [PM]: **Gate B, item 3 — the three phone checks**, in the Next Step block below. Two are
-  taste; the §2 playback one closes a hard launch blocker no harness on this machine can reach.
+- [2026-07-30] [PM]: **The re-gate is live — one thing is asked, and it is the three phone checks.**
+  All six Gate B findings are fixed, reviewed and resolved; the packet is at the bottom of
+  `wave-review.md`. The §2 playback watch closes a hard launch blocker no harness on this machine can
+  reach. Two answers are also flagged for argument rather than approval: §4's track keeps its own
+  horizontal snap, and §4 on the phone got *longer*, not shorter. See DEC-058 and the Next Step halt
+  block below.
+
+<!-- Resolved 2026-07-30 — Gate B items 1 and 2 (footer copy, "8 agents") are consumed: the footer ships real copy naming five roles, no email; §1's caption stays as the roster label. DEC-056 answered them, HO-034/HO-036 built them, and PM re-derived the participation from `git log` at the review. Item 3, the phone checks, carries forward to the re-gate above. -->
 
 <!-- Resolved 2026-07-27 — Formation: hub is PM, bus-bar carries the seven specialists. Founder ruling, Gate A item 4. -->
 <!-- Resolved 2026-07-28 — Gate A COMPLETE, all four items. Headline: B amended (struck `a human`, rust `an AI`, plain `team.`). §4: four re-selected decisions, plain language (DEC-043, DEC-044). §1: sparse hero, all Bodh out (DEC-045, DEC-046). §3: bare-Claude contrast, closed at 90/90 (DEC-047). §5: cost row in (DEC-048). Fix round routed at the gate by the interactive PM (DEC-049) — the steps below ARE the verdict's consumption. -->
@@ -77,45 +73,72 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-29 PM: Review the fix round and promote the re-gate
+### 2026-07-30 GATE B RE-GATE — the founder's phone is the only instrument left
 
 ```
-Role: pm
-Model: claude-opus-5
+Role: halt
 
-**Task:** Review HO-034 through HO-037, then write the Gate B re-gate packet and promote its halt.
+**The sprint stops here for you.** Every Gate B finding (F-B1 through F-B6) is fixed, reviewed and
+resolved, and all three runners are green on the shipped tree — re-run cold at the review, not read
+off a handoff: `scripts/test.sh` GREEN both engines (282/282 + 27/27), the independent audit exit 0
+at 108/108, the full-page sweep exit 0 at 42/42.
 
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-034 through HO-037
-- `knowledge-base/wave-review.md` — the Gate B verdict these fixes answer
+**What to do:**
 
-**Deliverable:** review verdicts on HO-034 through HO-037; the re-gate packet appended to
-`wave-review.md`; the `Role: halt` re-gate block written into `## Next Step`.
+1. Read the **RE-GATE** section at the bottom of `knowledge-base/wave-review.md` — one line per
+   finding, then your three checks. It is short on purpose.
+2. Open `index.html` at 1280 or wider, dark theme, and scroll it once end to end.
+3. **Then take it to your iPhone in Safari, with the toolbars showing** — this is the ask:
+   - **§2's full 48-second playback.** Both layers must stay on screen for the whole chain. This is
+     a hard launch blocker and no harness on this machine can reach it. A screenshot of the end
+     state does not close it; the guarantee is about *during*.
+   - **Find on Page** for `scarcest` or `commit-days` — does the match land on screen?
+   - **Scroll feel** — page snapping is gone, so this is just "does it scroll like a page." Flick
+     §4 sideways too; its track is the one thing that still snaps.
+4. Two answers are flagged for argument rather than approval, both marked ↯ in the packet: §4's
+   track keeps its own horizontal snap (one declaration if you meant "remove entirely" to cover it),
+   and §4 on the phone got **longer** — 3042px at 375 against the 2957 you judged — because every
+   shrinking alternative hides content. Say so if you disagree.
 
-**Acceptance criteria:**
-- Re-run all three runners yourself; a summary is not evidence
-- Look at renders of every state the fix round changed — the alignment at 375 and 1280, the §4
-  affordance, the footer, the snap outcome — against the founder's F-B findings, not just the specs
-- Confirm the participation line is true (five roles), the overnight call respected the guardrail
-  (mechanism, never wall-clock), and no email ships
-- The re-gate packet is short: what changed per finding, then the three deferred phone checks —
-  §2's full 48 s playback with toolbars (hard launch blocker), find-in-page, and snap feel only if
-  snapping survived. Nothing else needs founder attention
-- The re-gate halt block tells the founder to write the verdict in `wave-review.md` and run
-  `muster/scripts/muster-sprint-resume.sh`
+**Then write your verdict** in `wave-review.md` under **"## Re-gate verdict — write here"** —
+`APPROVE`, or a bug list — and run:
 
-**On completion:** Write the packet, promote the halt. Run the Pre-Handoff Self-Review Checklist.
+    bash muster/scripts/muster-sprint-resume.sh
+
+Resume's PM reads the verdict, inserts a fix step per bug (or promotes the next wave), and the loop
+carries on without you.
 ```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-_None — the PM review step above is the sprint's last queued step; it promotes the Gate B re-gate._
+_None — the re-gate halt above is the sprint's last queued step. What follows is whatever the
+founder's verdict routes: a fix step per bug, or the next wave. Two carried one-line spec amendments
+(DEC-058) ride along with it: `footer-copy.md` §3's lowercase-labels sentence (Content) and
+`section-01-hero.md`'s two chip clauses plus the sketch's class name (UI/UX)._
 
 
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-30 — Step: PM fix-round review and the Gate B re-gate (DEC-058). **All four handoffs
+  accepted with no revision**, and the acceptance is re-derived rather than read: all three runners
+  re-run cold by PM on the shipped tree (`scripts/test.sh` GREEN both engines 282/282 + 27/27, audit
+  exit 0 at 108/108, sweep exit 0 at 42/42), every changed state rendered and looked at — the
+  formation at 1280/1440/375, §4's cut in Blink *and* WebKit, the footer in both engines, the phone
+  stack — and the alignment re-measured on the shipped build rather than on the proposal (hub centre
+  − axis **0.0px**, one rail number per width). **Two violations planted by PM and watched go red**,
+  tree reverted clean: a one-word drift in the footer's team line turned exactly one check red
+  printing `team line equal: false`, and zeroing `--track-bleed` turned two red printing *"ground
+  between the track's end and the screen: 128px"* — the founder's judged dead strip, reproduced by
+  the harness as a measurement rather than a claim. Participation re-derived from `git log` (pm 49 ·
+  developer 14 · ui-ux 10 · qa 8 · content 6 · marketing/legal/research 0), the overnight fact
+  confirmed as mechanism with no wall-clock anywhere in the shipped set, and no email in any shipped
+  file. **DEC-058 rules OBS-016 and OBS-017 together**: both are specs describing a build that moved
+  — the page is right, the files are amended, neither is a launch blocker. `muster-requests-lint.sh`
+  back to green (360 active lines to 6). **The re-gate is live: the founder's phone is the only
+  instrument left, and one of its three checks closes a hard launch blocker.**
 
 - 2026-07-30 — Step: QA scoped re-run on the fix round (HO-037). **Every acceptance criterion
   passes and nothing adjacent broke** — all three runners re-run here (suite GREEN both engines
@@ -219,17 +242,4 @@ _None — the PM review step above is the sprint's last queued step; it promotes
   load-bearing assertion planted and watched go red. **Awaiting PM review at the build-review step;
   OBS-011 (a stale dash count in `section-05-copy.md`'s R4 prose) and OBS-012 (the footer still
   carries a shell placeholder and no sprint step owns footer copy) are PM's to rule.**
-
-- 2026-07-29 — Step: Developer §3 and §4 (HO-027). §3 reads as one passage — kicker and paragraph
-  byte-equal to the copy file, zero numerals, the 64ch column measured — and its sentence-boundary
-  wrap is asserted as a rule rather than a line count. §4 ships DEC-044's four decisions verbatim
-  in order on the Gate A treatment, in HO-032's paged track: all four sheets equalised at 473.33px,
-  the 360.0px peek reproduced, the mechanism mark 2px at a token-read 12.00px seat with zero rust
-  text, and the track's bottom edge inside a 700px screen under the sticky bar. Contrast measured
-  in both themes at the spec's own figures (13.23/13.64 ink, 5.16/5.76 muted). `scripts/test.sh`
-  GREEN both engines (**230/230 + 21/21**); the audit exits zero, 107/107, twice. Six assertions
-  planted and watched go red. **Awaiting PM review at the build-review step; OBS-009 asks PM to
-  rule one clause of `section-04-decisions.md` §12.16 — with the track's proximity snap on, a
-  `scrollIntoView()` on off-canvas content lands the match part-visible, and no declaration in the
-  section's ruling overrides that.**
 

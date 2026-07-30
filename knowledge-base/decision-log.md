@@ -1095,5 +1095,66 @@ packet).
 
 ---
 
+### DEC-058 — Two durable specs describe a build that has moved; the build is right and the specs are amended (2026-07-30)
+
+**Both are spec-versus-build drifts surfaced by the fix round's own authors rather than by a check.
+Neither changes a pixel. Ruled together because the disposition is the same: the shipped page is
+correct, and the durable file that describes it is the thing that is wrong.**
+
+**Ruling 1 — the footer's receipts render uppercase, and `footer-copy.md` §3 is amended to say so
+(OBS-017).** The sentence reads *"Labels ship lowercase as the seed writes them"*; the page renders
+all six receipts tracked uppercase by transform, so the distinction the sentence draws is invisible
+to a reader. The **rendering stays**: every mono label on this page is uppercase by the same
+transform — the eyebrow, the stencil tags, §4's row labels, the remnant keys — and forking
+`--text-micro` for six words would buy a lowercase footer row that matches nothing else on the page.
+What the sentence is actually stating is a **source-string** convention, and it is true of the source
+strings, which are byte-equal to the copy file and are what a reader copies. It gains one clause
+saying which of the two it means. Content owns the file; the amendment is one line.
+
+**Ruling 2 — `section-01-hero.md`'s chip clauses are amended to the production href (OBS-016).** The
+markup sketch (§6.1) and assertion 9 both still specify a same-origin relative `VERIFY.md` href,
+which F-B6 superseded at Gate B (DEC-056): the chip ships
+`https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md`, and the harness asserts it
+byte-equal to the footer's VERIFY receipt so the two cannot drift apart. The spec is wrong about the
+build, not the reverse — a relative href would serve raw markdown on a static host, which is the
+defect F-B6 was raised to fix. Both clauses take the blob URL; the A-004 rationale stays as written,
+because an href click is user navigation either way and no runtime request is added. While in there,
+the sketch's class name is corrected to the shipped `chip--emphasis`. UI/UX owns the file.
+
+**Why neither is a launch blocker**: nothing a reader meets is affected, and both files' *shipped*
+consequences are already asserted by the harness. They are carried, named, in the re-gate packet's
+standing fix list so they land in whichever step follows the founder's verdict rather than being
+rediscovered.
+
+**Ruling 3 — `copy-rules.md`'s R8 and R9 had drifted off the shipped page, and PM fixed them in
+place.** Found while checking the footer against the rules that govern it, not filed by anyone. R8's
+✅ example still blessed *"by Muster's AI team — 8 agents, 1 operator"* — the exact phrasing the
+founder superseded for the footer — so a Content session reading the rule would have been pointed
+back at the string this sprint just removed. It now carries the shipped line and the principle behind
+it: a team claim states participation, not roster size, wherever a reader could take it as a claim
+about who built the thing in front of them; roster size is sayable only as a label on the roster
+itself, which is what §1's caption is. R9 read *"the `curl` plus one GitHub link,"* which is now
+literally false of a page carrying seven footer links. The rule's subject was always the single
+**ask**, so it is restated that way, with provenance links named as explicitly out of scope: they let
+a skeptic check the page, which is the opposite of an invitation to act. PM owns
+`agent-skills/`, so this is fixed rather than routed — the same disposition A-007's stale motion
+count got at Gate B.
+
+**Also checked and cleared, since the footer departs from the seed**: the shipped receipt row carries
+six links where the seed's footer spec names five. The sixth (the framework repo) is founder-supplied
+— DEC-056 answer 1 names both URLs and says they feed the footer links — so it is authorized source,
+not Content inflating a founder-authored passage. Recorded because "the seed wins" is the standing
+tie-break, and a reader comparing the two would otherwise find an unexplained extra link.
+
+**Impact**: content (ruling 1's one-line amendment), ui-ux (ruling 2's two clauses plus the class
+name), developer (none — the build is correct as shipped), qa (none — no assertion changes), pm
+(ruling 3, done in this session).
+
+**Touched**: `agent-skills/content/copy-rules.md` (R8, R9), `agent-requests.md` (HO-034 through
+HO-037 reviewed and resolved), `wave-review.md` (re-gate packet), `orchestration-queue.md`,
+`current-sprint.md`, `decision-log.md`.
+
+---
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

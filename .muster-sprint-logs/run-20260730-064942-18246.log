@@ -104,3 +104,118 @@
   🧪 bash   git status --short; echo "--- gitignore check on artifacts ---"; git check-ignore -v tests/artifacts/qa-webkit-s04-track
   ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
   🧪 bash   git add knowledge-base/agent-requests.md knowledge-base/orchestration-queue.md .muster-sprint-logs/ && git commit -q -F 
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "LINT_EXIT=$?"; echo "--- queue lint ---"; bash muster/scri
+  💬 **QA scoped re-run complete (HO-037). Every acceptance criterion passes; nothing adjacent broke.** **All three runners, re-run here on the shipped tree:** `scripts/test.sh` exit 0, GREEN both engines 
+    📖 ×21 · ✏️  ×5 · 🧪 ×56 · ⚠️  ×4
+  ✓ 83 turns · $6.44 · peak ctx 154k/1M 15% · out 48k  (success)
+  ✓ [32;1mQA[0m · [1m58m 18s[0m · advanced → 2026-07-29 PM: Review the fix round and promote the re-gate (PM) · handoff HO-037 filed ✓
+    run so far: 58m 18s · $6.44 · 1 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 2
+▶ [35;1mPM[0m · 2026-07-29 PM: Review the fix round and promote the re-gate  [2m[claude-opus-5][0m
+  ⚙  session start
+  💬 I'll start with the required first tool call.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/.populated
+  💬 `onboarded_at` is null and `agents.pm` is a timestamp → greenfield ongoing. Running session-start housekeeping.
+  🧪 bash   bash muster/scripts/muster-housekeeping.sh
+  🧪 bash   echo "${MUSTER_ROLE:-UNSET}"
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Binding to PM for this session.
+  🧪 bash   bash muster/scripts/muster-bind.sh pm auto
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/.claude/agents/pm.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/muster/team/pm/CLAUDE.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-context/pm.md
+  🧪 bash   wc -l knowledge-base/agent-requests.md knowledge-base/wave-review.md knowledge-base/decision-log.md knowledge-base/curre
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  🧪 bash   git log --oneline -3 && git status --porcelain | head -20
+  💬 Running all three runners now, foreground and blocking.
+  🧪 bash   bash scripts/test.sh 2>&1 | tail -40; echo "=== test.sh exit: ${PIPESTATUS[0]} ==="
+  🧪 bash   bash scripts/test.sh > /tmp/pm-test.log 2>&1; echo "EXIT=$?"; grep -E "([0-9]+/[0-9]+)" /tmp/pm-test.log | tail -25
+  🧪 bash   tail -30 /tmp/pm-test.log; echo "--- raw log ---"; ls -t .test-logs/*.log | head -1
+  🧪 bash   grep -nE "PASS|FAIL|[0-9]+ */ *[0-9]+|[0-9]+/[0-9]+" .test-logs/run-20260730-075557.log | tail -20
+  🧪 bash   grep -nE "^[0-9]+/[0-9]+ checks passed|checks passed|GREEN|RED" .test-logs/run-20260730-075557.log | tail -20
+  🧪 bash   node tests/qa-independent-audit.mjs > /tmp/pm-audit.log 2>&1; echo "AUDIT EXIT=$?"; tail -5 /tmp/pm-audit.log; echo "===
+  🧪 bash   ls tests/ tools/ scripts/ 2>&1 | head -60
+  🧪 bash   ls tests/lib/ && ls tests/artifacts/ | head -30 && sed -n '1,60p' tests/README.md
+  🧪 bash   ls -lt tests/artifacts/*.png | head -40
+  🧪 bash   ls -lt tests/artifacts/*.png | sed -n '40,80p'
+  🧪 bash   grep -n "^export\|^async function\|^function" tests/lib/cdp.mjs | head -40
+  🧪 bash   sed -n 19,60p tests/lib/cdp.mjs; echo ---; sed -n 193,260p tests/lib/cdp.mjs
+  🧪 bash   sed -n 260,340p tests/lib/cdp.mjs
+  📝 write  /tmp/pm-regate-look.mjs
+  🧪 bash   grep -n "newPage\|close()" tests/lib/cdp.mjs | head -20; echo ---; sed -n 97,192p tests/lib/cdp.mjs | grep -n "return\|n
+  🧪 bash   sed -n 60,96p tests/lib/cdp.mjs
+  ✏️  edit   /tmp/pm-regate-look.mjs
+  🧪 bash   node /tmp/pm-regate-look.mjs 2>&1 | tail -120
+  🧪 bash   node /tmp/pm-regate-look.mjs 2>/dev/null | head -70
+  🧪 bash   echo "── commits by role subject (this branch, since main divergence) ──" && git log main..HEAD --format='%s' | sed -E '
+  🧪 bash   echo "── shipped set ──" && ls index.html styles/*.css scripts/*.js 2>/dev/null && echo "── email / mailto anywhere in s
+  🧪 bash   grep -n "doesn't need me present\|waits only at gates\|Questions between roles travel as files" index.html knowledge-bas
+  🧪 bash   grep -n "R7\|first person\|first-person" knowledge-base/agent-skills/content/copy-rules.md | head -20
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  🧪 bash   sed -n '1,60p' knowledge-base/agent-skills/content/copy-rules.md
+  📖 read   /tmp/pm-renders-1280-hero.png
+  📖 read   /tmp/pm-renders-1280-s04.png
+  📖 read   /tmp/pm-renders-1280-footer.png
+  🧪 bash   grep -n -B4 -A6 "Labels ship lowercase" knowledge-base/design-specs/web/footer-copy.md
+  🧪 bash   sed -n '236,240p;417,421p' knowledge-base/design-specs/web/section-01-hero.md; echo "── what ships ──"; grep -n 'class="
+  📖 read   /tmp/pm-renders-375-hero.png
+  📖 read   /tmp/pm-renders-375-footer.png
+  📝 write  /tmp/pm-s04-phone.mjs
+  🧪 bash   node /tmp/pm-s04-phone.mjs 2>&1 | tail -30
+  📖 read   /tmp/pm-renders-375-s04.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/qa-webkit-s04-track.png
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/tests/artifacts/qa-webkit-footer-dark.png
+  🧪 bash   grep -n "footer-copy\|pagefoot\|footer" tests/verify-shell.mjs tests/qa-fullpage-sweep.mjs | head -25
+  🧪 bash   cp index.html /tmp/index.html.bak && sed -i '' "s/PM, Developer, UI\/UX, QA, and Content ran this build/PM, Developer, U
+  🧪 bash   cp /tmp/index.html.bak index.html && git status --porcelain index.html && echo "index.html restored clean" && git diff -
+  🧪 bash   grep -n "track-bleed" styles/*.css | head
+  🧪 bash   cp styles/sections.css /tmp/sections.css.bak && sed -i '' '525s/.*/ --track-bleed: 0px;/' styles/sections.css && sed -n 
+  🧪 bash   cp /tmp/sections.css.bak styles/sections.css && git status --porcelain styles/ index.html && echo "shipped tree restored
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh; echo "LINT EXIT=$?"; echo "── last DEC ──"; grep -n "^### DEC-" knowledge-b
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  💬 All three runners green and two independent plants confirmed. Now filing the review.
+  📝 write  /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   bash muster/scripts/muster-requests-lint.sh; echo "LINT EXIT=$?"
+  💬 Now the DEC-058 rulings for the two open observations.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/wave-review.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Now the Next Step halt block and the Done entry.
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  🧪 bash   ls muster/scripts/ | grep -i lint; echo ---; bash muster/scripts/muster-queue-lint.sh 2>&1 | tail -20; echo "QUEUE LINT 
+  🧪 bash   awk '/^## Done/,0' knowledge-base/orchestration-queue.md | grep -c "^- 2026-"
+  🧪 bash   awk '/^## Done/,0' knowledge-base/orchestration-queue.md | grep -n "^- 2026-" | tail -3
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/orchestration-queue.md
+  💬 Now the founder-facing notice and the sprint board.
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/founder-notices.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/founder-notices.md
+  🧪 bash   grep -n "HO-034\|HO-035\|HO-036\|HO-037\|Gate B\|re-gate\|Status" knowledge-base/current-sprint.md | head -30
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  📖 read   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/current-sprint.md
+  🧪 bash   grep -n "Pre-Handoff Self-Review" muster/system-guide.md | head
+  🧪 bash   sed -n '448,500p' muster/system-guide.md
+  🧪 bash   ls -1 muster/scripts/muster-sprint-resume.sh && grep -n "## Re-gate verdict — write here" knowledge-base/wave-review.md 
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -n "A-00[1-9]" knowledge-base/foundational-assumptions.md | head -12
+  🧪 bash   sed -n '55,75p;124,140p' knowledge-base/foundational-assumptions.md
+  🧪 bash   grep -n -A18 -i "^#*.*footer" knowledge-base/product-spec-seed.md | head -40
+  💬 The seed specifies five footer links; the page ships six. Checking whether that's authorized.
+  🧪 bash   sed -n '109,124p' knowledge-base/agent-skills/content/copy-rules.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-skills/content/copy-rules.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/decision-log.md
+  ✏️  edit   /Users/kanwarsandhu/Desktop/TA-muster-ai-site-sprint-auto-20260725-163930/knowledge-base/agent-requests.md
+  🧪 bash   grep -rn "copy-rules\|footer-copy" tests/*.mjs | head
+  💬 My edits touched a file the harness parses. Re-running all three runners as a final gate.
+  🧪 bash   bash scripts/test.sh > /tmp/pm-final.log 2>&1; echo "SUITE EXIT=$?"; grep -E "checks passed|GREEN|RED" .test-logs/$(ls -
+  ⚠️  tool returned an error
+  🧪 bash   node tests/qa-fullpage-sweep.mjs > /tmp/pm-sweep2.log 2>&1; echo "SWEEP EXIT=$?"; tail -1 /tmp/pm-sweep2.log
+  🧪 bash   git status --porcelain
+  🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the page's last open question is a phone, not a pixel Gate B's four fix-rou

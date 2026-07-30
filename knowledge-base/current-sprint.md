@@ -36,6 +36,14 @@ bare-Claude contrast, closed at 90/90; §5 takes the cost row (`$147`'s only hom
 written. The fix round was routed at the gate by the interactive PM — Wave 2 now opens with Content
 HO-031 then UI/UX HO-032 before any build.
 
+**Gate B's verdict is consumed and the page is re-gated (DEC-056–058).** All six findings shipped:
+one alignment system with the formation on the page's real axis, section snapping removed, §4's cut
+moved to the physical screen edge with `SHEET n OF 4` ordinals, decision 1's trade-off restated as
+the file-based mechanism, the operator-absence fact carried as mechanism in decision 4, and the
+footer's placeholder replaced by real copy naming the five roles that ran and the three that did not.
+**The sprint's one remaining ask is the founder's phone** — §2's full 48-second playback with
+toolbars, the last hard launch blocker no harness on this machine can reach.
+
 **Everything else never reaches the founder.** Spec conformance, contrast, cross-engine parity, zero
 network requests, reduced-motion completeness and corpus fidelity are all machine-verifiable (DEC-009).
 

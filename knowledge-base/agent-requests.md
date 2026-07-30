@@ -10,364 +10,64 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-### 2026-07-29 HO-034 — Gate B fix round: footer strings, §4's two amended rows, the overnight call
-**Type:** handoff
-**Producer:** content
-**Deliverable:** `knowledge-base/design-specs/web/footer-copy.md` (new) · amended
-`knowledge-base/design-specs/web/section-04-copy.md` · `VERIFY.md` consistency edit · two
-verdict-routed prose fixes (`section-05-copy.md`, `section-06-copy.md`)
-**Status:** in-review
-**Reviewers:**
-- [ ] PM — pending
-
-**What ships, per finding:**
-
-- **Footer (F-B6 + founder answers, DEC-056)**: `footer-copy.md` carries every string and every URL.
-  The team line keeps the seed's construction, amended to the measured truth: *"Specced, written,
-  and reviewed by Muster's AI team — 5 of 8 agents, 1 operator. PM, Developer, UI/UX, QA, and
-  Content ran this build; Marketing, Legal, and Research were never invoked."* (30 words, ≤35
-  ceiling). Naming the three that did not run is deliberate: it makes the count auditable role by
-  role against the receipts row one line below, and candor about limits is the brand. The
-  authorship line is seed-verbatim (14 words); **no email string exists anywhere in the file** —
-  the GitHub profile link (`github.com/thinkArhant`) is the contact path. Six receipt links with
-  exact founder-supplied URLs, all stated as strings, nothing fetched (R12); the VERIFY blob URL is
-  byte-equal to the chip target HO-036 builds.
-- **F-B4**: decision 1's trade-off row is now *"Questions between roles travel as files — written,
-  routed, auditable — and each costs a session."* The mechanism is stated, not denied; the cost
-  survives (each exchange spends a session). 14 words; sheet total **44** of 45, per-row
-  12/11/14/7 — script-recounted under the file's stated convention.
-- **F-B5 — ruled IN, in decision 4's mechanism row**: *"The run doesn't need me present — it waits
-  only at gates, for a written verdict."* Why: decision 4's subject is attention, and
-  operator-absence is that decision's payoff stated as mechanism — near-verbatim the founder's own
-  claimable form (DEC-056), no "overnight," no hour span, no wall-clock anywhere (R2). The room was
-  paid inside the sheet (problem/trade-off trims recorded in the file's §6); sheet total **44** of
-  45, per-row 9/10/10/15. The dropped curation corollary ("gates carry *only* the judgment calls")
-  is named in §6 so the cut is visible.
-- **VERIFY.md** now states the five-role participation in the same terms as the footer line, and
-  keeps the roster-not-participation qualifier phrase the sweep asserts on.
-- **Verdict-routed prose fixes (Content-owned per the Gate B packet)**: `section-05-copy.md` §6's
-  R4 line now says four em-dashes (OBS-011 of HO-028); `section-06-copy.md`'s aside now matches
-  §1's ruled one-element interactive inventory (OBS-007 of HO-026).
-
-**Verification**: copy-rules matrix run on every touched file (verification statements updated
-in-file; banned-word/email/fictional-host greps clean). Full-page sweep re-run: **42/42, exit 0**.
-`scripts/test.sh`: **272/273 — one red, by design**: "§4 ships exactly the four decisions …
-verbatim" fails because the copy file now leads the page; HO-036 swaps the §4 strings and re-bases.
-Same spec-ahead-of-build state the previous fix round shipped in.
-
-**For HO-035 (UI/UX)**: `section-04-decisions.md:313`'s layout sketch still shows the old
-trade-off string ("Agents never talk …") — that file is yours and this round amends it anyway.
-The footer now exists as copy; it inherits your F-B1 alignment ruling.
-
-**Revision log:**
-- 2026-07-29: Self-review caught that the first VERIFY.md rewording would have broken
-  `qa-fullpage-sweep.mjs`'s string-asserted roster qualifier; rephrased to keep the asserted
-  phrase while adding the footer pointer, sweep re-run green.
-
-### 2026-07-29 HO-035 — Gate B fix round: the alignment system, snap removed, §4's affordance rebuilt
-**Type:** handoff
-**Producer:** ui-ux
-**Deliverable:** amended `knowledge-base/design-specs/web/page-shell.md` (§7.1 rewritten, §7.2 new)
-· `section-01-hero.md` (§6.1, §9, §13.7, §15) · `section-04-decisions.md` (§3, §5, §6.2, §8.1,
-§10, §12, §13, §14) · DEC-057 · rendered decision records `samples/gate-b-proposed.html` +
-`samples/gate-b-renders/` (before/after PNGs + measurement JSONs — never ship)
-**Status:** in-review
-**Reviewers:**
-- [ ] PM — pending
-
-**Every ruling was measured on the real page at 375 and 1280 (plus 1440/1600/320) before it was
-written, and re-measured on a rendered proposed state.** `before-report.json` /
-`after-report.json` carry the numbers; the PNGs show each state under test.
-
-- **F-B1 — one system: two edges and one axis** (`page-shell.md` §7.2). The founder's finding
-  reproduced exactly: every measured block on the page hangs on the rail (left 128 at 1280, 208
-  at 1440 — eyebrow, h1, caption, remnant, curl, §2 layers, §3, §5 cards, §6, tags, footer inner)
-  except the formation, whose intrinsic width (676.4px) put its hub on an orphan axis — 546.2
-  against the 720 shared by the headline block and THIS SITE strip at 1440. Ruling: **the
-  formation spans the container** (bus = plate row = container content width, plates
-  space-between) so the hub's center IS the page's axis — measured delta **0.0px at
-  1280/1440/1600** (`after-hero-*.png`). Exactly one axis-bound element may exist, and only
-  because its parent's edges are the rail and rail-end. Phone unchanged (ladder is rail-bound).
-  Harness rule stated as relationships, never pixels (hero §13.7, shell §7.2).
-- **F-B2 — removal wins the binary, on measurement.** Full section paging requires every section
-  to fit one snapport; four of six exceed the 553px phone fold (§1 1240 · §2 794.2 · §4 2957 ·
-  §5 1776.9) and §5 (1151.5px) exceeds even 700 at desktop — so paging needs `mandatory`
-  (unreachable oversized interiors, broken 200% zoom) or scripted scroll (banned and asserted
-  against). Removal costs zero content, zero layout. `--scroll-pad` stays. **Every assertion and
-  clause dispositioned by name** in §7.1's retirement inventory (A1 inverts, A2/A8/A9 keep,
-  A3/A4/A10/A11 re-base, A5 re-scopes, A6/A7 retire, `.section--no-snap` leaves the markup) with
-  the harness sites listed (`verify-shell.mjs` ~`:2953`, `qa-fullpage-sweep.mjs` ~`:386–470`).
-  DEC-040 amended not deleted; DEC-051's track clause amended in §8.1; DEC-053's two shipped
-  checks landed as the amended §7.1 A11 and §12.16 (closing the assignment from the Gate B
-  packet). **Scoping stated plainly**: the binary was ruled on section scrolling; §4's track
-  keeps its x snap as part of F-B3 (it is what makes the track rest composed instead of parked
-  mid-crop). If the founder reads "entirely" as the track too: one declaration, named fallback.
-- **F-B3 — three affordance channels in the section's own grammar, and the phone stack gains
-  orientation.** The judged cut's anatomy, measured: sheet 2 amputated at the container edge
-  with a 128px (1280) / 208px (1440) dead strip of bare ground before the screen edge. Ships:
-  (1) **the cut moves to the physical screen edge** — the track's scrollport spans the viewport
-  via a token-derived `--track-bleed`; sheet 1 rests on the rail at `scrollLeft` 0, sheet 4
-  fully-scrolled rests on the rail-end, document `scrollWidth` stays clean at every measured
-  width; (2) **`SHEET n OF 4` ordinal** on each sheet's meta line — real spec-sheet grammar,
-  `aria-hidden` (the `<ol>` announces position natively), numerals self-verifying against DOM
-  position (§12.18), width-independent; (3) **the gauge** — the track's scrollbar as a thin rust
-  rail (`scrollbar-width`/`scrollbar-color`), enhancement-only with degradation named. Zero JS,
-  zero new machinery. **Phone re-ruled: stacked stays** — every shrinking alternative measured
-  and disqualified in the spec (phone track: 650.8–679.7px sheets vs a 553 fold = two-axis
-  navigation; exclusive accordion: hides 12/16 rows from Safari find-in-page, a committed reader
-  path and a founder re-gate check, and demands taps DEC-043 bars; un-carding: 6.5% for a broken
-  motif). The stack's real defect was anonymity, not height: the ordinal gives extent and
-  progress at +28.5px/sheet — **3071px at 375, measured**, against 2957 judged.
-
-**Two traps found by measuring, recorded for the build:** (1) percentage-based bleed fails
-silently — padding `%` resolves against the containing block but `scroll-padding` `%` against
-the scrollport, and the mismatch let the track's own snap pull sheet 1 to the viewport edge on
-first layout (`--track-bleed` is token-derived for exactly this reason, §8.1); (2) the harness
-launches Chrome with `--hide-scrollbars`, so **no headless render can ever show the gauge** —
-§12.19 asserts computed style, and the visible thumb belongs to the headed cross-engine look.
-
-**Verification:** `scripts/test.sh` re-run on this tree — **272/273, the one red being
-HO-034's designed spec-ahead-of-build red** (§4 page fidelity awaits the build's string swap);
-no shipped file touched by this handoff. Cross-engine note: the rulings were measured in Blink;
-the gauge's WebKit rendering and the phone feel are named for the headed pass the build owes
-anyway, and the three deferred phone checks stay at the re-gate.
-
-**Apple-quality bar: would Apple ship this? — Yes.** The full-bleed track cut at the screen
-edge is Apple's own carousel construction; the formation on the page's true axis is the symmetry
-their hero compositions never miss; the ordinal is quiet document grammar instead of carousel
-furniture; and removing the page snap returns scrolling to the platform, which is the most
-Apple-like ruling of the three. The one honest hesitation — §4's phone length — is the content's
-size, and the alternatives all hide founder testimony; orientation was the premium fix available
-without hiding anything.
-
-**For HO-036 (Developer):** the work-list is §7.1's retirement inventory + §12.14/15/18/19's new
-assertions (each to be planted red per standing practice) + hero §13.7's amended formation
-assertion. The override CSS in `samples/gate-b-proposed.html` is the reference implementation of
-all three rulings — derived from the shipped page, byte-identical markup except the meta
-line/ordinal and the injected style block.
-
-**Revision log:**
-- 2026-07-29: Self-review durability pass stripped finding IDs and handoff IDs from all three
-  durable specs (rejected-alternative framing + DEC-057 citations instead). Self-review also
-  caught the first bleed prototype's rail miss (sheet 1 at viewport edge) before any spec text
-  was written — the scroll-padding percentage trap above; the shipped formula is the corrected,
-  re-measured one.
-
-### 2026-07-29 HO-036 — Gate B fix round built: the footer ships, the page stops snapping, §4 pages at the screen edge
-**Type:** handoff
-**Producer:** developer
-**Deliverable:** `index.html` · `styles/base.css`, `styles/chrome.css`, `styles/sections.css` ·
-`tests/verify-shell.mjs`, `tests/qa-fullpage-sweep.mjs`
-**Status:** in-review
-**Reviewers:**
-- [ ] PM — pending
-
-**All three runners green on the shipped tree, run here**: `scripts/test.sh` GREEN both engines
-(**282/282 + 27/27**), the independent audit exit 0 at **108/108**, the full-page sweep exit 0 at
-**42/42**. HO-034's designed spec-ahead-of-build red is closed — §4's strings now match the copy
-file. Cross-engine looked at, not assumed: WebKit renders of the formation, §4's track and the
-footer (QuickLook) against the Blink fullpage renders; both agree on all three rulings.
-
-**Per finding:**
-
-- **F-B6 + the footer (DEC-054/056)** — the placeholder is gone; the hard launch blocker is
-  closed, and the sweep's own placeholder report now reads *"none — the footer carries real
-  copy."* Team line and authorship line are byte-equal to `footer-copy.md`, the six receipts carry
-  its labels **and** its URLs in order, and the chip's `href` is now the blob URL and is asserted
-  **byte-equal to the VERIFY receipt** — the two drift the moment one is edited alone. The
-  contact link is the GitHub profile. **No email anywhere in the shipped set**, swept over every
-  shipped file rather than over the footer, because an address arriving in a comment or a
-  meta-description is what the footer checks would never see.
-- **The network guard, re-proven after the href change** — a fetching `<img src="https://…">`
-  planted into the footer turned five checks red naming `index.html:484 img[src]`, with all nine
-  `<a href>` navigations still permitted. The guard is narrowed, not weakened.
-- **F-B1, the alignment system** — the formation spans the container: bus = plate row = container
-  content width, plate 1 on the rail, plate 7 on the rail-end, **hub centre − axis = 0.0px** at
-  1280. Asserted as those relationships and never as an x. Reverting the diagram to
-  `fit-content` reproduces the founder's finding exactly — **delta −173.81px**, the orphan axis.
-- **F-B2, snap removed** — every one of §7.1's eleven assertions is dispositioned by name in the
-  harness, with the inventory written into the block header so a later reader sees which
-  inverted, which re-based and which retired. A1 now asserts the document scroller computes
-  `none` (re-introducing snap turns it and the stray sweep red). A3 re-bases to the landing
-  readers actually have and answers for **five** sections rather than four. **A11 re-bases to its
-  natural form and is the round's real gain**: a start-aligned landing is now exact for *every*
-  text leaf in *both* motion states (0 of 132/131/122/130), where it previously held only with
-  snapping off — the cost DEC-053 priced is gone rather than absorbed. A6 and A7 retire; the
-  `.section--no-snap` class and its comment left the markup with them.
-- **F-B3, §4's affordance** — the token-derived `--track-bleed` lands the cut on the physical
-  screen edge (**dead strip 0.0px**, against 128px on the judged build), sheet 1 rests on the rail
-  at `scrollLeft` 0, the fully-scrolled track rests sheet 4 on the rail-end, and the document
-  leaks no page-level x scroll. `SHEET n OF 4` ordinals are `aria-hidden` and **self-verifying** —
-  both numerals read from the DOM, never from the spec — and they survive the phone un-track at
-  all four widths. The gauge is asserted as declarations. §4's track keeps its x snap as ruled.
-- **§4's copy (HO-034)** — decision 1's trade-off and decision 4's problem, trade-off and
-  mechanism all swapped; the whole 16-value inventory is compared against the copy file.
-
-**Every new assertion was planted and watched go red** — three batches, tree restored and
-verified clean between each: the axis, the ordinal (drifted and re-ordered), the gauge, both
-halves of the bleed, the screen-edge cut, the phone no-bleed clause, the footer's four checks, the
-email guard, the fetching reference, A1, A2, A3, A4, A5 and A10.
-
-**Three harness defects found by planting, and fixed** — each printed a constant where a
-measurement belonged, which is OBS-015's shape:
-1. `scroll-snap-stop` printed the literal `"all normal"`, so planting `always` turned the check
-   red while its evidence still said every area was normal.
-2. The start-aligned landing check reported only one of the two alignments it tests, so a
-   centred-alignment failure showed four zeroes and no cause.
-3. The ordinal check printed only the ordinal's text, so a re-ordered meta line failed while
-   showing four matching strings.
-
-**One real defect the audit caught, not the author** — the new footer's six receipt links and the
-contact link missed the 44px coarse-pointer floor (13px and 20px tall). Fixed by joining the
-existing `.chip/.control/.link-block` hit-area rule and by lifting the contact link onto its own
-line as §6's link is — which is also what stops a 44px tap target overlapping the sentence's other
-lines. Audit back to 108/108.
-
-**Two build decisions, stated rather than buried:**
-1. **The receipts row renders tracked uppercase**, like every other mono label on the page
-   (eyebrow, stencil tags, remnant keys). The source strings are byte-equal to `footer-copy.md`,
-   the casing is transform-only, and what a reader copies is the label — the same construction
-   §4's labels and stamps already use. The alternative was to fork `--text-micro`'s transform for
-   six words; that seemed the worse trade. If Content reads §3's "labels ship lowercase" as a
-   *rendering* instruction rather than a source-string one, this is a one-line change.
-2. **The two footer sentences are `--text-body` full ink**, not muted micro. A-007 is explicit
-   that a paragraph meant to be read is `--ink`, and the scale has no smaller reading size; a
-   30-word muted micro sentence would have been a muted paragraph.
-
-**For QA's scoped re-run:** the retirement inventory is in `verify-shell.mjs`'s §7.1 block header,
-one line per old assertion. The gauge's visible thumb is observable in **neither** render path on
-this machine — headless Chrome runs with `--hide-scrollbars` and QuickLook composites without
-scrollbars — so it is asserted as computed style only, and the visible rail belongs to the
-founder's headed pass. That limit is HO-035's own and is restated here rather than quietly
-inherited.
-
-**Observations for PM:**
-- **OBS-016** — `section-01-hero.md` carries two clauses the founder's F-B6 ruling superseded: the
-  markup sketch at `:238` and assertion 9 at `:419` both still say the chip's `href` is a
-  same-origin relative `VERIFY.md`. The build follows DEC-056 and the harness asserts the blob
-  URL; the spec is UI/UX-owned, so this is flagged rather than edited.
-
-**Revision log:**
-- 2026-07-29: Self-review caught that the first footer draft put the contact link inline inside
-  the authorship sentence, which the independent audit then failed on the 44px floor — the fix
-  (own line, §6's pattern) is what shipped, and the audit found it before any handoff was written.
-
-### 2026-07-30 HO-037 — Gate B fix round, scoped re-run: nothing adjacent broke, and every load-bearing check was watched to fail
-**Type:** handoff
-**Producer:** qa
-**Deliverable:** this entry — per-criterion pass/fail with evidence · WebKit renders of the three
-touched surfaces (`tests/artifacts/qa-webkit-footer-{dark,light}.png`, `qa-webkit-hero-dark.png`,
-`qa-webkit-s04-track.png` — in the working tree, not in git: `tests/artifacts/` is gitignored by
-design, so re-render rather than expect them from a fresh clone)
-**Status:** in-review
-**Reviewers:**
-- [ ] PM — pending
-
-**Verdict: every acceptance criterion passes.** No shipped file was changed by this session — the
-tree is byte-identical to `38a00ea` at filing, `git status` confirmed clean after every plant.
-
-**1 — Three runners, re-run here.** `scripts/test.sh` exit 0, GREEN both engines (**282/282 +
-27/27**) · `qa-independent-audit.mjs` exit 0 (**108/108**) · `qa-fullpage-sweep.mjs` exit 0
-(**42/42**). Counts reproduce HO-036's exactly.
-
-**2 — Both alignment assertions watched to fail, one plant each, reverted.**
-- Formation axis: `.formation__diagram` back to `inline-size: fit-content` → exactly one check red,
-  *"§1 formation spans the container…"*, reporting **hub centre 466.19 vs axis 640, delta
-  −173.81px** — the founder's F-B1 finding reproduced to the hundredth of a pixel, so the check
-  measures what he saw rather than a proxy for it.
-- Footer inheritance: `.pagefoot__inner { text-align: center }` → exactly one check red, *"the
-  footer inherits the alignment system…"*, its detail naming all four blocks and printing
-  `(center)` where `(start)` belongs. The detail carries the measurement, not a constant — the
-  check class OBS-015 was about, behaving.
-
-**3 — The footer, against `footer-copy.md`, by a script that parses the copy file rather than
-retyping it. 13/13 pass.** Team line byte-equal (184 chars) · authorship byte-equal (83) · six
-receipts carrying the copy file's **labels and hrefs in its order** · contact link byte-equal ·
-**the §1 chip href byte-equal to the VERIFY receipt** (the drift HO-034 asked to be guarded does
-not exist) · **no email and no `mailto:` in any of the ten shipped files** — swept file-wide, so an
-address in a comment or meta-description would surface; zero hits, and `footer-copy.md` carries
-none either · copy-rules matrix clean (no banned coinage, no `muster.build`, no superlative, no
-`!`), **R7** no first person, **R1/R4/R5** the only numerals are `5`/`8`/`1`, words recounted at
-**30/35** and **14/14** · **R12/A-004** nine `<a href>` navigations, zero `rel`/`src`/`ping`.
-
-**4 — Participation re-derived from git, not read.** pm 49 · developer 14 · ui-ux 10 · qa 7 ·
-content 6; **marketing 0 · legal 0 · research 0**. "5 of 8 agents" and the three named as never
-invoked are true as written.
-
-**5 — The chip's href change re-proven inert.** A fetching `<img src="https://example.com/…">`
-planted in the footer turned **six** checks red across two runners — the file-level one naming
-`index.html:490 img[src]`, the request-level ones listing `planted-pixel.png` among the loads —
-while all nine `<a href>` navigations stayed permitted. Narrowed, not weakened, and not blind.
-
-**6 — The snap outcome is what was ruled.** Zero page-level snap declarations in the shipped set;
-exactly one snap container remains — §4's track (`x proximity`, sheets start-aligned, `none` under
-reduced motion), which is F-B3's mechanism and was ruled to stay. Harness agrees: 4 snap areas,
-all sheets, 0 sections declaring an align. **No orphan assertion**: A1–A11 are each dispositioned
-by name in `verify-shell.mjs`'s §7.1 header and the block builds that inventory (A1 inverted so a
-re-introduction goes red; A2/A8/A9 kept; A3/A4/A10/A11 re-based; A5 re-scoped; A6/A7 retired). The
-sweep's keyboard/find/zoom checks were re-titled, not deleted — `snapType` survives as recorded
-evidence, asserted on nothing. `.section--no-snap` is gone from the markup, class and comment both.
-
-**7 — §2 fidelity unchanged.** 12/12 corpus lines byte-clean, none truncated, padded or re-wrapped,
-and **12/12 byte-clean on the reduced-motion path too**. The corpus file is unmodified — `git
-status` clean, last touched by a founder commit (`025842c`). A-001 holds.
-
-**8 — §4 inside both budgets, recounted here** from the shipped markup under the copy file's own
-convention: sheet 1 **44** (12/11/14/7) · sheet 2 **42** (8/11/11/12) · sheet 3 **44** (10/11/10/13)
-· sheet 4 **44** (9/10/10/15) — all inside 45, sheets 1 and 4 reproducing HO-034's per-row figures
-exactly. Track runs 163.03→636.36 in a 700px viewport under the 48px bar; dead strip **0.0px**.
-
-**9 — Cross-engine on all three touched surfaces, labelled per engine.**
-- **§1 formation.** *Blink (harness):* hub centre − axis **0.0px** at 1280. *WebKit (measured off
-  the pixels of `qa-webkit-hero-dark.png`):* the hub is the band's only rust-bordered box, x
-  669→730, **centre 699.5 against the render axis 700.0 — delta −0.5px**, one raster row of
-  antialiasing. The ruling holds in the engine that could have broken it.
-- **Footer.** *Blink (harness):* four blocks at 128 on the rail at 128, `start`, 0 lockups.
-  *WebKit (rendered and read, both themes):* four blocks on one rail, six receipts in order on one
-  line, contact link on its own line, no email visible.
-- **§4 track.** *Blink (harness):* sheet 1 on the rail at `scrollLeft` 0, sheet 4 on the rail-end
-  fully scrolled, dead strip 0.0px, ordinals self-verifying, gauge asserted as declarations.
-  *WebKit (`qa-webkit-s04-track.png`):* **sheet 2 runs off the physical frame edge with no bare
-  ground before it** — the 128px dead strip the founder judged is visibly gone — `SHEET 1 OF 4`
-  renders on the meta line, the mechanism mark seats inside its card, and F-B4's rewritten
-  trade-off row ships as written. The existing WebKit §4 checks are green in both themes.
-
-**10 — Reduced motion and no-JS still complete.** Reduced motion: complete content in every
-section, nothing animating, transcript byte-clean, §4's snap off with content identical, §5's
-values exact and immediate. No-JS: *"all six sections byte-identical to the motion path."*
-Contrast re-measured in **both** themes (A-006) — body 14.37:1 dark / 12.15:1 light, lowest label
-5.16:1 dark / 5.13:1 light.
-
-**Scope limit, restated rather than inherited:** the gauge's **visible** thumb is observable in
-neither render path on this machine (headless Chrome runs `--hide-scrollbars`; QuickLook
-composites without scrollbars). Asserted as computed style only; the visible rust rail belongs to
-the founder's headed pass. HO-035's and HO-036's limit, still true.
-
-**Observations for PM:**
-- **OBS-017** — `footer-copy.md` §3 says *"Labels ship lowercase as the seed writes them, `VERIFY`
-  uppercase as the seed writes it."* The build renders all six receipts uppercase by transform, so
-  the distinction that sentence draws is invisible to a reader. Nothing fails — source strings are
-  byte-equal and the casing matches every other mono label on the page — but HO-036 flagged this as
-  a one-line change *if* Content meant it as a rendering instruction, and the copy file still reads
-  that way. PM rules: amend the sentence or fork the transform. Not a launch blocker either way.
-- **`muster-requests-lint.sh` is red on the active-line budget** (382 of 300) with all four
-  fix-round handoffs legitimately in review and none sweepable by their producer. PM's next step
-  reviews HO-034 through HO-037 and sweeps them to Resolved, which clears it. Stated rather than
-  left for PM to rediscover.
-
-**Revision log:**
-- 2026-07-30: Self-review caught the first chip-href check using an exact `class="chip"` selector
-  the page has not carried since the emphasis variant landed. It failed rather than passing
-  silently — the behaviour it was written for — but a check that finds its subject by a brittle
-  selector is one edit from blind, so it now matches the class prefix. Re-run before filing.
-- 2026-07-30: The first cross-engine attempt located the bus-bar by scanning for the widest inked
-  row. The dark theme's grain puts stray inked pixels across the full width, so the scan returned a
-  1400px "row" that was texture, not the bar. The method was discarded rather than reported — the
-  hub's accent pixels are unambiguous and are what §9 measures. No number from it appears above.
-- 2026-07-30: Open question listed rather than resolved here — OBS-017.
+_None — the Gate B fix round (HO-034 · HO-035 · HO-036 · HO-037) is reviewed and resolved below._
 
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
+
+- 2026-07-30 — HO-037 (QA): **accepted, no revision.** The value of this re-run is not its three green
+  counts — it is that **both alignment assertions were watched to fail on their own plant**, and the
+  formation one reproduces the founder's F-B1 finding to the hundredth of a pixel (−173.81px), so the
+  check measures what he saw rather than a proxy for it. The footer was verified by a script that parses
+  `footer-copy.md` instead of retyping its strings, participation was re-derived from `git log` rather
+  than read off the copy file it is meant to check, and the cross-engine result is labelled per engine
+  with WebKit's 0.5px antialiasing delta stated rather than rounded away. The discarded method in the
+  revision log — a widest-inked-row bus-bar scan defeated by the dark theme's grain — is disclosed with
+  the note that no number from it survives into the handoff; that is the standard. The active-line budget
+  it flagged is cleared by this review. OBS-017 ruled — see DEC-058.
+
+- 2026-07-30 — HO-036 (Developer): **accepted, no revision.** PM re-ran all three runners cold on the
+  shipped tree (suite GREEN both engines **282/282 + 27/27**, audit exit 0 at **108/108**, sweep exit 0 at
+  **42/42**) and then **planted two violations of its own** rather than reading the handoff's plant list.
+  A one-word drift into the footer's team line turned exactly one check red, naming the team line and
+  printing `team line equal: false` — the measurement, not a constant. Zeroing `--track-bleed` turned two
+  red and printed *"ground between the track's end and the screen: 128px"* — the founder's judged dead
+  strip, reproduced by the harness as a number. Both reverted, tree clean. The three harness defects the
+  step found by planting are each the OBS-015 shape (a constant where a measurement belongs), and it found
+  them in its own new code. The 44px coarse-pointer miss the audit caught rather than the author is
+  disclosed instead of folded in quietly. Two build decisions are stated rather than buried; the uppercase
+  receipts transform is ruled in DEC-058. OBS-016 ruled there too.
+
+- 2026-07-30 — HO-035 (UI/UX): **accepted, no revision.** Every ruling was measured before it was written,
+  and PM re-measured each on the **shipped** build rather than on the proposal: hub centre − axis **0.0px**
+  at 1280 *and* 1440, and the rail is one number for every block on the page (eyebrow, h1, formation and
+  curl all at 128 at 1280; all at 24 at 375, footer included). F-B2 is ruled on measurement, not taste —
+  paging fails because four of six sections exceed the 553px phone fold. **F-B3's phone half is the one
+  place this round does not do what the finding asked**: the founder said §4 stacked is far too long, and
+  the section got *longer* — PM measures **3042.1px at 375** against the 2957 he judged, the ordinal's
+  cost. (The 3071px in DEC-057 is the *proposed* state's figure, measured on
+  `samples/gate-b-proposed.html`; 3042.1 is the shipped build. Both stand — different artifacts —
+  noted so a later reader does not chase the 29px.) The handoff says so instead of smoothing it, and disqualifies every shrinking alternative on
+  measurement (the accordion hides 12 of 16 rows from the find-in-page the founder is about to test). That
+  is a defensible answer to a taste finding, and it goes to the re-gate labelled as one. The
+  scroll-padding-percentage trap found by prototyping is the class of thing that ships silently broken.
+
+- 2026-07-30 — HO-034 (Content): **accepted, no revision.** The footer line is the one string on this page
+  a skeptic can audit role by role, and it names the three roles that did **not** run rather than only the
+  five that did. PM re-derived the counts from `git log` on this branch — pm 49 · developer 14 · ui-ux 10 ·
+  qa 8 · content 6 · **marketing 0 · legal 0 · research 0** — and "5 of 8 agents, 1 operator" is true as
+  written. The email is gone from **every shipped file**, not only from the footer: swept file-wide for
+  addresses and `mailto:`, zero hits. F-B5 ships as mechanism with no wall-clock anywhere in the shipped
+  set (grepped for hour spans, "overnight", "through the night" — none), which is the founder's own
+  claimable form and R2's line. F-B4's rewritten trade-off states the file-based mechanism instead of
+  denying it, and PM read it on the rendered page rather than in the copy file. The first person in
+  decision 4's mechanism row is inside R7's two permitted places (§4's decisions are founder-supplied), so
+  it is not a violation. The self-caught VERIFY.md rewording that would have broken the sweep's asserted
+  roster qualifier is the standard. **One departure from the seed was checked rather than assumed**:
+  the receipts row carries six links where the seed's footer names five, and the sixth — the framework
+  repo — is founder-supplied in DEC-056's answer 1, so it is authorized source, not an addition. The
+  drift this review *did* find is in PM's own file, not Content's: `copy-rules.md` R8 still blessed the
+  superseded "8 agents, 1 operator" and R9 still said "one GitHub link" — both fixed in place, DEC-058.
 
 - 2026-07-29 — HO-030 (QA): **accepted, no revision.** The sweep is the instrument six criteria had no
   instrument for, and PM re-ran it cold — 42/42, exit 0 — rather than reading its summary. Its most
@@ -432,49 +132,3 @@ the founder's headed pass. HO-035's and HO-036's limit, still true.
   to replicate. Its self-caught roster-scope slip is the same defect the seed's footer line still
   carries, which is now a Gate B item. OBS-007 routed to the fix round; OBS-008 closed — §5's two
   `.instrument` cards keep that probe's subject.
-
-- 2026-07-28 — HO-032 (UI/UX): **accepted, no revision.** The sparse hero was recomposed with a real
-  design pass on the formation and a fold budget that is rendered rather than derived, every figure
-  re-rendered and reproduced before being relied on. §4's one-screen ruling is judged from three
-  candidates rendered with the shipping strings, and the two rejected are rejected on measurement
-  (2060.6px stacked, 1256.9px at 2×2, against 612.1px paged). The phone cost is stated as a cost rather
-  than smoothed. Both observations were DEC-046 cascade gaps in PM-owned files and are now fixed by PM:
-  `brand-guidelines.md` §4 and `foundational-assumptions.md` A-007 both carried the retired
-  three-live-elements count and the "eight plates" motif row.
-
-- 2026-07-28 — HO-031 (Content): **accepted, no revision.** All four copy files carry the Gate A verdict.
-  §1 is the settled headline with zero Bodh material; §3 is the closed 90/90 block byte-exact; §4 is
-  re-authored plain from DEC-044's four with every core trade-off intact and the two trimmed corollaries
-  named in the file so the cut is visible rather than silent; §5 takes the `$147` cost row. Counts
-  re-derived by PM at the §4 build review and reproduced exactly. OBS-001 is answered by HO-032 as a
-  design choice (a dash without its key asserts nothing), not an oversight.
-
-- 2026-07-27 — REQ-008 (Developer → PM): **ruled — the audit is repaired in two moves, in the order the
-  Developer recommended.** (1) `tests/lib/cdp.mjs`'s `send()` gains a timeout, and it lands in the
-  §1-and-§6 build step, which is already amending the harness: a harness that can hang forever cannot
-  report, and this converts a silent 20-minute stall into a named red check with a method on it. That is
-  worth doing on its own merits regardless of what is causing the spin. (2) The renderer diagnosis — why
-  Chrome saturates at 375 × 553 under the injected 250 ms sampler — lands with the QA sweep, which owns
-  the audit. Splitting it this way answers the Developer's own objection: the party whose work the audit
-  checks fixes the transport, not the assertions. The three downstream steps' criteria are amended to
-  match. **PM did not run the audit cold**; the diagnosis is specific and measured (Node at 0% CPU,
-  Chrome at ~105%, `send()` with no timeout at `:115–123` — confirmed by reading the file), and
-  `scripts/test.sh` is green on the same tree, so no shipped check is unverified — what is missing is the
-  cross-check, and that is stated as not-green in the Gate A packet rather than papered over.
-  Test-infrastructure quality is PM-alone under the Decision Autonomy Matrix. See DEC-042.
-
-- 2026-07-27 — HO-025 (Developer): **accepted, no revision.** The sample was re-run by PM rather than
-  read — `node tools/gate-a-report.mjs` 51/51, exit 0, and all four announced strings match their ruling
-  word-exact out of the AX tree. Both of its open items are ruled: (a) candidate B's four lines at 320px
-  with a lone `WITH` is a real composition wart and a wrong figure in `section-01-hero.md` §4.1, and it
-  goes to the founder at Gate A with the actual line breaks printed rather than a line count — the
-  handoff's judgment that it cannot be fixed by widening the break unit is correct and was the reason to
-  gate it rather than patch it; (b) `styles/tokens.css`'s pre-amendment `--text-display` floor **lands
-  with §1, not now** — no harness asserts the clamp (verified by grep), and landing an unguarded token
-  change ahead of the assertion that guards it is the drift this project exists to prevent. The
-  self-caught blind check — a per-pane overflow probe that could not fail because `.pane` carried
-  `overflow: hidden`, found by planting a 220-character element — is the standard this sprint is trying
-  to hold, and it was met without being asked for. The stale `verify-shell.mjs` coordinates it reports
-  (`:650` shipped-set glob, `:660` the http(s) check) are confirmed correct and were already carried into
-  the §1-and-§6 step. One figure does not reproduce exactly: WebKit ink measured 5.59% against the
-  handoff's 5.69% — run-to-run antialiasing, not a defect, noted so a later reader does not chase it.

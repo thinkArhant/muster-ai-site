@@ -211,8 +211,9 @@ Two things. Neither is a failing check; both are named rather than omitted.
 3. **Phone** — does snapping fight your scroll; does Find land its match; and do §2's two layers stay
    on screen for the whole 48 seconds?
 
-**Status: IN PROGRESS — first pass recorded 2026-07-29 ("feedback so far"); the phone's §2
-playback watch and find-in-page check are still outstanding.**
+**Status: CONSUMED 2026-07-30 — every finding below (F-B1 through F-B6) was fixed, reviewed and
+resolved. The re-gate packet is at the bottom of this file, and the verdict you write goes there,
+not here.**
 
 **Findings:**
 
@@ -309,3 +310,86 @@ have to rediscover them:
 **Any fix round must end with a scoped QA re-run** of the relationship assertions plus cross-engine on
 whatever was touched. Three Sprint-1 fix rounds each satisfied their stated criterion and broke
 something adjacent; a fix chain with no verification behind it is how that happened.
+
+---
+
+# RE-GATE — Gate B, second pass (2026-07-30)
+
+**Open `index.html` at 1280 or wider, dark theme, and scroll top to bottom once.** Your six findings
+are all closed; what follows is one line each on what changed, then the three phone checks you
+deferred on purpose. Two of the six were answered in a way you may want to argue with, and those two
+are marked. Nothing else here needs you.
+
+## What changed, per finding
+
+- **F-B1 — alignment is now one system.** The formation no longer sits on its own axis: it spans the
+  container, so the hub's centre *is* the page's centre. I measured it on the shipped build, not on
+  the proposal — **hub centre − axis = 0.0px at 1280 and at 1440**, and the left rail is a single
+  number for every block on the page (128 at 1280; 24 at 375, footer included). Reverting the
+  diagram to its old intrinsic width reproduces what you saw, at **−173.81px**.
+- **F-B2 — section snapping is gone.** The document scroller computes `none`, no section declares a
+  snap alignment, and scrolling to an arbitrary mid-section offset stays exactly there (I scrolled to
+  1337px and it rested at 1337px). **↯ One scoping call to check:** §4's horizontal track keeps its
+  own left-right snap — it is what makes the sheets rest composed instead of parked mid-crop, and it
+  is part of the F-B3 fix. If you meant "entirely" to cover that too, say so; it is one declaration.
+- **F-B3 — §4's cut now lands on the physical screen edge.** The 128px strip of bare ground that made
+  sheet 2 read as broken is gone: the track spans the viewport, sheet 1 still rests on the rail, and
+  sheet 2 runs off the frame. Confirmed in **both engines** — WebKit shows the same. Each sheet also
+  carries a `SHEET n OF 4` ordinal, so a reader knows there are four. **↯ The phone half went the
+  other way, and you should know it:** you said the stacked §4 is far too long, and it is now
+  *longer* — **3042px at 375**, against the 2957 you judged, the ordinal's cost. Every shrinking
+  alternative was measured and rejected because each hides content (the accordion hides 12 of 16 rows
+  from the Find-on-Page you are about to test). The stack's problem was judged to be anonymity, not
+  height. Argue with that if you disagree — it is a taste call answered with measurement, not a fix.
+- **F-B4 — decision 1's trade-off now states the mechanism** instead of denying it: *"Questions
+  between roles travel as files — written, routed, auditable — and each costs a session."*
+- **F-B5 — the overnight fact ships as mechanism**, in decision 4: *"The run doesn't need me present
+  — it waits only at gates, for a written verdict."* No hour span, no wall-clock, anywhere in the
+  shipped set — I grepped for it.
+- **F-B6 + the footer — the placeholder is gone and the footer ships true.** *"Specced, written, and
+  reviewed by Muster's AI team — 5 of 8 agents, 1 operator. PM, Developer, UI/UX, QA, and Content ran
+  this build; Marketing, Legal, and Research were never invoked."* I re-derived that from `git log`
+  rather than trusting it: **pm 49 · developer 14 · ui-ux 10 · qa 8 · content 6 · marketing 0 · legal
+  0 · research 0.** Six receipt links, the framework link, and your GitHub profile as the contact
+  path. **No email anywhere in any shipped file** — swept file-wide, including `mailto:`. The VERIFY
+  chip points at the blob URL and is asserted byte-equal to the footer's VERIFY receipt, so the two
+  cannot drift apart.
+
+## The three phone checks — the only thing I need from you
+
+On your iPhone, in Safari, **with the toolbars showing**:
+
+1. **§2's full playback — the hard launch blocker.** Let §2 scroll into view fresh and watch the
+   whole **48 seconds**. Both layers — the terminal and the narration card — must stay on screen for
+   the entire chain. `100dvh` under disappearing toolbars is the risk and no harness on this machine
+   can take that measurement. A screenshot of the end state does not close it; the guarantee is about
+   *during*.
+2. **Find on Page** for a phrase mid-page — `scarcest` or `commit-days`. Does the match land on
+   screen? Chrome always does (0 of 165 text leaves land off screen); Safari's alignment is the one
+   case my ruling leaves unverified.
+3. **Scroll feel** — snapping is gone, so this is now just "does the page scroll like a page." Flick
+   through §4 sideways too, since its track is the one thing that still snaps.
+
+## Already green — do not spend attention here
+
+All three runners re-run by me on the shipped tree, cold: `scripts/test.sh` **GREEN both engines,
+282/282 + 27/27** · `qa-independent-audit.mjs` **exit 0, 108/108** · `qa-fullpage-sweep.mjs` **exit 0,
+42/42**. And I planted two violations myself rather than reading anyone's plant list: a one-word drift
+in the footer's team line turned exactly one check red naming the team line, and zeroing the track's
+bleed turned two red printing *"ground between the track's end and the screen: 128px"* — your dead
+strip, reproduced by the harness as a measurement. Tree reverted clean after each.
+
+## Carried, so nothing is rediscovered later
+
+Two durable specs describe a build that has moved (DEC-058, ruled — no pixel changes, not launch
+blockers): `footer-copy.md` §3's lowercase-labels sentence, and `section-01-hero.md`'s two chip
+clauses still naming the old relative `VERIFY.md` href. Both are one-line amendments and land in
+whichever step follows your verdict.
+
+## Re-gate verdict — write here
+
+<!-- Founder writes the verdict here, then runs muster/scripts/muster-sprint-resume.sh. Two forms: -->
+<!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
+<!-- Bug list — PM inserts a fix step per bug, then continues. -->
+
+**Status: AWAITING FOUNDER**

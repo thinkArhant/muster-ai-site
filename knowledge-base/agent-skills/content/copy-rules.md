@@ -108,14 +108,23 @@ terminal line (`deploy · bodh.day · LIVE`) is three days later in reality.
 
 ## R8 — The team is AI and says so
 
-- ✅ "by Muster's AI team — 8 agents, 1 operator"
+- ✅ "by Muster's AI team — 5 of 8 agents, 1 operator"
 - ❌ "the Muster team" unqualified
 - Never imply humans did the work. Never let a reader assume a human wrote a deliverable.
+- **A team claim states participation, not roster size**, wherever a reader could take it as a claim
+  about who built the thing in front of them. Roster size is only sayable as a label on the roster
+  itself — the formation diagram's caption is the one place that reads as a label. Everywhere else,
+  count what ran and say that number.
 
 ## R9 — One CTA
 
-The `curl` plus one GitHub link. No newsletter signup, no Discord, no stars badge, no testimonials, no
+One conversion event: the `curl`. No newsletter signup, no Discord, no stars badge, no testimonials, no
 pricing, no invitation section, no community furniture.
+
+**Provenance links are not CTAs and are not capped.** The footer carries the receipt set the seed
+specifies — repo · queue · handoffs · decision log · VERIFY — plus the framework repo and the contact
+profile. They exist so a skeptic can check the page's claims, which is the opposite of an invitation
+to act. What R9 bans is a second *ask*.
 
 ## R10 — Major version only
 
