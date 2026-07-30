@@ -105,7 +105,7 @@ exact material). Routed at the gate (DEC-059); apply, do not re-derive.
   each instance earns its seat, what space returns. A MEMO with recommendations, not applied
   changes; ruled at PM review.
 - `VERIFY.md`'s participation qualifier stays consistent with the new single footer sentence —
-  the merge reopens the check HO-034 closed.
+  the merge reopens the consistency check the previous fix round closed.
 - Copy-rules matrix on every touched file; no new numeral anywhere.
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
