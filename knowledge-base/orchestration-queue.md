@@ -104,6 +104,8 @@ exact material). Routed at the gate (DEC-059); apply, do not re-derive.
 - **F-R8:** the repetition audit — every string that appears more than once on the page, whether
   each instance earns its seat, what space returns. A MEMO with recommendations, not applied
   changes; ruled at PM review.
+- `VERIFY.md`'s participation qualifier stays consistent with the new single footer sentence —
+  the merge reopens the check HO-034 closed.
 - Copy-rules matrix on every touched file; no new numeral anywhere.
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
@@ -150,7 +152,10 @@ founder, build nothing.
 - **F-R7:** the header lockup becomes a legible brand logo (founder ruling supersedes the badging
   restraint for this one seat); separators keep size; the missing footer-boundary separator is
   added. Sized optically, clip-path route, never on a pole, no new colour (DEC-031/037 otherwise
-  stand). State the chosen sizes.
+  stand). State the chosen sizes. **Cascade clause: say explicitly whether the sticky bar's 48px
+  height changes.** That number is load-bearing — the hero fold arithmetic (144 = 48 + 96), §2's
+  phone visibility budget, and `--scroll-pad` all derive from it. If it moves, name every
+  dependent budget and re-state each with measured figures; if it does not, say so in one line.
 - **F-R9:** footer layout for the single sentence + receipt links + final link, Apple-level.
 - Every ruling measured on the rendered page; renders show the state under test.
 
@@ -186,7 +191,10 @@ consult-only this round), plus the receipt-link permalinks.
   (queue: a fully-planned backlog moment; handoffs: the ledger at its fullest; decision log:
   current depth; VERIFY: the launch state), and record each chosen SHA and why in the handoff.
   The framework and profile links stay as they are. VERIFY.md gains the live-file links for
-  current state
+  current state. **Reachability caveat, stated in your handoff**: these SHAs exist on the sprint
+  branch — they reach the public repo only if the final merge preserves history. A squash merge
+  404s all four links. Flag this beside each chosen SHA; PM carries the post-push verification to
+  `pre-launch-checklist.md`
 - Also land DEC-058's two one-line spec amendments if not already applied upstream
 - All three runners green, both engines; changed-subject assertions re-based; new assertions
   planted and watched red; cross-engine on every touched surface
@@ -221,6 +229,8 @@ Model: claude-opus-5
   shows a planned backlog (read the file at that SHA)
 - The footer renders the single sentence; the old two-sentence form is gone; no email anywhere
 - New assertions (indicator, logo size relationships) each proven to fail when violated
+- **Enumerate the live motion elements on the built page** against the stated budget (two + the
+  cursor) — a count, not an impression; an animated indicator would breach silently
 - §2 playback untouched: fidelity byte-clean, chain timing asserted green
 - Cross-engine per touched surface, labelled per engine
 

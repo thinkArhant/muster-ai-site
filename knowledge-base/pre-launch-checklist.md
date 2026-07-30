@@ -104,3 +104,13 @@
     `scripts/*.js`, and the verification artifacts the page links to, or an exclusion list. Note that
     `scripts/` holds both shipped page JS and the project's test runner.
   - Milestone gate: launch
+
+- [ ] **The four receipt permalinks resolve on github.com after the final push** — Blocker: hard,
+  Source: pm (re-gate stress test), Added: 2026-07-30
+  - The footer's queue · handoffs · decision-log · VERIFY links are pinned to commit SHAs chosen on
+    the sprint branch (F-R10, demo-in-itself criterion). Those SHAs reach the public repo **only if
+    the final merge preserves history — a squash merge 404s all four silently.**
+  - Resolve at launch: merge with history (merge commit, not squash), push, then the founder
+    click-checks all four links once. If squash is preferred, the links must be re-pinned to
+    post-merge SHAs before deploy.
+  - Milestone gate: launch
