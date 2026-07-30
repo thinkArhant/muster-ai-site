@@ -70,7 +70,9 @@ The script that command fetches is readable in the repository before it is run:
 
 ## Who built this
 
-This page was built with Muster, by Muster's AI team, with one operator. Which roles ran which
-step is recorded in the queue and the handoff ledger above — read them rather than taking a
-count on trust. The hero's `8 AI agents · 1 operator` describes Muster's roster, not the
-participation in any one build.
+This page was built with Muster, by Muster's AI team, with one operator. Five of the eight
+roles ran this build — PM, Developer, UI/UX, QA, and Content; Marketing, Legal, and Research
+were never invoked. Which role ran which step is recorded in the queue and the handoff ledger
+above — read them rather than taking a count on trust. The hero's `8 AI agents · 1 operator`
+describes Muster's roster, not the participation in any one build; the footer states the
+participation.

@@ -7,7 +7,8 @@ the measured lengths below), PM (reviews against the inflation guardrail), QA (f
 checks), the founder (reviews this copy as rendered)
 **Sources**: the four decisions, their order, their stamps, and every load-bearing claim come from
 `decision-log.md` DEC-044 (each date verified by `git log` against the framework repo). The audience
-ruling and its guardrail are DEC-043. Governed by `agent-skills/content/copy-rules.md` and
+ruling and its guardrail are DEC-043. Decision 1's trade-off row and decision 4's mechanism row
+carry founder-ruled amendments (DEC-056). Governed by `agent-skills/content/copy-rules.md` and
 `brand-guidelines.md` §5.
 
 ---
@@ -84,7 +85,7 @@ What breaks isn't the talking — it's each agent reading too much.
 **Trade-off**
 
 ```
-Agents never talk directly — every question between roles costs a file and a session.
+Questions between roles travel as files — written, routed, auditable — and each costs a session.
 ```
 
 **Mechanism**
@@ -98,7 +99,7 @@ Three reading tiers; the PM routes context.
 | Title, verbatim | DEC-044 decision 1 (founder's voice) |
 | Stamp 2026-04-24 | DEC-044 ruling 1 — commit `03ba0ce`, "slim bootstrap: keep routing behavior, cut ~600 tokens/session"; verified by `git log` |
 | Reading too much, not talking, is what breaks | DEC-044: the real ceiling was each agent's context window filling with what it didn't need |
-| No shared conversation; a question costs a file and a session | DEC-044 trade-off, intact |
+| Written, routed, auditable files; each question costs a session | DEC-044 trade-off, with the mechanism named rather than denied (DEC-056): agents do communicate — through request files, never a live chat. The cost survives (each exchange spends a session) |
 | Three tiers, PM as router | DEC-044 mechanism (three-layer read architecture; PM as sole context-router) |
 
 ### Decision 2 — determinism and model economics (systems thinking)
@@ -220,19 +221,19 @@ Runs halt at planned gates — never interrupt, never guess.
 **Problem**
 
 ```
-Unattended agents guess wrong or stall — and pinging me constantly doesn't scale.
+Unattended agents guess wrong or stall — constant pings don't scale.
 ```
 
 **Trade-off**
 
 ```
-No steering mid-run — every ambiguity is paid up front, at planning.
+No steering mid-run — ambiguity is paid up front, at planning.
 ```
 
 **Mechanism**
 
 ```
-Gates carry only the judgment calls; work resumes on a written verdict.
+The run doesn't need me present — it waits only at gates, for a written verdict.
 ```
 
 | Claim | Source |
@@ -241,7 +242,8 @@ Gates carry only the judgment calls; work resumes on a written verdict.
 | Stamp 2026-06-07 | DEC-044 — commit `78490b7`, "Muster v4 — autonomous sprint execution (#29)"; verified by `git log` |
 | Guess-or-stall, constant pings don't scale | DEC-044 problem, intact |
 | No mid-run steering; ambiguity paid up front | DEC-044 trade-off, intact |
-| Halt gates, curated packets, written verdict to resume | DEC-044 mechanism (framed as attention economics, not a restatement of §2's on-screen halt) |
+| The run doesn't need the operator present; gates are the only waits | Founder-supplied fact in its ruled mechanism form (DEC-056), evidenced by night-stamped commits in the public repo — never framed as wall-clock, never as hours |
+| Waits at gates for a written verdict | DEC-044 mechanism (halt gates, written verdict to resume), framed as attention economics |
 
 ## 5. Measured counts — per sheet, against the ceilings
 
@@ -253,7 +255,7 @@ titles are counted separately. Script-measured under the stated convention.
 | 1 — tiered reading | 10 | **44** | 12 / 11 / 14 / 7 |
 | 2 — determinism + economics | 9 | **42** | 8 / 11 / 11 / 12 |
 | 3 — growth caps | 11 | **44** | 10 / 11 / 10 / 13 |
-| 4 — attention architecture | 9 | **44** | 9 / 12 / 11 / 12 |
+| 4 — attention architecture | 9 | **44** | 9 / 10 / 10 / 15 |
 | **§4 total** | 39 | **174** | — |
 
 Longest title is 11 words — short enough that no title approaches a multi-line wall of display type
@@ -269,9 +271,15 @@ trade-offs, recorded here so the cut is a visible choice rather than a silent on
    ships.
 2. **Decision 3** drops "every new file must ship with a cap or it's a leak" — the core cost
    (permanent loss of history from view) ships.
+3. **Decision 4** carries the operator-absence fact in its mechanism row (DEC-056), and the room
+   was paid for inside the sheet rather than by inflating the ceiling: the problem row drops "and
+   pinging **me**" for "constant pings" and the trade-off drops "every" — both claims intact — and
+   the mechanism drops "gates carry **only** the judgment calls," a curation corollary of the
+   halt-gate claim the decision row still makes. Halt-at-planned-gates, no-interrupt-no-guess, and
+   resume-on-written-verdict all ship.
 
-Neither omission changes any claim's size; both are maintenance corollaries of costs that ship. No
-decision needed more than 45 words to make its point — nothing is flagged as unfittable.
+None of these omissions changes any claim's size; all are corollaries of costs or mechanisms that
+ship. No decision needed more than 45 words to make its point — nothing is flagged as unfittable.
 
 ## 7. Verification statement
 
@@ -282,7 +290,10 @@ Checked line by line against `copy-rules.md`:
   `2026-04-12` · `2026-06-07`. Nothing is rounded, nothing invented, no scope mixed, no
   dash-and-caption case arises.
 - **R2 / R3** — no time claim, no cost claim, no human or agency baseline. "Premium models buy
-  judgment" is a design claim about where model spend goes, not a cost figure.
+  judgment" is a design claim about where model spend goes, not a cost figure. "The run doesn't
+  need me present" is a mechanism claim in the founder-ruled form (DEC-056): no wall-clock framing,
+  no "overnight," no hour span appears anywhere in the section — the evidence (night-stamped
+  commits) lives in the public repo, not in the copy.
 - **R6** — "proven" appears nowhere; no merit claim beyond the decisions themselves.
 - **R7** — first person appears only as the founder's (titles 1, 3, 4; rows of decision 4); no
   first-person sentence exists outside §4's permitted place.

@@ -10,7 +10,59 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-_None._
+### 2026-07-29 HO-034 — Gate B fix round: footer strings, §4's two amended rows, the overnight call
+**Type:** handoff
+**Producer:** content
+**Deliverable:** `knowledge-base/design-specs/web/footer-copy.md` (new) · amended
+`knowledge-base/design-specs/web/section-04-copy.md` · `VERIFY.md` consistency edit · two
+verdict-routed prose fixes (`section-05-copy.md`, `section-06-copy.md`)
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**What ships, per finding:**
+
+- **Footer (F-B6 + founder answers, DEC-056)**: `footer-copy.md` carries every string and every URL.
+  The team line keeps the seed's construction, amended to the measured truth: *"Specced, written,
+  and reviewed by Muster's AI team — 5 of 8 agents, 1 operator. PM, Developer, UI/UX, QA, and
+  Content ran this build; Marketing, Legal, and Research were never invoked."* (30 words, ≤35
+  ceiling). Naming the three that did not run is deliberate: it makes the count auditable role by
+  role against the receipts row one line below, and candor about limits is the brand. The
+  authorship line is seed-verbatim (14 words); **no email string exists anywhere in the file** —
+  the GitHub profile link (`github.com/thinkArhant`) is the contact path. Six receipt links with
+  exact founder-supplied URLs, all stated as strings, nothing fetched (R12); the VERIFY blob URL is
+  byte-equal to the chip target HO-036 builds.
+- **F-B4**: decision 1's trade-off row is now *"Questions between roles travel as files — written,
+  routed, auditable — and each costs a session."* The mechanism is stated, not denied; the cost
+  survives (each exchange spends a session). 14 words; sheet total **44** of 45, per-row
+  12/11/14/7 — script-recounted under the file's stated convention.
+- **F-B5 — ruled IN, in decision 4's mechanism row**: *"The run doesn't need me present — it waits
+  only at gates, for a written verdict."* Why: decision 4's subject is attention, and
+  operator-absence is that decision's payoff stated as mechanism — near-verbatim the founder's own
+  claimable form (DEC-056), no "overnight," no hour span, no wall-clock anywhere (R2). The room was
+  paid inside the sheet (problem/trade-off trims recorded in the file's §6); sheet total **44** of
+  45, per-row 9/10/10/15. The dropped curation corollary ("gates carry *only* the judgment calls")
+  is named in §6 so the cut is visible.
+- **VERIFY.md** now states the five-role participation in the same terms as the footer line, and
+  keeps the roster-not-participation qualifier phrase the sweep asserts on.
+- **Verdict-routed prose fixes (Content-owned per the Gate B packet)**: `section-05-copy.md` §6's
+  R4 line now says four em-dashes (OBS-011 of HO-028); `section-06-copy.md`'s aside now matches
+  §1's ruled one-element interactive inventory (OBS-007 of HO-026).
+
+**Verification**: copy-rules matrix run on every touched file (verification statements updated
+in-file; banned-word/email/fictional-host greps clean). Full-page sweep re-run: **42/42, exit 0**.
+`scripts/test.sh`: **272/273 — one red, by design**: "§4 ships exactly the four decisions …
+verbatim" fails because the copy file now leads the page; HO-036 swaps the §4 strings and re-bases.
+Same spec-ahead-of-build state the previous fix round shipped in.
+
+**For HO-035 (UI/UX)**: `section-04-decisions.md:313`'s layout sketch still shows the old
+trade-off string ("Agents never talk …") — that file is yours and this round amends it anyway.
+The footer now exists as copy; it inherits your F-B1 alignment ruling.
+
+**Revision log:**
+- 2026-07-29: Self-review caught that the first VERIFY.md rewording would have broken
+  `qa-fullpage-sweep.mjs`'s string-asserted roster qualifier; rephrased to keep the asserted
+  phrase while adding the footer pointer, sweep re-run green.
 
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->

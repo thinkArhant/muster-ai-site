@@ -70,9 +70,9 @@ command must edit it in the second, which is why they are shown adjacent and una
   only cursor, `aria-hidden`, and carries no text.
 - If a prompt glyph (`$`) is rendered, it is decorative: `aria-hidden`, outside the selectable command
   text, and never part of what a reader copies. A `$` inside the copied string breaks the command.
-- No copy-to-clipboard control is specified. §1's interactive inventory is exactly two elements and
-  §6's is one — the link. Copying is a text selection, as it is in every terminal the reader already
-  uses. If the build rules that a copy affordance earns its place, it is a treatment of the existing
+- No copy-to-clipboard control is specified. §1's interactive inventory is exactly one element (the
+  `VERIFY ⎘` chip) and §6's is one — the link. Copying is a text selection, as it is in every
+  terminal the reader already uses. If the build rules that a copy affordance earns its place, it is a treatment of the existing
   CTA rather than a second one, and no new copy is needed.
 
 ## 5. The link

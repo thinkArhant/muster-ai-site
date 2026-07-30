@@ -77,56 +77,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-29 Content: Gate B fix round — footer strings, one trade-off row, the overnight call
-
-```
-Role: content
-Model: claude-fable-5
-
-**Task:** Three copy jobs from the Gate B verdict (`knowledge-base/wave-review.md` → ### Gate B —
-findings F-B4, F-B5, and the footer block with the founder's answers). The verdict was routed at
-the gate (DEC-056) — apply it, do not re-derive it.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — Gate B findings + founder answers (repo URLs, no-email ruling,
-  participation delegation)
-- `knowledge-base/design-specs/web/section-04-copy.md` · `knowledge-base/product-spec-seed.md` →
-  Footer (read-only source; the founder amended two of its lines at the gate)
-- `knowledge-base/agent-skills/content/copy-rules.md` · `VERIFY.md`
-
-**Deliverable:** `design-specs/web/footer-copy.md` (new); amended `section-04-copy.md`; `VERIFY.md`
-consistency check; HO-034.
-
-**Acceptance criteria:**
-- **Footer strings** (F-B6 + answers): the seed's authorship line rewritten to **true
-  participation** — five roles ran this build (pm · developer · ui-ux · qa · content; marketing ·
-  legal · research did not). The founder pre-approved your phrasing — no gate; that raises the bar,
-  it does not lower it. **No raw email anywhere** — the GitHub profile link is the contact path.
-  Links, exact URLs: site repo `https://github.com/thinkArhant/muster-ai-site`, framework repo
-  `https://github.com/thinkArhant/muster-ai`, and blob URLs into the site repo on `main` for the
-  four artifacts — queue → `knowledge-base/orchestration-queue.md`, handoffs →
-  `knowledge-base/agent-requests.md`, decision log → `knowledge-base/decision-log.md`, VERIFY →
-  `VERIFY.md` (so e.g.
-  `https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/decision-log.md`).
-  Every URL real (R12) — state each as a string; never fetch to check.
-- **F-B4**: §4 decision 1's trade-off row rewritten so it stops denying the mechanism — agents do
-  communicate, through agent-request files: written, routed, auditable, never a live chat. Stay
-  inside the 45-word sheet ceiling; re-state the sheet's measured count.
-- **F-B5**: judge whether the works-while-the-operator-sleeps fact earns a place (likeliest §4
-  decision 4). Claimable form is the **mechanism**, evidenced by night-stamped public commits —
-  never wall-clock framing (R2), never a flaunt (DEC-043's guardrail). Declining with reasons is a
-  valid outcome; say which you chose and why.
-- `VERIFY.md`'s participation qualifier stays consistent with the new footer line.
-- Copy-rules matrix run on every touched file.
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-034 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-29 UI/UX: Gate B fix round — alignment system, the snap ruling, §4's affordance
 
 ```
@@ -173,6 +123,9 @@ measured evidence; HO-035.
 
 **On completion:** File HO-035 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-29 Developer (web): Gate B fix round — build the rulings
 
@@ -280,6 +233,14 @@ Model: claude-opus-5
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
 
+- 2026-07-29 — Step: Content Gate B fix round (HO-034). The footer's strings exist and are true:
+  `5 of 8 agents, 1 operator`, the five named and the three never-invoked named, no email, six
+  exact founder-supplied URLs. §4's trade-off row states the file-based mechanism instead of
+  denying it (sheet 44/45), and the overnight fact ships as mechanism in decision 4's row (44/45) —
+  the founder's claimable form, no wall-clock. Sweep re-run 42/42; `scripts/test.sh` 272/273 with
+  the one red designed (§4 page fidelity awaits HO-036's string swap). **Awaiting PM review at the
+  fix-round review step.**
+
 - 2026-07-29 — Step: PM Wave 2 review and the Gate B packet (DEC-053, DEC-054, DEC-055). **All eight
   handoffs accepted with no revision**, and the acceptance is re-derived rather than read: all three
   runners re-run by PM on the shipped tree (`scripts/test.sh` GREEN both engines 273/273 + 27/27, the
@@ -379,33 +340,6 @@ Model: claude-opus-5
   unfittable, every trade-off intact), §5 takes the `$147` cost row. Awaiting PM review at the
   build-review step; HO-032 consumes the measured lengths next.
 
-- 2026-07-28 — Step: Gate A, processed at the gate (DEC-043–049). All four items ruled interactively
-  with the founder against rendered evidence: headline B amended (`~~a human~~` struck, rust `an AI`,
-  plain `team.`, 3/3/2/2/2 lines measured); §4's four decisions re-selected from ten candidates with
-  every stamp verified by `git log` against the framework repo; §1 ruled the sparse hero with **all**
-  Bodh material out (measured line, readout row, hero terminal — §2 becomes the page's only
-  terminal); §3 rebuilt on the bare-Claude contrast and closed at 90/90 with the recognition hook in;
-  §5 closed with the cost row restoring the page's only `$147`; §6 approved as written. **The fix
-  round was routed here by the interactive PM rather than by resume's headless PM** — two fix steps
-  (Content HO-031, UI/UX HO-032) inserted, four build briefs re-cut to the rulings, the halt step
-  retired. Run `muster/scripts/muster-sprint-run.sh` directly; the verdict is already consumed.
-
-- 2026-07-27 — Step: PM Wave 1 review and the Gate A packet (DEC-042). **All eight handoffs accepted with
-  no revision**, and the acceptance is re-derived rather than read: the §4 seed-vs-shipped diff
-  independently reproduced at 420 → 415 / 30 → 30 sentences / exactly three rows, every stated word
-  budget across five copy files recounted with no mismatch, all eight contrast pairs recomputed from the
-  locked hex exactly, §1's element inventory checked against seed §1 item by item (all nine present),
-  `scripts/test.sh` re-run GREEN both engines and `tools/gate-a-report.mjs` re-run 51/51 exit 0.
-  **The two load-bearing assertions were re-planted and watched to go red** — `--mark-clear: 0ch` turns
-  R2 red at all three states, `--mark-inset: 8px` turns R1 red *with the expected figure following the
-  token*, failing on the inequality; tree reverted clean. **Four rulings keep the gate to taste**: the
-  audit's repair split across two owners (transport timeout to the §1 step, renderer diagnosis to QA),
-  scroll-snap's WebKit half ruled a labelled manual check, the `--text-display` token held to land with
-  §1 *and its assertion*, and §5's `9.3 h` repeat kept as the denominator. REQ-006/007/008 all closed;
-  `brand-guidelines.md` amended; six observations triaged; `agent-context/content.md` refreshed where it
-  still carried SP3 as an open defect. `muster-requests-lint.sh` back to green — 872 active lines to 6.
-  **Gate A is live: four things need the founder's word, and one thing is honestly not green** — the
-  independent audit hangs, which is stated in the packet rather than omitted.
 
 
 

@@ -162,7 +162,7 @@ takes with cost.
 - **R3** — the one cost figure, `$147`, sits under the `COST · API LIST` key, which carries R3's
   framing in the label itself: API list price, cost-to-replicate, never subscription spend. No human
   or agency baseline exists anywhere in the section.
-- **R4** — THIS SITE is three em-dashes with `measured at launch`; no placeholder value, and the
+- **R4** — THIS SITE is four em-dashes with `measured at launch`; no placeholder value, and the
   dashes are inert.
 - **R5** — both cards are scope-labelled (`BODH · IDEA → LIVE`, `THIS SITE · SPEC → LIVE`); no claim
   mixes scopes; wave-scope numbers (`~64 min`, `289`, `$24.73`) appear nowhere in §5.
