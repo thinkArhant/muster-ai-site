@@ -212,3 +212,24 @@
   💬 All lints green. Committing the round:
   🧪 bash   git status --short; du -sh samples/gate-b-renders
   🧪 bash   git add knowledge-base/agent-requests.md knowledge-base/decision-log.md knowledge-base/design-specs/web/page-shell.md kn
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "commit-lint exit=$?"
+  💬 The step is complete and committed. Here's the summary of what happened: **HO-035 is filed: all three Gate B design rulings are made, each measured on the real rendered page before being written, with
+    📖 ×27 · ✏️  ×44 · 📝 ×2 · 🧪 ×37 · ⚠️  ×2
+  ✓ 111 turns · $34.41 · peak ctx 328k/1M 32% · out 129k  (success)
+  ✓ [36;1mUI-UX[0m · [1m42m 24s[0m · advanced → 2026-07-29 Developer (web): Gate B fix round — build the rulings (DEVELOPER) · handoff HO-035 filed ✓
+    run so far: 1h 4m · $44.36 · 2 steps
+───────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────── step 3
+▶ [34;1mDEVELOPER[0m · 2026-07-29 Developer (web): Gate B fix round  [2m[claude-opus-5][0m
+  build the rulings
+  ⚙  session start
+  ⚠ [34;1mDEVELOPER[0m · [1m4s[0m · ⚠ queue NOT advanced — Next Step unchanged (next loop stops)
+    run so far: 1h 4m · $44.36 · 2 steps
+───────────────────────────────────────────────────────────
+⛔ Next Step unchanged — agent didn't advance / failure
+── run summary ────────────────────────────────────────────
+  2026-07-29 Content: Gate B fix round    62    $9.95   14%    54k 21m 42s
+  2026-07-29 UI/UX: Gate B fix round �   111   $34.41   32%   129k 42m 24s
+  2026-07-29 Developer (web): Gate B f   —      —   —    —      4s
+───────────────────────────────────────────────────────────
+  2 steps · 173 turns · $44.36 · out 183k · 1h 4m wall · stopped: step did not advance (2026-07-29 Developer (web): Gate B fix round — build the rulings)

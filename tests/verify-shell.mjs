@@ -736,6 +736,23 @@ try {
   }
   evidence.shippedUrls = { fetching: fetchingRefs, inert: inertRefs };
   check("no fetching http(s) reference in any shipped file", fetchingRefs.length === 0, fetchingRefs.join(", ") || `none — ${inertRefs.length} inert: ${inertRefs.join(", ") || "none"}`);
+
+  /* No raw email ships anywhere — founder ruling, amending his own seed's
+     footer spec: a published address is scraper bait, and the GitHub profile
+     link is the contact path. Swept over the whole shipped set rather than over
+     the footer, because the failure this guards against is an address arriving
+     in a comment, an aria-label or a meta description, none of which the footer
+     assertions would ever see. */
+  const emailHits = [];
+  for (const rel of shipped) {
+    readFileSync(join(ROOT, rel), "utf8").split("\n").forEach((line, i) => {
+      const m = line.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
+      if (m) emailHits.push(`${rel}:${i + 1} ${m[0]}`);
+    });
+  }
+  evidence.emailHits = emailHits;
+  check("no email address in any shipped file — the GitHub profile is the contact path",
+    emailHits.length === 0, emailHits.join(", ") || "none");
   check("raw hex appears only in the token block", hexHits.length === 0, hexHits.join(", ") || "none");
   check("no build-system artifacts", !existsSync(join(ROOT, "package.json")) && !existsSync(join(ROOT, "node_modules")) && !existsSync(join(ROOT, "dist")), "no package.json / node_modules / dist");
   const cssText = shipped.filter((f) => f.endsWith(".css")).map((f) => readFileSync(join(ROOT, f), "utf8")).join("\n");
@@ -776,6 +793,7 @@ try {
     const css = (el, p) => getComputedStyle(el).getPropertyValue(p).trim();
     const hero = document.querySelector("#hero");
     const h1 = document.querySelector("#hero-title");
+    const heroContainer = hero.querySelector(".container");
     const eyebrow = hero.querySelector(".eyebrow");
     const formation = hero.querySelector(".formation");
     const diagram = hero.querySelector(".formation__diagram");
@@ -876,6 +894,33 @@ try {
              Math.min(...plates.map((li) => li.getBoundingClientRect().left)))
         : null,
       captionText: caption.textContent.trim(),
+
+      /* The alignment system's three references, read off the live container
+         rather than named as figures (page-shell.md §7.2). The rail and the
+         rail-end are the container's CONTENT edges — its padding is the
+         --gutter, so the border box is the wrong reading. */
+      axis: (() => {
+        const box = heroContainer.getBoundingClientRect();
+        const rail = box.left + parseFloat(css(heroContainer, "padding-left"));
+        const railEnd = box.right - parseFloat(css(heroContainer, "padding-right"));
+        const hubBox = hub.getBoundingClientRect();
+        const plateRects = plates.map((li) => li.getBoundingClientRect());
+        return {
+          rail: r2(rail), railEnd: r2(railEnd), content: r2(railEnd - rail),
+          mid: r2((rail + railEnd) / 2),
+          hubCentre: r2(hubBox.left + hubBox.width / 2),
+          plateFirstStart: plateRects.length ? r2(plateRects[0].left) : null,
+          plateLastEnd: plateRects.length ? r2(plateRects[plateRects.length - 1].right) : null,
+          diagramStart: r2(diagram.getBoundingClientRect().left),
+          /* Every block that hangs on the rail, measured, not assumed. */
+          onRail: [".eyebrow", "#hero-title", ".formation", ".formation__caption",
+                   ".remnant", "#hero .curl"]
+            .map((sel) => {
+              const el = document.querySelector(sel);
+              return el ? { sel, start: r2(el.getBoundingClientRect().left) } : { sel, start: null };
+            })
+        };
+      })(),
 
       /* --- remnant --- */
       scopeRects: scope.getClientRects().length,
@@ -1022,11 +1067,34 @@ try {
     bodhHits.length === 0 && heroWide.heroOrderedLists === 0 && heroWide.heroTerminals === 0 && strayDigits.length === 0,
     `${bodhHits.join(" ") || "no Bodh material"} · ${heroWide.heroOrderedLists} <ol> · ${heroWide.heroTerminals} terminal/log elements · stray digits ${JSON.stringify(strayDigits)}`);
 
-  /* --- 7. formation modes: the bus diagrams the row it spans --- */
+  /* --- 7. formation modes: the bus diagrams the row it spans, and the row
+     spans the container — which is what puts the hub on the PAGE's axis rather
+     than on an axis of its own. Relationships only (DEC-032): no literal x
+     appears here, so the checks follow --page-max, --gutter and any plate-name
+     change. --- */
   check("§1 formation at wide: one plate row, bus spanning exactly it",
     heroWide.wide && new Set(heroWide.plateTops).size === 1 &&
       heroWide.busDisplay !== "none" && Math.abs(heroWide.busWidth - heroWide.plateRowWidth) < 0.5,
     `${new Set(heroWide.plateTops).size} row(s), bus ${heroWide.busWidth}px vs plate row ${heroWide.plateRowWidth}px`);
+  check("§1 formation spans the container, so the hub's centre IS the page axis",
+    heroWide.wide &&
+      Math.abs(heroWide.axis.content - heroWide.plateRowWidth) < 1 &&
+      Math.abs(heroWide.axis.content - heroWide.busWidth) < 1 &&
+      Math.abs(heroWide.axis.plateFirstStart - heroWide.axis.rail) < 1 &&
+      Math.abs(heroWide.axis.plateLastEnd - heroWide.axis.railEnd) < 1 &&
+      Math.abs(heroWide.axis.hubCentre - heroWide.axis.mid) < 1,
+    `bus ${heroWide.busWidth} = plate row ${heroWide.plateRowWidth} = container content ${heroWide.axis.content}px · ` +
+      `plate 1 at ${heroWide.axis.plateFirstStart} on the rail ${heroWide.axis.rail}, plate 7 at ${heroWide.axis.plateLastEnd} on the rail-end ${heroWide.axis.railEnd} · ` +
+      `hub centre ${heroWide.axis.hubCentre} vs axis ${heroWide.axis.mid} (delta ${Math.round((heroWide.axis.hubCentre - heroWide.axis.mid) * 100) / 100}px)`);
+  /* §7.2's two edges: every block in the section starts on the rail, including
+     the formation's own diagram. The hub is the page's ONE axis-bound element,
+     and it qualifies only because its parent's edges ARE the rail and the
+     rail-end — centred-within-a-narrower-block is the composition this bans. */
+  check("§1 every block hangs on the rail — nothing centres on an axis of its own",
+    heroWide.axis.onRail.every((b) => b.start !== null && Math.abs(b.start - heroWide.axis.rail) < 1) &&
+      Math.abs(heroWide.axis.diagramStart - heroWide.axis.rail) < 1,
+    heroWide.axis.onRail.map((b) => `${b.sel} ${b.start}`).join(" · ") +
+      ` · diagram ${heroWide.axis.diagramStart} · rail ${heroWide.axis.rail}`);
   check("§1 formation plate names are the locked full forms, in the locked order",
     heroWide.plateNames.join(" · ") === LOCKED_PLATES.join(" · ") && heroWide.captionText === "8 AI agents · 1 operator",
     `${heroWide.plateNames.join(" · ")} / caption ${JSON.stringify(heroWide.captionText)}`);
@@ -1038,16 +1106,28 @@ try {
       heroWide.remnantCaptions === 1,
     `${heroWide.dashCells.length} dashes ${JSON.stringify(heroWide.dashCells)} · caption ×${heroWide.remnantCaptions}`);
 
-  /* --- 9. the chip: §1's only interactive element, and the proof link --- */
-  check("§1 VERIFY chip is the section's only focusable element and resolves to VERIFY.md",
+  /* --- 9. the chip: §1's only interactive element, and the proof link.
+
+     The target is the site repo's rendered blob URL, not a relative VERIFY.md:
+     a static host serves the relative form as raw markdown or 404s it, and this
+     is the one link the page asks a sceptic to click. It is an <a href> —
+     inert until clicked — so the zero-request claim is untouched; the guard
+     that proves that stays narrowed to fetching references and is planted
+     against below. The string must stay byte-equal to the footer's VERIFY
+     receipt, which is asserted with the footer. --- */
+  const CHIP_HREF = "https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md";
+  check("§1 VERIFY chip is the section's only focusable element and points at the rendered VERIFY.md",
     heroWide.heroFocusable.length === 1 && /chip/.test(heroWide.heroFocusable[0]) &&
-      heroWide.chipHref === "VERIFY.md" && heroWide.chipResolved.startsWith("file://") &&
+      heroWide.chipHref === CHIP_HREF &&
       /VERIFY\b/.test(heroWide.chipAria) && /VERIFY/.test(heroWide.chipLabel),
     `${JSON.stringify(heroWide.heroFocusable)} · href ${heroWide.chipHref} · name ${JSON.stringify(heroWide.chipAria)}`);
   /* The chip is the page's proof link; without the file behind it the one
-     claim the page asks readers to check is a 404. */
-  check("VERIFY.md exists at the repo root the chip points at",
-    existsSync(join(ROOT, "VERIFY.md")), join(ROOT, "VERIFY.md"));
+     claim the page asks readers to check is a 404. The blob URL names a path
+     inside this repo, so the file's presence is still checkable here — the
+     assertion did not become unfalsifiable when the href went absolute. */
+  check("VERIFY.md exists at the repo path the chip's blob URL names",
+    existsSync(join(ROOT, "VERIFY.md")) && heroWide.chipHref.endsWith("/VERIFY.md"),
+    join(ROOT, "VERIFY.md"));
 
   /* --- 10 / 11. §1 is fully static; the curl is one string --- */
   check("§1 is fully static — nothing in the section animates or transitions",
@@ -1200,6 +1280,7 @@ try {
     const para = insight.querySelector("p.read");
     const decisions = document.querySelector("#the-decisions");
     const decisionsBody = decisions.querySelector(".section__body");
+    const decisionsContainer = decisions.querySelector(".container");
     const track = decisions.querySelector(".sheets");
     const sheets = [...decisions.querySelectorAll(".sheet")];
 
@@ -1352,8 +1433,41 @@ try {
         return r2(t.getBoundingClientRect().height / parseFloat(css(t, "line-height")));
       }),
       stamps: sheets.map((s) => s.querySelector(".sheet__stamp").textContent.replace(/\\s+/g, " ").trim()),
-      stampIsNextSibling: sheets.map((s) => s.querySelector(".sheet__title").nextElementSibling === s.querySelector(".sheet__stamp")),
+      /* The meta line replaced the bare stamp: the h3's next sibling is now the
+         line, and the stamp is what OPENS it — so the announced order is still
+         title → stamp → rows, and the ordinal (aria-hidden) never enters it. */
+      metaIsNextSibling: sheets.map((s) => s.querySelector(".sheet__title").nextElementSibling === s.querySelector(".sheet__meta")),
+      stampOpensMeta: sheets.map((s) => s.querySelector(".sheet__meta").firstElementChild === s.querySelector(".sheet__stamp")),
       stampBeforeRows: sheets.map((s) => s.querySelector(".sheet__stamp").compareDocumentPosition(s.querySelector(".sheet__rows")) & Node.DOCUMENT_POSITION_FOLLOWING ? true : false),
+      /* The ordinal: chrome, self-verifying against DOM position, never a
+         metric. Both numerals are read from the DOM here and never from the
+         spec — a hardcoded count would survive a fifth sheet landing. */
+      ordinals: sheets.map((s, i) => {
+        const all = [...s.querySelectorAll(".sheet__ordinal")];
+        const o = all[0];
+        return {
+          count: all.length,
+          text: o ? o.textContent.replace(/\\s+/g, " ").trim() : null,
+          expected: "SHEET " + (i + 1) + " OF " + sheets.length,
+          hidden: o ? o.getAttribute("aria-hidden") : null,
+          colour: o ? css(o, "color") : null,
+          fontSize: o ? css(o, "font-size") : null,
+          afterStamp: o ? Boolean(s.querySelector(".sheet__stamp").compareDocumentPosition(o) & Node.DOCUMENT_POSITION_FOLLOWING) : false
+        };
+      }),
+      microFontSize: css(sheets[0].querySelector(".sheet__stamp"), "font-size"),
+      mutedRgb: css(sheets[0].querySelector(".sheet__stamp"), "color"),
+      gauge: { width: css(track, "scrollbar-width"), colour: css(track, "scrollbar-color") },
+      /* §4's own rail and rail-end, from the container's content edges. */
+      rail: (() => {
+        const box = decisionsContainer.getBoundingClientRect();
+        return { start: r2(box.left + parseFloat(css(decisionsContainer, "padding-left"))),
+                 end: r2(box.right - parseFloat(css(decisionsContainer, "padding-right"))) };
+      })(),
+      trackBox: (() => {
+        const b = track.getBoundingClientRect();
+        return { left: r2(b.left), right: r2(b.right), width: r2(b.width) };
+      })(),
       categories: sheets.map((s) => s.dataset.category),
       rowLabels: sheets.map((s) => [...s.querySelectorAll(".sheet__row dt")].map((dt) => dt.textContent.trim())),
       rowValues: sheets.map((s) => [...s.querySelectorAll(".sheet__row dd")].map((dd) => dd.textContent.replace(/\\s+/g, " ").trim())),
@@ -1403,11 +1517,17 @@ try {
         align: css(s, "scroll-snap-align"),
         nearestScroller: clipper(s) === track ? "the track" : (clipper(s) ? (clipper(s).className || clipper(s).tagName) : "none")
       })),
-      /* The peek: sheet 2 is on screen and cut by the track's inline end. */
+      /* The cut: sheet 2 is on screen and runs off the PHYSICAL SCREEN EDGE,
+         with no bare ground left between the track's inline end and that edge.
+         Cut at the container's edge instead — the judged construction — a dead
+         strip of ground sat between the crop and the screen, and the sheet read
+         as amputated rather than as continuing. The strip is what is measured. */
       peek: (() => {
         const s2 = sheets[1].getBoundingClientRect();
-        return { visible: r2(Math.min(s2.right, trackBox.right) - Math.max(s2.left, trackBox.left)),
-                 cut: s2.right > trackBox.right + 0.5, intersects: s2.left < trackBox.right - 0.5 };
+        return { visible: r2(Math.min(s2.right, innerWidth) - Math.max(s2.left, trackBox.left)),
+                 cut: s2.right > innerWidth + 0.5,
+                 intersects: s2.left < innerWidth - 0.5,
+                 deadStrip: r2(innerWidth - trackBox.right) };
       })(),
       stacked: sheets.every((s, i) => i === 0 ||
         s.getBoundingClientRect().top >= sheets[i - 1].getBoundingClientRect().bottom - 0.5),
@@ -1454,15 +1574,36 @@ try {
     s34.rowLabels.every((labels) => labels.join("|") === ROW_LABELS.join("|")) &&
       s34.rowPairs.every((p) => p === "1/1 1/1 1/1 1/1"),
     s34.rowLabels.map((labels, i) => `sheet ${i + 1}: ${labels.join("/")} (${s34.rowPairs[i]})`).join(" · "));
-  check("§4 stamps carry DEC-044's verified dates, byte-exact, and are §4's only numerals",
+  /* The numerals sweep now admits exactly two sources: the four stamps and the
+     four ordinals. The ordinals earn the exemption by being pinned to the DOM
+     in their own check above — take that check away and a hardcoded "SHEET 2 OF
+     9" would sail through here. Compared as sorted multisets so the sweep does
+     not depend on where in the section a numeral happens to sit. */
+  const digitsOf = (s) => (s.match(/\d/g) || []).sort().join("");
+  const s04Allowed = digitsOf(s34.stampText + " " + s34.ordinals.map((o) => o.text).join(" "));
+  check("§4 stamps carry DEC-044's verified dates, byte-exact; only they and the ordinals carry numerals",
     s34.stamps.every((s, i) => s === s04Copy[i].stamp) &&
       STAMP_DATES.every((d, i) => s34.stamps[i].includes(d)) &&
-      (s34.decisionsNumerals.match(/\d/g) || []).join("") === (s34.stampText.match(/\d/g) || []).join("") &&
+      digitsOf(s34.decisionsNumerals) === s04Allowed &&
       s34.categories.every((c) => c === "framework"),
-    `${s34.stamps.join(" · ")}`);
-  check("§4 announces title → stamp → rows",
-    s34.stampIsNextSibling.every(Boolean) && s34.stampBeforeRows.every(Boolean),
-    `stamp is the h3's next sibling on ${s34.stampIsNextSibling.filter(Boolean).length}/4 sheets, before the rows on ${s34.stampBeforeRows.filter(Boolean).length}/4`);
+    `${s34.stamps.join(" · ")} · section digits ${digitsOf(s34.decisionsNumerals) === s04Allowed ? "match" : "DIFFER from"} stamps + ordinals`);
+  check("§4 announces title → stamp → rows, the meta line carrying the stamp first",
+    s34.metaIsNextSibling.every(Boolean) && s34.stampOpensMeta.every(Boolean) && s34.stampBeforeRows.every(Boolean),
+    `the meta line is the h3's next sibling on ${s34.metaIsNextSibling.filter(Boolean).length}/4 sheets, opened by the stamp on ${s34.stampOpensMeta.filter(Boolean).length}/4, before the rows on ${s34.stampBeforeRows.filter(Boolean).length}/4`);
+  /* The width-independent paging channel. Its numerals are the one exception to
+     "the stamps are §4's only numerals" (above), and they are exempt only
+     because they are self-verifying: `n` is read from DOM position and `m` from
+     the list's length, so a drifting or hardcoded ordinal fails here rather
+     than passing as chrome. */
+  check("§4 sheet ordinals are self-verifying, silent, and dressed as captions",
+    s34.ordinals.every((o) => o.count === 1 && o.text === o.expected && o.hidden === "true" &&
+      o.afterStamp && o.colour === s34.mutedRgb && o.fontSize === s34.microFontSize &&
+      o.colour !== s34.accentRgb),
+    /* Every clause the check tests appears in its own evidence: text, silence,
+       position within the meta line, and the caption treatment. A detail that
+       printed only the text would fail on the ordering while showing four
+       matching strings and no cause. */
+    s34.ordinals.map((o) => `${JSON.stringify(o.text)} (expected ${JSON.stringify(o.expected)}, aria-hidden ${o.hidden}, after the stamp ${o.afterStamp}, ${o.fontSize} ${o.colour})`).join(" · "));
 
   /* --- §4: the emphasis system — rust as a mark, never as text --- */
   check("§4 sets zero rust text; the accent appears only as the four mechanism marks",
@@ -1495,9 +1636,70 @@ try {
       s34.sheetSnap.every((s) => s.align === "start" && s.nearestScroller === "the track") &&
       s34.track.overflowX === "auto",
     `track ${s34.track.scrollWidth}/${s34.track.clientWidth}, snap ${JSON.stringify(s34.track.snapType)}, sheets snap to ${s34.sheetSnap[0].nearestScroller}`);
-  check("§4 the peek: sheet 2 is on screen and cut by the track's edge",
-    s34.peek.intersects && s34.peek.cut && s34.peek.visible > 0,
-    `${s34.peek.visible}px of sheet 2 visible, cut at the track's inline end: ${s34.peek.cut}`);
+  /* The cut, width-scoped deliberately: at ~1590px and above a whole number of
+     sheets fits and there is nothing to cut, so the assertion pins the budgeted
+     1280 case and the ordinal + gauge carry the affordance elsewhere. What is
+     asserted is the relationship the founder rejected the absence of — the crop
+     lands on the screen, and no bare ground sits between the track's end and
+     that screen edge. */
+  check("§4 the cut lands on the screen edge: sheet 2 runs off it, with no dead strip",
+    s34.peek.intersects && s34.peek.cut && s34.peek.visible > 0 && Math.abs(s34.peek.deadStrip) < 0.5,
+    `${s34.peek.visible}px of sheet 2 on screen, running off the viewport edge: ${s34.peek.cut} · ground between the track's end and the screen: ${s34.peek.deadStrip}px`);
+  /* The gauge is declarations only here: the harness launches Chrome with
+     --hide-scrollbars, so no headless render can ever show the thumb. The
+     visible rail belongs to the headed cross-engine look and is recorded there. */
+  const squash = (s) => String(s).replace(/\s+/g, "");
+  check("§4 the gauge: the track's own scrollbar is thin, its thumb the accent token",
+    s34.gauge.width === "thin" && squash(s34.gauge.colour).includes(squash(s34.accentRgb)),
+    `scrollbar-width ${s34.gauge.width}, scrollbar-color ${JSON.stringify(s34.gauge.colour)} against the accent ${s34.accentRgb}`);
+  /* The bleed, as the four relationships it has to hold — never as the 128px it
+     resolves to at 1280. Run in its own eval because it moves the track's
+     scroll position, and the SECTIONS probe above is read in three motion and
+     viewport states that must not inherit a scrolled track.
+
+     The percentage trap this formula exists to avoid is silent: padding
+     percentages resolve against the containing block, scroll-padding
+     percentages against the scrollport, and the mismatch lets the track's own
+     snap pull sheet 1 to the viewport edge on first layout. Relationship 2 is
+     what catches that. */
+  const bleed = await page.eval(`(async () => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const css = (el, p) => getComputedStyle(el).getPropertyValue(p).trim();
+    const container = document.querySelector("#the-decisions .container");
+    const track = document.querySelector(".sheets");
+    const sheets = [...document.querySelectorAll(".sheet")];
+    const box = container.getBoundingClientRect();
+    const rail = box.left + parseFloat(css(container, "padding-left"));
+    const railEnd = box.right - parseFloat(css(container, "padding-right"));
+
+    track.scrollLeft = 0;
+    await new Promise((r) => setTimeout(r, 250));
+    const atRest = r2(sheets[0].getBoundingClientRect().left);
+    const restScroll = r2(track.scrollLeft);
+
+    track.scrollLeft = track.scrollWidth;
+    await new Promise((r) => setTimeout(r, 400));
+    const atEnd = r2(sheets[3].getBoundingClientRect().right);
+
+    track.scrollLeft = 0;
+    await new Promise((r) => setTimeout(r, 250));
+    const t = track.getBoundingClientRect();
+    return {
+      rail: r2(rail), railEnd: r2(railEnd),
+      trackLeft: r2(t.left), trackRight: r2(t.right), viewport: innerWidth,
+      sheet1Start: atRest, restScroll, sheet4End: atEnd,
+      docScrollWidth: document.documentElement.scrollWidth,
+      docClientWidth: document.documentElement.clientWidth
+    };
+  })()`);
+  evidence.s04Bleed = bleed;
+  check("§4 the bleed: the track spans the viewport while its content keeps the rail",
+    Math.abs(bleed.trackLeft) < 0.5 && Math.abs(bleed.trackRight - bleed.viewport) < 0.5 &&
+      Math.abs(bleed.sheet1Start - bleed.rail) < 1 && bleed.restScroll === 0 &&
+      Math.abs(bleed.sheet4End - bleed.railEnd) < 1 &&
+      bleed.docScrollWidth <= bleed.docClientWidth,
+    `track ${bleed.trackLeft}→${bleed.trackRight} in a ${bleed.viewport}px viewport · at scrollLeft ${bleed.restScroll} sheet 1 starts at ${bleed.sheet1Start} on the rail ${bleed.rail} · fully scrolled sheet 4 ends at ${bleed.sheet4End} on the rail-end ${bleed.railEnd} · document ${bleed.docScrollWidth}/${bleed.docClientWidth}`);
+
   check("§4 is the section's one named tab stop, and nothing inside a sheet is interactive",
     s34.focusable.length === 1 && /sheets/.test(s34.focusable[0]) &&
       s34.track.role === "list" && s34.track.label === "The four decisions",
@@ -1531,8 +1733,9 @@ try {
     const r2 = (n) => Math.round(n * 100) / 100;
     const section = document.querySelector("#the-decisions");
     const bar = document.querySelector(".statusbar").getBoundingClientRect().height;
-    /* Rest position: the section's own start, under the sticky bar — where
-       proximity snap will put it once the page's y snap lands. */
+    /* The landing path readers actually have, now that the page does not snap:
+       a fragment or scrollIntoView() settling the section's start under the
+       sticky bar. Nothing here waits on a snap position. */
     window.scrollTo(0, section.getBoundingClientRect().top + window.scrollY - bar);
     const track = document.querySelector(".sheets").getBoundingClientRect();
     return { bar: r2(bar), trackBottom: r2(track.bottom), trackTop: r2(track.top),
@@ -1540,7 +1743,7 @@ try {
              gapSection: getComputedStyle(document.querySelector("#the-decisions .section__body")).marginTop };
   })()`);
   evidence.s04OneScreen = oneScreen;
-  check("§4 fits one desktop screen at 1280 × 700, snapped under the sticky bar",
+  check("§4 fits one desktop screen at 1280 × 700, with its start under the sticky bar",
     oneScreen.trackBottom <= oneScreen.viewport + 0.5 && oneScreen.trackTop >= oneScreen.bar - 0.5,
     `track ${oneScreen.trackTop}→${oneScreen.trackBottom} in a ${oneScreen.viewport}px viewport under a ${oneScreen.bar}px bar (--gap-section ${oneScreen.gapSection})`);
 
@@ -1671,11 +1874,21 @@ try {
   check("§3 kicker breaks only at a sentence boundary, at every measured width",
     allWidths.every(wrapOK) && allWidths.every(([, m]) => m.viewport.scrollWidth <= m.viewport.clientWidth),
     allWidths.map(([w, m]) => `${w}px: ${m.kickerLines}L, sentences ${m.sentences.map((s) => s.rects + (s.natural > m.kickerColumn ? "*" : "")).join("/")} rect(s) in a ${m.kickerColumn}px column`).join(" · "));
-  check("§4 un-tracks below --bp-wide: sheets stack, nothing scrolls sideways",
+  /* The bleed is scoped to the same media query as the track, so below
+     --bp-wide the track's border box must stay INSIDE the container — a bleed
+     that leaked into the stacked path would push a phone page sideways. */
+  check("§4 un-tracks below --bp-wide: sheets stack, no bleed, nothing scrolls sideways",
     narrowEntries.every(([, m]) => !m.wide && m.track.scrollWidth === m.track.clientWidth &&
       m.stacked && m.sheetOverflow.every((o) => o <= 0) &&
+      m.trackBox.left >= m.rail.start - 0.5 && m.trackBox.right <= m.rail.end + 0.5 &&
       m.viewport.scrollWidth <= m.viewport.clientWidth),
-    narrowEntries.map(([w, m]) => `${w}px: track ${m.track.scrollWidth}/${m.track.clientWidth}, stacked ${m.stacked}, doc ${m.viewport.scrollWidth}/${m.viewport.clientWidth}`).join(" · "));
+    narrowEntries.map(([w, m]) => `${w}px: track ${m.track.scrollWidth}/${m.track.clientWidth} at ${m.trackBox.left}→${m.trackBox.right} inside the container ${m.rail.start}→${m.rail.end}, stacked ${m.stacked}, doc ${m.viewport.scrollWidth}/${m.viewport.clientWidth}`).join(" · "));
+  /* The phone stack's orientation channel. The ordinal is what the re-ruling
+     turned on: without it four near-identical cards give no extent, no
+     progress and no end. It must survive the un-track. */
+  check("§4 the ordinal survives the phone stack — extent and progress on every card",
+    narrowEntries.every(([, m]) => m.ordinals.every((o) => o.count === 1 && o.text === o.expected && o.hidden === "true")),
+    narrowEntries.map(([w, m]) => `${w}px: ${m.ordinals.map((o) => o.text).join(", ")}`).join(" · "));
   check("§4 label column disappears rather than compresses below --bp-wide",
     narrowEntries.every(([, m]) => m.labelColumns.every((sheet) => sheet.every((d) => !d.sharesBandWithValue))),
     narrowEntries.map(([w, m]) => `${w}px: ${m.labelColumns.flat().filter((d) => d.sharesBandWithValue).length} label(s) beside their value`).join(" · "));
@@ -2949,15 +3162,155 @@ try {
   check("landscape phone: the worst narration slot fits its card", landscape.worst.h <= landscape.list + 0.5, `${landscape.worst.slot} sets ${landscape.worst.h}px in a ${landscape.list}px card`);
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-landscape.png"), await page.screenshot());
 
-  /* ================================================================== §7.1 ==
-     Section scrolling — proximity snap.
+  /* ================================================================ footer ==
+     The closing signature. Its strings and its seven URLs are read off
+     `footer-copy.md` rather than copied into this file — the §3/§4 pattern,
+     applied to the block whose whole job is to be checkable. The participation
+     count is the page's most falsifiable sentence, and the receipts row one
+     line below it is what a reader uses to falsify it, so the two are asserted
+     against the same source.
 
-     Eleven relationships, every figure re-derived from the page. The feature is
-     four declarations in the user agent, so what is asserted here is what the
-     user agent DOES with them: where it comes to rest, what it declines to
-     move, and that the reader's own scrolling — keys, zoom, scroll-into-view —
-     survives it. Section heights change as sections land, so none of the
-     positions below is a constant.
+     URLs are verified by STRING EQUALITY and never by fetching: a check that
+     resolved them would be the one thing on this page that made a network
+     request, which is the claim the page is here to make.
+     ======================================================================= */
+
+  const footerCopy = (() => {
+    const lines = copyFile("footer-copy.md");
+    const slice = (heading) => {
+      const at = lines.findIndex((l) => l.startsWith(heading));
+      const next = lines.findIndex((l, i) => i > at && /^## /.test(l));
+      return fencesIn(lines.slice(at, next === -1 ? lines.length : next))[0];
+    };
+    const cell = (s) => s.trim().replace(/^`|`$/g, "").trim();
+    /* The receipts table: numbered rows only, so no prose row can drift in. */
+    const receipts = lines
+      .filter((l) => /^\|\s*\d+\s*\|/.test(l))
+      .map((l) => l.split("|").slice(1, -1))
+      .map((c) => ({ label: cell(c[1]), href: cell(c[2]) }));
+    const slot = (name) => {
+      const row = lines.find((l) => new RegExp("^\\|\\s*`?" + name + "`?\\s*\\|").test(l));
+      return row ? cell(row.split("|")[2]) : null;
+    };
+    return {
+      team: slice("## 2. The team line"),
+      authorship: slice("## 4. The authorship line"),
+      receipts,
+      contactText: slot("Link text"),
+      contactHref: slot("href")
+    };
+  })();
+  evidence.footerCopy = footerCopy;
+
+  await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
+  await page.setViewport({ width: 1280, height: 900 });
+  await page.goto(PAGE_URL);
+  const footer = await page.eval(`(() => {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const css = (el, p) => getComputedStyle(el).getPropertyValue(p).trim();
+    const foot = document.querySelector("body > footer");
+    const container = foot.querySelector(".container");
+    const box = container.getBoundingClientRect();
+    const rail = box.left + parseFloat(css(container, "padding-left"));
+    const railEnd = box.right - parseFloat(css(container, "padding-right"));
+    const lines = [...foot.querySelectorAll("p.pagefoot__line")];
+    const receipts = [...foot.querySelectorAll(".pagefoot__receipts a")];
+    const contact = [...foot.querySelectorAll(".pagefoot__contact a")];
+    const text = (el) => el.textContent.replace(/\\s+/g, " ").trim();
+    return {
+      lineText: lines.map(text),
+      authorshipSentence: lines.length > 1 ? text(lines[1]) : null,
+      receipts: receipts.map((a) => ({ label: text(a), href: a.getAttribute("href") })),
+      /* Every anchor in the footer, so a stray link cannot ride in unasserted
+         between the receipts row and the contact line. */
+      allLinks: [...foot.querySelectorAll("a[href]")].map((a) => a.getAttribute("href")),
+      contact: contact.map((a) => ({ text: text(a), href: a.getAttribute("href") })),
+      /* §7.2: everything on the rail, no counterweight, nothing centred. */
+      starts: [...container.children].map((el) => ({
+        cls: el.className, start: r2(el.getBoundingClientRect().left),
+        align: css(el, "text-align")
+      })),
+      rail: r2(rail), railEnd: r2(railEnd),
+      placeholders: foot.querySelectorAll("[data-shell-placeholder]").length,
+      lockups: foot.querySelectorAll(".brand, .brand__mark, .brand__word").length,
+      footText: text(foot),
+      colours: lines.map((p) => css(p, "color")),
+      inkRgb: css(document.body, "color"),
+      chipHref: document.querySelector("#hero .chip").getAttribute("href")
+    };
+  })()`);
+  evidence.footer = footer;
+
+  check("the footer ships the team line and the authorship line, byte-equal to the deliverable",
+    Boolean(footerCopy.team) && Boolean(footerCopy.authorship) &&
+      footer.placeholders === 0 && footer.lineText.length === 2 &&
+      footer.lineText[0] === footerCopy.team &&
+      footer.authorshipSentence === footerCopy.authorship,
+    `${footer.placeholders} placeholder(s) · team line equal: ${footer.lineText[0] === footerCopy.team} · authorship equal: ${footer.authorshipSentence === footerCopy.authorship}`);
+  /* The count is the claim; the receipts are what make it checkable. Both the
+     label and the URL are compared, in order — a right URL under a wrong label
+     sends a reader to the wrong artifact, which on this page is the same
+     failure as a wrong number. */
+  check("the footer's six receipts carry the deliverable's labels and URLs, in order",
+    footerCopy.receipts.length === 6 && footer.receipts.length === 6 &&
+      footer.receipts.every((a, i) => a.label === footerCopy.receipts[i].label &&
+        a.href === footerCopy.receipts[i].href),
+    footer.receipts.map((a, i) => `${a.label} → ${a.href === (footerCopy.receipts[i] || {}).href ? "ok" : "DIFFERS: " + a.href}`).join(" · "));
+  /* The chip and the VERIFY receipt are one string in two places. They drift
+     the moment one of them is edited alone, and a drifted proof link is a 404
+     on the page's own evidence. */
+  check("the VERIFY chip and the footer's VERIFY receipt are the same string",
+    footer.chipHref === (footerCopy.receipts.find((r) => r.label === "VERIFY") || {}).href &&
+      footer.receipts.some((a) => a.href === footer.chipHref),
+    `chip ${footer.chipHref}`);
+  check("the footer's contact path is the GitHub profile, its text its own destination",
+    footer.contact.length === 1 && footer.contact[0].text === footerCopy.contactText &&
+      footer.contact[0].href === footerCopy.contactHref &&
+      footerCopy.contactHref.endsWith(footerCopy.contactText) &&
+      footer.allLinks.length === footer.receipts.length + 1,
+    `${JSON.stringify(footer.contact)} · ${footer.allLinks.length} links in the footer, all accounted for`);
+  /* §7.2's footer clause: both lines, the receipts row and the contact line on
+     the rail, no counterweight, no centred element, and no lockup — the header
+     carries the page's only one. */
+  check("the footer inherits the alignment system: everything on the rail, nothing centred",
+    footer.starts.length === 4 &&
+      footer.starts.every((b) => Math.abs(b.start - footer.rail) < 1 &&
+        (b.align === "start" || b.align === "left")) &&
+      footer.lockups === 0,
+    footer.starts.map((b) => `${b.cls.split(" ").pop()} at ${b.start} (${b.align})`).join(" · ") +
+      ` against the rail at ${footer.rail} · ${footer.lockups} lockups`);
+
+  /* ================================================================== §7.1 ==
+     Scroll landing — the page does not snap.
+
+     Section snapping was judged on the rendered page and removed; what stays is
+     where any scroll-into-view comes to rest. The assertions that guarded the
+     feature are not deleted wholesale — each was dispositioned by name in
+     §7.1's retirement inventory, and this block is that inventory built:
+
+       A1  INVERTS  — the document scroller computes `none`; snapping must not
+                      silently return. This is the one that would catch a
+                      re-introduction, so it is the first check in the block.
+       A2  KEEPS    — the padding is the bar plus one --rhythm, unchanged.
+       A3  RE-BASES — the clearance is measured at the landing readers actually
+                      have (scrollIntoView) rather than at a snap rest, and now
+                      answers for all five ruled sections rather than four.
+       A4  RE-BASES — nothing anywhere computes a non-`none` scroll-snap-align
+                      except §4's sheets, whose scroller is the track.
+       A5  RE-SCOPES— `scroll-snap-stop: normal` on the sheets, the only snap
+                      areas left.
+       A6  RETIRES  — subsumed by the re-based A4 sweep (no snap outside the
+                      track, §2's log included).
+       A7  RETIRES  — the §2 rest-position sweep had nothing left to measure:
+                      with no y snap, no rest position can be moved. The
+                      `.section--no-snap` class left the markup with it.
+       A8  KEEPS    — arrow/page keys as a no-trap property, real key events.
+       A9  KEEPS    — 200% zoom reachability, unchanged.
+       A10 RE-BASES — to its surviving half: the padding is untouched by reduced
+                      motion. The track's reduced-motion half is asserted in §4.
+       A11 RE-BASES — to its natural form: with no y snap a start-aligned
+                      landing is exact, in both motion states. The pull DEC-053
+                      priced no longer exists on this axis.
      ========================================================================= */
 
   /* Shared page-side helpers. `nearestScroller` deliberately walks past body
@@ -3019,56 +3372,63 @@ try {
   })()`);
   evidence.snapDecl = snapDecl;
 
-  /* A1. `y proximity` serialises as `"y"` — proximity is the initial strictness
-     and is dropped, while `mandatory` serialises in full. So this one string
-     carries both halves: the axis and the refusal to make it mandatory. The
-     scroller identity is asserted alongside because on body the declaration is
-     silently inert: nothing errors, nothing snaps. */
-  check("snapping is declared on the element that actually scrolls, and stays proximity",
-    snapDecl.scrollerIsRoot && snapDecl.snapType === "y",
-    `document.scrollingElement is :root, scroll-snap-type "${snapDecl.snapType}" (mandatory would serialise in full)`);
+  /* A1, inverted. The scroller identity is asserted alongside the value because
+     the two together are what make the claim falsifiable: `scroll-snap-type` on
+     body is silently inert — nothing errors and nothing snaps — so a check that
+     read body would report `none` while :root snapped. Reading the element that
+     actually scrolls is what makes a re-introduction show up here. */
+  check("the page does not snap — the element that actually scrolls declares none",
+    snapDecl.scrollerIsRoot && snapDecl.snapType === "none",
+    `document.scrollingElement is :root, scroll-snap-type "${snapDecl.snapType}"`);
   /* A2. The bar's measured height, not the token's — the token could be right
      while the bar renders at something else. */
   check("scroll padding is the measured bar plus one rhythm, never a hardcoded 72",
     Math.abs(snapDecl.pad - (snapDecl.bar + snapDecl.rhythm)) < 0.5 && Math.abs(snapDecl.bar - snapDecl.barToken) < 0.5,
     `${snapDecl.pad}px = ${snapDecl.bar}px bar (rendered; --bar-h resolves ${snapDecl.barToken}px) + ${snapDecl.rhythm}px --rhythm`);
-  /* A4, first half: the snap set is exactly the five non-§2 sections. */
-  const snapSet = snapDecl.sections.filter((s) => s.align === "start").map((s) => s.id);
-  const exempt = snapDecl.sections.filter((s) => s.align === "none").map((s) => s.id);
-  check("exactly the five non-§2 sections snap, and §2 declares its exemption",
-    snapSet.length === 5 && exempt.length === 1 && exempt[0] === "watch-it-ship" &&
-      snapDecl.sections.find((s) => s.id === "watch-it-ship").exempt,
-    `${snapSet.join(" · ")} snap; ${exempt.join(", ")} is .section--no-snap`);
-  /* A4, second half: §4's sheets snap on their own x axis to the track. If one
-     ever bound to the document, a sheet would become a rest position on the
-     page's y axis. */
-  const strays = snapDecl.areas.filter((a) => !a.el.startsWith("section#") && !a.scroller.startsWith("ol.sheets"));
-  check("no snap area outside §4's track binds to the document",
-    strays.length === 0,
-    `${snapDecl.areas.length} snap areas: ${snapDecl.areas.filter((a) => a.el.startsWith("section#")).length} sections on :root, ${snapDecl.areas.filter((a) => a.scroller.startsWith("ol.sheets")).length} sheets on ol.sheets` +
+  /* A4, re-based. The whole-document sweep is the surviving form: no element
+     ANYWHERE computes a non-`none` scroll-snap-align except §4's four sheets,
+     and each of those has the track as its nearest scroll container. That
+     subsumes A6 (a nested scroller silently gaining snap — §2's log included)
+     and it is what a section quietly regaining `scroll-snap-align: start` would
+     fail on. `.section--no-snap` is gone from the markup: with nothing snapping
+     there is no exemption left to declare, and a class that declares one is
+     itself the defect this catches. */
+  const snapping = snapDecl.sections.filter((s) => s.align !== "none").map((s) => s.id);
+  const strays = snapDecl.areas.filter((a) => !a.scroller.startsWith("ol.sheets"));
+  check("nothing snaps outside §4's track — no section, no nested scroller, no stray",
+    snapping.length === 0 && strays.length === 0 &&
+      snapDecl.areas.length === 4 && snapDecl.areas.every((a) => a.el.startsWith("li.sheet")) &&
+      snapDecl.sections.every((s) => !s.exempt) &&
+      snapDecl.logSnap === "none" && /(auto|scroll)/.test(snapDecl.logOverflow),
+    `${snapDecl.areas.length} snap areas, all sheets on ol.sheets · ${snapping.length} sections declaring an align · ` +
+      `§2's log is a real scroller (overflow-y ${snapDecl.logOverflow}) at scroll-snap-type ${snapDecl.logSnap}` +
       (strays.length ? ` — STRAY: ${strays.map((s) => s.el + " → " + s.scroller).join(", ")}` : ""));
-  /* A5. `always` is scroll-jacking by declaration: it forces a stop at every
-     section and takes the fling gesture away. It is the obvious "improvement"
-     here, which is why it is asserted rather than trusted. */
+  /* A5, re-scoped to the sheets — the only snap areas left. `always` is
+     scroll-jacking by declaration: it forces a stop at every sheet and takes
+     the fling gesture away. It is the obvious "improvement" to make on a paged
+     track, which is why it is asserted rather than trusted. */
   check("no snap area asks for scroll-snap-stop: always",
-    snapDecl.areas.every((a) => a.stop === "normal"),
-    `${snapDecl.areas.length} areas, all normal`);
-  /* A6. Not inherited, so this holds by default — asserted because a nested
-     scroller silently gaining snap is invisible until a reader is inside it. */
-  check("§2's terminal log does not quantise its own scrollback",
-    snapDecl.logSnap === "none" && /(auto|scroll)/.test(snapDecl.logOverflow),
-    `.log is a real scroll container (overflow-y ${snapDecl.logOverflow}) with scroll-snap-type ${snapDecl.logSnap}`);
+    snapDecl.areas.length === 4 && snapDecl.areas.every((a) => a.stop === "normal"),
+    /* The measured values, not the word "normal". This detail used to print
+       "all normal" as a literal, so planting `scroll-snap-stop: always` on the
+       sheets turned the check red while its evidence still said every area was
+       normal. A check whose evidence is a literal cannot report what broke,
+       which is the defect class this suite keeps finding in itself. */
+    `${snapDecl.areas.length} sheet areas: ${snapDecl.areas.map((a) => a.stop).join(", ")}`);
 
-  /* A3. Measured at a real rest, per section: scroll each snapping section to
-     its start, let the user agent settle, and read the gap between the bar's
-     own hairline and the section's. The binding property is the clearance, not
-     the 72 — §1 carries no rule, so the four ruled snapping sections answer. */
+  /* A3, re-based to the landing readers actually have. It used to be measured
+     at a snap rest; now it is measured at the same place a fragment link, the
+     skip link or find-in-page puts them — scrollIntoView, settled. The binding
+     property is unchanged: the section's own hairline must clear the bar's by
+     at least --gap-hairline, or the page's separator motif reads as an
+     accidental double rule. §1 carries no rule, so five sections answer where
+     four used to (§2 is no longer excluded — nothing exempts it now). */
   const clearances = await page.eval(`(async () => {
     ${SNAP_LIB}
     const out = [];
     for (const sec of [...document.querySelectorAll("main .section")]) {
       const rule = sec.querySelector(".rule__line");
-      if (!rule || getComputedStyle(sec).scrollSnapAlign === "none") continue;
+      if (!rule) continue;
       scrollTo({ top: 0, behavior: "instant" });
       await settle(60);
       sec.scrollIntoView({ behavior: "instant" });
@@ -3081,53 +3441,23 @@ try {
   })()`);
   evidence.snapClearance = clearances;
   const worstClear = Math.min(...clearances.out.map((c) => c.clear));
-  check("a snapped section's rule never crowds the bar's rule",
-    clearances.out.length === 4 && worstClear >= clearances.hairline - 0.5,
+  check("a section landed by scroll-into-view never crowds the bar's rule",
+    clearances.out.length === 5 && worstClear >= clearances.hairline - 0.5,
     `${clearances.out.map((c) => c.id + " " + c.clear + "px").join(" · ")} against a ${clearances.hairline}px --gap-hairline floor`);
 
-  /* A7. The exemption as a property, not an intention: sweep every rest
-     position across §2 at a 40px step, and of the ones where the playback core
-     is ≥90% visible — the threshold the chain pauses below — count how many the
-     user agent moved. One is a failure.
+  /* A7 RETIRED with the feature. It swept every rest position across §2 and
+     counted how many the user agent moved, to prove §2's snap exemption held as
+     a property rather than as an intention. With no y snap on the document
+     there is no engine correction left to observe: the sweep would compare
+     every requested offset against itself and could not fail. That is precisely
+     the blind-check shape this project tore out elsewhere, so it leaves rather
+     than staying green for free. What replaced its subject: the re-based A4
+     above proves no y snap exists to move a rest in the first place, and §2's
+     playback gate keeps its own visibility assertions in the replay block.
 
-     The aim is the offset REQUESTED, never the offset observed afterwards.
-     Blink applies the snap inside the scroll call, so reading `scrollY` back
-     reports where the engine put you, not where you asked to be: a sweep
-     written that way compares a number against itself and cannot fail. The
-     core's visibility at the requested offset is computed from the core's own
-     document rectangle for the same reason — measured after the scroll, it is
-     the visibility of wherever the engine went. */
-  const sweepSnap = {};
-  for (const [w, h] of [[1280, 900], [375, 553]]) {
-    await page.setViewport({ width: w, height: h, deviceScaleFactor: 1, mobile: w < 700 });
-    await page.goto(PAGE_URL);
-    sweepSnap[w + "x" + h] = await page.eval(`(async () => {
-      ${SNAP_LIB}
-      const core = document.querySelector(".replay__core");
-      const bar = document.querySelector(".statusbar").getBoundingClientRect().height;
-      const docTop = () => core.getBoundingClientRect().top + scrollY;
-      const max = () => document.documentElement.scrollHeight - innerHeight;
-      const from = Math.max(0, docTop() - innerHeight);
-      const to = Math.min(max(), docTop() + core.getBoundingClientRect().height + innerHeight);
-      const samples = [];
-      for (let y = from; y <= to; y += 40) {
-        /* Predicted from the core's document position, at the offset asked for. */
-        const top = docTop(), height = core.getBoundingClientRect().height;
-        const aim = Math.min(y, max());
-        const seen = Math.max(0, Math.min(top + height, aim + innerHeight) - Math.max(top, aim + bar)) / height;
-        scrollTo({ top: y, behavior: "instant" });
-        await settle(140);
-        samples.push({ aim: Math.round(aim), settled: Math.round(scrollY), seen: r2(seen) });
-      }
-      return { samples, gated: samples.filter((s) => s.seen >= 0.9),
-               moved: samples.filter((s) => s.seen >= 0.9 && Math.abs(s.settled - s.aim) > 1) };
-    })()`);
-  }
-  evidence.snapS2Sweep = sweepSnap;
-  const s2Moved = Object.values(sweepSnap).reduce((n, v) => n + v.moved.length, 0);
-  check("§2's exemption holds as a property: no rest position that shows the core is moved",
-    s2Moved === 0 && Object.values(sweepSnap).every((v) => v.gated.length > 0),
-    Object.entries(sweepSnap).map(([v, r]) => `${v}: 0 of ${r.gated.length} gated rests moved (${r.samples.length} sampled)`).join(" · "));
+     A7's disclosure debt travels with it: the check printed a hardcoded zero
+     where its measured count belonged, so its "0 of N gated rests moved"
+     detail was never a measurement. Nothing may quote that figure. */
 
   /* A8. Real key events, never `window.scrollBy` — programmatic and
      input-driven snapping differ in Blink, and the programmatic form reports a
@@ -3174,9 +3504,9 @@ try {
     Object.values(keyboard).every((k) => strictlyUp(k.pages) && k.pages[k.pages.length - 1] >= k.max - 1),
     Object.entries(keyboard).map(([v, k]) => `${v}: ${k.pages.length} presses to ${k.pages[k.pages.length - 1]} of ${k.max}`).join(" · "));
 
-  /* A9. 200% zoom, which is where `mandatory` would have made the page
-     unreadable: every section's last rendered text must still be reachable and
-     land clear of the bar. */
+  /* A9, unchanged. 200% zoom is where every section is oversized and the whole
+     page becomes one long reflow: every section's last rendered text must still
+     be reachable and land clear of the bar. */
   await page.setViewport({ width: 720, height: 450, deviceScaleFactor: 2, mobile: false });
   await page.goto(PAGE_URL);
   const zoom = await page.eval(`(async () => {
@@ -3206,29 +3536,29 @@ try {
     zoom.out.map((z) => `${z.id} +${z.top}px under the bar`).join(" · ") +
       (unreachable.length ? ` — UNREACHABLE: ${unreachable.map((u) => u.id).join(", ")}` : ""));
 
-  /* A11 — the mechanical stand-in for find-in-page. The browser's find UI is
-     not scriptable, so this exercises the same scroll-into-view-then-snap path
-     the find uses without being the find; real find-in-page stays a manual
-     check in both engines.
+  /* A11, re-based to its natural form. The browser's find UI is not scriptable,
+     so this exercises the same scroll-into-view path the find uses without
+     being the find; real find-in-page stays a manual check in both engines, and
+     on a real phone it stays a named manual check at the re-gate.
 
-     It is run over EVERY text leaf on the page rather than over the one
-     paragraph §7.1 names, because a match is not a nominated element — any word
-     the reader types is one — and because a single sample cannot separate the
-     two alignments below, which behave differently. Log lines are excluded:
-     they live in §2's own scroller, which has its own scrollback and its own
-     assertions.
+     It is run over EVERY text leaf on the page rather than over one nominated
+     paragraph, because a match is not a nominated element — any word the reader
+     types is one. Log lines are excluded: they live in §2's own scroller, which
+     has its own scrollback and its own assertions.
 
-     Two alignments, and they are not interchangeable:
+     Both alignments are still swept, and the sweep is still run in both motion
+     states, because that pairing is what makes the claim falsifiable rather
+     than a restatement of the removal:
        - CENTER-IF-NEEDED is what Chrome's find actually does (ScrollAlignment
-         CenterIfNeeded): leave a visible match alone, otherwise centre it. A
-         centred match sits ~half a viewport from either edge, which is more
-         than the proximity pull can spend.
-       - START is the default `scrollIntoView()` §7.1's A11 was written against,
-         and it is the harsher stand-in of the two — it parks the target at the
-         snapport's own start edge, where the next section's snap position can
-         be nearer than the target. Fragment navigation is start-aligned, so it
-         is not hypothetical; every fragment target this page ships is asserted
-         below. */
+         CenterIfNeeded): leave a visible match alone, otherwise centre it.
+       - START is the default `scrollIntoView()`, and it used to be the harsher
+         of the two: it parked the target at the snapport's start edge, where
+         the next section's snap position could be nearer than the target, and
+         the target got pulled past. With no y snap that pull is gone and a
+         start-aligned landing is exact — which is the relationship A11 now
+         asserts, in both states rather than only with snapping off. Fragment
+         navigation is start-aligned, so this is not hypothetical; every
+         fragment target the page ships is asserted below. */
   const findLike = {};
   for (const [w, h] of [[1280, 900], [375, 553]]) {
     for (const snapping of ["on", "off"]) {
@@ -3303,22 +3633,31 @@ try {
   }
   evidence.snapFindLike = findLike;
   const onSnap = Object.entries(findLike).filter(([k]) => k.endsWith("snap-on"));
-  const offSnap = Object.entries(findLike).filter(([k]) => k.endsWith("snap-off"));
-  const gone = (list) => list.filter((o) => o.seen <= 0).length;
+  const allStates = Object.entries(findLike);
   check("find-in-page's own alignment never leaves a match off screen, at either viewport",
     onSnap.every(([, f]) => f.centred.length === 0),
     onSnap.map(([k, f]) => `${k}: ${f.leaves - f.centred.length}/${f.leaves} whole`).join(" · "));
-  /* The cost, asserted rather than absorbed, and named where it bites: a
-     start-aligned landing whose target sits within the proximity pull of the
-     NEXT section's start is moved past. It is zero with snapping off, which is
-     what identifies the snap as the cause rather than the alignment. */
-  check("a start-aligned landing is exact when nothing snaps — the pull is the whole difference",
-    offSnap.every(([, f]) => f.started.length === 0 && f.centred.length === 0),
-    offSnap.map(([k, f]) => `${k}: 0 of ${f.leaves} moved`).join(" · ") +
-      ` · with snapping on, start-aligned leaves ${onSnap.map(([k, f]) => gone(f.started) + " off screen at " + k.split(" ")[0]).join(" and ")}`);
+  /* A11's natural form. This used to hold only on the snap-off path — the cost
+     of the proximity pull, priced and named rather than absorbed. Removing the
+     page's snap is what makes it hold everywhere, so it is asserted across both
+     motion states and both viewports: every text leaf on the page, landed at
+     the start edge, settles fully visible below the bar. A single leaf short of
+     whole fails it. */
+  check("a start-aligned landing is exact for every text leaf, in both motion states",
+    allStates.every(([, f]) => f.started.length === 0 && f.centred.length === 0),
+    /* Both counts are printed, from the measurements rather than from the
+       expectation. A detail that reported only one of the two alignments would
+       fail on the other while printing zeroes — a check whose evidence does not
+       name what broke is the defect class this suite keeps finding. */
+    allStates.map(([k, f]) =>
+      `${k}: start-aligned ${f.started.length}/${f.leaves} short, centred ${f.centred.length}/${f.leaves} short`
+      + (f.started.length ? ` [${f.started.slice(0, 3).map((o) => o.sec + " " + Math.round(o.seen * 100) + "%").join(", ")}]` : "")
+      + (f.centred.length ? ` [${f.centred.slice(0, 3).map((o) => o.sec + " " + Math.round(o.seen * 100) + "%").join(", ")}]` : "")
+    ).join(" · "));
   /* Which matters exactly as far as the page start-aligns anything, and it
-     ships one such mechanism: fragment links. Each names a section start, and a
-     section start IS a snap position, so the pull has nowhere to take it. */
+     ships one such mechanism: fragment links. `scroll-padding-block-start` is
+     what puts each landing clear of the bar — that is the padding's whole job,
+     and it is why the padding did not leave with the snap. */
   check("every fragment link the page ships lands its target clear of the bar",
     onSnap.every(([, f]) => f.frag.length > 0 && f.frag.every((x) => !x.missing && x.onScreen && x.top >= -0.5)),
     onSnap.map(([k, f]) => `${k}: ${f.frag.map((x) => "#" + x.id + " +" + x.top + "px").join(", ")}`).join(" · "));
@@ -3326,9 +3665,12 @@ try {
     onSnap.every(([, f]) => f.focused.length > 0 && f.focused.every((x) => x.whole)),
     onSnap.map(([k, f]) => `${k}: ` + f.focused.map((x) => x.el.split(".")[0] + (x.h <= x.band ? ` whole +${x.top}px` : ` ${Math.round(x.seen * 100)}% of ${x.h}px in a ${x.band}px band`)).join(", ")).join(" · "));
 
-  /* A10. The ruling, made once in one media query — and the padding is NOT part
-     of it: anchors, the skip link and find-in-page still have to clear the bar
-     for a reader who asked for less motion. */
+  /* A10, re-based to its surviving half. The page has no snap to turn off under
+     reduce, so what is left to assert is that the PADDING is not swept away
+     with it: anchors, the skip link and find-in-page still have to clear the
+     bar for a reader who asked for less motion, and the reduced path is the one
+     where a "less scrolling machinery" edit would land. §4's track keeps the
+     reduced-motion half of its own snap, asserted with §4. */
   await page.setMedia({ colorScheme: "dark", reducedMotion: "reduce" });
   await page.setViewport({ width: 1280, height: 900 });
   await page.goto(PAGE_URL);
@@ -3345,10 +3687,10 @@ try {
     };
   })()`);
   evidence.snapReduced = snapReduced;
-  check("under reduced motion the page stops snapping and the scroll padding stays",
+  check("under reduced motion the scroll padding stays, and nothing starts snapping",
     snapReduced.snapType === "none" && Math.abs(snapReduced.pad - (snapReduced.bar + snapReduced.rhythm)) < 0.5 &&
-      snapReduced.track === "none",
-    `:root scroll-snap-type ${snapReduced.snapType}, §4's track ${snapReduced.track}, padding still ${snapReduced.pad}px = ${snapReduced.bar} + ${snapReduced.rhythm}`);
+      snapReduced.sections.every((a) => a === "none"),
+    `:root scroll-snap-type ${snapReduced.snapType}, ${snapReduced.sections.filter((a) => a !== "none").length} section(s) declaring an align, padding still ${snapReduced.pad}px = ${snapReduced.bar} + ${snapReduced.rhythm}`);
 
   /* The spec's central claim, and the one thing a stylesheet cannot show:
      nothing in this project reads, writes or intercepts the PAGE's scroll

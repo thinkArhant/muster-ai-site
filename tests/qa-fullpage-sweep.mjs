@@ -4,7 +4,8 @@
    `qa-independent-audit.mjs` re-derives §2, the palette and the accessibility
    floors from the specs. This file covers what neither reaches: the whole-page
    copy matrix including VERIFY.md, §4's stamps, the motion inventory as a count,
-   the counting cells' announced value during playback, scroll-snap as behaviour,
+   the counting cells' announced value during playback, the reader's own scroll
+   paths as behaviour rather than as declarations,
    and complete content with motion off and with JavaScript off — section by
    section rather than for §2 alone.
 
@@ -47,10 +48,18 @@ function staticChecks() {
     verify !== null && verify.length > 0,
     verify ? `${verify.split("\n").length} lines` : "missing");
 
+  /* The chip's production target is the site repo's rendered blob URL: a static
+     host serves a relative `VERIFY.md` as raw markdown or 404s it. So the
+     subject survives and the form re-bases — the URL still has to name a path
+     that exists in THIS repo, which is what keeps the check falsifiable
+     without ever fetching anything. The footer's VERIFY receipt is the same
+     string; verify-shell.mjs asserts the two are byte-equal. */
   const chipHref = html.match(/class="chip chip--emphasis" href="([^"]+)"/)?.[1];
-  check("§1's VERIFY chip resolves to a file that exists in the repo",
-    chipHref === "VERIFY.md" && existsSync(join(ROOT, chipHref)),
-    `chip href = ${chipHref ?? "not found"}; target ${chipHref && existsSync(join(ROOT, chipHref)) ? "present" : "ABSENT"}`);
+  const CHIP_BLOB = "https://github.com/thinkArhant/muster-ai-site/blob/main/";
+  const chipPath = chipHref?.startsWith(CHIP_BLOB) ? chipHref.slice(CHIP_BLOB.length) : null;
+  check("§1's VERIFY chip names a file that exists in the repo",
+    chipPath === "VERIFY.md" && existsSync(join(ROOT, chipPath)),
+    `chip href = ${chipHref ?? "not found"}; repo path ${chipPath ?? "off the blob root"} ${chipPath && existsSync(join(ROOT, chipPath)) ? "present" : "ABSENT"}`);
 
   check("R12's verified curl was parsed off copy-rules.md, not retyped",
     R12.startsWith("curl -fsSL https://raw.githubusercontent.com/"), R12 || "not parsed");
@@ -383,7 +392,12 @@ async function run() {
       `visible "${midRoll.visible}" (state ${midRoll.state}) while the AX tree reads 9.3 h and 4.8 h; ` +
         `${liveProps.length} nodes with a live property`);
 
-    /* ---- scroll-snap: keyboard paging ---- */
+    /* ---- reader paths: keyboard paging ----
+       These three checks were written under the page's section snapping and
+       titled for it. The feature is gone (page-shell.md §7.1); their subjects
+       are not. Keyboard paging, find-in-page and 200% zoom were always
+       assertions about the reader's own paths surviving whatever the page
+       declares, so the claims drop the word and keep the property. */
     await page.goto(PAGE);
     const paging = await page.eval(`(() => {
       const doc = document.documentElement;
@@ -411,7 +425,7 @@ async function run() {
     evidence.pageDownStops = stops;
     const reachedBottom = stops[stops.length - 1] >= paging.max - 1;
     const monotone = stops.every((y, i) => i === 0 || y >= stops[i - 1]);
-    check("scroll-snap: PageDown walks the page to its end in a bounded number of presses, never stalling",
+    check("PageDown walks the page to its end in a bounded number of presses, never stalling",
       reachedBottom && monotone && stops.length <= 20 && new Set(stops).size === stops.length,
       `${stops.length} presses to the bottom (${paging.max}px of scroll), strictly advancing: ${stops.join(" → ")}`);
 
@@ -434,7 +448,7 @@ async function run() {
       reach.every((r) => r.clearsBar),
       reach.map((r) => `${r.id} +${r.top}px`).join(" · "));
 
-    /* ---- scroll-snap: find-in-page ---- */
+    /* ---- reader paths: find-in-page ---- */
     const find = await page.eval(`(async () => {
       const leaves = [...document.querySelectorAll("main *")]
         .filter(el => el.children.length === 0 && el.textContent.trim() && el.getClientRects().length);
@@ -461,13 +475,13 @@ async function run() {
       return { leaves: leaves.length, ...off };
     })()`);
     evidence.find = find;
-    check("scroll-snap: a find-in-page match stays on screen under centre-if-needed, which is what the engine's find uses",
+    check("a find-in-page match stays on screen under centre-if-needed, which is what the engine's find uses",
       find.centreIfNeeded.length === 0,
       `0 of ${find.leaves} text leaves land off screen centred; start-aligned leaves ${find.startAligned.length} off screen`);
     report("start-aligned scrollIntoView, which no link on the page currently uses",
       `${find.startAligned.length} of ${find.leaves} leaves off screen: ${find.startAligned.slice(0, 6).join(", ")}${find.startAligned.length > 6 ? " …" : ""}`);
 
-    /* ---- scroll-snap: 200% zoom ---- */
+    /* ---- reader paths: 200% zoom ---- */
     await page.setViewport({ width: 720, height: 450, deviceScaleFactor: 2 });
     await page.goto(PAGE);
     const zoom = await page.eval(`(async () => {

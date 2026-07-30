@@ -153,6 +153,105 @@ line/ordinal and the injected style block.
   was written — the scroll-padding percentage trap above; the shipped formula is the corrected,
   re-measured one.
 
+### 2026-07-29 HO-036 — Gate B fix round built: the footer ships, the page stops snapping, §4 pages at the screen edge
+**Type:** handoff
+**Producer:** developer
+**Deliverable:** `index.html` · `styles/base.css`, `styles/chrome.css`, `styles/sections.css` ·
+`tests/verify-shell.mjs`, `tests/qa-fullpage-sweep.mjs`
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**All three runners green on the shipped tree, run here**: `scripts/test.sh` GREEN both engines
+(**282/282 + 27/27**), the independent audit exit 0 at **108/108**, the full-page sweep exit 0 at
+**42/42**. HO-034's designed spec-ahead-of-build red is closed — §4's strings now match the copy
+file. Cross-engine looked at, not assumed: WebKit renders of the formation, §4's track and the
+footer (QuickLook) against the Blink fullpage renders; both agree on all three rulings.
+
+**Per finding:**
+
+- **F-B6 + the footer (DEC-054/056)** — the placeholder is gone; the hard launch blocker is
+  closed, and the sweep's own placeholder report now reads *"none — the footer carries real
+  copy."* Team line and authorship line are byte-equal to `footer-copy.md`, the six receipts carry
+  its labels **and** its URLs in order, and the chip's `href` is now the blob URL and is asserted
+  **byte-equal to the VERIFY receipt** — the two drift the moment one is edited alone. The
+  contact link is the GitHub profile. **No email anywhere in the shipped set**, swept over every
+  shipped file rather than over the footer, because an address arriving in a comment or a
+  meta-description is what the footer checks would never see.
+- **The network guard, re-proven after the href change** — a fetching `<img src="https://…">`
+  planted into the footer turned five checks red naming `index.html:484 img[src]`, with all nine
+  `<a href>` navigations still permitted. The guard is narrowed, not weakened.
+- **F-B1, the alignment system** — the formation spans the container: bus = plate row = container
+  content width, plate 1 on the rail, plate 7 on the rail-end, **hub centre − axis = 0.0px** at
+  1280. Asserted as those relationships and never as an x. Reverting the diagram to
+  `fit-content` reproduces the founder's finding exactly — **delta −173.81px**, the orphan axis.
+- **F-B2, snap removed** — every one of §7.1's eleven assertions is dispositioned by name in the
+  harness, with the inventory written into the block header so a later reader sees which
+  inverted, which re-based and which retired. A1 now asserts the document scroller computes
+  `none` (re-introducing snap turns it and the stray sweep red). A3 re-bases to the landing
+  readers actually have and answers for **five** sections rather than four. **A11 re-bases to its
+  natural form and is the round's real gain**: a start-aligned landing is now exact for *every*
+  text leaf in *both* motion states (0 of 132/131/122/130), where it previously held only with
+  snapping off — the cost DEC-053 priced is gone rather than absorbed. A6 and A7 retire; the
+  `.section--no-snap` class and its comment left the markup with them.
+- **F-B3, §4's affordance** — the token-derived `--track-bleed` lands the cut on the physical
+  screen edge (**dead strip 0.0px**, against 128px on the judged build), sheet 1 rests on the rail
+  at `scrollLeft` 0, the fully-scrolled track rests sheet 4 on the rail-end, and the document
+  leaks no page-level x scroll. `SHEET n OF 4` ordinals are `aria-hidden` and **self-verifying** —
+  both numerals read from the DOM, never from the spec — and they survive the phone un-track at
+  all four widths. The gauge is asserted as declarations. §4's track keeps its x snap as ruled.
+- **§4's copy (HO-034)** — decision 1's trade-off and decision 4's problem, trade-off and
+  mechanism all swapped; the whole 16-value inventory is compared against the copy file.
+
+**Every new assertion was planted and watched go red** — three batches, tree restored and
+verified clean between each: the axis, the ordinal (drifted and re-ordered), the gauge, both
+halves of the bleed, the screen-edge cut, the phone no-bleed clause, the footer's four checks, the
+email guard, the fetching reference, A1, A2, A3, A4, A5 and A10.
+
+**Three harness defects found by planting, and fixed** — each printed a constant where a
+measurement belonged, which is OBS-015's shape:
+1. `scroll-snap-stop` printed the literal `"all normal"`, so planting `always` turned the check
+   red while its evidence still said every area was normal.
+2. The start-aligned landing check reported only one of the two alignments it tests, so a
+   centred-alignment failure showed four zeroes and no cause.
+3. The ordinal check printed only the ordinal's text, so a re-ordered meta line failed while
+   showing four matching strings.
+
+**One real defect the audit caught, not the author** — the new footer's six receipt links and the
+contact link missed the 44px coarse-pointer floor (13px and 20px tall). Fixed by joining the
+existing `.chip/.control/.link-block` hit-area rule and by lifting the contact link onto its own
+line as §6's link is — which is also what stops a 44px tap target overlapping the sentence's other
+lines. Audit back to 108/108.
+
+**Two build decisions, stated rather than buried:**
+1. **The receipts row renders tracked uppercase**, like every other mono label on the page
+   (eyebrow, stencil tags, remnant keys). The source strings are byte-equal to `footer-copy.md`,
+   the casing is transform-only, and what a reader copies is the label — the same construction
+   §4's labels and stamps already use. The alternative was to fork `--text-micro`'s transform for
+   six words; that seemed the worse trade. If Content reads §3's "labels ship lowercase" as a
+   *rendering* instruction rather than a source-string one, this is a one-line change.
+2. **The two footer sentences are `--text-body` full ink**, not muted micro. A-007 is explicit
+   that a paragraph meant to be read is `--ink`, and the scale has no smaller reading size; a
+   30-word muted micro sentence would have been a muted paragraph.
+
+**For QA's scoped re-run:** the retirement inventory is in `verify-shell.mjs`'s §7.1 block header,
+one line per old assertion. The gauge's visible thumb is observable in **neither** render path on
+this machine — headless Chrome runs with `--hide-scrollbars` and QuickLook composites without
+scrollbars — so it is asserted as computed style only, and the visible rail belongs to the
+founder's headed pass. That limit is HO-035's own and is restated here rather than quietly
+inherited.
+
+**Observations for PM:**
+- **OBS-016** — `section-01-hero.md` carries two clauses the founder's F-B6 ruling superseded: the
+  markup sketch at `:238` and assertion 9 at `:419` both still say the chip's `href` is a
+  same-origin relative `VERIFY.md`. The build follows DEC-056 and the harness asserts the blob
+  URL; the spec is UI/UX-owned, so this is flagged rather than edited.
+
+**Revision log:**
+- 2026-07-29: Self-review caught that the first footer draft put the contact link inline inside
+  the authorship sentence, which the independent audit then failed on the 44px floor — the fix
+  (own line, §6's pattern) is what shipped, and the audit found it before any handoff was written.
+
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
 

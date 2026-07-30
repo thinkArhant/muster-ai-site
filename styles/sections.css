@@ -77,10 +77,14 @@
    --plate-block, is what lets it do that. It runs through the phone fold
    deliberately: the cut ladder is the section's only scroll cue.
 
-   The block is intrinsic-width and start-aligned in the container, like every
-   reading passage on the page; the hub is centred within the formation, over
-   its own bus. Centring the block would detach the page's one diagram from
-   the reading edge everything else hangs on.
+   Wide: the diagram spans the container, so bus = plate row = container content
+   width and the hub's centre IS the page's axis — the midpoint of the rail and
+   the rail-end (page-shell.md §7.2). An intrinsic-width block centres the hub
+   on nothing: it lands ~174px inside the axis the headline and the THIS SITE
+   strip share, which is the one composition the alignment system bans. Plate 1
+   still starts on the rail, so the reading edge is kept and the centred gesture
+   gets a page-true axis; the plate gaps take the spread, which is what makes
+   the formation read as the section's centrepiece rather than a packed cluster.
    -------------------------------------------------------------------------- */
 
 .formation {
@@ -167,10 +171,19 @@
 }
 
 /* Wide: the hub sits centred over a bus-bar that spans exactly the plate
-   row's width, with the shell's registration marks at both bus ends. */
+   row's width — which is the container's content width, so the hub's centre is
+   the page's axis. The shell's registration marks sit at both bus ends, which
+   are the rail and the rail-end. */
 @media (min-width: 60rem) {
   .formation__plates::before {
     display: none;
+  }
+
+  /* The diagram spans the container: the axis the hub centres on is then the
+     page's, not the block's own. Relationship, not a figure — the width comes
+     from the container, so it follows --page-max and --gutter. */
+  .formation__diagram {
+    inline-size: 100%;
   }
 
   .formation__hub {
@@ -214,8 +227,12 @@
     inset-inline-end: -2px;
   }
 
+  /* The gaps flex, the plates do not: plate 1's inline-start edge is the rail
+     and plate 7's inline-end edge is the rail-end, and --gap-hairline is the
+     floor the distribution can never close below. */
   .formation__plates {
     display: flex;
+    justify-content: space-between;
     gap: var(--gap-hairline);
     padding-block-start: var(--gap-hairline);
   }
@@ -369,9 +386,18 @@
    §4 — the decisions. Four spec-sheets: title, stamp, four labelled rows.
 
    Phone first — the sheets stack, each roughly a screen. At --bp-wide the
-   list becomes a horizontal paged track so four ideas share one desktop
-   screen, with the next sheet visibly cut at the container edge: the peek is
-   the paging affordance, and there is no other machinery.
+   list becomes a horizontal paged track so four ideas share one desktop screen.
+
+   The paging affordance is three channels and no machinery — no buttons, no
+   dots, no JS. (1) The cut lands on the PHYSICAL SCREEN EDGE: the track's
+   scrollport bleeds out to the viewport while its content keeps the rail, so
+   the next sheet runs off the screen the way section rules already do. Cut at
+   the container edge instead, it left a dead strip of bare ground between the
+   crop and the screen, and read as "something broke". (2) The SHEET n OF 4
+   ordinal on each meta line — the only channel that does not depend on the
+   viewport's width, and the one that carries the phone stack. (3) The track's
+   own scrollbar styled as a gauge: position and extent, truthfully, from the
+   scrollbar the track already had.
    -------------------------------------------------------------------------- */
 
 .sheets {
@@ -406,9 +432,26 @@
   color: var(--ink);
 }
 
+/* The meta line: the stamp opens it, the ordinal closes it — the counterweight
+   pattern, on an existing line rather than as a floated block. It occupies the
+   stamp's own line box, so the ordinal costs no height at desktop. It wraps:
+   where stamp + ordinal exceed the line (the phone widths), the ordinal takes
+   its own right-aligned line rather than colliding. */
+.sheet__meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--gap-hairline);
+  margin-block-start: var(--gap-hairline);
+}
+
 .sheet__stamp {
   display: block;
-  margin-block-start: var(--gap-hairline);
+}
+
+.sheet__ordinal {
+  margin-inline-start: auto;
+  white-space: nowrap;
 }
 
 .sheet__rows {
@@ -467,6 +510,30 @@
     gap: var(--gap-flow);
     overflow-x: auto;
     scroll-snap-type: x proximity;
+
+    /* The rail's own distance from the viewport edge, derived from the page's
+       tokens and applied three ways so the geometry cannot shear: pull the
+       scrollport out to the screen, pad the content back onto the rail, and
+       land the snap on the same line.
+
+       A percentage is wrong here twice, and silently: padding percentages
+       resolve against the containing block but scroll-padding percentages
+       against the SCROLLPORT, and the mismatch lets the track's own snap pull
+       sheet 1 to the viewport edge on first layout. min() clamps the case
+       where the viewport is narrower than --page-max, so the bleed is never
+       negative and never leaks page-level horizontal scroll. */
+    --track-bleed: calc((100vw - min(var(--page-max), 100vw)) / 2 + var(--gutter));
+    margin-inline: calc(-1 * var(--track-bleed));
+    padding-inline: var(--track-bleed);
+    scroll-padding-inline-start: var(--track-bleed);
+
+    /* The gauge. Enhancement, never the sole channel: styling forces a
+       persistent scrollbar in Blink and in Safari 18.2+, and an engine that
+       renders its own overlay instead still leaves the cut and the ordinal
+       carrying the affordance. Headless renders suppress scrollbars, so this
+       is verified as computed style plus a headed cross-engine look. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
   }
 
   .sheet {
@@ -493,8 +560,9 @@
   }
 }
 
-/* Snapping is off with the page's own — same profile: a post-gesture user-agent
-   glide. Paging by plain scroll is unaffected. */
+/* The track's snap is a post-gesture user-agent glide, so it goes off for a
+   reader who asked for less motion. Paging by plain scroll is unaffected, and
+   the cut, the ordinal and the gauge all stand. */
 @media (min-width: 60rem) and (prefers-reduced-motion: reduce) {
   .sheets {
     scroll-snap-type: none;

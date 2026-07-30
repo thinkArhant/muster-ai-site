@@ -106,7 +106,13 @@
         <span class="regmark regmark--br" aria-hidden="true">+</span>
         <div class="remnant__head">
           <span class="t-label remnant__scope">THIS SITE · SPEC → LIVE</span>
-          <a class="chip chip--emphasis" href="VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span class="chip__glyph" aria-hidden="true">⎘</span></a>
+          <!-- The blob URL, not a relative VERIFY.md: a static host serves the
+               relative form as raw markdown or 404s it, and the chip is the one
+               link the page asks a sceptic to click. An <a href> is inert until
+               clicked, so the zero-request claim is untouched — the guard that
+               proves it stays narrowed to fetching references. Byte-equal to
+               the footer's VERIFY receipt. -->
+          <a class="chip chip--emphasis" href="https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span class="chip__glyph" aria-hidden="true">⎘</span></a>
         </div>
         <dl class="remnant__cells">
           <div class="remnant__cell">
@@ -133,11 +139,7 @@
     </div>
   </section>
 
-  <!-- The one markup change §7.1's snap feature needs: this section is exempt,
-       because a snap position near its playback core competes with the
-       visibility gate that starts the chain. Stated here rather than left to
-       fall out of the section's height. -->
-  <section id="watch-it-ship" class="section section--no-snap" aria-labelledby="s02-title">
+  <section id="watch-it-ship" class="section" aria-labelledby="s02-title">
     <div class="rule">
       <span class="rule__line" aria-hidden="true"></span>
       <span class="rule__tag">
@@ -280,18 +282,29 @@
 
         <li class="sheet" data-category="framework">
           <h3 class="sheet__title">I optimized what each agent <em>reads</em>, not how they talk.</h3>
-          <span class="sheet__stamp t-micro">framework — 2026-04-24</span>
+          <!-- The meta line: provenance opens it, position closes it. The
+               ordinal is real spec-sheet grammar and the one paging channel
+               that does not depend on the viewport's width. It is aria-hidden
+               because the <ol role="list"> already announces "n of 4" — a
+               screen reader would otherwise hear the position twice. -->
+          <div class="sheet__meta">
+            <span class="sheet__stamp t-micro">framework — 2026-04-24</span>
+            <span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 1 OF 4</span>
+          </div>
           <dl class="sheet__rows">
             <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Each agent gets a curated brief: what its task needs, nothing more.</dd></div>
             <div class="sheet__row"><dt class="t-label">Problem</dt><dd>What breaks isn't the talking — it's each agent reading too much.</dd></div>
-            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>Agents never talk directly — every question between roles costs a file and a session.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>Questions between roles travel as files — written, routed, auditable — and each costs a session.</dd></div>
             <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Three reading tiers; the PM routes context.</dd></div>
           </dl>
         </li>
 
         <li class="sheet" data-category="framework">
           <h3 class="sheet__title">Any rule a script can check, a script enforces.</h3>
-          <span class="sheet__stamp t-micro">framework — 2026-06-13</span>
+          <div class="sheet__meta">
+            <span class="sheet__stamp t-micro">framework — 2026-06-13</span>
+            <span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 2 OF 4</span>
+          </div>
           <dl class="sheet__rows">
             <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Mechanics live in scripts; judgment stays in prose.</dd></div>
             <div class="sheet__row"><dt class="t-label">Problem</dt><dd>AI follows written instructions unevenly — one model skipped a required step.</dd></div>
@@ -302,7 +315,10 @@
 
         <li class="sheet" data-category="framework">
           <h3 class="sheet__title">I capped every file the agents read — before almost anything else.</h3>
-          <span class="sheet__stamp t-micro">framework — 2026-04-12, first commit</span>
+          <div class="sheet__meta">
+            <span class="sheet__stamp t-micro">framework — 2026-04-12, first commit</span>
+            <span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 3 OF 4</span>
+          </div>
           <dl class="sheet__rows">
             <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Every file the agents read has a hard size cap.</dd></div>
             <div class="sheet__row"><dt class="t-label">Problem</dt><dd>Shared files grow quietly; eventually agents mostly reread their own history.</dd></div>
@@ -313,12 +329,15 @@
 
         <li class="sheet" data-category="framework">
           <h3 class="sheet__title">The system treats my attention as the scarcest resource.</h3>
-          <span class="sheet__stamp t-micro">framework — 2026-06-07</span>
+          <div class="sheet__meta">
+            <span class="sheet__stamp t-micro">framework — 2026-06-07</span>
+            <span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 4 OF 4</span>
+          </div>
           <dl class="sheet__rows">
             <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Runs halt at planned gates — never interrupt, never guess.</dd></div>
-            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>Unattended agents guess wrong or stall — and pinging me constantly doesn't scale.</dd></div>
-            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>No steering mid-run — every ambiguity is paid up front, at planning.</dd></div>
-            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Gates carry only the judgment calls; work resumes on a written verdict.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>Unattended agents guess wrong or stall — constant pings don't scale.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>No steering mid-run — ambiguity is paid up front, at planning.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>The run doesn't need me present — it waits only at gates, for a written verdict.</dd></div>
           </dl>
         </li>
 
@@ -449,10 +468,44 @@
 
 </main>
 
+<!-- The closing signature. Three blocks, all on the rail: who built it, the
+     receipts that let a reader check the count role by role, and who authored
+     the framework. No lockup here — the header carries the only one.
+
+     The count is measured, not claimed: five of the eight roles have commits on
+     this build, and the three that never ran are named so the sentence can be
+     falsified against the queue and the handoff ledger linked directly below
+     it. No email string ships anywhere on the page; the GitHub profile is the
+     contact path. -->
 <footer class="pagefoot">
   <div class="container pagefoot__inner">
-    <!-- SHELL PLACEHOLDER — removed when the footer copy lands. -->
-    <p class="t-micro" data-shell-placeholder>Provenance line and links ship with their own spec.</p>
+
+    <p class="t-body read pagefoot__line">Specced, written, and reviewed by Muster's AI team — 5 of 8 agents, 1 operator. PM, Developer, UI/UX, QA, and Content ran this build; Marketing, Legal, and Research were never invoked.</p>
+
+    <!-- The receipts. Uppercase is a transform, as it is on every mono label on
+         this page — the source strings stay exactly as the copy file writes
+         them, so what a reader copies is the label. Separators are drawn with
+         the eyebrow's alt-text syntax and never announced. Every href is a
+         plain reader navigation: inert until clicked, nothing fetched. -->
+    <ul class="t-micro pagefoot__receipts" role="list">
+      <li><a href="https://github.com/thinkArhant/muster-ai-site">repo</a></li>
+      <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/orchestration-queue.md">queue</a></li>
+      <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/agent-requests.md">handoffs</a></li>
+      <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/decision-log.md">decision log</a></li>
+      <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md">VERIFY</a></li>
+      <li><a href="https://github.com/thinkArhant/muster-ai">framework</a></li>
+    </ul>
+
+    <p class="t-body read pagefoot__line">Designed and built by Kanwar Sandhu, solo, while shipping his own products with it.</p>
+
+    <!-- The contact path, on its own line as §6's link is: the visible text is
+         the destination, so name and target are the same string and nothing
+         needs an aria-label. A block of its own is also what lets the hit area
+         reach 44px on a coarse pointer without a tap target overlapping the
+         sentence's other lines. No email ships anywhere on the page; the
+         profile carries it for anyone who wants it. -->
+    <p class="pagefoot__contact"><a class="link-block" href="https://github.com/thinkArhant">github.com/thinkArhant</a></p>
+
   </div>
 </footer>
 

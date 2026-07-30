@@ -186,7 +186,13 @@
 }
 
 /* --------------------------------------------------------------------------
-   Footer
+   Footer — the closing signature.
+
+   Every block hangs on the rail: no counterweight, nothing centred, no lockup.
+   The two sentences are prose and take the reading face at full ink, capped at
+   the 64ch column — a capped block still STARTS on the rail. The receipts row
+   is chrome and takes the micro label family, like every other mono row on the
+   page.
    -------------------------------------------------------------------------- */
 
 .pagefoot {
@@ -195,5 +201,27 @@
 }
 
 .pagefoot__inner > * + * {
-  margin-block-start: var(--gap-hairline);
+  margin-block-start: var(--gap-flow);
+}
+
+/* Separators drawn rather than typed, and hung off the END of each label so a
+   wrap puts a whole label at the head of the new line — the eyebrow's
+   construction. `content: "·" / ""` renders the glyph with an empty
+   alternative text, so it never enters a link's accessible name. */
+.pagefoot__receipts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.7ch;
+  padding: 0;
+  list-style: none;
+}
+
+.pagefoot__receipts > li {
+  white-space: nowrap;
+}
+
+.pagefoot__receipts > li:not(:last-child)::after {
+  content: "·";
+  content: "·" / "";
+  padding-inline-start: 0.7ch;
 }
