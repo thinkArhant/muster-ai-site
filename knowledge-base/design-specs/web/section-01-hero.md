@@ -144,19 +144,31 @@ specialists execute.
   distinction rides on position (seated above the bus), DOM order (first), weight, and the accent
   border — colour is never the sole channel. Seated centered over the bus (`inset-inline-start:
   50%`, translated), with a 1px `--hair` stem `--gap-hairline` (12px) tall from hub to bus.
-- **Bus-bar**: 1px `--hair` horizontal rule spanning exactly the plate row's width (measured
-  676.4px at 1280 — the relationship is bus width = row width, not the figure). Registration `+`
-  marks (`--text-micro`, `--muted`, `aria-hidden`) at both bus ends — the shell's regmark
-  grammar, two per surface, marking the formation as an instrument reading of the org.
-- **Plates**: seven, one flex row, `--gap-hairline` gaps, each `--surface` with 1px `--hair`
+- **Bus-bar**: 1px `--hair` horizontal rule spanning exactly the plate row's width — which is
+  the **container's full content width** (the relationship is bus width = row width = container
+  content width, never a figure). Registration `+` marks (`--text-micro`, `--muted`,
+  `aria-hidden`) at both bus ends — the shell's regmark grammar, two per surface, marking the
+  formation as an instrument reading of the org — seated on the rail and rail-end, over the
+  corners of the remnant strip below.
+- **Plates**: seven, one flex row **distributed edge to edge** (`justify-content: space-between`
+  on the full-width row — the gaps flex, the plates do not), each `--surface` with 1px `--hair`
   border, role name `--text-label` `--ink` tracked uppercase (the names are content, not
   captions), padding `--gap-hairline` inline / `calc(var(--rhythm) / 3)` block. Locked full role
   names in the locked order: `DEVELOPER · UI/UX · QA · CONTENT · MARKETING · LEGAL · RESEARCH`.
-  A 1px `--hair` stem 12px tall drops from the bus to each plate's center.
-- **Alignment ruling**: the formation block is intrinsic-width and **start-aligned in the
-  container**, like every reading passage on the page; the hub is centered *within the formation*,
-  over its bus. Centering the block in the container would detach the page's one diagram from the
-  reading edge everything else hangs on.
+  A 1px `--hair` stem 12px tall drops from the bus to each plate's center. Plate 1's inline-start
+  edge is the rail; plate 7's inline-end edge is the rail-end.
+- **Alignment ruling (DEC-057)**: the formation **spans the container** — bus = plate row =
+  container content width — and the hub stays centered within it, which makes the hub's center
+  the page's axis (`page-shell.md` §7.2). The rejected alternative, founder-judged from the
+  rendered page: an intrinsic-width block (676.4px at 1280) with the hub centered on that block
+  alone — an orphan axis at x 546.2 against the 720 shared by the headline block and the THIS
+  SITE strip at 1440, visibly centered on nothing. Spanning the container keeps the reading edge
+  (plate 1 on the rail) **and** gives the centered gesture a page-true axis — measured
+  hub-center − axis = **0.0px at 1280, 1440 and 1600**, bus spanning rail→rail-end exactly
+  (`samples/gate-b-renders/after-report.json`; rendered record `samples/gate-b-proposed.html`).
+  The spread also serves *spacious*: plate gaps open from 12px to ~70px at 1280, and the
+  formation reads as the section centerpiece DEC-045 made it, rather than a packed cluster
+  huddled at the rail.
 
 ### 6.2 Construction — the phone ladder (< `--bp-wide`)
 
@@ -254,11 +266,12 @@ claim → team → posture → command.
 │  SHIP A PRODUCT WITH                                  (2) │
 │  A̶ ̶H̶U̶M̶A̶N̶ AN AI TEAM.                                     │
 │                                                           │
-│                    ┌──────┐                               │
-│                    │  PM  │           (3) hub, accent     │
-│  +─────────────────┴──┬───┴──────────────────────+        │
-│  ┌─────────┐┌─────┐┌──┴┐┌───────┐┌─────────┐┌─────┐┌────────┐
-│  │DEVELOPER││UI/UX││QA ││CONTENT││MARKETING││LEGAL││RESEARCH│
+│                        ┌──────┐                           │
+│                        │  PM  │       (3) hub, accent, on │
+│  +─────────────────────┴──┬───┴────────────────────────+  │     the page axis
+│  ┌─────────┐  ┌─────┐  ┌──┴┐  ┌───────┐  ┌─────┐  ┌────────┐
+│  │DEVELOPER│  │UI/UX│  │QA │…│CONTENT│…  │LEGAL│  │RESEARCH│   rail → rail-end,
+│  └─────────┘  └─────┘  └───┘  └───────┘  └─────┘  └────────┘   gaps flex
 │  8 AI AGENTS · 1 OPERATOR             (4)                 │
 │ ─ ─ ─ ─ ─ ─ ─ 700px fold ─ ─ ─ ─ ─ ─ (194.1px clear) ─ ─  │
 │  ┌ + THIS SITE · SPEC → LIVE            [VERIFY ⎘] ┐ (5)  │
@@ -391,10 +404,13 @@ violated. The fold budget's load-bearing relationships (§3) are 1–5.
    seven items equal to the locked names in the locked order; the hub's computed border-color is
    the accent and its font-weight ≥ 700 (distinction is never colour alone); bus, spine, stem and
    regmark constructions are absent from the AX tree.
-7. **Formation modes** — below `--bp-wide`: each plate's top edge ≥ the previous plate's bottom
-   edge (the ladder stacks). At ≥ `--bp-wide`: all seven plates share one row (equal top edges)
-   and the bus's rendered width equals the plate row's width. Fails if the bus detaches from the
-   row it diagrams.
+7. **Formation modes and the axis** — below `--bp-wide`: each plate's top edge ≥ the previous
+   plate's bottom edge (the ladder stacks). At ≥ `--bp-wide`: all seven plates share one row
+   (equal top edges); the bus's rendered width equals the plate row's width **equals the
+   container's content width** (plate 1 starts on the rail, plate 7 ends on the rail-end); and
+   |hub center − the container content box's midpoint| ≤ 1px — the page's one axis-bound
+   element, per `page-shell.md` §7.2. Fails if the bus detaches from the row it diagrams, the
+   formation shrinks back to intrinsic width, or the hub's center drifts off the page axis.
 8. **Remnant honesty** — the two unmeasured cells render `--ink` em-dashes with no animation and
    no transition in default and reduced paths; the caption `measured at launch` occurs exactly
    once in the strip; the scope label reports exactly one client rect at 320/375 (a scope label
@@ -436,10 +452,11 @@ colour, face, surface and spacing rule; the eyebrow facts; one `curl`; the `VERI
 **From the copy file**: every string, including announced-string content and the remnant strings.
 
 **Decided here (the craft)**: the fold budget and its named cases, re-measured for the sparse
-stack; the formation's design pass — hub centered over a row-width bus with regmarks, 12px stems
-on the rhythm scale, the start-aligned intrinsic-width block, the ladder spine terminating at the
-last stem and running through the fold as the scroll cue, hub weight-700 + accent border as the
-multi-channel distinction; the announced group → `PM` → 7-list structure; the remnant ruled as a
+stack; the formation's design pass — the container-spanning formation with the hub on the page
+axis (DEC-057: bus = plate row = container content width, plates distributed edge to edge,
+regmarks on the rail and rail-end), 12px stems on the rhythm scale, the ladder spine terminating
+at the last stem and running through the fold as the scroll cue, hub weight-700 + accent border
+as the multi-channel distinction; the announced group → `PM` → 7-list structure; the remnant ruled as a
 one-row instrument strip with its why (labels make dashes claims; §5 owns the full card; the
 lost-contrast cost carried openly); the nowrap scope label + chip-drop wrap rule; the
 `--gap-major` idea-group seam; §1 ruled fully static with the page budget re-stated at two live

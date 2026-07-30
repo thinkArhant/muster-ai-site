@@ -57,7 +57,10 @@ slots.
 <ol class="sheets" role="list">
   <li class="sheet" data-category="framework">
     <h3 class="sheet__title">I optimized what each agent <em>reads</em>, not how they talk.</h3>
-    <span class="sheet__stamp t-micro">framework — 2026-04-24</span>
+    <div class="sheet__meta">
+      <span class="sheet__stamp t-micro">framework — 2026-04-24</span>
+      <span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 1 OF 4</span>
+    </div>
     <dl class="sheet__rows">
       <div class="sheet__row">
         <dt class="t-label">Decision</dt>
@@ -125,6 +128,18 @@ no extra markup, and a future stamp of any shape costs nothing.
   casing), `--track-micro`, `--muted`. It renders directly under the title at `--gap-hairline` — the
   stamped attribution line, small against the title's scale exactly as the seed's "dates as small
   stamps" asks.
+- **The meta line (DEC-057)**: the stamp shares one line box with the sheet ordinal —
+  `.sheet__meta`, a baseline-aligned flex row at the stamp's old seat, stamp at the inline-start,
+  `SHEET n OF 4` at the inline-end (`margin-inline-start: auto`, nowrap; the §7.2 counterweight
+  pattern). Provenance reads first, position closes the line. The ordinal is `--text-micro`
+  `--muted` like the stamp, **`aria-hidden`** — the `<ol role="list">` already announces "n of 4"
+  natively, so the visual mark duplicates list semantics and must not be read twice. Its text is
+  chrome, not copy (the same class of designed label as §2's `BEAT 06 / 06`): Content owns the
+  stamp string; this spec owns the ordinal string, and its numerals are self-verifying — `n` is
+  the sheet's 1-based DOM position and `4` is the list's length (§12.18). Measured: the meta line
+  is the stamp's own 16.5px line box in the track (zero height cost); below ~`--bp-wide` widths
+  where stamp + ordinal exceed the line, the ordinal wraps to its own right-aligned line at
+  +28.5px per sheet (the flex row wraps; measured at 375/320).
 - **Dates render exactly as supplied — never reformatted, never localized.** A stamp is provenance;
   the four strings above are byte-fixed by DEC-044 and any drift is a defect, not a style choice.
 - **Stamps never carry accent, never carry a border.** A chip border would make them read as
@@ -164,9 +179,9 @@ the prose column renders **470px ≈ 45.7 rendered characters of the body face**
 cap. That is a judged trade, not a squeeze: the rows are ≤ 14 words each (one to two lines at this
 measure), so no row approaches the line lengths the 64ch column exists to protect, and a
 64ch-of-prose sheet (≈903px of card) would set every row on one long line — a stretched ribbon of
-air whose pages nearly fill the container and demote the peek affordance to a sliver. At 40rem the
-sheet keeps a document's proportions: title at two lines, rows at one to two, and 360px of the next
-sheet visible (§8.1). The original protection — the label column must never steal reading width —
+air whose pages nearly fill the scrollport and starve the cut. At 40rem the sheet keeps a
+document's proportions: title at two lines, rows at one to two, and the next sheet substantially
+on screen before the screen edge cuts it (§8.1). The original protection — the label column must never steal reading width —
 holds structurally: the column is additive chrome outside the prose (`6rem + --gap-flow` beside it),
 and the assertion on the cap survives unchanged.
 
@@ -251,45 +266,113 @@ against the shipping copy's measured lengths, from three candidates rendered wit
 The track is the only candidate that satisfies DEC-043, and it is the pattern the founder himself
 raised. Horizontal scroll between discrete cards is permitted — the Sprint-1 ruling (DEC-025)
 barred sideways dragging *within a line of text*, not card paging — but it has a real
-discoverability cost: sideways content is missable. That cost is paid for, not ignored:
+discoverability cost: sideways content is missable. **The rejected construction, founder-judged
+from the rendered page (DEC-057): a next sheet cropped at the container's inline-end, amputated
+mid-page with a dead strip of bare ground between the cut and the screen edge (128px at 1280,
+208px at 1440, measured) — it reads as "something broke," not as an invitation.** The affordance
+is three channels, each in the section's own grammar:
 
-- **The peek is the affordance.** `--sheet-w: 40rem` (640px) leaves **360px of sheet 2 visible**
-  at 1280 — over a third of the next page, its title readable, unmistakably cut by the edge.
-  Nothing communicates "more this way" more honestly than the content itself, cropped.
+- **The cut lands on the screen edge, never mid-page.** The track's scrollport spans the
+  viewport (construction below); sheets keep their seats — sheet 1 rests on the rail — but the
+  next sheet now runs off the physical screen edge, the one place a crop universally reads as
+  *continues beyond* rather than *broken here*. The dead strip is gone by construction. The
+  shell's own grammar already works this way: section rules span the viewport while content sits
+  in the container (`page-shell.md` §7). How much of sheet 2 shows is width-dependent (measured:
+  488px at 1280, 568px at 1440, all 640px at 1600 — at roughly ≥1590px a whole number of sheets
+  fits and no cut is visible), which is why the cut is one channel of three, not the affordance
+  alone.
+- **The sheet ordinal — `SHEET 1 OF 4` — is real spec-sheet grammar.** Machine data sheets carry
+  their sheet number; the motif §4 is built on supplies its own "more, sideways" statement.
+  Each sheet's meta line carries the stamp at its start and the ordinal at its end (§5): the
+  reader on sheet 1 knows there are three more, the reader on sheet 4 knows they are done, at
+  every viewport and independent of where the cut falls. It is the width-independent channel.
+- **The gauge — the track's own scrollbar, styled as an instrument rail.** `scrollbar-width:
+  thin` + `scrollbar-color: var(--accent) transparent`: a thin rust thumb riding under the
+  sheets, always rendered (styling forces persistent rendering in Blink; supported in Safari
+  18.2+, and where an older engine renders its default overlay scrollbar instead, the ordinal
+  and the cut still carry the affordance — the gauge is enhancement, never the sole channel).
+  It shows position *and* extent truthfully with zero JavaScript, zero added elements, and it is
+  the one "more indicator" that cannot lie about reaching the end. Headless harness renders
+  suppress scrollbars (`--hide-scrollbars`), so the gauge is verified as computed style plus a
+  headed cross-engine look, stated as such.
 - **The skim layer survives without scrolling.** The four h3 title sentences remain the section's
   argument skeleton for heading navigation regardless of scroll position, and the count is four —
   a page turn, not a carousel of unknown length.
-- **No machinery.** The track is CSS overflow with proximity snap — no buttons, no dots, no JS.
-  A control strip would be more chrome than the content it pages.
+- **Still no machinery.** No buttons, no dots, no JS. The ordinal is four static spans; the gauge
+  is the scrollbar the track already had, made honest and visible.
 
 **Construction**: the `<ol>` becomes the track at ≥ `--bp-wide` — `display: grid;
 grid-auto-flow: column; grid-auto-columns: var(--sheet-w); gap: --gap-flow; overflow-x: auto;
 scroll-snap-type: x proximity`, each sheet `scroll-snap-align: start`. Grid stretch equalizes the
-four sheets to the tallest (measured: all four at 473.3px). The track carries `tabindex="0"` and
-`aria-label="The four decisions"` so keyboard users can scroll it (§11); the scrollbar renders
-per platform and is never hidden.
+four sheets to the tallest (measured: all four at 473.3px, unchanged by the meta line — it
+replaces the stamp's line box at the same height). The track carries `tabindex="0"` and
+`aria-label="The four decisions"` so keyboard users can scroll it (§11).
+
+**The bleed**, in full — the rail's distance from the viewport edge, derived from the page's own
+tokens and applied three ways so the geometry cannot shear:
+
+```
+.sheets {
+  --track-bleed: calc((100vw - min(var(--page-max), 100vw)) / 2 + var(--gutter));
+  margin-inline:               calc(-1 * var(--track-bleed));
+  padding-inline:              var(--track-bleed);
+  scroll-padding-inline-start: var(--track-bleed);
+  scrollbar-width:             thin;
+  scrollbar-color:             var(--accent) transparent;
+}
+```
+
+Percentages are wrong here twice, and the trap is silent: padding percentages resolve against the
+containing block but `scroll-padding` percentages against the *scrollport*, and the mismatch lets
+the track's own snap pull sheet 1 off the rail at first layout (measured before this formula: the
+UA snapped the fresh track to `scrollLeft` 128 and sheet 1 sat on the viewport edge). With the
+token-derived bleed: sheet 1 rests on the rail at `scrollLeft` 0 (128/208/288 at 1280/1440/1600,
+all measured), the fully-scrolled track rests sheet 4's inline-end exactly on the rail-end, and
+the document's `scrollWidth` stays equal to the viewport at every measured width — the bleed
+never leaks page-level horizontal scroll. The binding relationships: **track border-box spans the
+viewport; track content and snap rest sit on the rail; no page-level x overflow** — never the
+literal offsets.
 
 **Snap scope**: the sheets snap to the *track* — their nearest scroll container — never to the
-document's y axis. `page-shell.md` §7.1 A4 is amended to scope its no-other-snap-align sweep to
-elements outside this track. Under `prefers-reduced-motion: reduce` the track's snap turns off
-with the page's (same profile: a post-gesture user-agent glide), in the same media query; paging
-by plain scroll is unaffected.
+document's y axis. **Since DEC-057 removed the page's section snapping, this track is the page's
+only snap container of any kind.** The founder's remove-or-page binary was ruled on the page's
+section scrolling; the track's x snap is retained deliberately as part of this affordance — it is
+what guarantees the track always *rests* composed (a sheet on the rail, the next cut at the
+screen edge) instead of parked mid-crop, which is the very state the founder rejected. It is
+proximity, bounded, within one section, between discrete cards. If the founder rules that
+"remove entirely" covers the track too, the fallback is one declaration
+(`scroll-snap-type: none` on the track) and the rest of the affordance stands. Under
+`prefers-reduced-motion: reduce` the track's snap turns off (a post-gesture user-agent glide —
+the same profile that ruling was always about); paging by plain scroll is unaffected.
 
 **One-screen budget, measured** (Blink, real tokens, real strings): track 473.3px tall; content
 bottom 612.1px from section top at 1280 × 700 (`--gap-section` resolves 98px) and 626.1px at
-1280 × 800 (112px). **Snapped under the sticky bar, the track's bottom edge sits at 684.1px of a
+1280 × 800 (112px). **With the section's start scrolled under the sticky bar (fragment or
+`scrollIntoView()` landing at `--scroll-pad`), the track's bottom edge sits at 684.1px of a
 700px viewport and 698.1px of an 800px one** — the whole section inside one screen at both common
-laptop heights, with the `--sheet-pad` = 24px ruling (§6.4) as part of the budget.
+laptop heights, with the `--sheet-pad` = 24px ruling (§6.4) as part of the budget. Section height
+686.1px at 1280, measured identical before and after the meta line landed.
 
-**Phone ruling — stacked, and why not paged**: below `--bp-wide` the track un-tracks (block flow,
-no overflow) and sheets stack at `--gap-major`. Measured cost, stated honestly: sheets at 375px
-run 631.8 / 629.5 / 648.3 / 660.7px — each roughly one phone screen, the section about five
-(2786.4px total; 3079.9px at 320) — so §4 on a phone is one idea per screen, not one section per
-screen. The one-screen ruling is desktop-scoped (DEC-043 set it against a desktop screen); paging
-was rejected on the phone because a sheet is taller than the 553px fold, and horizontally paging
-cards that also scroll vertically is two-axis navigation of clipped documents — strictly worse
-than the scroll the reader is already doing. No horizontal scroll at 320/360/375/390 (measured,
-document and track).
+**Phone ruling (DEC-057): the stack stays, and it gains orientation.** Below `--bp-wide` the
+track un-tracks (block flow, no overflow, no bleed — the media query scopes the whole
+construction) and sheets stack at `--gap-major`. The founder's finding from the rendered phone
+was that four stacked sheets read *far too long*; the honest measurements of every alternative:
+
+| Phone candidate | Measured | Disqualifier |
+|---|---|---|
+| Paged track at 375 | sheets 650.8–679.7px vs a 553px fold | two-axis navigation of clipped documents (DEC-051's rejection, still true) |
+| Exclusive accordion (`<details name>`, three sheets collapsed to title + meta) | ≈2 screens | hides 12 of 16 rows of founder testimony behind taps; text inside closed sheets is invisible to Safari's find-in-page — and find-in-page is a committed reader path *and* one of the founder's own re-gate phone checks. DEC-043 also bars sheets that demand work from a non-technical reader |
+| Un-carding the sheets on phone | saves ≈200px of 3071 (6.5%) | breaks the spec-sheet motif for a saving that changes nothing about the felt length |
+| **Stacked + ordinals (ships)** | **3071px at 375, 3364.5px at 320** — the ordinal costs +28.5px per sheet where it wraps to its own line | — |
+
+What was actually wrong with the judged stack was not its height but its *anonymity*: four
+near-identical gray cards, three of four stamped `FRAMEWORK — 2026-…`, no extent, no progress, no
+end in sight. The ordinal fixes precisely that: `SHEET 2 OF 4` on every card tells the phone
+reader where they are, how much remains, and when they are done — and the length itself is the
+content's honest size. One idea per screen is the page's own rule; four ideas at roughly a screen
+each is that rule holding, now legible as progress instead of reading as a wall. The removal of
+page snapping (DEC-057) also retires the scroll-fight half of the phone finding.
+No horizontal scroll at 320/360/375/390 (measured, document and track).
 
 **200% zoom** (720 × 450 CSS): 720px sits below `--bp-wide`, so zoomed readers get the stacked
 path — every sheet reachable by vertical scroll alone, no horizontal scroll, which is what keeps
@@ -298,24 +381,25 @@ the track compatible with the shell's zoom promise.
 ### Wireframe — desktop ≥ `--bp-wide`
 
 ```
-│ ──┤ ▸ §04 · THE DECISIONS ├──────────────────────────────── │  shell chrome (h2)
-│                                                             │
-│  ┌──────────────────────────────────┐ ┌───────────────────  │
-│  │ I optimized what each agent      │ │ Any rule a script   │  (1) h3, 2L in track
-│  │ reads, not how they talk.        │ │ can check, a scrip  │
-│  │ FRAMEWORK — 2026-04-24           │ │ FRAMEWORK — 2026-0  │  (2) stamp, micro muted
-│  │                                  │ │                     │
-│  │ DECISION    Each agent gets a    │ │ DECISION    Mechan  │  (3) label col 6rem │
-│  │             curated brief: …     │ │             live i  │      prose ≤64ch cap
-│  │ ──────────────────────────────   │ │ ─────────────────   │
-│  │ PROBLEM     What breaks isn't …  │ │ PROBLEM     AI fol  │
-│  │ ──────────────────────────────   │ │ ─────────────────   │
-│  │ TRADE-OFF   Agents never talk …  │ │ TRADE-OFF   Hard f  │
-│  │ ──────────────────────────────   │ │ ─────────────────   │
-│  │▌MECHANISM   Three reading tiers  │ │▌MECHANISM   Autom   │  (4) 2px rust bar
-│  └──────────────────────────────────┘ └───────────────────  │
-│   sheet 1 · 640px            360px of sheet 2: the peek (5) │
-│  ⟵ x-proximity track: sheets 3 · 4 off-canvas ⟶             │
+│ ──┤ ▸ §04 · THE DECISIONS ├──────────────────────────────────│  shell chrome (h2)
+│                                                              │
+│  ┌──────────────────────────────────┐  ┌─────────────────────  ⟵ cut at the
+│  │ I optimized what each agent      │  │ Any rule a script c │    SCREEN edge,
+│  │ reads, not how they talk.        │  │ enforces.           │    no dead strip
+│  │ FRAMEWORK — 2026-04-24  SHEET 1 OF 4  FRAMEWORK — 2026-06 │  (2) meta line:
+│  │                                  │  │                     │      stamp + ordinal
+│  │ DECISION    Each agent gets a    │  │ DECISION    Mechani │  (3) label col 6rem │
+│  │             curated brief: …     │  │             judgme  │      prose ≤64ch cap
+│  │ ──────────────────────────────   │  │ ─────────────────   │
+│  │ PROBLEM     What breaks isn't …  │  │ PROBLEM     AI fol  │
+│  │ ──────────────────────────────   │  │ ─────────────────   │
+│  │ TRADE-OFF   Questions between …  │  │ TRADE-OFF   Hard f  │
+│  │ ──────────────────────────────   │  │ ─────────────────   │
+│  │▌MECHANISM   Three reading tiers  │  │▌MECHANISM   Autom   │  (4) 2px rust bar
+│  └──────────────────────────────────┘  └─────────────────────
+│  ▬▬▬▬▬▬▬░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  (6) the gauge
+│   rail → sheet 1 · 640px      sheet 2 runs off the screen (5)
+│  ⟵ x-proximity track: sheets 3 · 4 off-canvas ⟶              │
 ```
 
 ### Wireframe — phone 375
@@ -326,12 +410,13 @@ the track compatible with the shell's zoom promise.
    │ I optimized what each        │ (1) ≤3 lines at 375
    │ agent reads, not how         │
    │ they talk.                   │
-   │ FRAMEWORK — 2026-04-24       │ (2) wraps to 2 lines
-   │                              │     only on stamp 3
-   │ DECISION                     │ (3) label above value,
-   │ Each agent gets a curated    │     27ch prose, no
-   │ brief: what its task …       │     horizontal scroll
-   │ ──────────────────────────   │
+   │ FRAMEWORK — 2026-04-24       │ (2) meta line; the
+   │                 SHEET 1 OF 4 │     ordinal wraps to its
+   │                              │     own right-aligned
+   │ DECISION                     │     line on the phone
+   │ Each agent gets a curated    │ (3) label above value,
+   │ brief: what its task …       │     27ch prose, no
+   │ ──────────────────────────   │     horizontal scroll
    │ PROBLEM                      │
    │ …                            │
    │ ──────────────────────────   │
@@ -341,8 +426,9 @@ the track compatible with the shell's zoom promise.
    │▌MECHANISM                    │ (4) same mark, same
    │ Three reading tiers; the …   │     12px card inset
    └──────────────────────────────┘
-      --gap-major, then sheet 2      (stacked, ~one sheet
-                                      per screen — §8.1)
+      --gap-major, then sheet 2      (stacked, ~one sheet per
+                                      screen; SHEET n OF 4 is
+                                      the progress read — §8.1)
 ```
 
 ### Annotations
@@ -350,10 +436,11 @@ the track compatible with the shell's zoom promise.
 | # | Element | Spec |
 |---|---|---|
 | 1 | Title sentence | §4 — h3, sans bold at kicker scale, sentence case, `<em>` preserved |
-| 2 | Stamp | §5 — one text slot, micro muted, four verified dates |
+| 2 | Meta line | §5 — stamp (one text slot, four verified dates) + `SHEET n OF 4` ordinal at the line's end, both micro muted |
 | 3 | Rows | §6 — fixed 6rem label column ≥`--bp-wide`, stacked below; prose ≤64ch cap |
 | 4 | Mechanism row | §7 — 2px rust bar at 12px from card inner edge, ink-bold label |
-| 5 | The peek | §8.1 — 360px of the next sheet visible at rest; the paging affordance |
+| 5 | The cut | §8.1 — the next sheet runs off the screen edge (width-dependent share; 488px of sheet 2 at 1280); one of three affordance channels |
+| 6 | The gauge | §8.1 — the track's scrollbar: thin, rust thumb, always-rendered where supported |
 
 Measured line counts (shipping strings) for the build to sanity-check against:
 
@@ -382,10 +469,12 @@ and no rust text (§7.3).
 ## 10. States, motion, interaction
 
 - **§4 is fully static.** No animation, no transition, no scroll-triggered anything, no count-up
-  (there are no metrics here — stamps are provenance, not measurements). The motion budget is closed
-  at the shell's two elements plus the cursor, and this section holds no seat. The track's snap
-  settle is the user agent finishing the reader's own gesture, not an element animation — the same
-  scope ruling as the page's y snap (`page-shell.md` §7.1) — and it is off under reduced motion.
+  (there are no metrics here — stamps are provenance, not measurements; the ordinal is a static
+  span). The motion budget is closed at the shell's two elements plus the cursor, and this section
+  holds no seat. The track's snap settle is the user agent finishing the reader's own gesture, not
+  an element animation, and it is off under reduced motion. The track is the page's only snap
+  container — the page's own section snapping was removed by founder ruling (`page-shell.md`
+  §7.1, DEC-057).
 - **Reduced motion / no JS: identical render, complete content, zero JavaScript.** The track is CSS
   overflow; with snap off (reduced motion) it pages by plain scroll.
 - **Interactive inventory: one focusable element — the track itself** (`tabindex="0"`, named
@@ -397,7 +486,9 @@ and no rust text (§7.3).
   Find-in-page and select-and-copy hit real text everywhere (the uppercase label/stamp casing is
   transform-only; copied text yields the source casing per engine behavior); a find match in an
   off-canvas sheet scrolls the track to reveal it, and the scroll-into-view path is asserted as
-  its mechanical stand-in (§12.16).
+  its mechanical stand-in in the two forms DEC-053 ruled (§12.16): with the track's snap on, the
+  reveal is re-aligned to a sheet start and lands the match's sheet substantially on screen;
+  whole-visible is asserted on the snap-off (reduced-motion) path.
 - Forced colors: card and row borders are real borders and survive; the mark is a background and
   drops — correct, it is decorative duplication of what position and weight already carry.
 
@@ -436,9 +527,13 @@ violated.
    string (case-insensitive vs the transform), and **each stamp's date is byte-equal to its
    DEC-044-verified value** — the stamps are the independent-arrival argument, and a transposed
    date on the one section whose premise is checkable dates is a launch-grade defect. Fails if a
-   date drifts, is reformatted, or a numeral appears in §4 outside the four stamps.
-4. **Stamp position** — the stamp is the h3's next element sibling, before the rows (the announced
-   order is title → stamp → rows). Fails if reordered.
+   date drifts, is reformatted, or a numeral appears in §4 outside the four stamps and the four
+   ordinals (the ordinal's numerals are chrome and self-verifying — assertion 18 pins them to the
+   DOM; any other numeral in the section is still a defect).
+4. **Meta-line position** — the meta line (stamp + ordinal) is the h3's next element sibling,
+   before the rows, with the stamp its first content (the announced order stays title → stamp →
+   rows; the ordinal is `aria-hidden`). Fails if reordered or if the ordinal enters the announced
+   stream.
 5. **Zero rust text** — no element inside `#the-decisions` has computed `color` equal to the accent;
    the accent appears in the section only as the four mechanism marks' `background-color`. Fails on
    any rust word, rust label, or filled-rust surface.
@@ -460,44 +555,74 @@ violated.
 11. **Heading discipline** — within `#the-decisions`: one h2, exactly four h3, nothing deeper.
 12. **List semantics** — the `<ol>` exposes list role with four items in the AX tree despite
     `list-style: none`, and its accessible name is the visible-purpose label `The four decisions`.
-13. **One screen** — at 1280 × 700 with §4 scrolled to its snap rest, the track's bottom edge sits
-    within the viewport. Read the elements and the live `--gap-section`, never this file's
-    figures, so the check follows any padding or copy change. Fails the moment §4 exceeds the
-    screen DEC-043 ruled.
-14. **Track mechanics** — at ≥ `--bp-wide` the track is horizontally scrollable
+13. **One screen** — at 1280 × 700 with §4's start scrolled under the bar (fragment or
+    `scrollIntoView()` landing at `--scroll-pad` — the page no longer snaps), the track's bottom
+    edge sits within the viewport. Read the elements and the live `--gap-section`, never this
+    file's figures, so the check follows any padding or copy change. Fails the moment §4 exceeds
+    the screen DEC-043 ruled.
+14. **Track mechanics and the bleed** — at ≥ `--bp-wide` the track is horizontally scrollable
     (`scrollWidth > clientWidth`), computes `scroll-snap-type` `"x"` (proximity serialises out —
     the A1 lesson), and every sheet computes `scroll-snap-align: start` with the track as its
     nearest scroll container; under `prefers-reduced-motion: reduce` the track's snap-type is
-    `none`. Fails if the snap binds to the root, goes `mandatory`, or survives reduced motion.
-15. **The peek** — at the track's rest position, sheet 2's box intersects the track's visible box
-    **and** extends beyond its inline-end edge (partially cut — the paging affordance). Fails if
-    `--sheet-w` grows to fill the container and the cue disappears.
+    `none`. The bleed holds as relationships: the track's border box spans the viewport's width;
+    at `scrollLeft` 0 sheet 1's inline-start equals the container's content inline-start (the
+    rail); fully scrolled, sheet 4's inline-end equals the rail-end; and the document's
+    `scrollWidth` equals the viewport width (the bleed leaks no page-level x scroll). Fails if
+    the snap binds to the root, goes `mandatory`, survives reduced motion, or the track shears
+    off the rail.
+15. **The cut** — at the track's rest position at 1280, sheet 2's box intersects the viewport
+    **and** extends beyond the physical screen edge, with no rendered ground between the track's
+    inline-end and the viewport edge (the dead strip stays gone). Width-scoped deliberately: at
+    widths where a whole number of sheets fits (~≥1590px) no cut exists and the ordinal + gauge
+    carry the affordance — the assertion pins the budgeted case, not every width. Fails if
+    `--sheet-w` grows to fill the scrollport or the track returns to a container-edge clip.
 16. **Every sheet reachable** — with the track focused, `ArrowRight` (real key events) strictly
     increases `scrollLeft` until sheet 4's inline-end edge is inside the track's box; and
-    `scrollIntoView()` on sheet 3's last `<dd>` lands it fully visible (the mechanical stand-in
-    for find-in-page reaching off-canvas content). Fails if the track traps or clips.
+    `scrollIntoView()` on sheet 3's last `<dd>` behaves per DEC-053's two shipped forms — snap
+    on: the reveal re-aligns to a sheet start with the match's sheet substantially on screen;
+    snap off (reduced motion): the target lands whole. Fails if the track traps or clips beyond
+    those forms.
 17. **Phone un-track** — below `--bp-wide`: the track has no horizontal overflow
-    (`scrollWidth === clientWidth`) and each sheet's top edge ≥ the previous sheet's bottom edge
-    (the stack). Fails if the track leaks into the stacked path.
+    (`scrollWidth === clientWidth`), no bleed (its border box stays inside the container), and
+    each sheet's top edge ≥ the previous sheet's bottom edge (the stack). Fails if the track or
+    the bleed leaks into the stacked path.
+18. **The ordinal** — exactly one `.sheet__ordinal` per sheet, `aria-hidden`, absent from the AX
+    tree; its text equals `SHEET n OF m` where `n` is the sheet's 1-based DOM position and `m`
+    the list's rendered length (read both from the DOM, never from this file); it sets in
+    `--text-micro` `--muted` and never computes the accent. Fails if an ordinal drifts from its
+    position, the count hardcodes, it enters the announced stream, or it dresses as a metric.
+19. **The gauge** — at ≥ `--bp-wide` the track computes `scrollbar-width: thin` and a
+    `scrollbar-color` whose thumb is the accent token. Computed-style only in the harness
+    (headless runs suppress scrollbar rendering); the visible thumb is part of the headed
+    cross-engine look, recorded as such. Fails if the declarations drop or the thumb colour
+    forks from the token.
 
-## 13. Existing harness sites — one spec-level re-base, two pointers
+## 13. Existing harness sites this round re-bases
 
-No shipped check in `tests/verify-shell.mjs` or `tests/qa-independent-audit.mjs` asserts anything
-about `#the-decisions` beyond the shell placeholder, whose counts drop symmetrically when the
-section lands (the placeholder-count checks compare across states and survive, per the shell's
-established pattern). Neither harness contains a scroll-snap check yet (verified by grep — those
-land with the scroll-snap build step), so the A4 amendment below is spec-level only:
+The build that lands this spec meets a harness that already asserts both the container-edge peek
+and the whole page-snap feature. The known sites, so nothing is cleaned by accident or left
+asserting a retired behaviour:
 
-- **`page-shell.md` §7.1 A4 is amended by this spec**: its no-other-snap-align sweep now scopes to
-  elements *outside* the §4 track — the track's sheets snap to the track, their nearest scroll
-  container, and never bind to the document's y axis. The scroll-snap build step implements A4 in
-  its amended form.
-- The audit's 64ch reading-measure probe finds its permanent target in **§3's paragraph** — the
-  page's largest single body of reading prose at the full 64ch measure. `.sheet__row dd` is no
-  longer the exemplar: on the track it renders ~46 rendered characters by design (§6.2).
-- The mechanism marks join the audit's decorative-construction sweep alongside the replay's marks,
-  and they must be painted with `background-color` so the small-rust-text sweep (keyed on computed
-  `color`) never sees them (§7.3).
+- **`tests/verify-shell.mjs` "Section scrolling" block (~`:2953` on the judged tree)** — the page
+  y-snap assertions. Every one is dispositioned in `page-shell.md` §7.1's retirement inventory
+  (A1 inverts, A2/A8/A9 keep, A3/A4/A10/A11 re-base, A5 re-scopes to the track, A6/A7 retire).
+  `.section--no-snap` and its markup comment leave `index.html` with them.
+- **`tests/verify-shell.mjs` §4 track checks (~`:1395–1647`)** — the track's snap-to-itself,
+  one-screen, reveal-share and reduced-motion checks survive with two re-bases: the one-screen
+  landing no longer arrives by page snap (§12.13's fragment/`scrollIntoView` path), and the
+  rest-position geometry gains the bleed relationships (§12.14–15). The DEC-053 reveal checks
+  (`:1590–1647`) are already the two forms §12.16 now states — the spec catches up to the build.
+- **`tests/qa-fullpage-sweep.mjs` scroll-snap-titled checks (~`:386–470`)** — keyboard paging,
+  centre-if-needed find, 200% zoom: subjects survive, claims re-word (they never depended on
+  snapping to be true).
+- The audit's 64ch reading-measure probe keeps its permanent target in **§3's paragraph**;
+  `.sheet__row dd` renders ~46 characters on the track by design (§6.2).
+- The mechanism marks stay in the audit's decorative-construction sweep, painted with
+  `background-color` so the small-rust-text sweep never sees them (§7.3). The ordinal joins the
+  muted-label family and must never compute the accent (§12.18).
+- **New assertions this spec plants**: §12.14's bleed relationships, §12.15's screen-edge cut,
+  §12.18's ordinal, §12.19's gauge declarations — each proven able to go red at the build, per
+  the standing planted-violation practice.
 
 ## 14. Provenance — seed lock vs. decided here
 
@@ -515,16 +640,21 @@ colour, face, and surface rule via the shell.
 ≤45-word row / ≤12-word title ceilings.
 
 **Decided here (the craft)**: the horizontal paged track as the one-screen answer, with its
-measured budget, the 40rem sheet page, the 360px peek as the paging affordance, x-proximity snap
-scoped to the track (and page-shell A4's amended sweep), the track as the section's single named
-tab stop, and the stacked phone form with its stated cost; the single-text-slot stamp with no
-structured date field; parens-as-enclosure dropped in render; title at kicker scale in sans bold
-sentence case and the first-person-as-face ruling (§4); the fixed 6rem label column with its
-measured headroom; the 64ch ruling — the cap ships on the prose and the track's page width governs
-the rendered measure (§6.2); the stacked single-column row grammar below `--bp-wide`; the
-mechanism emphasis system (12px-inset rust bar as the accent-mark idiom's third seat + ink-bold
-label, zero rust text in the section); sheets as `--surface` cards without registration marks
-(documents, not instruments); `<ol role="list">` / h3 / `<dl>` markup and the announced structure.
+measured budget and the 40rem sheet page; the paging affordance system (DEC-057) — the
+viewport-spanning scrollport with its token-derived bleed so the cut lands on the screen edge,
+the `SHEET n OF 4` ordinal as the width-independent channel in real spec-sheet grammar, and the
+track's scrollbar styled as the gauge; x-proximity snap scoped to the track, retained as what
+keeps the track's rests composed; the track as the section's single named tab stop; the stacked
+phone form re-ruled with the ordinal as its orientation and its full measured cost and rejected
+alternatives on the record (§8.1); the single-text-slot stamp with no structured date field and
+the meta line pairing it with the ordinal; parens-as-enclosure dropped in render; title at kicker
+scale in sans bold sentence case and the first-person-as-face ruling (§4); the fixed 6rem label
+column with its measured headroom; the 64ch ruling — the cap ships on the prose and the track's
+page width governs the rendered measure (§6.2); the stacked single-column row grammar below
+`--bp-wide`; the mechanism emphasis system (12px-inset rust bar as the accent-mark idiom's third
+seat + ink-bold label, zero rust text in the section); sheets as `--surface` cards without
+registration marks (documents, not instruments); `<ol role="list">` / h3 / `<dl>` markup and the
+announced structure.
 
 **From the direction reference, as feel cues only (A-003 — it never ships)**: the calm density of a
 bordered card holding labelled rows. **Present in the reference and deliberately not inherited**: its

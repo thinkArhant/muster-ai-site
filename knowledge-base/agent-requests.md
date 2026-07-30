@@ -64,6 +64,95 @@ The footer now exists as copy; it inherits your F-B1 alignment ruling.
   `qa-fullpage-sweep.mjs`'s string-asserted roster qualifier; rephrased to keep the asserted
   phrase while adding the footer pointer, sweep re-run green.
 
+### 2026-07-29 HO-035 — Gate B fix round: the alignment system, snap removed, §4's affordance rebuilt
+**Type:** handoff
+**Producer:** ui-ux
+**Deliverable:** amended `knowledge-base/design-specs/web/page-shell.md` (§7.1 rewritten, §7.2 new)
+· `section-01-hero.md` (§6.1, §9, §13.7, §15) · `section-04-decisions.md` (§3, §5, §6.2, §8.1,
+§10, §12, §13, §14) · DEC-057 · rendered decision records `samples/gate-b-proposed.html` +
+`samples/gate-b-renders/` (before/after PNGs + measurement JSONs — never ship)
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending
+
+**Every ruling was measured on the real page at 375 and 1280 (plus 1440/1600/320) before it was
+written, and re-measured on a rendered proposed state.** `before-report.json` /
+`after-report.json` carry the numbers; the PNGs show each state under test.
+
+- **F-B1 — one system: two edges and one axis** (`page-shell.md` §7.2). The founder's finding
+  reproduced exactly: every measured block on the page hangs on the rail (left 128 at 1280, 208
+  at 1440 — eyebrow, h1, caption, remnant, curl, §2 layers, §3, §5 cards, §6, tags, footer inner)
+  except the formation, whose intrinsic width (676.4px) put its hub on an orphan axis — 546.2
+  against the 720 shared by the headline block and THIS SITE strip at 1440. Ruling: **the
+  formation spans the container** (bus = plate row = container content width, plates
+  space-between) so the hub's center IS the page's axis — measured delta **0.0px at
+  1280/1440/1600** (`after-hero-*.png`). Exactly one axis-bound element may exist, and only
+  because its parent's edges are the rail and rail-end. Phone unchanged (ladder is rail-bound).
+  Harness rule stated as relationships, never pixels (hero §13.7, shell §7.2).
+- **F-B2 — removal wins the binary, on measurement.** Full section paging requires every section
+  to fit one snapport; four of six exceed the 553px phone fold (§1 1240 · §2 794.2 · §4 2957 ·
+  §5 1776.9) and §5 (1151.5px) exceeds even 700 at desktop — so paging needs `mandatory`
+  (unreachable oversized interiors, broken 200% zoom) or scripted scroll (banned and asserted
+  against). Removal costs zero content, zero layout. `--scroll-pad` stays. **Every assertion and
+  clause dispositioned by name** in §7.1's retirement inventory (A1 inverts, A2/A8/A9 keep,
+  A3/A4/A10/A11 re-base, A5 re-scopes, A6/A7 retire, `.section--no-snap` leaves the markup) with
+  the harness sites listed (`verify-shell.mjs` ~`:2953`, `qa-fullpage-sweep.mjs` ~`:386–470`).
+  DEC-040 amended not deleted; DEC-051's track clause amended in §8.1; DEC-053's two shipped
+  checks landed as the amended §7.1 A11 and §12.16 (closing the assignment from the Gate B
+  packet). **Scoping stated plainly**: the binary was ruled on section scrolling; §4's track
+  keeps its x snap as part of F-B3 (it is what makes the track rest composed instead of parked
+  mid-crop). If the founder reads "entirely" as the track too: one declaration, named fallback.
+- **F-B3 — three affordance channels in the section's own grammar, and the phone stack gains
+  orientation.** The judged cut's anatomy, measured: sheet 2 amputated at the container edge
+  with a 128px (1280) / 208px (1440) dead strip of bare ground before the screen edge. Ships:
+  (1) **the cut moves to the physical screen edge** — the track's scrollport spans the viewport
+  via a token-derived `--track-bleed`; sheet 1 rests on the rail at `scrollLeft` 0, sheet 4
+  fully-scrolled rests on the rail-end, document `scrollWidth` stays clean at every measured
+  width; (2) **`SHEET n OF 4` ordinal** on each sheet's meta line — real spec-sheet grammar,
+  `aria-hidden` (the `<ol>` announces position natively), numerals self-verifying against DOM
+  position (§12.18), width-independent; (3) **the gauge** — the track's scrollbar as a thin rust
+  rail (`scrollbar-width`/`scrollbar-color`), enhancement-only with degradation named. Zero JS,
+  zero new machinery. **Phone re-ruled: stacked stays** — every shrinking alternative measured
+  and disqualified in the spec (phone track: 650.8–679.7px sheets vs a 553 fold = two-axis
+  navigation; exclusive accordion: hides 12/16 rows from Safari find-in-page, a committed reader
+  path and a founder re-gate check, and demands taps DEC-043 bars; un-carding: 6.5% for a broken
+  motif). The stack's real defect was anonymity, not height: the ordinal gives extent and
+  progress at +28.5px/sheet — **3071px at 375, measured**, against 2957 judged.
+
+**Two traps found by measuring, recorded for the build:** (1) percentage-based bleed fails
+silently — padding `%` resolves against the containing block but `scroll-padding` `%` against
+the scrollport, and the mismatch let the track's own snap pull sheet 1 to the viewport edge on
+first layout (`--track-bleed` is token-derived for exactly this reason, §8.1); (2) the harness
+launches Chrome with `--hide-scrollbars`, so **no headless render can ever show the gauge** —
+§12.19 asserts computed style, and the visible thumb belongs to the headed cross-engine look.
+
+**Verification:** `scripts/test.sh` re-run on this tree — **272/273, the one red being
+HO-034's designed spec-ahead-of-build red** (§4 page fidelity awaits the build's string swap);
+no shipped file touched by this handoff. Cross-engine note: the rulings were measured in Blink;
+the gauge's WebKit rendering and the phone feel are named for the headed pass the build owes
+anyway, and the three deferred phone checks stay at the re-gate.
+
+**Apple-quality bar: would Apple ship this? — Yes.** The full-bleed track cut at the screen
+edge is Apple's own carousel construction; the formation on the page's true axis is the symmetry
+their hero compositions never miss; the ordinal is quiet document grammar instead of carousel
+furniture; and removing the page snap returns scrolling to the platform, which is the most
+Apple-like ruling of the three. The one honest hesitation — §4's phone length — is the content's
+size, and the alternatives all hide founder testimony; orientation was the premium fix available
+without hiding anything.
+
+**For HO-036 (Developer):** the work-list is §7.1's retirement inventory + §12.14/15/18/19's new
+assertions (each to be planted red per standing practice) + hero §13.7's amended formation
+assertion. The override CSS in `samples/gate-b-proposed.html` is the reference implementation of
+all three rulings — derived from the shipped page, byte-identical markup except the meta
+line/ordinal and the injected style block.
+
+**Revision log:**
+- 2026-07-29: Self-review durability pass stripped finding IDs and handoff IDs from all three
+  durable specs (rejected-alternative framing + DEC-057 citations instead). Self-review also
+  caught the first bleed prototype's rail miss (sheet 1 at viewport edge) before any spec text
+  was written — the scroll-padding percentage trap above; the shipped formula is the corrected,
+  re-measured one.
+
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
 

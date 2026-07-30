@@ -77,56 +77,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-29 UI/UX: Gate B fix round — alignment system, the snap ruling, §4's affordance
-
-```
-Role: ui-ux
-Model: claude-fable-5
-
-**Task:** Three design rulings from the Gate B verdict (`knowledge-base/wave-review.md` → ### Gate
-B — findings F-B1, F-B2, F-B3). Each was raised by the founder from the rendered page; each is
-yours to decide, not to escalate.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — the Gate B findings, with the founder's own words
-- `knowledge-base/decision-log.md` — DEC-040, DEC-051, DEC-053 (the snap and §4-track rulings your
-  F-B2/F-B3 decisions amend or retire), DEC-045/046 (the sparse hero F-B1 aligns)
-- `knowledge-base/design-specs/web/page-shell.md` · `section-01-hero.md` · `section-04-decisions.md`
-- `index.html` + `styles/` — the built page the founder judged; render it, at desktop and phone
-  widths, before ruling anything
-- `knowledge-base/design-specs/web/footer-copy.md` (HO-034) — the footer now exists; it inherits
-  the alignment system too
-
-**Deliverable:** amended `page-shell.md` (+ hero/§4 specs as needed), each ruling stated with its
-measured evidence; HO-035.
-
-**Acceptance criteria:**
-- **F-B1 — one horizontal alignment system for every element on the page.** The formation is
-  visibly off-center against the THIS SITE strip and the headline. Rule the system (centered vs
-  left-rail vs mixed-with-a-reason), apply it to every §1 element and check every other section
-  against it. State the rule so the harness can assert it — a relationship, not per-element pixel
-  values (DEC-032).
-- **F-B2 — the snap ruling is binary**: remove scroll-snap entirely, or full section paging (one
-  section per view, a scroll advances whole sections, small more-indicator). No middle state.
-  Weigh: §5 does not fit one screen top-to-bottom; the phone scroll already feels wrong; paging is
-  heavy machinery on a page arguing restraint — but rule it on the rendered feel, and rule the
-  phone with it. If paging wins, spec the reduced-motion and keyboard paths; if removal wins, name
-  every assertion and spec clause that retires (DEC-040/051/053 amend, never silently die).
-- **F-B3 — §4's crop must read as an invitation, not a break.** Design the premium affordance that
-  says "more, sideways" (peek geometry, indicator, edge treatment — your call), and re-rule the
-  phone treatment: four stacked sheets read too long on a phone; state the alternative and its
-  measured height.
-- Every ruling measured on the real page at 375 and 1280 before it is written; renders attached to
-  the handoff must show the state under test.
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-035 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-29 Developer (web): Gate B fix round — build the rulings
 
 ```
@@ -150,11 +100,12 @@ Model: claude-opus-5
   guard still passes: an `href` is inert; **re-prove the guard catches a fetching reference after
   the change**
 - The alignment system built as HO-035 rules it, with its relationship assertion in the harness
-- The snap outcome built exactly as ruled — if removal: every retired assertion and clause cleaned
-  up, none left asserting a behaviour that no longer exists; if paging: reduced-motion and keyboard
-  paths included
-- §4's affordance and phone treatment per HO-035; §4 copy swaps per HO-034 (trade-off row, and the
-  overnight line if Content ruled it in)
+- The snap outcome built exactly as ruled — **removal won**: every retired assertion and clause
+  cleaned up per `page-shell.md` §7.1's retirement inventory, none left asserting a behaviour
+  that no longer exists; §4's track keeps its x snap per `section-04-decisions.md` §8.1
+- §4's affordance and phone treatment per HO-035 (`--track-bleed`, meta line + ordinals, gauge —
+  the reference implementation is `samples/gate-b-proposed.html`); §4 copy swaps per HO-034
+  (trade-off row, and the overnight line — Content ruled it in, decision 4's mechanism row)
 - All three runners green — `scripts/test.sh` both engines, the independent audit, the full-page
   sweep — with changed-subject assertions re-based, each new assertion planted-and-proven red
 - Cross-engine WebKit and Blink before filing
@@ -163,6 +114,9 @@ Model: claude-opus-5
 
 **On completion:** File HO-036 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-29 QA (web): Scoped re-run on the fix round
 
@@ -232,6 +186,22 @@ Model: claude-opus-5
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-29 — Step: UI/UX Gate B fix round (HO-035, DEC-057). All three rulings measured on the
+  real page before being written, and re-measured on a rendered proposed state
+  (`samples/gate-b-proposed.html`, renders + JSONs in `samples/gate-b-renders/`). **F-B1**: two
+  edges and one axis (`page-shell.md` §7.2) — the formation spans the container so the hub's
+  center IS the page axis (delta 0.0px at 1280/1440/1600, against 173.8px off on the judged
+  build). **F-B2**: snap removed — paging loses on measurement (four of six sections exceed the
+  553 phone fold; §5 exceeds 700 at desktop), every assertion dispositioned by name in §7.1's
+  retirement inventory; §4's track keeps its x snap as part of F-B3, fallback named. **F-B3**:
+  the cut moves to the physical screen edge via a token-derived `--track-bleed` (the dead strip
+  — 128/208px on the judged build — gone by construction), `SHEET n OF 4` ordinals in real
+  spec-sheet grammar, the scrollbar styled as a gauge; phone stays stacked with orientation
+  (3071px at 375, measured; accordion and phone-track alternatives measured and disqualified in
+  §8.1 — the accordion hides 12/16 rows from Safari find-in-page). DEC-053's §7.1-A11/§12.16
+  amendments landed with the round. `scripts/test.sh` re-run: 272/273 with HO-034's one designed
+  red, no shipped file touched. **Awaiting PM review at the fix-round review step.**
 
 - 2026-07-29 — Step: Content Gate B fix round (HO-034). The footer's strings exist and are true:
   `5 of 8 agents, 1 operator`, the five named and the three never-invoked named, no email, six
@@ -334,11 +304,6 @@ Model: claude-opus-5
   `scripts/test.sh` re-run GREEN. Awaiting PM review at the build-review step; two DEC-046 cascade
   gaps in PM-owned files flagged as OBS-002/003.
 
-- 2026-07-28 — Step: Content Gate A fix round (HO-031). All four copy files carry the verdict: §1 is
-  the settled headline with zero Bodh material, §3 is the closed 90/90 block byte-exact, §4 is
-  re-authored plain from DEC-044's four at 44/42/44/44 words per sheet (ceiling 45 — nothing
-  unfittable, every trade-off intact), §5 takes the `$147` cost row. Awaiting PM review at the
-  build-review step; HO-032 consumes the measured lengths next.
 
 
 

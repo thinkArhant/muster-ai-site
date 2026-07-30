@@ -1,0 +1,285 @@
+{
+  "d1280": {
+    "vw": 1280,
+    "vh": 700,
+    "rail": 128,
+    "railEnd": 1152,
+    "axis": 640,
+    "hubCenter": 640,
+    "hubAxisDelta": 0,
+    "busSpan": [
+      128,
+      1152
+    ],
+    "trackBox": [
+      0,
+      1280
+    ],
+    "trackScrollLeft": 0,
+    "trackScrollWidth": 2888,
+    "trackSnap": "x",
+    "trackPad": "128px",
+    "sheets": [
+      {
+        "left": 128,
+        "right": 768,
+        "height": 473.3
+      },
+      {
+        "left": 792,
+        "right": 1432,
+        "height": 473.3
+      },
+      {
+        "left": 1456,
+        "right": 2096,
+        "height": 473.3
+      },
+      {
+        "left": 2120,
+        "right": 2760,
+        "height": 473.3
+      }
+    ],
+    "metas": [
+      16.5,
+      16.5,
+      16.5,
+      16.5
+    ],
+    "sheet2Visible": 488,
+    "rootSnap": "none",
+    "scrollPad": "72px",
+    "s4Height": 686.1,
+    "docScrollW": 1280,
+    "pageHeight": 4647
+  },
+  "d1440": {
+    "vw": 1440,
+    "vh": 800,
+    "rail": 208,
+    "railEnd": 1232,
+    "axis": 720,
+    "hubCenter": 720,
+    "hubAxisDelta": 0,
+    "busSpan": [
+      208,
+      1232
+    ],
+    "trackBox": [
+      0,
+      1440
+    ],
+    "trackScrollLeft": 0,
+    "trackScrollWidth": 3048,
+    "trackSnap": "x",
+    "trackPad": "208px",
+    "sheets": [
+      {
+        "left": 208,
+        "right": 848,
+        "height": 473.3
+      },
+      {
+        "left": 872,
+        "right": 1512,
+        "height": 473.3
+      },
+      {
+        "left": 1536,
+        "right": 2176,
+        "height": 473.3
+      },
+      {
+        "left": 2200,
+        "right": 2840,
+        "height": 473.3
+      }
+    ],
+    "metas": [
+      16.5,
+      16.5,
+      16.5,
+      16.5
+    ],
+    "sheet2Visible": 568,
+    "rootSnap": "none",
+    "scrollPad": "72px",
+    "s4Height": 714.1,
+    "docScrollW": 1440,
+    "pageHeight": 4815
+  },
+  "d1600": {
+    "vw": 1600,
+    "vh": 900,
+    "rail": 288,
+    "railEnd": 1312,
+    "axis": 800,
+    "hubCenter": 800,
+    "hubAxisDelta": 0,
+    "busSpan": [
+      288,
+      1312
+    ],
+    "trackBox": [
+      0,
+      1600
+    ],
+    "trackScrollLeft": 0,
+    "trackScrollWidth": 3208,
+    "trackSnap": "x",
+    "trackPad": "288px",
+    "sheets": [
+      {
+        "left": 288,
+        "right": 928,
+        "height": 473.3
+      },
+      {
+        "left": 952,
+        "right": 1592,
+        "height": 473.3
+      },
+      {
+        "left": 1616,
+        "right": 2256,
+        "height": 473.3
+      },
+      {
+        "left": 2280,
+        "right": 2920,
+        "height": 473.3
+      }
+    ],
+    "metas": [
+      16.5,
+      16.5,
+      16.5,
+      16.5
+    ],
+    "sheet2Visible": 640,
+    "rootSnap": "none",
+    "scrollPad": "72px",
+    "s4Height": 742.1,
+    "docScrollW": 1600,
+    "pageHeight": 4983
+  },
+  "p375": {
+    "vw": 375,
+    "vh": 553,
+    "rail": 24,
+    "railEnd": 351,
+    "axis": 187.5,
+    "hubCenter": 46.4,
+    "hubAxisDelta": -141.1,
+    "busSpan": [
+      0,
+      0
+    ],
+    "trackBox": [
+      24,
+      351
+    ],
+    "trackScrollLeft": 0,
+    "trackScrollWidth": 327,
+    "trackSnap": "none",
+    "trackPad": "0px",
+    "sheets": [
+      {
+        "left": 24,
+        "right": 351,
+        "height": 650.8
+      },
+      {
+        "left": 24,
+        "right": 351,
+        "height": 648.5
+      },
+      {
+        "left": 24,
+        "right": 351,
+        "height": 667.3
+      },
+      {
+        "left": 24,
+        "right": 351,
+        "height": 679.7
+      }
+    ],
+    "metas": [
+      45,
+      45,
+      61.5,
+      45
+    ],
+    "sheet2Visible": 327,
+    "rootSnap": "none",
+    "scrollPad": "72px",
+    "s4Height": 3071,
+    "docScrollW": 375,
+    "pageHeight": 8379
+  },
+  "p320": {
+    "vw": 320,
+    "vh": 553,
+    "rail": 24,
+    "railEnd": 296,
+    "axis": 160,
+    "hubCenter": 46.4,
+    "hubAxisDelta": -113.6,
+    "busSpan": [
+      0,
+      0
+    ],
+    "trackBox": [
+      24,
+      296
+    ],
+    "trackScrollLeft": 0,
+    "trackScrollWidth": 272,
+    "trackSnap": "none",
+    "trackPad": "0px",
+    "sheets": [
+      {
+        "left": 24,
+        "right": 296,
+        "height": 737.4
+      },
+      {
+        "left": 24,
+        "right": 296,
+        "height": 766.3
+      },
+      {
+        "left": 24,
+        "right": 296,
+        "height": 727.3
+      },
+      {
+        "left": 24,
+        "right": 296,
+        "height": 708.5
+      }
+    ],
+    "metas": [
+      45,
+      45,
+      61.5,
+      45
+    ],
+    "sheet2Visible": 272,
+    "rootSnap": "none",
+    "scrollPad": "72px",
+    "s4Height": 3364.5,
+    "docScrollW": 320,
+    "pageHeight": 8929
+  },
+  "trackEnd1280": {
+    "scrollLeft": 1608,
+    "sheet4": [
+      512,
+      1152
+    ],
+    "vw": 1280
+  }
+}

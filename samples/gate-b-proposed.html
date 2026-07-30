@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muster — the open-source multi-agent product framework for Claude Code</title>
+<meta name="description" content="Muster is an open-source multi-agent product framework for Claude Code. One person plus a governed AI team, with the build's measured data and real artifacts published alongside it.">
+<!-- Inline data-URI icon: self-contained, no network request, no /favicon.ico probe.
+     The founder's house tile as supplied — rust ground, cream pennant — restated
+     at a 16-unit viewBox, which is the authored 1024 coordinates divided by 64
+     (brand-seats.md §6). It deliberately does not follow the theme: a favicon
+     cannot, and the tile is legible without one. The two hex literals are legal
+     here and nowhere else — a data: URI cannot reference a custom property. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23C05A32'/%3E%3Cpath d='M4.33 2.34L11.67 2.34L11.67 13.33L8 11.33L4.33 13.33Z' fill='%23E6E3D3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/chrome.css">
+<link rel="stylesheet" href="../styles/motifs.css">
+<link rel="stylesheet" href="../styles/replay.css">
+<link rel="stylesheet" href="../styles/sections.css">
+
+<style>
+/* GATE B FIX ROUND — proposed state (HO-035). Never ships; decision record. */
+
+/* F-B2 — section snapping removed entirely; --scroll-pad stays. */
+:root { scroll-snap-type: none; }
+
+@media (min-width: 60rem) {
+  /* F-B1 — the formation spans the container: bus = plate row = container
+     content width; the hub centers on the page's one axis. */
+  .formation__diagram { inline-size: 100%; }
+  .formation__plates { justify-content: space-between; }
+
+  /* F-B3 — the track's scrollport spans the viewport; sheets start on the
+     rail; the horizontal scrollbar renders as a persistent thin gauge. */
+  .sheets {
+    /* The rail's distance from the viewport edge, from the page's own tokens —
+       percentages are wrong twice here: padding % resolves against the
+       containing block but scroll-padding % against the scrollport, and the
+       mismatch lets the track's own snap pull sheet 1 off the rail on load. */
+    --track-bleed: calc((100vw - min(var(--page-max), 100vw)) / 2 + var(--gutter));
+    margin-inline: calc(-1 * var(--track-bleed));
+    padding-inline: var(--track-bleed);
+    scroll-padding-inline-start: var(--track-bleed);
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+  }
+}
+
+/* F-B3 — sheet meta line: provenance at the start, position at the end. */
+.sheet__meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--gap-hairline);
+  margin-block-start: var(--gap-hairline);
+}
+.sheet__meta .sheet__stamp { margin-block-start: 0; }
+.sheet__ordinal { margin-inline-start: auto; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- Texture: two generated layers, behind all content, information-free. -->
+<div class="texture" aria-hidden="true">
+  <div class="texture__grain"></div>
+  <div class="texture__vignette"></div>
+</div>
+
+<header class="statusbar">
+  <div class="statusbar__inner container">
+    <!-- The underscore lives INSIDE the wordmark's own text run, not as a third
+         flex item: a sibling of the pennant would pick up .brand's 12px gap and
+         read as a rust dash floating clear of the R. Inside .brand__word only
+         the wordmark's own trailing letter-space separates them, which is
+         exactly the next character position (brand-seats.md §4). Both marks are
+         aria-hidden, so the header's accessible name is exactly MUSTER. -->
+    <span class="brand"><span class="brand__mark" aria-hidden="true"></span><span class="brand__word">MUSTER<span class="brand__rule" aria-hidden="true"></span></span></span>
+    <p class="status">
+      <span class="pulse" aria-hidden="true"><span class="pulse__core"></span></span>
+      <span class="status__word">OPERATIONAL</span>
+    </p>
+  </div>
+</header>
+
+<!-- tabindex="-1": WebKit does not move focus to a non-focusable skip-link
+     target, so the skip would be silent for keyboard users there. -->
+<main id="main" tabindex="-1">
+
+  <!-- §1 — the sparse hero. Above the fold: eyebrow, headline, formation.
+       Nothing else. Every measured figure on this page lands one scroll down
+       (§2's replay, §5's cards); §1 carries none, and carries no Bodh
+       material at all — §2 is the page's only terminal. -->
+  <section id="hero" class="section section--hero" aria-labelledby="hero-title">
+    <div class="container">
+
+      <!-- A list, so the separators can be drawn rather than typed: the
+           alt-text syntax (content: "·" / "") keeps them out of the
+           accessible name, and each fact is a nowrap unit so a narrow
+           viewport wraps at fact boundaries. list-style: none strips list
+           semantics in WebKit VoiceOver, hence the explicit role. -->
+      <ul class="eyebrow t-label" role="list">
+        <li>open source</li>
+        <li>runs in Claude Code</li>
+        <li>v4</li>
+        <li>MIT</li>
+      </ul>
+
+      <!-- The claim editing itself in front of the reader. The struck phrase
+           is aria-hidden, so the computed name is the post-edit sentence
+           only — screen readers otherwise read struck text as ordinary text.
+           Both treated phrases are nowrap units and no <br> appears: the
+           line breaks are the wrap system's, so they hold at any width. -->
+      <h1 class="t-display hero__title" id="hero-title">Ship a product with <s class="h1__cut" aria-hidden="true">a human</s> <span class="h1__accent">an AI</span> team.</h1>
+
+      <!-- The formation is the roster: hub is PM, the bus-bar carries the
+           seven specialists. Announced as group → PM → a 7-item list, which
+           is the architecture the diagram draws; a flat 8-item list would
+           erase it. Bus, spine and stems are CSS constructions and reach
+           the accessibility tree nowhere. -->
+      <div class="formation">
+        <div class="formation__diagram" role="group" aria-label="PM and seven specialist AI roles">
+          <span class="formation__hub">PM</span>
+          <div class="formation__bus" aria-hidden="true"></div>
+          <ul class="formation__plates" role="list" aria-label="The seven specialist roles">
+            <li>Developer</li>
+            <li>UI/UX</li>
+            <li>QA</li>
+            <li>Content</li>
+            <li>Marketing</li>
+            <li>Legal</li>
+            <li>Research</li>
+          </ul>
+        </div>
+        <p class="t-micro formation__caption">8 AI agents · 1 operator</p>
+      </div>
+
+      <!-- The THIS SITE remnant: the readout motif at its smallest honest
+           size. The cell labels are what make the dashes claims rather than
+           punctuation. §5 owns the full card and the measured contrast
+           beside it. Dashes are ink, static, and never count up. -->
+      <div class="remnant">
+        <span class="regmark regmark--tl" aria-hidden="true">+</span>
+        <span class="regmark regmark--br" aria-hidden="true">+</span>
+        <div class="remnant__head">
+          <span class="t-label remnant__scope">THIS SITE · SPEC → LIVE</span>
+          <a class="chip chip--emphasis" href="../VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span class="chip__glyph" aria-hidden="true">⎘</span></a>
+        </div>
+        <dl class="remnant__cells">
+          <div class="remnant__cell">
+            <dt class="t-micro remnant__key">ACTIVE BUILD</dt>
+            <dd class="remnant__value">—</dd>
+          </div>
+          <div class="remnant__cell">
+            <dt class="t-micro remnant__key">COST · API LIST</dt>
+            <dd class="remnant__value">—</dd>
+          </div>
+          <div class="remnant__cell">
+            <dt class="t-micro remnant__key">SHIPPED</dt>
+            <dd class="remnant__value">THIS PAGE</dd>
+          </div>
+        </dl>
+        <p class="t-micro remnant__caption">measured at launch</p>
+      </div>
+
+      <!-- The command, closing the section. No cursor and no prompt glyph —
+           §6's instance owns the page's only blink, and a `$` inside the
+           selectable text would break what the reader copies. -->
+      <p class="curl"><span class="curl__cmd" data-curl>curl -fsSL https://raw.githubusercontent.com/thinkArhant/muster-ai/main/scripts/setup-project.sh | bash -s my-product</span></p>
+
+    </div>
+  </section>
+
+  <!-- The one markup change §7.1's snap feature needs: this section is exempt,
+       because a snap position near its playback core competes with the
+       visibility gate that starts the chain. Stated here rather than left to
+       fall out of the section's height. -->
+  <section id="watch-it-ship" class="section section--no-snap" aria-labelledby="s02-title">
+    <div class="rule">
+      <span class="rule__line" aria-hidden="true"></span>
+      <span class="rule__tag">
+        <span class="rule__tick" aria-hidden="true"></span>
+        <h2 class="tag t-label" id="s02-title"><span class="tag__mark" aria-hidden="true"></span>§02 · WATCH IT SHIP</h2>
+        <span class="rule__tick" aria-hidden="true"></span>
+      </span>
+      <span class="rule__line rule__line--grow" aria-hidden="true"></span>
+    </div>
+    <div class="container section__body">
+
+      <!-- The complete annotated transcript is in the DOM from load. Playback is
+           an opacity reveal over it, so no-JS and reduced-motion readers get the
+           whole thing and screen readers read it once, in document order. -->
+      <div class="replay">
+
+        <div class="replay__core">
+
+          <p class="replay__beat t-micro" aria-hidden="true" data-beat-indicator>BEAT 06 / 06 · THE HUMAN GATE</p>
+
+          <div class="replay__layers">
+
+            <div class="terminal">
+              <span class="regmark regmark--tl" aria-hidden="true">+</span>
+              <span class="regmark regmark--br" aria-hidden="true">+</span>
+              <div class="terminal__chrome">
+                <p class="terminal__label t-micro"><span class="terminal__label-prefix">BODH · SPRINT 4 — </span>CONDENSED FROM THE REAL BUILD LOG</p>
+                <p class="terminal__live t-micro">
+                  <span class="pulse" aria-hidden="true"><span class="pulse__core"></span></span>
+                  <span class="terminal__live-word">RUN</span>
+                </p>
+              </div>
+              <ol class="log" tabindex="0" aria-label="Build log, condensed from the real build log">
+        <li class="log__line" data-line="1" data-beat="1"><span class="log__stamp">20:38</span><span class="log__role">  muster   </span><span class="log__detail">sprint/auto · queue read · 8 roles standing by</span></li>
+        <li class="log__line" data-line="2" data-beat="1"><span class="log__stamp">20:38</span><span class="log__role">  ui-ux    </span><span class="log__detail">production spec + assets · HO-027 filed</span></li>
+        <li class="log__line" data-line="3" data-beat="2"><span class="log__stamp">20:46</span><span class="log__role">  dev      </span><span class="log__detail">web/ built · rotation port parity ✓ (UTC+ / UTC−) · HO-028</span></li>
+        <li class="log__line log__line--key" data-line="4" data-beat="3"><span class="log__mark" aria-hidden="true"></span><span class="log__stamp">20:59</span><span class="log__role">  <b class="log__token">pm</b> <span class="log__glyph">✓</span>     </span><span class="log__detail">independent re-verify · own screenshots · match</span></li>
+        <li class="log__line" data-line="5" data-beat="4"><span class="log__stamp">21:06</span><span class="log__role">  content  </span><span class="log__detail">copy on-voice · one meta edit · HO-029</span></li>
+        <li class="log__line" data-line="6" data-beat="4"><span class="log__stamp">21:11</span><span class="log__role">  legal    </span><span class="log__detail">data-not-collected · confirmed at code level · HO-030</span></li>
+        <li class="log__line" data-line="7" data-beat="4"><span class="log__stamp">21:16</span><span class="log__role">  mkt      </span><span class="log__detail">share card written · HO-031</span></li>
+        <li class="log__line" data-line="8" data-beat="5"><span class="log__stamp">21:20</span><span class="log__role">  qa       </span><span class="log__detail">re-deriving rotation · 24 dates × 3 timezones …</span></li>
+        <li class="log__line log__line--key" data-line="9" data-beat="5"><span class="log__mark" aria-hidden="true"></span><span class="log__stamp">21:35</span><span class="log__role">  <b class="log__token">qa</b>       </span><span class="log__detail">11/11 acceptance · <b class="log__token">PASS</b> · zero bugs · HO-032</span></li>
+        <li class="log__line" data-line="10" data-beat="6"><span class="log__stamp">21:35</span><span class="log__role">  pm       </span><span class="log__detail">handoffs accepted · deploy packet → founder</span></li>
+        <li class="log__line" data-line="11" data-beat="6"><span class="log__stamp">21:43</span><span class="log__role">  gate     </span><span class="log__detail">Role: halt · awaiting operator</span></li>
+        <li class="log__line log__line--state" data-line="12" data-beat="6"><span class="log__stamp">─────</span><span class="log__role">  deploy   </span><span class="log__detail">bodh.day · LIVE</span></li>
+              </ol>
+            </div>
+
+            <div class="narration">
+              <ol class="narration__list" aria-label="Narration">
+        <li class="narration__entry" data-slot="sp1" data-beat="1"><span class="narration__tag" aria-hidden="true">QUEUE ADVANCES</span><span class="narration__text">A real run, replayed: Bodh's website wave — one evening, AI agents, unattended. The queue advances; UI/UX files the production spec.</span></li>
+        <li class="narration__entry" data-slot="sp2" data-beat="2"><span class="narration__tag" aria-hidden="true">DEVELOPER BUILDS</span><span class="narration__text">The developer builds the deployable site — an exact port of the app's date-rotation logic, verified on both sides of UTC.</span></li>
+        <li class="narration__entry" data-slot="sp3" data-beat="3"><span class="narration__tag" aria-hidden="true">PM RE-VERIFIES</span><span class="narration__text">One agent auditing another: the PM re-checks the developer's work with its own screenshots — never trusting the developer's. Accepted.</span></li>
+        <li class="narration__entry" data-slot="sp4a" data-beat="4"><span class="narration__tag" aria-hidden="true">THREE HANDOFFS</span><span class="narration__text">Content polishes the copy — on-voice, one meta-description edit.</span></li>
+        <li class="narration__entry" data-slot="sp4b" data-beat="4"><span class="narration__tag" aria-hidden="true">THREE HANDOFFS</span><span class="narration__text">Legal confirms 'Data Not Collected' in code, not in a policy.</span></li>
+        <li class="narration__entry" data-slot="sp4c" data-beat="4"><span class="narration__tag" aria-hidden="true">THREE HANDOFFS</span><span class="narration__text">Marketing writes the share card — 134 characters, no competitor mention.</span></li>
+        <li class="narration__entry" data-slot="sp5" data-beat="5"><span class="narration__tag" aria-hidden="true">QA FULL VALIDATION</span><span class="narration__text">QA doesn't re-run the developer's tests — it re-derives the date math with its own formula, across 24 dates and 3 timezones.</span></li>
+        <li class="narration__entry" data-slot="sp6" data-beat="6"><span class="narration__tag" aria-hidden="true">THE HUMAN GATE</span><span class="narration__text">PASS — 11/11, zero bugs. The PM accepts, the same instant.</span></li>
+        <li class="narration__entry" data-slot="sp7" data-beat="6"><span class="narration__tag" aria-hidden="true">THE HUMAN GATE</span><span class="narration__text">The operator planned the sprint, left the agents running, and returns to a deploy-ready site.</span></li>
+        <li class="narration__entry" data-slot="sp8"><span class="narration__text">bodh.day, live. The deploy landed three days later — the gate waited on Apple. This wave: 64 minutes of agent work across 8 sessions, 289 API calls, $24.73 at API list price.</span></li>
+              </ol>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Outside .replay__core deliberately. The core is what must fit the
+             visual viewport on a phone; the totals strip is static evidence
+             rather than a playback layer, so lifting it out is what buys the
+             height the soft wrap costs (replay spec §7.1 rule 3). Above
+             --bp-wide it sits exactly where it always did, under the two
+             columns. -->
+        <p class="totals">
+          <span class="totals__value">~64 MIN AGENT WORK · 289 API CALLS · $24.73</span>
+          <span class="totals__scope">BODH SPRINT 4 · WEBSITE WAVE ONLY</span>
+        </p>
+
+        <!-- Controls are built by scripts/replay.js and only when playback runs:
+             with no JS, or at reduced motion, there is nothing to control. -->
+        <div class="replay__controls" data-replay-controls></div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="the-insight" class="section" aria-labelledby="s03-title">
+    <div class="rule">
+      <span class="rule__line" aria-hidden="true"></span>
+      <span class="rule__tag">
+        <span class="rule__tick" aria-hidden="true"></span>
+        <h2 class="tag t-label" id="s03-title"><span class="tag__mark" aria-hidden="true"></span>§03 · THE INSIGHT</h2>
+        <span class="rule__tick" aria-hidden="true"></span>
+      </span>
+      <span class="rule__line rule__line--grow" aria-hidden="true"></span>
+    </div>
+    <div class="container section__body">
+
+      <!-- Each sentence is its own inline-block span, so a line break lands at
+           a sentence boundary wherever the viewport allows and a sentence too
+           wide for the column wraps inside itself rather than overflowing —
+           the headline's phrase-unit mechanism at kicker scale. The spans are
+           style-only: the punctuation already separates the sentences, so the
+           announced string is unchanged. The kicker is a statement, not a
+           heading; §3's heading is the stencil tag above it. -->
+      <p class="t-kicker kicker"><span class="kicker__s">The product grows.</span> <span class="kicker__s">The briefing doesn't.</span></p>
+
+      <!-- The page's largest single body of reading prose, at the full 64ch
+           column. §3 carries no numerals by design: the argument here is
+           mechanism, and the numbers stay where their scope labels live. -->
+      <p class="t-body read insight__para">Muster puts eight AI roles under one human operator, coordinating through markdown files and a queue. Used bare, Claude Code makes you the memory: every session starts with re-explaining, and the re-explaining grows with the product. Muster moves that job into the system. Decisions land in a knowledge base; each session reads a curated slice — a small always-on tier, the rest on demand, most never — context engineering, per role. The product grows; what a session reads stays bounded. Mechanics run as scripts, judgment in prose — it holds on cheap models.</p>
+
+    </div>
+  </section>
+
+  <section id="the-decisions" class="section" aria-labelledby="s04-title">
+    <div class="rule">
+      <span class="rule__line" aria-hidden="true"></span>
+      <span class="rule__tag">
+        <span class="rule__tick" aria-hidden="true"></span>
+        <h2 class="tag t-label" id="s04-title"><span class="tag__mark" aria-hidden="true"></span>§04 · THE DECISIONS</h2>
+        <span class="rule__tick" aria-hidden="true"></span>
+      </span>
+      <span class="rule__line rule__line--grow" aria-hidden="true"></span>
+    </div>
+    <div class="container section__body">
+
+      <!-- An <ol> because the order is meaningful — strongest first, and never
+           reordered. `list-style: none` strips list semantics in WebKit
+           VoiceOver, hence the explicit role. At desktop the list is the paged
+           track: it is the section's one tab stop, so a keyboard reader can
+           scroll sheets 2–4 into view. Below --bp-wide it un-tracks and the
+           sheets stack; the attribute stays, costing one named, skippable stop
+           on a list that no longer scrolls.
+
+           Sheets carry no registration marks: those are instrument grammar,
+           and these are documents. Founder testimony must not dress as
+           telemetry. -->
+      <ol class="sheets" role="list" tabindex="0" aria-label="The four decisions">
+
+        <li class="sheet" data-category="framework">
+          <h3 class="sheet__title">I optimized what each agent <em>reads</em>, not how they talk.</h3>
+          <div class="sheet__meta"><span class="sheet__stamp t-micro">framework — 2026-04-24</span><span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 1 OF 4</span></div>
+          <dl class="sheet__rows">
+            <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Each agent gets a curated brief: what its task needs, nothing more.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>What breaks isn't the talking — it's each agent reading too much.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>Agents never talk directly — every question between roles costs a file and a session.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Three reading tiers; the PM routes context.</dd></div>
+          </dl>
+        </li>
+
+        <li class="sheet" data-category="framework">
+          <h3 class="sheet__title">Any rule a script can check, a script enforces.</h3>
+          <div class="sheet__meta"><span class="sheet__stamp t-micro">framework — 2026-06-13</span><span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 2 OF 4</span></div>
+          <dl class="sheet__rows">
+            <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Mechanics live in scripts; judgment stays in prose.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>AI follows written instructions unevenly — one model skipped a required step.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>Hard floors can't flex: a legitimate exception still trips the gate.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Automated gates hold the floors, so premium models buy judgment, not correctness.</dd></div>
+          </dl>
+        </li>
+
+        <li class="sheet" data-category="framework">
+          <h3 class="sheet__title">I capped every file the agents read — before almost anything else.</h3>
+          <div class="sheet__meta"><span class="sheet__stamp t-micro">framework — 2026-04-12, first commit</span><span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 3 OF 4</span></div>
+          <dl class="sheet__rows">
+            <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Every file the agents read has a hard size cap.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>Shared files grow quietly; eventually agents mostly reread their own history.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>Agents lose sight of anything older than the current sprint.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Size caps plus archive rules, and a build gate that fails on growth.</dd></div>
+          </dl>
+        </li>
+
+        <li class="sheet" data-category="framework">
+          <h3 class="sheet__title">The system treats my attention as the scarcest resource.</h3>
+          <div class="sheet__meta"><span class="sheet__stamp t-micro">framework — 2026-06-07</span><span class="sheet__ordinal t-micro" aria-hidden="true">SHEET 4 OF 4</span></div>
+          <dl class="sheet__rows">
+            <div class="sheet__row"><dt class="t-label">Decision</dt><dd>Runs halt at planned gates — never interrupt, never guess.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Problem</dt><dd>Unattended agents guess wrong or stall — and pinging me constantly doesn't scale.</dd></div>
+            <div class="sheet__row"><dt class="t-label">Trade-off</dt><dd>No steering mid-run — every ambiguity is paid up front, at planning.</dd></div>
+            <div class="sheet__row sheet__row--mech"><dt class="t-label">Mechanism</dt><dd>Gates carry only the judgment calls; work resumes on a written verdict.</dd></div>
+          </dl>
+        </li>
+
+      </ol>
+
+    </div>
+  </section>
+
+  <section id="shipped-with-muster" class="section" aria-labelledby="s05-title">
+    <div class="rule">
+      <span class="rule__line" aria-hidden="true"></span>
+      <span class="rule__tag">
+        <span class="rule__tick" aria-hidden="true"></span>
+        <h2 class="tag t-label" id="s05-title"><span class="tag__mark" aria-hidden="true"></span>§05 · SHIPPED WITH MUSTER</h2>
+        <span class="rule__tick" aria-hidden="true"></span>
+      </span>
+      <span class="rule__line rule__line--grow" aria-hidden="true"></span>
+    </div>
+    <div class="container section__body">
+
+      <!-- Three prose lines, then the cards. The middle line is the founder's
+           own sentence, preserved verbatim, and it renders as PROSE: a readout
+           cell is an instrument surface, and founder testimony must not dress
+           as telemetry. That is why §5 has two cards and not three.
+
+           `bodh.day` is text and not a link. §5 carries no CTA — the page has
+           one, in §6 — and a second destination here would be a second ask on
+           the section whose whole job is to hand over receipts. -->
+      <p class="t-body read shipped__line">Bodh — a shipped iOS app and web landing, live at bodh.day. The replay above is its website wave.</p>
+      <p class="t-body read shipped__line">Muster was extracted mid-build from a production iOS app — the framework existed as working practice before it existed as a repo.</p>
+      <p class="t-body read shipped__line">This page — built with Muster by its own AI team, and measured with the same meter.</p>
+
+      <!-- Two scopes, same four keys, same order, read key for key across the
+           pair. Every value sits beside its own scope label: this is the one
+           place on the page where BODH and THIS SITE are adjacent, which is
+           exactly why neither is ever stated without saying which it is.
+
+           The authored text of each value IS its exact final value. The
+           count-up replaces a string it can restore character for character,
+           so no-JS, reduced motion and a paused roll all render the measured
+           number and never an intermediate one. -->
+      <div class="shipped">
+
+        <div class="instrument shipped__card">
+          <span class="regmark regmark--tl" aria-hidden="true">+</span>
+          <span class="regmark regmark--br" aria-hidden="true">+</span>
+          <p class="t-label shipped__scope">BODH · IDEA → LIVE</p>
+          <dl class="shipped__cells">
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">ACTIVE BUILD</dt>
+              <dd class="readout__value"><span data-countup>9.3 h</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">OPERATOR ATTENTION</dt>
+              <dd class="readout__value"><span data-countup>4.8 h</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">COMMIT-DAYS</dt>
+              <dd class="readout__value"><span data-countup>4</span></dd>
+              <dd class="t-micro readout__sub">Jul 11–18</dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">COST · API LIST</dt>
+              <dd class="readout__value"><span data-countup>$147</span></dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- The dashes are ink, not rust: an unmeasured value is a claim about
+             what will be measured, not a metric. They carry data-countup on
+             purpose — the engine's refusal to animate a value with no digits
+             is then a property of the shipped page rather than of a fixture. -->
+        <div class="instrument shipped__card">
+          <span class="regmark regmark--tl" aria-hidden="true">+</span>
+          <span class="regmark regmark--br" aria-hidden="true">+</span>
+          <p class="t-label shipped__scope">THIS SITE · SPEC → LIVE</p>
+          <dl class="shipped__cells">
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">ACTIVE BUILD</dt>
+              <dd class="readout__value readout__value--unmeasured"><span data-countup>—</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">OPERATOR ATTENTION</dt>
+              <dd class="readout__value readout__value--unmeasured"><span data-countup>—</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">COMMIT-DAYS</dt>
+              <dd class="readout__value readout__value--unmeasured"><span data-countup>—</span></dd>
+            </div>
+            <div class="shipped__cell">
+              <dt class="t-micro readout__key">COST · API LIST</dt>
+              <dd class="readout__value readout__value--unmeasured"><span data-countup>—</span></dd>
+            </div>
+          </dl>
+          <p class="t-micro readout__sub shipped__caption">measured at launch</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="get-started" class="section" aria-labelledby="s06-title">
+    <div class="rule">
+      <span class="rule__line" aria-hidden="true"></span>
+      <span class="rule__tag">
+        <span class="rule__tick" aria-hidden="true"></span>
+        <h2 class="tag t-label" id="s06-title"><span class="tag__mark" aria-hidden="true"></span>§06 · GET STARTED</h2>
+        <span class="rule__tick" aria-hidden="true"></span>
+      </span>
+      <span class="rule__line rule__line--grow" aria-hidden="true"></span>
+    </div>
+    <div class="container section__body">
+      <p class="t-lead read">One command. No signup, no framework install, no API wiring — markdown files and Claude Code.</p>
+
+      <!-- Two commands, adjacent and unannotated: the project name in the
+           second is the first's `bash -s` argument, so a reader who edits one
+           must edit the other. The curl string is byte-identical to §1's and
+           to the verified form in copy-rules.md — asserted by equality, never
+           by fetching. -->
+      <p class="curl getstarted__curl"><span class="curl__cmd" data-curl>curl -fsSL https://raw.githubusercontent.com/thinkArhant/muster-ai/main/scripts/setup-project.sh | bash -s my-product</span><span class="cursor" aria-hidden="true"></span></p>
+      <p class="curl getstarted__then"><span class="curl__cmd">cd my-product &amp;&amp; claude</span></p>
+
+      <!-- The link text is the URL, so the accessible name and the
+           destination are the same string and nothing needs an aria-label. -->
+      <p class="getstarted__link"><a class="link-block" href="https://github.com/thinkArhant/muster-ai">github.com/thinkArhant/muster-ai</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pagefoot">
+  <div class="container pagefoot__inner">
+    <!-- SHELL PLACEHOLDER — removed when the footer copy lands. -->
+    <p class="t-micro" data-shell-placeholder>Provenance line and links ship with their own spec.</p>
+  </div>
+</footer>
+
+<script src="../scripts/count-up.js" defer></script>
+<script src="../scripts/replay.js" defer></script>
+</body>
+</html>

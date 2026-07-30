@@ -1024,5 +1024,76 @@ founder's phone pass is spent once, on the fixed page.
 
 **Touched**: `orchestration-queue.md`, `wave-review.md`, `decision-log.md`.
 
+### DEC-057 — Gate B design rulings: one alignment system, section snapping removed, §4's affordance rebuilt (2026-07-29)
+
+**Three rulings, exercising the design calls F-B1/F-B2/F-B3 delegated to UI/UX at Gate B. Every
+figure below is measured on the rendered page (before) or the rendered proposed state
+(`samples/gate-b-proposed.html`, after); the renders and reports are in
+`samples/gate-b-renders/`.**
+
+**Decision 1 — F-B1: the page has one horizontal alignment system, two edges and one axis**
+(`page-shell.md` §7.2). Every element binds to the rail (the container's content inline-start),
+the rail-end (line-level counterweights only), or the axis (the container's center). The founder's
+finding reproduced exactly: the formation was intrinsic-width (676.4px) with its hub centered on
+that block alone — an orphan axis at x 546.2 against the 720 shared by the headline block and the
+THIS SITE strip at 1440. The fix is not to centre the block but to **make the formation span the
+container** — bus = plate row = container content width, plates distributed edge to edge — so the
+hub's centre *is* the page's axis: measured delta 0.0px at 1280/1440/1600, with plate gaps opening
+from 12px to ~70px in the bargain (*spacious*). Exactly one element on the page may bind to the
+axis, and only because its parent's edges are the rail and rail-end. Phone unchanged — the ladder
+is rail-bound and no axis-bound element exists below `--bp-wide`.
+
+**Decision 2 — F-B2: section snapping is removed entirely.** The founder's binary was remove or
+full section paging; paging loses on measurement, not taste — it requires every section to fit one
+snapport, and four of six exceed the 553px phone fold (§1 1240px · §2 794.2px · §4 2957px · §5
+1776.9px) while §5 (1151.5px) exceeds even the 700px desktop fold. One-section-per-view over this
+content needs `mandatory` snapping (unreachable oversized interiors, broken 200% zoom — DEC-040's
+own grounds) or scripted paging (banned and asserted against). Removal costs zero content and zero
+layout. `--scroll-pad`/`scroll-padding-block-start` stay — they serve anchors, the skip link and
+find-in-page. Every §7.1 assertion is dispositioned in a retirement inventory (keep / invert /
+re-base / retire — nothing left asserting a retired behaviour); DEC-040 is amended, not deleted.
+**Scoping stated plainly: the binary was ruled on the page's section scrolling; §4's track keeps
+its x-proximity snap as part of Decision 3** — it is what guarantees the track rests composed
+instead of parked mid-crop. If the founder's re-gate reads "entirely" as covering the track, the
+fallback is one declaration and the rest of the affordance stands.
+
+**Decision 3 — F-B3: §4's affordance becomes three channels in the section's own grammar, and the
+phone stack gains orientation instead of hiding content.** The judged build cut sheet 2 at the
+container edge with a dead strip of bare ground to the screen edge (128px at 1280, 208px at 1440)
+— the anatomy of "reads broken." Ships: (1) the track's scrollport spans the viewport via a
+token-derived bleed (`--track-bleed`; percentages are wrong twice there — padding % resolves
+against the containing block, scroll-padding % against the scrollport, and the mismatch measurably
+let the track's own snap pull sheet 1 off the rail on first layout), so the cut lands on the
+physical screen edge, sheet 1 rests on the rail, sheet 4 fully scrolled rests on the rail-end, and
+the document leaks no x scroll; (2) a `SHEET n OF 4` ordinal on each sheet's meta line —
+authentic spec-sheet grammar, `aria-hidden` (the `<ol>` announces position natively), numerals
+self-verifying against DOM position, the width-independent channel; (3) the track's scrollbar
+styled as a thin rust gauge (`scrollbar-width`/`scrollbar-color` — enhancement only, degradation
+named). **Phone re-ruled: the stack stays.** Every shrinking alternative was measured and
+disqualified: a phone track pages 650.8–679.7px sheets across a 553px fold (two-axis navigation of
+clipped documents, DEC-051 upheld); an exclusive accordion halves the height but hides 12 of 16
+rows from Safari's find-in-page — a committed reader path and one of the founder's own re-gate
+phone checks — and demands taps DEC-043 bars; un-carding saves 6.5% and breaks the motif. What was
+wrong with the judged stack was anonymity, not height: four near-identical cards with no extent or
+progress. The ordinal fixes that at +28.5px per sheet (3071px total at 375, measured), and F-B2's
+removal retires the scroll-fight half of the phone complaint in the same round.
+
+**Also landed with this round**: `page-shell.md` §7.1 A11 and `section-04-decisions.md` §12.16
+amended to the two checks that shipped, closing DEC-053's assignment; §4's layout sketch updated
+off the retired trade-off string (HO-034's pointer).
+
+**Impact**: developer (HO-036 builds all three; the retirement inventory and §12.14/15/18/19 are
+its assertion work-list), qa (HO-037 re-runs scoped; the new alignment assertion must be proven
+able to fail), content (none — the ordinal is chrome, stamp strings untouched), pm (re-gate
+packet).
+
+**Touched**: `design-specs/web/page-shell.md` (§7 intro, §7.1 rewritten, §7.2 new, §9 unchanged,
+§10, §11, §13), `design-specs/web/section-01-hero.md` (§6.1, §9, §13.7, §15),
+`design-specs/web/section-04-decisions.md` (§3, §5, §6.2, §8.1, §10, §12, §13, §14),
+`samples/gate-b-proposed.html` + `samples/gate-b-renders/` (decision records, never ship),
+`agent-requests.md` (HO-035), `orchestration-queue.md`, `decision-log.md`.
+
+---
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

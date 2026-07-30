@@ -1,6 +1,6 @@
 run: run-20260729-173149-48688
-state: running step 1
-step: 2026-07-29 Content: Gate B fix round — footer strings, one trade-off row, the overnight call
-step started: 2026-07-29 17:31:49
-last completed: —
-totals: 
+state: running step 2
+step: 2026-07-29 UI/UX: Gate B fix round — alignment system, the snap ruling, §4's affordance
+step started: 2026-07-29 17:53:31
+last completed: 2026-07-29 Content: Gate B fix round — footer strings, one trade-off row, the overnight call · 62 turns · $9.95 · out 54k · 21m 42s
+totals: 1 attempt(s) · 62 turns · $9.95
