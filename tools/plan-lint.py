@@ -84,12 +84,20 @@ for i, s in enumerate(steps):
     for ho in set(re.findall(r"HO-(\d{3})", s["body"])):
         consumed.setdefault(ho, []).append(i)
 
-all_ids = sorted(set(list(produced) + list(consumed)))
-if all_ids:
-    lo, hi = int(all_ids[0]), int(all_ids[-1])
-    missing = [f"{n:03d}" for n in range(lo, hi + 1) if f"{n:03d}" not in all_ids]
+# Contiguity is judged over the LIVE fenced steps only. The run log rotates (Done keeps 10),
+# so historical IDs legitimately vanish from the file — a gap against history is rotation,
+# not a planning typo. Orphan/order checks above still honour run-log IDs as produced.
+fenced_ids = {ho for s in steps for ho in re.findall(r"HO-(\d{3})", s["body"])}
+# "HO-024 through HO-029" names every id in the span — expand ranges before judging gaps.
+for s in steps:
+    for a, b in re.findall(r"HO-(\d{3})\s+through\s+HO-(\d{3})", s["body"]):
+        fenced_ids.update(f"{n:03d}" for n in range(int(a), int(b) + 1))
+fenced_ids = sorted(fenced_ids)
+if fenced_ids:
+    lo, hi = int(fenced_ids[0]), int(fenced_ids[-1])
+    missing = [f"{n:03d}" for n in range(lo, hi + 1) if f"{n:03d}" not in fenced_ids]
     if missing:
-        defect("HO-GAP", f"handoff IDs are not contiguous — missing {', '.join(missing)} between HO-{lo:03d} and HO-{hi:03d}")
+        defect("HO-GAP", f"handoff IDs in live steps are not contiguous — missing {', '.join(missing)} between HO-{lo:03d} and HO-{hi:03d}")
 
 for ho, users in consumed.items():
     if ho not in produced:

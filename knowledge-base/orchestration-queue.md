@@ -77,47 +77,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-29 Developer (web): Gate B fix round — build the rulings
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Implement HO-034's copy and HO-035's rulings, and build the footer.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-034, HO-035
-- `knowledge-base/design-specs/web/footer-copy.md` and every spec HO-035 amended
-- `knowledge-base/wave-review.md` — Gate B findings, for the intent behind each change
-
-**Deliverable:** `index.html`, `styles/`, `scripts/` as needed; amended tests; HO-036.
-
-**Acceptance criteria:**
-- The footer ships the HO-034 strings — the placeholder is gone (it was ruled a hard launch
-  blocker, DEC-054); links carry the exact URLs; no email string anywhere in the shipped set
-- The `VERIFY ⎘` chip's `href` becomes
-  `https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md` (F-B6) — and the network
-  guard still passes: an `href` is inert; **re-prove the guard catches a fetching reference after
-  the change**
-- The alignment system built as HO-035 rules it, with its relationship assertion in the harness
-- The snap outcome built exactly as ruled — **removal won**: every retired assertion and clause
-  cleaned up per `page-shell.md` §7.1's retirement inventory, none left asserting a behaviour
-  that no longer exists; §4's track keeps its x snap per `section-04-decisions.md` §8.1
-- §4's affordance and phone treatment per HO-035 (`--track-bleed`, meta line + ordinals, gauge —
-  the reference implementation is `samples/gate-b-proposed.html`); §4 copy swaps per HO-034
-  (trade-off row, and the overnight line — Content ruled it in, decision 4's mechanism row)
-- All three runners green — `scripts/test.sh` both engines, the independent audit, the full-page
-  sweep — with changed-subject assertions re-based, each new assertion planted-and-proven red
-- Cross-engine WebKit and Blink before filing
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-036 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-29 QA (web): Scoped re-run on the fix round
 
 ```
@@ -151,6 +110,9 @@ step naming the failing check, and file HO-037 with what you found.
 
 **On completion:** File HO-037 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-29 PM: Review the fix round and promote the re-gate
 
@@ -186,6 +148,15 @@ Model: claude-opus-5
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-30 — Step: Developer Gate B fix round (HO-036). The footer ships true — five roles named, no
+  email, the GitHub profile as the contact path — and the placeholder that was a hard launch blocker is
+  gone; the VERIFY chip carries its production blob URL in both seats; page-level scroll-snap retired
+  with its assertions while §4's track keeps its own x-axis snap as the paging mechanism; the alignment
+  system applied page-wide. **The session hit MAX_TURNS=150 during its self-review, after the work and
+  HO-036 were complete** — PM re-verified on the tree rather than trusting the log (all three runners
+  green: suite GREEN both engines, audit 108/108, sweep 42/42; in-flight-edited test files parse;
+  placeholder/email greps zero) and committed the closeout. Queue advanced by PM.
 
 - 2026-07-29 — Step: UI/UX Gate B fix round (HO-035, DEC-057). All three rulings measured on the
   real page before being written, and re-measured on a rendered proposed state
