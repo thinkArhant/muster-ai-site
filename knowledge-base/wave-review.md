@@ -422,10 +422,10 @@ production iOS app"* — the founder's claim-check: Arogh is nearing MVP, App St
 production**. On this page an untrue claim is the one unrecoverable failure, and this one is in
 the founder's own voice. The line is founder-supplied; he amends it at his gate. Truthful
 replacement candidates for his pick (the second clause stays true either way):
-(a) *"Muster was extracted mid-build from a real iOS app — the framework existed as working
-practice before it existed as a repo."*
-(b) *"Muster was extracted mid-build from an iOS app now nearing the App Store — the framework
-existed as working practice before it existed as a repo."*
+**RESOLVED 2026-07-30 — the founder picked (a)**, and it ships exactly as: *"Muster was extracted
+mid-build from a real iOS app — the framework existed as working practice before it existed as a
+repo."* One word changes ("production" → "real"); the line stays founder-supplied and verbatim
+thereafter.
 
 **F-R5 — §5's three prose lines need a premium hierarchy.** UI/UX to guide — currently three
 same-weight lines; the founder wants the section to read designed.
@@ -461,3 +461,12 @@ receipt links to commit-SHA permalinks** (GitHub `blob/<sha>` URLs) captured at 
 are full — e.g. the Gate B review commit — so they never rot, never show a template, and stay
 byte-checkable forever. The live-file links can additionally exist in VERIFY.md where a reader
 expects "current state."
+
+**RESOLVED 2026-07-30 — approved, with a founder criterion that governs the selection: each
+snapshot must be a demo in itself.** Pick the commit where the file is at its most demonstrative,
+not merely non-empty — e.g. the queue frozen at a moment when a long list of steps is QUEUED
+(sprint freshly planned or a fix round freshly routed), never the current nearly-done state where
+most work sits in the run log. Per file: queue → richest planned backlog; handoffs → the ledger at
+its fullest filed state; decision log → current depth is already the demo; VERIFY → the launch
+state. The executing step inspects `git log` for each file, states the chosen SHA and why, and the
+founder sees the four links land at the next pass.
