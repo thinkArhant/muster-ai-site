@@ -219,3 +219,31 @@
   🧪 bash   node tests/qa-fullpage-sweep.mjs > /tmp/pm-sweep2.log 2>&1; echo "SWEEP EXIT=$?"; tail -1 /tmp/pm-sweep2.log
   🧪 bash   git status --porcelain
   🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the page's last open question is a phone, not a pixel Gate B's four fix-rou
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD 2>&1 | tail -5; bash muster/scripts/muster-queue-lint.sh 2>&1 | t
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "COMMIT LINT EXIT=$?"
+  💬 The step is complete and the sprint is halted at the founder gate. ## What I did **Reviewed HO-034 through HO-037 — all four accepted, no revisions.** Acceptance was re-derived, not read: - **All thre
+    📖 ×22 · ✏️  ×15 · 📝 ×3 · 🧪 ×56 · ⚠️  ×1
+  ✓ 97 turns · $7.91 · peak ctx 164k/1M 16% · out 47k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-30 pm: **the re-gate is live and it asks for one thing — your phone.** All six Gate B findings are fixed, reviewed and resolved (four handoffs, no revisions), and the re-gate packet is at the bottom of `wave-review.md`: one line per finding, then your three checks. The footer placeholder is gone and the footer now ships true — "5 of 8 agents, 1 operator", the five named and the three that never ran named too, no email, your GitHub profile as the contact path — and I re-derived that from `git log` rather than trusting it. The formation sits on the page's real axis (hub centre − axis 0.0px at 1280 *and* 1440), page snapping is gone, and §4's cut now lands on the physical screen edge in both engines with the 128px dead strip you judged measured at 0. All three runners green cold (282/282 + 27/27, 108/108, 42/42), and I planted two violations myself — the footer's team line and the track's bleed — and watched them go red printing measurements rather than constants; zeroing the bleed reproduces your dead strip at exactly 128px. **Two answers you may want to argue with, both marked ↯ in the packet**: §4's horizontal track kept its own snap (it is what stops the sheets parking mid-crop — one declaration if you meant "entirely" to cover it), and §4 on the phone got *longer*, not shorter — 3042px at 375 against the 2957 you judged — because every shrinking alternative hides content, including an accordion that would hide 12 of 16 rows from the Find-on-Page you are about to test. The ask itself is unchanged and it is the last hard launch blocker: §2's full 48 seconds on your iPhone with the toolbars showing, both layers on screen the whole way.
+  📌 '## Founder Decisions' changed this step — review knowledge-base/orchestration-queue.md
+  ✓ [35;1mPM[0m · [1m56m 54s[0m · advanced → 2026-07-30 GATE B RE-GATE — the founder's phone is the only instrument left
+    run so far: 1h 55m · $14.35 · 2 steps
+───────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════
+⛔ HALT — 2026-07-30 GATE B RE-GATE — the founder's phone is the only instrument left   (Role: halt)
+
+   The loop stopped for founder input — nothing is wrong.
+   • Wave gate: review knowledge-base/wave-review.md, write your verdict in its
+     ## Verdict section, then run: bash muster/scripts/muster-sprint-resume.sh
+     (from this worktree).
+   • PM escalation: see '## Founder Decisions' in knowledge-base/orchestration-queue.md, answer, then re-run
+     muster-sprint-run.sh.
+═══════════════════════════════════════════════════════════
+── run summary ────────────────────────────────────────────
+  2026-07-29 QA (web): Scoped re-run o    83    $6.44   15%    48k 58m 18s
+  2026-07-29 PM: Review the fix round     97    $7.91   16%    47k 56m 54s
+  2026-07-30 GATE B RE-GATE — the fo  halt
+───────────────────────────────────────────────────────────
+  2 steps · 180 turns · $14.35 · out 95k · 1h 55m wall · stopped: halt (2026-07-30 GATE B RE-GATE — the founder's phone is the only instrument left)
+  📣 1 founder notice(s) this run — read knowledge-base/founder-notices.md

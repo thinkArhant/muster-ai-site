@@ -73,50 +73,194 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-30 GATE B RE-GATE — the founder's phone is the only instrument left
+### 2026-07-30 Content: Re-gate round — the true word, the model-proof line, one footer sentence, the repetition audit
 
 ```
-Role: halt
+Role: content
+Model: claude-fable-5
 
-**The sprint stops here for you.** Every Gate B finding (F-B1 through F-B6) is fixed, reviewed and
-resolved, and all three runners are green on the shipped tree — re-run cold at the review, not read
-off a handoff: `scripts/test.sh` GREEN both engines (282/282 + 27/27), the independent audit exit 0
-at 108/108, the full-page sweep exit 0 at 42/42.
+**Task:** Four copy jobs from the re-gate verdict (`knowledge-base/wave-review.md` → "Re-gate
+verdict", findings F-R4, F-R6, F-R8, F-R9 — F-R4 and F-R6 are already RESOLVED there with the
+exact material). Routed at the gate (DEC-059); apply, do not re-derive.
 
-**What to do:**
+**Inputs:**
+- `knowledge-base/wave-review.md` — the re-gate verdict, findings and resolutions
+- `knowledge-base/design-specs/web/footer-copy.md` · `section-05-copy.md` · `section-06-copy.md`
+- `knowledge-base/agent-skills/content/copy-rules.md` · `index.html` (the shipped strings, for the
+  repetition audit)
 
-1. Read the **RE-GATE** section at the bottom of `knowledge-base/wave-review.md` — one line per
-   finding, then your three checks. It is short on purpose.
-2. Open `index.html` at 1280 or wider, dark theme, and scroll it once end to end.
-3. **Then take it to your iPhone in Safari, with the toolbars showing** — this is the ask:
-   - **§2's full 48-second playback.** Both layers must stay on screen for the whole chain. This is
-     a hard launch blocker and no harness on this machine can reach it. A screenshot of the end
-     state does not close it; the guarantee is about *during*.
-   - **Find on Page** for `scarcest` or `commit-days` — does the match land on screen?
-   - **Scroll feel** — page snapping is gone, so this is just "does it scroll like a page." Flick
-     §4 sideways too; its track is the one thing that still snaps.
-4. Two answers are flagged for argument rather than approval, both marked ↯ in the packet: §4's
-   track keeps its own horizontal snap (one declaration if you meant "remove entirely" to cover it),
-   and §4 on the phone got **longer** — 3042px at 375 against the 2957 you judged — because every
-   shrinking alternative hides content. Say so if you disagree.
+**Deliverable:** amended copy files; a repetition-audit memo appended to your handoff; HO-038.
 
-**Then write your verdict** in `wave-review.md` under **"## Re-gate verdict — write here"** —
-`APPROVE`, or a bug list — and run:
+**Acceptance criteria:**
+- **F-R4 (blocking):** the provenance line ships exactly as the founder resolved it — "production"
+  becomes "real", every other word identical, verbatim thereafter.
+- **F-R6:** §6's lead line redrawn from the resolved material ONLY — the safe claim is the
+  deterministic-bash/model-proof fact; present tense; no "(yet)", no roadmap, no "coming soon";
+  Claude Code stays stated as the prerequisite. State the word budget.
+- **F-R9:** the footer's two sentences become ONE — team truth (5 of 8 agents, 1 operator, three
+  never invoked) and authorship (designed and built by the founder, solo, shipping his own
+  products) in a single sentence, highest-priority fact first. Draft 2–3 candidates with a
+  recommendation; UI/UX lays it out next step.
+- **F-R8:** the repetition audit — every string that appears more than once on the page, whether
+  each instance earns its seat, what space returns. A MEMO with recommendations, not applied
+  changes; ruled at PM review.
+- Copy-rules matrix on every touched file; no new numeral anywhere.
 
-    bash muster/scripts/muster-sprint-resume.sh
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
 
-Resume's PM reads the verdict, inserts a fix step per bug (or promotes the next wave), and the loop
-carries on without you.
+**On completion:** File HO-038 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
+Self-Review Checklist.
 ```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-_None — the re-gate halt above is the sprint's last queued step. What follows is whatever the
-founder's verdict routes: a fix step per bug, or the next wave. Two carried one-line spec amendments
-(DEC-058) ride along with it: `footer-copy.md` §3's lowercase-labels sentence (Content) and
-`section-01-hero.md`'s two chip clauses plus the sketch's class name (UI/UX)._
+### 2026-07-30 UI/UX: Re-gate round — the brand-size mark, the indicator, hierarchy, and the §2 consult
 
+```
+Role: ui-ux
+Model: claude-fable-5
+
+**Task:** Five design findings from the re-gate verdict (`knowledge-base/wave-review.md` →
+"Re-gate verdict": F-R1, F-R2, F-R3, F-R5, F-R7, F-R9). **The founder's explicit instruction:
+read your skill files before ruling anything.** F-R1 is a CONSULT — options and pros/cons for the
+founder, build nothing.
+
+**Inputs:**
+- `knowledge-base/wave-review.md` — the re-gate verdict, findings F-R1–R10 with the founder's own
+  words
+- Your skill files (`muster/team/ui-ux/skills/`) — read before ruling; founder's instruction
+- `knowledge-base/design-specs/web/page-shell.md` · `section-01-hero.md` · `section-02-replay.md`
+  · `section-04-decisions.md` · `section-05-copy.md` · `knowledge-base/brand-guidelines.md`
+- `index.html` + `styles/` — render the shipped page at 375 and 1280 before ruling
+- HO-038 — the footer sentence candidates and §6 line this round lays out
+
+**Deliverable:** amended specs; the F-R1 options memo in your handoff; HO-039.
+
+**Acceptance criteria:**
+- **F-R1 (memo only):** options for making the overnight wave visible — including the founder's
+  one-card-holding-two idea — each with pros, cons, and its scope-safety (A-005: §2 is BODH-wave
+  scope; THIS SITE stays dashes, DEC-005; R2 bans wall-clock). Recommend one. The founder decides
+  at the next pass; nothing builds this round.
+- **F-R2:** rule §3's "context engineering" emphasis — rust is dead by measurement (4.19/4.35 vs
+  the 4.5 floor); choose ink-bold, the accent-mark idiom, or plain, and say why.
+- **F-R3:** the §4 page indicator — always visible, aligned with the track, premium; rust
+  permitted if restrained. Spec it with measurements and its harness assertion.
+- **F-R5:** §5's three prose lines get a deliberate hierarchy — spec the treatment.
+- **F-R7:** the header lockup becomes a legible brand logo (founder ruling supersedes the badging
+  restraint for this one seat); separators keep size; the missing footer-boundary separator is
+  added. Sized optically, clip-path route, never on a pole, no new colour (DEC-031/037 otherwise
+  stand). State the chosen sizes.
+- **F-R9:** footer layout for the single sentence + receipt links + final link, Apple-level.
+- Every ruling measured on the rendered page; renders show the state under test.
+
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
+
+**On completion:** File HO-039 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
+Self-Review Checklist.
+```
+
+### 2026-07-30 Developer (web): Re-gate round — build the ruled items and pin the receipts
+
+```
+Role: developer
+Model: claude-opus-5
+
+**Task:** Implement HO-038's copy and HO-039's rulings (everything except F-R1, which is
+consult-only this round), plus the receipt-link permalinks.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-038, HO-039
+- `knowledge-base/wave-review.md` — the re-gate verdict, including F-R10's RESOLVED
+  snapshot-selection criterion
+- Every spec HO-039 amended; `knowledge-base/design-specs/web/footer-copy.md`
+
+**Deliverable:** `index.html`, `styles/` as needed; amended tests; HO-040.
+
+**Acceptance criteria:**
+- Provenance word swap exact (F-R4); §6 line per HO-038 (F-R6); the single footer sentence and
+  layout (F-R9); §3 emphasis as ruled (F-R2); §4 indicator per spec with its assertion (F-R3);
+  §5 hierarchy (F-R5); header logo at the ruled size + the footer-boundary separator (F-R7)
+- **F-R10:** the four receipt links become commit-SHA blob permalinks chosen by the founder's
+  demo-in-itself criterion — inspect `git log` per file, pick the most demonstrative frozen state
+  (queue: a fully-planned backlog moment; handoffs: the ledger at its fullest; decision log:
+  current depth; VERIFY: the launch state), and record each chosen SHA and why in the handoff.
+  The framework and profile links stay as they are. VERIFY.md gains the live-file links for
+  current state
+- Also land DEC-058's two one-line spec amendments if not already applied upstream
+- All three runners green, both engines; changed-subject assertions re-based; new assertions
+  planted and watched red; cross-engine on every touched surface
+
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
+
+**On completion:** File HO-040 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
+Self-Review Checklist.
+```
+
+### 2026-07-30 QA (web): Scoped re-run on the re-gate round
+
+```
+Role: qa
+Model: claude-opus-5
+
+**Task:** The scoped verification every fix round owes — prove the round broke nothing adjacent.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-038 through HO-040
+- `knowledge-base/wave-review.md` — the re-gate findings these answer
+
+**Deliverable:** HO-041 in `agent-requests.md` — per-finding pass/fail with evidence.
+
+**Acceptance criteria:**
+- All three runners green on the shipped tree, run by you, both engines
+- The provenance line byte-equal to the resolved string; "production" appears nowhere near it
+- §6 carries no forward promise: grep for "yet", "soon", "will", "roadmap" in the shipped set and
+  judge each hit
+- The four permalinks resolve by STRING to `blob/<sha>` URLs and each SHA exists in this repo's
+  history (`git cat-file -e <sha>` — a local check, no fetch); the pinned queue snapshot actually
+  shows a planned backlog (read the file at that SHA)
+- The footer renders the single sentence; the old two-sentence form is gone; no email anywhere
+- New assertions (indicator, logo size relationships) each proven to fail when violated
+- §2 playback untouched: fidelity byte-clean, chain timing asserted green
+- Cross-engine per touched surface, labelled per engine
+
+**If a check fails:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment
+step naming it, and file HO-041 with what you found.
+
+**On completion:** File HO-041 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
+Self-Review Checklist.
+```
+
+### 2026-07-30 PM: Review the re-gate round and promote the final gate
+
+```
+Role: pm
+Model: claude-opus-5
+
+**Task:** Review HO-038 through HO-041, rule the repetition-audit memo, then write the final gate
+packet and promote its halt.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-038 through HO-041
+- `knowledge-base/wave-review.md` — the re-gate verdict
+
+**Deliverable:** review verdicts; the final gate packet in `wave-review.md`; the `Role: halt`
+block in `## Next Step`.
+
+**Acceptance criteria:**
+- Re-run all three runners yourself; render and look at every changed state, both engines
+- Rule each repetition-audit recommendation (F-R8): apply, decline with reason, or send to the
+  founder only if it is genuinely taste
+- Verify the four pinned snapshots against the founder's demo criterion by READING each at its
+  SHA — a queue link that lands on a template is a blocking miss
+- The final gate packet carries: one line per F-R finding on what shipped, the F-R1 §2-overnight
+  options memo for the founder's pick, and the three PHONE checks still outstanding (§2's full
+  48 s playback — hard launch blocker — find-in-page, scroll feel)
+- The halt block tells the founder to write the verdict in `wave-review.md` and run
+  `muster/scripts/muster-sprint-resume.sh`
+
+**On completion:** Write the packet, promote the halt. Run the Pre-Handoff Self-Review Checklist.
+```
 
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->

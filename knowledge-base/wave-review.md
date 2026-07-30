@@ -430,11 +430,15 @@ thereafter.
 **F-R5 — §5's three prose lines need a premium hierarchy.** UI/UX to guide — currently three
 same-weight lines; the founder wants the section to read designed.
 
-**F-R6 — §6: signal the model-agnostic direction without promising it.** Founder: the goal is
-Muster not depending on Claude Code — he suggested "(yet)" and offered his exact vision text.
-Constraint: "coming soon" and roadmap promises are banned; the claimable form is a present-tense
-fact ("runs in Claude Code today") or the founder's vision stated as intent in a place that can
-carry it. Content drafts options against his vision text once supplied.
+**F-R6 — §6: signal the model-agnostic direction without promising it. RESOLVED 2026-07-30 — the
+founder supplied the roadmap picture, and it draws the claim line exactly.** The "(yet)" dies: it
+is a forward promise, and the roadmap's own author says "runs on any model / works beyond Claude
+Code" must NOT be claimed until its Wave 5 lands. **What IS safe today, verbatim from the vision**:
+*"Muster's gates are deterministic bash over markdown — zero model tokens, model-proof by design;
+the framework's correctness doesn't depend on which model runs it."* Content drafts §6's line from
+that material only — present tense, no roadmap, no "coming soon" — and may lean on the page's
+existing holds-on-cheap-models thread (§3's close, brand VP2), which this claim strengthens rather
+than repeats. Claude Code remains stated as the prerequisite, because it is one.
 
 **F-R7 — the mark is too small to read as a mark.** Founder ruling, superseding the badging
 restraint for one seat: the **header lockup becomes a real brand logo at legible size**; the five

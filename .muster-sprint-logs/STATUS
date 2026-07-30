@@ -1,6 +1,6 @@
 run: run-20260730-064942-18246
-state: running step 2
-step: 2026-07-29 PM: Review the fix round and promote the re-gate
+state: halted: halt (2026-07-30 GATE B RE-GATE — the founder's phone is the only instrument left)
+step: 2026-07-30 GATE B RE-GATE — the founder's phone is the only instrument left
 step started: 2026-07-30 07:48:00
-last completed: 2026-07-29 QA (web): Scoped re-run on the fix round · 83 turns · $6.44 · out 48k · 58m 18s
-totals: 1 attempt(s) · 83 turns · $6.44
+last completed: 2026-07-29 PM: Review the fix round and promote the re-gate · 97 turns · $7.91 · out 47k · 56m 54s
+totals: 2 attempt(s) · 180 turns · $14.35

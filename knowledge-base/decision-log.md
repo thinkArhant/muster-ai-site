@@ -1156,5 +1156,33 @@ HO-037 reviewed and resolved), `wave-review.md` (re-gate packet), `orchestration
 
 ---
 
+---
+
+### DEC-059 — The re-gate round is routed: ten findings, two resolved at the gate, one held as a consult (2026-07-30)
+
+**Decision**: the founder's re-gate desktop pass produced findings F-R1–R10 (recorded in
+`wave-review.md`); the interactive PM routed them at the gate, the third use of the DEC-049
+mechanism. Resolved before routing: **F-R4** — the provenance line was false as written
+("production"); it ships as *"a real iOS app"*, one word changed, founder's pick. **F-R6** — the
+"(yet)" idea dies against the founder's own roadmap (model-agnostic must not be claimed before its
+Wave 5); §6 draws from the roadmap's safe-today claim — deterministic bash over markdown,
+model-proof by design — present tense only. **F-R10** — receipt links become commit-SHA
+permalinks chosen by the founder's criterion that *each snapshot must be a demo in itself* (the
+queue pinned at a fully-planned backlog, never the nearly-done state). **F-R2** — rust on
+"context engineering" is dead by measurement: 4.19:1 dark / 4.35:1 light against the 4.5 floor.
+
+**Held deliberately**: F-R1 (the overnight wave in §2) is a UI/UX **consult** — options with pros,
+cons and scope-safety, founder decides at the final gate; nothing builds this round. The three
+phone checks ride to the final gate so the founder's phone pass is spent once.
+
+**Routing**: Content HO-038 (fable — the footer's single closing sentence and §6's claim line are
+founder-trusted judgment) → UI/UX HO-039 (fable — five design rulings plus the consult; the
+founder's read-your-skill-files instruction is in the brief) → Developer HO-040 → QA HO-041 → PM
+review, which rules the repetition-audit memo and promotes the final gate.
+
+**Impact**: content, ui-ux, developer, qa, pm.
+
+**Touched**: `orchestration-queue.md`, `wave-review.md`, `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
