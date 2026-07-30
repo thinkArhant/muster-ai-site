@@ -392,4 +392,72 @@ whichever step follows your verdict.
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
 <!-- Bug list — PM inserts a fix step per bug, then continues. -->
 
-**Status: AWAITING FOUNDER**
+**Status: IN PROGRESS — desktop pass recorded 2026-07-30. §1 approved. The three phone checks are
+still outstanding.**
+
+**F-R1 — §2: the founder wants the overnight wave visible, and wants options, not a build.** The
+muster-site build's own waves ran 22:45 → 05:40 while the founder slept, and that is the thing that
+impresses him most. He floated one shape — §2 restructured toward §4's idiom, one card holding the
+two current cards, scrolling — and explicitly wants **UI/UX to think, weigh pros and cons, and
+report back** before anything is built, **reading its skill files first** (founder's instruction).
+Hard constraints the options must respect: §2 is BODH-wave scope and THIS SITE material must not
+blend into it (A-005); R2 bans wall-clock build-time framing; THIS SITE metrics stay dashes
+(DEC-005). The overnight *fact* is real and evidenced by night-stamped public commits — the
+question is where and how it earns a seat, or whether it waits for launch telemetry.
+
+**F-R2 — §3: "context engineering" cannot take rust, measured.** Founder asked; the answer is a
+number: rust on ground is 4.19:1 dark / 4.35:1 light, both under the 4.5:1 floor for body-size
+text — the same measurement that forced §4's zero-rust-text rule. If emphasis is wanted, the
+permitted forms are ink bold or the accent-mark idiom; UI/UX rules whether §3 gets either or stays
+plain.
+
+**F-R3 — §4's page indicator must become premium.** With overlay scrollbars hidden (the default)
+there is no persistent signal; when visible, the bar runs edge-to-edge and reads misaligned with
+the sheets. Founder wants an always-visible, Apple-quality indicator, aligned with the track —
+rust welcome if it is not too much. UI/UX designs it (this is the F-B3 affordance, round two:
+ordinals + edge-cut landed, the indicator is the missing piece).
+
+**F-R4 — §5's provenance line is FALSE AS WRITTEN and cannot ship. Blocking.** *"…from a
+production iOS app"* — the founder's claim-check: Arogh is nearing MVP, App Store soon, **not in
+production**. On this page an untrue claim is the one unrecoverable failure, and this one is in
+the founder's own voice. The line is founder-supplied; he amends it at his gate. Truthful
+replacement candidates for his pick (the second clause stays true either way):
+(a) *"Muster was extracted mid-build from a real iOS app — the framework existed as working
+practice before it existed as a repo."*
+(b) *"Muster was extracted mid-build from an iOS app now nearing the App Store — the framework
+existed as working practice before it existed as a repo."*
+
+**F-R5 — §5's three prose lines need a premium hierarchy.** UI/UX to guide — currently three
+same-weight lines; the founder wants the section to read designed.
+
+**F-R6 — §6: signal the model-agnostic direction without promising it.** Founder: the goal is
+Muster not depending on Claude Code — he suggested "(yet)" and offered his exact vision text.
+Constraint: "coming soon" and roadmap promises are banned; the claimable form is a present-tense
+fact ("runs in Claude Code today") or the founder's vision stated as intent in a place that can
+carry it. Content drafts options against his vision text once supplied.
+
+**F-R7 — the mark is too small to read as a mark.** Founder ruling, superseding the badging
+restraint for one seat: the **header lockup becomes a real brand logo at legible size**; the five
+section separators keep their current size (once the header teaches the shape, small reads as the
+logo); and the **footer boundary is missing its separator mark** — add it. UI/UX sizes optically;
+DEC-031/037's other rules (never on a pole, clip-path route, no new colour) stand.
+
+**F-R8 — repetition audit, whole page.** What repeats, does each instance earn its seat, and what
+space comes back (or what more useful thing takes it)? Content runs the audit with PM; findings
+ruled at the next review, not silently applied.
+
+**F-R9 — the footer's two sentences become one.** The team line and the authorship line ("designed
+and built by …, solo, shipping his own products") merge into a single sentence that covers
+everything with the right emphasis first — Apple-level; UI/UX and Content together. Layout goal:
+one paragraph, the receipt links beneath, one final link.
+
+**F-R10 — the receipt links must land on populated, stable artifacts. Blocking on the queue link.**
+Founder's exact concern: the queue link currently points at the live `orchestration-queue.md`,
+which is rewritten every sprint and reads near-template between runs — a reader landing there sees
+scaffolding, which refutes the receipt. Intent of the links, stated: each one is a checkable
+artifact of HOW this page was built (the org chart in file form, the handoff ledger, the decision
+record, the verification index). PM's proposed mechanism, founder to confirm: **pin the four
+receipt links to commit-SHA permalinks** (GitHub `blob/<sha>` URLs) captured at a moment the files
+are full — e.g. the Gate B review commit — so they never rot, never show a template, and stay
+byte-checkable forever. The live-file links can additionally exist in VERIFY.md where a reader
+expects "current state."
