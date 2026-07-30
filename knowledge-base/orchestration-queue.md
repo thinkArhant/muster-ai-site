@@ -103,8 +103,12 @@ consistency check; HO-034.
   legal · research did not). The founder pre-approved your phrasing — no gate; that raises the bar,
   it does not lower it. **No raw email anywhere** — the GitHub profile link is the contact path.
   Links, exact URLs: site repo `https://github.com/thinkArhant/muster-ai-site`, framework repo
-  `https://github.com/thinkArhant/muster-ai`, and queue · handoffs · decision log · VERIFY as blob
-  URLs into the site repo. Every URL real (R12) — state each as a string; never fetch to check.
+  `https://github.com/thinkArhant/muster-ai`, and blob URLs into the site repo on `main` for the
+  four artifacts — queue → `knowledge-base/orchestration-queue.md`, handoffs →
+  `knowledge-base/agent-requests.md`, decision log → `knowledge-base/decision-log.md`, VERIFY →
+  `VERIFY.md` (so e.g.
+  `https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/decision-log.md`).
+  Every URL real (R12) — state each as a string; never fetch to check.
 - **F-B4**: §4 decision 1's trade-off row rewritten so it stops denying the mechanism — agents do
   communicate, through agent-request files: written, routed, auditable, never a live chat. Stay
   inside the 45-word sheet ceiling; re-state the sheet's measured count.
@@ -135,6 +139,8 @@ yours to decide, not to escalate.
 
 **Inputs:**
 - `knowledge-base/wave-review.md` — the Gate B findings, with the founder's own words
+- `knowledge-base/decision-log.md` — DEC-040, DEC-051, DEC-053 (the snap and §4-track rulings your
+  F-B2/F-B3 decisions amend or retire), DEC-045/046 (the sparse hero F-B1 aligns)
 - `knowledge-base/design-specs/web/page-shell.md` · `section-01-hero.md` · `section-04-decisions.md`
 - `index.html` + `styles/` — the built page the founder judged; render it, at desktop and phone
   widths, before ruling anything
