@@ -240,3 +240,44 @@ in rough order of how much they cost:
 project-local override would hide the finding rather than route it. Option 1 looks correct on its merits
 regardless of sprint shape: "closed but still in Active" is the thing worth catching, and "open, being
 worked" is not.
+
+---
+
+## FF-003 — A turn-capped step dies AFTER its work is done, and only a human can salvage it
+
+**Filed**: 2026-07-30, from the Gate B fix round.
+
+### What happened
+
+The Developer step hit `MAX_TURNS=150` at turn 151 — **after** the build was complete, all three
+harness runners were green, cross-engine was confirmed, and the handoff (HO-036) was filed. It died
+inside the Pre-Handoff Self-Review checklist, before its closeout commit. The driver stopped with
+"state was not advanced," which was true of the queue but not of the tree: ~10 files of finished,
+verified, uncommitted work.
+
+### Why the failure mode is expensive
+
+A plain restart — the driver's own suggestion — would have spawned a fresh Developer onto a dirty
+tree of someone else's nearly-complete work: at best a full re-verification session (~$15–20 wasted,
+on a build whose token bill is published), at worst confusion or duplicate filing. The only cheap
+path was a human-adjacent PM re-verifying the dead session's claims on the tree (never trusting its
+log), committing the closeout, and advancing the queue by hand. That salvage took judgment the
+driver does not have.
+
+### Recommendations to the core team
+
+- **R1 — checkpoint-commit before the self-review.** The self-review audits durable artifacts; it
+  does not need to precede the commit. A step that commits its work first and reviews second turns
+  `error_max_turns` from "session lost" into "review owed," which a follow-up step can absorb.
+- **R2 — a turn-budget warning threshold.** At ~80% of MAX_TURNS the session should be told to cut
+  to closeout (commit + file the handoff + stop). Agents cannot see their own turn count; the
+  harness can.
+- **R3 — the driver's stop message should distinguish queue state from tree state.** "State was not
+  advanced" invited exactly the wrong action (restart). "Queue not advanced; N uncommitted files
+  from the dead session — assess before re-running" is the honest message.
+
+### Status
+
+Salvaged by interactive PM this run (re-verified, closeout-committed as the developer's work with
+the story in the commit body, queue advanced by hand). Nothing fixed locally — the driver is
+Muster's.
