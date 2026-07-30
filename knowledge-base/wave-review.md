@@ -211,11 +211,60 @@ Two things. Neither is a failing check; both are named rather than omitted.
 3. **Phone** — does snapping fight your scroll; does Find land its match; and do §2's two layers stay
    on screen for the whole 48 seconds?
 
-**Status: OPEN — awaiting founder.**
+**Status: IN PROGRESS — first pass recorded 2026-07-29 ("feedback so far"); the phone's §2
+playback watch and find-in-page check are still outstanding.**
 
 **Findings:**
 
-<!-- Founder: write here. One numbered finding per line is enough; PM turns each into a fix step. -->
+**F-B1 — Horizontal alignment is not a system. UI/UX decides.** The formation is not centered
+against the THIS SITE strip below it, nor against the headline above. Founder ruling: UI/UX decides
+the horizontal alignment of **all elements on the page** — one system, not per-element patches.
+
+**F-B2 — Scroll-snap does not read premium. UI/UX decides between exactly two outcomes:**
+(a) **remove it entirely**, or (b) **full section paging** — one section per view, a scroll moves
+the whole section to the next/previous, the new section takes the whole space, with a small
+indicator that there is more. No middle state. Evidence for (a): §5 does not fit one screen top to
+bottom, and the phone scroll feels wrong. Whichever way, the phone experience is part of the
+ruling.
+
+**F-B3 — §4's cropped second card reads broken, not inviting. UI/UX designs a premium affordance**
+that tells the reader to move horizontally — the current half-card reads as "something broke."
+Related, from the phone: **§4 stacked vertically makes the section far too long** — the phone
+treatment is re-ruled together with the affordance.
+
+**F-B4 — §4 decision 1's trade-off overstates.** "Agents never talk directly — every question
+between roles costs a file and a session" is not quite true: agents do communicate through
+agent-request files. Content rewords so the mechanism is stated smartly, not denied. (The
+underlying fact is the strength: communication is written, routed and auditable — not a chat.)
+
+**F-B5 — The overnight run is a checkable fact worth carrying.** Founder: the system works through
+the night after a sprint is planned — the last driver ran ~23:00 to ~05:00 while he slept. Content
+judges where it earns a place (likeliest §4 decision 4, whose subject is attention). **Guardrail
+unchanged (DEC-043): a checkable fact stated plainly, never a flaunt** — "runs while the operator
+sleeps" is measured by committed run logs; "works tirelessly all night" is marketing.
+
+**F-B6 — the VERIFY chip's production target.** Ruled (PM answer, founder aware): the chip keeps
+working after launch by pointing at the **site repo's GitHub blob URL** for `VERIFY.md` — a
+rendered, readable page; an href click is permitted under A-004 (no runtime fetch). The relative
+`VERIFY.md` href would serve raw markdown on a static host. Needs the public repo URL (below), and
+lands with the footer build.
+
+**Settled: "8 agents" ships as roster + true participation.** Founder accepted the
+recommendation: §1's caption stays (it labels the roster diagram); the **footer** states the true
+participation — five roles on this build. Content writes the line; the seed's "8 agents, 1
+operator" footer phrasing is superseded by the founder for this build's truth (the DEC-043
+mechanism: the author amends at his gate).
+
+**Footer — what PM needs from the founder (item 1):**
+1. The **public URL of this site's repo** (for the footer links — repo · queue · handoffs ·
+   decision log · VERIFY — and F-B6's chip target).
+2. Confirm **`thinkArhant@gmail.com` ships on the page** (it is in your seed's footer spec;
+   published email invites scraping — your call to keep or drop).
+3. The participation line's shape: Content drafts against "five roles on this build" per the
+   settled item above — one word from you approves the draft at the re-gate, or name the exact
+   phrasing now if you have one.
+
+<!-- Founder: add any remaining findings below; the phone checks from item 3 are still open. -->
 
 ---
 
