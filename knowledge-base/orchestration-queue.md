@@ -77,40 +77,197 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-26 Gate B — founder review: the assembled page
+### 2026-07-29 Content: Gate B fix round — footer strings, one trade-off row, the overnight call
 
 ```
-Role: halt
+Role: content
+Model: claude-fable-5
 
-**Gate:** The whole page, desktop and phone, in one pass. §1 through §6, the brand mark, the spacing
-system, and scroll-snap. **Three things need your word** — the packet opens with them: the footer
-placeholder that ships today, the page's "8 agents" claim against the five roles that actually ran,
-and the phone asks below.
+**Task:** Three copy jobs from the Gate B verdict (`knowledge-base/wave-review.md` → ### Gate B —
+findings F-B4, F-B5, and the footer block with the founder's answers). The verdict was routed at
+the gate (DEC-056) — apply it, do not re-derive it.
 
-**Also asked here, and it closes a hard launch blocker:** open §2 on your iPhone in Safari with the
-toolbars showing and confirm both layers stay on screen for the whole playback. No harness on this
-machine can prove it. **While you are there — does section snapping fight your scroll?** That is the
-WebKit half of scroll-snap, and it is a manual check by ruling: `qlmanage` cannot scroll, and iOS
-momentum is exactly where a proximity pull is most likely to feel wrong (REQ-007, DEC-042).
-**And one more, ten seconds:** Find on Page for a phrase in the middle of §4 or §5 (`scarcest`,
-`commit-days`) and see whether the match lands on screen. Chrome always does — measured, 0 of 165.
-Safari's find alignment is the one thing DEC-053's ruling leaves unverified.
+**Inputs:**
+- `knowledge-base/wave-review.md` — Gate B findings + founder answers (repo URLs, no-email ruling,
+  participation delegation)
+- `knowledge-base/design-specs/web/section-04-copy.md` · `knowledge-base/product-spec-seed.md` →
+  Footer (read-only source; the founder amended two of its lines at the gate)
+- `knowledge-base/agent-skills/content/copy-rules.md` · `VERIFY.md`
 
-**Read:** `knowledge-base/wave-review.md` and write your verdict in its `## Verdict` section.
+**Deliverable:** `design-specs/web/footer-copy.md` (new); amended `section-04-copy.md`; `VERIFY.md`
+consistency check; HO-034.
 
-**Resume:** write your verdict, then run `muster/scripts/muster-sprint-resume.sh` — **not** the driver
-directly. Resume spawns a PM that turns your findings into fix steps. **Any fix round it creates must
-end with a scoped QA re-run** of the relationship assertions plus cross-engine on whatever was touched:
-three Sprint-1 fix rounds each satisfied their criterion and broke something adjacent, and a fix chain
-with no verification behind it is how that happened.
+**Acceptance criteria:**
+- **Footer strings** (F-B6 + answers): the seed's authorship line rewritten to **true
+  participation** — five roles ran this build (pm · developer · ui-ux · qa · content; marketing ·
+  legal · research did not). The founder pre-approved your phrasing — no gate; that raises the bar,
+  it does not lower it. **No raw email anywhere** — the GitHub profile link is the contact path.
+  Links, exact URLs: site repo `https://github.com/thinkArhant/muster-ai-site`, framework repo
+  `https://github.com/thinkArhant/muster-ai`, and queue · handoffs · decision log · VERIFY as blob
+  URLs into the site repo. Every URL real (R12) — state each as a string; never fetch to check.
+- **F-B4**: §4 decision 1's trade-off row rewritten so it stops denying the mechanism — agents do
+  communicate, through agent-request files: written, routed, auditable, never a live chat. Stay
+  inside the 45-word sheet ceiling; re-state the sheet's measured count.
+- **F-B5**: judge whether the works-while-the-operator-sleeps fact earns a place (likeliest §4
+  decision 4). Claimable form is the **mechanism**, evidenced by night-stamped public commits —
+  never wall-clock framing (R2), never a flaunt (DEC-043's guardrail). Declining with reasons is a
+  valid outcome; say which you chose and why.
+- `VERIFY.md`'s participation qualifier stays consistent with the new footer line.
+- Copy-rules matrix run on every touched file.
+
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
+
+**On completion:** File HO-034 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
 ```
-
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-_Empty — Gate B is the sprint's last step. Resume turns the founder's verdict
-into the fix round._
+### 2026-07-29 UI/UX: Gate B fix round — alignment system, the snap ruling, §4's affordance
+
+```
+Role: ui-ux
+Model: claude-fable-5
+
+**Task:** Three design rulings from the Gate B verdict (`knowledge-base/wave-review.md` → ### Gate
+B — findings F-B1, F-B2, F-B3). Each was raised by the founder from the rendered page; each is
+yours to decide, not to escalate.
+
+**Inputs:**
+- `knowledge-base/wave-review.md` — the Gate B findings, with the founder's own words
+- `knowledge-base/design-specs/web/page-shell.md` · `section-01-hero.md` · `section-04-decisions.md`
+- `index.html` + `styles/` — the built page the founder judged; render it, at desktop and phone
+  widths, before ruling anything
+- `knowledge-base/design-specs/web/footer-copy.md` (HO-034) — the footer now exists; it inherits
+  the alignment system too
+
+**Deliverable:** amended `page-shell.md` (+ hero/§4 specs as needed), each ruling stated with its
+measured evidence; HO-035.
+
+**Acceptance criteria:**
+- **F-B1 — one horizontal alignment system for every element on the page.** The formation is
+  visibly off-center against the THIS SITE strip and the headline. Rule the system (centered vs
+  left-rail vs mixed-with-a-reason), apply it to every §1 element and check every other section
+  against it. State the rule so the harness can assert it — a relationship, not per-element pixel
+  values (DEC-032).
+- **F-B2 — the snap ruling is binary**: remove scroll-snap entirely, or full section paging (one
+  section per view, a scroll advances whole sections, small more-indicator). No middle state.
+  Weigh: §5 does not fit one screen top-to-bottom; the phone scroll already feels wrong; paging is
+  heavy machinery on a page arguing restraint — but rule it on the rendered feel, and rule the
+  phone with it. If paging wins, spec the reduced-motion and keyboard paths; if removal wins, name
+  every assertion and spec clause that retires (DEC-040/051/053 amend, never silently die).
+- **F-B3 — §4's crop must read as an invitation, not a break.** Design the premium affordance that
+  says "more, sideways" (peek geometry, indicator, edge treatment — your call), and re-rule the
+  phone treatment: four stacked sheets read too long on a phone; state the alternative and its
+  measured height.
+- Every ruling measured on the real page at 375 and 1280 before it is written; renders attached to
+  the handoff must show the state under test.
+
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
+
+**On completion:** File HO-035 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+```
+
+### 2026-07-29 Developer (web): Gate B fix round — build the rulings
+
+```
+Role: developer
+Model: claude-opus-5
+
+**Task:** Implement HO-034's copy and HO-035's rulings, and build the footer.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-034, HO-035
+- `knowledge-base/design-specs/web/footer-copy.md` and every spec HO-035 amended
+- `knowledge-base/wave-review.md` — Gate B findings, for the intent behind each change
+
+**Deliverable:** `index.html`, `styles/`, `scripts/` as needed; amended tests; HO-036.
+
+**Acceptance criteria:**
+- The footer ships the HO-034 strings — the placeholder is gone (it was ruled a hard launch
+  blocker, DEC-054); links carry the exact URLs; no email string anywhere in the shipped set
+- The `VERIFY ⎘` chip's `href` becomes
+  `https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md` (F-B6) — and the network
+  guard still passes: an `href` is inert; **re-prove the guard catches a fetching reference after
+  the change**
+- The alignment system built as HO-035 rules it, with its relationship assertion in the harness
+- The snap outcome built exactly as ruled — if removal: every retired assertion and clause cleaned
+  up, none left asserting a behaviour that no longer exists; if paging: reduced-motion and keyboard
+  paths included
+- §4's affordance and phone treatment per HO-035; §4 copy swaps per HO-034 (trade-off row, and the
+  overnight line if Content ruled it in)
+- All three runners green — `scripts/test.sh` both engines, the independent audit, the full-page
+  sweep — with changed-subject assertions re-based, each new assertion planted-and-proven red
+- Cross-engine WebKit and Blink before filing
+
+**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
+
+**On completion:** File HO-036 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+```
+
+### 2026-07-29 QA (web): Scoped re-run on the fix round
+
+```
+Role: qa
+Model: claude-opus-5
+
+**Task:** Verify the fix round did not break what it did not touch — the scoped re-run every fix
+chain owes (three Sprint-1 rounds each satisfied their criterion and broke something adjacent).
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-034 through HO-036
+- `knowledge-base/wave-review.md` — the Gate B findings these fixes answer
+
+**Deliverable:** HO-037 in `agent-requests.md` — per-finding pass/fail with evidence.
+
+**Acceptance criteria:**
+- All three runners green on the shipped tree, run by you
+- Every relationship assertion green **and the new alignment assertion proven to fail when
+  violated**
+- The footer: strings byte-equal to `footer-copy.md`, links resolve as written (string check, no
+  fetch), no email anywhere in the shipped set, copy-rules matrix on the footer text
+- The chip href change re-proven inert: plant a fetching reference, watch the guard go red, revert
+- The snap outcome verified as ruled (if removed: no orphan assertion, no `snap` declaration left;
+  if paging: keyboard, find-in-page and reduced-motion each asserted)
+- §2 fidelity still byte-clean; §4's sheets still inside their ceiling and their screen budget;
+  cross-engine on every touched surface, labelled per engine
+- Reduced-motion and no-JS still render complete content
+
+**If a check fails:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment
+step naming the failing check, and file HO-037 with what you found.
+
+**On completion:** File HO-037 in `agent-requests.md`. Run the Pre-Handoff Self-Review Checklist.
+```
+
+### 2026-07-29 PM: Review the fix round and promote the re-gate
+
+```
+Role: pm
+Model: claude-opus-5
+
+**Task:** Review HO-034 through HO-037, then write the Gate B re-gate packet and promote its halt.
+
+**Inputs:**
+- `knowledge-base/agent-requests.md` — HO-034 through HO-037
+- `knowledge-base/wave-review.md` — the Gate B verdict these fixes answer
+
+**Deliverable:** review verdicts on HO-034 through HO-037; the re-gate packet appended to
+`wave-review.md`; the `Role: halt` re-gate block written into `## Next Step`.
+
+**Acceptance criteria:**
+- Re-run all three runners yourself; a summary is not evidence
+- Look at renders of every state the fix round changed — the alignment at 375 and 1280, the §4
+  affordance, the footer, the snap outcome — against the founder's F-B findings, not just the specs
+- Confirm the participation line is true (five roles), the overnight call respected the guardrail
+  (mechanism, never wall-clock), and no email ships
+- The re-gate packet is short: what changed per finding, then the three deferred phone checks —
+  §2's full 48 s playback with toolbars (hard launch blocker), find-in-page, and snap feel only if
+  snapping survived. Nothing else needs founder attention
+- The re-gate halt block tells the founder to write the verdict in `wave-review.md` and run
+  `muster/scripts/muster-sprint-resume.sh`
+
+**On completion:** Write the packet, promote the halt. Run the Pre-Handoff Self-Review Checklist.
+```
 
 
 ## Done (Last 10)

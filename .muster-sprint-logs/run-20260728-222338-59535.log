@@ -1067,3 +1067,36 @@
   🧪 bash   git status --porcelain
   💬 No shipped file touched — correct for a review step. Committing.
   🧪 bash   git add -A && git commit -q -F - <<'EOF' pm: the whole page clears review; gate B asks three things All eight Wave 2 han
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD 2>&1; echo "EXIT: $?"
+  💬 Step complete. Gate B is live. ## What I did **Re-derived the acceptance rather than reading it.** All three runners re-run by me on the shipped tree: `scripts/test.sh` GREEN both engines (273/273 + 2
+    📖 ×25 · ✏️  ×5 · 📝 ×2 · 🧪 ×48
+  ✓ 85 turns · $6.85 · peak ctx 177k/1M 17% · out 52k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-29 pm: **Gate B is live — the page is built and it is three questions, not a review pile.** Open `index.html` at 1280 wide and scroll top to bottom once before reading anything; that first pass is the only cold-reader pass you get. Then `wave-review.md`. All eight Wave 2 handoffs accepted with no revision, and all three harnesses re-run by me rather than read off a summary: `scripts/test.sh` GREEN both engines (273/273 + 27/27), the independent audit exit 0 at 108/108, the full-page sweep exit 0 at 42/42. I planted a fetching `<img>` and §2's exemption removal myself and watched them go red, so the guards are falsifiable, not just green. **Two things need your word at a desk and one needs your phone.** The footer still ships a shell placeholder — "PROVENANCE LINE AND LINKS SHIP WITH THEIR OWN SPEC." — as the last string after the curl; no sprint step ever owned footer copy, the seed already specifies it in full, and it cannot ship (hard blocker, DEC-054). And the page says `8 AI agents · 1 operator` while `git log` says five roles built it — pm, developer, ui-ux, qa, content; marketing, legal and research were never invoked. As a caption for the eight-plate diagram that is roster size and defensible; the seed's footer line states participation outright and is not true, and Content may not inflate a founder-supplied passage. My recommendation is in the packet: keep the hero caption, rewrite the footer line to the true five. On the phone: watch §2's full 48-second playback with both layers on screen (closes the last hard blocker no harness here can reach), check whether section snapping fights your scroll, and Find-on-Page a phrase mid-§4 — Safari's find alignment is the one thing my snap ruling leaves unverified.
+  📌 '## Founder Decisions' changed this step — review knowledge-base/orchestration-queue.md
+  ✓ [35;1mPM[0m · [1m45m 39s[0m · advanced → 2026-07-26 Gate B — founder review: the assembled page
+    run so far: 7h 26m · $112.51 · 8 steps
+───────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════
+⛔ HALT — 2026-07-26 Gate B — founder review: the assembled page   (Role: halt)
+
+   The loop stopped for founder input — nothing is wrong.
+   • Wave gate: review knowledge-base/wave-review.md, write your verdict in its
+     ## Verdict section, then run: bash muster/scripts/muster-sprint-resume.sh
+     (from this worktree).
+   • PM escalation: see '## Founder Decisions' in knowledge-base/orchestration-queue.md, answer, then re-run
+     muster-sprint-run.sh.
+═══════════════════════════════════════════════════════════
+── run summary ────────────────────────────────────────────
+  2026-07-28 UI/UX: Gate A fix round �    91   $19.23   24%    72k 19m 28s
+  2026-07-26 Developer (web): §1 and    150   $22.74   33%   118k  58m 7s
+  2026-07-26 Developer (web): §3 and    118   $16.94   31%   105k  54m 2s
+  2026-07-26 Developer (web): §5        128    $17.7   29%   100k 59m 43s
+  2026-07-26 Developer (web): Scroll-s   125   $13.45   23%    90k  1h 32m
+  2026-07-28 QA (web): The independent    69    $4.93   12%    35k 54m 35s
+  2026-07-26 QA (web): Full-page sweep    96   $10.67   22%    70k   1h 3m
+  2026-07-26 PM: Review the build and     85    $6.85   17%    52k 45m 39s
+  2026-07-26 Gate B — founder review  halt
+───────────────────────────────────────────────────────────
+  8 steps · 862 turns · $112.51 · out 642k · 7h 26m wall · stopped: halt (2026-07-26 Gate B — founder review: the assembled page)
+  📣 1 founder notice(s) this run — read knowledge-base/founder-notices.md

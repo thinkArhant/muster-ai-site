@@ -264,7 +264,31 @@ mechanism: the author amends at his gate).
    settled item above — one word from you approves the draft at the re-gate, or name the exact
    phrasing now if you have one.
 
-<!-- Founder: add any remaining findings below; the phone checks from item 3 are still open. -->
+**Founder answers, 2026-07-29 — the verdict's findings are complete (DEC-056):**
+
+1. **Repo URLs supplied**: this site `https://github.com/thinkArhant/muster-ai-site` · the
+   framework `https://github.com/thinkArhant/muster-ai`. These feed the footer links and F-B6's
+   chip target (`https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md`).
+2. **No raw email on the page** — founder ruling, amending his own seed's footer spec: the GitHub
+   profile link is the contact path; the profile carries the email for anyone who wants it. No
+   scraper bait, one click.
+3. **The participation line is Content's call, no gate** — the founder pre-approves whatever
+   Content writes against "five roles on this build" (pm · developer · ui-ux · qa · content ran;
+   marketing · legal · research did not — measured from this branch's commits).
+4. **The overnight fact is delegated**: the agents decide whether and where the
+   works-while-you-sleep fact earns a place. Guardrail unchanged — R2 bans wall-clock framing, so
+   the mechanism ("the run doesn't need the operator present; gates are the only places it waits")
+   is the claimable form, evidenced by night-stamped commits in the public repo. Declining is a
+   valid outcome.
+
+**Deferred to the re-gate, deliberately**: the three phone checks (§2's full 48 s playback with
+toolbars — the hard launch blocker; find-in-page; snap feel *if* snapping survives F-B2). Checking
+them once, on the fixed page, spends the founder's phone pass where it counts.
+
+**ROUTED 2026-07-29 (DEC-056)**: the fix round is in the queue — Content HO-034 → UI/UX HO-035 →
+Developer HO-036 → QA scoped re-run HO-037 → PM review, which promotes the re-gate. The founder
+runs `muster/scripts/muster-sprint-run.sh` directly. If a resume-spawned PM reads this: the
+verdict is consumed — verify the queue matches and change nothing.
 
 ---
 

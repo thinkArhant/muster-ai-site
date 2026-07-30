@@ -1,6 +1,6 @@
 run: run-20260728-222338-59535
-state: running step 8
-step: 2026-07-26 PM: Review the build and assemble the Gate B packet
+state: halted: halt (2026-07-26 Gate B — founder review: the assembled page)
+step: 2026-07-26 Gate B — founder review: the assembled page
 step started: 2026-07-29 05:04:43
-last completed: 2026-07-26 QA (web): Full-page sweep · 96 turns · $10.67 · out 70k · 1h 3m
-totals: 7 attempt(s) · 777 turns · $105.66
+last completed: 2026-07-26 PM: Review the build and assemble the Gate B packet · 85 turns · $6.85 · out 52k · 45m 39s
+totals: 8 attempt(s) · 862 turns · $112.51

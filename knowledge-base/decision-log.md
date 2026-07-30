@@ -997,5 +997,32 @@ them directly rather than routing them.
 
 ---
 
+---
+
+### DEC-056 — Gate B's verdict is complete and routed; the footer loses the email and gains the truth (2026-07-29)
+
+**Founder rulings recorded**: (1) repo URLs supplied — site
+`https://github.com/thinkArhant/muster-ai-site`, framework
+`https://github.com/thinkArhant/muster-ai`; the `VERIFY ⎘` chip's production target is the site
+repo's blob URL for `VERIFY.md` (F-B6). (2) **No raw email on the page** — the GitHub profile link
+is the contact path; the founder amended his own seed's footer spec at his gate (the DEC-043
+mechanism). (3) The participation line is **Content's call with no gate** — pre-approved against
+"five roles on this build." (4) The overnight fact is **delegated to the agents** under the
+standing guardrail: mechanism claims evidenced by night-stamped public commits, never wall-clock
+framing (R2), declining valid.
+
+**Routing, same shape as DEC-049**: the interactive PM consumed the verdict at the gate instead of
+resume's headless PM. Five steps queued — Content HO-034 (fable: the participation line ships
+without a gate and the overnight ask has the exact instruction shape that inflates, so the
+judgment bar is highest) → UI/UX HO-035 (fable: three page-level design rulings the founder will
+re-judge) → Developer HO-036 → QA scoped re-run HO-037 → PM review, which writes the re-gate
+packet and promotes the halt. The three phone checks (§2's 48 s playback — the remaining hard
+launch blocker — find-in-page, snap feel) are deliberately deferred to the re-gate so the
+founder's phone pass is spent once, on the fixed page.
+
+**Impact**: content, ui-ux, developer, qa, pm.
+
+**Touched**: `orchestration-queue.md`, `wave-review.md`, `decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
