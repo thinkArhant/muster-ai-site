@@ -141,9 +141,11 @@ founder, build nothing.
 
 **Acceptance criteria:**
 - **F-R1 (memo only):** options for making the overnight wave visible — including the founder's
-  one-card-holding-two idea — each with pros, cons, and its scope-safety (A-005: §2 is BODH-wave
-  scope; THIS SITE stays dashes, DEC-005; R2 bans wall-clock). Recommend one. The founder decides
-  at the next pass; nothing builds this round.
+  one-card-holding-two idea — each with pros, cons, its scope-safety (A-005: §2 is BODH-wave
+  scope; THIS SITE stays dashes, DEC-005; R2 bans wall-clock), **and its blast radius: what would
+  rebuild and re-verify.** §2 is the page's most expensive section (three Sprint-1 fix rounds);
+  the founder cannot weigh an option without its cost. Recommend one. The founder decides at the
+  next pass; nothing builds this round.
 - **F-R2:** rule §3's "context engineering" emphasis — rust is dead by measurement (4.19/4.35 vs
   the 4.5 floor); choose ink-bold, the accent-mark idiom, or plain, and say why.
 - **F-R3:** the §4 page indicator — always visible, aligned with the track, premium; rust
@@ -157,6 +159,15 @@ founder, build nothing.
   phone visibility budget, and `--scroll-pad` all derive from it. If it moves, name every
   dependent budget and re-state each with measured figures; if it does not, say so in one line.
 - **F-R9:** footer layout for the single sentence + receipt links + final link, Apple-level.
+- **Taste rulings are chosen from renders, not descriptions**: for the logo size (F-R7), the
+  indicator (F-R3) and the §5 hierarchy (F-R5), render at least two candidate treatments in the
+  page's real tokens, judge from the renders, and attach them to the handoff — every good taste
+  call this sprint (headline, sparse hero, kicker) was made this way, and every miss was ruled on
+  paper.
+- **F-R7's instrument is open at brand scale**: the clip-path pennant was chosen at punctuation
+  size (DEC-031); at logo size, weigh it against the founder's supplied artwork as a data-URI
+  image — zero-network-compliant, and an `<img>` is not the inline-SVG divergence class. Whichever
+  wins, cross-engine renders decide, not the inherited ruling.
 - Every ruling measured on the rendered page; renders show the state under test.
 
 **If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
@@ -259,8 +270,11 @@ block in `## Next Step`.
 
 **Acceptance criteria:**
 - Re-run all three runners yourself; render and look at every changed state, both engines
-- Rule each repetition-audit recommendation (F-R8): apply, decline with reason, or send to the
-  founder only if it is genuinely taste
+- Rule each repetition-audit recommendation (F-R8): **accept or decline with reason — never
+  hand-apply.** Accepted cuts have no builder in this round; queue them for the build step that
+  follows the founder's final verdict (the phone-check round), and frame them in the packet as
+  ruled-but-not-yet-applied so the founder is not surprised by unchanged text. Genuine taste calls
+  go to the founder
 - Verify the four pinned snapshots against the founder's demo criterion by READING each at its
   SHA — a queue link that lands on a template is a blocking miss
 - The final gate packet carries: one line per F-R finding on what shipped, the F-R1 §2-overnight
