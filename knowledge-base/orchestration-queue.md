@@ -102,32 +102,36 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-31 FINAL GATE — the founder picks one number and checks three things on his phone
+### 2026-07-31 THE BATCHED RENDER LOOK — one image, one pick
 
 ```
 Role: halt
 ```
 
-**The packet is at the bottom of `knowledge-base/wave-review.md`.** Open `index.html` at 1280 or
-wider in the dark theme, scroll it once, then write the verdict in that file's **Final gate
-verdict** section and run `muster/scripts/muster-sprint-resume.sh`.
+<!-- The role marker is unchanged; only the body is re-pointed. The final gate this block
+     previously described is closed in DEC-063 — its number is picked (F-R1 → option 4, DEC-062)
+     and all three phone checks passed. What the founder owes next is the render look DEC-063 §5
+     scheduled between UI/UX and Developer. -->
 
-**Two asks:**
+**Open `samples/closing-round-renders/CONTACT-SHEET.png`.** One screenful. Reply with a letter,
+then run `muster/scripts/muster-sprint-resume.sh`.
 
-1. **F-R1 — reply with a number: 1 · 2 · 3 · 4.** Where and when §2's overnight wave earns a seat.
-   Option 3 is recommended and the packet says plainly why the founder's own shape is right but
-   early — R2 reduces options 1 and 2 to the mechanism sentence §4 decision 4 already ships, and
-   option 1 re-spends the phone playback check below.
-2. **The three phone checks** (iPhone, Safari, toolbars showing): §2's **full 48-second playback**
-   with both layers on screen throughout — **the last hard launch blocker**, and a measurement no
-   harness on this machine can take; find-in-page for `scarcest` or `commit-days`; scroll feel,
-   including §4's sideways track.
+**One ask: §1's THIS SITE strip — A or B.**
 
-**Everything else is stated, not asked.** All ten re-gate findings shipped and were re-verified by
-PM at this review — all three runners re-run cold (295/295 + 27/27 · 108/108 · 43/43), every
-changed surface rendered and looked at in both engines, the load-bearing numbers re-measured, the
-four pinned receipts read at their SHAs, and three violations planted. Three carried items are in
-the packet's last section, and DEC-061 carries the rulings.
+- **A** — the strip re-keys to §5's two questions: `OPERATOR ATTENTION —` + `SHIPPED THIS PAGE`.
+- **B** — the cells go; §1 keeps the scope label and the `VERIFY ⎘` chip, and §5 owns the readout.
+
+Both are shown in situ under the headline and the formation, at 1280 and 375, and both were
+re-rendered in WebKit. **UI/UX recommends B** and says so on the sheet as a recommendation: A prints
+the same two keys and the same two values as §5's THIS SITE card one scroll above it, and puts a
+second rust readout under the headline's rust `AN AI`. B is 87px shorter, which brings the whole
+hero — the `curl` included — inside a 774px window.
+
+**Two things are shown, not asked** — §5's rebuilt two-cell cards and the footer's final sentence
+as it sets. Speak only if either is wrong.
+
+**Then Developer builds everything**, including the picked form, and deletes the losing form from
+`section-01-hero.md` §7.1 in the same commit. The terminal QA sweep follows.
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
