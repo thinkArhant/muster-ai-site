@@ -10,6 +10,116 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-30 HO-040 — Re-gate build: the rulings ship, and the receipts stop pointing at a moving target
+**Type:** handoff
+**Producer:** developer
+**Deliverable:** `index.html`, `styles/sections.css`, `styles/chrome.css`, new
+`scripts/sheet-indicator.js`, `VERIFY.md`; amended `tests/verify-shell.mjs`,
+`tests/verify-webkit.mjs`, `tests/qa-fullpage-sweep.mjs`; the SHA selections recorded in
+`footer-copy.md` §3 and `section-01-hero.md`.
+**Status:** in-review
+**Reviewers:**
+- [ ] QA — pending (scoped re-run)
+- [ ] PM — pending (re-gate review step)
+
+**All three runners green, both engines, run here on the shipped tree**: `scripts/test.sh` GREEN
+(295/295 Blink + 27/27 WebKit), audit exit 0 at 108/108, sweep exit 0 at **43/43** — one more
+than it carried, and the extra check is the one the plants forced into existence (below).
+
+**What shipped, finding by finding.**
+
+- **F-R4 — the provenance word.** `real`, byte-equal to the founder's resolved string. The last
+  `production iOS app` in a shipped file is gone.
+- **F-R2 — §3's hook.** `context engineering` at 700, ink, once, at the paragraph's own size.
+- **F-R6 — §6's lead.** HO-038's 30-word line, and the harness now reads it off
+  `section-06-copy.md` instead of holding a retyped copy: a claim about model-agnostic
+  correctness should be checked against the file that owns it.
+- **F-R5 — §5's primary.** Shipped, and the build **found a defect in the obvious form of it**:
+  `--read-max` is `64ch`, and `ch` is the advance of the element's own "0". Weighting the `<p>`
+  itself resolves its 64ch **8.7% wider** than its neighbours' (744.81px against 685.31px,
+  measured) — the three-line block goes ragged and §5's own column check went red. The emphasis
+  therefore rides on a `<b>` spanning the sentence, which is the shell's own in-passage
+  emphasis route; the paragraph's font, and so the column, is untouched. The assertion reads the
+  weight a READER sees and additionally requires the run to cover the whole claim, so a phrase-level
+  hook cannot pass as a primary.
+- **F-R3 — the indicator.** Four segments, rail → rail-end, 2px, one lit, zero motion, native
+  scrollbar retired. The observer (`scripts/sheet-indicator.js`) reads no scroll position and
+  writes none — it keeps a per-sheet visibility table from an `IntersectionObserver` rooted on
+  the track and toggles one class, so the shell's no-script-touches-scroll assertion holds as
+  written. Segment count comes from the DOM at every seam: the markup, the script, and all six
+  assertions.
+- **F-R7 — the masthead.** 18px word, mark derived at 0.5em × 0.75em, `--bar-h` unmoved. The
+  harness asserts the RATIO, not the pixels — re-sizing the masthead is one CSS edit and no test
+  edit. Separator pennants keep 6 × 9, bound to the rule's own end tick.
+- **F-R9 — the footer.** One sentence at lead scale, boundary separator replacing the plain top
+  border, receipts at micro, contact last, four blocks on the rail.
+- **DEC-058's amendments** were already applied upstream (`footer-copy.md` §3's
+  lowercase-labels sentence at HO-038, `section-01-hero.md`'s chip clause at HO-039). Verified,
+  not re-applied.
+
+**F-R10 — the four SHAs, and why each one.** `git log` was walked per file and the states
+measured, not eyeballed:
+
+| Link | SHA | Why this commit is the demo |
+|---|---|---|
+| `queue` | `9b26788` | **16 steps queued** ahead of the run, 786 lines — the audited Sprint-2 plan at its fullest. The currently-pinned `392ee05` was the planning commit at 14 steps; this is two steps richer and three hardening passes later. |
+| `handoffs` | `bded0dd` | **11 entries filed and open at once**, and **both entry types on one screen** — three inter-agent requests and eight handoffs awaiting review. `5fc6a31` is 80 lines longer but carries 8 entries, all one type; the protocol is better demonstrated than described. |
+| `decision log` | `b41ed56` | Current depth, per the founder's own note that this file's demo is now. |
+| `VERIFY` | `14bceef` | The last frozen state. **Flagged, not silently accepted**: the founder's criterion for this one is *the launch state*, which does not exist yet. See the caveat below. |
+
+**Two caveats, both stated rather than buried.**
+
+1. **Reachability.** These SHAs live on the sprint branch. They reach the public repo only if the
+   final merge preserves history — **a squash merge 404s all four links.** Recorded beside the
+   table in `footer-copy.md` §3 so the constraint travels with the URLs. PM carries the
+   post-push verification to `pre-launch-checklist.md`.
+2. **VERIFY is provisional.** Pinning it now freezes it before the state its criterion names, and
+   the pinned copy predates the live-file section this round added to `VERIFY.md`. It must be
+   re-pointed at the launch commit. The §1 chip follows the same string by ruling
+   (`section-01-hero.md`), so **both move together** — one edit, two seats, and the harness fails
+   if only one of them moves.
+
+`VERIFY.md` gained the live-file links the ruling asked for, with one line on why the two forms
+differ: the pinned link is the receipt, the live one is the running file, and the diff between
+them is the build since.
+
+**Six violations planted and watched, tree reverted clean.** Five went red on exactly the check
+that owns them: the masthead shrunk to label scale (*"separator 6×9 ... masthead 6×9"* — the
+punctuation-scale check caught it, not the ratio check, which is correct), a 3px segment
+(*"segments 3px against the mechanism mark's 2px"*), the footer's plain border restored
+(*"footer border-top 1px"*), §5's emphasis narrowed to a phrase (*"1 run"* against the whole
+line), and §3's hook unbolded.
+
+**The sixth found a real gap and is the most useful thing in this handoff.** Removing
+`is-active` from the shipped markup broke **nothing** — the observer restores it within a frame of
+load, so every rendered check passed on a page that shipped four dead segments. That is exactly
+wrong for the reader with JavaScript off, which the spec promises to serve. The sweep now asserts
+the guarantee **in the source and only in the source** (`the indicator ships segment 1 lit in the
+markup`), and it was proven red on that same plant before the revert.
+
+**Cross-engine, per surface.** WebKit renders of §4, the footer, §5 and the header at 1280 dark
+(`tests/artifacts/regate-webkit-*.png` — the harness's own ignored artifact directory, so these
+are regenerated rather than committed; `samples/re-gate-renders/render-webkit-surfaces.mjs`
+reproduces them, Quick Look route): the masthead reads as a masthead, the
+indicator's four segments sit rail → rail-end with segment 1 lit, the footer's separator and its
+four blocks compose as specced, and §5's three lines hold **one column edge** with the bold line
+among them — the defect above, confirmed fixed in the engine that did not measure it. The WebKit
+pennant scan was re-based from a 6×9 size match to a **2:3 silhouette** match, so it identifies
+the mark by shape and covers both seats.
+
+**Revision log:**
+- 2026-07-30: Filed. Self-review caught three things. (1) The first draft weighted §5's `<p>`
+  directly — the column defect above; found by the harness, not by reading. (2) The §6 lead was
+  initially re-based by retyping the new string into `verify-shell.mjs`; changed to parse
+  `section-06-copy.md`, since a hardcoded copy of a claim is a copy that can drift with the build
+  that changes it. (3) The footer separator shipped with `aria-hidden` on the wrapper only; the
+  independent audit failed it, and the markup now mirrors the section rules per-element rather
+  than the audit being loosened. Open question for PM, not blocking: VERIFY's pin (caveat 2).
+  Durability: F-R IDs and SHA rationale stay in this ledger and in the code comments that explain
+  the construction; no finding ID entered a durable spec.
+
+---
+
 ### 2026-07-30 HO-039 — Re-gate design round: the masthead, the indicator, two hierarchies, the footer, and the §2 consult
 **Type:** handoff
 **Producer:** ui-ux

@@ -59,12 +59,18 @@
    which is the one construction here with real WebKit divergence risk, and is
    why the mark's bottom edge is verified against the baseline in both engines
    (brand-seats.md §2, §11). */
+/* Brand scale, the page's one such seat: 1.125rem. Every other measurement in
+   the lockup derives from this declaration — the mark is 0.5em × 0.75em of it,
+   the underscore is 1ch of it, the letter-space is 0.18em of it — so the
+   masthead scales from one number and nothing has to be re-tuned beside it.
+   The bar does NOT follow: --bar-h stays 3rem, and the hero fold arithmetic,
+   §2's phone visibility budget and --scroll-pad all derive from the bar. */
 .brand {
   display: inline-flex;
   align-items: baseline;
   gap: var(--gap-hairline);
   font-family: var(--font-mono);
-  font-size: var(--text-label);
+  font-size: 1.125rem;
   line-height: var(--lead-label);
   text-transform: uppercase;
   letter-spacing: var(--track-label);
@@ -81,13 +87,34 @@
    resolves to the accent, and a mark painted with `color` would join that set
    and be failed as sub-AA text. */
 .brand__mark,
-.tag__mark {
-  inline-size: 6px;
-  block-size: 9px;
+.tag__mark,
+.rule__mark {
   flex: none;
-  align-self: baseline;
   background-color: var(--accent);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 81.79%, 0 100%);
+}
+
+/* Punctuation scale — the five section tags and the footer boundary. It stays
+   at 6 × 9 while the header grows: once the masthead teaches the silhouette,
+   small reads as the logo rather than as a stray glyph, and 9px is the section
+   rule's own end-tick height, so rule and mark share one vertical measure. */
+.tag__mark,
+.rule__mark {
+  inline-size: 6px;
+  block-size: 9px;
+}
+
+/* Brand scale, derived rather than declared: 0.5em × 0.75em carries the shipped
+   6/12 × 9/12 proportions up, so one ratio governs every seat and the wordmark's
+   font-size is the only number in the lockup. */
+.brand__mark {
+  inline-size: 0.5em;
+  block-size: 0.75em;
+}
+
+.brand__mark,
+.tag__mark {
+  align-self: baseline;
 }
 
 .brand__word {
@@ -185,23 +212,46 @@
   font-weight: 400;
 }
 
+/* The footer boundary: the section-rule construction minus the label. The
+   pennant seats between the two end-ticks at the same --gap-hairline the tag's
+   own padding gives it on a section rule, so the two boundaries are the same
+   assembly at the same spacing. Centred rather than baseline-aligned, because
+   there is no text here to synthesise a baseline from — the construction whose
+   WebKit divergence risk brand-seats.md §11 names. */
+.rule--boundary .rule__tag {
+  gap: var(--gap-hairline);
+}
+
 /* --------------------------------------------------------------------------
    Footer — the closing signature.
 
-   Every block hangs on the rail: no counterweight, nothing centred, no lockup.
-   The two sentences are prose and take the reading face at full ink, capped at
-   the 64ch column — a capped block still STARTS on the rail. The receipts row
-   is chrome and takes the micro label family, like every other mono row on the
-   page.
+   Four blocks, every one hanging on the rail: no counterweight, nothing
+   centred, no lockup. The closing sentence is prose at LEAD scale and full ink,
+   capped at the 64ch column — a capped block still STARTS on the rail. At body
+   scale it read as fine print; at lead it reads as the page's last deliberate
+   sentence. The receipts row is chrome and takes the micro label family, like
+   every other mono row on the page.
+
+   No border-block-start: the boundary separator above IS this boundary's rule,
+   and a plain border under it would be two stacked lines at one edge.
    -------------------------------------------------------------------------- */
 
 .pagefoot {
-  border-block-start: 1px solid var(--hair);
-  padding-block: var(--gap-block);
+  padding-block: 0 var(--gap-block);
+}
+
+.pagefoot__inner {
+  margin-block-start: var(--gap-block);
 }
 
 .pagefoot__inner > * + * {
   margin-block-start: var(--gap-flow);
+}
+
+/* The receipts belong WITH the sentence — they are its evidence — so they sit
+   at --gap-flow above and the contact link opens its own block below. */
+.pagefoot__contact {
+  margin-block-start: var(--gap-block);
 }
 
 /* Separators drawn rather than typed, and hung off the END of each label so a

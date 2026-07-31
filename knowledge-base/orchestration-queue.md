@@ -73,49 +73,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-30 Developer (web): Re-gate round — build the ruled items and pin the receipts
-
-```
-Role: developer
-Model: claude-opus-5
-
-**Task:** Implement HO-038's copy and HO-039's rulings (everything except F-R1, which is
-consult-only this round), plus the receipt-link permalinks.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-038, HO-039
-- `knowledge-base/wave-review.md` — the re-gate verdict, including F-R10's RESOLVED
-  snapshot-selection criterion
-- Every spec HO-039 amended; `knowledge-base/design-specs/web/footer-copy.md`
-
-**Deliverable:** `index.html`, `styles/` as needed; amended tests; HO-040.
-
-**Acceptance criteria:**
-- Provenance word swap exact (F-R4); §6 line per HO-038 (F-R6); the single footer sentence and
-  layout (F-R9); §3 emphasis as ruled (F-R2); §4 indicator per spec with its assertion (F-R3);
-  §5 hierarchy (F-R5); header logo at the ruled size + the footer-boundary separator (F-R7)
-- **F-R10:** the four receipt links become commit-SHA blob permalinks chosen by the founder's
-  demo-in-itself criterion — inspect `git log` per file, pick the most demonstrative frozen state
-  (queue: a fully-planned backlog moment; handoffs: the ledger at its fullest; decision log:
-  current depth; VERIFY: the launch state), and record each chosen SHA and why in the handoff.
-  The framework and profile links stay as they are. VERIFY.md gains the live-file links for
-  current state. **Reachability caveat, stated in your handoff**: these SHAs exist on the sprint
-  branch — they reach the public repo only if the final merge preserves history. A squash merge
-  404s all four links. Flag this beside each chosen SHA; PM carries the post-push verification to
-  `pre-launch-checklist.md`
-- Also land DEC-058's two one-line spec amendments if not already applied upstream
-- All three runners green, both engines; changed-subject assertions re-based; new assertions
-  planted and watched red; cross-engine on every touched surface
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-040 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
-Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-30 QA (web): Scoped re-run on the re-gate round
 
 ```
@@ -151,6 +108,9 @@ step naming it, and file HO-041 with what you found.
 **On completion:** File HO-041 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
 Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-30 PM: Review the re-gate round and promote the final gate
 
@@ -189,6 +149,20 @@ block in `## Next Step`.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-30 — Step: Developer re-gate build round (HO-040). Every ruling ships and all three
+  runners are green here on the shipped tree — suite GREEN both engines 295/295 + 27/27, audit
+  108/108, sweep **43/42→43/43**. The four receipts stop pointing at a moving target: `queue`
+  pins the plan at 16 queued steps, `handoffs` the ledger at 11 open entries carrying both entry
+  types, `decision log` current depth, `VERIFY` the last frozen state — **provisional, and
+  flagged**, since its criterion names a launch state that does not exist yet. Six violations
+  planted and reverted; five went red on the right check and **the sixth found a real gap** —
+  stripping `is-active` from the markup broke nothing, because the observer restores it before
+  any harness looks, so a page shipping four dead segments passed every rendered check. The sweep
+  now asserts that guarantee in the source. §5's ruling also surfaced a live defect: weighting the
+  paragraph resolved its `64ch` 8.7% wider than its neighbours' and broke the column, so the
+  emphasis rides a run instead. **Awaiting QA (HO-041) and PM review; PM must rule VERIFY's
+  provisional pin and carry the squash-merge reachability caveat to `pre-launch-checklist.md`.**
 
 - 2026-07-30 — Step: UI/UX re-gate design round (HO-039, DEC-060). All five rulings chosen from
   renders in both engines: the header lockup ships at brand scale — 18px word, 9 × 13.5 mark, the
@@ -300,15 +274,3 @@ block in `## Next Step`.
   and two hard launch blockers are ticked. **Awaiting PM review at the build-review step; OBS-015 —
   the §2-exemption check's failure detail prints a hardcoded `0` where its measured count belongs,
   which is the exact figure HO-029 quotes as evidence.**
-
-- 2026-07-29 — Step: QA independent audit (HO-033). The audit can no longer hang: its one unbounded
-  external wait — `execFileSync("qlmanage")` with no timeout — is bounded and named, proven by
-  planting a stalling `qlmanage` (pre-fix: blocked 120 s straight, zero output, killed; post-fix:
-  red in 60 s with the render named). **The brief's `SAMPLER` hypothesis was bisected and is not
-  supported** — the audit at `bded0dd`, the commit it was reported hanging at, runs 106/106 exit 0.
-  Exit 0 twice at 108/108; `scripts/test.sh` GREEN both engines (273/273 + 27/27). No shipped file
-  touched. **Awaiting PM review at the build-review step; OBS-014 records that the original hang does
-  not reproduce from the committed tree, and closes OBS-006's question.**
-
-
-

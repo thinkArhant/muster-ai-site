@@ -366,7 +366,16 @@ const AUDIT = `(() => {
                 animation: css(brandRule, "animation-name"),
                 transition: css(brandRule, "transition-duration") },
         name: document.querySelector(".brand").textContent.trim(),
-        gap: css(document.querySelector(".brand"), "column-gap")
+        gap: css(document.querySelector(".brand"), "column-gap"),
+        /* The masthead's one declared number. Everything else in the lockup
+           derives from it — the mark is 0.5em × 0.75em of it — so the whole
+           thing scales from a single value and the harness checks the RATIO,
+           never the pixel size. */
+        wordSize: Math.round(parseFloat(css(brandWord, "font-size")) * 100) / 100,
+        /* Punctuation scale, for comparison: the five section tags keep 6 × 9
+           while the header grows. Two scales, one silhouette. */
+        tagMark: { w: Math.round(markBox.width * 100) / 100, h: Math.round(markBox.height * 100) / 100 },
+        tickH: Math.round(tickBox.height * 100) / 100
       },
       /* Tokens resolve to hex and computed colours to rgb(); ask the engine what
          the token paints as so the two can be compared like with like. */
@@ -383,6 +392,7 @@ const AUDIT = `(() => {
       regmarksPerSurface,
       stencilTags: [...document.querySelectorAll(".tag")].map((t) => t.textContent.trim()),
       ruleCount: document.querySelectorAll(".rule").length,
+      boundaryRules: document.querySelectorAll(".rule--boundary").length,
       operationalWord: document.querySelector(".status__word").textContent.trim()
     },
     reading: {
@@ -471,7 +481,15 @@ try {
   check("texture is aria-hidden, behind content, inert", dark.texture.ariaHidden === "true" && dark.texture.zIndex === "-1" && dark.texture.pointerEvents === "none", JSON.stringify({ z: dark.texture.zIndex, pe: dark.texture.pointerEvents }));
   check("grain peak alpha capped at 8% (dark)", Number(dark.texture.grainOpacity) <= 0.08, `opacity ${dark.texture.grainOpacity}`);
   check("vignette alpha 16% (dark)", Number(dark.tokens["--vignette-alpha"]) === 0.16, dark.tokens["--vignette-alpha"]);
-  check("five stencil tags with machined ticks", dark.motifs.stencilTags.length === 5 && dark.motifs.ruleCount === 5, dark.motifs.stencilTags.join(" / "));
+  /* Five labelled section rules, and one more rule at the footer boundary
+     carrying no label — the same construction minus the tag. The tag count is
+     what stays at five: a sixth stencil tag would be a section that arrived
+     without anyone noticing, where a sixth RULE is the boundary the footer
+     needs and the plain border it replaced. */
+  check("five stencil tags with machined ticks, on six rules — the sixth closes the page",
+    dark.motifs.stencilTags.length === 5 && dark.motifs.ruleCount === 6 &&
+      dark.motifs.boundaryRules === 1,
+    `${dark.motifs.stencilTags.join(" / ")} · ${dark.motifs.ruleCount} rules, ${dark.motifs.boundaryRules} of them the unlabelled footer boundary`);
   check("ticks are 9x1px", dark.motifs.tick.w === 1 && dark.motifs.tick.h === 9, JSON.stringify(dark.motifs.tick));
   /* The mark is the pennant at punctuation scale. Three clauses, and the one
      that carries weight is the middle one: the mark's height is bound to
@@ -494,10 +512,27 @@ try {
     `.tag renders ${dark.motifs.tagBox.h}px against a ${dark.motifs.tagBox.lineBox}px --text-label line box`);
   /* The header lockup: pennant + MUSTER + a drawn static underscore. */
   const bm = dark.motifs.brand;
-  check("header lockup carries the 6x9 pennant on the wordmark's baseline",
-    bm.mark.w === 6 && bm.mark.h === 9 && bm.mark.clip !== "none" &&
-      bm.mark.bg === dark.motifs.accentRgb && Math.abs(bm.mark.baselineDrop) < 0.5 && bm.mark.hidden === "true",
-    `${bm.mark.w}×${bm.mark.h}, ${bm.mark.baselineDrop}px off the baseline, ${bm.mark.bg}, aria-hidden ${bm.mark.hidden}`);
+  /* The masthead. Two relationships, not two sizes: the mark is 0.5em × 0.75em
+     of the wordmark, so it carries the pennant's 6/12 × 9/12 proportions up
+     from the punctuation scale — one silhouette, two seats — and it still sits
+     on the wordmark's baseline, which is the construction with the real WebKit
+     divergence risk. The 18px is declared in one place and asserted here as a
+     ratio, so re-sizing the masthead is one CSS edit and no test edit. */
+  check("the masthead's pennant derives from the wordmark: 0.5em × 0.75em, on its baseline",
+    Math.abs(bm.mark.w - bm.wordSize * 0.5) < 0.5 &&
+      Math.abs(bm.mark.h - bm.wordSize * 0.75) < 0.5 &&
+      Math.abs(bm.mark.h / bm.mark.w - 1.5) < 0.02 &&
+      bm.mark.clip !== "none" && bm.mark.bg === dark.motifs.accentRgb &&
+      Math.abs(bm.mark.baselineDrop) < 0.5 && bm.mark.hidden === "true",
+    `${bm.mark.w}×${bm.mark.h} against a ${bm.wordSize}px wordmark (${bm.mark.w / bm.wordSize}em × ${bm.mark.h / bm.wordSize}em), ${bm.mark.baselineDrop}px off the baseline, aria-hidden ${bm.mark.hidden}`);
+  /* Punctuation scale holds while the masthead grows: the separators stay at
+     the section rule's own end-tick height, so rule and mark share one vertical
+     measure — and the masthead is strictly the larger of the two seats, which
+     is the whole point of the ruling. */
+  check("the separator pennant keeps punctuation scale, bound to the rule's end tick",
+    bm.tagMark.w === 6 && bm.tagMark.h === 9 && bm.tagMark.h === bm.tickH &&
+      bm.mark.h > bm.tagMark.h,
+    `separator ${bm.tagMark.w}×${bm.tagMark.h} against the tick's ${bm.tickH}px · masthead ${bm.mark.w}×${bm.mark.h}`);
   /* Painted with background-color and never `color`: the small-rust-text audit
      collects elements whose `color` resolves to the accent, so a mark painted
      the other way would be judged as sub-AA rust text. */
@@ -1115,7 +1150,11 @@ try {
      that proves that stays narrowed to fetching references and is planted
      against below. The string must stay byte-equal to the footer's VERIFY
      receipt, which is asserted with the footer. --- */
-  const CHIP_HREF = "https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md";
+  /* Pinned, not `main`: the receipts are commit-SHA permalinks so a reader
+     lands on the artifact as it was when the claim was made. The chip shares
+     the footer's VERIFY receipt exactly, and that equality is asserted with
+     the footer against `footer-copy.md` — this constant is the §1 half. */
+  const CHIP_HREF = "https://github.com/thinkArhant/muster-ai-site/blob/14bceef/VERIFY.md";
   check("§1 VERIFY chip is the section's only focusable element and points at the rendered VERIFY.md",
     heroWide.heroFocusable.length === 1 && /chip/.test(heroWide.heroFocusable[0]) &&
       heroWide.chipHref === CHIP_HREF &&
@@ -1140,7 +1179,19 @@ try {
     `cursor ${heroWide.heroCurlHasCursor}, prompt ${heroWide.heroCurlPrompt}`);
 
   /* --- §6 --- */
-  const gsLead = "One command. No signup, no framework install, no API wiring — markdown files and Claude Code.";
+  /* Read off the deliverable, not retyped here: §6's lead now carries the
+     model-agnostic-correctness claim, and a claim of that weight must be
+     checked against the file that owns it rather than against a copy of it
+     that a build step could quietly edit alongside the page. */
+  const gsLead = (() => {
+    const lines = readFileSync(join(ROOT, "knowledge-base", "design-specs", "web", "section-06-copy.md"), "utf8").split("\n");
+    const at = lines.findIndex((l) => l.startsWith("## 3. The lead line"));
+    const next = lines.findIndex((l, i) => i > at && /^## /.test(l));
+    const body = lines.slice(at, next === -1 ? lines.length : next);
+    const open = body.findIndex((l) => l.trim() === "```");
+    const close = body.indexOf("```", open + 1);
+    return body.slice(open + 1, close).join(" ").replace(/\s+/g, " ").trim();
+  })();
   check("§6 ships the lead line, both commands and exactly one link",
     heroWide.gs.lead === gsLead && heroWide.gs.then === "cd my-product && claude" &&
       heroWide.gs.links.length === 1 && heroWide.gs.focusable === 1 &&
@@ -1410,6 +1461,17 @@ try {
       })),
       paraText: para.textContent.replace(/\\s+/g, " ").trim(),
       paraColour: css(para, "color"),
+      /* The in-passage emphasis rule: weight, never colour, and spent once.
+         Read as computed style off whatever element carries it, so swapping
+         <b> for a class cannot quietly change what ships. */
+      paraEmphasis: [...para.querySelectorAll("*")].map((el) => ({
+        text: el.textContent.replace(/\\s+/g, " ").trim(),
+        weight: Number(css(el, "font-weight")),
+        size: css(el, "font-size"),
+        colour: css(el, "color")
+      })),
+      paraWeight: Number(css(para, "font-weight")),
+      paraSize: css(para, "font-size"),
       paraCap: r2(parseFloat(css(para, "max-inline-size"))),
       paraReadMax: readMaxIn(para),
       paraWidth: r2(para.getBoundingClientRect().width),
@@ -1457,7 +1519,39 @@ try {
       }),
       microFontSize: css(sheets[0].querySelector(".sheet__stamp"), "font-size"),
       mutedRgb: css(sheets[0].querySelector(".sheet__stamp"), "color"),
-      gauge: { width: css(track, "scrollbar-width"), colour: css(track, "scrollbar-color") },
+      /* The retired gauge, asserted as retired: the native scrollbar must not
+         return as a second, misaligned position channel under the same track. */
+      scrollbarWidth: css(track, "scrollbar-width"),
+      /* The indicator. Segment count is read from the DOM and compared to the
+         sheet count also read from the DOM — a literal 4 here would survive a
+         fifth sheet landing, which is the failure this shape exists to avoid. */
+      indicator: (() => {
+        const row = decisions.querySelector("[data-sheet-indicator]");
+        if (!row) return null;
+        const segs = [...row.querySelectorAll(".sheets-indicator__seg")];
+        const box = row.getBoundingClientRect();
+        const mech = decisions.querySelector(".sheet__row--mech");
+        return {
+          rows: decisions.querySelectorAll("[data-sheet-indicator]").length,
+          hidden: row.getAttribute("aria-hidden"),
+          display: css(row, "display"),
+          count: segs.length,
+          start: r2(box.left), end: r2(box.right),
+          /* Bound to its sibling: the mechanism mark's own stroke, read off
+             the pseudo-element rather than restated as 2. */
+          mechStroke: mech ? css(mech, "inline-size", "::before") : null,
+          segs: segs.map((s) => ({
+            h: css(s, "block-size"),
+            bg: css(s, "background-color"),
+            colour: css(s, "color"),
+            animation: css(s, "animation-name"),
+            duration: css(s, "transition-duration"),
+            active: s.classList.contains("is-active")
+          })),
+          rowAnimation: css(row, "animation-name"),
+          rowTransition: css(row, "transition-duration")
+        };
+      })(),
       /* §4's own rail and rail-end, from the container's content edges. */
       rail: (() => {
         const box = decisionsContainer.getBoundingClientRect();
@@ -1555,6 +1649,19 @@ try {
     `cap ${s34.paraCap}px against --read-max ${s34.paraReadMax}px, rendered ${s34.paraWidth}px, colour ${s34.paraColour}`);
   check("§3 carries no numerals — no scope can be mixed where no figure appears",
     s34.insightNumerals === "", s34.insightNumerals || "none");
+  /* The in-passage emphasis rule (`page-shell.md` §3): one run, weight only,
+     at the paragraph's own size and colour. Rust is barred here by
+     measurement — the accent runs 4.19/4.35 against a 4.5 body floor — and a
+     third weight would break the page's 400/700 pair, so both failure modes
+     are asserted rather than trusted. The announced string is unaffected: the
+     verbatim check above reads the same paragraph. */
+  check("§3's recognition hook is emphasised by weight alone, once, at body size",
+    s34.paraEmphasis.length === 1 &&
+      s34.paraEmphasis[0].weight === 700 && s34.paraWeight < 700 &&
+      s34.paraEmphasis[0].colour === s34.paraColour &&
+      s34.paraEmphasis[0].size === s34.paraSize,
+    s34.paraEmphasis.map((e) => `${JSON.stringify(e.text)} at ${e.weight}/${e.size}/${e.colour}`).join(" · ") +
+      ` against the paragraph at ${s34.paraWeight}/${s34.paraSize}/${s34.paraColour}`);
   check("bold sans at kicker scale is §4's title voice and only §4's",
     s34.boldKickerScale.length === 4 && s34.boldKickerScale.every((c) => /sheet__title/.test(c)) &&
       s34.kickerFont.weight < 700 && /system-ui/.test(s34.kickerFont.family),
@@ -1606,9 +1713,15 @@ try {
     s34.ordinals.map((o) => `${JSON.stringify(o.text)} (expected ${JSON.stringify(o.expected)}, aria-hidden ${o.hidden}, after the stamp ${o.afterStamp}, ${o.fontSize} ${o.colour})`).join(" · "));
 
   /* --- §4: the emphasis system — rust as a mark, never as text --- */
-  check("§4 sets zero rust text; the accent appears only as the four mechanism marks",
-    s34.rustText.length === 0 && s34.accentBackgrounds.length === 4 &&
-      s34.accentBackgrounds.every((b) => /sheet__row--mech::before/.test(b)),
+  /* Two accent sites now, and both are marks rather than text: the four
+     mechanism strokes and the one lit indicator segment. The segment is
+     admitted by name and by count — a second lit segment would mean the
+     position channel is reporting two rests at once, so the ceiling of one is
+     part of what this sweep protects. */
+  check("§4 sets zero rust text; the accent appears only as marks — four mechanisms, one lit segment",
+    s34.rustText.length === 0 && s34.accentBackgrounds.length === 5 &&
+      s34.accentBackgrounds.filter((b) => /sheet__row--mech::before/.test(b)).length === 4 &&
+      s34.accentBackgrounds.filter((b) => /sheets-indicator__seg is-active/.test(b)).length === 1,
     `${s34.rustText.join(" | ") || "no rust text"} · accent backgrounds ${JSON.stringify(s34.accentBackgrounds)}`);
   check("§4 mechanism mark: 2px, token-seated at --gap-hairline from its own card, spanning the row",
     s34.markCount === 4 && s34.marks.every((m) =>
@@ -1645,13 +1758,41 @@ try {
   check("§4 the cut lands on the screen edge: sheet 2 runs off it, with no dead strip",
     s34.peek.intersects && s34.peek.cut && s34.peek.visible > 0 && Math.abs(s34.peek.deadStrip) < 0.5,
     `${s34.peek.visible}px of sheet 2 on screen, running off the viewport edge: ${s34.peek.cut} · ground between the track's end and the screen: ${s34.peek.deadStrip}px`);
-  /* The gauge is declarations only here: the harness launches Chrome with
-     --hide-scrollbars, so no headless render can ever show the thumb. The
-     visible rail belongs to the headed cross-engine look and is recorded there. */
+  /* --- §12.19, the indicator. It replaced a styled scrollbar that this
+     harness could never actually see (Chrome launches with --hide-scrollbars),
+     which is part of why the gauge failed: the signal was invisible to most
+     readers for the same reason it was invisible here. The indicator is real
+     DOM and is measured as such.
+
+     Every clause below is a relationship. The segment count is compared to the
+     rendered sheet count, both read from the page; the segment height is
+     compared to the mechanism mark's own stroke, read off its pseudo-element.
+     No literal from the spec is asserted as a number. --- */
   const squash = (s) => String(s).replace(/\s+/g, "");
-  check("§4 the gauge: the track's own scrollbar is thin, its thumb the accent token",
-    s34.gauge.width === "thin" && squash(s34.gauge.colour).includes(squash(s34.accentRgb)),
-    `scrollbar-width ${s34.gauge.width}, scrollbar-color ${JSON.stringify(s34.gauge.colour)} against the accent ${s34.accentRgb}`);
+  const ind = s34.indicator;
+  check("§4 (a) one indicator row, out of the AX tree, one segment per rendered sheet",
+    Boolean(ind) && ind.rows === 1 && ind.hidden === "true" && ind.count === s34.sheetCount,
+    `${ind ? ind.rows : 0} row(s), aria-hidden ${ind && ind.hidden} · ${ind ? ind.count : 0} segments against ${s34.sheetCount} sheets`);
+  check("§4 (b) the indicator spans rail → rail-end — the alignment the gauge lost",
+    Boolean(ind) && Math.abs(ind.start - s34.rail.start) <= 1 && Math.abs(ind.end - s34.rail.end) <= 1,
+    `indicator ${ind && ind.start}–${ind && ind.end} against the rail ${s34.rail.start}–${s34.rail.end}`);
+  check("§4 (c) a segment is the mechanism mark's own 2px stroke, bound to it",
+    Boolean(ind) && ind.mechStroke !== null &&
+      ind.segs.length > 0 && ind.segs.every((s) => s.h === ind.mechStroke),
+    `segments ${ind ? [...new Set(ind.segs.map((s) => s.h))].join("/") : "—"} against the mechanism mark's ${ind && ind.mechStroke}`);
+  check("§4 (d) exactly one segment carries the accent, and it is a background, never colour",
+    Boolean(ind) &&
+      ind.segs.filter((s) => squash(s.bg) === squash(s34.accentRgb)).length === 1 &&
+      ind.segs.every((s) => squash(s.colour) !== squash(s34.accentRgb)) &&
+      ind.segs.filter((s) => s.active).length === 1,
+    `${ind ? ind.segs.map((s) => (squash(s.bg) === squash(s34.accentRgb) ? "accent" : "hair")).join(" · ") : "—"} against the accent ${s34.accentRgb}`);
+  check("§4 (e) nothing in the indicator animates or transitions",
+    Boolean(ind) && ind.rowAnimation === "none" && parseFloat(ind.rowTransition) === 0 &&
+      ind.segs.every((s) => s.animation === "none" && parseFloat(s.duration) === 0),
+    `row ${ind && ind.rowAnimation}/${ind && ind.rowTransition} · segments ${ind ? [...new Set(ind.segs.map((s) => s.animation + "/" + s.duration))].join(" ") : "—"}`);
+  check("§4 (f) the retired scrollbar does not come back as a second channel",
+    s34.scrollbarWidth === "none",
+    `scrollbar-width ${s34.scrollbarWidth}`);
   /* The bleed, as the four relationships it has to hold — never as the 128px it
      resolves to at 1280. Run in its own eval because it moves the track's
      scroll position, and the SECTIONS probe above is read in three motion and
@@ -1789,6 +1930,45 @@ try {
   })()`);
   afterArrows.presses = arrowWalk.presses;
 
+  /* --- §12.19(d)'s second half: the state has to TRACK the rest, not sit at 1.
+     Driven with real key events for the same reason the walk above is — a
+     scrollLeft write settles differently from a gesture, and this check is
+     about what the reader's own paging produces. The active segment is
+     compared against the sheet measured to hold the track, not against a
+     hardcoded 2, so the check keeps meaning if the sheet width changes. --- */
+  await page.goto(PAGE_URL);
+  await page.eval(`(() => { const t = document.querySelector(".sheets"); t.scrollLeft = 0; t.focus(); return true; })()`);
+  const READ_REST = `(() => {
+    const track = document.querySelector(".sheets");
+    const box = track.getBoundingClientRect();
+    const share = [...document.querySelectorAll(".sheet")].map((s) => {
+      const b = s.getBoundingClientRect();
+      return Math.max(0, Math.min(b.right, box.right) - Math.max(b.left, box.left)) / b.width;
+    });
+    let rest = 0;
+    share.forEach((v, i) => { if (v > share[rest]) rest = i; });
+    const segs = [...document.querySelectorAll(".sheets-indicator__seg")];
+    return { rest, active: segs.findIndex((s) => s.classList.contains("is-active")),
+             actives: segs.filter((s) => s.classList.contains("is-active")).length,
+             share: share.map((v) => Math.round(v * 100)) };
+  })()`;
+  const restAtLoad = await page.eval(READ_REST);
+  let indicatorRest = restAtLoad;
+  for (let i = 0; i < 40; i++) {
+    for (const type of ["rawKeyDown", "keyUp"]) {
+      await page.call("Input.dispatchKeyEvent", { type, windowsVirtualKeyCode: 39, code: "ArrowRight", key: "ArrowRight" });
+    }
+    await page.eval("new Promise(r => setTimeout(r, 120))");
+    indicatorRest = await page.eval(READ_REST);
+    if (indicatorRest.rest >= 1) break;
+  }
+  evidence.indicatorRest = { atLoad: restAtLoad, afterKeys: indicatorRest };
+  check("§4 (d) the indicator follows the track's rest under real key events, and starts honest",
+    restAtLoad.rest === 0 && restAtLoad.active === 0 && restAtLoad.actives === 1 &&
+      indicatorRest.rest >= 1 && indicatorRest.active === indicatorRest.rest && indicatorRest.actives === 1,
+    `at load: sheet ${restAtLoad.rest + 1} holds the track, segment ${restAtLoad.active + 1} lit · ` +
+      `after paging: sheet ${indicatorRest.rest + 1} holds it (${indicatorRest.share.join("/")}% visible), segment ${indicatorRest.active + 1} lit`);
+
   /* The mechanical stand-in for find-in-page reaching off-canvas content: the
      engine's own scroll-into-view, measured after the snap has settled. Run
      from the track's start, which is where a reader searching the page is. */
@@ -1844,6 +2024,17 @@ try {
       s34Still.rowValues.flat().join("|") === s34.rowValues.flat().join("|") &&
       s34Still.kickerText === s34.kickerText && s34Still.paraText === s34.paraText,
     `snap ${JSON.stringify(s34Still.track.snapType)} · ${s34Still.decisionsMoving.join(" | ") || "nothing moving"} · content identical`);
+  /* §12.19(e)'s reduced-motion half. The indicator's discrete-state guarantee
+     is what keeps the motion budget closed, so it is asserted on the path where
+     a reader has explicitly asked for less — and the render must be identical,
+     not merely calmer. */
+  check("§4 the indicator is identical with motion reduced: same segments, still nothing animating",
+    Boolean(s34Still.indicator) &&
+      s34Still.indicator.count === s34.indicator.count &&
+      s34Still.indicator.rowAnimation === "none" && parseFloat(s34Still.indicator.rowTransition) === 0 &&
+      s34Still.indicator.segs.every((s) => s.animation === "none" && parseFloat(s.duration) === 0) &&
+      s34Still.indicator.segs.map((s) => s.bg).join("|") === s34.indicator.segs.map((s) => s.bg).join("|"),
+    `${s34Still.indicator ? s34Still.indicator.count : 0} segments · row ${s34Still.indicator && s34Still.indicator.rowAnimation} · colours identical: ${Boolean(s34Still.indicator) && s34Still.indicator.segs.map((s) => s.bg).join("|") === s34.indicator.segs.map((s) => s.bg).join("|")}`);
   const revealPlain = await page.eval(REVEAL);
   evidence.s04RevealPlain = revealPlain;
   check("§4 with the track's snap off, an off-canvas match lands whole in view",
@@ -1863,6 +2054,13 @@ try {
   evidence.s34Narrow = s34Narrow;
   const narrowEntries = Object.entries(s34Narrow);
   const allWidths = [...narrowEntries, ["1280", s34]];
+
+  /* §12.19(f)'s second half. Below --bp-wide there is no track and therefore no
+     position to report — the ordinals carry the stack alone. A row of segments
+     under a stacked list would be reporting on a scroll that does not exist. */
+  check("§4 the indicator does not render below --bp-wide, where there is no track",
+    narrowEntries.every(([, m]) => m.indicator && m.indicator.display === "none"),
+    narrowEntries.map(([w, m]) => `${w}px: ${m.indicator ? m.indicator.display : "absent"}`).join(" · "));
 
   /* The rule, not the line count: a sentence breaks only where it cannot fit
      the column. Strip the inline-block and the break lands mid-sentence at
@@ -2051,9 +2249,21 @@ try {
       lines: [...body.querySelectorAll(".shipped__line")].map((p) => ({
         text: p.textContent.replace(/\\s+/g, " ").trim(),
         colour: css(p, "color"),
+        /* The weight the READER sees, not the paragraph's own: §5's primary
+           carries its emphasis on a run spanning the sentence, so the
+           paragraph stays at 400 and keeps its neighbours' column. */
+        weight: Math.max(...[p, ...p.querySelectorAll("*")].map((el) => Number(css(el, "font-weight")))),
+        emphasised: [...p.querySelectorAll("*")]
+          .filter((el) => Number(css(el, "font-weight")) >= 700)
+          .map((el) => el.textContent.replace(/\\s+/g, " ").trim()),
+        size: css(p, "font-size"),
         cap: r2(parseFloat(css(p, "max-width"))),
         rendered: r2(p.getBoundingClientRect().width)
       })),
+      /* The emphasis must be weight and nothing else — no element in §5's
+         prose block may compute the accent as its colour. */
+      proseAccentText: [...body.querySelectorAll(".shipped__line, .shipped__line *")]
+        .filter((el) => css(el, "color") === accentRgb).length,
       readMax: (() => {
         const p = document.createElement("span");
         p.style.cssText = "position:absolute;visibility:hidden;inline-size:var(--read-max)";
@@ -2096,6 +2306,25 @@ try {
       s05.lines.every((l, i) => l.text === s05Copy.prose[i]) &&
       s05.lines.every((l) => l.colour === s05.inkRgb),
     `${s05.lines.length}/3 lines, all equal: ${s05.lines.every((l, i) => l.text === s05Copy.prose[i])} · ${JSON.stringify(s05.lines.map((l) => l.text.slice(0, 28)))}`);
+  /* §5's hierarchy, as the two relationships it is. The primary is matched by
+     its STRING against the copy file, not by its class or its position, so
+     moving the emphasis to a different line fails here rather than passing as
+     "still exactly one bold line". One lever is spent: same size, same ink —
+     a size fork riding in with the weight is the drift this catches. */
+  const s05Primary = s05Copy.prose.findIndex((p) => /extracted mid-build/.test(p));
+  check("§5 has one primary line — the provenance claim, at body size, weight alone",
+    s05Primary >= 0 && s05.lines.length === 3 &&
+      s05.lines.filter((l) => l.weight >= 700).length === 1 &&
+      s05.lines[s05Primary].weight >= 700 &&
+      /* The emphasis covers the whole claim, not a phrase inside it — a
+         partial run would make §5's primary a hook rather than a primary. */
+      s05.lines[s05Primary].emphasised.length === 1 &&
+      s05.lines[s05Primary].emphasised[0] === s05.lines[s05Primary].text &&
+      new Set(s05.lines.map((l) => l.size)).size === 1 &&
+      new Set(s05.lines.map((l) => l.colour)).size === 1 &&
+      s05.proseAccentText === 0,
+    s05.lines.map((l, i) => `${i + 1}: ${l.weight}/${l.size}${i === s05Primary ? " (primary, " + l.emphasised.length + " run)" : ""}`).join(" · ") +
+      ` · ${s05.proseAccentText} accent-coloured element(s) in the prose block`);
   check("§5 renders two cards and only two — the provenance line is never a readout cell",
     s05.cardCount === 2 && s05.bodyChildren.filter((c) => /shipped__line/.test(c)).length === 3 &&
       s05.cards.every((c) => c.cells.length === 4),
@@ -3193,8 +3422,11 @@ try {
       return row ? cell(row.split("|")[2]) : null;
     };
     return {
-      team: slice("## 2. The team line"),
-      authorship: slice("## 4. The authorship line"),
+      /* One sentence now, not two: the team line and the authorship line
+         merged, so the footer closes in one breath. The fence is the
+         recommended candidate — the alternates in the same section are prose,
+         never fenced, so they cannot be picked up here by accident. */
+      sentence: slice("## 2. The closing sentence"),
       receipts,
       contactText: slot("Link text"),
       contactHref: slot("href")
@@ -3217,9 +3449,34 @@ try {
     const receipts = [...foot.querySelectorAll(".pagefoot__receipts a")];
     const contact = [...foot.querySelectorAll(".pagefoot__contact a")];
     const text = (el) => el.textContent.replace(/\\s+/g, " ").trim();
+    const sep = [...foot.querySelectorAll(".rule--boundary")];
+    const leadProbe = document.createElement("p");
+    leadProbe.style.cssText = "position:absolute;visibility:hidden;font-size:var(--text-lead)";
+    foot.appendChild(leadProbe);
+    const leadSize = css(leadProbe, "font-size");
+    leadProbe.style.fontSize = "var(--text-micro)";
+    const microSize = css(leadProbe, "font-size");
+    leadProbe.remove();
     return {
       lineText: lines.map(text),
-      authorshipSentence: lines.length > 1 ? text(lines[1]) : null,
+      lineSizes: lines.map((p) => css(p, "font-size")),
+      receiptSize: receipts.length ? css(receipts[0], "font-size") : null,
+      leadSize, microSize,
+      /* §4.1: one boundary, one rule. The separator replaced the footer's
+         plain top border; if the border comes back, the page carries two
+         stacked lines at the same edge — the accidental double rule the whole
+         construction exists to avoid. */
+      separators: sep.length,
+      separatorHidden: sep.map((s) => s.getAttribute("aria-hidden")),
+      separatorMark: sep.length ? (() => {
+        const m = sep[0].querySelector(".rule__mark");
+        const tick = sep[0].querySelector(".rule__tick");
+        if (!m || !tick) return null;
+        const mb = m.getBoundingClientRect(), tb = tick.getBoundingClientRect();
+        return { w: r2(mb.width), h: r2(mb.height), tickH: r2(tb.height) };
+      })() : null,
+      separatorTagStart: sep.length ? r2(sep[0].querySelector(".rule__tag").getBoundingClientRect().left) : null,
+      footBorderTop: css(foot, "border-top-width"),
       receipts: receipts.map((a) => ({ label: text(a), href: a.getAttribute("href") })),
       /* Every anchor in the footer, so a stray link cannot ride in unasserted
          between the receipts row and the contact line. */
@@ -3241,12 +3498,27 @@ try {
   })()`);
   evidence.footer = footer;
 
-  check("the footer ships the team line and the authorship line, byte-equal to the deliverable",
-    Boolean(footerCopy.team) && Boolean(footerCopy.authorship) &&
-      footer.placeholders === 0 && footer.lineText.length === 2 &&
-      footer.lineText[0] === footerCopy.team &&
-      footer.authorshipSentence === footerCopy.authorship,
-    `${footer.placeholders} placeholder(s) · team line equal: ${footer.lineText[0] === footerCopy.team} · authorship equal: ${footer.authorshipSentence === footerCopy.authorship}`);
+  check("the footer closes on one sentence, byte-equal to the deliverable",
+    Boolean(footerCopy.sentence) && footer.placeholders === 0 &&
+      footer.lineText.length === 1 && footer.lineText[0] === footerCopy.sentence,
+    `${footer.placeholders} placeholder(s) · ${footer.lineText.length} sentence(s) · equal: ${footer.lineText[0] === footerCopy.sentence}`);
+  /* §4.2, the signature scale. Computed-to-computed against a probe carrying
+     the token, never against a pixel figure: the sentence is the page's last
+     deliberate statement, and at body scale it read as fine print. */
+  check("the footer's sentence is the largest text in it — lead scale, receipts at micro",
+    footer.lineSizes.length === 1 && footer.lineSizes[0] === footer.leadSize &&
+      footer.receiptSize === footer.microSize &&
+      parseFloat(footer.lineSizes[0]) > parseFloat(footer.receiptSize),
+    `sentence ${footer.lineSizes[0]} against --text-lead ${footer.leadSize} · receipts ${footer.receiptSize} against --text-micro ${footer.microSize}`);
+  /* §4.1, one boundary and one rule. The separator IS the footer's boundary,
+     so the plain border it replaced must be gone — and the mark it seats is
+     punctuation scale, bound to the end tick it sits between rather than to a
+     literal 9px. */
+  check("the footer's boundary is the separator, and the plain border it replaced is gone",
+    footer.separators === 1 && footer.separatorHidden.every((h) => h === "true") &&
+      parseFloat(footer.footBorderTop) === 0 &&
+      Boolean(footer.separatorMark) && footer.separatorMark.h === footer.separatorMark.tickH,
+    `${footer.separators} separator(s), aria-hidden ${footer.separatorHidden.join("/")} · footer border-top ${footer.footBorderTop} · mark ${footer.separatorMark && footer.separatorMark.w}×${footer.separatorMark && footer.separatorMark.h} against the tick's ${footer.separatorMark && footer.separatorMark.tickH}`);
   /* The count is the claim; the receipts are what make it checkable. Both the
      label and the URL are compared, in order — a right URL under a wrong label
      sends a reader to the wrong artifact, which on this page is the same
@@ -3273,12 +3545,16 @@ try {
      the rail, no counterweight, no centred element, and no lockup — the header
      carries the page's only one. */
   check("the footer inherits the alignment system: everything on the rail, nothing centred",
-    footer.starts.length === 4 &&
+    footer.starts.length === 3 &&
       footer.starts.every((b) => Math.abs(b.start - footer.rail) < 1 &&
         (b.align === "start" || b.align === "left")) &&
+      /* The separator's own rail element is its tag: the lines bleed to the
+         viewport the way every section rule's do, and the tag is what seats on
+         the container's content edge. Four blocks on the rail, counting it. */
+      Math.abs(footer.separatorTagStart - footer.rail) < 1 &&
       footer.lockups === 0,
     footer.starts.map((b) => `${b.cls.split(" ").pop()} at ${b.start} (${b.align})`).join(" · ") +
-      ` against the rail at ${footer.rail} · ${footer.lockups} lockups`);
+      ` · separator tag at ${footer.separatorTagStart} · against the rail at ${footer.rail} · ${footer.lockups} lockups`);
 
   /* ================================================================== §7.1 ==
      Scroll landing — the page does not snap.

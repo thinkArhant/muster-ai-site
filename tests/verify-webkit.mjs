@@ -170,8 +170,16 @@ function lockupBaseline(image, theme) {
     const box = { l: Math.min(...xs), r: Math.max(...xs), t: Math.min(...ys), b: Math.max(...ys) };
     box.w = box.r - box.l + 1;
     box.h = box.b - box.t + 1;
-    /* 6 × 9 authored, plus up to a row of antialiasing on each edge. */
-    if (box.w >= 5 && box.w <= 9 && box.h >= 8 && box.h <= 12) clusters.push(box);
+    /* Matched on the SILHOUETTE, not on a size. The pennant is one shape at
+       two scales — 6 × 9 at punctuation scale, and the masthead's derived
+       0.5em × 0.75em — and both are 2:3, so the ratio is what identifies it
+       and a re-size of the masthead does not need this file edited. Bounds
+       stay wide enough to admit either seat and a row of antialiasing at each
+       edge, and tight enough that no accent rule or tick (1–2px, and far from
+       2:3) can be mistaken for it. */
+    const ratio = box.h / box.w;
+    if (box.w >= 5 && box.w <= 16 && box.h >= 8 && box.h <= 20 &&
+        ratio >= 1.2 && ratio <= 1.9) clusters.push(box);
   }
   if (!clusters.length) return null;
   const mark = clusters.sort((a, b) => a.l - b.l)[0];
@@ -234,7 +242,7 @@ try {
       lockup
         ? `pennant ${lockup.mark.w}×${lockup.mark.h}px, its lowest row ${lockup.mark.b} against the wordmark's ` +
           `baseline row ${lockup.inkBottom} — ${lockup.drop}px apart (one raster row of antialiasing allowed)`
-        : "no 6×9 accent pennant found in the status bar"
+        : "no 2:3 accent pennant found in the status bar"
     );
   }
 

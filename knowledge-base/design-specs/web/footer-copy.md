@@ -89,19 +89,24 @@ known file name).
 | # | Label | `href` |
 |---|---|---|
 | 1 | `repo` | `https://github.com/thinkArhant/muster-ai-site` |
-| 2 | `queue` | `https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/orchestration-queue.md` |
-| 3 | `handoffs` | `https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/agent-requests.md` |
-| 4 | `decision log` | `https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/decision-log.md` |
-| 5 | `VERIFY` | `https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md` |
+| 2 | `queue` | `https://github.com/thinkArhant/muster-ai-site/blob/9b26788/knowledge-base/orchestration-queue.md` |
+| 3 | `handoffs` | `https://github.com/thinkArhant/muster-ai-site/blob/bded0dd/knowledge-base/agent-requests.md` |
+| 4 | `decision log` | `https://github.com/thinkArhant/muster-ai-site/blob/b41ed56/knowledge-base/decision-log.md` |
+| 5 | `VERIFY` | `https://github.com/thinkArhant/muster-ai-site/blob/14bceef/VERIFY.md` |
 | 6 | `framework` | `https://github.com/thinkArhant/muster-ai` |
 
 - Order is the seed's five (`repo · queue · handoffs · decision log · VERIFY`), then `framework` —
   this site's receipts first, the thing they prove second.
-- The four artifact links (queue, handoffs, decision log, VERIFY) are ruled to become commit-SHA
-  blob permalinks chosen by the founder's demo-in-itself criterion (DEC-059); the build step selects
-  the SHAs and this table then carries labels whose hrefs pin those snapshots. `repo` and
-  `framework` stay as written. Until the SHAs are chosen, the `main` forms above are the current
-  strings.
+- The four artifact links (queue, handoffs, decision log, VERIFY) are commit-SHA blob permalinks
+  chosen by the founder's demo-in-itself criterion (DEC-059) — each pins the moment that file is
+  most a demonstration of itself, not merely the moment it was longest. `queue` → `9b26788`, 16
+  steps queued ahead of the run. `handoffs` → `bded0dd`, 11 entries filed and open at once, and
+  both entry types on one screen. `decision log` → `b41ed56`, current depth. `VERIFY` →
+  `14bceef`; the criterion for this one is *the launch state*, so the pin is provisional and is
+  re-pointed at the launch commit. `repo` and `framework` stay live — they are places, not
+  snapshots.
+- A permalink only resolves if the commit reaches the public repository. A squash merge of the
+  build branch collapses this history and 404s all four links; the merge must preserve it.
 - Blob URLs render as readable pages on GitHub rather than raw markdown, which is why the
   `VERIFY ⎘` chip in §1 shares link 5's URL exactly (DEC-056; the two strings must stay byte-equal —
   QA checks equality between this table and the chip).

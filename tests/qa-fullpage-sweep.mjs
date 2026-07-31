@@ -16,6 +16,7 @@ import { launchChrome } from "./lib/cdp.mjs";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { execFileSync } from "node:child_process";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PAGE = pathToFileURL(join(ROOT, "index.html")).href;
@@ -55,11 +56,43 @@ function staticChecks() {
      without ever fetching anything. The footer's VERIFY receipt is the same
      string; verify-shell.mjs asserts the two are byte-equal. */
   const chipHref = html.match(/class="chip chip--emphasis" href="([^"]+)"/)?.[1];
-  const CHIP_BLOB = "https://github.com/thinkArhant/muster-ai-site/blob/main/";
-  const chipPath = chipHref?.startsWith(CHIP_BLOB) ? chipHref.slice(CHIP_BLOB.length) : null;
-  check("§1's VERIFY chip names a file that exists in the repo",
-    chipPath === "VERIFY.md" && existsSync(join(ROOT, chipPath)),
-    `chip href = ${chipHref ?? "not found"}; repo path ${chipPath ?? "off the blob root"} ${chipPath && existsSync(join(ROOT, chipPath)) ? "present" : "ABSENT"}`);
+  /* The blob ref is a commit SHA now, not `main` — the receipts are pinned so a
+     reader lands on the artifact as it stood when the claim was made. Both the
+     ref and the path are checked here, and both locally: the SHA has to be a
+     real commit in THIS repository (`git cat-file -e`, which reads the object
+     store and fetches nothing), and the path has to name a file that exists.
+     A pinned link to a commit that never existed is the one way this receipt
+     could 404 while still looking correct. */
+  const chipMatch = chipHref?.match(/^https:\/\/github\.com\/thinkArhant\/muster-ai-site\/blob\/([0-9a-f]{7,40})\/(.+)$/);
+  const chipRef = chipMatch?.[1] ?? null;
+  const chipPath = chipMatch?.[2] ?? null;
+  const refExists = (ref) => {
+    if (!ref) return false;
+    try {
+      execFileSync("git", ["cat-file", "-e", ref + "^{commit}"], { cwd: ROOT, stdio: "ignore", timeout: 15000 });
+      return true;
+    } catch { return false; }
+  };
+  check("§1's VERIFY chip pins a real commit in this repo and names a file that exists",
+    chipPath === "VERIFY.md" && existsSync(join(ROOT, chipPath)) && refExists(chipRef),
+    `chip href = ${chipHref ?? "not found"}; ref ${chipRef ?? "not a SHA"} ${refExists(chipRef) ? "is a commit here" : "NOT FOUND in this repo"}; path ${chipPath ?? "off the blob root"} ${chipPath && existsSync(join(ROOT, chipPath)) ? "present" : "ABSENT"}`);
+
+  /* The indicator's no-JS guarantee, checked in the SOURCE and only in the
+     source. Every rendered check of this passes whether the markup ships
+     honest or not, because the observer restores the active segment within a
+     frame of load — so a build that shipped four dead segments would look
+     correct in every browser the harness drives and be wrong for the reader
+     with JavaScript off, which is a reader this page promises to serve. The
+     first segment is the one that ships lit because it is the one true at the
+     track's load rest. */
+  const indicatorMarkup = html.match(/<div class="sheets-indicator"[\s\S]*?<\/div>/)?.[0] ?? "";
+  const segMarkup = indicatorMarkup.match(/<span class="sheets-indicator__seg[^"]*"/g) ?? [];
+  check("the indicator ships segment 1 lit in the markup — the no-JS render is complete and true",
+    segMarkup.length === 4 &&
+      segMarkup.filter((s) => /is-active/.test(s)).length === 1 &&
+      /is-active/.test(segMarkup[0]),
+    `${segMarkup.length} segments authored, ${segMarkup.filter((s) => /is-active/.test(s)).length} lit, ` +
+      `first one lit: ${segMarkup.length > 0 && /is-active/.test(segMarkup[0])}`);
 
   check("R12's verified curl was parsed off copy-rules.md, not retyped",
     R12.startsWith("curl -fsSL https://raw.githubusercontent.com/"), R12 || "not parsed");

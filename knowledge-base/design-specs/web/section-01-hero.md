@@ -235,7 +235,7 @@ fold it is mid-ladder (plate 5 cut), which is the designed scroll cue (§3).
 - **Dashes are inert**: `--ink` em-dashes, no animation, no transition, identical in every state.
   They never render accent and never count up.
 - **The chip**: shell emphasis chip — `--accent` border, `--ink` text, rust glyph. Markup:
-  `<a class="chip chip--emph" href="https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span aria-hidden="true">⎘</span></a>`.
+  `<a class="chip chip--emph" href="https://github.com/thinkArhant/muster-ai-site/blob/14bceef/VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span aria-hidden="true">⎘</span></a>`.
   The `href` is the public blob URL — byte-equal to the footer's `VERIFY` receipt
   (`footer-copy.md` §3), a blob page renders readable where a raw-markdown response would not,
   and the two strings are asserted equal so they cannot drift. An inert `<a href>` is permitted

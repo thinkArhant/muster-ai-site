@@ -33,6 +33,23 @@ A figure from one scope is never presented as a figure from another. THIS SITE's
 dashed until the metered snapshot is committed; a dash is what an unmeasured metric renders as
 here, and no estimate stands in for it.
 
+## The four receipts, live
+
+The page's footer links these four artifacts as commit-SHA permalinks, pinned to the moment each
+file is most a demonstration of itself — a snapshot cannot rot, and cannot be quietly rewritten
+after the claim is made. Current state lives here:
+
+- [orchestration-queue.md](https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/orchestration-queue.md)
+  — the step sequence as it stands today
+- [agent-requests.md](https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/agent-requests.md)
+  — the handoff ledger as it stands today
+- [decision-log.md](https://github.com/thinkArhant/muster-ai-site/blob/main/knowledge-base/decision-log.md)
+  — the decision record as it stands today
+- [VERIFY.md](https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md) — this file
+
+The two differ on purpose: the pinned link is the receipt, this one is the running file. Compare
+them and the diff is the build since.
+
 ## What is committed in this repo, and what it holds
 
 | Artifact | What a reader can check |

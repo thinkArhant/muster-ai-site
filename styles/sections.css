@@ -388,16 +388,20 @@
    Phone first — the sheets stack, each roughly a screen. At --bp-wide the
    list becomes a horizontal paged track so four ideas share one desktop screen.
 
-   The paging affordance is three channels and no machinery — no buttons, no
-   dots, no JS. (1) The cut lands on the PHYSICAL SCREEN EDGE: the track's
-   scrollport bleeds out to the viewport while its content keeps the rail, so
-   the next sheet runs off the screen the way section rules already do. Cut at
-   the container edge instead, it left a dead strip of bare ground between the
+   The paging affordance is three channels and no scroll machinery — no
+   buttons, no click targets, nothing that moves the track for the reader.
+   (1) The cut lands on the PHYSICAL SCREEN EDGE: the track's scrollport
+   bleeds out to the viewport while its content keeps the rail, so the next
+   sheet runs off the screen the way section rules already do. Cut at the
+   container edge instead, it left a dead strip of bare ground between the
    crop and the screen, and read as "something broke". (2) The SHEET n OF 4
    ordinal on each meta line — the only channel that does not depend on the
-   viewport's width, and the one that carries the phone stack. (3) The track's
-   own scrollbar styled as a gauge: position and extent, truthfully, from the
-   scrollbar the track already had.
+   viewport's width, and the one that carries the phone stack. (3) The
+   indicator: four segments under the track, spanning rail → rail-end. It
+   succeeds a styled-scrollbar gauge that failed on its own terms — overlay
+   scrollbars are hidden by default, so the signal was absent for most
+   readers, and where classic scrollbars render the bar ran edge-to-edge and
+   read misaligned with the sheets it was reporting on.
    -------------------------------------------------------------------------- */
 
 .sheets {
@@ -527,13 +531,10 @@
     padding-inline: var(--track-bleed);
     scroll-padding-inline-start: var(--track-bleed);
 
-    /* The gauge. Enhancement, never the sole channel: styling forces a
-       persistent scrollbar in Blink and in Safari 18.2+, and an engine that
-       renders its own overlay instead still leaves the cut and the ordinal
-       carrying the affordance. Headless renders suppress scrollbars, so this
-       is verified as computed style plus a headed cross-engine look. */
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent) transparent;
+    /* The native scrollbar retires with the gauge: two position channels
+       under one track, one of them misaligned, is the state the indicator
+       replaces. */
+    scrollbar-width: none;
   }
 
   .sheet {
@@ -560,9 +561,52 @@
   }
 }
 
+/* The indicator — the paged counterpart of SHEET n OF 4. It lives INSIDE the
+   container while the track bleeds past it, which is the whole point: the row
+   spans rail → rail-end, the same two edges a resting sheet composes to, so
+   it reads aligned with the sheets rather than with the screen.
+
+   Desktop only. Below --bp-wide the track un-tracks and there is no position
+   to report — the ordinals carry the stack on their own.
+
+   Segments are 2px: the page's single accent-mark weight, the same stroke
+   .sheet__row--mech::before paints. The harness binds the two — if either
+   moves alone, the check goes red.
+
+   Nothing here transitions and nothing animates. State is a class the
+   observer toggles, so the change is a repaint, not motion, and the page's
+   motion budget is untouched in both paths. */
+.sheets-indicator {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .sheets-indicator {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: var(--gap-flow);
+    margin-block-start: var(--gap-hairline);
+  }
+
+  /* --hair is the page's rule weight: the inactive segments read as the rule
+     they are, and the one accent segment is the only rust in the row. Painted
+     with background-color and never with color — the small-rust-text sweep is
+     keyed on computed colour. */
+  .sheets-indicator__seg {
+    block-size: 2px;
+    background-color: var(--hair);
+  }
+
+  .sheets-indicator__seg.is-active {
+    background-color: var(--accent);
+  }
+}
+
 /* The track's snap is a post-gesture user-agent glide, so it goes off for a
    reader who asked for less motion. Paging by plain scroll is unaffected, and
-   the cut, the ordinal and the gauge all stand. */
+   the cut, the ordinal and the indicator all stand — the indicator behaves
+   identically in both paths, because nothing about it ever moved. */
 @media (min-width: 60rem) and (prefers-reduced-motion: reduce) {
   .sheets {
     scroll-snap-type: none;
@@ -584,6 +628,15 @@
 .shipped__line + .shipped__line {
   margin-block-start: var(--gap-flow);
 }
+
+/* §5's primary line takes no rule at all: the weight is carried by a <b>
+   spanning the sentence, which is the shell's in-passage emphasis route.
+   That is not a style preference — it is the only form that keeps the three
+   lines on ONE column edge. `--read-max` is 64ch, and `ch` is the advance of
+   the element's own "0": weight the <p> itself and its 64ch resolves ~8.7%
+   wider than its neighbours', so the primary line hangs past them and §5's
+   three-line block goes ragged. Bold the run instead and the paragraph's own
+   font — and therefore the column — is untouched. */
 
 .shipped {
   display: grid;
