@@ -73,46 +73,7 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-30 QA (web): Scoped re-run on the re-gate round
-
-```
-Role: qa
-Model: claude-opus-5
-
-**Task:** The scoped verification every fix round owes — prove the round broke nothing adjacent.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-038 through HO-040
-- `knowledge-base/wave-review.md` — the re-gate findings these answer
-
-**Deliverable:** HO-041 in `agent-requests.md` — per-finding pass/fail with evidence.
-
-**Acceptance criteria:**
-- All three runners green on the shipped tree, run by you, both engines
-- The provenance line byte-equal to the resolved string; "production" appears nowhere near it
-- §6 carries no forward promise: grep for "yet", "soon", "will", "roadmap" in the shipped set and
-  judge each hit
-- The four permalinks resolve by STRING to `blob/<sha>` URLs and each SHA exists in this repo's
-  history (`git cat-file -e <sha>` — a local check, no fetch); the pinned queue snapshot actually
-  shows a planned backlog (read the file at that SHA)
-- The footer renders the single sentence; the old two-sentence form is gone; no email anywhere
-- New assertions (indicator, logo size relationships) each proven to fail when violated
-- **Enumerate the live motion elements on the built page** against the stated budget (two + the
-  cursor) — a count, not an impression; an animated indicator would breach silently
-- §2 playback untouched: fidelity byte-clean, chain timing asserted green
-- Cross-engine per touched surface, labelled per engine
-
-**If a check fails:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment
-step naming it, and file HO-041 with what you found.
-
-**On completion:** File HO-041 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
-Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
-### 2026-07-30 PM: Review the re-gate round and promote the final gate
+### 2026-07-31 PM: Review the re-gate round and promote the final gate
 
 ```
 Role: pm
@@ -146,9 +107,21 @@ block in `## Next Step`.
 **On completion:** Write the packet, promote the halt. Run the Pre-Handoff Self-Review Checklist.
 ```
 
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
+
+_None — the PM step above is the sprint's last before the founder's final gate._
+
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-31 — Step: QA scoped re-run on the re-gate round (HO-041). **Every acceptance criterion
+  passes and nothing adjacent broke** — all three runners re-run cold on the shipped tree (295/295
+  + 27/27, 108/108, 43/43), no shipped file touched, thirteen violations planted by QA and each new
+  assertion watched to fail. The motion budget is counted, not judged: 7 looping instances across
+  3 seats, the indicator contributing zero. **Awaiting PM at the re-gate review step; PM must rule
+  VERIFY's provisional pin and reconcile `agent-requests.md` (lint red, 365 active lines vs 300).**
 
 - 2026-07-30 — Step: Developer re-gate build round (HO-040). Every ruling ships and all three
   runners are green here on the shipped tree — suite GREEN both engines 295/295 + 27/27, audit
@@ -266,11 +239,3 @@ block in `## Next Step`.
   blocker (DEC-054). `muster-requests-lint.sh` back to green — 764 active lines to 6.
   **Gate B is live: three things need the founder's word, and one of them is a number on the page that
   the page's own public artifacts contradict** — five roles built this site, not eight.
-
-- 2026-07-29 — Step: QA full-page sweep (HO-030). **Every acceptance criterion passes**, with every
-  load-bearing check watched to fail when violated: `scripts/test.sh` GREEN both engines (273/273 +
-  27/27), the independent audit exit 0 at 108/108, and a new `tests/qa-fullpage-sweep.mjs` 42/42.
-  The `http(s)` guard was proven able to go red, the curl was really run (HTTP 200, script parses),
-  and two hard launch blockers are ticked. **Awaiting PM review at the build-review step; OBS-015 —
-  the §2-exemption check's failure detail prints a hardcoded `0` where its measured count belongs,
-  which is the exact figure HO-029 quotes as evidence.**

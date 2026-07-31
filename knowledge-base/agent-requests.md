@@ -10,6 +10,156 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-07-31 HO-041 — Scoped re-run on the re-gate round: every criterion passes, and the one check that did not go red is the right one not to
+**Type:** handoff
+**Producer:** qa
+**Deliverable:** this entry — per-finding pass/fail with evidence. No shipped file touched; the
+tree is byte-identical to `847b99d` at close.
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending (re-gate review step)
+
+**All three runners re-run here, on the shipped tree, by me** — not read off HO-040:
+`scripts/test.sh` **GREEN, 295/295 Blink + 27/27 WebKit** · `qa-independent-audit.mjs` **exit 0,
+108/108** · `qa-fullpage-sweep.mjs` **exit 0, 43/43**. Every figure HO-040 reported reproduces.
+
+**Per criterion.**
+
+**1 — the provenance line, byte-equal.** PASS. Compared as bytes, not read: the shipped `<b>` run,
+`section-05-copy.md` §3.2, and the founder's resolved string in `wave-review.md` are all **125
+bytes and hex-identical**. `production` survives exactly twice in the shipped set, and both are
+inside §2's replay markup (`log__line` L2 and narration SP1) — corpus material, 300+ lines from
+§5's claim. Zero hits anywhere near the provenance line.
+
+**2 — §6 carries no forward promise.** PASS, and **the first matcher I wrote was blind**. A
+`\b`-escaping error made it return zero hits for every word including ones I knew were present; a
+self-test on a known-present word and a known-absent word caught it before it reached this entry.
+The corrected matcher finds **8 source hits — `yet` ×2, `will` ×5, `roadmap` ×1 — and every one is
+inside an HTML, CSS or JS comment**, including the two in §6's own annotation explaining why the
+words do not ship. Rendered text carries none. The §6 lead is present verbatim in
+`section-06-copy.md` (32 whitespace tokens, 30 words — the two extra tokens are the em-dashes,
+which is the gap between this count and HO-038's; both are under the ≤32 budget either way).
+
+**3 — the four permalinks.** PASS. All four resolve by string to
+`github.com/thinkArhant/muster-ai-site/blob/<sha>/<path>`; all four SHAs exist here
+(`git cat-file -e <sha>^{commit}`, local, nothing fetched); **all four paths also exist at their
+own commit** — a pinned link to a real commit that never held the file is the one way this receipt
+404s while looking correct. A fabricated SHA (`deadbee`) is rejected by the same call that accepted
+the four. Each snapshot read at its SHA:
+
+| Link | SHA | What a reader actually lands on |
+|---|---|---|
+| queue | `9b26788` | 786 lines · **16 steps under `## Upcoming` plus a live Next Step** — a planned backlog, not a template. The founder's demo criterion is met. |
+| handoffs | `bded0dd` | **11 active entries — 3 requests and 8 handoffs**, both entry types on one screen, as claimed. |
+| decision log | `b41ed56` | 31 `DEC-` entries, ending at DEC-060. Current depth. |
+| VERIFY | `14bceef` | 78 lines against the live file's 95. **The pinned copy predates the "four receipts, live" section this round added** — so the link that explains why pinned and live differ lands on the copy that does not contain the explanation. |
+
+VERIFY's pin is the one open item, and **HO-040 flagged it rather than burying it**; I confirm the
+condition exists and is exactly as described. PM rules it — it is a provisional pin awaiting a
+launch commit, not a defect in this round's work.
+
+**4 — the footer.** PASS. The shipped sentence is **byte-equal (197 bytes) to candidate A parsed
+out of `footer-copy.md` §2**, not retyped into the check. It is one sentence by measurement — one
+terminal period, at the end, 35 words. **No fragment of the retired two-sentence form survives** in
+any shipped file. Email: **zero**, scanned with a general address pattern rather than one known
+string, so a new address would be caught too; the matcher was self-tested against a known address
+first.
+
+**5 — the new assertions, each watched to fail. Thirteen plants, mine, tree reverted clean after
+every one.**
+
+| # | Plant | Went red on |
+|---|---|---|
+| 1 | one segment removed from the markup | sweep — *"3 segments authored, 1 lit"* |
+| 2 | a second segment lit in the markup | sweep — *"4 segments authored, 2 lit"* |
+| 3 | a `transition` added to the segments | shell — §4 (e), **and 3 more**: §3/§4 static, §4 reduced-motion, indicator-under-reduced-motion |
+| 4 | `is-active` stripped from the markup | sweep — *"4 segments authored, 0 lit, first one lit: false"* |
+| 5 | segment stroke 2px → 5px | shell — §4 (c), *"5px against the mechanism mark's 2px"* |
+| 6 | masthead mark unbound from the wordmark (fixed px) | shell — the derivation check **and** the punctuation-scale check |
+| 7 | masthead shrunk to label scale | shell — *"separator 6×9 · masthead 5.5×8.25"* |
+| 8 | separator pennant 6×9 → 12×18 | shell — 4 red, including the footer's boundary check |
+| 9 | indicator inset off the rail | shell — §4 (b), *"indicator 192–1088 against the rail 128–1152"* |
+| 10 | a segment removed (rendered) | shell — §4 (a), *"3 segments against 4 sheets"* |
+| 11 | **a second segment lit in the markup** | shell — **0 red.** See below. |
+| 12 | `scrollbar-width: none` → `auto` | shell — §4 (f), *"scrollbar-width auto"* |
+| 13 | every segment lit by CSS | shell — §4 (d), *"accent · accent · accent · accent"*, plus §4's zero-rust check |
+
+**Plant 11 is the one worth reading.** Lighting a second segment *in the markup* turns **nothing**
+red in `verify-shell.mjs` — the observer repairs the state within a frame of load, so the rendered
+check §4 (d) never sees the defect. That is the same blindness HO-040 found with `is-active`, and
+it is **already covered**: the identical mutation turns the sweep's source assertion red (plant 2),
+and §4 (d) is genuinely falsifiable where the observer cannot reach — plant 13 lights the segments
+from CSS and (d) goes red naming all four. So the division is correct by construction rather than
+by luck: **source truth is asserted in the sweep, rendered truth in the shell**, and a defect in
+either is caught by exactly one of them. No gap; stated so it is not rediscovered as one.
+
+**6 — the live motion inventory, counted on the built page.** PASS, and counted independently
+rather than read off the sweep's own check: a walk of **all 396 elements** plus every `::before`
+and `::after`, reading `animation-name`, iteration count and transition duration.
+
+- **7 looping animation instances across exactly 3 seats** — `pulse-ring` ×4 and `pulse-core` ×2
+  (the header status dot and §2's terminal `LIVE` dot: **one motif, two seats**), `cursor-blink` ×1
+  (§6's curl cursor). `document.getAnimations()` at rest agrees: 7.
+- **0 finite keyframe animations declared** anywhere.
+- count-up: 8 cells, JS, gated, one-shot per load — ambient element 2.
+- **The indicator: 5 elements, 0 of them carrying any animation or any non-zero transition.** It is
+  a repaint, not a member of the budget.
+
+Against A-007's budget — *"exactly two live motion elements — the pulse motif and the readout
+count-up — plus the curl cursor; a third is a deviation"* — **the built page is the budget
+exactly**, and the indicator did not enter it silently. §2's reveal stays outside the budget as
+A-007 provides for: a one-shot chain that ends, and the census finds zero finite keyframe
+animations declared anywhere.
+
+**7 — §2 playback untouched.** PASS. Fidelity byte-clean: **12/12 rendered log lines identical to
+the corpus**, 679 characters, codepoints matching, and byte-clean again at all five phone widths;
+10/10 narration slots verbatim. The corpus itself is unmodified — **2 commits ever touched it, both
+the founder's, working tree clean** (`025842c`). Chain timing green: a real 48-second playback
+reveals all twelve lines within **16.7 ms worst drift** of spec §5.1, the beat indicator walks all
+six beats, and the chain holds the same timing on the windowed phone layout.
+
+**8 — cross-engine, labelled per engine.**
+
+- **Blink** — `verify-shell.mjs` 295/295 and the sweep 43/43 carry every measurement assertion:
+  masthead ratio and scale, indicator (a)–(f), footer composition, §5's column, §3's hook.
+- **WebKit** — 27/27, plus four surface renders I generated and looked at
+  (`tests/artifacts/regate-webkit-{head,s04,foot,s05}.png`, 1280 dark, via
+  `samples/re-gate-renders/render-webkit-surfaces.mjs`). The masthead reads as a masthead with the
+  pennant on the wordmark's baseline; §4's four segments sit rail → rail-end with **segment 1 lit
+  and the other three at hairline**; the footer composes as four blocks under its boundary
+  separator, one sentence at lead scale, six receipts at micro, contact last; and **§5's three
+  lines hold one column edge with the bold line among them** — the `64ch` defect HO-040 found,
+  confirmed fixed in the engine that did not measure it.
+- **Scoped honestly**: WebKit's pennant scan was re-based this round from a 6×9 size match to a 2:3
+  silhouette match, which is right for identifying the mark at two seats — but it means **masthead
+  *scale* is asserted in Blink only**. Plant 7 confirms Blink catches a shrunk masthead; WebKit
+  would not. Not a defect, and not a claim I will let stand as cross-engine when it is one engine.
+
+**Nothing re-points to PM.** Every acceptance criterion passes; the queue advances to the re-gate
+review step as planned.
+
+**Two items for PM, neither blocking this round:**
+1. **VERIFY's provisional pin** (criterion 3) — the pinned copy predates the section that explains
+   the pin. HO-040 asks for the same ruling.
+2. **`muster-requests-lint.sh` is red before this entry** — active sections at 365 lines against a
+   300 budget, closed handoffs accumulating. Reconciliation is PM's at the review step.
+
+**Revision log:**
+- 2026-07-31: Filed. Self-review caught three things. (1) The forward-promise matcher returned zero
+  hits for every word — an escaping bug, found by self-testing it against a word I knew was present,
+  and the corrected matcher now self-tests before reporting. This is the blind-by-construction class
+  this project has been caught by before; it nearly reached a handoff as a pass. (2) Plants 3 and 5
+  were first pointed at the sweep, which does not own those two assertions, and read as 0 FAIL; both
+  were re-run against `verify-shell.mjs`, which owns them, and both go red. A plant that fails to go
+  red is a claim about the wrong runner until the runner is checked. (3) My first §2 fidelity check
+  matched only the 9 plainly-classed `log__line` elements and missed the 3 carrying a modifier —
+  the audit's 12/12 is the authoritative figure and is quoted as such rather than my narrower count.
+  No shipped file touched: 13 plants applied and reverted, `git status` clean on `index.html`,
+  `styles/`, `scripts/` at close. Durability: F-R IDs and plant detail stay in this ledger; nothing
+  entered a durable spec.
+
+---
+
 ### 2026-07-30 HO-040 — Re-gate build: the rulings ship, and the receipts stop pointing at a moving target
 **Type:** handoff
 **Producer:** developer
@@ -19,7 +169,11 @@ _None._
 `footer-copy.md` §3 and `section-01-hero.md`.
 **Status:** in-review
 **Reviewers:**
-- [ ] QA — pending (scoped re-run)
+- [x] QA — reviewed at HO-041: all three runners re-run cold on the shipped tree and every figure
+  reproduces (295/295 + 27/27, 108/108, 43/43); the four SHAs verified as objects and as paths at
+  their own commits; thirteen violations planted independently and each new assertion watched to
+  fail. No revision requested. Two items carried to PM: VERIFY's provisional pin, and the
+  source-vs-rendered split the indicator's assertions rely on (see HO-041, plant 11).
 - [ ] PM — pending (re-gate review step)
 
 **All three runners green, both engines, run here on the shipped tree**: `scripts/test.sh` GREEN
