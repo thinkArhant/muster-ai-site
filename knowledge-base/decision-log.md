@@ -1493,5 +1493,40 @@ both forms — the unpicked form retires from `section-01-hero.md`), qa (termina
 
 **Touched**: `decision-log.md`, `orchestration-queue.md`, `wave-review.md`.
 
+### DEC-065 — §4's indicator: the cause was neither hypothesis, and the fix is a rule about the end of a track (2026-07-31)
+
+**Why this is logged**: DEC-063 §2 recorded a hypothesis — *"likely a last-index rounding error or
+a `max-scrollLeft` short of the final snap point"* — and it is wrong. A logged guess that a build
+disproves should be corrected in the log, or the next reader inherits it as a fact.
+
+**The measured cause.** At the track's end the last **two** sheets are both wholly visible from
+**1600px up** (1600 `[0,0,100,100]%` · 1728 `[0,8,100,100]%` · 1920 `[0,23,100,100]%`). Rest was
+resolved as "the most visible sheet", ties broken by document order, so the report pinned one sheet
+short and **the last segment could never light on any screen that wide, at any scroll position**.
+Below 1600 the last sheet wins the ratio outright and nothing looks wrong — which is why the defect
+reached a founder rather than a harness. Nothing rounds and nothing is short: `scrollLeft` reaches
+its own maximum exactly.
+
+**The rule that replaces it.** Rest is the most visible sheet, earliest on a tie — with
+`scroll-snap-align: start`, the earlier of two equally visible sheets is the one sitting on the snap
+line — **and the end of the track is its own case**. The last sheet's snap point lies past the
+maximum scroll, so nothing aligns there and what the reader has arrived at is simply the end. The
+end is recognised from element boxes (the last sheet's end edge plus the scrollport's end padding on
+the scrollport's end edge, while the first sheet is no longer whole), so no scroll position is read
+or written and the shell's "no script touches the scroll" assertion holds as written.
+
+**A second finding, structural.** Across the whole run between "the last sheet became wholly
+visible" and the end of the track, **no intersection ratio changes** — an `IntersectionObserver`
+has nothing to fire on over exactly the stretch the reader is in when they reach the end. Any
+position report built on thresholds alone carries this blind spot. A passive, frame-coalesced
+scroll listener drives the same resolution.
+
+**Impact**: developer (built), qa (the end-state assertion is at 1280 **and** 1600, because 1280
+alone cannot see the defect), pm.
+
+**Touched**: `scripts/sheet-indicator.js`, `tests/verify-shell.mjs`, `decision-log.md`.
+
+---
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

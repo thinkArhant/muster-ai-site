@@ -10,11 +10,219 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-044 — Developer: §5 priced in prose, §1 slimmed to its posture, two phone bugs closed, and the harness re-based around all of it
+
+**From**: Developer · **Reviewers**: QA (`pending` — the terminal sweep runs on this tree),
+PM (`pending` — review against HO-042, HO-043 and DEC-061…064)
+**Status**: open · **Filed**: 2026-07-31
+
+**Commit**: `f166dfb developer: the page prices Bodh in prose and asks one question twice`
+
+#### 1. Runner counts, on the shipped tree, tree clean
+
+| Runner | Result |
+|---|---|
+| `node tests/verify-shell.mjs` (Blink) | **304/304** |
+| `node tests/verify-webkit.mjs` (WebKit, via `scripts/test.sh`) | **27/27** |
+| `node tests/qa-independent-audit.mjs` | **108/108** |
+| `node tests/qa-fullpage-sweep.mjs` | **45/45**, 3 measurements reported |
+
+`verify-shell.mjs` was aborting before check one when this round opened; the first fix was its §5
+copy parser, and the parser now **discovers** the cell inventory instead of re-hard-coding it — it
+walks `Key N` until the row is absent and matches the prose heading on its shape rather than on the
+number it spells. Planted against: a copy file re-keyed to three cells makes the runner go **red on
+the cell-count check with `2/2 cells against the deliverable's 3`**, which is what it should have
+done in the first place, instead of crashing.
+
+#### 2. Files changed
+
+| File | What changed |
+|---|---|
+| `index.html` | §5's four prose lines and two-cell cards; §1's strip slimmed to the head row with one top-left mark; the footer's re-ruled sentence with two nowrap spans |
+| `styles/sections.css` | The remnant's dead cell rules and `.shipped__caption` retired; §5's comment block re-stated for four lines and two keys |
+| `styles/chrome.css` | `.pagefoot__unit` — the style-only nowrap run |
+| `scripts/replay.js` | Both panes rewind on replay (`rewindPanes`), and the rail is addressed by name rather than through `parentElement` |
+| `scripts/sheet-indicator.js` | Rest resolved from geometry, with the end of the track as its own case, and a passive scroll listener beside the observer |
+| `tests/verify-shell.mjs` | The parser, plus every §5 / §1 / footer coupling below |
+| `tests/qa-independent-audit.mjs` | The readout rule's unanswered test |
+| `tests/qa-fullpage-sweep.mjs` | The dash-cell finding, `WHOLE_PRODUCT`, the count-up cell, the blind contrast probe |
+| `tests/verify-webkit.mjs` | §5's ink-dash count compared against Blink's rather than restated |
+| `design-specs/web/section-01-hero.md` | Form A deleted; §7 re-written as the ruled single-row strip with its why; assertion 8 re-based; the stale re-base table retired (rule 15) |
+
+#### 3. The two bugs, with the assertion each one lands with
+
+**Bug 1 — §2's replay did not reset both panes.** `restart()` now calls `rewindPanes()` after the
+state attribute lands, so the rewind is written against the idle layout rather than the end-state
+one. Assertion: *"§2 replay returns BOTH panes to the top — terminal and narration"*, driven through
+the **rendered control** (`.replay__controls button`), at 1280 × 900 and 375 × 553, printing each
+pane's before → after against its own scrollable extent so a pane that never moved cannot be read as
+a pass. Measured before the fix: **narration 990 of 991 at 1280, unchanged by the press**.
+
+**One correction to the brief's premise, measured rather than assumed.** The brief says neither pane
+returned to top. In Blink, the terminal already did — `restart()` was setting `log.scrollTop = 0`,
+and at 375 the log went **480 → 0** before any change of mine. What did not reset was the
+**narration rail**, and only at desktop, where it is the pane that scrolls. The fix covers both
+because which pane scrolls depends on the viewport; the assertion exercises both and the evidence
+line says which one was actually parked at each width.
+
+**Bug 2 — §4's indicator stopped at slot 3.** Root cause found by measurement, and it is neither a
+rounding error nor a short `max-scrollLeft`: at the track's end the last **two** sheets are both
+wholly visible from **1600px up**, visibility ties, and the tie was broken by document order — so
+the last segment could never light, at any scroll position, on any screen that wide. Below 1600 the
+last sheet wins the ratio outright and the bug is invisible. Measured at the track's end before the
+fix: `1600px [0,0,100,100]% → slot 3` · `1728px → slot 3` · `1920px → slot 3` · `1280px → slot 4`.
+
+Two things had to change. Rest is now resolved from geometry — most visible, earliest on a tie,
+because with `scroll-snap-align: start` the earlier of two equally visible sheets is the one on the
+snap line — **with the end of the track as its own case**, recognised from the boxes (the last
+sheet's end edge plus the scrollport's end padding sitting on the scrollport's end edge, while the
+first sheet is no longer whole). The last sheet's own snap point lies past the maximum scroll, so
+nothing aligns there and what the reader has arrived at is simply the end. And an observer alone
+cannot see it: across the entire run between "the last sheet became whole" and the end of the track,
+**no intersection ratio changes**, so there is nothing to fire on — a passive, rAF-coalesced scroll
+listener drives the same resolution. Neither path reads or writes a scroll position, so the shell's
+"no script touches the scroll" assertion holds as written.
+
+Assertion: *"§4 (d2) at the track's end the LAST segment is the lit one — including where the last
+two sheets are both whole"* — programmatic scroll to the end, at **1280 and 1600**, expecting the
+last segment for the last sheet (both counts read from the DOM, never from a share heuristic of the
+harness's own). It prints each sheet's visible share and how many are whole, so the evidence shows
+the tie regime being exercised. Verified after the fix at every snap point at 960 / 1280 / 1440 /
+1600 / 1728 / 1920: **1 → 2 → 3 → 4** at every width.
+
+#### 4. Couplings re-based
+
+HO-042's eleven, all landed: the parser; prose 3 → 4 (asserted as *the deliverable's count*, not as
+`4`); `cells.length` → the deliverable's slot count; `SEED_KEYS` down to two, with `SHIPPED`
+reconstituted as `value + " — " + sub` and diffed byte-exact against the seed's
+`bodh.day — App Store + web`; the commit-day check retired into a stronger property — **each card
+carries exactly one cell-level sub-line, on the cell the copy file attaches it to**, which is the
+diagonal the composition rests on; card-level captions **0 on both**, with `measured at launch`
+asserted as the sub-line of card 2's dash; `siteOf` re-based to the prose figures; §5's count-up
+block down to one counting cell (derived from the copy file's values, not listed here); the footer's
+string equality (no change needed); §5's markup.
+
+HO-043's six, all landed: `SHIPPED` values are accent — the split is now asserted as the
+**answered/unanswered channel** (every answered value rust, exactly one ink em-dash) in both themes
+and in WebKit; card comparability as four relationships, never a literal height, including each
+sub-line's **hang below its own value**; one column edge across all four prose lines; the strip's
+marks; the footer's units; the sweep's dash count.
+
+**Content's finding is closed as Content described it.** `dashCells >= 4` would have passed after
+the rebuild for the wrong reason — §5 does hold exactly four em-dashes, three of them prose
+punctuation. It now counts `.readout__value--unmeasured` **elements** inside the card found by its
+scope label and asserts **1**, and the evidence line prints both numbers side by side so the
+distinction stays visible.
+
+`WHOLE_PRODUCT` is re-based from strings to patterns (`/9\.3\s*(?:h\b|hours?\b|hrs?\b)/gi` and
+friends), because `9.3 h` no longer renders as that string and an exact-string check would have gone
+**blind, not red**. Planted: a second rendering in a *different* format elsewhere on the page —
+`9.3 hours` in §6 — is caught (`shipped-with-muster ×1 · get-started ×1`). The old check could not
+have seen it.
+
+#### 5. Five couplings the brief did not list, found by running
+
+1. **`verify-shell.mjs`: "registration marks: two per instrument surface"** — a hard
+   `every(s => s.marks === 2)`. Form B gives the remnant one mark, so this went red. Re-based to the
+   ruled relationship: two per surface, **one where the end corner is let to an interactive
+   element**, which is `page-shell.md` §8's own wording.
+2. **`qa-independent-audit.mjs`: the readout rule derived "unmeasured" from "has no digit."**
+   `bodh.day` and `THIS PAGE` have no digits, so the check demanded ink for both and failed the
+   ruled treatment. Re-based to the em-dash as the unanswered glyph — and strengthened: the page
+   carries **exactly one** unanswered value, which is the relationship the dash's meaning rests on.
+3. **`qa-fullpage-sweep.mjs`: "§1's remnant says `measured at launch`"** — true before this round,
+   false by ruling now. Replaced with its inverse plus the page-wide count: §1 makes no unmeasured
+   claim, and `measured at launch` occurs **exactly once page-wide**.
+4. **`qa-fullpage-sweep.mjs`'s contrast probe went BLIND, not red.** It read `#hero .remnant__key`
+   and skipped missing selectors with `if (!el) continue`, so retiring the strip's cells silently
+   dropped a surface from a check that still claimed to measure it. Every selector must now resolve;
+   an absent one is reported as `ABSENT — probe found nothing` and fails. Re-targeted to
+   `.remnant__scope` and extended to §5's key and sub-line. Planted by renaming the class: red, both
+   themes.
+5. **`verify-webkit.mjs` asserted `inkDashes.length === 4`.** Re-based to compare against the count
+   **Blink measured in the same run**, read out of `blink-report.json` — the claim this file uniquely
+   owns is that WebKit paints the dash in ink, not how many there are.
+
+#### 6. Every plant, and what went red
+
+Each was applied to the committed tree, run, and reverted; `git status` was clean between plants and
+is clean now.
+
+| # | Plant | Runner | What went red |
+|---|---|---|---|
+| 1 | `measured at launch` moved from the dash's cell to a card-level caption | shell | sub-line-attachment (`card 2: [null,null] against ["measured at launch",null]`), the one-dash check (`captions 0+1`), pair comparability (`sub-line hangs 12 vs px`) |
+| 2 | `readout__value--unmeasured` dropped from the dash | shell · audit · sweep · WebKit | shell: dash computes `rgb(192,90,50)`, and the light-theme split · audit: `"—" #C05A32 ← content and modifier disagree`, both themes · sweep: R4 · **WebKit: `0 ink cluster(s) … rust dashes 1 · Blink counted 1`** |
+| 3 | `data-countup` added to `bodh.day` | shell | counting-cells (`SHIPPED/bodh.day: static`) and the roll check |
+| 4 | `App Store + web` → `App Store + Web` | shell | seed byte-equality, on the reconstituted cell |
+| 5 | §5's new prose line deleted | shell | prose verbatim (`3 rendered against 4 authored`), the primary line, the card/line count, and `siteOf` (`activeBuild "9.3" ×0 · cost "$147" ×0`) |
+| 6 | The bottom-right mark restored to the strip | shell | mark count (`{"on":"remnant","marks":2}`), **and the collision clause: `regmark--br overlap 3.13px²`, 1 element on the chip's border box, at 1280 and at 320/360/375/390** |
+| 7 | A readout put back into §1 | shell | `strip reads "THIS SITE · SPEC → LIVE VERIFY OPERATOR ATTENTION — measured at launch"` |
+| 8 | `.pagefoot__unit` set to `white-space: normal` | shell | `"never invoked" ×2 rect` at 1280, `"Kanwar Sandhu" ×2 rect` at 375 and 320 — the founder-visible defect, reproduced |
+| 9 | `footer-copy.md`'s published count 35 → 36 | shell | `35 words rendered against 36 published` — the check reads the file |
+| 10 | The narration rail's rewind removed | shell | `1280px: narration 990→990 of 991` |
+| 11 | The indicator's end-of-track case removed | shell | `1600px: … (2 whole), segment 3 of 4 lit` while 1280 still passed — the exact regime |
+| 12 | A `Key 3` row added to `section-05-copy.md` | shell | cell count (`2/2 cells against the deliverable's 3`) — **and no crash**, which was the point |
+| 13 | The cell's reserved sub-line row removed | shell | key-for-key alignment and pair comparability, with the ragged heights printed |
+| 14 | `font-weight: 700` on the primary `<p>` | shell | one column edge — `widths [685.31, 685.31, 744.81, 685.31]`, the 64ch defect reproduced |
+| 15 | A transition on the dash under reduced motion | shell | the dash-inert check (`static none/1s`) |
+| 16 | A second `9.3 hours` added to §6 | sweep | `shipped-with-muster ×1 · get-started ×1` |
+| 17 | `$147` removed from §5's prose | sweep | the figure's site check, and the mid-roll AX check (`the prose 9.3 hours` — only one of two) |
+| 18 | `.remnant__scope` renamed | sweep | contrast, both themes: `ABSENT — probe found nothing` |
+
+#### 7. Cross-engine
+
+Rendered and looked at, not merely asserted. **Blink**: §1, §5, the footer and §2-after-replay at
+1280 and 375 in **both themes**; §4's track end at 1600. **WebKit** (`qlmanage`): §1 whole, and §5
+and the footer isolated, in both themes — same composition, same values, same ink/rust split, the
+`APP STORE + WEB` sub-line under `bodh.day` and `MEASURED AT LAUNCH` under the dash, and the footer
+setting three lines with both units whole.
+
+**No WebKit evidence exists at any phone width, and none for §4's track end or §2's replay in any
+condition.** `qlmanage` is the only WebKit on this machine: it executes no JavaScript and renders at
+a fixed ~1024² whatever size is requested. Every phone number in this handoff is Blink's and is
+labelled as such; the two JS-driven behaviours are Blink-only by construction, and that is a gap in
+the evidence rather than something the runners cover.
+
+#### 8. Measured versus judged
+
+**Measured**: every runner count; the indicator's slot at each snap point across six widths; both
+panes' scroll offsets before and after the press at two viewports; the mark/chip overlap in px² and
+per axis; the footer's client rects and line counts at 1280/375/320; §5's card heights, row tops,
+sub-line hangs, column widths and computed colours in both themes; the WebKit ink/rust clusters.
+
+**Judged, not measured**: that removing the dead `.remnant__*` and `.shipped__caption` rules is
+right rather than out of scope (HO-043 said the strip needs no CSS change, which is true of the
+render; leaving ~60 lines of unreachable CSS on a page that argues from build quality is not); that
+retiring `section-01-hero.md`'s stale re-base table is durability discipline rather than deletion of
+someone's work; that the end-of-track clause is a principle rather than a special case.
+
+#### 9. Two findings, neither a launch blocker
+
+1. **`section-05-copy.md` ends with a stray `</content>\n</invoke>` (2 lines).** A tool-call artifact
+   in a Content deliverable, present before this round. It is outside every parsed section so no
+   check reads it and nothing ships from it, but it is in a public repo that the page's footer links
+   to as a receipt. Swept the rest of `design-specs/`, `VERIFY.md` and `knowledge-base/*.md` — this
+   is the only file affected. **Not fixed here**: it is Content's file, and this round writes its own.
+2. **`section-01-copy.md` §5 still specifies §1 strings that no longer ship** — `ACTIVE BUILD`,
+   `COST · API LIST`, the two dashes and the `measured at launch` caption. The `THIS SITE · SPEC →
+   LIVE` label and the chip are correct. Nothing is coupled to it (no runner reads the file) and
+   nothing ships from it, so this is documentation drift, not a page defect. Left for Content for
+   the same reason.
+
+**One accuracy note on HO-043 and DEC-064**, offered because I built on it and checked it. The
+bottom-right mark's overlap with the chip is real and I reproduced it — `0.63px × 5px = 3.13px²` at
+1280, 375, 320 — but **only on the single-row strip**. On the strip as it actually shipped before
+this round, the mark sat **147.67px below** the chip and the boxes never intersected. So the
+overlap was a property of the proposed form, not of the page "today"; HO-043's own gloss (*"it only
+became visible as the strip shrank"*) is the accurate half. The ruling is unaffected — the mark is
+gone either way, and the harness now fails if it returns.
+
 ### HO-043 — UI/UX: §5's two-cell cards ruled, §1's two strip forms rendered for the founder, and the footer's line-break defect
 
-**From**: UI/UX · **Reviewers**: Developer (`pending` — builds §5's cards, the footer units, and
-whichever §1 form the founder picks), PM (`pending` — carries the contact sheet to the founder and
-records the pick)
+**From**: UI/UX · **Reviewers**: Developer (`accepted` — §5's cards, the footer's two nowrap units
+and form B all built as ruled and re-verified in both engines; one accuracy note on the mark/chip
+overlap and two documentation findings in HO-044, none of them a copy or design change), PM
+(`pending` — carries the contact sheet to the founder and records the pick)
 **Status**: open · **Filed**: 2026-07-31
 
 **Scope**: proposal renders + durable specs. No shipped file touched — `index.html`, `styles/*` and
@@ -147,7 +355,10 @@ why the recommendation is B and why it is stated on the sheet rather than hidden
 engines; two treatment findings returned in HO-043, neither a copy change: `bodh.day` and
 `THIS PAGE` take the accent because the value slot's colour is the answered/unanswered channel, and
 the footer sentence needs two nowrap units because it splits the founder's name at 375 and 320),
-Developer (`pending` — builds every string and re-bases the couplings below), PM (`pending` —
+Developer (`accepted` — every string built verbatim and all eleven couplings re-based, including the
+`dashCells` finding; the parser now discovers the cell inventory instead of re-hard-coding it. Two
+findings returned in HO-044: a stray tool-call artifact at the end of `section-05-copy.md`, and
+`section-01-copy.md` §5 still specifying §1 strings that no longer ship), PM (`pending` —
 line-by-line copy-rules review)
 **Status**: open · **Filed**: 2026-07-31
 

@@ -102,41 +102,52 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-31 THE BATCHED RENDER LOOK — one image, one pick
+### 2026-07-31 THE TERMINAL QA SWEEP — the last gate before the launch merge
 
 ```
-Role: halt
+Role: qa
 ```
 
-<!-- The role marker is unchanged; only the body is re-pointed. The final gate this block
-     previously described is closed in DEC-063 — its number is picked (F-R1 → option 4, DEC-062)
-     and all three phone checks passed. What the founder owes next is the render look DEC-063 §5
-     scheduled between UI/UX and Developer. -->
+Round 3 of 3 is built and committed (HO-044, `f166dfb`). Everything DEC-062 through DEC-064 ruled
+is on the page: §5's four prose lines and two-cell cards, §1 slimmed to the scope label and the
+chip with one top-left mark, the footer's re-ruled sentence with its two nowrap units, and the two
+phone bugs closed with an assertion each. Nothing is open to build.
 
-**Open `samples/closing-round-renders/CONTACT-SHEET.png`.** One screenful. Reply with a letter,
-then run `muster/scripts/muster-sprint-resume.sh`.
+**Read first**: `knowledge-base/agent-requests.md` **HO-044** — it lists every file changed, every
+assertion added or re-based, and eighteen plants with what each turned red.
 
-**One ask: §1's THIS SITE strip — A or B.**
+**The step.** Run the terminal sweep DEC-062 decision 5 traded the per-wave re-runs for. Developer
+reports all four runners green on the shipped tree with `git status` clean —
+**`verify-shell` 304/304 · `verify-webkit` 27/27 · `qa-independent-audit` 108/108 ·
+`qa-fullpage-sweep` 45/45** — so reproducing those counts cold is the floor, not the deliverable.
 
-- **A** — the strip re-keys to §5's two questions: `OPERATOR ATTENTION —` + `SHIPPED THIS PAGE`.
-- **B** — the cells go; §1 keeps the scope label and the `VERIFY ⎘` chip, and §5 owns the readout.
+**What is worth your attention, stated so it is not rediscovered:**
 
-Both are shown in situ under the headline and the formation, at 1280 and 375, and both were
-re-rendered in WebKit. **UI/UX recommends B** and says so on the sheet as a recommendation: A prints
-the same two keys and the same two values as §5's THIS SITE card one scroll above it, and puts a
-second rust readout under the headline's rust `AN AI`. B is 87px shorter, which brings the whole
-hero — the `curl` included — inside a 774px window.
+- **Three couplings this round found by running rather than by reading**, and one of them was a
+  check going *blind* rather than red: the sweep's contrast probe skipped selectors it could not
+  find, so retiring §1's cells silently dropped a surface from a check that still claimed to
+  measure it. Look for the same shape elsewhere.
+- **Two behaviours have no WebKit evidence in any condition** — §4's track end and §2's replay are
+  JavaScript, and `qlmanage` runs none. Every phone figure in HO-044 is Blink's and is labelled so.
+- **Two documentation findings are open and deliberately not fixed by Developer** (both in
+  Content's files, neither shipping): a stray `</content></invoke>` artifact ending
+  `section-05-copy.md`, and `section-01-copy.md` §5 still specifying §1 strings that no longer
+  ship. Judge whether either blocks the launch merge.
+- **One accuracy note on HO-043/DEC-064**, disclosed rather than smoothed: the mark/chip overlap is
+  real on the single-row strip (3.13px², measured) but did **not** exist on the strip as it shipped
+  before this round — the mark sat 147.67px below the chip. The ruling is unaffected.
 
-**Two things are shown, not asked** — §5's rebuilt two-cell cards and the footer's final sentence
-as it sets. Speak only if either is wrong.
-
-**Then Developer builds everything**, including the picked form, and deletes the losing form from
-`section-01-hero.md` §7.1 in the same commit. The terminal QA sweep follows.
+**If blocked**: never set `Role: halt`. File the blocker addressed to PM and re-point `## Next Step`
+to a `Role: pm` assessment step.
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-_None — the sprint is at its final gate. The founder's verdict routes what follows._
+1. **The launch merge, history preserved** (DEC-063 §5). A squash merge collapses this branch and
+   404s the three pinned receipts in the footer; `blob/main` survives either strategy, which is the
+   second reason VERIFY is not pinned.
+2. **The founder's VERIFY click-check on the live page** — the one thing no runner can stand in
+   for, because only a real fetch proves reachability.
 
 **Pre-loaded for the step after the verdict** (recorded so a resume-spawned PM does not rediscover
 them; they are NOT queue steps and add no scope):
@@ -150,6 +161,24 @@ them; they are NOT queue steps and add no scope):
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-31 — Closing round 3 of 3: Developer builds every ruling and closes both phone bugs
+  (HO-044, `f166dfb`). All four runners green on the shipped tree with the tree clean —
+  **304/304 · 27/27 · 108/108 · 45/45** — starting from a `verify-shell` that **aborted before
+  check one**, whose parser now discovers §5's cell inventory instead of re-hard-coding it. §4's
+  indicator bug was neither of the two causes proposed: at the track's end the last **two** sheets
+  are both wholly visible from **1600px up**, visibility ties, and the tie broke by document order
+  — so the last segment could never light on any screen that wide, and an observer alone cannot see
+  it because no intersection ratio changes across that whole run. Fixed from geometry with the end
+  of the track as its own case; verified 1→2→3→4 at every snap point across six widths. Replay's
+  narration rail was the pane that never rewound (**990 of 991 at 1280**); the terminal already
+  did, and the handoff corrects the brief rather than claiming both. **Eighteen plants, every one
+  watched to go red on the check that owns it** — including the four-runner plant on the dash's
+  modifier, the `white-space: normal` plant that reproduced the founder's `Kanwar / Sandhu` split,
+  and the re-key plant that proves the parser now goes red instead of crashing. **Five couplings
+  the brief did not list** were found by running, one of them a contrast probe that had gone
+  *blind* rather than red. Two documentation findings in Content's files are filed rather than
+  silently fixed, and HO-043's mark/chip overlap is corrected on measurement.
 
 - 2026-07-31 — Closing round 2 of 3: UI/UX rules §5's card and renders the founder's pick (HO-043).
   **A two-cell card still reads as an instrument**, chosen and measured on a rendered proposed
@@ -280,11 +309,3 @@ them; they are NOT queue steps and add no scope):
   strip gone. **Awaiting PM review at the fix-round review step; OBS-017 asks PM to rule
   `footer-copy.md` §3's lowercase-labels sentence against the shipped uppercase transform.**
 
-- 2026-07-30 — Step: Developer Gate B fix round (HO-036). The footer ships true — five roles named, no
-  email, the GitHub profile as the contact path — and the placeholder that was a hard launch blocker is
-  gone; the VERIFY chip carries its production blob URL in both seats; page-level scroll-snap retired
-  with its assertions while §4's track keeps its own x-axis snap as the paging mechanism; the alignment
-  system applied page-wide. **The session hit MAX_TURNS=150 during its self-review, after the work and
-  HO-036 were complete** — PM re-verified on the tree rather than trusting the log (all three runners
-  green: suite GREEN both engines, audit 108/108, sweep 42/42; in-flight-edited test files parse;
-  placeholder/email greps zero) and committed the closeout. Queue advanced by PM.
