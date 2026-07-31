@@ -649,3 +649,24 @@ Sprint 2; a bug list routes a fix round per bug.
 
 **Write your verdict below this line, then run `muster/scripts/muster-sprint-resume.sh`.**
 
+## Final-gate verdict — IN PROGRESS
+
+**Recorded 2026-07-31 in the interactive gate session (DEC-062).** Settled here:
+
+- **F-R1: option 4.** Nothing builds; the overnight fact stays in §4 decision 4 and the receipts.
+- **The cost posture (DEC-062)**: §5's cards re-key to OPERATOR ATTENTION + SHIPPED, both cards
+  symmetric; Bodh's `9.3 hours / $147` moves into Bodh's prose line; the site's full economics
+  publish in VERIFY.md with method and rate context; no derived rate, no human baseline on the
+  page; §1's remnant strip re-keys or slims (UI/UX picks from renders); commit-days off the cards.
+
+**Still outstanding, arriving in the founder's next session (on `claude-opus-5`, per the lean
+mandate):** the founder's remaining visual feedback on the final-gate build, and the three phone
+checks — §2's full 48 s playback (the last hard launch blocker), Find on Page, scroll feel.
+
+**Build list already ruled and awaiting the closing build** (no new founder input needed):
+DEC-061's two items (VERIFY receipt + §1 chip → `blob/main`, §5 loses one `with Muster`) and
+DEC-062's cascades above.
+
+**Execution mode for everything until launch (founder mandate, DEC-062 decision 5):** interactive
+warm-tab sessions on `claude-opus-5`, targeted assertions per change, ONE terminal QA sweep +
+review before launch. The driver runs only that final verification pass.

@@ -1305,5 +1305,51 @@ SHA guard), ui-ux (none — no layout consequence), pm (`brand-guidelines.md` ap
 **Touched**: `brand-guidelines.md`, `pre-launch-checklist.md`, `agent-requests.md` (HO-038 heading
 restored, four handoffs resolved), `wave-review.md` (final gate packet), `orchestration-queue.md`.
 
+---
+
+### DEC-062 — The cost posture: attention on the cards, price in prose, economics in VERIFY; the closing round runs lean (2026-07-31)
+
+**Context, measured before deciding**: the committed driver logs show **$594 across 51
+step-sessions and ~27.3 driver-hours** (fable 14 steps / $209; opus 37 / $385; true waste from
+error runs under 10%). That is a floor — interactive sessions add more. Bodh's card says $147 /
+9.3 h for a whole product; the site's rate ($21.8/hr) matches Bodh's own website wave ($24.73 /
+~64 min ≈ $23.2/hr), but the TOTAL beside $147 reads as failure, and any reader can do the
+division. The founder ruled the totals do not get headlined.
+
+**Decision 1 — §5's cards change the question, symmetrically.** Both cards re-key to
+`OPERATOR ATTENTION` (BODH `4.8 h` · THIS SITE `—` / `measured at launch`) plus the `SHIPPED`
+slot (`bodh.day` · `THIS PAGE`). Commit-days is dropped from the cards (founder: low value).
+Cost cells are gone from BOTH cards — never one card dodging its twin.
+
+**Decision 2 — Bodh's price moves to Bodh's prose line**, where product prose naturally differs:
+*"Bodh — a shipped iOS app and web landing, live at bodh.day: 9.3 hours of active build, $147 in
+AI tokens."* (The measured line DEC-046 removed from §1, homed in the receipts section.)
+
+**Decision 3 — the site's full economics publish in `VERIFY.md`**, with method and the rate
+context (same $/hr as the product's own website wave; more hours because the build carried four
+founder gates and its own verification apparatus). **The page prints no derived rate and no human
+cost baseline** — both bans reaffirmed after explicit founder exploration; the deck and meetings
+are the genre for the $/hr-vs-humans story. VERIFY may state the measured rate WITH its inputs, as
+a measurement report.
+
+**Decision 4 — F-R1 closes as option 4.** The overnight fact stays in §4 decision 4 and the
+receipts; the launch "wave rack" idea is retired for now because it would headline per-wave costs
+this posture declines to headline. Revivable if launch telemetry pleases.
+
+**Decision 5 — the closing round runs LEAN, by founder mandate.** Remaining work to launch runs
+interactively in a warm tab on `claude-opus-5` (PM included — no further fable), with **one**
+full QA sweep + review at the very end instead of per-wave re-runs. Risk accepted with eyes open:
+per-wave QA caught three Sprint-1 regressions, so every interactive change keeps its targeted
+assertion, and nothing merges to launch without the terminal sweep going green.
+
+**Cascades**: §1's THIS SITE remnant strip re-keys to match or slims to the VERIFY chip (UI/UX
+renders both, picks); §5's copy file re-keys; the dash-promise (`measured at launch`) now points
+at attention, a number the founder is glad to fill.
+
+**Impact**: content, ui-ux, developer, qa, pm.
+
+**Touched**: `wave-review.md` (final-gate verdict), `retrospective.md` (FF-004),
+`decision-log.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
