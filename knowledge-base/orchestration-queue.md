@@ -137,6 +137,12 @@ reports all four runners green on the shipped tree with `git status` clean —
   real on the single-row strip (3.13px², measured) but did **not** exist on the strip as it shipped
   before this round — the mark sat 147.67px below the chip. The ruling is unaffected.
 
+**One operational note, disclosed rather than left to be rediscovered**: running two runners
+concurrently against the same machine produced a
+`CDP timeout: Runtime.evaluate did not reply within 180000 ms` once during this round. Re-run serially
+and it is green. It is contention, not a page defect — but a timeout is a failure, so it is named
+here rather than treated as noise.
+
 **If blocked**: never set `Role: halt`. File the blocker addressed to PM and re-point `## Next Step`
 to a `Role: pm` assessment step.
 
