@@ -58,6 +58,14 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
   to lose one `with Muster` — both build after the verdict, neither is on the page yet, and a PM stress test found that a fabricated receipt SHA passes
   every runner if the copy file agrees with it. See DEC-061 and the Next Step halt block below.
 
+- [2026-07-31] [Content]: **VERIFY.md now publishes the site's economics — do the figures get a
+  fresh read before launch?** The section quotes the committed record ($594 · 51 step-sessions ·
+  ~27.3 driver-hours · $21.8/hr) and labels the whole thing a floor. But the tree already carries
+  more `.metrics` lines than that snapshot covers, so a reader who sums the committed files gets a
+  larger number. VERIFY.md states that plainly in the section's own preamble, so nothing published
+  is wrong. The question is whether the founder wants these re-read at launch — one number, taken
+  once, no agent involvement (A-002) — or whether the floor framing is the intended permanent form.
+
 <!-- Resolved 2026-07-31 — the re-gate's ten findings are consumed: F-R4's false word, F-R6's forward
      promise, F-R2/F-R5's hierarchies, F-R3's indicator, F-R7's masthead, F-R9's footer sentence and
      F-R10's pinned receipts all shipped and were re-verified by PM at the review; F-R8's audit is
@@ -126,6 +134,19 @@ them; they are NOT queue steps and add no scope):
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-31 — Closing round 1 of 3: Content writes the cost posture into strings (HO-042). §5 runs
+  four prose lines — Bodh's price lands as `Bodh, idea to live: 9.3 hours of active build, $147 in
+  AI tokens at API list price.` (17 of ≤ 20 words), the scope sentence survives, and the API-list
+  framing travels with the figure rather than dying with the key that carried it. Both §5 cards
+  re-key to `OPERATOR ATTENTION` + `SHIPPED`, symmetrical, no cost cell on either side;
+  `measured at launch` moves onto the dash it qualifies, since `SHIPPED · THIS PAGE` is measured.
+  `THIS PAGE` ruled uppercase in every seat, `bodh.day` ruled lowercase, asymmetry stated. The
+  footer's final sentence ships byte-exact at 35 of ≤ 40 words and the candidate structure retires.
+  `VERIFY.md` publishes the site's economics as a measurement report — driver-log scope, labelled a
+  floor twice, with the rate and its inputs — and the THIS SITE dashes are untouched. Sweep 45/45,
+  audit 108/108; **`verify-shell.mjs` aborts at its §5 copy parser, which is designed and is
+  round 3's first fix** — eleven couplings enumerated in HO-042. **Awaiting UI/UX (round 2).**
 
 - 2026-07-31 — Step: PM re-gate review and the final gate packet (DEC-061). **All four handoffs
   accepted with no revision**, and the acceptance is re-derived rather than read: all three runners
@@ -248,11 +269,3 @@ them; they are NOT queue steps and add no scope):
   §8.1 — the accordion hides 12/16 rows from Safari find-in-page). DEC-053's §7.1-A11/§12.16
   amendments landed with the round. `scripts/test.sh` re-run: 272/273 with HO-034's one designed
   red, no shipped file touched. **Awaiting PM review at the fix-round review step.**
-
-- 2026-07-29 — Step: Content Gate B fix round (HO-034). The footer's strings exist and are true:
-  `5 of 8 agents, 1 operator`, the five named and the three never-invoked named, no email, six
-  exact founder-supplied URLs. §4's trade-off row states the file-based mechanism instead of
-  denying it (sheet 44/45), and the overnight fact ships as mechanism in decision 4's row (44/45) —
-  the founder's claimable form, no wall-clock. Sweep re-run 42/42; `scripts/test.sh` 272/273 with
-  the one red designed (§4 page fidelity awaits HO-036's string swap). **Awaiting PM review at the
-  fix-round review step.**

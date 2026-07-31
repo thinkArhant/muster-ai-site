@@ -3,80 +3,76 @@
 **Surface type**: every Content-owned string in the page footer — one closing sentence (team truth +
 authorship merged), the receipts row (six link labels and their URLs), and the contact link (copy
 deliverable)
-**Consumers**: UI/UX (lays out the one-sentence footer and rules which candidate ships, from
-renders), Developer (builds the ruled strings and hrefs verbatim), PM (reviews against the
-participation truth), QA (string equality and link-string checks), the founder (ruled the merge and
-pre-approved the participation phrasing, DEC-056)
+**Consumers**: UI/UX (lays out the one-sentence footer), Developer (builds the ruled strings and
+hrefs verbatim), PM (reviews against the participation truth), QA (string equality and link-string
+checks)
 **Sources**: `product-spec-seed.md` → Footer (read-only), as amended by the founder on three points:
-the "8 agents" line yields to true participation and no raw email ships (DEC-056), and the team line
-and authorship line merge into a single sentence (DEC-059). The participation count is measured —
-`git log` by commit subject (DEC-054). Governed by `agent-skills/content/copy-rules.md` and
-`brand-guidelines.md` §5.
+the "8 agents" line yields to true participation, no raw email ships, and the team line and the
+authorship line are one sentence. The participation count is measured — `git log` by commit subject.
+Governed by `agent-skills/content/copy-rules.md` and `brand-guidelines.md` §5.
 
 ---
 
 ## 1. Rules this file is written under
 
-- **The footer is three blocks** (founder ruling, DEC-059): one sentence carrying the team truth and
-  the authorship, the receipts row beneath it, and one final link. Nothing else — no bio, no photo,
-  no social row (seed → Footer).
-- **True participation, not roster** (DEC-054, DEC-056): five roles ran this build — PM, Developer,
-  UI/UX, QA, Content; Marketing, Legal, and Research were never invoked (zero commits, all three
-  null in `agent-context/.populated`). §1's `8 AI agents · 1 operator` caption stays as the roster
-  label; the footer states what actually ran. The two never collide because each names its scope.
-- **No raw email anywhere on the page** (DEC-056): the GitHub profile link is the contact path; the
-  profile carries the email for anyone who wants it.
+- **The footer is three blocks** (founder ruling): one sentence carrying the team truth and the
+  authorship, the receipts row beneath it, and one final link. Nothing else — no bio, no photo, no
+  social row (seed → Footer).
+- **True participation, not roster**: five roles ran this build — PM, Developer, UI/UX, QA, Content;
+  Marketing, Legal, and Research were never invoked (zero commits, all three null in
+  `agent-context/.populated`). §1's `8 AI agents · 1 operator` caption is the roster label; the
+  footer states what actually ran. The two never collide because each names its scope.
+- **No raw email anywhere on the page**: the GitHub profile link is the contact path; the profile
+  carries the email for anyone who wants it.
 - **Every URL is stated as a string and verified by string equality** (R12) — never by fetching.
 - **The footer carries no lockup** (`brand-guidelines.md` §4): the closing sentence is the
   signature.
 - **First person appears nowhere here** (R7): the sentence is a third-person statement about who did
   what; §5's provenance line and §4's decisions remain the page's only first-person places.
-- **Ceiling, script-measured** (word-counting convention as in `section-04-copy.md` §1): the merged
-  sentence ≤ 40 words. Rationale: the split form it replaces ran 44 (30 + 14); a merge that lands at
-  or past that number has not earned the merge. Measured counts in §5.
+- **Ceiling, script-measured** (word-counting convention as in `section-04-copy.md` §1): the
+  sentence ≤ 40 words. Rationale: it sets at lead scale — the largest text in the footer — and its
+  shape is two clauses with one em-dash aside between them. The ceiling is what keeps the aside an
+  aside: past 40 words the participation facts outweigh the two clauses they qualify, and the page
+  closes on a recital instead of a signature. The number is calibrated, not guessed — a form naming
+  all eight roles inside the sentence measures 42, and that form is the recital. Measured count in
+  §5.
 
 ## 2. The closing sentence
 
 One sentence, team truth first, authorship closing it — the participation facts ride as an em-dash
 aside so the sentence scans as a signature, not a roster recital. The five roles that ran and the
 three that did not are named in `VERIFY.md` and enumerable from the queue and handoff ledger linked
-directly beneath the sentence, which is what keeps the count falsifiable after the names leave the
+directly beneath the sentence, which is what keeps the count falsifiable without the names in the
 footer.
 
-**Recommended:**
+**The string, founder-ruled and final:**
 
 ```
-Specced, written, and reviewed by Muster's AI team — 5 of 8 agents, the other three never invoked, 1 operator — and designed and built by Kanwar Sandhu, solo, shipping his own products with it.
+Specced, written, and reviewed by Muster's AI team — 5 of 8 agents, the other three never invoked, 1 operator — on a framework designed and built by Kanwar Sandhu, solo, shipping his own products with it.
 ```
 
 | Claim | Source |
 |---|---|
 | Specced, written, and reviewed by Muster's AI team | seed → Footer, verbatim |
-| 5 of 8 agents | measured: `git log` on this branch by commit subject — pm, developer, ui-ux, qa, content have commits; marketing, legal, research have zero (DEC-054). 8 is the roster (copy-rules → scope table) |
-| the other three never invoked | DEC-054's measurement, stated so the count carries its own falsifier — a reader opens the queue or handoff ledger one line below and checks |
+| 5 of 8 agents | measured: `git log` on this branch by commit subject — pm, developer, ui-ux, qa, content have commits; marketing, legal, research have zero. 8 is the roster (copy-rules → scope table) |
+| the other three never invoked | the same measurement, stated so the count carries its own falsifier — a reader opens the queue or handoff ledger one line below and checks |
 | 1 operator | seed → Footer, verbatim |
-| designed and built by Kanwar Sandhu, solo, shipping his own products with it | seed → Footer authorship line, in the founder's own merged phrasing (DEC-059 ruling quotes it without "while"); "it" = Muster — the framework is his, the page's strings are the team's, which is what keeps the two authorship claims from colliding |
+| on a framework designed and built by Kanwar Sandhu, solo, shipping his own products with it | seed → Footer authorship line, founder-ruled phrasing. "it" = Muster |
 
-**Alternates, for the layout ruling** (taste calls are chosen from renders — the layout step renders
-the candidates in the page's real tokens and rules there):
+**Why the sentence is shaped this way:**
 
-- **B — names kept in the sentence** (40 words, at the ceiling): *"Specced, written, and reviewed by
-  Muster's AI team — PM, Developer, UI/UX, QA, and Content; 5 of 8 agents, 1 operator; Marketing,
-  Legal, and Research never invoked — and designed and built by Kanwar Sandhu, solo, shipping his
-  own products with it."* Keeps role-by-role auditability inside the sentence itself at the cost of
-  reading as a recital; the aside outweighs the signature.
-- **C — authorship first** (32 words): *"Designed and built by Kanwar Sandhu, solo, shipping his own
-  products with Muster — specced, written, and reviewed by its AI team: 5 of 8 agents, 1 operator,
-  the other three never invoked."* Signature-first, but it leads the page's closing line with the
-  human, on a page whose thesis is what the AI team shipped — and the team truth, the page's audited
-  claim, lands mid-sentence.
-
-**Why the recommendation**: the team truth is the footer's highest-priority fact — it is the claim
-the page's receipts exist to prove, and the one the founder's own gate finding tested for truth — so
-it leads. The eight role names leave the sentence but not the record: `VERIFY.md` names all eight,
-and the linked queue and ledger carry the per-role evidence. "Solo" lands directly beside "AI team,"
-which is the page's whole proposition in four words. At 33 words it returns 11 against the split
-form and reads in one breath.
+- **The team truth leads** because it is the footer's highest-priority fact — the claim the page's
+  receipts exist to prove, and the one a skeptic checks first.
+- **"On a framework" is the scoping clause, and it is doing real work.** The page carries two
+  authorship claims that could collide: the AI team wrote the deliverables, and one person built the
+  thing they wrote them with. Naming *the framework* as what was designed and built keeps them
+  apart — without it, "designed and built by Kanwar Sandhu" sits in the same sentence as the team's
+  work with nothing saying which is which. It also gives the sentence one connective instead of a
+  second "and" competing with the first.
+- **The eight role names stay out of the sentence but not out of the record**: `VERIFY.md` names all
+  eight, and the linked queue and ledger carry the per-role evidence.
+- **"Solo" lands directly beside "AI team,"** which is the page's whole proposition in four words.
+- At 35 words it reads in one breath and holds five words under the ceiling.
 
 ## 3. The receipts row
 
@@ -134,9 +130,7 @@ No email ships anywhere on the page; the profile carries it for anyone who wants
 
 | String | Ceiling | Measured |
 |---|---|---|
-| Closing sentence (recommended) | ≤ 40 | **33** |
-| Alternate B | ≤ 40 | **40** |
-| Alternate C | ≤ 40 | **32** |
+| Closing sentence | ≤ 40 | **35** |
 | Receipts labels | seed's labels + `framework` | 6 labels |
 
 Counting convention: whitespace-delimited tokens containing at least one letter or digit; numerals
@@ -144,10 +138,10 @@ and compounds (`UI/UX`) count as one; standalone punctuation and separators coun
 
 ## 6. Verification statement
 
-Checked line by line against `copy-rules.md` (all three candidates):
+Checked line by line against `copy-rules.md`:
 
 - **R1 / R4 / R5** — the footer's only numerals are `5`, `8`, `1`: a measured participation count
-  (DEC-054, `git log` by commit subject), the roster size, and the operator count. "The other
+  (`git log` by commit subject), the roster size, and the operator count. "The other
   three" is a word, not a numeral, and is arithmetic a reader performs on the stated count, not a
   new figure. No performance or cost claim, no metric, no scope mixing. Nothing rounded, nothing
   invented, no dash case arises.
@@ -157,9 +151,10 @@ Checked line by line against `copy-rules.md` (all three candidates):
 - **R7** — no first person. "his own products" is third-person about the named author.
 - **R8** — the team is named as AI ("Muster's AI team"); "the Muster team" unqualified appears
   nowhere; the sentence states participation, not roster size, and the operator is counted
-  separately and named separately. "Designed and built by Kanwar Sandhu" is scoped by the sentence's
-  own first clause — the team's work is named before the author's — and by "with it": what he built
-  solo is the framework and the products, not this page's strings.
+  separately and named separately. "Designed and built by Kanwar Sandhu" is scoped twice over — by
+  the sentence's own first clause, which names the team's work before the author's, and by "on a
+  framework", which names what he built solo. What he built solo is the framework and the products;
+  this page's strings are the team's.
 - **R9** — the footer adds no CTA: the receipts row is provenance the seed itself specifies, not an
   invitation; no newsletter, no Discord, no stars badge, no community furniture. The page's one
   CTA remains §6's `curl`.

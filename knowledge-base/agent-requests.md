@@ -10,7 +10,140 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-_None._
+### HO-042 — Content: §5's cost posture in strings, the final footer sentence, and the site's economics published in VERIFY.md
+
+**From**: Content · **Reviewers**: UI/UX (`pending` — composes the two-cell card and §1's remnant
+against these strings), Developer (`pending` — builds every string and re-bases the couplings
+below), PM (`pending` — line-by-line copy-rules review)
+**Status**: open · **Filed**: 2026-07-31
+
+**Scope**: strings only. Three files written — `design-specs/web/section-05-copy.md`,
+`design-specs/web/footer-copy.md`, `VERIFY.md`. No markup, no CSS, no test file touched.
+
+#### 1. Every string that changed
+
+**§5 — prose. Four lines now, not three.** Lines 1, 3 and 4 are byte-unchanged; line 2 is new and
+sits between the Bodh identity line and the provenance line.
+
+```
+Bodh, idea to live: 9.3 hours of active build, $147 in AI tokens at API list price.
+```
+
+17 words against a ≤ 20 budget, script-measured. It renders at prose weight in ink — §5's single
+primary is still the provenance line, and §5's prose block still carries no accent-coloured
+element. Rationale for four lines over one merged line, and for naming Bodh twice, is in
+`section-05-copy.md` §3.2 and ruling 1.
+
+**§5 — cards. Two keys each, symmetrical.** `ACTIVE BUILD`, `COMMIT-DAYS` and `COST · API LIST` are
+gone from both cards; commit-days appear nowhere on the page after this.
+
+| Slot | Card 1 | Card 2 |
+|---|---|---|
+| Card label | `BODH · IDEA → LIVE` | `THIS SITE · SPEC → LIVE` |
+| Key 1 | `OPERATOR ATTENTION` | `OPERATOR ATTENTION` |
+| Value 1 | `4.8 h` | `—` |
+| Sub-line 1 | (none) | `measured at launch` |
+| Key 2 | `SHIPPED` | `SHIPPED` |
+| Value 2 | `bodh.day` | `THIS PAGE` |
+| Sub-line 2 | `App Store + web` | (none) |
+
+Two rulings inside that table that Developer and QA need as one answer, not two:
+
+- **`measured at launch` attaches to the dash, not to the card.** Card 2 carries one unmeasured
+  value beside one measured one, so a card-level caption would say the `SHIPPED` answer is
+  unmeasured too. Both cards therefore have **zero** card-level captions and **one** cell-level
+  sub-line each, in different cells.
+- **`THIS PAGE` is uppercase, in every seat.** Readout values take no CSS transform, so the copy
+  file's string is what renders. §1's remnant already ships `THIS PAGE`; if it keeps a `SHIPPED`
+  cell it renders the same string byte-identically. Its twin `bodh.day` stays lowercase because a
+  hostname is a literal a reader may type — the asymmetry is ruled, not drift
+  (`section-05-copy.md` ruling 6).
+
+**Footer — the closing sentence, founder-ruled and final.** Byte-exact, 35 words script-measured
+against a ≤ 40 ceiling:
+
+```
+Specced, written, and reviewed by Muster's AI team — 5 of 8 agents, the other three never invoked, 1 operator — on a framework designed and built by Kanwar Sandhu, solo, shipping his own products with it.
+```
+
+The A/B/C candidate structure is retired from `footer-copy.md`; the ruling is made. The receipts
+row and the contact link are untouched.
+
+**`VERIFY.md`** gains one section between the scope table and the receipts: *"What this site has
+cost so far — a floor, and not the THIS SITE row"*, plus a *"The rate, with its inputs"*
+sub-section. It publishes $594 / 51 step-sessions / ~27.3 driver-hours, the tier split, the
+under-10% waste share, and the $21.8/hr rate against the wave's $23.2/hr — every figure quoted
+from the committed record, none re-derived. The three-scope table is untouched and THIS SITE stays
+dashed.
+
+#### 2. The scope guard, and one accuracy note that needs a founder answer
+
+The published economics are **driver-log scope** — what the committed autonomous step-sessions
+cost. VERIFY.md labels them a floor twice, up front, and states plainly that nothing in the
+section answers *spec → live*. The dashes are not quietly filled.
+
+**The accuracy note**: the tree today carries more `.metrics` lines than the snapshot those
+figures were read from, so a reader who sums the committed files gets a larger number than $594.
+VERIFY.md says so in the section's own preamble rather than leaving the reader to find it. Whether
+a fresh snapshot replaces these figures at launch is a founder call — logged in Founder Decisions.
+
+#### 3. Harness couplings this breaks — all in `tests/`, all Developer's to re-base
+
+`qa-fullpage-sweep.mjs` **45/45** and `qa-independent-audit.mjs` **108/108** are green right now,
+both re-run after the writes. `verify-shell.mjs` **does not go red — it aborts**, at
+`tests/verify-shell.mjs:2129`, before any check runs. That is designed (copy leads the build) but
+it is a hard abort rather than a set of reds, so it is stated first:
+
+1. **`verify-shell.mjs` §5 copy parser, lines ~2116–2138 — CRASHES.** Two causes, both live.
+   (a) It finds the prose by `/^## 3\. The three prose lines/`; the heading now reads **four**, so
+   `at` is `-1` and `prose` parses empty. (b) It hard-reads `Key 1..4` / `Value 1..4`; rows 3 and 4
+   no longer exist, so `cellOf(undefined, col)` throws. Fix shape: match the heading on
+   `/^## 3\. The \w+ prose lines/`, walk `Key N` until the row is absent, and treat a cell with no
+   backticked run as `null` — the table's `(none)` slots are authored for exactly that.
+2. **`verify-shell.mjs`: "§5 ships the three prose lines verbatim"** — `prose.length === 3` and
+   `lines.length === 3` both re-base to **4**.
+3. **"§5 renders two cards and only two"** — `shipped__line` count 3 → **4**, and
+   `cells.length === 4` → **2**.
+4. **"§5's four BODH figures are byte-equal to the seed's Measured data table"** — `SEED_KEYS` now
+   maps `OPERATOR ATTENTION` → `Operator attention` and `SHIPPED` → `Shipped` only. The `SHIPPED`
+   assertion must reconstitute the seed cell rather than compare the value alone:
+   `value + " — " + sub === seed.value` gives `bodh.day — App Store + web`, byte-exact.
+5. **"§5 carries the commit-day window the seed states"** — retires. Its replacement is the
+   `App Store + web` sub-line under card 1's `SHIPPED`; the "exactly one cell carries a sub-line
+   per card" property survives and is worth keeping as the re-based form.
+6. **"§5 unmeasured values are ink em-dashes with one card-level sub-line"** — re-bases hard:
+   `cards[1].caption` is now `null`, `captions === 0` on **both** cards, and the
+   `measured at launch` string is asserted as the sub-line of card 2's `OPERATOR ATTENTION` cell.
+7. **"§5 is the page's only site for 9.3 h, $147 and 4.8 h"** — keeps its counts, changes its
+   evidence: `9.3 h` and `$147` are now substrings of §5's prose, not cell values. `"9.3 hours"`
+   contains `"9.3 h"`, so `siteOf` still finds exactly one of each; worth a comment so a later
+   reader does not think the check went stale.
+8. **§5's count-up a11y block, lines ~2440–2495** — §5 now has **one** counting cell (`4.8 h`).
+   `ax5Names.includes("9.3 h")` / `includes("$147")` and `settled.text === "9.3 h"` all re-base to
+   the surviving cell; `s05Copy.cards[0].values.every(...)` in the roll check re-bases to two
+   values, one of which (`bodh.day`) never counts.
+9. **`qa-fullpage-sweep.mjs` "§5's THIS SITE card is four em-dashes" (`dashCells >= 4`)** — this
+   one **will still pass, for the wrong reason**, and that is the finding. After the rebuild §5
+   holds exactly four em-dashes: one dash cell plus three in prose (`Bodh — `, the provenance
+   line's, `This page — `). The check would then measure the section's punctuation, not its dash
+   cell. Re-base it to count `.readout__value--unmeasured` cells in card 2 and assert **1**.
+10. **`verify-shell.mjs` footer sentence check, ~line 3505** — string equality re-bases
+    automatically from `footer-copy.md`; no code change needed. Any hard-coded **35** word-count
+    assertion Developer adds should be measured with the file's stated convention
+    (whitespace-delimited tokens containing a letter or digit — em-dashes count zero).
+11. **`index.html` §5 markup** — the section's comment block and cell structure carry the
+    four-key shape; the `data-countup` attribute leaves the `9.3 h` and `$147` cells with them.
+
+#### 4. Open for the round-2 and round-3 owners
+
+- **UI/UX**: `verify-shell.mjs` aborts until Developer re-bases it — `qa-fullpage-sweep.mjs` and
+  `qa-independent-audit.mjs` both run clean and are the usable baseline for the proposal round.
+- **UI/UX**: §1's remnant strip still carries `ACTIVE BUILD` and `COST · API LIST` keys against a
+  §5 that has neither. Whichever way the remnant is ruled (re-key to match, or slim to the chip),
+  its `SHIPPED` value string is `THIS PAGE` — that one is settled here so it is not re-decided.
+- **Developer**: §5's prose figures must not take the accent. Rust and the readout size are the
+  instrument treatment; the harness already asserts zero accent-coloured elements in §5's prose
+  block and that assertion should stay exactly as it is.
 
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
