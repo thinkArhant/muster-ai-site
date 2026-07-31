@@ -49,12 +49,21 @@ THIS SITE metrics remain dashes until the founder supplies a snapshot (seed rule
 **The eight role names** are settled and need no ruling — PM · Developer · UI/UX · QA · Content ·
 Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 
-- [2026-07-30] [PM]: **The re-gate is live — one thing is asked, and it is the three phone checks.**
-  All six Gate B findings are fixed, reviewed and resolved; the packet is at the bottom of
-  `wave-review.md`. The §2 playback watch closes a hard launch blocker no harness on this machine can
-  reach. Two answers are also flagged for argument rather than approval: §4's track keeps its own
-  horizontal snap, and §4 on the phone got *longer*, not shorter. See DEC-058 and the Next Step halt
-  block below.
+- [2026-07-31] [PM]: **The final gate is live — two things are asked, and one of them is a number.**
+  All ten re-gate findings are closed, reviewed and ruled; the packet is at the bottom of
+  `wave-review.md`. What is left: **pick 1–4 for F-R1** (§2's overnight wave — option 3 recommended,
+  and the reasoning says plainly why the founder's own shape is right but early), and **the three
+  phone checks**, of which §2's full 48-second playback is the last hard launch blocker. Also stated
+  rather than asked: VERIFY's receipt and the §1 chip are RULED to re-point to the live file and §5
+  to lose one `with Muster` — both build after the verdict, neither is on the page yet, and a PM stress test found that a fabricated receipt SHA passes
+  every runner if the copy file agrees with it. See DEC-061 and the Next Step halt block below.
+
+<!-- Resolved 2026-07-31 — the re-gate's ten findings are consumed: F-R4's false word, F-R6's forward
+     promise, F-R2/F-R5's hierarchies, F-R3's indicator, F-R7's masthead, F-R9's footer sentence and
+     F-R10's pinned receipts all shipped and were re-verified by PM at the review; F-R8's audit is
+     ruled in DEC-061; F-R1 is the one item carried forward, as a founder pick. The three phone
+     checks carry forward to the final gate above. -->
+
 
 <!-- Resolved 2026-07-30 — Gate B items 1 and 2 (footer copy, "8 agents") are consumed: the footer ships real copy naming five roles, no email; §1's caption stays as the roster label. DEC-056 answered them, HO-034/HO-036 built them, and PM re-derived the participation from `git log` at the review. Item 3, the phone checks, carries forward to the re-gate above. -->
 
@@ -73,48 +82,74 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-31 PM: Review the re-gate round and promote the final gate
+### 2026-07-31 FINAL GATE — the founder picks one number and checks three things on his phone
 
 ```
-Role: pm
-Model: claude-opus-5
-
-**Task:** Review HO-038 through HO-041, rule the repetition-audit memo, then write the final gate
-packet and promote its halt.
-
-**Inputs:**
-- `knowledge-base/agent-requests.md` — HO-038 through HO-041
-- `knowledge-base/wave-review.md` — the re-gate verdict
-
-**Deliverable:** review verdicts; the final gate packet in `wave-review.md`; the `Role: halt`
-block in `## Next Step`.
-
-**Acceptance criteria:**
-- Re-run all three runners yourself; render and look at every changed state, both engines
-- Rule each repetition-audit recommendation (F-R8): **accept or decline with reason — never
-  hand-apply.** Accepted cuts have no builder in this round; queue them for the build step that
-  follows the founder's final verdict (the phone-check round), and frame them in the packet as
-  ruled-but-not-yet-applied so the founder is not surprised by unchanged text. Genuine taste calls
-  go to the founder
-- Verify the four pinned snapshots against the founder's demo criterion by READING each at its
-  SHA — a queue link that lands on a template is a blocking miss
-- The final gate packet carries: one line per F-R finding on what shipped, the F-R1 §2-overnight
-  options memo for the founder's pick, and the three PHONE checks still outstanding (§2's full
-  48 s playback — hard launch blocker — find-in-page, scroll feel)
-- The halt block tells the founder to write the verdict in `wave-review.md` and run
-  `muster/scripts/muster-sprint-resume.sh`
-
-**On completion:** Write the packet, promote the halt. Run the Pre-Handoff Self-Review Checklist.
+Role: halt
 ```
+
+**The packet is at the bottom of `knowledge-base/wave-review.md`.** Open `index.html` at 1280 or
+wider in the dark theme, scroll it once, then write the verdict in that file's **Final gate
+verdict** section and run `muster/scripts/muster-sprint-resume.sh`.
+
+**Two asks:**
+
+1. **F-R1 — reply with a number: 1 · 2 · 3 · 4.** Where and when §2's overnight wave earns a seat.
+   Option 3 is recommended and the packet says plainly why the founder's own shape is right but
+   early — R2 reduces options 1 and 2 to the mechanism sentence §4 decision 4 already ships, and
+   option 1 re-spends the phone playback check below.
+2. **The three phone checks** (iPhone, Safari, toolbars showing): §2's **full 48-second playback**
+   with both layers on screen throughout — **the last hard launch blocker**, and a measurement no
+   harness on this machine can take; find-in-page for `scarcest` or `commit-days`; scroll feel,
+   including §4's sideways track.
+
+**Everything else is stated, not asked.** All ten re-gate findings shipped and were re-verified by
+PM at this review — all three runners re-run cold (295/295 + 27/27 · 108/108 · 43/43), every
+changed surface rendered and looked at in both engines, the load-bearing numbers re-measured, the
+four pinned receipts read at their SHAs, and three violations planted. Three carried items are in
+the packet's last section, and DEC-061 carries the rulings.
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-_None — the PM step above is the sprint's last before the founder's final gate._
+_None — the sprint is at its final gate. The founder's verdict routes what follows._
+
+**Pre-loaded for the step after the verdict** (recorded so a resume-spawned PM does not rediscover
+them; they are NOT queue steps and add no scope):
+- §5's attribution line drops `with Muster` (DEC-061, F-R8 item 12) — Content amends
+  `section-05-copy.md`, Developer swaps the string.
+- VERIFY's footer receipt and the §1 chip re-point to `blob/main/VERIFY.md` (DEC-061) — one edit,
+  two seats, and the harness fails if only one moves.
+- The sweep's `refExists` SHA check widens from the §1 chip to all four pinned receipts
+  (`pre-launch-checklist.md`, hard, gated at launch).
 
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-31 — Step: PM re-gate review and the final gate packet (DEC-061). **All four handoffs
+  accepted with no revision**, and the acceptance is re-derived rather than read: all three runners
+  re-run cold by PM on the shipped tree (`scripts/test.sh` GREEN both engines 295/295 + 27/27, audit
+  exit 0 at 108/108, sweep exit 0 at 43/43), every changed surface rendered and looked at in **both**
+  engines, and the load-bearing numbers re-measured on the build rather than read off a handoff —
+  masthead 18px word · 9 × 13.5 mark (0.5em × 0.75em) with `--bar-h` unmoved at 48px, the indicator's
+  four segments at x 128 → 1152 with transition 0s and animation none on all four, §5's three lines
+  on one column edge at 685.31px each, footer `border-top: 0` with one 35-word sentence at lead
+  scale. All four pinned receipts **read at their SHAs**, not resolved as strings: queue at 16 queued
+  steps, handoffs at 11 entries in both types, decision log at current depth. **Three violations
+  planted by PM; two went red and the third is the finding** — a fabricated SHA written into the page
+  *and* its copy file together passes 295/295 and 43/43, because the `git cat-file` existence check
+  covers the §1 chip only. No shipped link is wrong today, and that coordinated edit is exactly what
+  the launch re-pin makes; it is now a hard `pre-launch-checklist.md` item with the fix named.
+  **DEC-061 rules three things**: F-R8's audit (eleven verdicts accepted; item 12 declined as
+  untested and re-ruled — §5 drops one `with Muster`, ruled not hand-applied), VERIFY's provisional
+  pin retired in favour of the live `blob/main` target (the founder's own criterion for that one file
+  is the launch state, and the pinned copy predated its own explanation), and F-R1 sent to the
+  founder as a pick with option 3 recommended. DEC-060's open PM cascade closed in
+  `brand-guidelines.md`. Ledger reconciled — HO-038's heading, clobbered when HO-039 was filed above
+  it, restored; four handoffs swept to Resolved; lint 519 active lines to 6.
+  **The final gate is live: one number and three phone checks, and one of the three closes the last
+  hard launch blocker.**
 
 - 2026-07-31 — Step: QA scoped re-run on the re-gate round (HO-041). **Every acceptance criterion
   passes and nothing adjacent broke** — all three runners re-run cold on the shipped tree (295/295
@@ -221,21 +256,3 @@ _None — the PM step above is the sprint's last before the founder's final gate
   the founder's claimable form, no wall-clock. Sweep re-run 42/42; `scripts/test.sh` 272/273 with
   the one red designed (§4 page fidelity awaits HO-036's string swap). **Awaiting PM review at the
   fix-round review step.**
-
-- 2026-07-29 — Step: PM Wave 2 review and the Gate B packet (DEC-053, DEC-054, DEC-055). **All eight
-  handoffs accepted with no revision**, and the acceptance is re-derived rather than read: all three
-  runners re-run by PM on the shipped tree (`scripts/test.sh` GREEN both engines 273/273 + 27/27, the
-  independent audit exit 0 at 108/108, the full-page sweep exit 0 at 42/42), §4's word counts
-  independently recounted and reproduced exactly (44/42/44/44 and 10/9/11/9), §1's above-fold inventory
-  checked element by element against DEC-045/046, and the key-beat tick looked at in a frame that can
-  actually display it — L4 and L9 carry the rust tick clear of the timestamp. **Two violations planted
-  by PM and watched go red**, tree reverted clean: a fetching `<img src="https://…">` turned four checks
-  red naming `index.html:131 img[src]` with the §6 anchor still permitted, and §2's exemption removed
-  turned its check red — **which reproduced OBS-015 firsthand**, the check printing "0 of 13 gated rests
-  moved" on the red run. HO-029's §2 bullet was therefore read as "the check was green," never as a
-  measurement. **Three rulings closed**: the snap/reveal trade ruled once for both axes (amend the two
-  spec clauses, spend no mechanism — DEC-053), A-007's and `brand-guidelines.md`'s stale motion count
-  fixed directly in the PM-owned files (DEC-055), and the footer placeholder accepted as a hard launch
-  blocker (DEC-054). `muster-requests-lint.sh` back to green — 764 active lines to 6.
-  **Gate B is live: three things need the founder's word, and one of them is a number on the page that
-  the page's own public artifacts contradict** — five roles built this site, not eight.

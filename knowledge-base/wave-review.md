@@ -392,8 +392,8 @@ whichever step follows your verdict.
 <!-- APPROVE  — no bugs; PM removes the gate halt step and promotes the next wave's first step. -->
 <!-- Bug list — PM inserts a fix step per bug, then continues. -->
 
-**Status: IN PROGRESS — desktop pass recorded 2026-07-30. §1 approved. The three phone checks are
-still outstanding.**
+**Status: CONSUMED 2026-07-31 — all ten findings are closed, reviewed and ruled. The FINAL GATE
+packet is at the bottom of this file, and the verdict you write goes there, not here.**
 
 **F-R1 — §2: the founder wants the overnight wave visible, and wants options, not a build.** The
 muster-site build's own waves ran 22:45 → 05:40 while the founder slept, and that is the thing that
@@ -474,3 +474,178 @@ most work sits in the run log. Per file: queue → richest planned backlog; hand
 its fullest filed state; decision log → current depth is already the demo; VERIFY → the launch
 state. The executing step inspects `git log` for each file, states the chosen SHA and why, and the
 founder sees the four links land at the next pass.
+
+---
+
+# FINAL GATE — Sprint 2 (2026-07-31)
+
+**Open `index.html` at 1280 or wider, dark theme, and scroll top to bottom once.** All ten re-gate
+findings are closed. What follows is one line each on what shipped, then the two things that are
+actually yours: **one pick** (§2's overnight wave — F-R1) and **the three phone checks**, one of
+which is the last hard launch blocker on this page.
+
+Everything else here is stated so you are not surprised, not so you rule on it.
+
+## What shipped, per finding
+
+- **F-R1 — §2's overnight wave: nothing was built, and that is the answer being recommended, not a
+  deferral by default.** UI/UX priced four options against your own constraints. **You pick one —
+  the memo is below.**
+- **F-R2 — §3's hook takes ink bold.** Rust was measured and is dead for body text (4.19:1 dark /
+  4.35:1 light against the 4.5 floor — the same number that forced §4's zero-rust rule). *context
+  engineering* now carries 700 at the paragraph's own size: the page's existing weight pair, no
+  third weight, no new voice.
+- **F-R3 — §4 has a real indicator.** Four segments, one per sheet, 2px, spanning **x 128 → 1152**
+  at 1280 — the page's own rail, the same edges a resting sheet composes to, which is why the
+  misalignment you judged cannot come back by drift. Segment 1 lit in rust, three at hairline,
+  **zero motion on all four** (transition 0s, animation none — I measured each). The native
+  scrollbar is retired. A continuous rail-and-thumb gauge was rendered and rejected: it reads as a
+  loading bar.
+- **F-R4 — the false word is gone.** §5's provenance line ships your resolved string, and it is
+  byte-identical (125 bytes) in the shipped page, the copy file, and your string here. `production`
+  survives nowhere near it — its only remaining instances are inside §2's replay corpus, 300+ lines
+  away.
+- **F-R5 — §5 reads designed.** The provenance line is the section's primary at 700; the other two
+  lines stay 400. The lead-scale candidate was rendered and rejected — it dressed your testimony as
+  a heading. **Worth knowing:** the obvious build of this broke the page. Weighting the paragraph
+  itself resolved its `64ch` column **8.7% wider** than its neighbours' and went ragged; the
+  emphasis rides a run inside the sentence instead, so all three lines hold **one column edge** —
+  685.31px each, confirmed in both engines.
+- **F-R6 — §6 claims model-proofing without promising it.** 30 words, drawn only from your
+  safe-today material. `(yet)` is dead. No forward promise renders anywhere on the page — the eight
+  instances of *yet / will / roadmap* in the source are all inside comments, two of them the
+  annotation explaining why the words do not ship.
+- **F-R7 — the mark is a masthead.** Wordmark 18px, pennant **9 × 13.5** — held at 0.5em × 0.75em
+  of the word, so re-sizing the lockup is one declaration. **`--bar-h` is unmoved at 48px**, which
+  is the part that mattered: the hero fold arithmetic, §2's phone visibility budget and
+  `--scroll-pad` all stand. Separators keep 6 × 9; the footer boundary gained its mark.
+  **Your own artwork was weighed and rejected on a number, not a preference** — the cream glyph
+  composites at ~1.08:1 on the light ground, i.e. invisible, and one image asset cannot follow the
+  theme the way the clip-path box does.
+- **F-R8 — the repetition audit is ruled** (twelve items; DEC-061). Eleven verdicts accepted: the
+  page's repetition is almost entirely load-bearing idiom — scope labels, readout keys, §2's
+  two-voice design, ordinals — and nothing is cut where the second instance does a different job.
+  **One I declined and re-ruled:** §5 says "Muster" three times inside one screen (the heading, your
+  line, and the attribution line beneath it), and the audit called that "tolerable" without testing
+  the cut. §5's attribution line drops *with Muster* — the heading two lines above already supplies
+  it. **Ruled, not yet applied**, per the standing rule that rulings get a builder rather than a
+  hand-edit: it rides the build step after your verdict, so the page you are looking at still says
+  it. It does not gate launch.
+- **F-R9 — the footer is one sentence and a signature.** 35 words at lead scale, one terminal
+  period, four blocks on the rail under a boundary separator, six receipts at micro, contact last.
+  Body scale was rendered and read as fine print.
+- **F-R10 — the four receipts are pinned, and I read every one at its SHA rather than trusting the
+  link.** All four SHAs are real commits here; all four paths exist **at their own commit** (a pin
+  to a real commit that never held the file is the one way a receipt 404s while looking correct):
+
+  | Link | SHA | What you actually land on |
+  |---|---|---|
+  | queue | `9b26788` | 786 lines · **16 steps queued** under a live Next Step — a planned backlog, not a template. Your demo criterion, met. |
+  | handoffs | `bded0dd` | **11 open entries — 3 requests and 8 handoffs**, both entry types on one screen. |
+  | decision log | `b41ed56` | 31 decisions ending at DEC-060. Current depth, which you said is its demo. |
+  | VERIFY | `14bceef` | **Ruled to change — the page in front of you still has the old pin.** See below. |
+
+  **VERIFY's link is ruled to change, and like the §5 cut it is not applied yet** — the page you
+  are looking at still points at `14bceef`, so the receipt you click today is the frozen copy. The
+  pin had a circular problem: that copy predates VERIFY.md's own section explaining why pinned and
+  live links differ, so the receipt lands you on the copy without the explanation. More to the
+  point, your criterion for this one file is *the launch state*, and `main` at launch **is** that
+  state. **Ruling: it ships as `blob/main/VERIFY.md`** — no re-pin step a later session can forget,
+  and it survives a squash merge where the three pinned links do not. The §1 chip moves with it in
+  the same edit; the two are asserted byte-equal, so the harness fails if only one moves. Builds
+  after your verdict, with the §5 cut.
+
+## The one thing to pick — F-R1, §2's overnight wave
+
+You asked for options, not a build. Four were priced against your own constraints (§2 is BODH-wave
+scope and THIS SITE material must not blend into it; R2 bans wall-clock framing; THIS SITE metrics
+stay dashes until your snapshot). **Reply with a number.**
+
+- **1 — Restructure §2 now toward §4's idiom**, one card holding both layers, overnight material in
+  the freed room. *The largest blast radius on the page*: §2's playback machinery re-based (48 s
+  chain timing, corpus fidelity byte-checks, the 12px equality invariant, the phone visibility
+  budget), Content rewrite, Developer re-assert, QA re-run, cross-engine on the whole section —
+  **and your phone playback check, the hard launch blocker below, is spent and must be re-spent.**
+- **2 — A scope-labelled overnight line inside §2**, no restructure. Medium radius: §2's strip
+  layout and its assertions, one Content string, a QA re-run.
+- **3 — Recommended: the wave becomes visible when it can be shown rather than said.** Today the
+  fact already ships in its only claimable form (§4 decision 4 — mechanism, no wall-clock), and the
+  night-stamped commits are one click away through the receipts row. At launch, your snapshot
+  arrives and §2 takes your own card shape as a **wave rack** — a BODH card and a THIS SITE card,
+  each scope-labelled by construction — with the overnight wave rendered as a real card whose
+  numbers exist. Blast radius now: **zero**.
+- **4 — Do nothing**; leave the fact in §4 decision 4.
+
+**Why 3 and not your shape:** R2 reduces options 1 and 2 to the mechanism sentence the page
+*already ships in §4*, so both pay §2's entire machinery to print a duplicate a scroll apart — and
+both park THIS SITE material inside the BODH-scoped section, which is this page's likeliest factual
+failure. Your shape is right; it is the timing that is wrong. Option 3 is your shape, built once,
+on material that has its receipt. If you want it visible now anyway, say 1 or 2 and it gets built —
+this is a recommendation, not a refusal.
+
+## The three phone checks — the only thing I need from you
+
+On your iPhone, in Safari, **with the toolbars showing**. Unchanged from the last pass; you
+deliberately saved them for the fixed page, and this is it.
+
+1. **§2's full playback — the hard launch blocker.** Let §2 scroll into view fresh and watch the
+   whole **48 seconds**. Both layers — terminal and narration card — must stay on screen for the
+   entire chain. `100dvh` under disappearing toolbars is the risk, and no harness on this machine
+   can take that measurement. A screenshot of the end state does not close it; the guarantee is
+   about *during*.
+2. **Find on Page** for a mid-page phrase — `scarcest` or `commit-days`. Does the match land on
+   screen? Chrome always does (0 of 165 text leaves land off screen); Safari's alignment is the one
+   case the ruling leaves unverified.
+3. **Scroll feel.** Page snapping is gone, so this is just "does it scroll like a page." Flick
+   through §4 sideways too — its track is the one thing that still snaps, and it is what makes the
+   sheets rest composed instead of parked mid-crop.
+
+## Already green — do not spend attention here
+
+All three runners re-run by me, cold, on the shipped tree: `scripts/test.sh` **GREEN both engines,
+295/295 + 27/27** · `qa-independent-audit.mjs` **exit 0, 108/108** · `qa-fullpage-sweep.mjs`
+**exit 0, 43/43**. Every changed surface rendered and looked at in **both** engines — masthead, §4's
+indicator, §5, the footer — and the load-bearing numbers re-measured by me rather than read off a
+handoff (bar 48px · mark 9 × 13.5 = 0.5em × 0.75em · segments 128 → 1152 with zero motion · §5's
+three lines on one column edge · footer border-top 0, one sentence, 35 words).
+
+**And I planted three violations of my own.** Two went red exactly where they should: drifting the
+§1 chip's SHA off the footer receipt turned two checks red naming the drift, and a typo'd receipt
+SHA turned one red naming the differing URL.
+
+**The third passed, and that is the finding.** Writing a fabricated SHA into the page *and* its copy
+file together — the two agreeing with each other — passes **295/295 and 43/43**, because the
+existence check that reads git's object store covers the §1 chip only. A link that 404s for every
+reader, green everywhere. **No link on the page is wrong today** — I read all four at their SHAs.
+But that coordinated edit is precisely what a re-pin makes, so it is now a hard item in
+`pre-launch-checklist.md` with the fix named (widen the check to all four receipts) and the
+click-check kept, because only a real fetch proves reachability after a push.
+
+## Carried, so nothing is rediscovered later
+
+**Two rulings above are deliberately NOT on the page yet** — rulings get a builder rather than a
+hand-edit at a review, so nothing here was quietly typed into the shipped tree:
+
+- **§5's `with Muster` cut** (F-R8 item 12) — ruled above, builds after your verdict.
+- **VERIFY's link → `blob/main/VERIFY.md`** (chip + footer receipt, one edit) — same build step.
+- **Squash-merge reachability** — the three pinned receipts reach the public repo only if the final
+  merge preserves history. In `pre-launch-checklist.md`, hard, gated at launch.
+- **`brand-guidelines.md` §4** — recorded the header pennant at the separator's size and said the
+  footer carried no mark. Both now describe the shipped page (DEC-061). No pixels moved.
+
+## Final gate verdict — write here
+
+<!-- Founder writes the verdict here, then runs muster/scripts/muster-sprint-resume.sh. -->
+
+**Two things, then you are done:**
+
+1. **F-R1** — reply with a number: **1 · 2 · 3 · 4** (3 recommended).
+2. **The three phone checks** — pass/fail each, and describe any failure in the phrasing you would
+   use to a person, not to a harness. Check 1 is a launch blocker; if it fails, say what you saw
+   disappear and when.
+
+Plus anything the scroll-through turns up. **APPROVE** with a number for F-R1 and three passes ends
+Sprint 2; a bug list routes a fix round per bug.
+
+**Write your verdict below this line, then run `muster/scripts/muster-sprint-resume.sh`.**
+

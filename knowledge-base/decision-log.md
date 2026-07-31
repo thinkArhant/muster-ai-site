@@ -1231,5 +1231,79 @@ the footer-boundary separator).
 `section-05-shipped.md` (new), `footer-layout.md` (new), `section-01-hero.md` (DEC-058's chip
 amendment landed with the round), `agent-requests.md` (HO-039), `orchestration-queue.md`.
 
+### DEC-061 — The repetition audit is ruled, VERIFY's pin stops being provisional, and the receipts' own guard is scoped (2026-07-31)
+
+**Decision**: three rulings closing the re-gate round, plus one PM-owned cascade.
+
+**1 — The repetition audit (F-R8): eleven verdicts accepted, one declined and re-ruled.**
+Items 1–11 are accepted as filed. The page's repetition is load-bearing idiom, and the audit is
+right that most of it is structural rather than verbal: scope labels that would become punctuation
+without their key (5), readout keys that ARE the cross-scope comparison mechanism (6), §2's
+terminal-vs-narration two-voice design (7), ordinal frames whose values differ (9). Nothing is cut
+on repetition grounds where the second instance does a different job — the `curl` bookend (1), the
+roster-vs-participation split on `1 operator` (11), the two `THIS SITE` dash clusters (4).
+
+Item 2 — the wave totals twice in §2 — is **kept, and its reserve retires**. The audit held sp8's
+totals clause as §2's one reclaimable seat *if* the overnight-wave work needed room; ruling 3 below
+means §2 builds nothing this sprint, so the room is not needed and the clause stays. It becomes
+live again only if the founder picks option 1 or 2 at the final gate.
+
+Item 12 — `Muster` — is **declined as filed and re-ruled**. "Tolerable" is a weaker verdict than
+every other row's, and the row does not test the one cut available to it. §5 seats the word three
+times inside one screen: the section heading (`§05 · SHIPPED WITH MUSTER`), the founder's
+provenance line, and the page-attribution line directly beneath it. The heading supplies the
+subject two lines above, so the third instance is carried by the section frame, not by the
+sentence. **Ruling: §5's page-attribution line drops `with Muster`** — "This page — built by its
+own AI team, and measured with the same meter." R8's AI qualifier survives in both attribution
+seats, so item 3 is unaffected, and the founder's line is untouched. **Not applied at this review**
+— rulings are not hand-applied — it rides the build step after the founder's final verdict and
+does not gate launch. Accuracy note recorded rather than actioned: the row counts "×7 prose" where
+five render; two of the seven are `<title>`/meta, which the memo's own scope excludes.
+
+**2 — The VERIFY receipt and the §1 chip re-point to `blob/main/VERIFY.md`; the pin is retired,
+not deferred.** The founder's demo criterion for this one file is *the launch state*, and `main`
+at launch **is** that state by construction — which makes a SHA pin here a snapshot that must be
+re-taken later, rather than a receipt that cannot rot. Three things follow and all point the same
+way: a live target needs no re-pin step and therefore cannot be forgotten at launch; `blob/main`
+survives any merge strategy, where the other three links do not; and the pinned copy predates
+VERIFY.md's own "the four receipts, live" section, so the receipt that explains why pinned and
+live differ currently lands a reader on the copy that does not contain the explanation. The other
+three receipts stay pinned — their demo moments are in the past and a snapshot is exactly right
+for them. The chip and the footer receipt move together and stay byte-equal, as asserted.
+
+**3 — F-R1 (§2's overnight wave) goes to the founder as a pick, with option 3 recommended.** The
+consult's reasoning holds under review: R2 permits only the mechanism sentence, which §4 decision 4
+already ships, so options 1 and 2 pay §2's whole machinery for a duplicate — and option 1 re-spends
+the founder's phone playback check, which is the round's one hard launch blocker. This is the
+founder's call, not PM's; the memo rides in the final packet with its blast radii intact.
+
+**4 — PM cascade (DEC-060's open Impact item), applied.** `brand-guidelines.md` §4 recorded the
+header pennant at the separator's 6 × 9 and stated the footer carries no mark. Both now describe
+the shipped page: the header lockup is bound to the wordmark in `em`, the footer boundary is listed
+as a seat, and the punctuation-scale rule says which seats it governs and which one is sized to be
+read instead.
+
+**Rationale for what is NOT ruled here**: the harness gap found by this review (below) is a
+verification finding, not a page defect — all four shipped SHAs are real commits and every path
+exists at its own commit, read at the SHA. It lands in `pre-launch-checklist.md`, where the launch
+re-pin will meet it.
+
+**Stress test — a fabricated receipt SHA passes every runner if the copy file agrees with it.**
+Planted by PM and reverted clean: `verify-shell.mjs` asserts the six receipt URLs against
+`footer-copy.md`, and `qa-fullpage-sweep.mjs` asserts SHA existence via `git cat-file` **for the §1
+chip only**. Changing the queue receipt's SHA on the page alone goes red (one check, naming the
+differing URL); changing it in the page **and** its copy file together passes **295/295 and 43/43**
+— a link that 404s for every reader, green everywhere. Not a defect today; it is precisely the
+mutation the launch re-pin performs.
+
+**Impact**: content (item 12's cut and §5's copy file — build step after the founder's verdict),
+developer (item 12's string, VERIFY/chip re-point, and extending the sweep's `refExists` check to
+all four pinned receipts), qa (re-verify the re-pointed chip/receipt byte-equality and the widened
+SHA guard), ui-ux (none — no layout consequence), pm (`brand-guidelines.md` applied above;
+`pre-launch-checklist.md` extended).
+
+**Touched**: `brand-guidelines.md`, `pre-launch-checklist.md`, `agent-requests.md` (HO-038 heading
+restored, four handoffs resolved), `wave-review.md` (final gate packet), `orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

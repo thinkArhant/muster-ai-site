@@ -113,4 +113,22 @@
   - Resolve at launch: merge with history (merge commit, not squash), push, then the founder
     click-checks all four links once. If squash is preferred, the links must be re-pinned to
     post-merge SHAs before deploy.
+  - **The harness cannot catch a wrong SHA that both files agree on**, proven by planting one:
+    `verify-shell.mjs` checks the six receipt URLs against `footer-copy.md`, and the sweep's
+    `git cat-file` existence check covers the **§1 chip only** — so a fabricated SHA written into
+    the page *and* its copy file together passes 295/295 and 43/43 while 404ing for every reader.
+    That is exactly the edit a re-pin makes. Two ways to close it, and the first is cheap: extend
+    the sweep's `refExists` check to all four pinned receipts (ref exists as a commit **and** path
+    exists at that commit — the check that catches a pin to a commit that never held the file), and
+    keep the click-check as the second, because only a real fetch proves reachability after a push.
+  - Milestone gate: launch
+
+- [ ] **VERIFY's receipt and the §1 chip point at `blob/main/VERIFY.md`** — Blocker: hard,
+  Source: pm (DEC-061), Added: 2026-07-31
+  - The other three receipts pin to SHAs because their demo moment is in the past. VERIFY's demo
+    moment is the launch state, which `main` is by construction — so it is a live link, and it
+    needs no re-pin step that a later session could forget. `blob/main` also survives a squash
+    merge, unlike the three pinned links above.
+  - The chip and the footer receipt are asserted byte-equal; both move in one edit or the harness
+    goes red. Resolve at the build step following the founder's final verdict.
   - Milestone gate: launch

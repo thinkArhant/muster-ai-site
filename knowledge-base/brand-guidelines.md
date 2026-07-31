@@ -75,13 +75,19 @@ A cream swallowtail banner: the standard a formation musters under. Founder-auth
 
 | Seat | Treatment |
 |---|---|
-| Header lockup | Pennant + `MUSTER_` — rust pennant (6 × 9px), the wordmark, and a **static** rust underscore |
-| Section separators | Pennant replaces the square, at section-tag scale |
+| Header lockup | Pennant + `MUSTER_` — rust pennant at 0.5em × 0.75em of the wordmark, the wordmark, and a **static** rust underscore |
+| Section separators | Pennant replaces the square, at section-tag scale (6 × 9px) |
+| Footer boundary | Pennant on the closing rule — the separator's construction without its tag |
 | Favicon, social tile, avatars | The supplied artwork as authored |
 
-**The footer carries no lockup.** The header plus five section separators already seat the mark six
-times; a seventh a few rhythm units below the fifth does nothing the provenance line has not already
-done. The footer's authorship line is the closing signature.
+**The header is the only seat sized to be read; every other seat is punctuation.** The header lockup
+teaches the silhouette at legible size, and once it has, the five section separators and the footer
+boundary can be small — a reader who has met the mark recognises it at 6 × 9. The mark is bound to
+the wordmark in `em`, so one declaration re-scales the lockup and nothing else on the page moves.
+
+**The footer carries no lockup.** Its boundary takes the separator mark, not a second masthead — a
+separator is punctuation between blocks, and the page has already signed itself once at the top. The
+footer's closing sentence is the signature.
 
 **The underscore never blinks.** The `curl` owns the only cursor on the page; the header's underscore
 is a static mark, not a cursor effect.
@@ -95,8 +101,9 @@ which is deliberate: it costs no network request and avoids the inline-SVG rende
 project treats as a known failure class.
 
 **Proportion is a design decision, not arithmetic.** The pennant is ~1:1.5 portrait where a square is
-1:1, so a mark set to the same width sets half again as tall. Section tags and the header lockup are
-sized optically. At 8–12px the mark reads as punctuation; at display sizes it becomes badging, which the
+1:1, so a mark set to the same width sets half again as tall. Every seat is sized optically. Around
+6–9px the mark reads as punctuation, which is what the separators and the footer boundary want; the
+header lockup is sized to be legible as a mark instead. At display sizes it becomes badging, which the
 page's restraint does not carry.
 
 **Colour.** Rust, per the accent rules — rust is permitted on graphical marks at any size. The mark

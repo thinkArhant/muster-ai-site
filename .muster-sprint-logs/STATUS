@@ -1,6 +1,6 @@
 run: run-20260730-220543-29948
-state: running step 1
-step: 2026-07-30 Developer (web): Re-gate round — build the ruled items and pin the receipts
-step started: 2026-07-30 22:05:43
-last completed: —
-totals: 
+state: running step 3
+step: 2026-07-31 PM: Review the re-gate round and promote the final gate
+step started: 2026-07-31 01:04:18
+last completed: 2026-07-30 QA (web): Scoped re-run on the re-gate round · 109 turns · $8.28 · out 52k · 1h 44m
+totals: 2 attempt(s) · 260 turns · $23.50

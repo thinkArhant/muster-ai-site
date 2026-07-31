@@ -41,8 +41,13 @@ one alignment system with the formation on the page's real axis, section snappin
 moved to the physical screen edge with `SHEET n OF 4` ordinals, decision 1's trade-off restated as
 the file-based mechanism, the operator-absence fact carried as mechanism in decision 4, and the
 footer's placeholder replaced by real copy naming the five roles that ran and the three that did not.
-**The sprint's one remaining ask is the founder's phone** — §2's full 48-second playback with
-toolbars, the last hard launch blocker no harness on this machine can reach.
+**The re-gate's ten findings are consumed too, and the sprint is at its final gate (DEC-061).** The
+masthead reads as a mark, §4 carries a four-segment zero-motion indicator on the page's own rail,
+§5's false word is gone and its provenance line is the section's primary, §6 claims model-proofing
+without promising it, the footer closes in one sentence, and the four receipt links pin to commits
+chosen to be demonstrations of themselves. **Two asks remain, and both are the founder's**: one pick
+on where §2's overnight wave earns a seat, and the three phone checks — §2's full 48-second playback
+with toolbars is the last hard launch blocker no harness on this machine can reach.
 
 **Everything else never reaches the founder.** Spec conformance, contrast, cross-engine parity, zero
 network requests, reduced-motion completeness and corpus fidelity are all machine-verifiable (DEC-009).
