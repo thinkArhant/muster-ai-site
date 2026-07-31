@@ -1150,11 +1150,15 @@ try {
      that proves that stays narrowed to fetching references and is planted
      against below. The string must stay byte-equal to the footer's VERIFY
      receipt, which is asserted with the footer. --- */
-  /* Pinned, not `main`: the receipts are commit-SHA permalinks so a reader
-     lands on the artifact as it was when the claim was made. The chip shares
-     the footer's VERIFY receipt exactly, and that equality is asserted with
-     the footer against `footer-copy.md` — this constant is the §1 half. */
-  const CHIP_HREF = "https://github.com/thinkArhant/muster-ai-site/blob/14bceef/VERIFY.md";
+  /* `main`, not a SHA — and this one is deliberate rather than an oversight.
+     The other three receipts pin because their demo moment is in the past; this
+     file's demo moment is the LAUNCH state, which `main` at launch is by
+     construction. A pin here would be a snapshot needing a re-pin step a later
+     session could forget, and `blob/main` survives a squash merge where the
+     pinned three do not. The chip shares the footer's VERIFY receipt exactly,
+     and that equality is asserted with the footer against `footer-copy.md` —
+     this constant is the §1 half. */
+  const CHIP_HREF = "https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md";
   check("§1 VERIFY chip is the section's only focusable element and points at the rendered VERIFY.md",
     heroWide.heroFocusable.length === 1 && /chip/.test(heroWide.heroFocusable[0]) &&
       heroWide.chipHref === CHIP_HREF &&

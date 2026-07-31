@@ -92,21 +92,26 @@ known file name).
 | 2 | `queue` | `https://github.com/thinkArhant/muster-ai-site/blob/9b26788/knowledge-base/orchestration-queue.md` |
 | 3 | `handoffs` | `https://github.com/thinkArhant/muster-ai-site/blob/bded0dd/knowledge-base/agent-requests.md` |
 | 4 | `decision log` | `https://github.com/thinkArhant/muster-ai-site/blob/b41ed56/knowledge-base/decision-log.md` |
-| 5 | `VERIFY` | `https://github.com/thinkArhant/muster-ai-site/blob/14bceef/VERIFY.md` |
+| 5 | `VERIFY` | `https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md` |
 | 6 | `framework` | `https://github.com/thinkArhant/muster-ai` |
 
 - Order is the seed's five (`repo · queue · handoffs · decision log · VERIFY`), then `framework` —
   this site's receipts first, the thing they prove second.
-- The four artifact links (queue, handoffs, decision log, VERIFY) are commit-SHA blob permalinks
-  chosen by the founder's demo-in-itself criterion (DEC-059) — each pins the moment that file is
-  most a demonstration of itself, not merely the moment it was longest. `queue` → `9b26788`, 16
-  steps queued ahead of the run. `handoffs` → `bded0dd`, 11 entries filed and open at once, and
-  both entry types on one screen. `decision log` → `b41ed56`, current depth. `VERIFY` →
-  `14bceef`; the criterion for this one is *the launch state*, so the pin is provisional and is
-  re-pointed at the launch commit. `repo` and `framework` stay live — they are places, not
+- Three artifact links (queue, handoffs, decision log) are commit-SHA blob permalinks chosen by the
+  founder's demo-in-itself criterion (DEC-059) — each pins the moment that file is most a
+  demonstration of itself, not merely the moment it was longest. `queue` → `9b26788`, 16 steps
+  queued ahead of the run. `handoffs` → `bded0dd`, 11 entries filed and open at once, and both entry
+  types on one screen. `decision log` → `b41ed56`, current depth. Their demo moments are in the
+  past, which is what makes a snapshot the right form.
+- `VERIFY` is the fourth artifact link and the one exception: it points at `blob/main`, live. The
+  same criterion produces the opposite answer, because the moment that file is most a demonstration
+  of itself is *the launch state* — and `main` at launch **is** that state by construction. A pin
+  here would be a snapshot requiring a re-pin step that a later session could forget; a live link
+  cannot rot. `repo` and `framework` stay live for the different reason that they are places, not
   snapshots.
 - A permalink only resolves if the commit reaches the public repository. A squash merge of the
-  build branch collapses this history and 404s all four links; the merge must preserve it.
+  build branch collapses this history and 404s the three pinned links; the merge must preserve it.
+  `blob/main` survives either merge strategy, which is a second reason VERIFY is not pinned.
 - Blob URLs render as readable pages on GitHub rather than raw markdown, which is why the
   `VERIFY ⎘` chip in §1 shares link 5's URL exactly (DEC-056; the two strings must stay byte-equal —
   QA checks equality between this table and the chip).

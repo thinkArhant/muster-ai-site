@@ -111,8 +111,14 @@
                link the page asks a sceptic to click. An <a href> is inert until
                clicked, so the zero-request claim is untouched — the guard that
                proves it stays narrowed to fetching references. Byte-equal to
-               the footer's VERIFY receipt. -->
-          <a class="chip chip--emphasis" href="https://github.com/thinkArhant/muster-ai-site/blob/14bceef/VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span class="chip__glyph" aria-hidden="true">⎘</span></a>
+               the footer's VERIFY receipt.
+
+               `main`, not a SHA, and it is the one receipt that is live. The
+               other three pin because their demo moment is in the past; this
+               file's demo moment is the launch state, which `main` is by
+               construction. A live target needs no re-pin step that a later
+               session could forget, and it survives a squash merge. -->
+          <a class="chip chip--emphasis" href="https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span class="chip__glyph" aria-hidden="true">⎘</span></a>
         </div>
         <dl class="remnant__cells">
           <div class="remnant__cell">
@@ -394,7 +400,7 @@
            the section whose whole job is to hand over receipts. -->
       <p class="t-body read shipped__line">Bodh — a shipped iOS app and web landing, live at bodh.day. The replay above is its website wave.</p>
       <p class="t-body read shipped__line"><b>Muster was extracted mid-build from a real iOS app — the framework existed as working practice before it existed as a repo.</b></p>
-      <p class="t-body read shipped__line">This page — built with Muster by its own AI team, and measured with the same meter.</p>
+      <p class="t-body read shipped__line">This page — built by its own AI team, and measured with the same meter.</p>
 
       <!-- Two scopes, same four keys, same order, read key for key across the
            pair. Every value sits beside its own scope label: this is the one
@@ -540,11 +546,11 @@
          the eyebrow's alt-text syntax and never announced. Every href is a
          plain reader navigation: inert until clicked, nothing fetched.
 
-         The four artifact links are commit-SHA blob permalinks, not `main`.
-         `main` is rewritten every sprint and reads near-template between runs,
-         so a reader landing there sees scaffolding rather than a receipt. Each
-         SHA is chosen as the moment that file is most a demo of itself, not
-         merely the moment it was longest:
+         Three of the four artifact links are commit-SHA blob permalinks, not
+         `main`. `main` is rewritten every sprint and reads near-template
+         between runs, so a reader landing there sees scaffolding rather than a
+         receipt. Each SHA is chosen as the moment that file is most a demo of
+         itself, not merely the moment it was longest:
 
            queue        9b26788 — 16 steps queued ahead of the run, the audited
                                   Sprint-2 plan at its fullest. The org chart
@@ -555,17 +561,23 @@
                                   review. The protocol working, not described.
            decision log b41ed56 — current depth; the record is most itself at
                                   its deepest, which is now.
-           VERIFY       14bceef — the verification index as this page ships it.
 
-         `repo` and `framework` stay live — they are places, not snapshots —
-         and VERIFY.md carries live-file links for anyone who wants current
+         VERIFY is the exception and points at `blob/main`. The same criterion
+         produces the opposite answer for it: the moment that file is most a
+         demo of itself is the LAUNCH state, and `main` at launch is that state
+         by construction. A pin here would be a snapshot needing a re-pin step,
+         where a live link cannot rot — and the pinned copy predated VERIFY's
+         own account of why pinned and live differ.
+
+         `repo` and `framework` stay live too — they are places, not snapshots
+         — and VERIFY.md carries live-file links for anyone who wants current
          state. -->
     <ul class="t-micro pagefoot__receipts" role="list">
       <li><a href="https://github.com/thinkArhant/muster-ai-site">repo</a></li>
       <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/9b26788/knowledge-base/orchestration-queue.md">queue</a></li>
       <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/bded0dd/knowledge-base/agent-requests.md">handoffs</a></li>
       <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/b41ed56/knowledge-base/decision-log.md">decision log</a></li>
-      <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/14bceef/VERIFY.md">VERIFY</a></li>
+      <li><a href="https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md">VERIFY</a></li>
       <li><a href="https://github.com/thinkArhant/muster-ai">framework</a></li>
     </ul>
 

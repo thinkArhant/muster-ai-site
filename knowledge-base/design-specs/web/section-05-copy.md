@@ -77,20 +77,26 @@ Muster was extracted mid-build from a real iOS app — the framework existed as 
 
 ### 3.3 This page
 
-**Budget: ≤ 18 words.** Rationale: one line at the reading column on desktop. Written: **16**.
+**Budget: ≤ 18 words.** Rationale: one line at the reading column on desktop. Written: **14**.
 
 ```
-This page — built with Muster by its own AI team, and measured with the same meter.
+This page — built by its own AI team, and measured with the same meter.
 ```
 
 | Claim | Source |
 |---|---|
-| Built with Muster by its own AI team | Seed §5 ("built with Muster by its own team") + R8's naming requirement, which supplies "AI" |
+| Built by its own AI team | Seed §5 ("built with Muster by its own team") + R8's naming requirement, which supplies "AI" |
 | Measured with the same meter | Seed → Measured data ("This site's numbers come from the same meter over this repo's own build") |
 
 "by its own **AI** team" is R8 applied to the seed's phrase: "its own team" unqualified is the exact
 construction R8 bans, and the fix is one word. The full attribution shape — *8 agents, 1 operator* —
 lives in the footer and in §1's formation caption; repeating it a third time here would be furniture.
+
+**The line does not name Muster.** The section heading two lines above (`§05 · SHIPPED WITH MUSTER`)
+supplies the subject, so the attribution's third instance inside one screen is carried by the
+section frame rather than by the sentence. The seed's phrase survives where it is doing work — in
+the heading and in the founder's provenance line — and the page-attribution line spends its words
+on what is *only* true of this page: its team and its meter.
 
 ## 4. The readout cards
 

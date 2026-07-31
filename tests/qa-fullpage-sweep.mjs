@@ -56,26 +56,68 @@ function staticChecks() {
      without ever fetching anything. The footer's VERIFY receipt is the same
      string; verify-shell.mjs asserts the two are byte-equal. */
   const chipHref = html.match(/class="chip chip--emphasis" href="([^"]+)"/)?.[1];
-  /* The blob ref is a commit SHA now, not `main` — the receipts are pinned so a
-     reader lands on the artifact as it stood when the claim was made. Both the
-     ref and the path are checked here, and both locally: the SHA has to be a
-     real commit in THIS repository (`git cat-file -e`, which reads the object
-     store and fetches nothing), and the path has to name a file that exists.
-     A pinned link to a commit that never existed is the one way this receipt
-     could 404 while still looking correct. */
-  const chipMatch = chipHref?.match(/^https:\/\/github\.com\/thinkArhant\/muster-ai-site\/blob\/([0-9a-f]{7,40})\/(.+)$/);
-  const chipRef = chipMatch?.[1] ?? null;
-  const chipPath = chipMatch?.[2] ?? null;
-  const refExists = (ref) => {
-    if (!ref) return false;
+  /* Every blob receipt on the page is resolved here, and locally: the ref has to
+     be a real commit in THIS repository (`git cat-file -e`, which reads the
+     object store and fetches nothing), and the path has to exist AT THAT REF —
+     not merely in the working tree. A ref that never held the file is the one
+     way a receipt 404s while still looking correct in both the page and its
+     copy file, and a copy file that agrees with a fabricated SHA is exactly
+     what a launch re-pin writes. Checking the working tree alone would miss it.
+
+     Three receipts pin to SHAs because their demo moment is in the past.
+     VERIFY is live on `main` because its demo moment is the launch state —
+     asserted as a ruling here, so a well-meaning re-pin of that one link goes
+     red rather than silently reintroducing a snapshot that must be re-taken. */
+  const BLOB = /^https:\/\/github\.com\/thinkArhant\/muster-ai-site\/blob\/([^/]+)\/(.+)$/;
+  const parseBlob = (href) => {
+    const m = href?.match(BLOB);
+    return m ? { href, ref: m[1], path: m[2] } : null;
+  };
+  const gitOk = (args) => {
     try {
-      execFileSync("git", ["cat-file", "-e", ref + "^{commit}"], { cwd: ROOT, stdio: "ignore", timeout: 15000 });
+      execFileSync("git", args, { cwd: ROOT, stdio: "ignore", timeout: 15000 });
       return true;
     } catch { return false; }
   };
-  check("§1's VERIFY chip pins a real commit in this repo and names a file that exists",
-    chipPath === "VERIFY.md" && existsSync(join(ROOT, chipPath)) && refExists(chipRef),
-    `chip href = ${chipHref ?? "not found"}; ref ${chipRef ?? "not a SHA"} ${refExists(chipRef) ? "is a commit here" : "NOT FOUND in this repo"}; path ${chipPath ?? "off the blob root"} ${chipPath && existsSync(join(ROOT, chipPath)) ? "present" : "ABSENT"}`);
+  const refExists = (ref) => Boolean(ref) && gitOk(["cat-file", "-e", ref + "^{commit}"]);
+  const pathAtRef = (ref, path) => Boolean(ref && path) && gitOk(["cat-file", "-e", `${ref}:${path}`]);
+
+  /* The chip plus the footer's receipt row — every blob URL the page ships. */
+  const footerReceipts = (html.match(/<li><a href="(https:\/\/github\.com\/thinkArhant\/muster-ai-site\/blob\/[^"]+)">/g) ?? [])
+    .map((li) => parseBlob(li.match(/href="([^"]+)"/)[1]));
+  const blobs = [parseBlob(chipHref), ...footerReceipts].filter(Boolean);
+
+  /* The pinned three, checked at their own commits. This is the check that
+     catches a fabricated SHA the copy file agrees with: the ref resolving is
+     not enough, because a re-pin can name a real commit that never held the
+     file. Both halves have to hold, and both read the local object store. */
+  const pinned = blobs.filter((b) => b.path !== "VERIFY.md");
+  const resolved = pinned.map((b) => ({ ...b, commit: refExists(b.ref), atRef: pathAtRef(b.ref, b.path) }));
+  check("every pinned receipt resolves: the ref is a real commit here and the path exists AT that commit",
+    pinned.length === 3 && resolved.every((b) => b.commit && b.atRef),
+    `${resolved.length} pinned receipt(s) — ` + (resolved
+      .map((b) => `${b.path.split("/").pop()}@${b.ref}: ${b.commit ? "commit" : "NO SUCH COMMIT"}/${b.atRef ? "path present at ref" : "PATH ABSENT AT REF"}`)
+      .join(" · ") || "none found"));
+  check("the three pinned receipts stay pinned to SHAs, never to a branch",
+    pinned.length === 3 && pinned.every((b) => /^[0-9a-f]{7,40}$/.test(b.ref)),
+    pinned.map((b) => `${b.path.split("/").pop()} → ${b.ref}`).join(" · ") || "no pinned receipts found");
+
+  /* VERIFY is deliberately NOT pinned, and it is deliberately not checked at
+     `main` either: the launch state has not merged yet, so local `main` is the
+     initial commit and asserting against it would assert the wrong thing. What
+     is checkable here is that the target is the live branch and that the file
+     exists in the tree that BECOMES main. Its resolution on github.com after
+     the push is a founder click-check — a hard pre-launch item, because only a
+     real fetch proves reachability and nothing local can stand in for it. */
+  const live = blobs.filter((b) => b.path === "VERIFY.md");
+  check("both VERIFY seats point at live `main` and name a file that exists in the shipping tree",
+    live.length === 2 && live.every((b) => b.ref === "main") && existsSync(join(ROOT, "VERIFY.md")),
+    `${live.length} VERIFY seat(s) — ${live.map((b) => `${b.ref}/${b.path}`).join(" · ") || "none"}; ` +
+      `${existsSync(join(ROOT, "VERIFY.md")) ? "VERIFY.md present in tree" : "VERIFY.md ABSENT from tree"}`);
+  report("VERIFY's `blob/main` target resolves only after the launch merge — founder click-check, not a harness pass",
+    `main is at ${execFileSync("git", ["rev-parse", "--short", "main"], { cwd: ROOT, encoding: "utf8" }).trim()}, ` +
+      `${execFileSync("git", ["rev-list", "--count", "main..HEAD"], { cwd: ROOT, encoding: "utf8" }).trim()} commit(s) behind this branch; ` +
+      `VERIFY.md ${pathAtRef("main", "VERIFY.md") ? "already on main" : "not on main yet"}`);
 
   /* The indicator's no-JS guarantee, checked in the SOURCE and only in the
      source. Every rendered check of this passes whether the markup ships
