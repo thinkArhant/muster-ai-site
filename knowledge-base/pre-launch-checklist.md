@@ -57,7 +57,13 @@
     as an assertion and re-scoped to a reported measurement, so `qa-independent-audit.mjs` stops exiting
     non-zero on a standard the product has deliberately declined. See DEC-023.
 
-- [ ] **§2's mobile layout checked on a real iPhone** — Blocker: hard, Source: pm, Added: 2026-07-25
+- [x] **§2's mobile layout checked on a real iPhone** — RESOLVED 2026-07-31 (DEC-063), Source: pm, Added: 2026-07-25
+  - The founder ran it at the final gate: iPhone, Safari, toolbars showing. **The full 48-second
+    playback held both layers on screen throughout.** The `100dvh` residual did not reproduce —
+    the budget's widened slack (32.6px at 375 × 553, DEC-026 + DEC-029) was enough. Find on Page
+    lands its matches on screen and scroll feel is good, including §4's sideways track.
+  - This was the round's last hard launch blocker and the one measurement no harness on this
+    machine could take. The original entry follows, for the record of what was at risk.
   - `qlmanage` is the only WebKit on this machine; it executes no JavaScript and renders at a fixed
     ~1024² regardless of the requested size, so **no WebKit evidence can exist at mobile widths**
     (QA proved both with committed probes). The residual that matters is `100dvh` inside

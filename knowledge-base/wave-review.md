@@ -649,7 +649,15 @@ Sprint 2; a bug list routes a fix round per bug.
 
 **Write your verdict below this line, then run `muster/scripts/muster-sprint-resume.sh`.**
 
-## Final-gate verdict — IN PROGRESS
+## Final-gate verdict — COMPLETE
+
+**Closed 2026-07-31 (DEC-063).** The three phone checks ALL PASS, and the last hard launch
+blocker is closed: §2's full 48-second playback held both layers on screen on a real iPhone with
+the toolbars showing — the measurement no harness on this machine could take. Find on Page lands
+its matches on screen; scroll feel is good and §4's track rests composed. The scroll-through
+produced three findings, folded into the closing round rather than becoming new steps: two
+Developer bugs (§2's replay does not reset either pane's scroll; §4's indicator stops at slot 3)
+and one final Content ruling on the footer attribution line. See DEC-063.
 
 **Recorded 2026-07-31 in the interactive gate session (DEC-062).** Settled here:
 
@@ -659,14 +667,18 @@ Sprint 2; a bug list routes a fix round per bug.
   publish in VERIFY.md with method and rate context; no derived rate, no human baseline on the
   page; §1's remnant strip re-keys or slims (UI/UX picks from renders); commit-days off the cards.
 
-**Still outstanding, arriving in the founder's next session (on `claude-opus-5`, per the lean
-mandate):** the founder's remaining visual feedback on the final-gate build, and the three phone
-checks — §2's full 48 s playback (the last hard launch blocker), Find on Page, scroll feel.
+**Closed by the verdict above.** The three phone checks pass; the visual feedback produced the
+three findings DEC-063 records. Nothing from the gate remains open.
 
-**Build list already ruled and awaiting the closing build** (no new founder input needed):
-DEC-061's two items (VERIFY receipt + §1 chip → `blob/main`, §5 loses one `with Muster`) and
-DEC-062's cascades above.
+**Build list, ruled and in the closing round.** DEC-061's two items shipped ahead of the verdict
+(commit `42470b3`): the VERIFY receipt and §1 chip re-point to `blob/main` byte-equal, §5 lost one
+`with Muster`, and the sweep's SHA guard widened to every pinned receipt — the DEC-061 stress-test
+mutation now goes red. What remains is DEC-062's cascades plus DEC-063's three findings.
 
-**Execution mode for everything until launch (founder mandate, DEC-062 decision 5):** interactive
-warm-tab sessions on `claude-opus-5`, targeted assertions per change, ONE terminal QA sweep +
-review before launch. The driver runs only that final verification pass.
+**Execution mode for everything until launch (founder mandate, DEC-062 d5, amended by DEC-063):**
+one interactive warm PM tab on `claude-opus-5` running Muster's **Assisted** mode — exactly three
+specialist subagent invocations (Content, UI/UX, Developer), each writing its own files and
+committing under its own role. Targeted assertions per change; ONE terminal QA sweep + review
+before launch, run after the founder's render pick is built in. The driver runs only that final
+verification pass. The lean mandate constrains sessions and QA cadence, not role separation — the
+closing mile of the public git log has to match the footer's provenance claim.

@@ -1351,5 +1351,92 @@ at attention, a number the founder is glad to fill.
 **Touched**: `wave-review.md` (final-gate verdict), `retrospective.md` (FF-004),
 `decision-log.md`.
 
+---
+
+### DEC-063 — The final gate closes: the phone passes, the closing round runs Assisted, and two of DEC-062's own strings are corrected (2026-07-31)
+
+**1 — The gate is closed and the last hard launch blocker with it.** All three phone checks pass
+on a real iPhone in Safari with the toolbars showing. §2's **full 48-second playback held both
+layers on screen throughout** — the residual `100dvh` risk that `section-02-replay.md` §7.1's
+entire 379.4px budget rested on, and the one measurement no harness on this machine could take
+(`qlmanage` executes no JavaScript and renders at a fixed ~1024² at any requested size). Find on
+Page lands its matches on screen; scroll feel is good and §4's sideways track rests composed.
+`pre-launch-checklist.md`'s §2-mobile item resolves.
+
+**2 — Three findings from the scroll-through, folded into the closing round as work, not steps.**
+
+- **§2's replay control does not reset either pane's scroll** (Developer). After activation new
+  lines render out of view, because neither the terminal nor the narration container returns to
+  top. Replay must scroll **both** to top on activation. Assertion: trigger replay → `scrollTop`
+  0 in both panes.
+- **§4's indicator never reaches slot 4** (Developer), stopping at 3 at full track end — likely a
+  last-index rounding error or a `max-scrollLeft` short of the final snap point. Assertion:
+  programmatic scroll to track end → indicator state = slot 4. This is the second defect in the
+  same component the re-gate round already found shipping four dead segments to a no-JS reader,
+  which is why the assertion is on the END state rather than on a mid-track position.
+- **The footer attribution line is re-ruled, final** (Content). It becomes exactly: *"Specced,
+  written, and reviewed by Muster's AI team — 5 of 8 agents, the other three never invoked, 1
+  operator — on a framework designed and built by Kanwar Sandhu, solo, shipping his own products
+  with it."* This fixes the double-`and` and scopes "designed and built" to the **framework**,
+  which `footer-copy.md`'s own note on the two authorship claims already intended but the shipped
+  string did not say. Lands byte-equal in `footer-copy.md` and `index.html`, and the footer's
+  word-count coupling re-bases — the "one sentence, 35 words" measure changes with the string.
+
+**3 — Two of DEC-062's own quoted strings are corrected before they build.** DEC-062 decision 2
+quoted a replacement for §5's Bodh line. Building it verbatim would have shipped two regressions,
+and both are ruled here rather than carried into the brief as open questions:
+
+- **§5's scope sentence stays.** DEC-062's line deletes *"The replay above is its website wave."*
+  `section-05-copy.md` §3.1 documents that sentence as load-bearing: it tells the reader the
+  64-minute chain they watched in §2 is a **wave inside** this product, not the whole of it —
+  A-005's failure mode pre-empted in the one place on the page where the two scopes sit closest.
+  DEC-062's line makes that job **harder**, not redundant, because it introduces a whole-product
+  `$147` two screens below a wave-scoped `$24.73`. Deleting the guard while adding the hazard is
+  the wrong direction; the sentence stays.
+- **R3's framing moves with the figure it governs.** `$147` currently sits under the
+  `COST · API LIST` key, and `section-05-copy.md` §6 records that the key *is* where R3's framing
+  lives — API list price, cost-to-replicate, never subscription spend. DEC-062 deletes that key
+  and its quoted prose says only "$147 in AI tokens", which carries no framing at all. **A figure
+  may not shed its scope qualifier by changing which element renders it**: the prose must carry
+  the API-list framing the deleted key was carrying.
+
+Both are copy-rules calls inside PM's autonomy (`decision-making.md`), ruled at brief-writing time
+so no round-trip is spent mid-flight. The **substance** is ruled here; the **form** — exact
+wording, and whether §5 runs three prose lines or four within the seed's "~4 lines" budget — is
+Content's to rule.
+
+**4 — The closing round runs Muster's Assisted mode, three invocations, founder-approved.**
+DEC-062 d5's lean mandate constrains **sessions and QA cadence** (one warm tab, `claude-opus-5`,
+no driver runs, one terminal sweep instead of per-wave re-runs). PM initially read it as also
+constraining **role separation** and began building specialist work directly; the founder stopped
+that. The two are separable: Assisted mode is one PM tab spawning subagents, which satisfies every
+clause of the lean mandate. The deciding argument is not process hygiene but **the exhibit's own
+claim** — the footer publishes *"specced, written, and reviewed by Muster's AI team"* beside a
+linked, public git log, so a closing mile of `pm:` commits doing design, copy and code would refute
+the page on the one surface a sceptic checks. Secondary: PM reviewing PM removes the second reader
+that caught three Sprint-1 regressions, and durable specs would get written by the wrong owner
+(`muster/CLAUDE.md` rule 1).
+
+Exactly three invocations — Content, UI/UX, Developer — each writing its own files and committing
+under its own role per rule 16. Founder time is spent exactly twice: one batched render look, and
+the post-push VERIFY click-check.
+
+**5 — Sequence to launch, with PM's one amendment.** Content → UI/UX (renders proposals) →
+**founder's batched render look** → Developer (builds everything, including the pick) → terminal
+QA sweep → launch merge with history preserved → founder's VERIFY click-check on the live page.
+The amendment: the founder's stated sequence put Developer before the render look, which would
+have needed a fourth invocation to build in the pick. Developer therefore runs **last**, and the
+founder's look is taken on UI/UX proposal renders in the page's real tokens — the established
+pattern for taste calls here (DEC-057's `samples/gate-b-proposed.html`, and all five of DEC-060's
+rulings). This also satisfies DEC-062 d5's own condition that nothing merges on a sweep predating
+the last change.
+
+**Impact**: content (§5 strings, VERIFY.md economics, the footer ruling), ui-ux (2-cell card
+composition, §1 remnant options), developer (all markup, the two bugs, every harness coupling),
+qa (terminal sweep), pm (this entry, `wave-review.md`, `pre-launch-checklist.md`, the briefs).
+
+**Touched**: `wave-review.md`, `decision-log.md`, `pre-launch-checklist.md`,
+`orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
