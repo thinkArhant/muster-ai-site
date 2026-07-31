@@ -58,6 +58,18 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
   to lose one `with Muster` — both build after the verdict, neither is on the page yet, and a PM stress test found that a fabricated receipt SHA passes
   every runner if the copy file agrees with it. See DEC-061 and the Next Step halt block below.
 
+- [2026-07-31] [UI/UX]: **The batched render look is ready — one pick, on one image.** Open
+  `samples/closing-round-renders/CONTACT-SHEET.png`. **Asked, one thing**: §1's THIS SITE strip,
+  **A** (re-keyed to §5's two questions) or **B** (slimmed to the VERIFY chip). Both are shown in
+  situ under the headline and the formation, at 1280 and at 375, and both were re-rendered in
+  WebKit. **UI/UX recommends B**, and the sheet says so as a recommendation, not a ruling: A prints
+  the same two keys and the same two values as §5's THIS SITE card one scroll above it, and puts a
+  second rust readout under the headline's rust `AN AI`. B is also 87px shorter at desktop, which
+  brings the whole hero — the `curl` included — inside a 774px window. **Shown, not asked** on the
+  same sheet: §5's rebuilt two-cell cards, and the footer's final sentence as it sets. Developer
+  builds only the picked form; the losing form is deleted from `section-01-hero.md` §7.1 in the
+  same commit.
+
 - [2026-07-31] [Content]: **VERIFY.md now publishes the site's economics — do the figures get a
   fresh read before launch?** The section quotes the committed record ($594 · 51 step-sessions ·
   ~27.3 driver-hours · $21.8/hr) and labels the whole thing a floor. But the tree already carries
@@ -134,6 +146,25 @@ them; they are NOT queue steps and add no scope):
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-31 — Closing round 2 of 3: UI/UX rules §5's card and renders the founder's pick (HO-043).
+  **A two-cell card still reads as an instrument**, chosen and measured on a rendered proposed
+  state in both engines — card heights equal at 361.8px desktop / 301.8px phone, corresponding keys
+  and values on identical block-starts across the pair, each sub-line 42.0px below its own value,
+  so the sub-line asymmetry reads as a matrix answered on a diagonal rather than as an omission.
+  The alternative composition (cells side by side, cards stacked) is disqualified on measurement at
+  **475.6px against 361.8px** for a worse read. **`bodh.day` and `THIS PAGE` are RULED rust**: the
+  value slot's colour is the answered/unanswered channel, not a numeral/word distinction — ink for
+  both would make card 2 read as measuring nothing, and rust holds AA-large at the readout size's
+  24px floor (3.86 dark / 4.89 light). Reduced motion and scripts-stripped render the same end
+  frame; the dash never animates. **§1's two forms are rendered in situ, both engines**, and A's
+  cost is visible: it duplicates §5's card one scroll above it and puts a second rust readout under
+  the headline's rust `AN AI` — B is recommended and is 87px shorter. Two defects found by
+  rendering rather than by reading: the strip's bottom-right registration mark **overlaps the
+  VERIFY chip's border box** at 1280/375/320, and the footer's final sentence **splits
+  `Kanwar / Sandhu`** across lines at 375 and 320 — fixed with two nowrap units that cost zero
+  lines at every measured width. Sweep 45/45, audit 108/108, no shipped file touched.
+  **Awaiting the founder's batched render look, then Developer (round 3).**
 
 - 2026-07-31 — Closing round 1 of 3: Content writes the cost posture into strings (HO-042). §5 runs
   four prose lines — Bodh's price lands as `Bodh, idea to live: 9.3 hours of active build, $147 in
@@ -253,19 +284,3 @@ them; they are NOT queue steps and add no scope):
   HO-036 were complete** — PM re-verified on the tree rather than trusting the log (all three runners
   green: suite GREEN both engines, audit 108/108, sweep 42/42; in-flight-edited test files parse;
   placeholder/email greps zero) and committed the closeout. Queue advanced by PM.
-
-- 2026-07-29 — Step: UI/UX Gate B fix round (HO-035, DEC-057). All three rulings measured on the
-  real page before being written, and re-measured on a rendered proposed state
-  (`samples/gate-b-proposed.html`, renders + JSONs in `samples/gate-b-renders/`). **F-B1**: two
-  edges and one axis (`page-shell.md` §7.2) — the formation spans the container so the hub's
-  center IS the page axis (delta 0.0px at 1280/1440/1600, against 173.8px off on the judged
-  build). **F-B2**: snap removed — paging loses on measurement (four of six sections exceed the
-  553 phone fold; §5 exceeds 700 at desktop), every assertion dispositioned by name in §7.1's
-  retirement inventory; §4's track keeps its x snap as part of F-B3, fallback named. **F-B3**:
-  the cut moves to the physical screen edge via a token-derived `--track-bleed` (the dead strip
-  — 128/208px on the judged build — gone by construction), `SHEET n OF 4` ordinals in real
-  spec-sheet grammar, the scrollbar styled as a gauge; phone stays stacked with orientation
-  (3071px at 375, measured; accordion and phone-track alternatives measured and disqualified in
-  §8.1 — the accordion hides 12/16 rows from Safari find-in-page). DEC-053's §7.1-A11/§12.16
-  amendments landed with the round. `scripts/test.sh` re-run: 272/273 with HO-034's one designed
-  red, no shipped file touched. **Awaiting PM review at the fix-round review step.**

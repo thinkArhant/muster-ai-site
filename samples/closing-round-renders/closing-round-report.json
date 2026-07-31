@@ -1,0 +1,399 @@
+{
+  "engine": "Blink (headless Chrome, CDP)",
+  "viewports": {
+    "s01-a-1280x700": {
+      "rail": 128,
+      "heroHeight": 860.55,
+      "headline": {
+        "x": 128,
+        "y": 174.8,
+        "w": 1024,
+        "h": 142.78,
+        "bottom": 317.58
+      },
+      "caption": {
+        "x": 128,
+        "y": 484.17,
+        "w": 1024,
+        "h": 16.5,
+        "bottom": 500.67
+      },
+      "remnant": {
+        "x": 128,
+        "y": 572.67,
+        "w": 1024,
+        "h": 139.19,
+        "bottom": 711.86
+      },
+      "remnantInlineStart": 128,
+      "chip": {
+        "x": 1060.19,
+        "y": 585.67,
+        "w": 78.81,
+        "h": 26.19,
+        "bottom": 611.86
+      },
+      "curl": {
+        "x": 128,
+        "y": 759.86,
+        "w": 1024,
+        "h": 50.69,
+        "bottom": 810.55
+      },
+      "values": [
+        {
+          "text": "—",
+          "color": "rgb(230, 227, 211)",
+          "fontSize": "30px",
+          "animation": "none",
+          "transition": "0s"
+        },
+        {
+          "text": "THIS PAGE",
+          "color": "rgb(192, 90, 50)",
+          "fontSize": "30px",
+          "animation": "none",
+          "transition": "0s"
+        }
+      ],
+      "foldClear": 199.33
+    },
+    "s01-b-1280x700": {
+      "rail": 128,
+      "heroHeight": 773.55,
+      "headline": {
+        "x": 128,
+        "y": 174.8,
+        "w": 1024,
+        "h": 142.78,
+        "bottom": 317.58
+      },
+      "caption": {
+        "x": 128,
+        "y": 484.17,
+        "w": 1024,
+        "h": 16.5,
+        "bottom": 500.67
+      },
+      "remnant": {
+        "x": 128,
+        "y": 572.67,
+        "w": 1024,
+        "h": 52.19,
+        "bottom": 624.86
+      },
+      "remnantInlineStart": 128,
+      "chip": {
+        "x": 1060.19,
+        "y": 585.67,
+        "w": 78.81,
+        "h": 26.19,
+        "bottom": 611.86
+      },
+      "curl": {
+        "x": 128,
+        "y": 672.86,
+        "w": 1024,
+        "h": 50.69,
+        "bottom": 723.55
+      },
+      "values": [],
+      "foldClear": 199.33
+    },
+    "s01-a-375x553": {
+      "remnantHeight": 203.48,
+      "heroHeight": 1195.48,
+      "headWraps": true,
+      "values": [
+        {
+          "text": "—",
+          "color": "rgb(230, 227, 211)",
+          "fontSize": "24px"
+        },
+        {
+          "text": "THIS PAGE",
+          "color": "rgb(192, 90, 50)",
+          "fontSize": "24px"
+        }
+      ]
+    },
+    "s01-b-375x553": {
+      "remnantHeight": 80.98,
+      "heroHeight": 1072.98,
+      "headWraps": true,
+      "values": []
+    }
+  },
+  "s05_1280x700": {
+    "accentToken": "#C05A32",
+    "inkToken": "#E6E3D3",
+    "sectionHeight": 891.94,
+    "cardBlockHeight": 361.8,
+    "cards": [
+      {
+        "scope": "BODH · IDEA → LIVE",
+        "height": 361.8,
+        "width": 500,
+        "top": 504.5,
+        "cardCaptions": 0,
+        "cells": [
+          {
+            "key": "OPERATOR ATTENTION",
+            "value": "4.8 h",
+            "valueColor": "rgb(192, 90, 50)",
+            "valueFontSize": "30px",
+            "valueFontFamily": "ui-monospace",
+            "valueVariantNumeric": "tabular-nums",
+            "valueAnimation": "none",
+            "valueTransition": "0s",
+            "countup": true,
+            "sub": null,
+            "subTop": null,
+            "cellTop": 594.3,
+            "cellHeight": 87,
+            "valueTop": 622.8
+          },
+          {
+            "key": "SHIPPED",
+            "value": "bodh.day",
+            "valueColor": "rgb(192, 90, 50)",
+            "valueFontSize": "30px",
+            "valueFontFamily": "ui-monospace",
+            "valueVariantNumeric": "tabular-nums",
+            "valueAnimation": "none",
+            "valueTransition": "0s",
+            "countup": false,
+            "sub": "App Store + web",
+            "subTop": 800.8,
+            "cellTop": 705.3,
+            "cellHeight": 112,
+            "valueTop": 758.8
+          }
+        ]
+      },
+      {
+        "scope": "THIS SITE · SPEC → LIVE",
+        "height": 361.8,
+        "width": 500,
+        "top": 504.5,
+        "cardCaptions": 0,
+        "cells": [
+          {
+            "key": "OPERATOR ATTENTION",
+            "value": "—",
+            "valueColor": "rgb(230, 227, 211)",
+            "valueFontSize": "30px",
+            "valueFontFamily": "ui-monospace",
+            "valueVariantNumeric": "tabular-nums",
+            "valueAnimation": "none",
+            "valueTransition": "0s",
+            "countup": true,
+            "sub": "measured at launch",
+            "subTop": 664.8,
+            "cellTop": 594.3,
+            "cellHeight": 87,
+            "valueTop": 622.8
+          },
+          {
+            "key": "SHIPPED",
+            "value": "THIS PAGE",
+            "valueColor": "rgb(192, 90, 50)",
+            "valueFontSize": "30px",
+            "valueFontFamily": "ui-monospace",
+            "valueVariantNumeric": "tabular-nums",
+            "valueAnimation": "none",
+            "valueTransition": "0s",
+            "countup": false,
+            "sub": null,
+            "subTop": null,
+            "cellTop": 705.3,
+            "cellHeight": 112,
+            "valueTop": 758.8
+          }
+        ]
+      }
+    ],
+    "lines": [
+      {
+        "text": "Bodh — a shipped iOS app and web landing, li",
+        "fontSize": "17px",
+        "fontWeight": "400",
+        "color": "rgb(230, 227, 211)",
+        "inlineStart": 128,
+        "width": 685.31,
+        "rendered": 2,
+        "boldRuns": []
+      },
+      {
+        "text": "Bodh, idea to live: 9.3 hours of active buil",
+        "fontSize": "17px",
+        "fontWeight": "400",
+        "color": "rgb(230, 227, 211)",
+        "inlineStart": 128,
+        "width": 685.31,
+        "rendered": 1,
+        "boldRuns": []
+      },
+      {
+        "text": "Muster was extracted mid-build from a real i",
+        "fontSize": "17px",
+        "fontWeight": "400",
+        "color": "rgb(230, 227, 211)",
+        "inlineStart": 128,
+        "width": 685.31,
+        "rendered": 2,
+        "boldRuns": [
+          "700"
+        ]
+      },
+      {
+        "text": "This page — built by its own AI team, and me",
+        "fontSize": "17px",
+        "fontWeight": "400",
+        "color": "rgb(230, 227, 211)",
+        "inlineStart": 128,
+        "width": 685.31,
+        "rendered": 1,
+        "boldRuns": []
+      }
+    ],
+    "proseAccentCount": 0
+  },
+  "s05_alt_c2": [
+    {
+      "scope": "BODH · IDEA → LIVE",
+      "h": 225.8,
+      "w": 1024
+    },
+    {
+      "scope": "THIS SITE · SPEC → LIVE",
+      "h": 225.8,
+      "w": 1024
+    }
+  ],
+  "s05_reduced": [
+    {
+      "text": "4.8 h",
+      "color": "rgb(192, 90, 50)",
+      "animation": "none",
+      "transition": "0s"
+    },
+    {
+      "text": "bodh.day",
+      "color": "rgb(192, 90, 50)",
+      "animation": "none",
+      "transition": "0s"
+    },
+    {
+      "text": "—",
+      "color": "rgb(230, 227, 211)",
+      "animation": "none",
+      "transition": "0s"
+    },
+    {
+      "text": "THIS PAGE",
+      "color": "rgb(192, 90, 50)",
+      "animation": "none",
+      "transition": "0s"
+    }
+  ],
+  "s05_nojs": [
+    {
+      "text": "4.8 h",
+      "color": "rgb(192, 90, 50)"
+    },
+    {
+      "text": "bodh.day",
+      "color": "rgb(192, 90, 50)"
+    },
+    {
+      "text": "—",
+      "color": "rgb(230, 227, 211)"
+    },
+    {
+      "text": "THIS PAGE",
+      "color": "rgb(192, 90, 50)"
+    }
+  ],
+  "footer_1280x700": {
+    "fontSize": "20px",
+    "lineHeight": "32px",
+    "fontWeight": "400",
+    "width": 799.16,
+    "height": 96,
+    "words": 35,
+    "renderedLines": [
+      "Specced, written, and reviewed by Muster's AI team — 5 of 8 agents, the other three never",
+      "invoked, 1 operator — on a framework designed and built by Kanwar Sandhu, solo, shipping",
+      "his own products with it."
+    ]
+  },
+  "s05_375x553": {
+    "cards": [
+      {
+        "scope": "BODH · IDEA → LIVE",
+        "h": 301.8
+      },
+      {
+        "scope": "THIS SITE · SPEC → LIVE",
+        "h": 301.8
+      }
+    ],
+    "cardBlockHeight": 627.59,
+    "sectionHeight": 1298.19
+  },
+  "footer_375x553": {
+    "fontSize": "17px",
+    "lineHeight": "27.2px",
+    "fontWeight": "400",
+    "width": 327,
+    "height": 163.13,
+    "words": 35,
+    "renderedLines": [
+      "Specced, written, and reviewed by",
+      "Muster's AI team — 5 of 8 agents, the",
+      "other three never invoked, 1 operator — on",
+      "a framework designed and built by Kanwar",
+      "Sandhu, solo, shipping his own products",
+      "with it."
+    ]
+  },
+  "footer_320x568": {
+    "fontSize": "17px",
+    "lineHeight": "27.2px",
+    "fontWeight": "400",
+    "width": 272,
+    "height": 190.31,
+    "words": 35,
+    "renderedLines": [
+      "Specced, written, and reviewed by",
+      "Muster's AI team — 5 of 8 agents,",
+      "the other three never invoked, 1",
+      "operator — on a framework",
+      "designed and built by Kanwar",
+      "Sandhu, solo, shipping his own",
+      "products with it."
+    ]
+  },
+  "shipped_baseline_1280": {
+    "cards": [
+      {
+        "scope": "BODH · IDEA → LIVE",
+        "h": 674.3,
+        "cells": 4
+      },
+      {
+        "scope": "THIS SITE · SPEC → LIVE",
+        "h": 674.3,
+        "cells": 4
+      }
+    ],
+    "cardBlockHeight": 674.3,
+    "sectionHeight": 1151.55,
+    "heroHeight": 0
+  },
+  "shipped_baseline_s01": {
+    "remnantHeight": 145.19,
+    "heroHeight": 866.55
+  }
+}

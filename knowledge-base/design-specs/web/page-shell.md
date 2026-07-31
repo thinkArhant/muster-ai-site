@@ -217,12 +217,57 @@ The footer inherits this system as-is: the closing sentence, the receipts row an
 | **Brand mark — the pennant** | The `--accent` pennant, drawn as a `clip-path` on a plain box, `aria-hidden`. Brand scale (9×13.5px) in the header lockup; punctuation scale (6×9px) at the five section separators and the footer boundary. Full spec — geometry, per-seat sizing, the header lockup and its underscore, the favicon, and the seats it deliberately does **not** take — is `design-specs/web/brand-seats.md` |
 | **Stencil section tag** | `§02 · WATCH IT SHIP` — `--text-label`, `--muted`, preceded by the pennant at `--gap-hairline`. Semantically the section's `<h2>` (visually a label; the heading tree is real) |
 | **Hairline rule with machined end-ticks** | 1px `--hair` line, full-width, with 9×1px perpendicular ticks at both ends of the centered tag. Decorative: `aria-hidden` on the rule construction, never information-bearing |
-| **Registration marks** | `+` glyphs, `--muted`, `--text-micro`, at the outer corners of instrument surfaces (terminal, readout strips). Sparse — two per surface maximum, `aria-hidden` |
-| **Instrument readout cell** | `--surface` card, `--hair` 1px border, sharp corners. Key: `--text-micro` `--muted`. Value: `--text-readout` `--accent` flat, tabular. Sub-line: `--text-micro` `--muted`. Unmeasured value: `--ink` em-dash + sub-line "measured at launch" — dashes never count up |
+| **Registration marks** | `+` glyphs, `--muted`, `--text-micro`, at the outer corners of instrument surfaces (terminal, readout strips). Sparse — two per surface maximum, `aria-hidden`. **Two is a ceiling, not a quota**: two marks read as a frame only when a field of content sits between them, so a surface whose content is a single row takes one mark, at the top-left. The inline-end corner of such a surface belongs to its counterweight — a mark placed there lands on the counterweight's own border, measured overlapping the `VERIFY` chip at 1280, 375 and 320 |
+| **Instrument readout cell** | `--surface` card, `--hair` 1px border, sharp corners. Key: `--text-micro` `--muted`. Value: `--text-readout`, tabular, flat. Sub-line: `--text-micro` `--muted`. **The value slot's colour is the answered/unanswered channel** — §8.1 |
 | **Chip** | `--text-micro`, 1px border. Default: `--hair` border, `--muted` text. Emphasis (e.g. `VERIFY ⎘`): `--accent` border, **`--ink` text**, rust glyph — rust text at chip size would fail AA (§2.3) |
 | **Spec-sheet rows** | Label column `--text-label` `--muted` + `--hair` row rules; value cells `--ink`. Mechanism row: ink text with a rust graphical mark — never rust text (the ≥19px-bold rust branch is declined; §4 is body prose). Full detail: `design-specs/web/section-04-decisions.md` |
 | **`OPERATIONAL` status bar** | See §9. Sticky, opaque, hairline-ruled |
 | **Roster formation** | PM hub seated over a bus-bar carrying the seven specialist plates — hero-scoped; ships with the hero spec (`section-01-hero.md` §6). The bus-bar `+` terminals reuse registration-mark styling |
+
+### 8.1 The readout cell — what the colour means, and what the row grid guarantees
+
+**A readout cell answers one key. The value slot's colour says whether the key has been answered
+yet, and nothing else.**
+
+| State | Value | Sub-line |
+|---|---|---|
+| Answered | `--accent`, `--text-readout`, mono, tabular | optional qualifier, `--text-micro` `--muted` |
+| Not answered yet | `--ink` em-dash, same size and face | `measured at launch`, `--text-micro` `--muted` |
+
+Three consequences, each of them the reason the rule is stated as a channel rather than as a list
+of which cells are rust:
+
+1. **A word value is rust exactly as a numeral is.** `bodh.day` and `THIS PAGE` are answers to their
+   keys; they take the accent because they are answered, not because of what characters they
+   contain. The alternative — rust for numerals, ink for words — would put an answered value in the
+   same colour as an unanswered one, and a card holding one dash beside one ink word would read as a
+   card that measures nothing. Contrast holds by size: `--text-readout` floors at 24px, where rust
+   measures 3.86 on the dark surface and 4.89 on the light against a 3:1 large-text floor (§2.2).
+   `font-variant-numeric: tabular-nums` is inert on a word and stays declared — it is the cell's
+   property, not the string's.
+2. **Colour is never the only channel** (§11). The unanswered state also changes the glyph (an
+   em-dash, which is not a value) and carries a sub-line that says so in words. A reader who sees no
+   colour still reads the card correctly.
+3. **The unanswered value never animates**, in any state — no count-up, no transition, default path
+   and reduced-motion path identical (§10.2).
+
+**The sub-line is a property of the cell, not of the card.** A caption at the card's foot qualifies
+every cell above it, which is false the moment one cell is answered and another is not. So a
+qualifier sits under the value it qualifies, and a readout card carries no card-level caption.
+
+**Every cell reserves its sub-line row whether or not it has one.** The cell is a three-row grid —
+key, value, sub-line — with the third row's minimum equal to the micro line box plus the gap a
+sub-line hangs at, both read off the type and spacing tokens so a scale change moves the reserve
+with them. This is what makes a pair of cards comparable cell by cell: with the reserve, two cards
+whose sub-lines fall in *different* cells still put every key, every value and every rule on one
+row across the pair, and each sub-line sits the same distance under its own value. Without it the
+cards go ragged from the first asymmetry down, and the comparison the pairing exists to make is read
+across a step.
+
+**The relationships to assert** (never a literal height): paired cards compute equal block-size;
+corresponding keys and values across a pair compute equal block-start; each sub-line's offset below
+its own value is equal across the pair; the count of card-level captions is zero; an unanswered
+value computes `--ink` with `animation: none` and `transition-duration: 0s` in both motion paths.
 
 ## 9. Status bar (shell chrome)
 
@@ -279,7 +324,12 @@ Appears in the status bar and as the terminal live indicator. **Clearly alive at
 - Reduced motion: static solid `--accent` core at 100% + the `OPERATIONAL` word — state fully communicated without the animation (text channel, not colour-alone).
 
 ### 10.2 Scroll-triggered count-up (element 2)
-Readout metric values count from 0 to their exact value over `--countup-duration`, ease-out cubic, triggered once per page load at ≥55% cell visibility. Scope: §5's shipped-with cards — the page's only counting cells. §1's remnant renders inert dashes that never animate (`section-01-hero.md` §7), and the replay section's totals strip is deliberately static (see `section-02-replay.md` §7, annotation 7). The count-up engine's `aria-live` posture is decided and verified against §5's real cells.
+Readout metric values count from 0 to their exact value over `--countup-duration`, ease-out cubic, triggered once per page load at ≥55% cell visibility. Scope: §5's shipped-with cards — the page's only counting cells. §1's remnant never animates (`section-01-hero.md` §7), and the replay section's totals strip is deliberately static (see `section-02-replay.md` §7, annotation 7). The count-up engine's `aria-live` posture is decided and verified against §5's real cells.
+
+**The engine is pointed only at metric values.** A `SHIPPED` cell answers with a place, not a
+measurement, and takes no count-up hook at all. The one unanswered value keeps its hook deliberately
+— the engine's refusal to animate a value carrying no digits is then a property of the shipped page
+rather than of a fixture.
 
 - **Decimals roll as decimals**: 9.3 animates 0.0 → 9.3 with one decimal place preserved throughout; the final frame renders the exact source string.
 - Tabular numerals; the cell is sized by its final value — zero layout shift.

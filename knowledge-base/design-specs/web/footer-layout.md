@@ -16,9 +16,9 @@ boundary separator geometry in `brand-seats.md` §5. No new token.
 ──┤▸├──────────────────────────────────────────   1 boundary separator (full-width)
   Specced, written, and reviewed by Muster's       2 closing sentence — --text-lead
   AI team — 5 of 8 agents, the other three
-  never invoked, 1 operator — and designed and
-  built by Kanwar Sandhu, solo, shipping his
-  own products with it.
+  never invoked, 1 operator — on a framework
+  designed and built by Kanwar Sandhu, solo,
+  shipping his own products with it.
   REPO · QUEUE · HANDOFFS · DECISION LOG ·         3 receipts row — --text-micro
   VERIFY · FRAMEWORK
   github.com/thinkArhant                           4 contact link — --text-body
@@ -28,11 +28,11 @@ boundary separator geometry in `brand-seats.md` §5. No new token.
    (6 × 9), tick, line, seated at the container's content edge, entirely `aria-hidden`. It
    **replaces** the footer's plain `--hair` top border — one boundary, one rule
    (`brand-seats.md` §5 owns the ruling and geometry).
-2. **The closing sentence** — `footer-copy.md` §2's recommended candidate, ruled from renders
-   (§2 below), set at **`--text-lead` / `--lead-lead`, `--font-sans`, 400, full `--ink`**, capped
-   at the reading column. Lead scale is the ruling: the page's closing statement in the same
-   voice as its section intros — a signature, not fine print. At body scale the sentence rendered
-   as legal-notice furniture; at lead it reads as the page's last deliberate sentence.
+2. **The closing sentence** — `footer-copy.md` §2's string, set at **`--text-lead` / `--lead-lead`,
+   `--font-sans`, 400, full `--ink`**, capped at the reading column. Lead scale is the ruling: the
+   page's closing statement in the same voice as its section intros — a signature, not fine print.
+   At body scale the sentence rendered as legal-notice furniture; at lead it reads as the page's
+   last deliberate sentence. It carries two nowrap units — §2 below.
 3. **The receipts row** — six links, `--text-micro` mono labels, uppercase by the page's shared
    mono-label transform, separated by `·`, wrapping freely at narrow widths. Directly under the
    sentence at `--gap-flow`: the receipts are the sentence's own evidence and sit with it.
@@ -45,20 +45,26 @@ boundary separator geometry in `brand-seats.md` §5. No new token.
 `--gap-block`, sentence → receipts at `--gap-flow`, receipts → contact at `--gap-block`; the
 footer's own block padding comes from `--gap-section`'s floor, not a new value.
 
-## 2. Which sentence ships — ruled from renders
+## 2. How the sentence sets — measured, and the two units it holds
 
-`footer-copy.md` §2 supplies three candidates. All three were rendered in the page's real tokens
-(dark, 1280 and 375, both engines) and the recommended candidate was judged against its
-alternates:
+Measured in Blink on the shipped tokens, dark, at four widths: **3 lines at 1600 and 1280** (20px on
+a 32px lead, 799.16px column), **5 at 430**, **6 at 375**, **7 at 320** (17px on 27.2px). WebKit sets
+the same three lines at desktop scale with its own break points. No WebKit evidence exists at phone
+widths — the only WebKit on this machine cannot be given a viewport.
 
-| Candidate | Verdict |
-|---|---|
-| **A — team truth first, counts as an aside, authorship closing (33 words)** | **Ships.** Reads in one breath as a signature; "solo" lands beside "AI team"; the audited claim leads |
-| B — all eight role names in-sentence (40 words) | Rejected from the render: the name run reads as a recital and the aside swallows the signature; the names live one line below (receipts → queue/ledger) and in `VERIFY.md` |
-| C — authorship first (32 words) | Rejected: leads the page's closing line with the human on a page whose thesis is what the AI team shipped; the audited participation claim lands mid-sentence |
+**Two runs are held as nowrap units: the founder's name, and `never invoked`.** Untreated, the
+sentence breaks **`Kanwar / Sandhu`** across lines at 375 and at 320 — a personal name split in two
+in the page's closing signature — and at 1280 it breaks between the adverb and its verb inside the
+participation aside. Both units cost **zero lines at every measured width** (1280 stays 3 at 96px;
+375 stays 6 at 163.13px), and both move their break onto a phrase boundary instead of into a unit.
 
-Content's recommendation and the render judgment agree; A ships. The string is `footer-copy.md`'s
-verbatim and is asserted by byte equality there, not restated here.
+The mechanism is the page's own: a style-only span, as the headline's phrase units and the kicker's
+sentence spans are. The text content and the announced string are untouched, so the byte equality
+`footer-copy.md` asserts is unaffected — which is the whole reason the fix is a span and not a
+non-breaking space inside the string.
+
+A name is treated as unbreakable for the same reason a scope label is: it is one token to a reader
+even though it is two to a line-breaker.
 
 ## 3. Both themes, contrast
 
@@ -82,13 +88,17 @@ Each protects a relationship:
    (`brand-seats.md` §8). Fails if a footer lockup sneaks in.
 4. **Rail alignment** — each of the four blocks' border-box inline-start equals the container's
    content inline-start (the shell's §7.2 relationship, asserted per block, footer included).
+5. **The units hold** — the founder's name and `never invoked` each report exactly one client rect
+   at 1280, 375 and 320. Fails the moment either splits across a line, which is the defect the
+   spans exist to prevent. The sentence's `textContent` stays byte-equal to the copy file's, so a
+   span that leaked a character would fail that check instead.
 
 String equality, link hrefs, and the no-email sweep are `footer-copy.md`'s checks and stay there.
 
 ## 5. Provenance
 
-Decided here (DEC-060): the four-block composition; lead scale for the closing sentence, judged
-from renders against the body-scale alternate; the separator replacing the plain top border;
-candidate A confirmed from renders. Strings: `footer-copy.md` (Content). Separator geometry:
-`brand-seats.md` (founder-ruled seat). From the direction reference: nothing — its footer predates
-the receipts row and the participation truth.
+Decided here: the four-block composition; lead scale for the closing sentence, judged from renders
+against the body-scale alternate; the separator replacing the plain top border; the two nowrap
+units, chosen from measured line-break output rather than from a reading. Strings: `footer-copy.md`
+(Content). Separator geometry: `brand-seats.md` (founder-ruled seat). From the direction reference:
+nothing — its footer predates the receipts row and the participation truth.

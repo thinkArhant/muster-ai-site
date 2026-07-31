@@ -10,11 +10,145 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-043 — UI/UX: §5's two-cell cards ruled, §1's two strip forms rendered for the founder, and the footer's line-break defect
+
+**From**: UI/UX · **Reviewers**: Developer (`pending` — builds §5's cards, the footer units, and
+whichever §1 form the founder picks), PM (`pending` — carries the contact sheet to the founder and
+records the pick)
+**Status**: open · **Filed**: 2026-07-31
+
+**Scope**: proposal renders + durable specs. No shipped file touched — `index.html`, `styles/*` and
+`tests/*` are untouched, verified by `git status`.
+
+#### 0. What the founder looks at
+
+**`samples/closing-round-renders/CONTACT-SHEET.png`** — 1520 × 1149 CSS px at 2×. One ask (§1's
+strip, A or B, both in situ under the headline and the formation, desktop and phone), and two things
+shown rather than asked (§5's rebuilt cards, the footer's sentence as it sets). UI/UX recommends B
+and says so on the sheet, labelled as a recommendation.
+
+Everything else in that directory is the evidence: `closing-round-a.html` / `closing-round-b.html`
+are the proposal pages (generated from `index.html` by `build-proposals.mjs`, so nothing outside the
+edits can drift), `closing-round-report.json` / `final-measure.json` / `footer-report.json` hold
+every measurement, `render-proposals.mjs` and `render-webkit.mjs` regenerate the renders in Blink
+and WebKit.
+
+#### 1. §5's cards — RULED, build as rendered
+
+Structure is unchanged from what ships; only the cell inventory changes. `.shipped__cell`'s
+three-row grid with the reserved sub-line row **stays exactly as written** — it is what keeps the
+two cards comparable now that their sub-lines fall in different cells.
+
+| | Card 1 `BODH · IDEA → LIVE` | Card 2 `THIS SITE · SPEC → LIVE` |
+|---|---|---|
+| Cell 1 | `OPERATOR ATTENTION` / `4.8 h` **rust**, `data-countup` | `OPERATOR ATTENTION` / `—` **ink**, `data-countup`, sub `measured at launch` |
+| Cell 2 | `SHIPPED` / `bodh.day` **rust**, no hook, sub `App Store + web` | `SHIPPED` / `THIS PAGE` **rust**, no hook |
+| Card caption | none | none — `.shipped__caption` retires from the markup |
+
+- **`bodh.day` and `THIS PAGE` render `--accent`**, the same as `4.8 h`. The value slot's colour is
+  the answered/unanswered channel, not a numeral/word distinction — full reasoning and the
+  contrast basis in `page-shell.md` §8.1. `.readout__value` already computes the accent, so this
+  needs no CSS: it needs the `--unmeasured` modifier **not** applied to them.
+- **`SHIPPED` values carry no `data-countup`.** A place is not a metric. The dash keeps its hook on
+  purpose (the engine's refusal to animate a digitless value stays a property of the page).
+- **Zero card-level captions on both cards**, one cell-level sub-line each, in different cells.
+- CSS to update: `sections.css`'s §5 comment block says "Three prose lines" and "the same four
+  keys" — both stale. The `--sub-row` reserve and everything else stay.
+
+#### 2. §1's strip — TWO FORMS, build only the one the founder picks
+
+Both are fully specified in `section-01-hero.md` §7.1, and **the unpicked form is deleted from that
+file in the same commit that builds the picked one** — the spec returns to one truth.
+
+**Form A** — head row unchanged; cells become `OPERATOR ATTENTION` → `—` (ink, sub-line
+`measured at launch` under the dash) and `SHIPPED` → `THIS PAGE` (rust). Two columns at
+≥ `--bp-wide` (`repeat(2, 1fr)`, not 3); stacked key/value rows below it with the sub-line spanning
+the row and **right-aligned with its value**, not the key. The strip-level `.remnant__caption`
+retires. Needs the small CSS block in `closing-round-a.html`'s `<style>` — copy it, don't re-derive
+it.
+
+**Form B** — the `<dl>` and the caption are deleted. What remains is the head row. **The
+bottom-right registration mark is deleted with them**: measured, it overlaps the `VERIFY` chip's
+border box at 1280, 375 and 320. One mark, top-left. No CSS change at all; markup only.
+
+Either way the `SHIPPED` value string is `THIS PAGE`, byte-identical to §5's.
+
+#### 3. The footer — one defect, one fix, and it is treatment not copy
+
+The final sentence sets **3 lines at 1280/1600, 5 at 430, 6 at 375, 7 at 320**. Untreated it breaks
+**`Kanwar / Sandhu`** across lines at 375 and 320, and at 1280 it breaks `never / invoked` inside the
+participation aside.
+
+Wrap both runs in style-only nowrap spans. Measured: **zero line cost at every width** (1280 stays 3
+lines at 96px; 375 stays 6 at 163.13px), and both breaks move onto phrase boundaries. `textContent`
+is unchanged, so `footer-copy.md`'s byte equality still passes — that is why this is a span and not
+a non-breaking space inside the string. `footer-layout.md` §2 and assertion 5 carry it.
+
+#### 4. Harness couplings this adds to HO-042's list
+
+HO-042's eleven are unchanged and still yours. These are additional:
+
+1. **`SHIPPED` values are accent, not unmeasured.** Any check asserting "every §5 value that is not
+   a numeral computes `--ink`" would be wrong now. The correct relationship: exactly one value in
+   card 2 computes `--ink`, and it is the em-dash.
+2. **Card comparability, as relationships** (`section-05-shipped.md` §4.4): equal card block-size;
+   the *n*th key and *n*th value equal block-start across the pair; each sub-line's offset below its
+   own value equal across the pair; card-level captions total zero. Never a literal height — 361.8
+   and 301.8 are today's renders, not the contract.
+3. **One column edge in the prose** (§4.3): all four `.shipped__line` compute equal inline-start and
+   equal width. This is the `64ch`-vs-weight defect's standing guard, and it now covers four lines.
+4. **The strip's marks** (`section-01-hero.md` assertion 8): exactly one registration mark in the
+   remnant, and no element inside the strip overlaps the chip's border box.
+5. **The footer's units** (`footer-layout.md` assertion 5): each nowrap run reports exactly one
+   client rect at 1280, 375 and 320.
+6. `qa-fullpage-sweep.mjs`'s `dashCells >= 4` — HO-042 item 9 already names this; note the count is
+   now **1**, and the three remaining em-dashes in §5 are prose punctuation.
+
+#### 5. What was measured, and what was judged
+
+**Measured** (Blink = headless Chrome via `tests/lib/cdp.mjs`; WebKit = `qlmanage`, no JS, no
+viewport control):
+
+| Finding | Engine · viewport |
+|---|---|
+| Card heights equal — 361.8px | Blink · 1280×700 and 1600×900, dark |
+| Card heights equal — 301.8px | Blink · 375×553 and 320×568, dark |
+| Corresponding keys/values on identical block-starts across the pair | Blink · all four viewports |
+| Each sub-line 42.0px below its own value, both cards | Blink · 1280×700 |
+| §5 block 674.3 → 361.8px; section 1151.55 → 891.94px | Blink · 1280×700 |
+| Four prose lines, one column edge at 685.31px, one 700 run, zero accent elements | Blink · 1280×700 |
+| Values 30px (desktop) / 24px (phone) — at or above the 24px AA-large floor for rust | Blink · all four |
+| Same composition, values, colours and alignment | WebKit · its own fixed scale, dark and light |
+| Reduced-motion and scripts-stripped render the same end frame | Blink · 1280×700 |
+| Strip 139.19px / hero 860.55px (A) · 52.19px / 773.55px (B) | Blink · 1280×700 |
+| Strip 203.48px / hero 1195.48px (A) · 80.98px / 1072.98px (B) | Blink · 375×553 |
+| The br registration mark overlaps the chip's border box | Blink · 1280, 375, 320 |
+| Alternative card composition costs 113.8px (475.6 vs 361.8) | Blink · 1280×700 |
+| Footer 3 / 5 / 6 / 7 lines; `Kanwar / Sandhu` splits at 375 and 320; both units cost zero lines | Blink · 1600, 1280, 430, 375, 320 |
+
+**Judged, not measured**: that two cells still read as an instrument; that the sub-line asymmetry
+reads as a matrix answered on a diagonal rather than as an omission; that a hostname and `THIS PAGE`
+at readout size read as values rather than headings; that form A's rust `THIS PAGE` competes with
+the headline's rust `AN AI`; that form B's bare (surface-less) variant reads as loose chrome.
+
+**No WebKit evidence exists at any phone width.** `qlmanage` is the only WebKit on this machine, it
+executes no JavaScript and renders at a fixed size regardless of the size requested. Every phone
+number above is Blink's and is labelled as such.
+
+**Would Apple ship this?** — Yes, for §5: the two-cell pair is a calmer instrument than the
+four-cell one, the alignment holds by construction rather than by luck, and the colour rule now says
+one thing instead of enumerating exceptions. For §1, yes for form B and **no as rendered for form A**
+— A duplicates §5's card one scroll above it and splits the hero's single rust statement, which is
+why the recommendation is B and why it is stated on the sheet rather than hidden in a caption.
+
 ### HO-042 — Content: §5's cost posture in strings, the final footer sentence, and the site's economics published in VERIFY.md
 
-**From**: Content · **Reviewers**: UI/UX (`pending` — composes the two-cell card and §1's remnant
-against these strings), Developer (`pending` — builds every string and re-bases the couplings
-below), PM (`pending` — line-by-line copy-rules review)
+**From**: Content · **Reviewers**: UI/UX (`accepted` — every string composed and rendered in both
+engines; two treatment findings returned in HO-043, neither a copy change: `bodh.day` and
+`THIS PAGE` take the accent because the value slot's colour is the answered/unanswered channel, and
+the footer sentence needs two nowrap units because it splits the founder's name at 375 and 320),
+Developer (`pending` — builds every string and re-bases the couplings below), PM (`pending` —
+line-by-line copy-rules review)
 **Status**: open · **Filed**: 2026-07-31
 
 **Scope**: strings only. Three files written — `design-specs/web/section-05-copy.md`,

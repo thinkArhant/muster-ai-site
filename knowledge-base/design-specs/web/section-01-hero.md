@@ -16,8 +16,8 @@ the work, drawn as a formation. Measured proof deliberately lands at the first s
 replay and §5's cards carry every number; §1 carries none (DEC-045).
 
 **§1 contains no Bodh material** (DEC-046): no Bodh numeral, no Bodh label, no corpus line, no
-terminal. §2 is the page's only terminal. The only measurement scope present in §1 is THIS SITE,
-rendered as dashes in the below-fold remnant.
+terminal. §2 is the page's only terminal. The only measurement scope named in §1 is THIS SITE, in
+the below-fold remnant, and §1 states no measured figure of its own.
 
 ## 2. Content hierarchy and inventory
 
@@ -25,8 +25,8 @@ rendered as dashes in the below-fold remnant.
 2. **The formation** — the section's centerpiece: PM hub, bus-bar, seven specialists; this IS the
    roster (no separate roster section exists)
 3. **Formation caption** — `8 AI AGENTS · 1 OPERATOR`, the hero's only statement of the 8/1 fact
-4. **The THIS SITE remnant** — the self-referential proof posture: dashes, `measured at launch`,
-   `VERIFY ⎘` (below the fold)
+4. **The THIS SITE remnant** — the self-referential proof posture: the scope, and `VERIFY ⎘`
+   (below the fold)
 5. **The curl** — the action; §6 owns the canonical instance and the page's only cursor
 6. **Eyebrow facts** — orientation: open source · runs in Claude Code · v4 · MIT
 
@@ -63,9 +63,10 @@ from page top (48px bar + 96px hero padding = 144px to first content).
   whole plates above the fold (plate 3 bottom 515.3). No overflow at any width (document
   `scrollWidth` clean at 320/360/375/390 — measured).
 - **1280 × 700 desktop**: the entire first screen — eyebrow, headline, the full formation and its
-  caption — sits above the fold with **194.1px clear** (caption bottom 505.9). The remnant's head
-  enters at 577.9 and its card crosses the 700 line (bottom 731.8): the strip is the desktop
-  scroll cue, cut by the fold exactly as the ladder is on the phone.
+  caption — sits above the fold with **199.3px clear** (caption bottom 500.7). The remnant enters
+  at 572.7 and what follows it crosses the 700 line: the strip is the desktop scroll cue, cut by
+  the fold exactly as the ladder is on the phone. The section's own height is set by the ruled
+  form of §7.1 — 860.6px with cells, 773.6px without.
 - **Landscape phone (667 × 331 visual)** cannot hold the formation: eyebrow and headline fit
   (headline bottom 263.8, 2L), the hub lands just under the fold (bottom 350.2). The budget names
   its cases rather than asserting "every viewport."
@@ -205,46 +206,70 @@ fold it is mid-ladder (plate 5 cut), which is the designed scroll cue (§3).
   below the diagram, start-aligned with it. The R8 attribution at hero altitude and the hero's
   only 8/1 statement (no subline exists). True in both hub readings; exact under the settled one.
 
-## 7. The THIS SITE remnant — a one-row instrument strip
+## 7. The THIS SITE remnant — the instrument motif at its smallest honest size
 
-**Ruling: the remnant renders as a single-row instrument strip** — the shell's readout-cell motif
-(`page-shell.md` §8) at its smallest honest size: one `--surface` card, 1px `--hair` border,
-`--gap-hairline` padding, two registration marks (tl, br).
+**The remnant is *posture*, not measurement**: this page measures itself and invites checking. §5
+owns the measured story and renders the full THIS SITE card beside BODH's, so the remnant takes the
+motif's smallest form — one `--surface` card, 1px `--hair` border, `--gap-hairline` padding, and a
+head row that never changes.
 
 | Zone | Content (all strings `section-01-copy.md` §5) |
 |---|---|
-| Head row | `THIS SITE · SPEC → LIVE` (`--text-label` `--muted`, **nowrap** — a scope label never breaks mid-phrase) · `VERIFY ⎘` chip at the row's inline end |
-| Cells | `ACTIVE BUILD` → `—` · `COST · API LIST` → `—` · `SHIPPED` → `THIS PAGE` — keys `--text-micro` `--muted`, values `--text-readout` mono **`--ink`** tabular |
-| Caption | `measured at launch` — `--text-micro` `--muted`, once under the cells |
+| Head row | `THIS SITE · SPEC → LIVE` (`--text-label` `--muted`, **nowrap** — a scope label never breaks mid-phrase) on the rail · `VERIFY ⎘` chip at the row's inline end, the rail-end counterweight |
 
-- **Why one row and not less**: a dash without its key asserts nothing — the cell labels are what
-  make the dashes *claims* (unmeasured, will be measured) rather than punctuation. Folding the
-  labels away was considered and rejected.
-- **Why one row and not a full card**: §5 owns the measured story and renders the full THIS SITE
-  card beside BODH's; a second full readout here would show the same instrument twice a scroll
-  apart. The remnant is *posture* — this page measures itself and invites checking — so it takes
-  the motif's smallest form: one row, one caption, one chip.
-- **Honest cost, carried from the gate ruling** (DEC-046): without a measured BODH row beside
-  them, the dashes lose the contrast that made the idiom self-evident. The caption and the chip
-  now carry that meaning alone; §5 restores the side-by-side contrast one scroll later.
-- **Layout**: at ≥ `--bp-wide`, the three cells set three-across (key over value); below it they
-  stack as key/value rows (key left, value right) with `--hair` rules between — measured strip
-  height 153.9px at 1280, 244.3px at 375. The head row wraps below ~390px: the label holds as one
-  unit and the chip drops to its own right-aligned row (`margin-inline-start: auto`) — the scope
-  label never breaks.
-- **Dashes are inert**: `--ink` em-dashes, no animation, no transition, identical in every state.
-  They never render accent and never count up.
+The head row wraps below ~390px: the label holds as one unit and the chip drops to its own
+right-aligned row (`margin-inline-start: auto`). The scope label never breaks.
+
+### 7.1 The two forms
+
+The strip ships in one of two forms — a founder ruling. Both are specified here in full so either is
+buildable without a further round; the form that does not ship is deleted from this file in the same
+commit that builds the one that does.
+
+**Form A — the strip carries cells, re-keying to §5's questions.**
+
+| Zone | Content |
+|---|---|
+| Cells | `OPERATOR ATTENTION` → `—` with the sub-line `measured at launch` · `SHIPPED` → `THIS PAGE` |
+| Colour | `page-shell.md` §8.1's channel, unchanged by scale: the dash `--ink`, `THIS PAGE` `--accent` |
+
+- Two cells across the container at ≥ `--bp-wide` (`repeat(2, 1fr)`), key over value; below it they
+  stack as key/value rows with the sub-line spanning the row beneath. Measured, Blink dark: strip
+  139.19px at 1280×700, 203.48px at 375×553; hero 860.55px and 1195.48px.
+- **The sub-line right-aligns with its value at phone width.** Left-aligned it sits under the key
+  and reads as qualifying the key rather than the dash.
+- **No cost cell, in either card and in this strip.** §5 asks one question in two scopes and asks it
+  symmetrically; a surface that asks a cost question the page declines to answer breaks that.
+
+**Form B — the strip is the head row alone.**
+
+- The cells and the caption do not exist. The strip is the scope label and the chip, in a
+  `--surface` card at `--gap-hairline` padding.
+- Measured, Blink dark: strip 52.19px at 1280×700, 80.98px at 375×553; hero 773.55px and 1072.98px —
+  87.0px and 122.5px shorter than form A, and the `curl` clears a 774px window whole.
+- **The card stays.** A bare label-and-chip pair on the ground was rendered and rejected: it stops
+  being an instrument surface and reads as loose chrome, and the hairline it needs to hold the pair
+  together puts a full-width rule where this page's grammar reads a section boundary.
+
+### 7.2 What holds in both forms
+
+- **A dash never appears without its key.** The key is what makes a dash a *claim* — unmeasured,
+  will be measured — rather than punctuation. Folding the labels away is not a form of this strip.
+- **One registration mark, at the top-left** (`page-shell.md` §8). The inline-end corner belongs to
+  the chip: a bottom-right mark lands on the chip's own border, measured overlapping it at 1280, 375
+  and 320.
+- **Nothing in §1 animates** (§10). The dash is inert in every state and carries no count-up hook.
+- **The strip sits at `--gap-major` below the caption** — the section's one idea-group seam: claim +
+  team above it, receipts + command below it. The remnant → curl gap is `--gap-block`.
 - **The chip**: shell emphasis chip — `--accent` border, `--ink` text, rust glyph. Markup:
-  `<a class="chip chip--emph" href="https://github.com/thinkArhant/muster-ai-site/blob/14bceef/VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span aria-hidden="true">⎘</span></a>`.
+  `<a class="chip chip--emphasis" href="https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span aria-hidden="true">⎘</span></a>`.
   The `href` is the public blob URL — byte-equal to the footer's `VERIFY` receipt
   (`footer-copy.md` §3), a blob page renders readable where a raw-markdown response would not,
-  and the two strings are asserted equal so they cannot drift. An inert `<a href>` is permitted
-  navigation; a click is user navigation, so A-004's zero-runtime-request claim is untouched; no
-  prefetch attributes ever. 44px hit area via padding; the visual stays chip-sized. It is §1's
-  **only interactive element**.
-
-The remnant sits at `--gap-major` below the caption — the section's one idea-group seam: claim +
-team above it, receipts + command below it. The remnant → curl gap is `--gap-block`.
+  and the two strings are asserted equal so they cannot drift. It targets `main` rather than a
+  commit: this file's demo moment is the launch state, which `main` is by construction. An inert
+  `<a href>` is permitted navigation; a click is user navigation, so A-004's zero-runtime-request
+  claim is untouched; no prefetch attributes ever. 44px hit area via padding; the visual stays
+  chip-sized. It is §1's **only interactive element**.
 
 ## 8. The curl
 
@@ -278,13 +303,16 @@ claim → team → posture → command.
 │  8 AI AGENTS · 1 OPERATOR             (4)                 │
 │ ─ ─ ─ ─ ─ ─ ─ 700px fold ─ ─ ─ ─ ─ ─ (194.1px clear) ─ ─  │
 │  ┌ + THIS SITE · SPEC → LIVE            [VERIFY ⎘] ┐ (5)  │
-│  │  ACTIVE BUILD    COST · API LIST    SHIPPED     │      │
-│  │  —               —                  THIS PAGE   │      │
-│  │  measured at launch                           + │      │
+│  │  OPERATOR ATTENTION      SHIPPED                │ form │
+│  │  —                       THIS PAGE              │  A   │
+│  │  measured at launch                             │ only │
 │  └─────────────────────────────────────────────────┘      │
 │  ┌ curl -fsSL https://raw.githubusercontent.com/… ┐ (6)   │
 └───────────────────────────────────────────────────────────┘
 ```
+
+Form B is the head row and nothing else: the three lines marked *form A only* do not exist, and the
+card closes directly under the label-and-chip row.
 
 ### Wireframe — phone 375 × 553
 
@@ -306,13 +334,12 @@ claim → team → posture → command.
    8 AI AGENTS · 1 OPERATOR              (4)
    ┌ + THIS SITE · SPEC → LIVE ┐         (5) label nowrap;
    │              [VERIFY ⎘]   │             chip on its own
-   │ ACTIVE BUILD           —  │             right-aligned row
-   │ COST · API LIST        —  │             cells as stacked
-   │ SHIPPED         THIS PAGE │             key/value rows
-   │ measured at launch      + │
-   └───────────────────────────┘
-   ┌ curl -fsSL https://raw.gith… ┐      (6) soft-wraps, no
-   └──────────────────────────────┘          cursor, no prompt
+   │ OPERATOR ATTENTION     —  │  form A     right-aligned row
+   │      measured at launch   │   only      cells as stacked
+   │ SHIPPED         THIS PAGE │             key/value rows;
+   └───────────────────────────┘             sub-line right-
+   ┌ curl -fsSL https://raw.gith… ┐      (6) aligned with its
+   └──────────────────────────────┘          own value
 ```
 
 ### Annotations
@@ -323,7 +350,7 @@ claim → team → posture → command.
 | 2 | Headline | §4 — settled string, break units, announced name from the AX tree |
 | 3 | Formation | §6 — hub `PM` accent-bordered bold; bus + regmarks; ladder below `--bp-wide` |
 | 4 | Caption | §6.3 — `8 AI AGENTS · 1 OPERATOR`, micro muted, the only 8/1 statement |
-| 5 | Remnant strip | §7 — one-row instrument strip; dashes ink and inert; chip to `VERIFY.md` |
+| 5 | Remnant strip | §7 — the instrument motif at its smallest size; head row always, cells per the ruled form; a dash is ink and inert; chip to `VERIFY.md` |
 | 6 | The curl | §8 — exact string, wraps, no cursor, no prompt glyph |
 
 Gaps, one-sided throughout: eyebrow → h1 `--gap-hairline` · h1 → formation `--gap-block` ·
@@ -355,13 +382,14 @@ Every pair is the shell's measured table (§2.2); this section introduces no new
 | Headline (incl. struck phrase), curl text | `--ink` on `--ground` / `--surface` | 14.37 / 13.23 | 12.15 / 13.64 | 4.5 ✓ AAA |
 | Accent phrase `an AI` (display bold ≥28px) | `--accent` on `--ground` | 4.19 | 4.35 | AA-large ✓ (≥19px bold) |
 | Eyebrow, caption, keys, strip caption | `--muted` on `--ground` / `--surface` | 5.61 / 5.16 | 5.13 / 5.76 | 4.5 ✓ (labels/captions) |
-| Plate names, `THIS PAGE`, dashes | `--ink` on `--surface` | 13.23 | 13.64 | 4.5 ✓ AAA |
+| Plate names, curl text, an unanswered value's dash | `--ink` on `--surface` | 13.23 | 13.64 | 4.5 ✓ AAA |
+| An answered value at `--text-readout` (≥24px) | `--accent` on `--surface` | 3.86 | 4.89 | AA-large ✓ (3.0 for ≥24px) |
 | Hub border, chip border (graphical) | `--accent` on `--surface` | 3.86 | 4.89 | 3.0 ✓ UI |
 | Bus, spine, stems, rules | `--hair` | decorative | decorative | never information-bearing alone |
 
-No text on filled rust anywhere; no rust text below the AA-large floor — the accent appears in §1
-only as the headline phrase (display bold), the hub and chip borders, and the chip glyph beside
-ink text.
+No text on filled rust anywhere, and no rust text below its floor: the accent appears in §1 as the
+headline phrase (display bold), the hub and chip borders, the chip glyph beside ink text, and — where
+the ruled form carries an answered value — at the readout size, which floors at 24px.
 
 ## 12. States and accessibility
 
@@ -414,10 +442,12 @@ violated. The fold budget's load-bearing relationships (§3) are 1–5.
    |hub center − the container content box's midpoint| ≤ 1px — the page's one axis-bound
    element, per `page-shell.md` §7.2. Fails if the bus detaches from the row it diagrams, the
    formation shrinks back to intrinsic width, or the hub's center drifts off the page axis.
-8. **Remnant honesty** — the two unmeasured cells render `--ink` em-dashes with no animation and
-   no transition in default and reduced paths; the caption `measured at launch` occurs exactly
-   once in the strip; the scope label reports exactly one client rect at 320/375 (a scope label
-   never breaks mid-phrase).
+8. **Remnant honesty** — the scope label reports exactly one client rect at 320/375 (a scope label
+   never breaks mid-phrase); the strip renders exactly one registration mark, and no element
+   inside the strip overlaps the chip's border box. Where the ruled form carries cells: every
+   unanswered value renders an `--ink` em-dash with no animation and no transition in the default
+   and reduced paths and carries no count-up hook, an answered value renders `--accent`, and
+   `measured at launch` occurs exactly once and as the sub-line of the cell it qualifies.
 9. **The chip** — accessible name contains the visible label `VERIFY` (WCAG 2.5.3); its `href`
    string equals the footer's `VERIFY` receipt href byte-for-byte (`footer-copy.md` §3 — equality
    asserted as strings, never by fetching); hit area ≥ 44 × 44 on coarse pointers; it is the only
