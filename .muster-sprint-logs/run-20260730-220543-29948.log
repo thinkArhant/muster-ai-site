@@ -451,3 +451,31 @@
   🧪 bash   git status --porcelain
   🧪 bash   grep -l "brand-guidelines\|current-sprint\|pre-launch" tests/*.mjs 2>/dev/null; echo "--- (no output = no harness parses
   🧪 bash   git add -A knowledge-base/ .muster-sprint-logs/ && git commit -q -F - <<'MSG' pm: the final gate asks one number and thr
+  🧪 bash   bash muster/scripts/muster-commit-lint.sh HEAD~1..HEAD; echo "COMMIT_LINT_EXIT=$?"
+  💬 Step complete. All lints green, the sprint is halted at the founder's final gate. ## What I did **Reviewed HO-038 → HO-041, all four accepted with no revision** — re-derived, not read. I re-ran all th
+    📖 ×18 · ✏️  ×13 · 📝 ×2 · 🧪 ×71 · ⚠️  ×1
+  ✓ 107 turns · $9.06 · peak ctx 183k/1M 18% · out 53k  (success)
+  📣 FOUNDER NOTICE:
+     - 2026-07-31 pm: **the final gate is live, and it asks two things — one number and your phone.** All ten re-gate findings are closed (four handoffs, no revisions) and the packet is at the bottom of `wave-review.md`: one line per finding, then the pick, then the three checks. **The number:** §2's overnight wave — you asked for options, not a build, and you have four priced against your own constraints. Option 3 is recommended, and the reason is worth arguing with: R2 only lets the page state the *mechanism*, which §4 decision 4 already ships, so building it into §2 now pays that section's entire machinery to print a duplicate a scroll apart — and it re-spends the phone playback check below. Your shape is right; the timing is early. Say 1 or 2 and it gets built anyway. **The phone:** §2's full 48 seconds with both layers on screen (the last hard launch blocker), find-in-page, scroll feel. Everything else is stated, not asked. All three runners re-run cold by me (295/295 + 27/27, 108/108, 43/43), every changed surface rendered and looked at in both engines, and the load-bearing numbers re-measured on the build rather than read — bar unmoved at 48px under the new masthead, §4's four segments on the page's own rail at zero motion, §5's three lines on one column edge. I read all four pinned receipts *at their SHAs* rather than trusting the links: the queue lands on 16 queued steps, the ledger on 11 open entries in both entry types. **Two things you should know rather than rule on.** VERIFY's link changed — it was pinned to a frozen copy that predated its own explanation of why pinned and live differ, and your criterion for that one file is the launch state, which `main` *is*; it is ruled to point at the live file, which needs no re-pin anyone could forget — ruled, not yet on the page, like the one word §5 loses. And I planted three violations: two went red, and **the third passed, which is the finding** — a fabricated SHA written into the page *and* its copy file together passes every runner, because the check that reads git's object store covers one link of four. No link on the page is wrong today; that coordinated edit is exactly what a re-pin makes, so it is now a hard pre-launch item with the fix named.
+  📌 '## Founder Decisions' changed this step — review knowledge-base/orchestration-queue.md
+  ✓ [35;1mPM[0m · [1m53m 34s[0m · advanced → 2026-07-31 FINAL GATE — the founder picks one number and checks three things on his phone
+    run so far: 3h 52m · $32.56 · 3 steps
+───────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════
+⛔ HALT — 2026-07-31 FINAL GATE — the founder picks one number and checks three things on his phone   (Role: halt)
+
+   The loop stopped for founder input — nothing is wrong.
+   • Wave gate: review knowledge-base/wave-review.md, write your verdict in its
+     ## Verdict section, then run: bash muster/scripts/muster-sprint-resume.sh
+     (from this worktree).
+   • PM escalation: see '## Founder Decisions' in knowledge-base/orchestration-queue.md, answer, then re-run
+     muster-sprint-run.sh.
+═══════════════════════════════════════════════════════════
+── run summary ────────────────────────────────────────────
+  2026-07-30 Developer (web): Re-gate    151   $15.22   23%    78k  1h 14m
+  2026-07-30 QA (web): Scoped re-run o   109    $8.28   16%    52k  1h 44m
+  2026-07-31 PM: Review the re-gate ro   107    $9.06   18%    53k 53m 34s
+  2026-07-31 FINAL GATE — the founde  halt
+───────────────────────────────────────────────────────────
+  3 steps · 367 turns · $32.56 · out 183k · 3h 52m wall · stopped: halt (2026-07-31 FINAL GATE — the founder picks one number and checks three things on his phone)
+  📣 1 founder notice(s) this run — read knowledge-base/founder-notices.md

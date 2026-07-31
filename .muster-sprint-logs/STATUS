@@ -1,6 +1,6 @@
 run: run-20260730-220543-29948
-state: running step 3
-step: 2026-07-31 PM: Review the re-gate round and promote the final gate
+state: halted: halt (2026-07-31 FINAL GATE — the founder picks one number and checks three things on his phone)
+step: 2026-07-31 FINAL GATE — the founder picks one number and checks three things on his phone
 step started: 2026-07-31 01:04:18
-last completed: 2026-07-30 QA (web): Scoped re-run on the re-gate round · 109 turns · $8.28 · out 52k · 1h 44m
-totals: 2 attempt(s) · 260 turns · $23.50
+last completed: 2026-07-31 PM: Review the re-gate round and promote the final gate · 107 turns · $9.06 · out 53k · 53m 34s
+totals: 3 attempt(s) · 367 turns · $32.56
