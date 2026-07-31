@@ -281,3 +281,54 @@ driver does not have.
 Salvaged by interactive PM this run (re-verified, closeout-committed as the developer's work with
 the story in the commit body, queue advanced by hand). Nothing fixed locally — the driver is
 Muster's.
+
+---
+
+## FF-004 — The framework spends tokens and founder time as if both were free, and this build priced it
+
+**Filed**: 2026-07-31, at the final gate, from measured run logs — not impressions.
+
+### The economics, measured
+
+The committed driver logs alone: **$594 across 51 step-sessions, ~27.3 driver-hours** for a
+one-page site. Fable (premium) took 14 steps / $209 (35%); opus 37 / $385. True waste (errored
+runs, one turn-cap death) was under 10% — **the cost is structural, not accidental**. For scale:
+the product this site exhibits cost $147 total. The site's $/hr matches the product's own website
+wave ($21.8 vs $23.2), so the rate is the framework's going rate; the multiplier is HOURS — four
+founder gates, three §2 fix rounds, one full section redesign after a gate, and three harness
+runners re-run at nearly every step. Founder attention: four gate sittings plus interactive fix
+sessions across six days, against a thesis that operator attention is the scarcest input.
+
+### Where the structure spends, and what would cut it
+
+1. **Verification re-runs dominate step cost.** Nearly every build step re-runs three full
+   harnesses; QA and PM then re-run them again. The discipline caught real regressions (three in
+   Sprint 1) — but it is applied as a blanket, not a dial. **R1: make QA cadence a plan-level
+   knob** — steps declare a risk tier; low-tier changes run targeted assertions only, and ONE
+   terminal sweep guards the merge. This project switched to exactly that for its closing round
+   (DEC-062) — deliberately, with the risk stated.
+2. **Sessions do work scripts should do.** The highest-leverage finds of FF-001 recur: word
+   counts, byte-equality, contrast math, citation checks, budget recounts — all re-derived by
+   model sessions at model prices, repeatedly. **R2: ship the deterministic verification set as
+   framework scripts** (this repo's `tools/plan-lint.py` and the harness patterns are working
+   prototypes) so sessions assert judgment, not arithmetic. This is Muster's own thesis applied
+   to Muster.
+3. **Gate rounds via the driver cost a headless PM each way.** Routing verdicts interactively at
+   the gate (done three times here) saved a ~150-turn resume PM each time and produced better fix
+   steps. **R3: make interactive-gate-routing the documented default**, with resume as the
+   fallback, not the norm.
+4. **Premium tier earns its seat only at founder-judged creation.** The two-clause test held —
+   but 35% of spend at ~1.4× the per-step price says the default should stay down and the test
+   should be applied per-step at planning, never per-round. **R4.**
+5. **Founder time leaks through unbatched interaction.** The best sessions here batched many
+   rulings into one sitting against rendered evidence; the worst weeks earlier dripped one finding
+   per round. **R5: a PM skill that treats founder attention as a budgeted resource** — state the
+   ask-count before a gate, batch everything batchable, and surface the running token spend
+   (the driver already logs $/step; nothing shows the PM a cumulative number while planning).
+
+### The honest tension, so the core team does not over-rotate
+
+The verification overhead is also why the page's claims survive hostile reading, and three
+Sprint-1 fix rounds prove under-verification costs more than it saves. The goal is not less
+verification — it is verification at script prices instead of session prices, and founder
+attention spent on taste instead of bookkeeping.
