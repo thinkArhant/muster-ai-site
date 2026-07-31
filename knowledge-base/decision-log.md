@@ -1438,5 +1438,60 @@ qa (terminal sweep), pm (this entry, `wave-review.md`, `pre-launch-checklist.md`
 **Touched**: `wave-review.md`, `decision-log.md`, `pre-launch-checklist.md`,
 `orchestration-queue.md`.
 
+---
+
+### DEC-064 — §1's remnant slims to the scope label and the chip: the dash needs its twin, and its twin is in §5 (2026-07-31)
+
+**Decision**: **option B**. §1's THIS SITE strip drops its readout cells entirely and keeps the
+`THIS SITE · SPEC → LIVE` scope label with the `VERIFY ⎘` chip. §5 owns the full readout. Ruled by
+PM on the founder's explicit delegation, after he stated a preference for option A and the reason
+behind it.
+
+**The founder's goal, stated at the pick**: the strip should show at the fold that this site was
+itself shipped with Muster — trust built in the first seconds, so the visitor reads everything
+below from a changed perspective. That goal is right, and it is what decides the option.
+
+**Why B serves it and A does not.** The trust claim is carried by two elements — the scope label
+and the chip — and B keeps both at full strength. A's only additions on top of B are a dash and a
+tautology:
+
+1. **A dash at the fold is an empty metric, not a trust signal.** The target reader is the
+   sceptical technical cold reader who discounts unverified claims by default on a five-second
+   skim (`product-spec.md`, target user). A blank where a number belongs, met in second one,
+   invites *"so you haven't measured it"* — the opposite of the intended reframe. The identical
+   dash works in §5 because it lands beside `4.8 h`, `bodh.day`, and the prose `9.3 hours` /
+   `$147`. **An unmeasured value needs its measured twin to read as a promise rather than a gap.**
+   §1 has no twin; §5 is the twin.
+2. **`SHIPPED · THIS PAGE` is a tautology in the page's most expensive seat**, told to a reader
+   currently looking at the page.
+
+Supporting, in descending weight: A prints the same two keys and the same two values as §5's THIS
+SITE card one scroll below — repetition where the second instance does a *worse* job, not a
+different one, which is the inverse of the test DEC-061's repetition audit applied. B's strip is
+52px against A's 139px (hero 774 vs 861, both measured in Blink at 1280×700 and re-rendered in
+WebKit), bringing the whole hero **including the `curl`** inside a 774px laptop window — the curl
+is the page's single conversion event. And A seats a second rust readout directly beneath the
+headline's rust `AN AI`, diluting the page's one display moment.
+
+**The bounce test, which settles it**: a reader who leaves after §1 under B has still met the
+headline, `8 AI agents · 1 operator`, the scope label, the VERIFY chip and the curl. Nothing that
+builds trust is lost — only a dash and a tautology.
+
+**Consequence for A-002 and the dash promise**: `measured at launch` now appears once on the page,
+in §5, attached to the THIS SITE card's `OPERATOR ATTENTION` dash. §1 makes no unmeasured claim at
+all, which restores DEC-046's rule — §1 carries no measured figure — without an exception.
+
+**Carried with the ruling** (found while rendering, both live on the shipped page): the remnant's
+bottom-right registration mark overlaps the `VERIFY` chip's border box, visible once the strip
+shrinks — a single-row surface takes one mark, top-left. And the footer's re-ruled sentence breaks
+`Kanwar / Sandhu` across lines at 375 and 320; two nowrap units hold the name and `never invoked`
+as wholes at zero line cost, `textContent` untouched so byte-equality is unaffected.
+
+**Impact**: developer (builds B, the mark, the nowrap units), ui-ux (specs already written for
+both forms — the unpicked form retires from `section-01-hero.md`), qa (terminal sweep), content
+(none — no string changes), pm (this entry).
+
+**Touched**: `decision-log.md`, `orchestration-queue.md`, `wave-review.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
