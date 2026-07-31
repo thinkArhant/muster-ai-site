@@ -565,7 +565,20 @@ try {
     bm.rule.animation === "none" && parseFloat(bm.rule.transition) === 0,
     `animation-name ${bm.rule.animation}, transition-duration ${bm.rule.transition}`);
   check("the header's accessible name is exactly MUSTER", bm.name === "MUSTER", JSON.stringify(bm.name));
-  check("registration marks: two per instrument surface", dark.motifs.regmarksPerSurface.length > 0 && dark.motifs.regmarksPerSurface.every((s) => s.marks === 2), JSON.stringify(dark.motifs.regmarksPerSurface));
+  /* Two marks per instrument surface — one at each end of its diagonal — with
+     one exception, and the exception is geometric rather than a name on a
+     list: a surface whose inline-end corner is occupied by an interactive
+     element takes ONE mark, at the top-left, because the second would land on
+     that element's border box. §1's single-row strip is that surface today.
+     The corner-collision half of the rule is asserted with §1, against the
+     chip's measured box; here the count is held to 2 for every surface that
+     has both corners free. */
+  const CORNER_LET = ".remnant";
+  const regSurfaces = dark.motifs.regmarksPerSurface;
+  check("registration marks: two per instrument surface, one where the end corner is let",
+    regSurfaces.length > 0 &&
+      regSurfaces.every((s) => (new RegExp(CORNER_LET.slice(1)).test(s.on) ? s.marks === 1 : s.marks === 2)),
+    JSON.stringify(regSurfaces));
   check("pulse lamp is an 8px circle", dark.motifs.pulse.w === 8 && dark.motifs.pulse.h === 8 && dark.motifs.pulse.radius === "50%", JSON.stringify(dark.motifs.pulse));
   check("OPERATIONAL word present (state not colour-alone)", dark.motifs.operationalWord === "OPERATIONAL", dark.motifs.operationalWord);
   /* The token is the seed-locked 64ch. Capacity is reported alongside it because
@@ -838,7 +851,6 @@ try {
     const caption = hero.querySelector(".formation__caption");
     const remnant = hero.querySelector(".remnant");
     const scope = hero.querySelector(".remnant__scope");
-    const values = [...hero.querySelectorAll(".remnant__value")];
     const chip = hero.querySelector(".chip");
     const heroCurl = hero.querySelector(".curl");
     const gs = document.querySelector("#get-started");
@@ -957,13 +969,22 @@ try {
         };
       })(),
 
-      /* --- remnant --- */
+      /* --- remnant: one row, one mark, and no readout at all --- */
       scopeRects: scope.getClientRects().length,
-      dashCells: values.filter((v) => v.textContent.trim() === "—").map((v) => ({
-        colour: css(v, "color"),
-        animation: css(v, "animation-name"),
-        transition: css(v, "transition-duration")
-      })),
+      scopeText: scope.textContent.trim(),
+      /* What the strip SAYS: the decorative marks and the chip's glyph are
+         aria-hidden and contribute nothing a reader is told. */
+      remnantText: (() => {
+        let out = "";
+        const walk = (node) => {
+          if (node.nodeType === 3) { out += node.nodeValue; return; }
+          if (node.nodeType !== 1) return;
+          if (node.getAttribute("aria-hidden") === "true") return;
+          [...node.childNodes].forEach(walk);
+        };
+        walk(remnant);
+        return out.replace(/\\s+/g, " ").trim();
+      })(),
       inkRgb: (() => {
         const p = document.createElement("span");
         p.style.color = "var(--ink)";
@@ -972,8 +993,31 @@ try {
         p.remove();
         return v;
       })(),
-      remnantCaptions: [...remnant.querySelectorAll("*")]
-        .filter((el) => el.textContent.trim() === "measured at launch").length,
+      remnantMarks: [...remnant.querySelectorAll(".regmark")].map((m) => ({
+        cls: m.className,
+        /* Read against the CHIP's border box, which is the corner the mark
+           would land on. The measurement is the overlap, so the evidence
+           prints how far in it sits rather than a boolean. */
+        overlapsChip: (() => {
+          const a = m.getBoundingClientRect();
+          const b = chip.getBoundingClientRect();
+          return r2(Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) *
+                    Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)));
+        })()
+      })),
+      /* Nothing inside the strip may land on the chip's border box — the mark
+         is only the one that did. */
+      chipCollisions: [...remnant.querySelectorAll("*")].filter((el) => {
+        /* The chip itself, its own contents, and the row that CONTAINS it are
+           not collisions — a parent's box is where the chip lives. What this
+           catches is a sibling landing on it. */
+        if (el === chip || chip.contains(el) || el.contains(chip)) return false;
+        const a = el.getBoundingClientRect();
+        const b = chip.getBoundingClientRect();
+        return Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0.5 &&
+               Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0.5;
+      }).map((el) => el.className || el.tagName),
+      remnantReadouts: remnant.querySelectorAll(".remnant__value, .readout__value, [data-countup]").length,
 
       /* --- chip --- */
       chipLabel: chip.textContent.replace(/\\s+/g, " ").trim(),
@@ -1134,12 +1178,33 @@ try {
     heroWide.plateNames.join(" · ") === LOCKED_PLATES.join(" · ") && heroWide.captionText === "8 AI agents · 1 operator",
     `${heroWide.plateNames.join(" · ")} / caption ${JSON.stringify(heroWide.captionText)}`);
 
-  /* --- 8. remnant honesty --- */
-  check("§1 remnant: two ink dashes, inert, with their caption exactly once",
-    heroWide.dashCells.length === 2 &&
-      heroWide.dashCells.every((d) => d.colour === heroWide.inkRgb && d.animation === "none" && parseFloat(d.transition) === 0) &&
-      heroWide.remnantCaptions === 1,
-    `${heroWide.dashCells.length} dashes ${JSON.stringify(heroWide.dashCells)} · caption ×${heroWide.remnantCaptions}`);
+  /* --- 8. remnant honesty ---
+
+     The strip is posture, not measurement: the scope label and the chip, and
+     no readout of any kind. §5 owns every value and the page's one dash,
+     because an unmeasured value only reads as a promise beside its measured
+     twin — so `measured at launch` occurs exactly once on the page, and not
+     here. This replaces the two-ink-dashes assertion the cell form carried:
+     the strip cannot be honest about a value it no longer states, and what
+     has to hold now is that it states none. */
+  check("§1 remnant is the scope label and the chip — no readout, no dash, no launch promise",
+    heroWide.remnantReadouts === 0 &&
+      !heroWide.remnantText.includes("—") &&
+      !/measured at launch/i.test(heroWide.remnantText) &&
+      heroWide.remnantText === `${heroWide.scopeText} VERIFY`,
+    `${heroWide.remnantReadouts} readout element(s) · strip reads ${JSON.stringify(heroWide.remnantText)}`);
+  /* One registration mark on a single-row surface, and it is the top-left one.
+     The inline-end corner belongs to the chip: the bottom-right mark lands
+     INSIDE the chip's own border box, which is measured here as an overlap
+     area rather than asserted as a rule. Restoring the mark fails both
+     clauses. */
+  check("§1 remnant carries one registration mark, top-left, and nothing in the strip lands on the chip",
+    heroWide.remnantMarks.length === 1 &&
+      /regmark--tl/.test(heroWide.remnantMarks[0].cls) &&
+      heroWide.remnantMarks.every((m) => m.overlapsChip === 0) &&
+      heroWide.chipCollisions.length === 0,
+    `${heroWide.remnantMarks.length} mark(s) [${heroWide.remnantMarks.map((m) => m.cls + " overlap " + m.overlapsChip + "px²").join(", ")}] · ` +
+      `${heroWide.chipCollisions.length} element(s) on the chip's border box${heroWide.chipCollisions.length ? ": " + heroWide.chipCollisions.join(", ") : ""}`);
 
   /* --- 9. the chip: §1's only interactive element, and the proof link.
 
@@ -1231,6 +1296,13 @@ try {
   check("§1 scope label never breaks mid-phrase",
     widths.every(([, m]) => m.scopeRects === 1),
     widths.map(([w, m]) => `${w}: ${m.scopeRects}`).join(" · "));
+  /* The chip's corner, at the widths where the head row wraps and the chip
+     drops to its own line — which is where the retired bottom-right mark sat
+     furthest inside it. */
+  check("§1 nothing lands on the chip's border box at any phone width, and the strip keeps its one mark",
+    widths.every(([, m]) => m.remnantMarks.length === 1 && m.chipCollisions.length === 0 &&
+      m.remnantMarks.every((k) => k.overlapsChip === 0)),
+    widths.map(([w, m]) => `${w}: ${m.remnantMarks.length} mark(s), ${m.chipCollisions.length} collision(s)${m.chipCollisions.length ? " [" + m.chipCollisions.join(",") + "]" : ""}`).join(" · "));
   check("§1 the curl card wraps rather than scrolling sideways",
     widths.every(([, m]) => m.curlScrolls.every((s) => s <= 0)),
     widths.map(([w, m]) => `${w}: ${JSON.stringify(m.curlScrolls)}`).join(" · "));
@@ -1261,7 +1333,7 @@ try {
   check("§1 stays fully static under reduced motion, with identical content",
     heroStill.reducedMotion && heroStill.heroMoving.length === 0 &&
       heroStill.heroText === heroWide.heroText &&
-      heroStill.dashCells.every((d) => d.animation === "none" && parseFloat(d.transition) === 0),
+      heroStill.remnantText === heroWide.remnantText,
     `${heroStill.heroMoving.join(" | ") || "nothing moving"} · content identical: ${heroStill.heroText === heroWide.heroText}`);
   check("§6's cursor renders solid and static under reduced motion",
     heroStill.gs.cursorAnimation === "none" && heroStill.gs.cursorBox.w === 8,
@@ -1973,6 +2045,63 @@ try {
     `at load: sheet ${restAtLoad.rest + 1} holds the track, segment ${restAtLoad.active + 1} lit · ` +
       `after paging: sheet ${indicatorRest.rest + 1} holds it (${indicatorRest.share.join("/")}% visible), segment ${indicatorRest.active + 1} lit`);
 
+  /* --- THE TRACK'S END STATE. The indicator has to reach its last slot, and
+     the state asserted is the END one rather than a position along the way:
+     the reader who scrolls to the end of the track is the only reader who can
+     see the last segment, and this is the second defect found in this
+     component after one that a rendered check could not see at all.
+
+     It is asserted at two widths on purpose, and the second is the one that
+     matters. Wide enough and the last TWO sheets are both wholly visible at
+     the end, so "most visible" ties and a tie broken by document order pins
+     the report one sheet short — the last segment can then never light,
+     however far the reader scrolls. The precondition is measured and printed
+     beside the result, so the check is visibly exercising that regime and not
+     merely passing where the tie does not arise.
+
+     Expectation comes from the DOM — the LAST segment, for the LAST sheet —
+     never from a share heuristic of the harness's own, which would only
+     re-state the implementation back to itself. --- */
+  const trackEnd = {};
+  for (const width of [1280, 1600]) {
+    await page.setViewport({ width, height: 900 });
+    await page.goto(PAGE_URL);
+    trackEnd[width] = await page.eval(`(async () => {
+      const track = document.querySelector(".sheets");
+      const sheets = [...document.querySelectorAll(".sheet")];
+      const segs = [...document.querySelectorAll(".sheets-indicator__seg")];
+      track.scrollLeft = track.scrollWidth;
+      await new Promise((r) => setTimeout(r, 600));
+      const box = track.getBoundingClientRect();
+      const share = sheets.map((s) => {
+        const b = s.getBoundingClientRect();
+        return Math.round(100 * Math.max(0, Math.min(b.right, box.right) - Math.max(b.left, box.left)) / b.width);
+      });
+      const last = sheets[sheets.length - 1].getBoundingClientRect();
+      return {
+        atEnd: Math.round(track.scrollLeft) === Math.round(track.scrollWidth - track.clientWidth),
+        lastWhole: last.right <= box.right + 0.5,
+        share,
+        wholeAtEnd: share.filter((v) => v === 100).length,
+        segments: segs.length, sheets: sheets.length,
+        active: segs.findIndex((s) => s.classList.contains("is-active")),
+        actives: segs.filter((s) => s.classList.contains("is-active")).length
+      };
+    })()`);
+  }
+  evidence.s04TrackEnd = trackEnd;
+  const endWidths = Object.entries(trackEnd);
+  check("§4 (d2) at the track's end the LAST segment is the lit one — including where the last two sheets are both whole",
+    endWidths.every(([, m]) => m.atEnd && m.lastWhole && m.segments === m.sheets &&
+      m.actives === 1 && m.active === m.segments - 1) &&
+      /* The tie regime is reached, not assumed: at one of the two widths two
+         sheets are wholly visible at the end. */
+      endWidths.some(([, m]) => m.wholeAtEnd >= 2),
+    endWidths.map(([w, m]) => `${w}px: sheets ${m.share.join("/")}% visible at the end (${m.wholeAtEnd} whole), segment ${m.active + 1} of ${m.segments} lit, ${m.actives} active`).join(" · "));
+  await page.setViewport({ width: 1280, height: 900 });
+  await page.goto(PAGE_URL);
+  await page.eval(`(() => { const t = document.querySelector(".sheets"); t.scrollLeft = 0; t.focus(); return true; })()`);
+
   /* The mechanical stand-in for find-in-page reaching off-canvas content: the
      engine's own scroll-into-view, measured after the snap has settled. Run
      from the track's start, which is where a reader searching the page is. */
@@ -2110,12 +2239,21 @@ try {
      measurement and not only against the transcription of it.
      ======================================================================= */
 
-  /* Three fenced prose lines, then the card table. The table is parsed rather
+  /* The fenced prose lines, then the card table. The table is parsed rather
      than retyped for the same reason the fences are: a retyped em dash or a
-     transposed scope label is exactly the class of drift this catches. */
+     transposed scope label is exactly the class of drift this catches.
+
+     Nothing here is counted in advance. The prose heading is matched on its
+     shape rather than on the number it spells, and the cell inventory is
+     discovered by walking `Key N` until the row is absent — a re-key that
+     adds or drops a cell re-bases this parser by being read, instead of
+     crashing the runner before a single check has run. A slot with no
+     backticked run is null: the table authors its empty slots as `(none)`,
+     which is the copy file talking to its reader rather than a string that
+     ships. */
   const s05Copy = (() => {
     const lines = copyFile("section-05-copy.md");
-    const at = lines.findIndex((l) => /^## 3\. The three prose lines/.test(l));
+    const at = lines.findIndex((l) => /^## 3\. The \S+ prose lines/.test(l));
     const end = lines.findIndex((l, i) => i > at && /^## 4\./.test(l));
     const prose = fencesIn(lines.slice(at, end));
 
@@ -2124,17 +2262,18 @@ try {
     const rows = lines.slice(tableAt, tableEnd)
       .filter((l) => l.startsWith("|") && !/^\|\s*-+/.test(l))
       .map((l) => l.split("|").slice(1, -1).map((c) => c.trim()));
-    /* Cell text is the backticked run; the parentheticals beside it are the
-       copy file talking to its reader, not strings that ship. */
-    const cellOf = (row, col) => (row[col].match(/`([^`]*)`/) || [])[1] ?? null;
+    const cellOf = (row, col) => (row && row[col] ? (row[col].match(/`([^`]*)`/) || [])[1] ?? null : null);
+    const has = (label) => rows.some((r) => r[0] === label);
     const pick = (label, col) => cellOf(rows.find((r) => r[0] === label), col);
+    const slots = [];
+    for (let n = 1; has(`Key ${n}`); n += 1) slots.push(n);
     const card = (col) => ({
       scope: pick("Card label", col),
-      keys: [1, 2, 3, 4].map((n) => pick(`Key ${n}`, col)),
-      values: [1, 2, 3, 4].map((n) => pick(`Value ${n}`, col)),
-      sub: pick("Sub-line", col)
+      keys: slots.map((n) => pick(`Key ${n}`, col)),
+      values: slots.map((n) => pick(`Value ${n}`, col)),
+      subs: slots.map((n) => pick(`Sub-line ${n}`, col))
     });
-    return { prose, cards: [card(1), card(2)] };
+    return { prose, slots: slots.length, cards: [card(1), card(2)] };
   })();
 
   /* The seed's Measured data table — founder-authored, read-only, and the
@@ -2210,7 +2349,17 @@ try {
         subs: [...cell.querySelectorAll(".readout__sub")].map((s) => s.textContent.trim()),
         announced: atText(cell),
         top: r2(box.top),
-        height: r2(box.height)
+        height: r2(box.height),
+        keyTop: r2(key.getBoundingClientRect().top),
+        valueTop: r2(value.getBoundingClientRect().top),
+        /* The sub-line's own offset BELOW the value it qualifies — never its
+           absolute position. The two cards hang their sub-lines in different
+           cells, so what has to hold across the pair is the hang, not the
+           row. */
+        subDrop: (() => {
+          const sub = cell.querySelector(".readout__sub");
+          return sub ? r2(sub.getBoundingClientRect().top - value.getBoundingClientRect().bottom) : null;
+        })()
       };
     };
 
@@ -2223,6 +2372,7 @@ try {
       surface: css(card, "background-color"),
       border: css(card, "border-top-width"),
       cells: [...card.querySelectorAll(".shipped__cell")].map(readCell),
+      blockSize: r2(card.getBoundingClientRect().height),
       overflow: r2(card.scrollWidth - card.clientWidth)
     });
 
@@ -2238,6 +2388,7 @@ try {
     const siteOf = (needle) => {
       const all = document.body.textContent;
       return {
+        needle,
         count: all.split(needle).length - 1,
         sections: [...document.querySelectorAll("main > section")]
           .filter((s) => s.textContent.includes(needle)).map((s) => s.id)
@@ -2262,6 +2413,8 @@ try {
           .map((el) => el.textContent.replace(/\\s+/g, " ").trim()),
         size: css(p, "font-size"),
         cap: r2(parseFloat(css(p, "max-width"))),
+        start: r2(p.getBoundingClientRect().left),
+        width: r2(p.getBoundingClientRect().width),
         rendered: r2(p.getBoundingClientRect().width)
       })),
       /* The emphasis must be weight and nothing else — no element in §5's
@@ -2289,7 +2442,7 @@ try {
          and §5's counting cells are the reason the question comes up at all. */
       liveRegions: [...document.querySelectorAll("[aria-live], [role=status], [role=alert], [role=log], [role=timer], [role=marquee], [aria-atomic]")]
         .map((el) => (el.className || el.tagName) + "[" + (el.getAttribute("aria-live") || el.getAttribute("role")) + "]"),
-      sites: { activeBuild: siteOf("9.3 h"), cost: siteOf("$147"), attention: siteOf("4.8 h") },
+      sites: { activeBuild: siteOf("9.3"), cost: siteOf("$147"), attention: siteOf("4.8 h") },
       /* Wave-scope figures must not appear in §5 (copy file §1, R5). */
       waveScope: ["~64", "289", "$24.73"].filter((n) => section.textContent.includes(n)),
       sectionText: section.textContent.replace(/\\s+/g, " ").trim(),
@@ -2304,12 +2457,16 @@ try {
   evidence.s05Wide = s05;
   writeFileSync(join(ARTIFACTS, "blink-dark-s05-1280.png"), await page.screenshot({ fullPage: true }));
 
-  /* --- §5: the strings, verbatim from the deliverable --- */
-  check("§5 ships the three prose lines verbatim, the provenance line among them as prose",
-    s05Copy.prose.length === 3 && s05.lines.length === 3 &&
+  /* --- §5: the strings, verbatim from the deliverable ---
+     The line count is the copy file's, never this file's: §5's prose is a
+     deliverable that may be re-keyed, and a literal here would turn every
+     future re-key into a harness edit. What is asserted is the relationship —
+     the page renders exactly the deliverable's lines, in order, in ink. */
+  check("§5 ships the deliverable's prose lines verbatim, the provenance line among them as prose",
+    s05Copy.prose.length > 0 && s05.lines.length === s05Copy.prose.length &&
       s05.lines.every((l, i) => l.text === s05Copy.prose[i]) &&
       s05.lines.every((l) => l.colour === s05.inkRgb),
-    `${s05.lines.length}/3 lines, all equal: ${s05.lines.every((l, i) => l.text === s05Copy.prose[i])} · ${JSON.stringify(s05.lines.map((l) => l.text.slice(0, 28)))}`);
+    `${s05.lines.length} rendered against ${s05Copy.prose.length} authored, all equal: ${s05.lines.every((l, i) => l.text === s05Copy.prose[i])} · ${JSON.stringify(s05.lines.map((l) => l.text.slice(0, 28)))}`);
   /* §5's hierarchy, as the two relationships it is. The primary is matched by
      its STRING against the copy file, not by its class or its position, so
      moving the emphasis to a different line fails here rather than passing as
@@ -2317,7 +2474,7 @@ try {
      a size fork riding in with the weight is the drift this catches. */
   const s05Primary = s05Copy.prose.findIndex((p) => /extracted mid-build/.test(p));
   check("§5 has one primary line — the provenance claim, at body size, weight alone",
-    s05Primary >= 0 && s05.lines.length === 3 &&
+    s05Primary >= 0 && s05.lines.length === s05Copy.prose.length &&
       s05.lines.filter((l) => l.weight >= 700).length === 1 &&
       s05.lines[s05Primary].weight >= 700 &&
       /* The emphasis covers the whole claim, not a phrase inside it — a
@@ -2330,10 +2487,10 @@ try {
     s05.lines.map((l, i) => `${i + 1}: ${l.weight}/${l.size}${i === s05Primary ? " (primary, " + l.emphasised.length + " run)" : ""}`).join(" · ") +
       ` · ${s05.proseAccentText} accent-coloured element(s) in the prose block`);
   check("§5 renders two cards and only two — the provenance line is never a readout cell",
-    s05.cardCount === 2 && s05.bodyChildren.filter((c) => /shipped__line/.test(c)).length === 3 &&
-      s05.cards.every((c) => c.cells.length === 4),
-    `${s05.cardCount} cards of ${s05.cards.map((c) => c.cells.length).join("/")} cells, ${s05.bodyChildren.length} elements in the section body`);
-  check("§5 both cards carry the same four keys, in the same order, from the copy file",
+    s05.cardCount === 2 && s05.bodyChildren.filter((c) => /shipped__line/.test(c)).length === s05Copy.prose.length &&
+      s05.cards.every((c) => c.cells.length === s05Copy.slots),
+    `${s05.cardCount} cards of ${s05.cards.map((c) => c.cells.length).join("/")} cells against the deliverable's ${s05Copy.slots}, ${s05.bodyChildren.length} elements in the section body`);
+  check("§5 both cards carry the same keys, in the same order, from the copy file",
     s05.cards.every((card, i) => card.cells.every((cell, j) => cell.key === s05Copy.cards[i].keys[j])) &&
       s05.cards[0].cells.map((c) => c.key).join("|") === s05.cards[1].cells.map((c) => c.key).join("|"),
     s05.cards[0].cells.map((c) => c.key).join(" · "));
@@ -2342,43 +2499,84 @@ try {
     s05.cards.map((c) => `${JSON.stringify(c.scope)} in ${c.scopeRects} rect(s)`).join(" · "));
 
   /* --- §5: the figures, against the founder's own measurement --- */
-  const SEED_KEYS = { "ACTIVE BUILD": "Active build", "OPERATOR ATTENTION": "Operator attention", "COMMIT-DAYS": "Commit-days", "COST · API LIST": "Cost (API list)" };
+  const SEED_KEYS = { "OPERATOR ATTENTION": "Operator attention", "SHIPPED": "Shipped" };
   const bodhCells = s05.cards[0].cells;
   const seedFor = (key) => SEED_MEASURED[SEED_KEYS[key]];
-  check("§5's four BODH figures are byte-equal to the seed's Measured data table",
-    bodhCells.length === 4 && bodhCells.every((cell) => {
+  /* The seed's Shipped cell is one string — `bodh.day — App Store + web` — and
+     §5 renders it across two slots because the value slot is a readout and the
+     qualifier is not a value. So the assertion reconstitutes the seed's cell
+     from what the page renders rather than comparing half of it: value, the
+     seed's own separator, sub-line. A cell that carries a sub-line is
+     reconstituted; one that does not is compared whole. */
+  const seedCell = (cell) => cell.subs.length ? `${cell.value} — ${cell.subs[0]}` : cell.value;
+  check("§5's BODH figures are byte-equal to the seed's Measured data table",
+    bodhCells.length === s05Copy.slots && bodhCells.every((cell) => {
       const seed = seedFor(cell.key);
-      return Boolean(seed) && cell.value === seed.value;
+      return Boolean(seed) && seedCell(cell) === seed.value;
     }),
-    bodhCells.map((c) => `${c.key} ${JSON.stringify(c.value)} vs seed ${JSON.stringify(seedFor(c.key)?.value)}`).join(" · "));
-  check("§5 carries the commit-day window the seed states, under the count it qualifies",
-    bodhCells[2].subs.length === 1 && bodhCells[2].subs[0] === seedFor("COMMIT-DAYS").note &&
-      bodhCells.filter((c) => c.subs.length).length === 1,
-    `${JSON.stringify(bodhCells[2].subs)} vs seed note ${JSON.stringify(seedFor("COMMIT-DAYS").note)}`);
+    bodhCells.map((c) => `${c.key} ${JSON.stringify(seedCell(c))} vs seed ${JSON.stringify(seedFor(c.key)?.value)}`).join(" · "));
+  /* One sub-line per card, and it hangs on the value it qualifies rather than
+     on the card. The two cards carry theirs in DIFFERENT cells, which is the
+     matrix answered on a diagonal §5's composition rests on — so the property
+     asserted is "exactly one, and it belongs to the cell the copy file
+     attaches it to", never a position. */
+  check("§5 each card carries exactly one cell-level sub-line, on the cell the deliverable attaches it to",
+    s05.cards.every((card, i) => {
+      const authored = s05Copy.cards[i].subs;
+      return card.cells.filter((c) => c.subs.length).length === authored.filter(Boolean).length &&
+        card.cells.every((c, j) => c.subs.join("") === (authored[j] || ""));
+    }) &&
+      s05.cards.every((card) => card.cells.filter((c) => c.subs.length).length === 1),
+    s05.cards.map((card, i) => `card ${i + 1}: ${JSON.stringify(card.cells.map((c) => c.subs[0] ?? null))} against ${JSON.stringify(s05Copy.cards[i].subs)}`).join(" · "));
   /* The primary-site rule: §1 gave up its readout at Gate A, so each of these
      figures now has exactly one home and this is it. A second rendering
-     anywhere on the page fails here, whatever it says. */
-  check("§5 is the page's only site for 9.3 h, $147 and 4.8 h — one rendering each",
+     anywhere on the page fails here, whatever it says.
+
+     Two of the three render inside a sentence now rather than in a cell, so
+     the needle is the FIGURE and not the cell string: `9.3` and `$147` are
+     counted as they are written in the prose, and `4.8 h` as the cell writes
+     it. A second rendering in any format is still exactly one hit too many —
+     which is the point of counting the figure rather than a formatting of it. */
+  check("§5 is the page's only site for 9.3, $147 and 4.8 h — one rendering each",
     ["activeBuild", "cost", "attention"].every((k) =>
       s05.sites[k].count === 1 && s05.sites[k].sections.join("") === "shipped-with-muster"),
-    Object.entries(s05.sites).map(([k, v]) => `${k} ×${v.count} in [${v.sections.join(",")}]`).join(" · "));
+    Object.entries(s05.sites).map(([k, v]) => `${k} ${JSON.stringify(v.needle)} ×${v.count} in [${v.sections.join(",")}]`).join(" · "));
   check("§5 mixes no scope: no wave-scope figure appears in the section",
     s05.waveScope.length === 0, s05.waveScope.join(", ") || "no ~64 / 289 / $24.73");
 
-  /* --- §5: measured is rust, unmeasured is ink and says so --- */
-  const dashCells = s05.cards[1].cells;
-  check("§5 measured values are flat rust at the readout size, tabular",
-    bodhCells.every((c) => c.colour === s05.accentRgb && c.tabular.includes("tabular-nums") &&
-      parseFloat(c.fontSize) >= 24),
-    bodhCells.map((c) => `${c.value} ${c.colour} ${c.fontSize} ${c.tabular}`).join(" · "));
-  check("§5 unmeasured values are ink em-dashes with one card-level sub-line, never a placeholder",
-    dashCells.every((c) => c.value === s05Copy.cards[1].values[0] && c.colour === s05.inkRgb) &&
-      s05.cards[1].caption === s05Copy.cards[1].sub && s05.cards[1].captions === 1 &&
-      s05.cards[0].caption === null,
-    `${dashCells.map((c) => c.value).join("")} in ${dashCells[0].colour} · caption ${JSON.stringify(s05.cards[1].caption)} ×${s05.cards[1].captions}`);
-  check("§5 dashes never animate: the engine sees them and refuses",
+  /* --- §5: answered is rust, unanswered is ink and says so ---
+     The value slot's colour is the answered/unanswered channel, not a
+     numeral/word distinction: a hostname and a place-name are answers and set
+     in accent beside `4.8 h`. So the relationship asserted is the split
+     itself — every value the deliverable answers computes the accent, and the
+     one value it does not is the em-dash, in ink. A rust dash, or an ink
+     `bodh.day`, fails here. */
+  const siteCells = s05.cards[1].cells;
+  const allCells = [...bodhCells, ...siteCells];
+  const dashCells = allCells.filter((c) => c.value === "—");
+  const answered = allCells.filter((c) => c.value !== "—");
+  check("§5 answered values are flat rust at the readout size, tabular",
+    answered.length === allCells.length - 1 &&
+      answered.every((c) => c.colour === s05.accentRgb && c.tabular.includes("tabular-nums") &&
+        parseFloat(c.fontSize) >= 24),
+    answered.map((c) => `${c.value} ${c.colour} ${c.fontSize} ${c.tabular}`).join(" · "));
+  check("§5 carries exactly one unanswered value — an ink em-dash, with `measured at launch` under it and no card-level caption",
+    dashCells.length === 1 && dashCells[0].colour === s05.inkRgb &&
+      dashCells[0].value === s05Copy.cards[1].values[0] &&
+      dashCells[0].subs.join("") === s05Copy.cards[1].subs[0] &&
+      s05.cards.every((c) => c.captions === 0 && c.caption === null),
+    `${dashCells.length} dash(es) in ${dashCells.map((c) => c.colour).join("/")} · sub ${JSON.stringify(dashCells.map((c) => c.subs))} · card-level captions ${s05.cards.map((c) => c.captions).join("+")}`);
+  check("§5 the dash never animates: the engine sees it and refuses",
     dashCells.every((c) => c.state === "static" && c.animation === "none" && parseFloat(c.transition) === 0 && c.ariaHidden === null),
     dashCells.map((c) => `${c.state}/${c.animation}`).join(" · "));
+  /* A place is not a metric: the SHIPPED values carry no count-up hook at all,
+     which is a different guarantee from the dash's (the dash keeps its hook so
+     the engine's refusal stays a property of the page). */
+  check("§5's counting cells are the deliverable's measured ones and nothing else",
+    allCells.filter((c) => c.state !== "no-engine").length === 2 &&
+      bodhCells.filter((c) => c.state !== "no-engine").map((c) => c.value).join("") === "4.8 h" &&
+      siteCells.filter((c) => c.state !== "no-engine").map((c) => c.value).join("") === "—",
+    allCells.map((c) => `${c.key}/${c.value}: ${c.state}`).join(" · "));
   check("§5 declares no motion of its own — the count-up is the section's whole inventory",
     s05.moving.length === 0, s05.moving.join(" | ") || "no animation, no transition");
   check("§5 asks for nothing: no link, no chip, no control, and no heading below the h2",
@@ -2396,12 +2594,32 @@ try {
     s05.cards[0].cells.every((cell, i) => Math.abs(cell.height - s05.cards[1].cells[i].height) < 0.5) &&
       (!s05.wide || s05.cards[0].cells.every((cell, i) => Math.abs(cell.top - s05.cards[1].cells[i].top) < 0.5)),
     s05.cards[0].cells.map((c, i) => `${c.key}: ${c.height}px @${c.top} vs ${s05.cards[1].cells[i].height}px @${s05.cards[1].cells[i].top}`).join(" · "));
+  /* The pair is comparable, stated as the four relationships it is and never
+     as a literal height. The sub-line clause is the one the diagonal needs:
+     the two sub-lines sit in different cells, so what must match across the
+     pair is each one's HANG below its own value. */
+  const s05Drops = s05.cards.map((c) => c.cells.map((cell) => cell.subDrop).filter((d) => d !== null));
+  check("§5 the pair is comparable — equal card block-size, corresponding rows level, sub-lines hung alike",
+    Math.abs(s05.cards[0].blockSize - s05.cards[1].blockSize) < 0.5 &&
+      (!s05.wide || (s05.cards[0].cells.every((cell, i) => Math.abs(cell.keyTop - s05.cards[1].cells[i].keyTop) < 0.5) &&
+        s05.cards[0].cells.every((cell, i) => Math.abs(cell.valueTop - s05.cards[1].cells[i].valueTop) < 0.5))) &&
+      s05Drops.every((d) => d.length === 1) &&
+      Math.abs(s05Drops[0][0] - s05Drops[1][0]) < 0.5,
+    `cards ${s05.cards.map((c) => c.blockSize).join(" vs ")}px · sub-line hangs ${s05Drops.map((d) => d.join(",")).join(" vs ")}px · ` +
+      `key tops ${s05.cards.map((c) => c.cells.map((x) => x.keyTop).join("/")).join(" vs ")}`);
   check("§5 every key sets on one line at desktop, which is what the shared cell size assumes",
     s05.cards.every((c) => c.cells.every((cell) => cell.keyLines === 1)),
     s05.cards.map((c) => c.cells.map((cell) => cell.keyLines).join("")).join(" / "));
-  check("§5 prose sits at the seed-locked 64ch column",
-    s05.lines.every((l) => Math.abs(l.cap - s05.readMax) < 0.5 && l.rendered <= l.cap + 0.5),
-    `cap ${s05.lines[0].cap}px against --read-max ${s05.readMax}px, widest rendered ${Math.max(...s05.lines.map((l) => l.rendered))}px`);
+  /* One column edge for the whole prose block. This is the standing guard on
+     the 64ch defect — weighting the <p> re-resolves its own `ch` and hangs the
+     primary line past its neighbours — and it covers every line the
+     deliverable ships, not a count fixed here. */
+  check("§5 prose sits at the seed-locked 64ch column, on one edge",
+    s05.lines.every((l) => Math.abs(l.cap - s05.readMax) < 0.5 && l.rendered <= l.cap + 0.5) &&
+      s05.lines.every((l) => Math.abs(l.start - s05.lines[0].start) < 0.5) &&
+      s05.lines.every((l) => Math.abs(l.width - s05.lines[0].width) < 0.5),
+    `cap ${s05.lines[0].cap}px against --read-max ${s05.readMax}px, widest rendered ${Math.max(...s05.lines.map((l) => l.rendered))}px · ` +
+      `${new Set(s05.lines.map((l) => l.start)).size} distinct inline-start(s) ${JSON.stringify(s05.lines.map((l) => l.start))}, widths ${JSON.stringify(s05.lines.map((l) => l.width))}`);
 
   /* --- §5: the live-region posture, verified during playback ---
      The claim is not "no aria-live in the markup" — it is that the cell's
@@ -2445,14 +2663,18 @@ try {
   })()`);
   evidence.s05Roll = roll;
 
-  check("§5 counts up on the real page: every measured cell fires and lands on its exact string",
-    roll.states.every((s) => s === "done") &&
-      roll.landed.join("|") === s05Copy.cards[0].values.join("|") &&
+  /* §5 has ONE counting cell now, and the roll is read off the cells that
+     actually carry the hook rather than off every value in the card — a value
+     with no hook is not a failed count-up, it is a place. */
+  const s05Counting = s05Copy.cards[0].values.filter((v) => /\d/.test(v));
+  check("§5 counts up on the real page: every counting cell fires and lands on its exact string",
+    roll.states.length === s05Counting.length && roll.states.every((s) => s === "done") &&
+      roll.landed.join("|") === s05Counting.join("|") &&
       roll.distinctSeen > 5,
-    `${roll.states.join("/")} · landed ${JSON.stringify(roll.landed)} · ${roll.distinctSeen} distinct rendered frames`);
+    `${roll.states.join("/")} · landed ${JSON.stringify(roll.landed)} against ${JSON.stringify(s05Counting)} · ${roll.distinctSeen} distinct rendered frames`);
   check("§5's announced value never changes while the visible one rolls — no live region, no wrong number",
     roll.distinctHeard.length === 1 &&
-      s05Copy.cards[0].values.every((v) => roll.distinctHeard[0].includes(v)),
+      s05Counting.every((v) => roll.distinctHeard[0].includes(v)),
     `${roll.distinctSeen} visible states against ${roll.distinctHeard.length} announced: ${JSON.stringify(roll.distinctHeard)}`);
   check("§5 leaves nothing behind: the shroud and its stand-in are gone once the roll settles",
     roll.standInsLeft === 0 && roll.ariaHidden.every((a) => a === null),
@@ -2467,7 +2689,7 @@ try {
   const midVisible = await page.eval(`(() => {
     const el = document.querySelector("#shipped-with-muster [data-countup]");
     el.removeAttribute("data-countup-state");
-    window.__axSpec = MusterCountUp.parse("9.3 h");
+    window.__axSpec = MusterCountUp.parse(${JSON.stringify(s05Counting[0])});
     MusterCountUp.run(el, window.__axSpec, 9000);
     return el.textContent;
   })()`);
@@ -2485,12 +2707,12 @@ try {
   })()`);
   evidence.s05Ax = { midVisible, rollingNamesInTree: axRolling, live: axLive, settled };
 
-  check("§5 mid-roll: the accessibility tree carries the measured values and no intermediate one",
-    ax5Names.includes("9.3 h") && ax5Names.includes("4.8 h") && ax5Names.includes("$147") &&
-      axRolling.every((n) => n === "9.3 h" || n === "4.8 h") && axLive.length === 0,
-    `visible ${JSON.stringify(midVisible)} while the tree carries ${JSON.stringify([...new Set(axRolling)])} · ${axLive.length} live region(s)`);
+  check("§5 mid-roll: the accessibility tree carries the measured value and no intermediate one",
+    s05Counting.every((v) => ax5Names.includes(v)) &&
+      axRolling.every((n) => s05Counting.includes(n)) && axLive.length === 0,
+    `visible ${JSON.stringify(midVisible)} while the tree carries ${JSON.stringify([...new Set(axRolling)])} against ${JSON.stringify(s05Counting)} · ${axLive.length} live region(s)`);
   check("§5 settles back to the authored string with the tree left clean",
-    settled.text === "9.3 h" && settled.hidden === null && settled.standIns === 0,
+    settled.text === s05Counting[0] && settled.hidden === null && settled.standIns === 0,
     JSON.stringify(settled));
 
   /* --- §5 under reduced motion: the exact values, immediately, and no
@@ -2501,10 +2723,17 @@ try {
   evidence.s05Reduced = s05Still;
   check("§5 at reduced motion: every value renders exactly and immediately, nothing shrouded",
     s05Still.reducedMotion &&
-      s05Still.cards[0].cells.every((c, i) => c.state === "static" && c.value === s05Copy.cards[0].values[i]) &&
-      s05Still.cards[1].cells.every((c) => c.state === "static") &&
-      s05Still.standIns === 0 && s05Still.cards[0].cells.every((c) => c.ariaHidden === null),
-    `${s05Still.cards[0].cells.map((c) => c.state).join("/")} · ${JSON.stringify(s05Still.cards[0].cells.map((c) => c.value))}`);
+      s05Still.cards.every((card, i) => card.cells.every((c, j) => c.value === s05Copy.cards[i].values[j])) &&
+      s05Still.cards.every((card) => card.cells.every((c) => c.state === "static" || c.state === "no-engine")) &&
+      s05Still.standIns === 0 && s05Still.cards.every((card) => card.cells.every((c) => c.ariaHidden === null)),
+    `${s05Still.cards.map((card) => card.cells.map((c) => c.state).join("/")).join(" · ")} · ${JSON.stringify(s05Still.cards.map((card) => card.cells.map((c) => c.value)))}`);
+  /* The dash is inert on the reduced path too — its own animation and
+     transition, not the section's, so a motion token landing on the value
+     class alone still fails here. */
+  check("§5 the dash stays inert with motion reduced: no animation, no transition",
+    s05Still.cards[1].cells.filter((c) => c.value === "—").every((c) =>
+      c.animation === "none" && parseFloat(c.transition) === 0 && c.state === "static"),
+    s05Still.cards[1].cells.filter((c) => c.value === "—").map((c) => `${c.state} ${c.animation}/${c.transition}`).join(" · "));
 
   /* --- §5 in light theme and across the phone widths --- */
   await page.setMedia({ colorScheme: "light", reducedMotion: "no-preference" });
@@ -2512,10 +2741,10 @@ try {
   const s05Light = await page.eval(SHIPPED);
   evidence.s05Light = s05Light;
   check("§5 holds the rust/ink split in the light theme too",
-    s05Light.cards[0].cells.every((c) => c.colour === s05Light.accentRgb) &&
-      s05Light.cards[1].cells.every((c) => c.colour === s05Light.inkRgb) &&
-      s05Light.cards[0].cells.every((c, i) => c.value === s05.cards[0].cells[i].value),
-    `measured ${s05Light.cards[0].cells[0].colour} (accent ${s05Light.accentRgb}) · unmeasured ${s05Light.cards[1].cells[0].colour} (ink ${s05Light.inkRgb})`);
+    [...s05Light.cards[0].cells, ...s05Light.cards[1].cells].every((c) =>
+      c.colour === (c.value === "—" ? s05Light.inkRgb : s05Light.accentRgb)) &&
+      s05Light.cards.every((card, i) => card.cells.every((c, j) => c.value === s05.cards[i].cells[j].value)),
+    `answered ${s05Light.cards[0].cells[0].colour} (accent ${s05Light.accentRgb}) · unanswered ${s05Light.cards[1].cells[0].colour} (ink ${s05Light.inkRgb})`);
 
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
   const s05Narrow = {};
@@ -3395,6 +3624,52 @@ try {
   check("landscape phone: the worst narration slot fits its card", landscape.worst.h <= landscape.list + 0.5, `${landscape.worst.slot} sets ${landscape.worst.h}px in a ${landscape.list}px card`);
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-landscape.png"), await page.screenshot());
 
+  /* --- REPLAY RETURNS BOTH PANES TO THE TOP.
+     Each layer carries its own scroll region and they are not the same one at
+     every viewport: the narration rail scrolls on a desktop as entries
+     accumulate, the terminal's log window scrolls on a phone. A chain that
+     starts again at line 1 while either region is still parked where the last
+     run left it renders its first lines out of view.
+
+     Driven through the rendered control, not through the test API — the
+     reader presses a button. Both panes' pre-state is measured and printed
+     beside the result, so a pane that was already at zero cannot make this
+     read as a pass it did not earn. --- */
+  const rewind = {};
+  for (const [w, h] of [[1280, 900], [375, 553]]) {
+    await page.setViewport({ width: w, height: h, deviceScaleFactor: 1, mobile: w < 600 });
+    await page.goto(PAGE_URL);
+    rewind[w] = await page.eval(`(async () => {
+      const log = document.querySelector(".log");
+      const rail = document.querySelector(".narration__list");
+      const at = () => ({
+        log: Math.round(log.scrollTop), logMax: Math.round(log.scrollHeight - log.clientHeight),
+        rail: Math.round(rail.scrollTop), railMax: Math.round(rail.scrollHeight - rail.clientHeight)
+      });
+      document.querySelector("#watch-it-ship").scrollIntoView({ behavior: "instant", block: "center" });
+      window.MusterReplay.finish();
+      await new Promise((r) => setTimeout(r, 400));
+      const before = at();
+      const button = document.querySelector(".replay__controls button");
+      const label = button.textContent;
+      button.click();
+      await new Promise((r) => setTimeout(r, 400));
+      return { before, after: at(), label, state: window.MusterReplay.state() };
+    })()`);
+  }
+  evidence.s2Rewind = rewind;
+  const rewindWidths = Object.entries(rewind);
+  check("§2 replay returns BOTH panes to the top — terminal and narration",
+    rewindWidths.every(([, m]) => /REPLAY/.test(m.label) && m.after.log === 0 && m.after.rail === 0) &&
+      /* Non-vacuity: across the two viewports each pane was measurably
+         scrolled before the press, so neither zero is a pane that never
+         moved. */
+      rewindWidths.some(([, m]) => m.before.log > 0) && rewindWidths.some(([, m]) => m.before.rail > 0),
+    rewindWidths.map(([w, m]) =>
+      `${w}px: terminal ${m.before.log}→${m.after.log} of ${m.before.logMax}, narration ${m.before.rail}→${m.after.rail} of ${m.before.railMax}`).join(" · "));
+  await page.setViewport({ width: 1440, height: 900 });
+  await page.goto(PAGE_URL);
+
   /* ================================================================ footer ==
      The closing signature. Its strings and its seven URLs are read off
      `footer-copy.md` rather than copied into this file — the §3/§4 pattern,
@@ -3425,12 +3700,22 @@ try {
       const row = lines.find((l) => new RegExp("^\\|\\s*`?" + name + "`?\\s*\\|").test(l));
       return row ? cell(row.split("|")[2]) : null;
     };
+    /* The sentence's measured length, read out of the deliverable's own
+       measured-counts table rather than hard-coded here. The count changes
+       whenever the sentence is re-ruled, and a literal in this file would
+       make every future ruling a harness edit — the coupling that has to
+       survive is "the page's sentence is as long as the file says it is",
+       under the file's own stated counting convention. */
+    const measuredRow = lines.find((l) => /^\|\s*Closing sentence\s*\|/.test(l));
+    const measured = measuredRow ? measuredRow.split("|").slice(1, -1).map((c) => c.trim()) : null;
+    const num = (s) => (s ? Number((s.match(/\d+/) || [])[0]) : null);
     return {
-      /* One sentence now, not two: the team line and the authorship line
-         merged, so the footer closes in one breath. The fence is the
-         recommended candidate — the alternates in the same section are prose,
-         never fenced, so they cannot be picked up here by accident. */
+      /* One sentence: the team truth and the authorship in one breath. The
+         fence is the ruled string — any prose in the same section is never
+         fenced, so it cannot be picked up here by accident. */
       sentence: slice("## 2. The closing sentence"),
+      words: measured ? num(measured[2]) : null,
+      wordCeiling: measured ? num(measured[1]) : null,
       receipts,
       contactText: slot("Link text"),
       contactHref: slot("href")
@@ -3464,6 +3749,13 @@ try {
     return {
       lineText: lines.map(text),
       lineSizes: lines.map((p) => css(p, "font-size")),
+      /* The two style-only nowrap runs. A unit that split reports two rects;
+         a unit that leaked a character into textContent fails the byte
+         equality above instead. */
+      units: [...foot.querySelectorAll(".pagefoot__unit")].map((u) => ({
+        text: u.textContent, rects: u.getClientRects().length
+      })),
+      lineRows: lines.map((p) => Math.round(p.getBoundingClientRect().height / parseFloat(css(p, "line-height")))),
       receiptSize: receipts.length ? css(receipts[0], "font-size") : null,
       leadSize, microSize,
       /* §4.1: one boundary, one rule. The separator replaced the footer's
@@ -3506,6 +3798,17 @@ try {
     Boolean(footerCopy.sentence) && footer.placeholders === 0 &&
       footer.lineText.length === 1 && footer.lineText[0] === footerCopy.sentence,
     `${footer.placeholders} placeholder(s) · ${footer.lineText.length} sentence(s) · equal: ${footer.lineText[0] === footerCopy.sentence}`);
+  /* The sentence's length, counted on the RENDERED text under the copy file's
+     own convention — whitespace-delimited tokens carrying a letter or digit,
+     so the two em-dashes count zero — and compared against the count that file
+     publishes, plus the ceiling it publishes beside it. The number is read,
+     never typed here: re-rule the sentence and this re-bases with it. */
+  const footerWords = (s) => s.split(/\s+/).filter((t) => /[\p{L}\p{N}]/u.test(t)).length;
+  const footerRendered = footerWords(footer.lineText[0] || "");
+  check("the footer's sentence measures the length its deliverable publishes, under the ceiling",
+    typeof footerCopy.words === "number" && typeof footerCopy.wordCeiling === "number" &&
+      footerRendered === footerCopy.words && footerRendered <= footerCopy.wordCeiling,
+    `${footerRendered} words rendered against ${footerCopy.words} published, ceiling ${footerCopy.wordCeiling}`);
   /* §4.2, the signature scale. Computed-to-computed against a probe carrying
      the token, never against a pixel figure: the sentence is the page's last
      deliberate statement, and at body scale it read as fine print. */
@@ -3559,6 +3862,41 @@ try {
       footer.lockups === 0,
     footer.starts.map((b) => `${b.cls.split(" ").pop()} at ${b.start} (${b.align})`).join(" · ") +
       ` · separator tag at ${footer.separatorTagStart} · against the rail at ${footer.rail} · ${footer.lockups} lockups`);
+
+  /* --- the two nowrap units, at the widths the defect was measured at.
+     The founder's name split across two lines at 375 and 320, and the adverb
+     broke off its verb at 1280 — a name is one token to a reader even though
+     it is two to a line-breaker. One client rect per unit is that guarantee;
+     the sentence's byte equality above is what proves the spans carry no text
+     of their own. --- */
+  const footerUnits = { 1280: footer.units };
+  const footerRows = { 1280: footer.lineRows[0] };
+  for (const width of [375, 320]) {
+    await page.setViewport({ width, height: 553, deviceScaleFactor: 1, mobile: true });
+    await page.goto(PAGE_URL);
+    const at = await page.eval(`(() => {
+      const foot = document.querySelector("body > footer");
+      const line = foot.querySelector("p.pagefoot__line");
+      return {
+        units: [...foot.querySelectorAll(".pagefoot__unit")].map((u) => ({ text: u.textContent, rects: u.getClientRects().length })),
+        text: line.textContent.replace(/\\s+/g, " ").trim(),
+        rows: Math.round(line.getBoundingClientRect().height / parseFloat(getComputedStyle(line).lineHeight))
+      };
+    })()`);
+    footerUnits[width] = at.units;
+    footerRows[width] = at.rows;
+    /* Byte equality is re-read here, not assumed from 1280: a span that
+       injected whitespace would show up at exactly the width it wrapped. */
+    footerUnits[`${width}-equal`] = at.text === footerCopy.sentence;
+  }
+  evidence.footerUnits = { rects: footerUnits, rows: footerRows };
+  await page.setViewport({ width: 1280, height: 900 });
+  await page.goto(PAGE_URL);
+  check("the footer's two nowrap units hold as wholes at 1280, 375 and 320",
+    [1280, 375, 320].every((w) => footerUnits[w].length === 2 && footerUnits[w].every((u) => u.rects === 1)) &&
+      [375, 320].every((w) => footerUnits[`${w}-equal`] === true) &&
+      footer.units.map((u) => u.text).join("|") === "never invoked|Kanwar Sandhu",
+    [1280, 375, 320].map((w) => `${w}px: ${footerUnits[w].map((u) => JSON.stringify(u.text) + " ×" + u.rects + " rect").join(", ")} in ${footerRows[w]} line(s)`).join(" · "));
 
   /* ================================================================== §7.1 ==
      Scroll landing — the page does not snap.

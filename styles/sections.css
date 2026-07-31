@@ -253,10 +253,15 @@
 }
 
 /* --------------------------------------------------------------------------
-   §1.4 THIS SITE remnant — the readout motif at its smallest honest size.
+   §1.4 THIS SITE remnant — the instrument motif at its smallest honest size:
+   one row, carrying the scope label and the VERIFY chip.
 
    --gap-major above it is the section's one idea-group seam: claim and team
    above, receipts and command below.
+
+   The strip states posture, not measurement — §5 owns every value and every
+   dash, because an unmeasured value only reads as a promise beside its
+   measured twin. There is no cell construction here to style.
    -------------------------------------------------------------------------- */
 
 .remnant {
@@ -282,61 +287,6 @@
 
 .remnant__head .chip {
   margin-inline-start: auto;
-}
-
-.remnant__cells {
-  margin-block-start: var(--gap-hairline);
-}
-
-.remnant__cell {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--gap-hairline);
-}
-
-.remnant__cell + .remnant__cell {
-  margin-block-start: var(--gap-hairline);
-  border-block-start: 1px solid var(--hair);
-  padding-block-start: var(--gap-hairline);
-}
-
-/* Ink, never accent: an unmeasured value is a claim about what will be
-   measured, not a metric. Static in every state — no animation, no
-   transition, and the count-up engine never sees it. */
-.remnant__value {
-  font-family: var(--font-mono);
-  font-size: var(--text-readout);
-  line-height: var(--lead-readout);
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-}
-
-.remnant__caption {
-  margin-block-start: var(--gap-hairline);
-}
-
-@media (min-width: 60rem) {
-  .remnant__cells {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--gap-flow);
-  }
-
-  .remnant__cell {
-    display: block;
-  }
-
-  .remnant__cell + .remnant__cell {
-    margin-block-start: 0;
-    border-block-start: 0;
-    padding-block-start: 0;
-  }
-
-  .remnant__value {
-    display: block;
-    margin-block-start: calc(var(--rhythm) / 4);
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -614,15 +564,15 @@
 }
 
 /* --------------------------------------------------------------------------
-   §5 — shipped with Muster. Three prose lines, then two readout cards.
+   §5 — shipped with Muster. Four prose lines, then two readout cards.
 
-   The section's argument is a side-by-side read: same four keys, same order,
+   The section's argument is a side-by-side read: same two keys, same order,
    one scope each. So every cell is the same three tracks — key, value,
    sub-line — and the sub-line's track is reserved whether or not that cell
-   has one. Only one of the eight cells carries a sub-line today; without the
-   reserve the two cards would go ragged from the third row down and the
-   comparison the section exists to make would be reading across a step. The
-   harness asserts the alignment, not the figure.
+   has one. Each card carries exactly one sub-line and they fall in DIFFERENT
+   cells; without the reserve the pair would go ragged from the second row
+   down and the comparison the section exists to make would be reading across
+   a step. The harness asserts the alignment, not the figure.
    -------------------------------------------------------------------------- */
 
 .shipped__line + .shipped__line {
@@ -631,11 +581,11 @@
 
 /* §5's primary line takes no rule at all: the weight is carried by a <b>
    spanning the sentence, which is the shell's in-passage emphasis route.
-   That is not a style preference — it is the only form that keeps the three
+   That is not a style preference — it is the only form that keeps all four
    lines on ONE column edge. `--read-max` is 64ch, and `ch` is the advance of
    the element's own "0": weight the <p> itself and its 64ch resolves ~8.7%
    wider than its neighbours', so the primary line hangs past them and §5's
-   three-line block goes ragged. Bold the run instead and the paragraph's own
+   prose block goes ragged. Bold the run instead and the paragraph's own
    font — and therefore the column — is untouched. */
 
 .shipped {
@@ -666,12 +616,6 @@
   margin-block-start: var(--gap-flow);
   border-block-start: 1px solid var(--hair);
   padding-block-start: var(--gap-flow);
-}
-
-/* The card-level sub-line: it qualifies the whole scope, not one value, so it
-   sits at the card's foot rather than four times over under four dashes. */
-.shipped__caption {
-  margin-block-start: var(--gap-flow);
 }
 
 /* Wide: the two scopes stand side by side, which is the comparison. */

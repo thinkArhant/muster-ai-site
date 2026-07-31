@@ -233,12 +233,17 @@ const AUDIT = `(() => {
     colour: hex(parse(cs(el).color)),
     size: parseFloat(cs(el).fontSize),
     tabular: cs(el).fontVariantNumeric,
-    /* Derived from the CONTENT, never from the class: "no digit means not
-       measured" is the same test the count-up engine applies before it
-       refuses to animate a cell. Keyed on the class instead, this check would
-       wave through a dash painted rust the moment someone dropped the
-       modifier — and a rust dash reads as a metric that happens to be zero. */
-    unmeasured: !/[0-9]/.test(el.textContent),
+    /* Derived from the CONTENT, never from the class: the em-dash IS the
+       unanswered glyph, and a value slot holding anything else is an answer.
+       Keyed on the class instead, this check would wave through a dash
+       painted rust the moment someone dropped the modifier — and a rust dash
+       reads as a metric that happens to be zero.
+
+       Not keyed on digits: the value slot's colour is the answered/unanswered
+       channel, not a numeral/word distinction. A hostname is a place a reader
+       can open, and THIS PAGE is the one cell that cannot be unmeasured —
+       both are answers, and both take the accent beside the numeral. */
+    unmeasured: el.textContent.trim() === "—",
     modifier: el.classList.contains("readout__value--unmeasured"),
     text: el.textContent.trim()
   }));
@@ -500,12 +505,18 @@ try {
   check("full-ink rule: no muted prose", dark.mutedProse.length === 0, dark.mutedProse.join(" | ") || "every p/li is --ink");
   /* The other side of that exclusion: readout values are held to §8 and to
      §2.3's 24px accent floor, which is a harder rule than the one they left. */
+  /* And the page carries exactly ONE unanswered value. That is the relationship
+     the dash's whole meaning rests on: an unmeasured value reads as a promise
+     only beside its measured twin, so a second dash anywhere — or a dash with
+     no answered value on the same instrument — is a different claim. */
   check("every readout value is flat accent (or an ink dash) at or above the 24px accent floor, tabular",
     dark.readoutValues.length > 0 &&
+      dark.readoutValues.filter((v) => v.unmeasured).length === 1 &&
       dark.readoutValues.every((v) => v.size >= 24 && /tabular-nums/.test(v.tabular) &&
         v.unmeasured === v.modifier &&
         v.colour === (v.unmeasured ? dark.inkHex : dark.accentHex)),
-    dark.readoutValues.map((v) => `${JSON.stringify(v.text)} ${v.colour} @${v.size}px${v.unmeasured === v.modifier ? "" : " ← content and modifier disagree"}`).join(" · ") || "no readout values on the page");
+    dark.readoutValues.map((v) => `${JSON.stringify(v.text)} ${v.colour} @${v.size}px${v.unmeasured === v.modifier ? "" : " ← content and modifier disagree"}`).join(" · ") +
+      ` — ${dark.readoutValues.filter((v) => v.unmeasured).length} unanswered of ${dark.readoutValues.length}` || "no readout values on the page");
   check("no rust sets small text except the two glyphs the specs exempt as graphical marks",
     dark.smallRust.length === 0 && dark.graphicalRust.length === 2 &&
       !dark.graphicalRust.some((g) => /UNMARKED/.test(g)),
@@ -621,6 +632,7 @@ try {
   check("light theme also passes the full-ink, small-rust and readout-value rules",
     light.mutedProse.length === 0 && light.smallRust.length === 0 && light.graphicalRust.length === 2 &&
       light.readoutValues.length === dark.readoutValues.length &&
+      light.readoutValues.filter((v) => v.unmeasured).length === 1 &&
       light.readoutValues.every((v) => v.size >= 24 && v.colour === (v.unmeasured ? light.inkHex : light.accentHex)),
     `mutedProse ${light.mutedProse.length}, informational smallRust ${light.smallRust.length}, graphical ${light.graphicalRust.length}, readout values ${light.readoutValues.length} (${light.readoutValues.filter((v) => v.unmeasured).length} unmeasured, in ${light.inkHex})`);
 

@@ -484,6 +484,17 @@ try {
     return (c) => palette.reduce((best, e) => (d2(c, e[1]) < d2(c, best[1]) ? e : best))[0];
   };
 
+  /* The Blink run's own count of §5's unanswered values, when its report is
+     present. Read rather than restated: how many dashes §5 carries is a
+     product decision that has changed once already, and the claim this file
+     uniquely owns is that WebKit paints them the SAME — in ink, never rust —
+     not how many there are. */
+  const blinkReportPath = join(ARTIFACTS, "blink-report.json");
+  const blinkRun = existsSync(blinkReportPath) ? JSON.parse(readFileSync(blinkReportPath, "utf8")) : null;
+  const blinkDashes = blinkRun?.evidence?.s05Wide
+    ? blinkRun.evidence.s05Wide.cards.flatMap((c) => c.cells).filter((c) => c.value === "—").length
+    : null;
+
   for (const theme of ["dark", "light"]) {
     const target = hexLuminance(GROUND[theme]);
     const nearest = classifier(theme);
@@ -522,22 +533,25 @@ try {
       `ink ${s5Ink}% against ${baseInk}% on the same page with every section hidden — +${Math.round((s5Ink - baseInk) * 100) / 100} percentage points`
     );
     check(
-      `WebKit renders §5's measured values in rust, with no JavaScript run (${theme})`,
+      `WebKit renders §5's answered values in rust, with no JavaScript run (${theme})`,
       accentClusters.length >= 4 && accentDashes.length === 0,
       `${accentClusters.length} rust clusters, ${accentClusters.reduce((n, b) => n + b.n, 0)} px of accent ink — the authored strings, since QuickLook ran no count-up`
     );
+    /* The whole ink/rust split, as three relationships: every ink cluster in
+       the cards is dash-shaped, there is at least one, and no dash is rust.
+       The count itself is Blink's, compared rather than restated. */
     check(
-      `WebKit renders §5's four unmeasured values as ink em-dashes, never rust (${theme})`,
-      inkDashes.length === 4 && inkClusters.length === inkDashes.length && accentDashes.length === 0,
-      `${inkClusters.length} ink cluster(s) in the section, ${inkDashes.length} of them dash-shaped: ${inkDashes.map((b) => b.w + "×" + b.h).join(", ") || "none"} · rust dashes ${accentDashes.length}`
+      `WebKit renders §5's unanswered value as an ink em-dash, never rust (${theme})`,
+      inkDashes.length > 0 && inkClusters.length === inkDashes.length && accentDashes.length === 0 &&
+        (blinkDashes === null || inkDashes.length === blinkDashes),
+      `${inkClusters.length} ink cluster(s) in the section, ${inkDashes.length} of them dash-shaped: ${inkDashes.map((b) => b.w + "×" + b.h).join(", ") || "none"} · rust dashes ${accentDashes.length} · ` +
+        (blinkDashes === null ? "no Blink report to compare the count against" : `Blink counted ${blinkDashes}`)
     );
   }
 
   /* Side-by-side with Blink, when that report is present. */
-  const blinkReport = join(ARTIFACTS, "blink-report.json");
-  if (existsSync(blinkReport)) {
-    const blink = JSON.parse(readFileSync(blinkReport, "utf8"));
-    const blinkPatch = blink.evidence?.blinkGrainPatch;
+  if (blinkRun) {
+    const blinkPatch = blinkRun.evidence?.blinkGrainPatch;
     if (blinkPatch) {
       evidence.parity = { blink: blinkPatch, webkit: evidence.dark.patch };
       const wk = evidence.dark.patch;

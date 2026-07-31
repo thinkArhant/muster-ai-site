@@ -161,12 +161,27 @@ const BANNED_WORDS = [
   "cutting-edge", "10x", "effortless", "magical", "supercharge"
 ];
 
-/* Whole-product figures. Each must appear exactly once on the page, in §5. */
-const WHOLE_PRODUCT = ["9.3 h", "$147", "4.8 h"];
+/* Whole-product figures. Each must appear exactly once on the page, in §5.
+
+   Matched as the FIGURE rather than as one formatting of it: two of the three
+   render inside a sentence (`9.3 hours`, `$147 in AI tokens`) and one in a
+   cell (`4.8 h`), and a check pinned to a single spelling would go quietly
+   blind the moment a figure moved between the two — matching nothing, and
+   passing while it did. Each pattern accepts any rendering of its figure, so a
+   SECOND rendering anywhere, in any format, is still one hit too many. */
+const WHOLE_PRODUCT = [
+  { figure: "9.3 h", re: /9\.3\s*(?:h\b|hours?\b|hrs?\b)/gi },
+  { figure: "$147", re: /\$\s?147\b/g },
+  { figure: "4.8 h", re: /4\.8\s*(?:h\b|hours?\b|hrs?\b)/gi }
+];
+/* §5's one counting cell, from the seed's Measured data (Operator attention).
+   Stated here rather than read off the page: this runner's whole value is that
+   it re-derives what the page should say instead of echoing it. */
+const COUNTING_CELL = "4.8 h";
 /* Wave-scope figures. §1 and §5 must carry none of them. */
 const WAVE = ["~64", "289", "$24.73"];
 
-function copyMatrix(sections, verifyText, chrome) {
+function copyMatrix(sections, verifyText, chrome, dashCell) {
   /* The matrix runs over everything a reader sees, not over `main` alone: the
      status bar and the footer are page copy too, and the footer is the last
      thing the eye lands on after the curl. */
@@ -203,11 +218,13 @@ function copyMatrix(sections, verifyText, chrome) {
     heroBodh.length === 0,
     heroBodh.length ? `found: ${heroBodh.join(", ")}` : "hero text carries none of the eight Bodh tokens");
 
-  for (const fig of WHOLE_PRODUCT) {
-    const hits = Object.entries(sections).filter(([, t]) => t.includes(fig));
-    check(`\`${fig}\` appears exactly once on the page, and §5 is the site (DEC-048)`,
-      hits.length === 1 && hits[0][0] === "shipped-with-muster",
-      hits.map(([id, t]) => `${id} ×${(t.split(fig).length - 1)}`).join(" · ") || "absent");
+  for (const { figure, re } of WHOLE_PRODUCT) {
+    const count = (t) => (t.match(new RegExp(re.source, re.flags)) || []).length;
+    const hits = Object.entries(sections).map(([id, t]) => [id, count(t)]).filter(([, n]) => n > 0);
+    const total = hits.reduce((n, [, c]) => n + c, 0);
+    check(`\`${figure}\` appears exactly once on the page, and §5 is the site (DEC-048)`,
+      total === 1 && hits.length === 1 && hits[0][0] === "shipped-with-muster",
+      hits.map(([id, n]) => `${id} ×${n}`).join(" · ") + ` — matched as ${re}` || "absent");
   }
 
   const waveInS1S5 = WAVE.filter((f) => sections.hero.includes(f) || sections["shipped-with-muster"].includes(f));
@@ -221,19 +238,31 @@ function copyMatrix(sections, verifyText, chrome) {
     missing.length === 0, missing.length ? `missing: ${missing.join(" | ")}` : labels.join(" · "));
 
   const s5 = sections["shipped-with-muster"];
-  const dashCells = (s5.match(/—/g) || []).length;
+  /* Counting em-dashes in §5's TEXT would measure the section's punctuation
+     rather than its dash cell — §5's prose carries three of them, so a text
+     count reaches four whatever the cards do and passes for a reason unrelated
+     to what it claims. The dash cell is counted as an ELEMENT: the values
+     carrying the unmeasured modifier, inside the THIS SITE card. */
+  const dashCells = dashCell.count;
   const parts = {
     "§5 carries the THIS SITE scope label": /THIS SITE · SPEC → LIVE/.test(s5),
-    "§5's THIS SITE card is four em-dashes": dashCells >= 4,
-    /* `.t-micro` sets the caption in tracked uppercase, so the rendered string
+    "the THIS SITE card was found by its scope label": dashCell.cardFound,
+    "§5's THIS SITE card carries exactly one unmeasured value": dashCells === 1,
+    "and it renders an em-dash": dashCell.text === "—",
+    /* `.t-micro` sets the sub-line in tracked uppercase, so the rendered string
        is what innerText reports — matched case-insensitively on purpose. */
     "§5 says `measured at launch`": /measured at launch/i.test(s5),
-    "§1's remnant says `measured at launch`": /measured at launch/i.test(sections.hero),
+    /* §1 makes no unmeasured claim at all: the promise belongs beside the
+       measured twin that makes it read as a promise, and that is in §5. It
+       occurs ONCE on the page. */
+    "§1 makes no unmeasured claim": !/measured at launch/i.test(sections.hero) && !sections.hero.includes("—"),
+    "`measured at launch` occurs exactly once page-wide": (pageText.match(/measured at launch/gi) || []).length === 1,
     "no THIS SITE cell carries a numeral": !/THIS SITE · SPEC → LIVE[\s\S]*?(\d)/.test(s5.split("BODH")[0] === s5 ? s5 : s5.slice(s5.indexOf("THIS SITE")))
   };
   check("THIS SITE is still dashed, with `measured at launch` beside it (R4)",
     Object.values(parts).every(Boolean),
-    Object.entries(parts).map(([k, v]) => `${v ? "✓" : "✗"} ${k}`).join(" · ") + ` — ${dashCells} em-dashes in §5`);
+    Object.entries(parts).map(([k, v]) => `${v ? "✓" : "✗"} ${k}`).join(" · ") +
+      ` — ${dashCells} unmeasured value(s) in the THIS SITE card, ${(s5.match(/—/g) || []).length} em-dashes in §5's text`);
 
   check("the curl is byte-equal to R12's verified form in §1, §6 and VERIFY.md",
     (html.match(new RegExp(R12.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length === 2 &&
@@ -317,7 +346,18 @@ async function run() {
       placeholders: [...document.querySelectorAll("[data-shell-placeholder]")].map(e => e.innerText.replace(/\\s+/g, " ").trim())
     }))()`);
     evidence.chrome = chrome;
-    copyMatrix(sections, verify, chrome);
+    /* The dash cell as an ELEMENT, in the card that owns it — read here so the
+       copy matrix can assert the cell rather than count punctuation. The card
+       is found by its scope label, not by its position. */
+    const dashCell = await page.eval(`(() => {
+      const card = [...document.querySelectorAll(".shipped__card")]
+        .find((c) => /THIS SITE/.test((c.querySelector(".shipped__scope") || {}).textContent || ""));
+      const cells = card ? [...card.querySelectorAll(".readout__value--unmeasured")] : [];
+      return { count: cells.length, text: cells.map((c) => c.textContent.trim()).join("|"),
+               cardFound: Boolean(card) };
+    })()`);
+    evidence.dashCell = dashCell;
+    copyMatrix(sections, verify, chrome, dashCell);
 
     /* Reported, never asserted: a shell placeholder is a state the page passes
        through, and the last string a reader meets after the curl deserves a
@@ -383,7 +423,9 @@ async function run() {
         oneShotNames: byName(oneShot), oneShotSections,
         lamps: document.querySelectorAll(".pulse").length,
         cursors: document.querySelectorAll(".cursor").length,
-        countups: document.querySelectorAll("[data-countup]").length
+        countups: document.querySelectorAll("[data-countup]").length,
+        countupSections: [...new Set([...document.querySelectorAll("[data-countup]")]
+          .map((el) => { const s = el.closest("section"); return s ? s.id : "(loose)"; }))]
       };
     })()`);
     evidence.motion = motion;
@@ -391,9 +433,16 @@ async function run() {
        cursor. The lamp motif is one element seated twice — header and §2's
        terminal — which is what the budget calls one. */
     const loopingSeatKinds = [...new Set(motion.loopingSeats.map((s) => (s.includes("pulse") ? "pulse" : s.includes("cursor") ? "cursor" : s)))];
+    /* The count-up's seat count is the page's, read off the page: §5's cards
+       carry one hook per cell that states a metric — the measured one, and the
+       dash that keeps its hook so the engine's refusal to animate a digitless
+       value stays a property of the page. A place is not a metric and carries
+       none. What the budget asserts is the ELEMENT, not how many cells it is
+       seated in, so the count is asserted as "at least one and only in §5". */
     check("the live motion inventory on the built page is the budget exactly: the pulse motif, the count-up, the §6 cursor",
       loopingSeatKinds.length === 2 && loopingSeatKinds.includes("pulse") && loopingSeatKinds.includes("cursor") &&
-        motion.cursors === 1 && motion.lamps === 2 && motion.countups === 8,
+        motion.cursors === 1 && motion.lamps === 2 &&
+        motion.countups > 0 && motion.countupSections.join("") === "shipped-with-muster",
       `${motion.loopingSeats.length} looping seats, all pulse or cursor: ${motion.loopingSeats.join(" · ")} — ` +
         `keyframes ${Object.entries(motion.looping).map(([n, c]) => `${n} ×${c}`).join(", ")}; ` +
         `count-up is ambient element 2 (JS, ${motion.countups} cells, gated, one-shot per load)`);
@@ -408,8 +457,11 @@ async function run() {
 
     /* ---- the counting cells during playback: what is SEEN vs what is ANNOUNCED ---- */
     const roll = await page.eval(`(async () => {
-      const cell = document.querySelector("#shipped-with-muster .shipped__cell");
-      const span = cell.querySelector("[data-countup]");
+      /* The counting cell, found by the hook rather than by position: §5's
+         first cell is not guaranteed to be the one that counts, and a check
+         that assumed it would silently start measuring a different cell. */
+      const span = document.querySelector("#shipped-with-muster .shipped__cell [data-countup]:not(.readout__value--unmeasured [data-countup])");
+      const cell = span.closest(".shipped__cell");
       const seen = new Set(), announced = new Set();
       /* The announced string of the cell = its text with aria-hidden subtrees
          removed. That is what a screen reader assembles, and it is the thing the
@@ -443,28 +495,35 @@ async function run() {
     evidence.roll = roll;
     const announcedValues = roll.announced.filter(Boolean);
     check("the counting cell takes many visible states and exactly one announced state, verified during playback",
-      roll.seen.length > 10 && announcedValues.length === 1 && announcedValues[0].includes("9.3 h") &&
-        roll.state === "done" && roll.settled === "9.3 h",
-      `${roll.seen.length} distinct visible strings, ${announcedValues.length} announced: "${announcedValues.join('" | "')}" · settles "${roll.settled}" (state ${roll.state})`);
+      roll.seen.length > 10 && announcedValues.length === 1 && announcedValues[0].includes(COUNTING_CELL) &&
+        roll.state === "done" && roll.settled === COUNTING_CELL,
+      `${roll.seen.length} distinct visible strings, ${announcedValues.length} announced: "${announcedValues.join('" | "')}" · settles "${roll.settled}" against the seed's ${COUNTING_CELL} (state ${roll.state})`);
 
     /* Mid-roll, from the AX tree rather than from the DOM. */
     await page.goto(PAGE);
     const midRoll = await page.eval(`(async () => {
       document.getElementById("shipped-with-muster").scrollIntoView();
       await new Promise(r => requestAnimationFrame(() => setTimeout(r, 350)));
-      const span = document.querySelector("#shipped-with-muster [data-countup]");
+      const span = document.querySelector("#shipped-with-muster .readout__value:not(.readout__value--unmeasured) [data-countup]");
       return { visible: span.textContent, state: span.getAttribute("data-countup-state") };
     })()`);
     const fullAx = await page.call("Accessibility.getFullAXTree");
     const axStrings = fullAx.nodes.map((n) => n.name?.value).filter(Boolean);
+    /* Any name that reads as a bare figure and is not the settled one is an
+       intermediate the tree should never have carried. The prose figures are
+       inside sentences, so they never present as a bare figure — which is
+       exactly why this pattern still catches a rolling digit. */
     const axHasIntermediate = axStrings.some((s) => /^\$?\d[\d.,]* ?h?$/.test(s.trim()) &&
-      !["9.3 h", "4.8 h", "4", "$147"].includes(s.trim()));
+      s.trim() !== COUNTING_CELL);
     const liveProps = fullAx.nodes.filter((n) => (n.properties || []).some((p) => p.name === "live" && p.value?.value && p.value.value !== "off"));
-    evidence.midRoll = { ...midRoll, axHas93: axStrings.includes("9.3 h"), axHas48: axStrings.includes("4.8 h"), liveNodes: liveProps.length };
+    /* The prose figures have to be IN the tree too — a count-up shroud that
+       swallowed the sentence carrying them would otherwise pass here. */
+    const axProse = ["9.3 hours", "$147"].filter((s) => axStrings.some((n) => n.includes(s)));
+    evidence.midRoll = { ...midRoll, axHasCell: axStrings.includes(COUNTING_CELL), axProse, liveNodes: liveProps.length };
     check("mid-roll the accessibility tree carries the measured values and no intermediate, with no live node",
-      midRoll.state === "running" && axStrings.includes("9.3 h") && axStrings.includes("4.8 h") &&
+      midRoll.state === "running" && axStrings.includes(COUNTING_CELL) && axProse.length === 2 &&
         !axHasIntermediate && liveProps.length === 0,
-      `visible "${midRoll.visible}" (state ${midRoll.state}) while the AX tree reads 9.3 h and 4.8 h; ` +
+      `visible "${midRoll.visible}" (state ${midRoll.state}) while the AX tree reads ${COUNTING_CELL} and the prose ${axProse.join(" / ") || "— NEITHER"}; ` +
         `${liveProps.length} nodes with a live property`);
 
     /* ---- reader paths: keyboard paging ----
@@ -636,10 +695,17 @@ async function run() {
           return parse(getComputedStyle(document.body).backgroundColor); };
         const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
         const out = [];
-        for (const sel of ["#the-insight p.read", "#shipped-with-muster p.read", "#get-started p.read",
-                           "#the-decisions .sheet__row dd", "#the-decisions .sheet__stamp",
-                           "#watch-it-ship .narration__text", "#hero .formation__caption", "#hero .remnant__key"]) {
-          const el = document.querySelector(sel); if (!el) continue;
+        /* Every selector must resolve. A probe that silently skips a missing
+           element goes blind rather than red, and a check that measures fewer
+           surfaces than it claims is worse than one that fails. §1's muted
+           label is the scope label — the strip's only text. */
+        const wanted = ["#the-insight p.read", "#shipped-with-muster p.read", "#get-started p.read",
+                        "#the-decisions .sheet__row dd", "#the-decisions .sheet__stamp",
+                        "#watch-it-ship .narration__text", "#hero .formation__caption", "#hero .remnant__scope",
+                        "#shipped-with-muster .readout__key", "#shipped-with-muster .readout__sub"];
+        for (const sel of wanted) {
+          const el = document.querySelector(sel);
+          if (!el) { out.push({ sel, ratio: 0, size: 0, missing: true }); continue; }
           const cs = getComputedStyle(el);
           out.push({ sel, ratio: Math.round(ratio(parse(cs.color), bgOf(el)) * 100) / 100,
                      size: parseFloat(cs.fontSize) });
@@ -647,10 +713,10 @@ async function run() {
         return out;
       })()`);
       evidence[`contrast_${scheme}`] = contrast;
-      const failures = contrast.filter((c) => c.ratio < 4.5);
+      const failures = contrast.filter((c) => c.ratio < 4.5 || c.missing);
       check(`contrast ≥ 4.5:1 for body and label text, ${scheme} theme`,
         failures.length === 0,
-        contrast.map((c) => `${c.sel} ${c.ratio}:1`).join(" · "));
+        contrast.map((c) => `${c.sel} ${c.missing ? "ABSENT — probe found nothing" : c.ratio + ":1"}`).join(" · "));
     }
 
     /* ---- landmarks and focus states ---- */

@@ -44,6 +44,7 @@
   const core = replay.querySelector(".replay__core");
   const terminal = replay.querySelector(".terminal");
   const log = replay.querySelector(".log");
+  const rail = replay.querySelector(".narration__list");
   const lines = [...replay.querySelectorAll(".log__line")];
   const entries = [...replay.querySelectorAll(".narration__entry")];
   const indicator = replay.querySelector("[data-beat-indicator]");
@@ -135,8 +136,8 @@
       else entry.removeAttribute("data-active");
     }
     if (active && wide.matches) {
-      const railTop = active.offsetTop + active.offsetHeight - active.parentElement.clientHeight;
-      if (railTop > active.parentElement.scrollTop) active.parentElement.scrollTop = railTop;
+      const railTop = active.offsetTop + active.offsetHeight - rail.clientHeight;
+      if (railTop > rail.scrollTop) rail.scrollTop = railTop;
     }
 
     let beat = 1;
@@ -184,6 +185,19 @@
     renderControls();
   }
 
+  /* Both panes return to their own top when the chain restarts. Each layer
+     carries its own scroll region — the terminal's log window, and the
+     narration rail that walks down as entries accumulate — and a chain that
+     starts again at line 1 while either region is still parked at the end of
+     the last run renders its first lines out of view. The two are reset
+     together because "the reader asked to watch it again" is one guarantee,
+     not one per layer: whichever of them happens to be the scrolling one at a
+     given viewport, it starts at the top. */
+  function rewindPanes() {
+    log.scrollTop = 0;
+    if (rail) rail.scrollTop = 0;
+  }
+
   function restart() {
     pause();
     played = false;
@@ -194,9 +208,12 @@
       entry.removeAttribute("data-revealed");
       entry.removeAttribute("data-active");
     });
-    log.scrollTop = 0;
     setState("idle");
     apply(-1);
+    /* After the state attribute, not before: the idle state re-lays both
+       regions out, and a rewind written against the end-state layout would be
+       re-clamped against the new one. */
+    rewindPanes();
     renderControls();
     play();
   }

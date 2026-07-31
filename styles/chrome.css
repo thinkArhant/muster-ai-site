@@ -248,6 +248,15 @@
   margin-block-start: var(--gap-flow);
 }
 
+/* Two runs in the closing sentence are one token to a reader even though they
+   are two to a line-breaker: the founder's name, and `never invoked`. Style
+   only — the element contributes no text of its own, so the announced string
+   and the byte equality against the copy file are untouched. This is the same
+   mechanism the headline's phrase units and §3's sentence spans use. */
+.pagefoot__unit {
+  white-space: nowrap;
+}
+
 /* The receipts belong WITH the sentence — they are its evidence — so they sit
    at --gap-flow above and the contact link opens its own block below. */
 .pagefoot__contact {
