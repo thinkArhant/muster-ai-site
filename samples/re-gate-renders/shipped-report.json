@@ -1,0 +1,60 @@
+{
+  "header": {
+    "barH": 48,
+    "brand": {
+      "x": 128,
+      "y": 15.09375,
+      "w": 81.53125,
+      "h": 16.796875
+    },
+    "mark": {
+      "x": 128,
+      "y": 18.09375,
+      "w": 6,
+      "h": 9
+    },
+    "word": {
+      "x": 146,
+      "y": 15.09375,
+      "w": 63.53125,
+      "h": 16.796875
+    },
+    "rule": {
+      "x": 202.3125,
+      "y": 28.09375,
+      "w": 7.21875,
+      "h": 2
+    },
+    "wordFontSize": "12px"
+  },
+  "track": {
+    "trackBox": {
+      "x": 0,
+      "w": 1280
+    },
+    "rail": 128,
+    "railEnd": 1152,
+    "scrollWidth": 2888,
+    "clientWidth": 1280,
+    "visibleShare": 0.44321329639889195,
+    "scrollbarColor": "rgb(192, 90, 50) rgba(0, 0, 0, 0)",
+    "scrollbarWidth": "thin"
+  },
+  "s05": [
+    {
+      "fontSize": "17px",
+      "fontWeight": "400",
+      "text": "Bodh — a shipped iOS app and w"
+    },
+    {
+      "fontSize": "17px",
+      "fontWeight": "400",
+      "text": "Muster was extracted mid-build"
+    },
+    {
+      "fontSize": "17px",
+      "fontWeight": "400",
+      "text": "This page — built with Muster "
+    }
+  ]
+}

@@ -235,10 +235,13 @@ fold it is mid-ladder (plate 5 cut), which is the designed scroll cue (§3).
 - **Dashes are inert**: `--ink` em-dashes, no animation, no transition, identical in every state.
   They never render accent and never count up.
 - **The chip**: shell emphasis chip — `--accent` border, `--ink` text, rust glyph. Markup:
-  `<a class="chip chip--emph" href="VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span aria-hidden="true">⎘</span></a>`.
-  Same-origin `href`; a click is user navigation, so A-004's zero-runtime-request claim is
-  untouched; no prefetch attributes ever. 44px hit area via padding; the visual stays chip-sized.
-  It is §1's **only interactive element**.
+  `<a class="chip chip--emph" href="https://github.com/thinkArhant/muster-ai-site/blob/main/VERIFY.md" aria-label="Verify these numbers — VERIFY.md">VERIFY <span aria-hidden="true">⎘</span></a>`.
+  The `href` is the public blob URL — byte-equal to the footer's `VERIFY` receipt
+  (`footer-copy.md` §3), a blob page renders readable where a raw-markdown response would not,
+  and the two strings are asserted equal so they cannot drift. An inert `<a href>` is permitted
+  navigation; a click is user navigation, so A-004's zero-runtime-request claim is untouched; no
+  prefetch attributes ever. 44px hit area via padding; the visual stays chip-sized. It is §1's
+  **only interactive element**.
 
 The remnant sits at `--gap-major` below the caption — the section's one idea-group seam: claim +
 team above it, receipts + command below it. The remnant → curl gap is `--gap-block`.
@@ -415,8 +418,9 @@ violated. The fold budget's load-bearing relationships (§3) are 1–5.
    no transition in default and reduced paths; the caption `measured at launch` occurs exactly
    once in the strip; the scope label reports exactly one client rect at 320/375 (a scope label
    never breaks mid-phrase).
-9. **The chip** — accessible name contains the visible label `VERIFY` (WCAG 2.5.3); `href`
-   resolves to same-origin `VERIFY.md`; hit area ≥ 44 × 44 on coarse pointers; it is the only
+9. **The chip** — accessible name contains the visible label `VERIFY` (WCAG 2.5.3); its `href`
+   string equals the footer's `VERIFY` receipt href byte-for-byte (`footer-copy.md` §3 — equality
+   asserted as strings, never by fetching); hit area ≥ 44 × 44 on coarse pointers; it is the only
    focusable element inside `#hero`.
 10. **Hero static** — zero elements inside `#hero` carry a non-`none` animation or a non-default
     transition, in default **and** reduced-motion paths (the brand-rule static-assertion pattern,

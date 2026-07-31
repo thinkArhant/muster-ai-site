@@ -1,0 +1,85 @@
+{
+  "lockups": [
+    {
+      "barH": 48,
+      "mark": {
+        "w": 6,
+        "h": 9,
+        "bottom": 105.78125
+      },
+      "word": {
+        "fontSize": "12px",
+        "w": 63.53125,
+        "bottom": 110.578125
+      },
+      "markBottomMinusWordBottom": -4.796875,
+      "ruleH": 2
+    },
+    {
+      "barH": 48,
+      "mark": {
+        "w": 8,
+        "h": 12,
+        "bottom": 233.671875
+      },
+      "word": {
+        "fontSize": "16px",
+        "w": 84.703125,
+        "bottom": 240.0625
+      },
+      "markBottomMinusWordBottom": -6.390625,
+      "ruleH": 2
+    },
+    {
+      "barH": 48,
+      "mark": {
+        "w": 9,
+        "h": 13.5,
+        "bottom": 361.96875
+      },
+      "word": {
+        "fontSize": "18px",
+        "w": 95.296875,
+        "bottom": 368.15625
+      },
+      "markBottomMinusWordBottom": -6.1875,
+      "ruleH": 2
+    },
+    {
+      "barH": 48,
+      "mark": {
+        "w": 9,
+        "h": 13.5,
+        "bottom": 488.65625
+      },
+      "word": {
+        "fontSize": "18px",
+        "w": 95.296875,
+        "bottom": 494.84375
+      },
+      "markBottomMinusWordBottom": -6.1875,
+      "ruleH": 2
+    },
+    {
+      "barH": 48,
+      "mark": {
+        "w": 23.9375,
+        "h": 23.9375,
+        "bottom": 620.90625
+      },
+      "word": {
+        "fontSize": "18px",
+        "w": 95.296875,
+        "bottom": 621.53125
+      },
+      "markBottomMinusWordBottom": -0.625,
+      "ruleH": 2
+    }
+  ],
+  "gauge": {
+    "railW": 1024,
+    "railX": 128,
+    "thumbW": 453.625,
+    "thumbH": 2
+  }
+}

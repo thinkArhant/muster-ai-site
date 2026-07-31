@@ -1184,5 +1184,52 @@ review, which rules the repetition-audit memo and promotes the final gate.
 
 **Touched**: `orchestration-queue.md`, `wave-review.md`, `decision-log.md`.
 
+### DEC-060 — Re-gate design rulings: the masthead, the indicator, two hierarchies, and every one chosen from renders (2026-07-30)
+
+**Decision**: five rulings answering the re-gate's design findings, each judged from candidate
+renders in the page's real tokens, both themes where colour is in play, both engines
+(`samples/re-gate-proposed.html`, renders in `samples/re-gate-renders/`):
+
+1. **The header lockup ships at brand scale** (F-R7, founder-ruled seat): wordmark `1.125rem`
+   (18px), pennant 9 × 13.5px — the mark held at 0.5em × 0.75em of the wordmark so one declaration
+   scales the lockup. `--bar-h` stays 48px (measured), so the hero fold arithmetic, §2's phone
+   budget and `--scroll-pad` are untouched. The founder's artwork as a data-URI `<img>` was weighed
+   and rejected on measurement, not legality: the cream glyph is ~1.08:1 on the light ground —
+   invisible — and a single image asset cannot follow the theme tokens, where the clip-path box
+   paints `--accent` in both themes with no second asset. The house tile reads as an app-icon
+   badge in the chrome. Separators keep 6 × 9; the **footer boundary gains its separator mark**
+   (rule construction minus the tag), replacing the footer's plain top border; the footer lockup
+   stays ruled out — a separator is punctuation, not a second masthead.
+2. **§4's position channel becomes a real indicator** (F-R3): one 2px segment per sheet spanning
+   rail → rail-end under the track — aligned with the sheets by construction, always visible,
+   active segment `--accent` (4.19/4.35 ≥ 3:1 graphical), inactive `--hair` with extent carried
+   in the ordinals' text. Discrete class toggle via IntersectionObserver — no transition, no
+   animation, no scroll-position read or write, motion budget closed. The styled-scrollbar gauge
+   retires (`scrollbar-width: none`): overlay default rendered it absent, classic rendered it
+   edge-to-edge and misaligned — the founder's finding, confirmed on the shipped render.
+3. **§3's recognition hook takes ink bold** (F-R2): *context engineering* in `<b>` at 700 — the
+   page's existing weight pair, no third weight, no rust (dead at 4.19/4.35 vs the 4.5 floor).
+   Recorded as the shell's in-passage emphasis rule.
+4. **§5's provenance line is the section's primary** (F-R5): 700 at `--text-body`, the other two
+   lines 400 — the §4 bolded-title grammar applied to the section's strongest sentence. The
+   lead-scale candidate was rendered and rejected: founder testimony in display dress.
+5. **The footer composes as four blocks at signature scale** (F-R9): boundary separator, closing
+   sentence at `--text-lead` (candidate A — team truth first, 33 words — confirmed from renders
+   against B's recital and C's authorship-first), receipts row at micro, contact link last; all
+   on the rail.
+
+F-R1 is a consult, not a ruling — the options memo rides in HO-039 for the founder's pick at the
+final gate; nothing builds.
+
+**Impact**: ui-ux, developer (builds HO-039's rulings at the next step), qa (new indicator, logo,
+§5 and footer relationships), content (`section-05-copy.md`'s "no separate design spec" note is
+superseded by `section-05-shipped.md` — one-line amendment), pm (`brand-guidelines.md` §4's seat
+table and mark-scale prose are PM-owned and now need reconciling with the brand-scale header and
+the footer-boundary separator).
+
+**Touched**: `design-specs/web/brand-seats.md`, `page-shell.md`, `section-04-decisions.md`,
+`section-05-shipped.md` (new), `footer-layout.md` (new), `section-01-hero.md` (DEC-058's chip
+amendment landed with the round), `agent-requests.md` (HO-039), `orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

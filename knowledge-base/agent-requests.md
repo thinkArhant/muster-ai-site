@@ -10,7 +10,159 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-### 2026-07-30 HO-038 — Re-gate copy round: the true word, the model-proof line, one footer sentence, the repetition audit
+### 2026-07-30 HO-039 — Re-gate design round: the masthead, the indicator, two hierarchies, the footer, and the §2 consult
+**Type:** handoff
+**Producer:** ui-ux
+**Deliverable:** `knowledge-base/design-specs/web/brand-seats.md` (F-R7), `page-shell.md` (F-R2's
+emphasis rule, motif/status-bar/footer-alignment amendments), `section-04-decisions.md` (F-R3),
+`section-05-shipped.md` — new (F-R5), `footer-layout.md` — new (F-R9), `section-01-hero.md`
+(DEC-058's chip amendment, landed with the round), the F-R1 options memo below, and DEC-060.
+Candidate sample `samples/re-gate-proposed.html` with renders + measurement JSONs in
+`samples/re-gate-renders/` (samples never ship).
+**Status:** in-review
+**Reviewers:**
+- [ ] PM — pending (re-gate review step)
+- Developer consumes every ruling at HO-040 (F-R1 excluded — consult only, nothing builds)
+
+**Every ruling was chosen from renders, per the step's standard and the founder's instruction.**
+Skill files read before ruling: `web-iconography-and-visual-language.md` (brand mark vs functional
+icon; design-twice-for-dark-mode; never auto-invert), `web-content-hierarchy.md` (the four levers;
+two weights at one size = hierarchy, three = noise), `web-marketing-and-conversion-pages.md`
+(footer as load-bearing signature), `plan-first-discipline.md`. Candidates were rendered in the
+page's real tokens (the sample links the shipped `styles/`), dark and light, **WebKit and Blink**
+(Blink via the harness's CDP renderer at 2×; WebKit via the audit's Quick Look route — lockups,
+segments, §5 and footer zones all rendered in both engines, identical).
+
+**F-R7 — the header lockup becomes a real logo; the instrument was genuinely open and the renders
+closed it.** Five candidates: the shipped 12px baseline, clip-path at 16px and 18px, the founder's
+cream glyph as a data-URI `<img>`, and the house tile as a data-URI `<img>`. **Ships: clip-path at
+18px word / 9 × 13.5 mark** — reads as a masthead, notch legible at a glance. The `<img>` route
+lost on measurement, not on the inherited ruling: the cream glyph composites at **~1.08:1 on the
+light ground — invisible** (the light render shows it gone), and a single image asset cannot
+follow the theme tokens, where the clip-path box paints `--accent` in both themes with no second
+asset (the skill's design-twice rule satisfied by tokens rather than assets). The tile reads as an
+app-icon badge in the chrome. **Cascade clause, measured: `--bar-h` does not change — the bar
+renders 48px with the 18px lockup, brand block ~25px, so the hero fold arithmetic (144 = 48 + 96),
+§2's phone visibility budget and `--scroll-pad` all stand. One line: nothing derived from the bar
+moves.** Separators keep 6 × 9; the footer boundary gains its separator mark (rule construction
+minus the tag, replacing the footer's plain top border — one boundary, one rule); the footer
+lockup stays out (`brand-seats.md` §8 — a separator is punctuation, not a second masthead).
+
+**F-R3 — the §4 indicator: four segments, aligned by construction, discrete by design.** Two
+candidates rendered at rest and mid-track: a continuous rail-and-thumb gauge, and one segment per
+sheet. **Segments ship**: the continuous thumb reads as a loading bar and needs continuous scroll
+tracking; the segments are the `SHEET n OF 4` grammar at a glance, honest about the track's four
+rest states, and aligned because the row spans rail → rail-end — the same edges the resting sheet
+composes to, which kills the misalignment the founder judged. 2px tall (the mechanism mark's own
+stroke, bound in the assertion), active `--accent` (4.19/4.35 ≥ 3:1 graphical), inactive `--hair`
+with extent always carried in the ordinals' text. State moves by IntersectionObserver class
+toggle — **no transition, no animation (asserted both paths), no scroll-position read or write**,
+so the motion budget stays closed and the shell's no-script-touches-scroll assertion holds as
+written. Native scrollbar retired (`scrollbar-width: none`). Spec: `section-04-decisions.md` §8.1,
+§12.19 (six clauses, each a relationship).
+
+**F-R2 — ink bold, and the measurement did the ruling.** Rust is dead at 4.19/4.35 vs the 4.5
+floor (the founder's own answer). Rendered plain vs ink-bold: bold on *context engineering* gives
+the skimmer's eye the hook without a new voice — 700, the page's existing weight pair, no third
+weight (the hierarchy skill's two-weights rule). The accent-mark idiom was declined without a
+render: a rust tick is instrument-row grammar; in running prose it is furniture. Recorded as the
+shell's in-passage emphasis rule (`page-shell.md` §3).
+
+**F-R5 — §5's primary is the provenance line, at body weight 700.** Both treatments rendered:
+lead-scale bold dominates the section and dresses founder testimony as a heading — rejected; bold
+at body size reads as the strongest sentence in a passage, the same grammar as §4's bolded titles.
+New `section-05-shipped.md` carries the ruling and two relationship assertions (one primary line;
+emphasis is weight alone). **Flag for Content (one line, your file):** `section-05-copy.md`'s
+header note "§5 has no separate design spec" is superseded by `section-05-shipped.md`.
+
+**F-R9 — the footer is four blocks, and the sentence ships at lead scale.** Candidate A confirmed
+from renders (the recommendation and the render judgment agree): team truth first, "solo" beside
+"AI team", 33 words in one breath — B's name run reads as a recital, C leads the page's last line
+with the human. Rendered at body vs lead: body reads as fine print; **lead reads as the page's
+last deliberate sentence** — the signature the finding asked for. Composition in new
+`footer-layout.md`: boundary separator (F-R7), sentence at `--text-lead`, receipts at micro,
+contact link last, all on the rail, four assertions.
+
+**Would Apple ship this? — yes.** The masthead is one silhouette at three scales rather than a
+new asset; the indicator is the paging model made visible with two colours and zero motion; both
+hierarchies spend exactly one lever (weight, then scale); the footer closes the page in the same
+voice it opens with. Every choice is the removal of a weaker alternative that was actually
+rendered, which is the simpler-not-more-chrome test passing.
+
+**PM cascade flag**: `brand-guidelines.md` §4 (PM-owned) still records punctuation-scale-everywhere
+and no footer-boundary mark; DEC-060's Impact field carries the reconciliation.
+
+---
+
+**F-R1 — the §2 overnight-wave consult (memo only; founder picks at the final gate; nothing
+builds this round).**
+
+The fact: this build's own waves ran while the founder slept, evidenced by night-stamped commits
+in the public repo. The constraints every option must clear: §2 is **BODH-wave scope** and THIS
+SITE material must not blend into it (A-005 — the page's likeliest factual failure); **R2 bans
+wall-clock framing**, so "22:45 → 05:40" may not ship — the claimable form is the mechanism
+sentence ("the run doesn't need the operator present; gates are the only places it waits"),
+which **already ships in §4 decision 4** (the Gate B round put it there); THIS SITE metrics stay
+dashes until the founder supplies a snapshot (DEC-005). §2 is also the page's most expensive
+surface: three Sprint-1 fix rounds live in its playback timing, corpus fidelity byte-checks, the
+§9.1 12px equality invariant and the §7.1 phone visibility budget.
+
+**Option 1 — the founder's shape, now: §2 restructured toward §4's idiom, one card holding the
+two layers, overnight material in the freed room.**
+*Pros*: the most visible seat on the page; the card idiom is proven; one card is less chrome than
+two. *Cons*: R2 strips the seat to the mechanism sentence the page already ships, so the rebuild
+buys a duplicate; with THIS SITE dashed until launch, the seat is a claim beside dashes — a claim
+without its receipt, on the page that argues receipts. *Scope safety*: THIS SITE material inside
+the BODH-wave section survives only as a hard-labelled separate block — A-005's adjacency risk
+made permanent. *Blast radius — the largest on the page*: §2 layout + playback machinery re-based
+(48 s chain timing, fidelity byte-checks, the 12px invariant, the phone visibility budget and its
+3-entries-at-375 guarantee), Content narration rewrite, Developer re-assert, QA scoped re-run,
+cross-engine on the whole section — **and the founder's phone playback check, the hard launch
+blocker, is spent and must be re-spent on the rebuilt section.**
+
+**Option 2 — a scope-labelled overnight line inside §2, no restructure** (the F-R8 audit reserved
+sp8's totals clause as §2's one reclaimable seat if room is needed).
+*Pros*: visible near the replay's close; the smallest §2-resident form; the seat is already
+priced. *Cons*: R2 still reduces it to the mechanism sentence — a duplicate of §4 decision 4 a
+scroll apart; two scope labels a few lines apart is A-005's failure mode standing on the page.
+*Blast radius — medium*: §2's strip layout + its assertions, Content string, QA scoped re-run;
+narration re-timing only if sp8's clause is cut.
+
+**Option 3 — recommended: the wave becomes visible when it can be shown rather than said.** Today
+the fact ships in its only claimable form (§4 decision 4 — mechanism, no wall-clock), and the
+night-stamped commits are one click away through the receipts row. At launch the founder's meter
+supplies the THIS SITE snapshot DEC-005 already anticipates — and §2 then takes **the founder's
+own card shape as a wave rack**: the BODH wave card and a THIS SITE wave card, each scope-labelled
+by construction (per-card labels are A-005-safe where in-section adjacency is not), the overnight
+wave rendered as a real replay/summary card whose numbers exist. *Pros*: scope-safe by
+construction; the impressive thing arrives with its receipt instead of ahead of it; §2's rebuild
+is spent once, on real material, priced then. *Cons*: nothing new is visible this sprint; depends
+on the launch snapshot arriving. *Blast radius now*: **zero.**
+
+**Option 4 — amplify the existing seat only**: leave the fact in §4 decision 4 and do nothing
+else. *Pros*: zero cost, already true. *Cons*: does not answer "visible" — sheet 4 of a paged
+track is the least visible seat on the page.
+
+**Recommendation: Option 3.** Options 1 and 2 each pay §2's machinery to display a sentence R2
+only lets the page whisper, and both park a scope hazard in the section built to be trusted. The
+overnight wave is the page's best future exhibit — it deserves its receipt, and the receipt
+arrives at launch.
+
+---
+
+**Revision log:**
+- 2026-07-30: Filed. All render evidence in `samples/re-gate-renders/` (crops at 2×, both
+  themes, both engines; measurement JSONs `shipped-report.json` + `cand-report.json` — bar height
+  48px confirmed at every lockup candidate, gauge/segment geometry, §5 line weights). Self-review
+  notes: (1) an earlier draft of the shell's emphasis rule claimed the accent-mark treatment was
+  "chosen from renders against" — it was declined on grammar without a render; the sentence now
+  says so plainly. (2) The step brief's own words "three phone checks" and the §2 cost history
+  were cross-checked against `wave-review.md` and the queue rather than recalled. (3) Cross-refs
+  spot-checked: `brand-seats.md` §5 ↔ `footer-layout.md` §1, `page-shell.md` §7.2 ↔
+  `footer-layout.md` §4.4, `section-04-decisions.md` §12.19 ↔ §8.1's construction block. (4) No
+  shipped file touched — `index.html` and `styles/` changes are HO-040's; the two new spec files
+  and five amended ones are the deliverable. (5) Durability: findings are cited as founder
+  rulings/DEC-060 in durable files; F-R IDs stay in this ledger and the queue.
 **Type:** handoff
 **Producer:** content
 **Deliverable:** `knowledge-base/design-specs/web/section-05-copy.md` (F-R4),
@@ -19,7 +171,10 @@ _None._
 repetition-audit memo below
 **Status:** in-review
 **Reviewers:**
-- [ ] UI/UX — pending (consumes the footer candidates and the §6 line at HO-039's layout step)
+- [x] UI/UX — reviewed at HO-039: the three footer candidates were rendered in the page's real
+  tokens and candidate A confirmed from the renders (recommendation and render judgment agree);
+  the §6 line is consumed as copy input with no layout consequence beyond the standing lead
+  treatment. No revision requested.
 - [ ] PM — pending (rules the F-R8 memo at the re-gate review step)
 
 **F-R4 — applied, not re-derived.** The provenance line in `section-05-copy.md` §3.2 is now

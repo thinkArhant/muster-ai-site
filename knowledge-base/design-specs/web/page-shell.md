@@ -96,6 +96,14 @@ announced string is unchanged.
 
 **Full-ink rule (binding, A-007):** any paragraph meant to be read — body, lead, kicker, narration — is `--ink`. `--muted` is for `--text-label` and `--text-micro` elements only. A muted paragraph is a defect.
 
+**In-passage emphasis is ink bold at 700 — never rust, never a third weight.** Rust running text
+fails AA below 24px (§2.2), and the page's prose carries exactly two weights, 400 and 700 (the
+sheet titles' and mechanism labels' weight); a 500/600 "semibold emphasis" would be a third weight,
+which is noise, not hierarchy. The instance: §3's recognition hook — *context engineering* — sets
+in `<b>` at 700, the term only, judged from renders against the plain shipped state (DEC-060). The
+accent-mark idiom was declined without a render: a rust tick is instrument-row grammar, and inside
+running prose it is furniture. Emphasis this strong is spent at most once per section.
+
 Numerals: `font-variant-numeric: tabular-nums` on every metric, timestamp, and count-up target — animated digits must not reflow layout.
 
 ## 4. Spacing — one rhythm token, one-sided
@@ -200,13 +208,13 @@ Measured on the proposed render (`samples/gate-b-proposed.html`, headless Blink)
 
 **The harness asserts relationships (DEC-032), not pixels**: (1) per section, the first rendered block's border-box inline-start equals the container's content inline-start; (2) the formation's bus width equals the plate row's width equals the container's content width, and |hub center − (rail + rail-end)/2| ≤ 1px; (3) the set of axis-bound elements is exactly the hub. Never assert a literal x.
 
-The footer inherits this system as-is: both lines and the receipts row on the rail, no counterweight, no centered element (`footer-copy.md` owns the strings; this file owns the alignment).
+The footer inherits this system as-is: the closing sentence, the receipts row and the contact link all on the rail, no counterweight, no centered element (`footer-copy.md` owns the strings; `footer-layout.md` owns the footer's composition; this file owns the alignment).
 
 ## 8. Motifs
 
 | Motif | Spec |
 |---|---|
-| **Brand mark — the pennant** | The 6×9px `--accent` pennant, drawn as a `clip-path` on a plain box, `aria-hidden`. It seats in the header lockup and at all five section separators. Full spec — geometry, sizing, the header lockup and its underscore, the favicon, and the seats it deliberately does **not** take — is `design-specs/web/brand-seats.md` |
+| **Brand mark — the pennant** | The `--accent` pennant, drawn as a `clip-path` on a plain box, `aria-hidden`. Brand scale (9×13.5px) in the header lockup; punctuation scale (6×9px) at the five section separators and the footer boundary. Full spec — geometry, per-seat sizing, the header lockup and its underscore, the favicon, and the seats it deliberately does **not** take — is `design-specs/web/brand-seats.md` |
 | **Stencil section tag** | `§02 · WATCH IT SHIP` — `--text-label`, `--muted`, preceded by the pennant at `--gap-hairline`. Semantically the section's `<h2>` (visually a label; the heading tree is real) |
 | **Hairline rule with machined end-ticks** | 1px `--hair` line, full-width, with 9×1px perpendicular ticks at both ends of the centered tag. Decorative: `aria-hidden` on the rule construction, never information-bearing |
 | **Registration marks** | `+` glyphs, `--muted`, `--text-micro`, at the outer corners of instrument surfaces (terminal, readout strips). Sparse — two per surface maximum, `aria-hidden` |
@@ -222,7 +230,7 @@ Sticky at top, `block-size: var(--bar-h)` (3rem), opaque `--ground`, 1px `--hair
 
 | Slot | Element | Owner |
 |---|---|---|
-| Left | Brand lockup — the 6×9px pennant, the `MUSTER` wordmark in mono uppercase `--ink`, and a **static** rust underscore. Both marks are `aria-hidden`, so the header's accessible name is exactly `MUSTER`. Geometry and rationale: `brand-seats.md` §4 | Content (the wordmark string), `brand-seats.md` (treatment) |
+| Left | Brand lockup at brand scale — the 9×13.5px pennant, the `MUSTER` wordmark at `1.125rem` mono uppercase `--ink`, and a **static** rust underscore. The lockup grows; the bar does not — `--bar-h` stays 3rem, asserted (`brand-seats.md` §2.2, §11). Both marks are `aria-hidden`, so the header's accessible name is exactly `MUSTER`. Geometry and rationale: `brand-seats.md` §4 | Content (the wordmark string), `brand-seats.md` (treatment) |
 | Right | `⟨pulse dot⟩ OPERATIONAL` — dot per §10.1, word in `--muted` | this spec |
 
 The lockup carries two graphical marks and no accent *text* — rust at `--text-label` would measure

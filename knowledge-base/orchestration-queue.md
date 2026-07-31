@@ -73,68 +73,6 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-30 UI/UX: Re-gate round — the brand-size mark, the indicator, hierarchy, and the §2 consult
-
-```
-Role: ui-ux
-Model: claude-fable-5
-
-**Task:** Five design findings from the re-gate verdict (`knowledge-base/wave-review.md` →
-"Re-gate verdict": F-R1, F-R2, F-R3, F-R5, F-R7, F-R9). **The founder's explicit instruction:
-read your skill files before ruling anything.** F-R1 is a CONSULT — options and pros/cons for the
-founder, build nothing.
-
-**Inputs:**
-- `knowledge-base/wave-review.md` — the re-gate verdict, findings F-R1–R10 with the founder's own
-  words
-- Your skill files (`muster/team/ui-ux/skills/`) — read before ruling; founder's instruction
-- `knowledge-base/design-specs/web/page-shell.md` · `section-01-hero.md` · `section-02-replay.md`
-  · `section-04-decisions.md` · `section-05-copy.md` · `knowledge-base/brand-guidelines.md`
-- `index.html` + `styles/` — render the shipped page at 375 and 1280 before ruling
-- HO-038 — the footer sentence candidates and §6 line this round lays out
-
-**Deliverable:** amended specs; the F-R1 options memo in your handoff; HO-039.
-
-**Acceptance criteria:**
-- **F-R1 (memo only):** options for making the overnight wave visible — including the founder's
-  one-card-holding-two idea — each with pros, cons, its scope-safety (A-005: §2 is BODH-wave
-  scope; THIS SITE stays dashes, DEC-005; R2 bans wall-clock), **and its blast radius: what would
-  rebuild and re-verify.** §2 is the page's most expensive section (three Sprint-1 fix rounds);
-  the founder cannot weigh an option without its cost. Recommend one. The founder decides at the
-  next pass; nothing builds this round.
-- **F-R2:** rule §3's "context engineering" emphasis — rust is dead by measurement (4.19/4.35 vs
-  the 4.5 floor); choose ink-bold, the accent-mark idiom, or plain, and say why.
-- **F-R3:** the §4 page indicator — always visible, aligned with the track, premium; rust
-  permitted if restrained. Spec it with measurements and its harness assertion.
-- **F-R5:** §5's three prose lines get a deliberate hierarchy — spec the treatment.
-- **F-R7:** the header lockup becomes a legible brand logo (founder ruling supersedes the badging
-  restraint for this one seat); separators keep size; the missing footer-boundary separator is
-  added. Sized optically, clip-path route, never on a pole, no new colour (DEC-031/037 otherwise
-  stand). State the chosen sizes. **Cascade clause: say explicitly whether the sticky bar's 48px
-  height changes.** That number is load-bearing — the hero fold arithmetic (144 = 48 + 96), §2's
-  phone visibility budget, and `--scroll-pad` all derive from it. If it moves, name every
-  dependent budget and re-state each with measured figures; if it does not, say so in one line.
-- **F-R9:** footer layout for the single sentence + receipt links + final link, Apple-level.
-- **Taste rulings are chosen from renders, not descriptions**: for the logo size (F-R7), the
-  indicator (F-R3) and the §5 hierarchy (F-R5), render at least two candidate treatments in the
-  page's real tokens, judge from the renders, and attach them to the handoff — every good taste
-  call this sprint (headline, sparse hero, kicker) was made this way, and every miss was ruled on
-  paper.
-- **F-R7's instrument is open at brand scale**: the clip-path pennant was chosen at punctuation
-  size (DEC-031); at logo size, weigh it against the founder's supplied artwork as a data-URI
-  image — zero-network-compliant, and an `<img>` is not the inline-SVG divergence class. Whichever
-  wins, cross-engine renders decide, not the inherited ruling.
-- Every ruling measured on the rendered page; renders show the state under test.
-
-**If blocked:** do NOT set `Role: halt`. Re-point `## Next Step` to a `Role: pm` assessment step.
-
-**On completion:** File HO-039 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
-Self-Review Checklist.
-```
-
-## Upcoming
-<!-- Ordered sequence of remaining steps for this sprint. -->
-
 ### 2026-07-30 Developer (web): Re-gate round — build the ruled items and pin the receipts
 
 ```
@@ -174,6 +112,9 @@ consult-only this round), plus the receipt-link permalinks.
 **On completion:** File HO-040 in `agent-requests.md` — under this exact ID. Run the Pre-Handoff
 Self-Review Checklist.
 ```
+
+## Upcoming
+<!-- Ordered sequence of remaining steps for this sprint. -->
 
 ### 2026-07-30 QA (web): Scoped re-run on the re-gate round
 
@@ -248,6 +189,18 @@ block in `## Next Step`.
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-30 — Step: UI/UX re-gate design round (HO-039, DEC-060). All five rulings chosen from
+  renders in both engines: the header lockup ships at brand scale — 18px word, 9 × 13.5 mark, the
+  founder's artwork-as-`<img>` weighed and rejected at ~1.08:1 on the light ground, and `--bar-h`
+  stays 48px so nothing derived from the bar moves; §4 gains a four-segment, rail-aligned,
+  zero-motion indicator and retires the misaligned scrollbar-gauge; §3's hook and §5's provenance
+  line take ink bold at 700 (the lead-scale §5 candidate rendered and rejected); the footer
+  composes as four blocks at lead scale with the boundary separator added (candidate A confirmed
+  from renders). The F-R1 §2-overnight consult recommends showing the wave at launch with its
+  receipt — the build-now options are priced in the memo, the largest costing §2's whole
+  machinery plus a re-spent phone check. Suite re-run: 280/282 with exactly HO-038's two designed
+  reds — no shipped file touched. **Awaiting Developer (HO-040 builds the rulings) and PM review.**
 
 - 2026-07-30 — Step: Content re-gate copy round (HO-038). F-R4's false word is fixed in copy
   ("real", byte-equal to the founder's resolved string), §6's lead carries the model-proof claim
@@ -357,15 +310,5 @@ block in `## Next Step`.
   touched. **Awaiting PM review at the build-review step; OBS-014 records that the original hang does
   not reproduce from the committed tree, and closes OBS-006's question.**
 
-- 2026-07-29 — Step: Developer scroll-snap (HO-029). The page now comes to rest on section starts —
-  four declarations in the user agent, no script touching the page's scroll position (asserted
-  against the shipped source). §2's exemption proven as a property (0 of 13 gated rests moved at
-  1280×900, 0 of 3 at 375×553), keyboard paging, 200% zoom and find-in-page each asserted, reduced
-  motion off with `--scroll-pad` kept. `scripts/test.sh` GREEN both engines (**273/273 + 27/27**);
-  the audit exits zero, 108/108, twice. Eight violations planted, twelve assertions watched go red —
-  including two blind checks found and repaired. **Awaiting PM review at the build-review step;
-  OBS-013 asks PM (with UI/UX) to rule §7.1's A11: a start-aligned `scrollIntoView()` on §4's last
-  value is pulled 180px past it, off screen, while the alignment find-in-page actually uses is
-  unaffected — the same trade as OBS-009, so one ruling covers both.**
 
 

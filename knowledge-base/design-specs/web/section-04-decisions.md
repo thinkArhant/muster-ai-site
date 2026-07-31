@@ -286,20 +286,34 @@ is three channels, each in the section's own grammar:
   Each sheet's meta line carries the stamp at its start and the ordinal at its end (§5): the
   reader on sheet 1 knows there are three more, the reader on sheet 4 knows they are done, at
   every viewport and independent of where the cut falls. It is the width-independent channel.
-- **The gauge — the track's own scrollbar, styled as an instrument rail.** `scrollbar-width:
-  thin` + `scrollbar-color: var(--accent) transparent`: a thin rust thumb riding under the
-  sheets, always rendered (styling forces persistent rendering in Blink; supported in Safari
-  18.2+, and where an older engine renders its default overlay scrollbar instead, the ordinal
-  and the cut still carry the affordance — the gauge is enhancement, never the sole channel).
-  It shows position *and* extent truthfully with zero JavaScript, zero added elements, and it is
-  the one "more indicator" that cannot lie about reaching the end. Headless harness renders
-  suppress scrollbars (`--hide-scrollbars`), so the gauge is verified as computed style plus a
-  headed cross-engine look, stated as such.
+- **The indicator — four segments under the track, always visible, aligned with it** (DEC-060;
+  it succeeds a styled-scrollbar gauge that failed on its own terms: overlay scrollbars are
+  hidden by default so the signal was absent for most readers, and where classic scrollbars
+  render, the bar ran edge-to-edge and read misaligned with the sheets). One segment per sheet
+  in a single row spanning **rail → rail-end** — the same edges the resting sheet composes to,
+  which is what makes it read aligned. Segments are 2px tall — the page's single accent-mark
+  weight, the mechanism mark's own stroke — separated by `--gap-flow`, seated
+  `--gap-hairline` below the track. The sheet at rest paints its segment `--accent` (painted
+  with `background-color`, never `color`); the other three are `--hair`, the page's rule
+  weight. Rust here is one 2px line of it — restrained by construction. It is the paged
+  counterpart of `SHEET n OF 4`: the ordinal says it in text, the indicator says it at a
+  glance, and colour is never the sole channel because the text form always rides with it.
+  State is discrete and instant — segments never animate and never transition, so the motion
+  budget is untouched. The mechanism is an `IntersectionObserver` on the sheets (the same
+  observer class §2's playback gate already uses): it watches which sheet occupies the track
+  at rest and moves the active class — it never reads or writes any scroll position, so the
+  shell's "no script touches the page's scroll" assertion holds exactly as written. The markup
+  ships with segment 1 active, so with JavaScript absent the indicator renders complete and
+  truthful at the track's load rest, and the ordinals carry position from there. The native
+  scrollbar retires with this (`scrollbar-width: none`) — two position channels under one
+  track, one of them misaligned, is the state this replaces.
 - **The skim layer survives without scrolling.** The four h3 title sentences remain the section's
   argument skeleton for heading navigation regardless of scroll position, and the count is four —
   a page turn, not a carousel of unknown length.
-- **Still no machinery.** No buttons, no dots, no JS. The ordinal is four static spans; the gauge
-  is the scrollbar the track already had, made honest and visible.
+- **Still no scroll machinery.** No buttons, no click targets, nothing that moves the track for
+  the reader. The ordinal is four static spans; the indicator is four static segments plus one
+  observer that only ever toggles a class — it is state display, not a control, and no script
+  reads, writes, or intercepts any scroll position.
 
 **Construction**: the `<ol>` becomes the track at ≥ `--bp-wide` — `display: grid;
 grid-auto-flow: column; grid-auto-columns: var(--sheet-w); gap: --gap-flow; overflow-x: auto;
@@ -317,8 +331,7 @@ tokens and applied three ways so the geometry cannot shear:
   margin-inline:               calc(-1 * var(--track-bleed));
   padding-inline:              var(--track-bleed);
   scroll-padding-inline-start: var(--track-bleed);
-  scrollbar-width:             thin;
-  scrollbar-color:             var(--accent) transparent;
+  scrollbar-width:             none;   /* the indicator is the position channel */
 }
 ```
 
@@ -397,7 +410,7 @@ the track compatible with the shell's zoom promise.
 │  │ ──────────────────────────────   │  │ ─────────────────   │
 │  │▌MECHANISM   Three reading tiers  │  │▌MECHANISM   Autom   │  (4) 2px rust bar
 │  └──────────────────────────────────┘  └─────────────────────
-│  ▬▬▬▬▬▬▬░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  (6) the gauge
+│  ▬▬▬▬▬▬▬▬▬▬▬▬   ░░░░░░░░░░░░   ░░░░░░░░░░░░   ░░░░░░░░░░░░   (6) the indicator
 │   rail → sheet 1 · 640px      sheet 2 runs off the screen (5)
 │  ⟵ x-proximity track: sheets 3 · 4 off-canvas ⟶              │
 ```
@@ -440,7 +453,7 @@ the track compatible with the shell's zoom promise.
 | 3 | Rows | §6 — fixed 6rem label column ≥`--bp-wide`, stacked below; prose ≤64ch cap |
 | 4 | Mechanism row | §7 — 2px rust bar at 12px from card inner edge, ink-bold label |
 | 5 | The cut | §8.1 — the next sheet runs off the screen edge (width-dependent share; 488px of sheet 2 at 1280); one of three affordance channels |
-| 6 | The gauge | §8.1 — the track's scrollbar: thin, rust thumb, always-rendered where supported |
+| 6 | The indicator | §8.1 — one 2px segment per sheet, rail → rail-end under the track; sheet at rest in `--accent`, rest `--hair`; discrete, `aria-hidden`, desktop only |
 
 Measured line counts (shipping strings) for the build to sanity-check against:
 
@@ -461,6 +474,8 @@ thirteenth colour.
 | Title, row prose, mech label | `--ink` on `--surface` | 13.23 | 13.64 | 4.5 ✓ AAA |
 | Row labels, stamps | `--muted` on `--surface` | 5.16 | 5.76 | 4.5 ✓ (labels/captions only) |
 | Mechanism mark (graphical) | `--accent` on `--surface` | 3.86 | 4.89 | 3.0 ✓ UI/graphics |
+| Indicator, active segment (graphical) | `--accent` on `--ground` | 4.19 | 4.35 | 3.0 ✓ UI/graphics |
+| Indicator, inactive segments | `--hair` on `--ground` | decorative | decorative | extent rides in the ordinals' text, never in these alone |
 | Row rules, card border | `--hair` on `--surface` | decorative | decorative | never information-bearing alone |
 
 The banned pair — `--ink` on `--accent`, 3.43 / 2.79 — appears nowhere: §4 contains no filled rust
@@ -468,15 +483,19 @@ and no rust text (§7.3).
 
 ## 10. States, motion, interaction
 
-- **§4 is fully static.** No animation, no transition, no scroll-triggered anything, no count-up
-  (there are no metrics here — stamps are provenance, not measurements; the ordinal is a static
-  span). The motion budget is closed at the shell's two elements plus the cursor, and this section
-  holds no seat. The track's snap settle is the user agent finishing the reader's own gesture, not
-  an element animation, and it is off under reduced motion. The track is the page's only snap
-  container — the page's own section snapping was removed by founder ruling (`page-shell.md`
-  §7.1, DEC-057).
-- **Reduced motion / no JS: identical render, complete content, zero JavaScript.** The track is CSS
-  overflow; with snap off (reduced motion) it pages by plain scroll.
+- **§4 is fully static.** No animation, no transition, no count-up (there are no metrics here —
+  stamps are provenance, not measurements; the ordinal is a static span). The motion budget is
+  closed at the shell's two elements plus the cursor, and this section holds no seat: the
+  indicator's state change is a discrete class toggle with no transition — a repaint, not
+  motion — asserted as such in both paths (§12.19). The track's snap settle is the user agent
+  finishing the reader's own gesture, not an element animation, and it is off under reduced
+  motion. The track is the page's only snap container — the page's own section snapping was
+  removed by founder ruling (`page-shell.md` §7.1, DEC-057).
+- **Reduced motion / no JS: identical render, complete content.** The track is CSS overflow; with
+  snap off (reduced motion) it pages by plain scroll, and the indicator behaves identically in
+  both paths (nothing animates either way). The section's one script is the indicator's observer —
+  state display only (§8.1); with JavaScript absent the shipped markup renders segment 1 active,
+  which is true at the track's load rest, and the ordinals carry position thereafter.
 - **Interactive inventory: one focusable element — the track itself** (`tabindex="0"`, named
   `The four decisions`), so keyboard users can scroll sheets 2–4 into view at desktop. Nothing
   inside a sheet is interactive: no links, no controls. Below `--bp-wide` the attribute remains
@@ -573,8 +592,8 @@ violated.
 15. **The cut** — at the track's rest position at 1280, sheet 2's box intersects the viewport
     **and** extends beyond the physical screen edge, with no rendered ground between the track's
     inline-end and the viewport edge (the dead strip stays gone). Width-scoped deliberately: at
-    widths where a whole number of sheets fits (~≥1590px) no cut exists and the ordinal + gauge
-    carry the affordance — the assertion pins the budgeted case, not every width. Fails if
+    widths where a whole number of sheets fits (~≥1590px) no cut exists and the ordinal +
+    indicator carry the affordance — the assertion pins the budgeted case, not every width. Fails if
     `--sheet-w` grows to fill the scrollport or the track returns to a container-edge clip.
 16. **Every sheet reachable** — with the track focused, `ArrowRight` (real key events) strictly
     increases `scrollLeft` until sheet 4's inline-end edge is inside the track's box; and
@@ -591,11 +610,23 @@ violated.
     the list's rendered length (read both from the DOM, never from this file); it sets in
     `--text-micro` `--muted` and never computes the accent. Fails if an ordinal drifts from its
     position, the count hardcodes, it enters the announced stream, or it dresses as a metric.
-19. **The gauge** — at ≥ `--bp-wide` the track computes `scrollbar-width: thin` and a
-    `scrollbar-color` whose thumb is the accent token. Computed-style only in the harness
-    (headless runs suppress scrollbar rendering); the visible thumb is part of the headed
-    cross-engine look, recorded as such. Fails if the declarations drop or the thumb colour
-    forks from the token.
+19. **The indicator** — at ≥ `--bp-wide`, six clauses, each a relationship:
+    (a) exactly one indicator row exists, `aria-hidden`, absent from the AX tree, and its segment
+    count equals the rendered sheet count — both read from the DOM, never from this file;
+    (b) its border box spans the container's content width — inline-start on the rail, inline-end
+    on the rail-end, ≤ 1px — the alignment the finding it answers was about;
+    (c) each segment's block-size equals the mechanism mark's 2px stroke — the page's single
+    accent-mark weight, bound to its sibling so the two move together or the check fails;
+    (d) exactly one segment computes the accent as `background-color` (never `color`) at any rest,
+    and after real-key scrolling to sheet 2's rest the active segment is the second — the state
+    tracks the rest, not a constant;
+    (e) no segment and no indicator element carries a non-`none` animation or a non-default
+    transition, in default **and** reduced-motion paths — the discrete-state guarantee that keeps
+    the motion budget closed;
+    (f) the track computes `scrollbar-width: none` (the retired scrollbar must not silently
+    return as a second, misaligned channel), and below `--bp-wide` no indicator renders.
+    Fails if the count hardcodes, the row shears off the rail, a segment animates, the state
+    sticks at 1, or the scrollbar comes back.
 
 ## 13. Existing harness sites this round re-bases
 
@@ -621,8 +652,11 @@ asserting a retired behaviour:
   `background-color` so the small-rust-text sweep never sees them (§7.3). The ordinal joins the
   muted-label family and must never compute the accent (§12.18).
 - **New assertions this spec plants**: §12.14's bleed relationships, §12.15's screen-edge cut,
-  §12.18's ordinal, §12.19's gauge declarations — each proven able to go red at the build, per
-  the standing planted-violation practice.
+  §12.18's ordinal, §12.19's indicator clauses — each proven able to go red at the build, per
+  the standing planted-violation practice. The retired scrollbar-gauge's computed-style checks
+  (`scrollbar-width: thin` + accent `scrollbar-color`) must not survive as written — §12.19(f)
+  now asserts the inverse (`scrollbar-width: none`), so a leftover copy of the old check is a
+  guaranteed contradiction, not dead weight.
 
 ## 14. Provenance — seed lock vs. decided here
 
@@ -643,7 +677,8 @@ colour, face, and surface rule via the shell.
 measured budget and the 40rem sheet page; the paging affordance system (DEC-057) — the
 viewport-spanning scrollport with its token-derived bleed so the cut lands on the screen edge,
 the `SHEET n OF 4` ordinal as the width-independent channel in real spec-sheet grammar, and the
-track's scrollbar styled as the gauge; x-proximity snap scoped to the track, retained as what
+segmented indicator as the always-visible position channel, rail-aligned, succeeding the styled
+scrollbar (DEC-060); x-proximity snap scoped to the track, retained as what
 keeps the track's rests composed; the track as the section's single named tab stop; the stacked
 phone form re-ruled with the ordinal as its orientation and its full measured cost and rejected
 alternatives on the record (§8.1); the single-text-slot stamp with no structured date field and
