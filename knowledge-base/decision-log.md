@@ -1528,5 +1528,66 @@ alone cannot see the defect), pm.
 
 ---
 
+---
+
+### DEC-066 — The grain's problem is feature size, not intensity: STRONGER is rejected and one capped coarse round runs (2026-08-01)
+
+**Decision**: **STRONGER is rejected.** One coarse-grain round runs, capped at one, after which the
+founder picks a variant or `CURRENT` ships unchanged. Either way it is the last texture round.
+
+**Why the measured winner lost.** The proposed STRONGER form raised measured grain spread ~2.2× in
+both themes (dark span 7.5 → 16.3 levels of 255, light 2.0 → 5.0) at a cost of about a third of the
+light theme's remaining contrast margin — worst `--muted`-on-ground 4.83 → 4.71 against a 4.5 floor.
+The founder compared both live, full page, both themes, and **could barely distinguish them**. A
+measured improvement below the perceptual threshold, bought with contrast headroom, is a bad trade,
+and the round's own report had already conceded the shape of it.
+
+**The diagnosis, which the evidence supports.** At `baseFrequency: 0.9` the noise features are
+roughly one pixel; on a high-density display the eye averages them into a uniform veil, so more
+alpha yields a slightly different veil rather than more texture. **Ruggedness is a feature-size
+property, not an intensity property** — the physical referents (canvas tooth, gunmetal wear) carry
+features at roughly 3–6px with clumpy structure. `baseFrequency` was held at `0.9` in every
+candidate rendered so far, so the single most direct control over feature size was never varied.
+The supporting datum was already in hand and pointed the same way: a coarser tile measured **+13%
+spread at zero per-pixel contrast cost**, the most efficient lever tested.
+
+**The glyph-stem rejection is lifted, for the ground layer only.** That rejection blocked the coarse
+lever on the grounds that its features would exceed a glyph stem. It does not survive review: the
+grain sits on the ground, cards are opaque `--surface` with the texture behind at `z-index: -1`, and
+the only type on bare ground is sparse labels and §3's reading column. Physical paper tooth is far
+coarser than a glyph stem without harming reading. **The binding guard is and remains the measured
+worst-case `--muted`-on-ground pair at ≥ 4.5:1 in both themes** — a real measurement, not a proxy
+about feature size.
+
+**Scope of the round**: three variants at `baseFrequency` ≈ 0.35 / 0.18 / 0.09, `fractalNoise`,
+4–5 octaves, **alphas held at CURRENT** (0.08 dark / 0.04 light, both vignettes untouched) — because
+coarser reading stronger at equal alpha is the hypothesis under test, and raising alpha would
+confound it. An optional fourth two-layer form (fine veil plus sparse coarse grit at very low alpha)
+renders only if cheap. **"None of these sing — ship CURRENT" is an acceptable and expected result**;
+a manufactured winner is not.
+
+**Why it is capped.** This is a second taste round on a launch-ready page. Texture is mood; the
+page's argument does not rest on it. One round, then a pick or ship-as-is — no third.
+
+**Standing finding this round must work around, recorded because it outlives the round**: no runner
+measures texture-composited contrast at all. Every contrast probe resolves a background by walking
+ancestors for a `background-color`, and `.texture` is a fixed **sibling** — so the sweep prints
+`5.13:1` for a pair that composites at `4.83`. Runner green is not evidence about the texture, and
+every ratio in this decision was measured directly for it. The check is routed to QA's terminal
+step; it is not a launch blocker, because the true ratios clear the floor in both themes before and
+after.
+
+**Model override, recorded rather than left silent**: DEC-062 decision 5 barred `fable` for the
+remainder of the build. The founder has overridden that for this round and directed it to run on
+`fable`. The mandate's other clauses — one warm interactive session, targeted assertions, one
+terminal QA sweep before the merge — are unchanged.
+
+**Impact**: ui-ux (renders and rules the round), developer (builds the pick, or deletes the losing
+forms from `page-shell.md` §5 if `CURRENT` ships; one hard-coded harness assertion —
+`grain peak alpha capped at 8%` — re-bases either way), qa (the texture-blind contrast probe),
+pm (this entry).
+
+**Touched**: `decision-log.md`, `orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
