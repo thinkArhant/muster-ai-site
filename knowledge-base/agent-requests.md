@@ -10,6 +10,100 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-050 — §5's THIS SITE card gets its measured number; VERIFY.md carries the why
+- **From**: Content
+- **To**: Developer (builds, round 2), PM (review)
+- **Date**: 2026-08-01
+- **Status**: open
+- **Deliverables**: `knowledge-base/design-specs/web/section-05-copy.md`, `VERIFY.md`
+
+**The measurement, quoted, never re-derived.** The founder ran the meter once over both project
+paths: `operator attention 7h 30m` (115 typed prompts), `active build 42h 24m`, `git commit-days 9`.
+The card value is **`7.5 h`** — `7h 30m` in decimal hours, an exact conversion, byte-matching the
+format of Bodh's `4.8 h` under the same key. **No cost figure from this run is published anywhere**
+(the run's model pricing was incomplete); VERIFY.md's existing $594 floor stands exactly as written.
+
+**Card strings that changed (§4.1, the page-equality surface):**
+- Card 2 (`THIS SITE · SPEC → LIVE`) · Value 1 (`OPERATOR ATTENTION`): `—` → **`7.5 h`**
+- Card 2 · Sub-line 1: `measured at launch` → **(none)**
+- Every other string in both cards is unchanged. All four prose lines are unchanged.
+- Consequence stated in the copy file: **`measured at launch` now appears nowhere on the page** —
+  it occurred exactly once, on this cell. Card 2 now carries **zero** sub-lines; the section's one
+  sub-line is card 1's `App Store + web`, and that asymmetry is authored.
+- `7.5 h` must render identically everywhere it appears: one measurement, one rendering. It joins
+  `9.3 h`, `$147`, `4.8 h` as a single-site figure with §5 as the site.
+
+**Spec prose rewritten to current truth** (copy file §1 rules, §4 preamble, §4.2 rationale, ruling
+5, §6 verification statement): THIS SITE is measured, spec → live, same instrument and definition
+as Bodh's `4.8 h`; R4 has nothing to render in §5; the scope labels alone keep the two figures
+from being read as one comparison. §5 still prints no wave-scope numeral and no derived
+rate/ratio/difference — the cells sit side by side and the reader does the arithmetic.
+
+**VERIFY.md changes:**
+- Scope-table THIS SITE row: `— · measured at launch` → `7.5 h operator attention · 42h 24m active
+  build · 9 commit-days`. The paragraph under the table states the provenance (one founder-run
+  pass of the meter, same definition as Bodh's 4.8 h) and the format conversion (7h 30m = 7.5 h
+  exactly).
+- The floor section's framing no longer describes the row as dashed/pending; the $594 table, the
+  floor reasons and the rate paragraph are untouched.
+- **The why lives in the existing "hours are the whole of the difference" bullet, extended** — one
+  explanation, not two: the page took more of the operator than the product it exhibits; Bodh is a
+  landing page plus a single-screen iOS app, this page carries more and more of it is fact-driven
+  (§2's replay reproduced from the build log, §4's decision sheets, the verification apparatus).
+
+**Harness couplings Developer must re-base in round 2** — the dash-to-measured flip is the largest
+assertion change in the round:
+
+*`tests/qa-fullpage-sweep.mjs`* (2 red NOW, by design — VERIFY.md leads the check):
+1. "VERIFY.md states the three scopes separately, THIS SITE dashed" (~L276) — the em-dash row regex
+   asserts the old truth; re-base to the measured row.
+2. "VERIFY.md makes no unmeasured claim about THIS SITE" (~L285) — both clauses (no numeral in the
+   row; the "column stays dashed" phrase) assert the old truth.
+3. "THIS SITE is still dashed, with `measured at launch` beside it (R4)" (~L246–265) — green today,
+   dies at the rebuild: every part flips (`--unmeasured` cell count 0, no em-dash element, no
+   `measured at launch` in §5 or page-wide, and `7.5` puts a numeral in the THIS SITE card).
+4. `WHOLE_PRODUCT` (~L172) — add `7.5 h` as a fourth exactly-once-in-§5 figure.
+5. `COUNTING_CELL` (~L180, `"4.8 h"`) and the playback announce checks — if `7.5 h` takes a
+   count-up hook, the counting-cell inventory becomes two.
+
+*`tests/verify-shell.mjs`* (currently red at its §5 copy-parse checks against the unbuilt page —
+designed; these re-base with the build):
+6. "exactly one unanswered value — ink em-dash with `measured at launch` under it" (~L2563) —
+   premise dead; zero dash cells after the build.
+7. "answered values are flat rust at the readout size, tabular" (~L2558) — `allCells.length - 1`
+   becomes all four; `7.5 h` renders accent/tabular like its twin.
+8. "the dash never animates" (~L2569) — no dash cell on the page; the engine-refusal property
+   stays proven by the count-up fixture (~L692), which needs no change.
+9. "counting cells are the deliverable's measured ones" (~L2575) — the site cell's counted value
+   `—` becomes `7.5 h`; whether it rolls is a build ruling (symmetry with `4.8 h` suggests yes).
+10. "each card carries exactly one cell-level sub-line" (~L2523) — card 2 will carry zero; the
+    authored-vs-rendered comparison survives, the `=== 1` per-card clause does not.
+11. "sub-lines hung alike" (~L2602) — card 2 has no drop to compare; the equal-card-height and
+    key-alignment clauses should hold via the reserved sub-line row and must be re-verified.
+12. "only site for 9.3, $147 and 4.8 h" (~L2540) — extend to four figures per the copy file.
+
+*`tests/qa-independent-audit.mjs`*:
+13. Dark theme readout rule (~L509–519): `unmeasured count === 1` and unmeasured→ink colour split —
+    becomes zero unmeasured, all values accent.
+14. Light theme twin (~L635).
+
+*Non-test surfaces to align in round 2:*
+15. `index.html` §5 comments narrate the dash and the sub-line diagonal — rewrite to current truth.
+16. `page-shell.md` §8 (unmeasured-value treatment rows, ~L333/341/347) and §10.3 (~L435) — the
+    treatment may stand as a design-system rule, but any sentence claiming §5 renders a dash goes.
+17. `section-01-hero.md` ~L244 and ~L423 state `measured at launch` occurs exactly once on the
+    page, in §5 — must become "nowhere on the page" (UI/UX-owned; PM to route).
+18. PM cascade at review: `product-spec.md` scope table, `copy-rules.md` scope table + R4 wording,
+    `agent-context/*.md` scope tables, `foundational-assumptions.md` A-002 notes,
+    `pre-launch-checklist.md` "THIS SITE measured numbers replace dashes" item (attention cell now
+    has its number; the checklist's sweep-matrix line also says "THIS SITE dashed").
+
+**Runner state on this commit**: sweep run cold, serial — **43/45**, the two reds are items 1–2
+above and are designed; every page-based check green because the page is untouched. Copy leads the
+build.
+
+- **Revision log**: —
+
 ## Resolved (Last 10)
 
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->

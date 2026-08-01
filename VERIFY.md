@@ -27,17 +27,22 @@ python3 muster/scripts/muster-meter.py <this-repo-path> --repo <this-repo-path> 
 |---|---|---|
 | **BODH** | idea → live | 9.3 h active build · $147 API list · 4.8 h operator attention · 4 commit-days (Jul 11–18) · the whole product, iOS app included |
 | **BODH SPRINT-4 WEBSITE WAVE** | one evening, the chain §2 replays | ~64 minutes of agent work across 8 sessions · 289 API calls · $24.73 |
-| **THIS SITE** | spec → live | — · measured at launch |
+| **THIS SITE** | spec → live | 7.5 h operator attention · 42h 24m active build · 9 commit-days |
 
-A figure from one scope is never presented as a figure from another. THIS SITE's column stays
-dashed until the metered snapshot is committed; a dash is what an unmeasured metric renders as
-here, and no estimate stands in for it.
+A figure from one scope is never presented as a figure from another. THIS SITE's figures are one
+founder-run pass of the meter above, over this repo's own build, spec → live. Operator attention
+here is the definition in line 3 — the gap math over human-typed prompts only — and it is the same
+instrument and the same definition that produced Bodh's 4.8 h, which is what makes the two figures
+comparable at all. The meter prints hours and minutes; the page renders decimal hours, and 7h 30m
+is 7.5 h exactly — a change of format, not of precision. The page's card prints the attention
+figure alone; active build and commit-days live here, beside the method that defines them.
 
 ## What this site has cost so far — a floor, and not the THIS SITE row
 
-The row above is dashed and stays dashed. What follows is a narrower measurement that does not
-fill it: what the **committed autonomous step-sessions** cost, as the sprint driver recorded them
-in `.muster-sprint-logs/`. Read it as a floor, for two reasons stated up front.
+The row above carries this site's metered time and no cost figure. What follows is a narrower
+measurement, and not that missing cost: what the **committed autonomous step-sessions** cost, as
+the sprint driver recorded them in `.muster-sprint-logs/`. Read it as a floor, for two reasons
+stated up front.
 
 1. **Interactive sessions are not in it.** Founder gates, interactive fix rounds and the closing
    round that shipped this file are not metered here.
@@ -45,8 +50,8 @@ in `.muster-sprint-logs/`. Read it as a floor, for two reasons stated up front.
    at the final build gate, over the step-sessions committed at that point. Summing the committed
    files today gives a larger number, because more steps ran after the snapshot.
 
-Nothing in this section is an answer to *spec → live*. That answer is a single metered snapshot,
-and it lands at launch.
+Nothing in this section is a *spec → live* cost. It is the driver's own ledger of the autonomous
+steps — a floor under any fuller figure, never the figure itself.
 
 | Measured | Figure | Over |
 |---|---|---|
@@ -74,10 +79,15 @@ Two things about that comparison, stated rather than smoothed:
   chains, because a chain runs back to back with no idle gaps — the same property that makes the
   wave's active build and its elapsed span agree — but they are not interchangeable, and neither
   is the `active build` measure defined at the top of this file.
-- **The hours are the whole of the difference.** This build carried four founder gates, three fix
-  rounds on §2 alone, one full section redesign after a gate, and three harness runners re-run at
-  nearly every step. A one-page site does not need that apparatus. A page whose entire claim is
-  that its claims are checkable does.
+- **The hours are the whole of the difference, and that holds for the operator's hours too.** §5
+  puts this site's 7.5 h of operator attention beside Bodh's 4.8 h: the page took more of the
+  operator than the product it exhibits. Bodh is a landing page plus a single-screen iOS app. This
+  page carries more, and more of it is fact-driven — §2's replay above all, a real build chain
+  reproduced from its build log into a 48-second condensed playback, plus §4's decision sheets and
+  the verification apparatus behind every claim: four founder gates, three fix rounds on §2 alone,
+  one full section redesign after a gate, and three harness runners re-run at nearly every step. A
+  one-page site does not need that apparatus. A page whose entire claim is that its claims are
+  checkable does.
 
 None of these figures appears on the page. The page prints measured inputs and no rate derived
 from them, and it prints no human or agency cost baseline anywhere — that comparison is the

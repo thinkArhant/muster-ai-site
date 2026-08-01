@@ -5,10 +5,12 @@ deliverable)
 **Consumers**: Developer (builds the strings verbatim and derives §5's content inventory from this
 file — §5 has no separate design spec; treatment comes from `page-shell.md` §8), UI/UX (composes
 the two-cell card against these strings), PM (reviews line by line against the copy rules), QA
-(scope-label and dash checks)
+(scope-label and figure-fidelity checks)
 **Sources**: every claim traces to `product-spec-seed.md` §5 and its Measured data table
-(founder-authored, read-only) or `bodh-sprint4-corpus.md` (founder-authored, read-only), cited per
-string. Governed by `agent-skills/content/copy-rules.md` and `brand-guidelines.md` §5.
+(founder-authored, read-only), `bodh-sprint4-corpus.md` (founder-authored, read-only), or the
+founder-run meter snapshot over this repo (telemetry is founder-supplied — no agent measures this
+build, A-002), cited per string. Governed by `agent-skills/content/copy-rules.md` and
+`brand-guidelines.md` §5.
 
 ---
 
@@ -18,12 +20,17 @@ string. Governed by `agent-skills/content/copy-rules.md` and `brand-guidelines.m
   permitted first-person places (R7). It is preserved exactly as the founder supplies it. Every other
   string in §5 is product voice.
 - **Scope discipline (A-005) is the section's highest risk.** §5 carries **BODH** values and **THIS
-  SITE** dashes, each beside its own scope label, and **no wave-scope number at all** — `~64 min`,
+  SITE** values, each beside its own scope label, and **no wave-scope number at all** — `~64 min`,
   `289` and `$24.73` do not appear in this section. Two scopes sit adjacent here by design, which is
   exactly why every value is labelled.
-- **THIS SITE's unmeasured metric is a dash** (R4, A-002) with `measured at launch` attached to the
-  dash itself. Never a placeholder, never an estimate, and the dash never counts up
-  (`page-shell.md` §10.3).
+- **Every value in §5 is measured, THIS SITE's included.** Its `OPERATOR ATTENTION` figure is
+  founder-metered (A-002), spec → live, by the same instrument and the same definition that
+  produced Bodh's `4.8 h` — the gap math over human-typed prompts only — which is what makes the
+  two cells comparable. §5 renders no unmeasured value, so R4 has nothing to render here; what
+  binds is scope labelling (A-005): the card labels are the only thing keeping two figures under
+  one key from being read as one comparison.
+- **`measured at launch` appears nowhere on the page.** Beside a measured figure the phrase would
+  be false, and no other cell needs it. Do not re-add it, in any seat.
 - **No growing-list hype** — see the ruling in §5 of this file.
 - **Word counting convention**: as in the sibling copy files — whitespace-delimited tokens containing
   a letter or digit; script-measured.
@@ -149,8 +156,8 @@ line spends its words on what is *only* true of this page: its team and its mete
 
 Two cards, same two keys, same order. Treatment is `page-shell.md` §8's instrument readout cell:
 key `--text-micro` `--muted`, value `--text-readout` `--accent` tabular, sub-line `--text-micro`
-`--muted`; an unmeasured value renders an `--ink` em-dash with the `measured at launch` sub-line and
-never animates.
+`--muted`. Every value in both cards is answered, so §5 renders no em-dash and none of the
+unmeasured treatment.
 
 ### 4.1 Card strings
 
@@ -161,8 +168,8 @@ ship.
 |---|---|---|
 | Card label | `BODH · IDEA → LIVE` | `THIS SITE · SPEC → LIVE` |
 | Key 1 | `OPERATOR ATTENTION` | `OPERATOR ATTENTION` |
-| Value 1 | `4.8 h` | `—` |
-| Sub-line 1 | (none) | `measured at launch` |
+| Value 1 | `4.8 h` | `7.5 h` |
+| Sub-line 1 | (none) | (none) |
 | Key 2 | `SHIPPED` | `SHIPPED` |
 | Value 2 | `bodh.day` | `THIS PAGE` |
 | Sub-line 2 | `App Store + web` | (none) |
@@ -170,51 +177,58 @@ ship.
 | Claim | Source |
 |---|---|
 | `4.8 h` operator attention, BODH scope | Seed → Measured data ("4.8 h (supporting stat)"); scope table |
+| `7.5 h` operator attention, THIS SITE scope | Founder-run meter over this repo, `spec → live` (A-002): `operator attention 7h 30m` — the gap math over 115 human-typed prompts, the same instrument and the same definition behind Bodh's `4.8 h`. `7h 30m` renders as `7.5 h`: an exact conversion to decimal hours matching the cell beside it, no rounding, no gained precision |
 | `bodh.day` + `App Store + web` | Seed → Measured data, Shipped row: "bodh.day — App Store + web". Value and sub-line reconstitute the seed's cell exactly: `bodh.day` + ` — ` + `App Store + web` |
 | `THIS PAGE` | Seed → Measured data, Shipped row, THIS SITE column: "this page" |
-| THIS SITE dashed, `spec → live`, `measured at launch` | Seed rule 4 and rule 5; A-002 |
 
 ### 4.2 Which values §5 carries, and why these two
 
 **Both cards ask one question, and they ask it symmetrically.** Every key is answered in both
-columns, so the two columns are comparable cell by cell — which is the only thing that makes THIS
-SITE's dash informative rather than decorative. A key present in one card and absent from the other
-would be a card dodging its twin.
+columns, so the two columns are comparable cell by cell. A key present in one card and absent from
+the other would be a card dodging its twin — and because the two `OPERATOR ATTENTION` figures sit
+under one key in one format, the scope labels are the only thing keeping them from being read as
+one comparison. The labels carry that weight alone, by design: a format fork between the cells
+would be a scope tell, and the cells refuse it.
 
 **`OPERATOR ATTENTION` is the question the page is actually about.** The thesis is that one person
 plus a governed AI team ships real products; the number that tests it is how much of the person it
-took. It is also the dash the meter can fill: THIS SITE's `measured at launch` promises one figure of
-the same kind as the one beside it, which is a promise a single snapshot keeps.
+took. Both cards answer it from the same meter under the same definition, so the pair reads as one
+instrument pointed at two builds — and the page states both readings and derives nothing from
+them.
 
-**`SHIPPED` is the falsifier.** `bodh.day` is a place a reader can open, and `THIS PAGE` is the one
-THIS SITE cell that cannot be unmeasured — the reader is standing in the evidence. It is the seed's
-own Shipped row, split across value and sub-line because the value slot is a readout at
-`--text-readout` scale and `App Store + web` is a qualifier, not a value. It is the section's only
-cell-level sub-line, and the construction is reserved for exactly that case.
+**`SHIPPED` is the falsifier.** `bodh.day` is a place a reader can open, and `THIS PAGE` is the
+cell whose evidence the reader is standing in. It is the seed's own Shipped row, split across value
+and sub-line because the value slot is a readout at `--text-readout` scale and `App Store + web` is
+a qualifier, not a value. That sub-line is the section's only one, and the construction is reserved
+for exactly that case.
 
-**The attention figure has its denominators, and they sit in prose rather than in sibling cells.** A
-readout of operator attention with no build or cost figure anywhere near it is a number without a
-denominator. Those denominators — `9.3 hours of active build` and `$147 ... at API list price` — are
-stated two lines above, for the same scope, in the same section. In prose they read as what they are
-(what the build cost) instead of as instrument cells competing with the one figure that answers the
-page's question.
+**Bodh's attention figure has its denominators, and they sit in prose rather than in sibling
+cells.** A readout of operator attention with no build or cost figure anywhere near it is a number
+without a denominator. Bodh's — `9.3 hours of active build` and `$147 ... at API list price` — are
+stated two lines above, for the same scope, in the same section. In prose they read as what they
+are (what the build cost) instead of as instrument cells competing with the one figure that
+answers the page's question. This site's denominators live in `VERIFY.md`, the page's measurement
+report, where a reader checking the figure was already headed.
 
-**Neither card carries a cost cell, and that symmetry is the point.** A cost cell whose twin is a
-dash invites the reader to price a build that has not been measured yet — an invitation to invent
-the number the whole page exists to refuse.
+**Neither card carries a cost cell, and that symmetry is the point.** The page prints one cost
+figure — Bodh's, in prose, with its framing attached — and the cards stay a two-key surface asking
+one question. A cost cell would put a second kind of number on that surface and invite the reader
+to divide one card by the other, which is arithmetic the page leaves to the reader everywhere.
 
 **Commit-days appear nowhere on the page.** They are R2's checkable fallback for elapsed time, and
 against a two-key card they would add a third kind of number to a surface that asks one question —
-while the span they measure is already stated, in the same section, as `idea to live`.
+while the spans they would measure are already stated, on the cards themselves, as `idea → live`
+and `spec → live`.
 
-**The harness asserts `9.3 h`, `$147` and `4.8 h` byte-exact with §5 as the sole site** — two
-renderings of one measurement is the drift this page cannot afford. That two of the three render in
-prose and one in a cell does not change the count: one rendering each, page-wide.
+**The harness asserts `9.3 h`, `$147`, `4.8 h` and `7.5 h` byte-exact with §5 as the sole site** —
+two renderings of one measurement is the drift this page cannot afford. That two of the four
+render in prose and two in cells does not change the count: one rendering each, page-wide.
 
 **No derived figure is printed anywhere on the page.** No ratio, no percentage, no rate, no
-difference between these numbers — the reader does the arithmetic, the same posture R3 takes with
-cost. `VERIFY.md` publishes this site's own economics as a measurement report, with its inputs and
-its method; the page states measured inputs and nothing derived from them.
+difference between these numbers — not even between the two attention figures sitting side by
+side. The cells sit adjacent and the reader does their own arithmetic, the same posture R3 takes
+with cost. `VERIFY.md` publishes this site's own economics as a measurement report, with its
+inputs and its method; the page states measured inputs and nothing derived from them.
 
 ## 5. Rulings this file makes
 
@@ -235,10 +249,10 @@ its method; the page states measured inputs and nothing derived from them.
    proposition is that its claims are checkable. Nothing in §5 says the list will grow.
 4. **No third card ships as a placeholder.** No empty slot, no "next", no ghost card. When a product
    ships, a card is added.
-5. **`measured at launch` attaches to the dash it qualifies, not to the card.** Card 2 now carries
-   one unmeasured value beside one measured one, so a card-level caption would say the `SHIPPED`
-   answer is unmeasured too. R4 asks for a dash *with* "measured at launch"; the sub-line sits under
-   the dash, which is the tightest form of that.
+5. **THIS SITE's attention value carries no sub-line, and no card carries a caption.** A sub-line
+   qualifies the value above it, and `7.5 h` needs no qualifier: its scope is the card label's job
+   and its provenance is `VERIFY.md`'s. The section's one sub-line is `App Store + web`, a
+   qualifier on the seed's own Shipped cell — that asymmetry is authored, not an omission.
 6. **Readout values are authored strings and are never re-cased by CSS, so the copy file's string is
    what renders — and `THIS PAGE` is that string, in every seat.** Uppercase is the readout register
    for a phrase used as a value: `SHIPPED · THIS PAGE` reads as an instrument state, the same way
@@ -252,20 +266,24 @@ its method; the page states measured inputs and nothing derived from them.
 
 ## 6. Verification statement
 
-- **R1** — every numeral in §5 is quoted exactly from the seed's Measured data table: `9.3` hours,
-  `$147`, `4.8 h`. None is rounded; none is given precision its source lacks; none is derived.
+- **R1** — every numeral in §5 is stated exactly as its source states it: `9.3` hours, `$147` and
+  `4.8 h` quoted from the seed's Measured data table; `7.5 h` from the founder-run meter over this
+  repo, whose `7h 30m` renders in decimal hours as an exact conversion. None is rounded; none is
+  given precision its source lacks; none is derived.
 - **R2** — the only time claim is "active build", as the seed labels it. No wall-clock framing, no
   "built in N hours", and §5 makes no deploy claim at all. Commit-days, R2's checkable fallback, are
   no longer shown here or anywhere on the page.
 - **R3** — the one cost figure, `$147`, carries its framing in the sentence that prints it: `at API
   list price` — cost-to-replicate, never subscription spend. No human or agency baseline exists
   anywhere in the section, and no rate is derived from the figures beside it.
-- **R4** — THIS SITE's one metric is an em-dash with `measured at launch` under it; no placeholder
-  value, and the dash is inert. `THIS PAGE` is not an exception to this: it is a measured fact, not
-  a metric.
-- **R5** — both cards are scope-labelled (`BODH · IDEA → LIVE`, `THIS SITE · SPEC → LIVE`); the
-  prose figures carry the same scope key in words (`Bodh, idea to live:`); no claim mixes scopes;
-  wave-scope numbers (`~64 min`, `289`, `$24.73`) appear nowhere in §5.
+- **R4** — §5 renders no unmeasured value: every metric in the section is measured, so R4 has
+  nothing to render here. No placeholder exists, no estimate stands anywhere, and `measured at
+  launch` appears nowhere in §5 or on the page.
+- **R5** — both cards are scope-labelled (`BODH · IDEA → LIVE`, `THIS SITE · SPEC → LIVE`), and the
+  labels do §5's hardest work: `4.8 h` is Bodh, idea → live, and `7.5 h` is this site, spec → live —
+  two figures under one key, kept apart by their labels alone. The prose figures carry the same
+  scope key in words (`Bodh, idea to live:`); no claim mixes scopes; wave-scope numbers (`~64 min`,
+  `289`, `$24.73`) appear nowhere in §5.
 - **R6** — "proven" does not appear; no merit claim is made about the framework.
 - **R7** — first person is confined to the provenance line, preserved verbatim.
 - **R8** — "its own AI team"; the string "the Muster team" appears nowhere.

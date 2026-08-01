@@ -56,13 +56,12 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
      items shipped in 42470b3. The terminal sweep is accepted (DEC-068) and the build is cleared. -->
 
 
-- [2026-07-31] [Content]: **VERIFY.md now publishes the site's economics — do the figures get a
-  fresh read before launch?** The section quotes the committed record ($594 · 51 step-sessions ·
-  ~27.3 driver-hours · $21.8/hr) and labels the whole thing a floor. But the tree already carries
-  more `.metrics` lines than that snapshot covers, so a reader who sums the committed files gets a
-  larger number. VERIFY.md states that plainly in the section's own preamble, so nothing published
-  is wrong. The question is whether the founder wants these re-read at launch — one number, taken
-  once, no agent involvement (A-002) — or whether the floor framing is the intended permanent form.
+<!-- Resolved 2026-08-01 — the founder ruled at the telemetry round: the $594 driver-log figure and
+     its floor framing stand exactly as written; no re-read, no reconciliation with the meter run,
+     whose cost total was incomplete (one model unpriced) and is published nowhere. The meter's
+     operator-attention figure ships as §5's THIS SITE value (HO-050). -->
+
+_None open._
 
 <!-- Resolved 2026-07-31 — the re-gate's ten findings are consumed: F-R4's false word, F-R6's forward
      promise, F-R2/F-R5's hierarchies, F-R3's indicator, F-R7's masthead, F-R9's footer sentence and
@@ -88,79 +87,70 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-08-01 THE LAUNCH MERGE — history preserved, then the founder's click-check
+### 2026-08-01 THE TELEMETRY BUILD — §5's last dash becomes `7.5 h`, round 2 of 2
 
 ```
-Role: halt
+Role: developer
 
-The build is cleared. QA's terminal sweep is accepted with no revision (DEC-068), and with it every
-handoff in the closing round. All four runners are green cold on the shipped tree, re-derived by PM
-after QA's harness fix landed. The ledger is reconciled to 4 active lines and all three lints are
-green. Nothing is open to build, and no agent has work left.
+The founder's telemetry snapshot is taken and Content has shipped the strings (HO-050): §5's THIS
+SITE card reads `OPERATOR ATTENTION 7.5 h` with NO sub-line — `measured at launch` now appears
+NOWHERE on the page — and VERIFY.md's THIS SITE row carries `7.5 h operator attention · 42h 24m
+active build · 9 commit-days` with the why extended into the existing "hours are the whole of the
+difference" bullet. Copy files and VERIFY.md are final; the page is not yet rebuilt.
 
-TWO THINGS REMAIN, AND NEITHER IS AN AGENT'S TO DO.
+BUILD: update index.html's §5 THIS SITE card to the copy file's §4.1 table exactly — value `7.5 h`
+in the answered treatment (accent, tabular, readout size, like its twin `4.8 h`), the
+`--unmeasured` modifier and the sub-line gone, the §5 HTML comments rewritten to current truth.
+NO other page string moves. `7.5 h` renders byte-identically everywhere it appears.
 
-1 — THE MERGE, WITH HISTORY PRESERVED. Merge this branch to `main` with a real merge commit, NOT a
-squash. Three of the footer's four receipts are pinned to commit SHAs on this branch; a squash
-collapses that history and 404s all three silently, for every reader, with no harness able to see
-it. `blob/main/VERIFY.md` survives either strategy — that is the second reason VERIFY is not
-pinned — but the other three do not. If a squash is preferred for any reason, the three pinned
-receipts must be re-pinned to post-merge SHAs BEFORE deploy, and the sweep's pinned-receipt check
-re-run to confirm each path still exists at its new commit.
+RE-BASE the harness around the dash-to-measured flip — HO-050 enumerates 18 couplings across
+qa-fullpage-sweep.mjs (incl. the two designed reds on VERIFY.md's row, the R4 dash check, the
+WHOLE_PRODUCT list), verify-shell.mjs (the §5 dash/sub-line/counting-cell/single-site checks) and
+qa-independent-audit.mjs (both themes' unmeasured-count rules). Assert relationships, not values;
+plant each new assertion red before trusting it. Also align page-shell.md §8/§10.3 and
+section-01-hero.md's "exactly once" claims to "nowhere on the page".
 
-2 — THE FOUNDER'S VERIFY CLICK-CHECK, AFTER THE PUSH. `blob/main/VERIFY.md` 404s today, by
-construction: `main` is ~110 commits behind and the link resolves only once the merge lands. Click
-all four footer receipts plus the §1 chip on the live page. Only a real fetch proves reachability,
-which is why no runner stands in for this and why it is the last step rather than an earlier one.
+DO NOT: publish any cost figure from the meter run, print `42h 24m` / `9 commit-days` / any wave
+numeral on the page, derive any rate or difference between 4.8 h and 7.5 h, or touch VERIFY.md's
+$594 floor section.
 
-ALSO FOUNDER-ONLY, AND STILL OPEN: the THIS SITE telemetry snapshot. No agent measures this build
-(seed rule 4, A-002), so §5's THIS SITE card carries an em-dash under `OPERATOR ATTENTION` with
-`measured at launch` beneath it until the founder supplies a number. The page is honest as it
-stands — a dash is a claim about what will be measured, never a placeholder — so this gates the
-telemetry claim, not the merge.
+Deliverable: page byte-equal to the copy file, all four runners green cold and serial on the
+shipped tree, handoff filed for QA/PM naming every re-based check.
 
-TWO ACCEPTED RESIDUALS, recorded so nobody re-discovers them as defects (DEC-068):
-
-- No contrast check can see the texture. Both probes resolve a background by walking ancestors and
-  `.texture` is a fixed sibling. PROVEN by planting `--grain-alpha: 0.90` — the sweep returned
-  45/45 with both contrast checks green. The bound: the alpha TOKEN is guarded (verify-shell caps
-  8% dark / 4% light), so what is exposed is a change that passes the cap while degrading real
-  contrast. Today's ratios clear the floor on two independent measurements.
-- `section-01-copy.md` is the one copy spec no harness parses, and the one that drifted. Accepted
-  on its small surface; every §1 string is asserted against the page elsewhere.
-
-**Deliverable:** the merge pushed with history intact, the four receipts and the §1 chip click-checked
-green on the live page by the founder, and any 404 filed as a blocker before deploy.
-
-IF BLOCKED: this step is already `Role: halt` because the remaining work is the founder's. An agent
-resuming here for any other reason must not set `Role: halt` itself — file the blocker addressed to
-PM and re-point `## Next Step` to a `Role: pm` assessment step.
-```
-
-## Upcoming` below) — history preserved,
-not squashed, so the three pinned receipts in the footer don't 404. The founder's VERIFY
-click-check is the step after that, and it is the one thing no runner can stand in for.
-
-IF BLOCKED on a founder question: this is the one case where `Role: halt` is correct — record
-the question in `## Founder Decisions` above.
+IF BLOCKED: file the blocker addressed to PM and re-point `## Next Step` to a `Role: pm`
+assessment step. Never set `Role: halt`.
 ```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-1. **The launch merge, history preserved** (DEC-063 §5). A squash merge collapses this branch and
-   404s the three pinned receipts in the footer; `blob/main` survives either strategy, which is the
-   second reason VERIFY is not pinned.
-2. **The founder's VERIFY click-check on the live page** — the one thing no runner can stand in
+1. **PM review of the telemetry round** (HO-050 + the Developer build), then re-issue the launch
+   merge step.
+2. **The launch merge, history preserved** (DEC-063 §5) — `Role: halt`, founder-only. A squash
+   merge collapses this branch and 404s the three pinned receipts in the footer; `blob/main`
+   survives either strategy, which is the second reason VERIFY is not pinned. Two accepted
+   residuals stand recorded (DEC-068): the texture-blind contrast checks, and `section-01-copy.md`
+   as the one unparsed copy spec.
+3. **The founder's VERIFY click-check on the live page** — the one thing no runner can stand in
    for, because only a real fetch proves reachability.
-
-3. **The founder's THIS SITE telemetry snapshot** — founder-only work, no agent involvement
-   (A-002, seed rule 4). §5's `OPERATOR ATTENTION` dash on the THIS SITE card is what it fills.
-   Hard, gated at launch, and the one remaining blocker no agent can close.
 
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-08-01 — Telemetry round 1 of 2: Content quotes the founder's meter and ships the strings
+  (HO-050). §5's THIS SITE card: `OPERATOR ATTENTION` `—` → **`7.5 h`** (`7h 30m` in decimal
+  hours, exact conversion, byte-matching Bodh's `4.8 h` format) and the `measured at launch`
+  sub-line **goes** — the phrase now appears nowhere on the page, stated in the copy file so
+  nobody re-adds it. Copy file §1/§4/§5/§6 rewritten to current truth: THIS SITE is measured,
+  R4 renders nothing in §5, the scope labels alone keep the two attention figures apart, no
+  derived figure anywhere. VERIFY.md's THIS SITE row fills (`7.5 h · 42h 24m active build ·
+  9 commit-days`), the floor framing survives untouched as ruled, and the why extends the
+  existing "hours are the whole of the difference" bullet — one explanation, not two. **No cost
+  figure from the run is published anywhere** (one model unpriced; the run total is wrong).
+  Sweep run cold: **43/45**, both reds designed (VERIFY.md's dashed-row checks assert the
+  pre-snapshot truth); every page-based check green because the page is untouched — copy leads
+  the build. 18 harness couplings enumerated in HO-050. **Awaiting Developer (round 2).**
 
 - 2026-08-01 — The terminal QA sweep (HO-049). All four counts re-derived cold, twice, serial:
   **308/308 · 27/27 · 108/108 · 45/45**, before and after one fix. **`cdp.mjs`'s unref'd send
@@ -322,10 +312,4 @@ the question in `## Founder Decisions` above.
   **The final gate is live: one number and three phone checks, and one of the three closes the last
   hard launch blocker.**
 
-- 2026-07-31 — Step: QA scoped re-run on the re-gate round (HO-041). **Every acceptance criterion
-  passes and nothing adjacent broke** — all three runners re-run cold on the shipped tree (295/295
-  + 27/27, 108/108, 43/43), no shipped file touched, thirteen violations planted by QA and each new
-  assertion watched to fail. The motion budget is counted, not judged: 7 looping instances across
-  3 seats, the indicator contributing zero. **Awaiting PM at the re-gate review step; PM must rule
-  VERIFY's provisional pin and reconcile `agent-requests.md` (lint red, 365 active lines vs 300).**
 
