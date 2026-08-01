@@ -183,6 +183,44 @@ runner can see the texture at all** (both contrast probes walk ancestors for a `
 re-measured per-pixel on the built tree (worst `--muted`-on-ground 5.14 dark / 4.82 light, floor
 4.5), and no WebKit evidence exists for the texture at any phone width.
 
+PM AMENDMENT 2026-08-01 — THE PATTERN IS THE ASSIGNMENT, NOT THE THREE FIXES.
+
+Four separate checks in this closing round were found unable to fail. That is no longer a run of bad
+luck; it is a class, and naming it is the highest-value thing this step can do:
+
+1. The sweep's contrast probe skipped selectors it could not resolve (`if (!el) continue`), so
+   retiring a surface silently dropped it from a check still claiming to measure it. **Blind.**
+2. Both contrast probes resolve a background by walking ancestors, and `.texture` is a fixed
+   sibling — so **no runner has ever measured the texture**, and the sweep prints 5.13:1 for a pair
+   compositing at 4.83. Ruled yours in DEC-066/067.
+3. `findGroundPatch` scans until a patch fits, so `bare ground renders at the locked value` can pass
+   by **relocating** rather than by being true.
+4. A containment-only assertion on §2's rail measured the wrong moment — settled rather than during
+   the 350ms reveal — and would have passed on 36 of 40 rows while the founder's defect survived.
+
+Common shape: **a check whose failure mode is silence.** Not a wrong threshold — an absent
+measurement wearing a green label. Hunt that shape across the whole harness; it is worth more than
+re-confirming counts four specialists have already confirmed. For each one you find, say whether it
+ever protected anything.
+
+Two calls that are yours to make, both stated so they are not assumed:
+
+- **`cdp.mjs` unrefs its own send deadline** (`tests/lib/cdp.mjs`, in `send()`), so a stalled call can
+  exit the process instead of rejecting with the method named — defeating the promise in that
+  function's own comment, in exactly the case the deadline exists for. `clearTimeout` already fires
+  on both settle paths, so the unref buys nothing. It is test infrastructure and therefore yours:
+  fix it and say so, or rule it out of scope for launch and say why. **The gate's own
+  failure-reporting path should not be the broken thing.**
+- **Neither copy spec is parsed by any harness**, which is why `section-01-copy.md` drifted from the
+  shipped page silently until a human read it. Judge whether that class needs a check before launch
+  or is accepted as a documentation risk.
+
+LEDGER STATE, so you do not read it as rot: `muster-requests-lint.sh` is red at ~405 active lines
+against a 300 budget. HO-044, HO-045 and HO-048 are **legitimately open pending this sweep** —
+PM reviewed and swept everything closable (HO-042, HO-043, HO-046, HO-047) and declined to fake
+green by deleting live content. Your sweep is what closes the remaining three; PM reconciles at the
+review immediately after.
+
 IF BLOCKED: never set `Role: halt` — only PM does that, and only for a founder question. File the
 blocker addressed to PM in `agent-requests.md` and re-point `## Next Step` to a `Role: pm`
 assessment step.
