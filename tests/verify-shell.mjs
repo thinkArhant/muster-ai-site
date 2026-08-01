@@ -3624,6 +3624,172 @@ try {
   check("landscape phone: the worst narration slot fits its card", landscape.worst.h <= landscape.list + 0.5, `${landscape.worst.slot} sets ${landscape.worst.h}px in a ${landscape.list}px card`);
   writeFileSync(join(ARTIFACTS, "blink-dark-s02-landscape.png"), await page.screenshot());
 
+  /* --- THE RAIL KEEPS THE ACTIVE ENTRY WHOLE.
+     The reader's guarantee is not "the rail scrolls". It is that whenever an
+     entry is the active one, ALL of it is inside the rail's client box — the
+     explanation that just arrived can be read where it arrived, not one slot
+     later. That is a property of the whole chain rather than of one moment, so
+     it is asserted at every slot in SLOT_AT, walked in order, with the chain
+     DRIVEN to each slot instead of sampled off a wall clock: the rail's rest
+     position is a function of where it already was and which entry just became
+     active, so stepping the slots in sequence reproduces a real run exactly and
+     a single seek would not.
+
+     TWO relationships, because containment alone is not the whole guarantee and
+     asserting it alone would have let this defect through a second time.
+
+     1. WHOLE — the active entry's rect is inside the rail's client rect.
+        Measured after `--reveal` settles: the reveal translates a new entry
+        down from its layout box for 350ms, and containment is a property of
+        where the entry comes to rest, not of where it passes through.
+
+     2. ROOM BELOW — the entry rests with at least the reveal's own displacement
+        of rail beneath it. This is the one that names the reader's complaint.
+        An entry whose bottom edge is the rail's bottom edge is contained and
+        still unreadable: it arrives flush at the fold of the scroll window, is
+        clipped for the whole of its own fade-in, and only rises into reading
+        position one slot later. The floor is the reveal displacement itself,
+        MEASURED off an unrevealed entry rather than restated as a number, so it
+        follows the token instead of pinning a copy of it here.
+
+        The end of the rail is its own case, and it is a measured condition
+        rather than an exemption: at maximum scroll there is no rail left below
+        to give, and relationship 1 still binds there. An implementation that
+        tried to buy the exemption by parking at maximum scroll early would fail
+        relationship 1 at every earlier slot, which is why the pair is sound.
+
+     Four viewports: --bp-wide itself (960, where the rail is narrowest, the
+     prose sets tallest and the fit is by far the tightest), the two reading
+     widths, and the landscape phone — the one other place `.narration__list`
+     carries its own overflow. Whether the rail has anything to scroll is
+     measured and printed at each, so a viewport that cannot fail cannot read as
+     a pass it did not earn. --- */
+  const railFollow = {};
+  for (const [w, h, mobile] of [[960, 900, false], [1280, 900, false], [1600, 900, false], [667, 375, true]]) {
+    await page.setViewport({ width: w, height: h, deviceScaleFactor: 1, mobile });
+    await page.goto(PAGE_URL);
+    railFollow[`${w}×${h}`] = await page.eval(`(async () => {
+      const r2 = (n) => Math.round(n * 100) / 100;
+      const rail = document.querySelector(".narration__list");
+      const slots = Object.keys(window.MusterReplay.SLOT_AT);
+      /* Bring the section on screen and let the autoplay gate DELIVER before
+         taking the clock. The gate's observer records land at the end of a
+         frame, so a pause issued in the same task as the scroll is undone by a
+         callback that has not run yet — and the probe then measures a chain
+         that is quietly still running. Once the intersection has settled
+         nothing fires again, and the pause holds for the whole walk. */
+      document.querySelector("#watch-it-ship").scrollIntoView({ behavior: "instant", block: "center" });
+      await new Promise((r) => setTimeout(r, 300));
+      window.MusterReplay.restart();
+      window.MusterReplay.pause();
+      await new Promise((r) => setTimeout(r, 420));
+      const view = rail.clientHeight;
+      const border = parseFloat(getComputedStyle(rail).borderTopWidth);
+      /* The reveal's displacement, measured, not restated: with nothing
+         revealed and the rewind's own transition settled, the first entry
+         carries the full offset and its layout position is the rail's origin.
+         Sampled before the settle this reads a fraction of itself, which would
+         quietly soften every floor below it. */
+      const first = document.querySelector(".narration__entry");
+      const reveal = r2(first.getBoundingClientRect().top
+        - (rail.getBoundingClientRect().top + border) + rail.scrollTop - first.offsetTop);
+      const rows = [];
+      for (const want of slots) {
+        window.MusterReplay.seek(window.MusterReplay.SLOT_AT[want]);
+        await new Promise((r) => setTimeout(r, 420));   /* --reveal, settled */
+        window.MusterReplay.pause();
+        const active = document.querySelector(".narration__entry[data-active]");
+        const a = active.getBoundingClientRect();
+        /* The CLIENT box, composed rather than assumed: the border edge plus
+           the border, for clientHeight. A rect comparison against the border
+           box would silently forgive a border's worth of overflow. */
+        const top = rail.getBoundingClientRect().top + border;
+        const bottom = top + view;
+        const at = Math.round(rail.scrollTop);
+        const end = Math.round(rail.scrollHeight - view);
+        rows.push({
+          want, slot: active.dataset.slot,
+          topInside: r2(a.top - top), bottomOverflow: r2(a.bottom - bottom),
+          clearance: r2(bottom - a.bottom), height: r2(a.height),
+          /* The half-pixel is device-pixel rounding, not slop. scrollHeight is
+             an integer, so a container's maximum scroll can fall a fraction
+             short of its own fractional content height — at the end of the
+             list that leaves the last entry's final leading up to half a pixel
+             past the client box, and no follow rule can buy it back. */
+          scrollTop: at, atEnd: at >= end,
+          full: a.top >= top - 0.5 && a.bottom <= bottom + 0.5,
+          room: bottom - a.bottom >= reveal - 0.5 || at >= end
+        });
+      }
+      /* The reader takes the rail. Nothing in the slot walk above can see the
+         forward-only guard, because the chain's own targets already climb — so
+         it is exercised the only way a reader ever exercises it: scroll the
+         rail ahead of the chain, then let the next slot land on it. The rail
+         must not haul the reader back to the chain's position. */
+      let yank = null;
+      if (rail.scrollHeight > view + 0.5) {
+        window.MusterReplay.restart();
+        window.MusterReplay.pause();
+        window.MusterReplay.seek(window.MusterReplay.SLOT_AT.sp4a);
+        await new Promise((r) => setTimeout(r, 420));
+        rail.scrollTop = rail.scrollHeight - view;
+        const from = Math.round(rail.scrollTop);
+        window.MusterReplay.seek(window.MusterReplay.SLOT_AT.sp4b);
+        await new Promise((r) => setTimeout(r, 60));
+        yank = { from, to: Math.round(rail.scrollTop) };
+      }
+      const entries = [...document.querySelectorAll(".narration__entry")];
+      return { rows, yank, view: r2(view), max: Math.round(rail.scrollHeight - view), reveal,
+        scrolls: rail.scrollHeight > view + 0.5,
+        tallest: r2(Math.max(...entries.map((e) => e.getBoundingClientRect().height))) };
+    })()`);
+  }
+  evidence.s2RailFollow = railFollow;
+  const railViews = Object.entries(railFollow);
+  const railGeometry = railViews.map(([v, m]) =>
+    `${v} rail ${m.view}px${m.scrolls ? ` (scrolls, max ${m.max})` : " (no overflow)"}, reveal drop ${m.reveal}px: ` +
+    m.rows.map((r) => `${r.want} ${r.height}px @${r.scrollTop}${r.atEnd ? "=end" : ""} top+${r.topInside} clear+${r.clearance}`).join(" · ")).join("\n      ");
+  /* The chain really was driven to each slot: ten slots, and the entry the page
+     made active is the one the schedule was asked for. A stray frame of
+     playback between the seek and the measurement would land a later entry here
+     and say so, rather than measuring the wrong slot quietly. */
+  const railDriven = railViews.every(([, m]) => m.rows.length === 10 && m.rows.every((r) => r.slot === r.want));
+  /* Non-vacuity: some rail has overflow to scroll, and some slot needed the
+     rail to move. Containment on a rail that never scrolls is not evidence of
+     anything. */
+  const railLive = railViews.some(([, m]) => m.scrolls) && railViews.some(([, m]) => m.rows.some((r) => r.scrollTop > 0));
+  const railBad = railViews.flatMap(([v, m]) =>
+    m.rows.filter((r) => !r.full).map((r) => `${v} ${r.want}: top ${r.topInside}px, bottom overflow ${r.bottomOverflow}px at scrollTop ${r.scrollTop}`));
+  check("§2 the narration rail keeps the ACTIVE entry whole, at every slot",
+    railBad.length === 0 && railDriven && railLive,
+    railBad.length ? railBad.join(" · ") : railGeometry);
+  const railFlush = railViews.flatMap(([v, m]) =>
+    m.rows.filter((r) => !r.room).map((r) => `${v} ${r.want}: ${r.clearance}px of rail below it, needs ${m.reveal}px, at scrollTop ${r.scrollTop} of ${m.max}`));
+  check("§2 the active entry arrives with rail beneath it, never flush on the fold",
+    railFlush.length === 0 && railDriven && railLive &&
+      /* The end-of-rail case is allowed to exist, not allowed to swallow the
+         check: at least one viewport must carry slots that are NOT at maximum
+         scroll, or this measures nothing. */
+      railViews.some(([, m]) => m.rows.filter((r) => !r.atEnd).length >= 5),
+    railFlush.length ? `${railFlush.length} of ${railViews.reduce((n, [, m]) => n + m.rows.length, 0)} slots arrive flush — ${railFlush.join(" · ")}` : railGeometry);
+  /* The other half of the follow rule, and the half the slot walk is blind to:
+     the rail moves forward or not at all. A reader who has scrolled the rail
+     ahead of the chain to read on keeps their position when the next slot
+     arrives — a rail that could travel backwards would haul them off the line
+     they were reading, every few seconds, for the rest of the playback. */
+  const railYank = railViews.filter(([, m]) => m.yank);
+  check("§2 the narration rail never scrolls backwards under a reader",
+    railYank.length > 0 && railYank.every(([, m]) => m.yank.to >= m.yank.from && m.yank.from > 0),
+    railYank.map(([v, m]) => `${v}: reader at ${m.yank.from}, next slot leaves it at ${m.yank.to}`).join(" · ") || "no rail scrolled");
+  /* Why containment is reachable at all, stated as its own relationship: no
+     entry may set taller than the rail that has to hold it. At --bp-wide the
+     margin is thinnest, and if narration ever grows past it no follow rule can
+     honour the guarantee above — this check names that cause instead of leaving
+     the one above to fail mysteriously. */
+  check("§2 no narration entry sets taller than the rail that must hold it",
+    railViews.every(([, m]) => m.tallest <= m.view + 0.5),
+    railViews.map(([v, m]) => `${v}: tallest entry ${m.tallest}px in a ${m.view}px rail (${Math.round((m.view - m.tallest) * 100) / 100}px spare)`).join(" · "));
+
   /* --- REPLAY RETURNS BOTH PANES TO THE TOP.
      Each layer carries its own scroll region and they are not the same one at
      every viewport: the narration rail scrolls on a desktop as entries

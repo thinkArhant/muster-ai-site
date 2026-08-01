@@ -107,6 +107,48 @@
     log.scrollTop = Math.max(0, Math.min(at, log.scrollHeight - log.clientHeight));
   }
 
+  /* The rail pages forward. Entries accumulate in it, so the reader's
+     guarantee is not that the rail moves — it is that whenever an entry is the
+     active one, the whole of it is inside the rail, with rail beneath it. So
+     the rail holds still while the newest entry is already whole inside it,
+     and when the newest entry would fall outside it moves ONCE, landing that
+     entry's top on the rail's top. The entry then has the rail's full height
+     below it to set in.
+
+     Landing the top rather than the bottom is the whole difference. Bringing an
+     entry's BOTTOM to the rail's bottom also contains it, arithmetically, and
+     is what an implementation reaches for first — but it delivers every new
+     explanation flush against the fold of the scroll window, clipped for the
+     length of its own reveal and only rising into reading position one slot
+     later. Landing the top also means the room the reader is given is the room
+     the entry is about to need, which is the reason a reader scrolls at all.
+
+     Positions come from offsetTop and offsetHeight, which the reveal's 4px rise
+     does not move: a decision taken from the rendered rect would page forward
+     early, on a transform that is about to disappear, and stay one entry ahead
+     for the rest of the chain.
+
+     Forward only, and deliberately. `Math.max` is what makes the rail monotonic
+     for a whole run: a rail that could move backwards would yank a reader who
+     had scrolled ahead of the chain to read on, every few seconds, for the rest
+     of the playback. The cost is stated rather than hidden — a reader who
+     scrolls the rail forward past the chain keeps their position, and the
+     guarantee above is a guarantee about playback, not about a rail the reader
+     is driving themselves.
+
+     The end of the rail is its own case and needs no branch: clamping the
+     target to the rail's own maximum means the last entries, whose tops lie
+     past anything the rail can scroll to, come to rest whole against the end of
+     the list instead of demanding a position that does not exist.
+
+     Instant position change, never an animated scroll (§5.1). */
+  function followRail(active) {
+    const view = rail.clientHeight;
+    const top = active.offsetTop;
+    if (top >= rail.scrollTop && top + active.offsetHeight <= rail.scrollTop + view) return;
+    rail.scrollTop = Math.max(rail.scrollTop, Math.min(top, rail.scrollHeight - view));
+  }
+
   function revealLine(i, at) {
     const line = lines[i];
     if (line.hasAttribute("data-revealed")) return;
@@ -135,10 +177,7 @@
       if (entry === active) entry.setAttribute("data-active", "");
       else entry.removeAttribute("data-active");
     }
-    if (active && wide.matches) {
-      const railTop = active.offsetTop + active.offsetHeight - rail.clientHeight;
-      if (railTop > rail.scrollTop) rail.scrollTop = railTop;
-    }
+    if (active && wide.matches) followRail(active);
 
     let beat = 1;
     BEAT_AT.forEach((at, i) => {
@@ -337,6 +376,19 @@
     });
   });
 
+  /* Chain time, set directly, with the clock held. Reveal is already driven by
+     elapsed time rather than by a chain of timers, so positioning the chain is
+     the same code path playback uses — and a harness that needs the state at a
+     named slot can have exactly that state instead of racing a wall clock to
+     catch it. Stepping slot by slot reproduces a real run, because everything
+     the rail does is a function of the previous position and the new active
+     entry. */
+  function seek(ms) {
+    pause();
+    elapsed = Math.max(0, Math.min(ms, CHAIN));
+    apply(elapsed);
+  }
+
   /* Test surface: the harness asserts measured reveal offsets against §5.1
      rather than trusting the schedule it was given. */
   window.MusterReplay = {
@@ -346,6 +398,7 @@
     marks,
     play,
     pause,
+    seek,
     finish,
     restart,
     state: () => replay.dataset.state,
