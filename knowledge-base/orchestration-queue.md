@@ -70,6 +70,21 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
   builds only the picked form; the losing form is deleted from `section-01-hero.md` §7.1 in the
   same commit.
 
+- [2026-07-31] [UI/UX]: **The ground texture — one pick, on one image.** Open
+  `samples/ground-texture-renders/CONTACT-SHEET.png`. **Asked, one thing**: the grain, **CURRENT**
+  or **STRONGER**. Both are shown behind real content — §2's terminal, §5's cards, §3's reading
+  column and the phone — at 1:1, never resized, because scaling a crop of a per-pixel noise shows a
+  texture neither one has. **UI/UX recommends STRONGER.** The founder's premise is confirmed and is
+  worse than stated: on the light ground the current grain spans **2.0 levels of 255**, which is one
+  step of 8-bit quantisation — not faint, absent. STRONGER takes that to 5.0 and the dark ground from
+  7.5 to 16.3, and every contrast pair stays above 4.5:1 in both themes (dark 4.92, light 4.71).
+  **The light vignette is verified at its 5% cap and is untouched in both forms**, as is the dark
+  vignette at 16%. The one real cost, stated rather than buried: on a near-black ground making a
+  grain visible *is* lightening it, and the dark ground's rendered luminance goes 21.9 → 25.6 of 255.
+  Developer builds only the picked form; the losing form is deleted from `page-shell.md` §5.1 in the
+  same commit, and one hard-coded harness assertion (`grain peak alpha capped at 8%`) is re-based
+  either way. See HO-046.
+
 - [2026-07-31] [Content]: **VERIFY.md now publishes the site's economics — do the figures get a
   fresh read before launch?** The section quotes the committed record ($594 · 51 step-sessions ·
   ~27.3 driver-hours · $21.8/hr) and labels the whole thing a floor. But the tree already carries
@@ -193,6 +208,25 @@ them; they are NOT queue steps and add no scope):
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-31 — Founder-directed round: UI/UX measures the ground texture and renders the pick
+  (HO-046). **The founder's premise is confirmed and understated** — on the light ground the shipped
+  grain spans **2.0 levels of 255**, one step of 8-bit quantisation, so it is absent rather than
+  faint; dark spans 7.5. STRONGER takes them to **5.0 and 16.3** by turning the pigment two-sided
+  (`feFuncR/G/B linear`), lifting the alpha curve, and raising dark opacity 0.08 → 0.11 — the light
+  theme's opacity does **not** move, measured: doubling it buys +23% where the pigment buys +150%.
+  **Both vignettes verified untouched, light at its 5% cap.** Every composited pair holds above
+  4.5:1 at the worst pixel with the vignette at its darkest (dark 4.92, light 4.71 against 4.5).
+  Runners on the proposed state, serial: sweep **45/45**, audit **108/108**, verify-shell
+  **306/307** with exactly one red — a hard-coded `--grain-alpha === 0.08`, to be re-based with the
+  pick. **Two harness findings from running rather than reading**: no contrast probe on this page can
+  see the texture at all (both walk ancestors for a `background-color`; `.texture` is a fixed
+  sibling), and `bare ground renders at the locked value` survived only by *relocating* its patch —
+  2.16 clear of a 2.5 tolerance. WebKit isolated as the gate and it applies the new primitives
+  (pigment alone: spread 5.70 → 10.00); the first WebKit answer was an instrument artefact from
+  `qlmanage` downscaling a 3000px document into its fixed square. Four levers rejected on
+  measurement, including the most efficient one. No shipped file touched.
+  **Awaiting the founder's pick, then Developer builds one form and deletes the other.**
 
 - 2026-07-31 — Developer closes the founder's §2 rail defect (HO-045, `7c574b9`). The rail put each
   new entry's **bottom** on its own bottom edge, so every explanation arrived flush on the fold —
@@ -328,22 +362,3 @@ them; they are NOT queue steps and add no scope):
   needs the room. Suite 280/282 with both reds designed (copy leading the build; HO-040 swaps the
   strings); audit 108/108; sweep 42/42. **Awaiting UI/UX (HO-039 consumes the candidates and the
   §6 line) and PM (rules the memo) at their steps.**
-
-- 2026-07-30 — Step: PM fix-round review and the Gate B re-gate (DEC-058). **All four handoffs
-  accepted with no revision**, and the acceptance is re-derived rather than read: all three runners
-  re-run cold by PM on the shipped tree (`scripts/test.sh` GREEN both engines 282/282 + 27/27, audit
-  exit 0 at 108/108, sweep exit 0 at 42/42), every changed state rendered and looked at — the
-  formation at 1280/1440/375, §4's cut in Blink *and* WebKit, the footer in both engines, the phone
-  stack — and the alignment re-measured on the shipped build rather than on the proposal (hub centre
-  − axis **0.0px**, one rail number per width). **Two violations planted by PM and watched go red**,
-  tree reverted clean: a one-word drift in the footer's team line turned exactly one check red
-  printing `team line equal: false`, and zeroing `--track-bleed` turned two red printing *"ground
-  between the track's end and the screen: 128px"* — the founder's judged dead strip, reproduced by
-  the harness as a measurement rather than a claim. Participation re-derived from `git log` (pm 49 ·
-  developer 14 · ui-ux 10 · qa 8 · content 6 · marketing/legal/research 0), the overnight fact
-  confirmed as mechanism with no wall-clock anywhere in the shipped set, and no email in any shipped
-  file. **DEC-058 rules OBS-016 and OBS-017 together**: both are specs describing a build that moved
-  — the page is right, the files are amended, neither is a launch blocker. `muster-requests-lint.sh`
-  back to green (360 active lines to 6). **The re-gate is live: the founder's phone is the only
-  instrument left, and one of its three checks closes a hard launch blocker.**
-

@@ -10,6 +10,182 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-046 — UI/UX: the ground texture is measured, and a stronger grain is rendered beside the current one for the founder's pick
+
+**From**: UI/UX · **Reviewers**: Founder (`pending` — the pick),
+Developer (`pending` — builds the picked form; exact delta in §5 below),
+PM (`pending` — one spec-level finding to rule, §7)
+**Status**: open · **Filed**: 2026-07-31
+
+**Contact sheet**: `samples/ground-texture-renders/CONTACT-SHEET.png`
+**No shipped file was touched.** The proposals are generated from `index.html`; the runners were run
+against a temporarily-applied delta and the tree was reverted before this handoff was filed.
+
+#### 1. The ask, in one line each
+
+- **CURRENT** — the grain exactly as it ships. One pale grey at mostly very low alpha.
+- **STRONGER** — the pigment goes two-sided, more of the tile carries real alpha, and the dark
+  theme's opacity rises 0.08 → 0.11. The light theme's opacity does not move.
+
+**UI/UX recommends STRONGER.** It is a recommendation, not a ruling.
+
+#### 2. The founder's premise is confirmed on measurement, and is worse on the light theme
+
+Spread of a bare-ground patch, per CSS pixel, Blink at a 2× raster, vignette off so the number is the
+grain alone:
+
+| | dark | light |
+|---|---|---|
+| grain off | 0.00 | 0.00 |
+| **current** | **1.12** (span 7.5 levels of 255) | **0.26** (span 2.0) |
+| **stronger** | **2.49** (span 16.3) | **0.65** (span 5.0) |
+
+A span of 2.0 levels is one step of 8-bit quantisation. On the light ground the current grain is not
+faint, it is absent. "Almost not visible" understates it.
+
+#### 3. The light vignette is at its cap, and nothing in this round goes near it
+
+Verified before anything was changed: `--vignette-alpha` resolves to **0.05** in the light theme and
+**0.16** in the dark, `verify-shell.mjs` asserts both, and the audit independently re-derives that 5%
+is load-bearing (16% over the light ground puts `--muted` at ≈3.6:1). **Neither proposal touches
+either vignette value, and the vignette's markup and CSS are untouched in both.**
+
+#### 4. Contrast, before and after, both themes
+
+Worst single composited pixel of a bare-ground patch, vignette at its darkest, per-pixel WCAG:
+
+| Pair | dark current | dark stronger | light current | light stronger |
+|---|---|---|---|---|
+| `--ink` on ground | 13.55 | 12.61 | 11.42 | 11.14 |
+| `--muted` on ground | 5.29 | **4.92** | 4.83 | **4.71** |
+| ground luminance (of 255) | 21.9 | 25.6 | 214.9 | 214.8 |
+
+Floor 4.5:1. Margin after the change: **0.42 dark, 0.21 light**. Only ground-level text is exposed at
+all — every card is an opaque `--surface` with the texture behind it at `z-index: -1`, so no card
+text moves by any amount in either form.
+
+#### 5. THE EXACT DELTA TO BUILD — three lines, two files
+
+**`styles/base.css`**, `.texture__grain`'s `background-image`. Inside the existing
+`feComponentTransfer`, before the existing `feFuncA`, insert three primitives, and change the
+`feFuncA` exponent from `2.6` to `1.5`. As URL-encoded text, the substring
+
+```
+%3CfeComponentTransfer%3E%3CfeFuncA type='gamma' exponent='2.6' amplitude='1' offset='0'/%3E%3C/feComponentTransfer%3E
+```
+
+becomes
+
+```
+%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='3' intercept='-1'/%3E%3CfeFuncG type='linear' slope='3' intercept='-1'/%3E%3CfeFuncB type='linear' slope='3' intercept='-1'/%3E%3CfeFuncA type='gamma' exponent='1.5' amplitude='1' offset='0'/%3E%3C/feComponentTransfer%3E
+```
+
+Nothing else in the data URI changes — same `baseFrequency`, same `numOctaves`, same
+`stitchTiles`, same `saturate 0`, same 140-unit tile, same `background-size: 196px 196px`.
+
+**`styles/tokens.css`**, both dark declarations of `--grain-alpha` — the one in `:root` and the one
+in `:root[data-theme="dark"]`:
+
+```
+--grain-alpha: 0.08;   →   --grain-alpha: 0.11;
+```
+
+**The two light declarations stay at `0.04`, and all four `--vignette-alpha` declarations are
+untouched.** If CURRENT is picked, the delta is: nothing in the styles, and delete the STRONGER
+column from `page-shell.md` §5.1. Either way the losing form leaves the spec in the same commit.
+
+The layer stays generated and inert — no image file, no `url()` that fetches, no raster. The
+`verify-shell` network check still enumerates exactly `data:uri(grain)` and no external load.
+
+#### 6. Runners against the proposed state, run serially
+
+| Runner | Baseline | Proposed |
+|---|---|---|
+| `qa-fullpage-sweep.mjs` | 45/45 | **45/45** |
+| `qa-independent-audit.mjs` | 108/108 | **108/108** |
+| `verify-shell.mjs` | 307/307 | **306/307** |
+
+**Exactly one red, and it must be re-based with the pick**: `grain peak alpha capped at 8% (dark)`,
+which asserts the literal `0.08` — the value-not-relationship shape this project has ruled against.
+Re-base it to the picked value, or better, to the relationship it exists to protect: the dark alpha
+is the larger of the two, both stay below the point where `--muted` on ground composites under
+4.5:1, and the light one never exceeds the dark one.
+
+**Two couplings found by running, not by reading, and both are worth a check each:**
+
+- `bare ground renders at the locked value` **passed, and its margin is the finding**. It asserts a
+  ground patch within ±2.5 of `hexLuminance('#13140D')` = 19.28. Baseline: patch at `0,0`, mean
+  20.12 — 0.84 clear. Proposed: patch at `320,0`, mean 21.445 — **2.16 clear of a 2.5 tolerance**.
+  It did not go red because `findGroundPatch` *relocated*: it scans until some patch fits, and the
+  vignette's own darkening cancels part of the grain's lift somewhere. A stronger grain than this
+  one either turns it red or, worse, keeps it green by finding an ever-more-vignetted patch. It is a
+  check that can pass by moving.
+- **No contrast probe on this page can see the texture at all.** Both the sweep's and the audit's
+  resolve a background by walking ancestors for a `background-color`; `.texture` is a fixed
+  *sibling* of the content. The sweep prints `#hero .formation__caption 5.13:1` for the pair this
+  round measures at **4.83** composited today and 4.71 proposed. Nothing is wrong on the page and
+  no floor is breached — but a texture change can move real contrast while every runner stays green,
+  and today nothing asserts the composited floor. `page-shell.md` §5 now names the instrument.
+
+#### 7. Cross-engine: WebKit renders the pigment, and the first WebKit answer was wrong
+
+The pigment is three added SVG filter primitives, so WebKit was the gate. Isolated rather than
+assumed — same tile, same alpha curve, same opacity, pigment change alone, over mid-grey:
+spread **5.70 → 10.00**, range **127–180 → 55–203**. WebKit applies `feFuncR/G/B linear`.
+
+On the page, bare ground: dark **×2.16** (Blink ×2.22), light **×1.42**, §5's surface **×2.19**.
+
+**The first WebKit pass reported the light change as ×1.01 and was an instrument artefact.**
+`qlmanage` scales a whole document into a fixed 1280² frame; the page is ~3000px tall, so it was
+downscaled ~0.43 and the downscale box-averaged the noise back toward flat. Pinning the document's
+height near the frame's fixed it. Any future texture evidence from `qlmanage` has to do the same.
+`qlmanage` also cannot be given a viewport, so **no WebKit evidence exists at any phone width in
+this round** — the sheet's phone pair is Blink's and is labelled so.
+
+#### 8. What was rejected, and on what number
+
+- **Opacity alone** (0.08 → 0.16): reaches spread 2.22 dark but costs `--muted` 0.41 against the
+  0.16 the pigment route costs for comparable spread, and does almost nothing on light (+23% for a
+  doubling — the light ground sits only ~28 levels from the pigment's grey, so there is little to
+  scale).
+- **The alpha curve alone** (gamma 2.6 → 1.5): +13% of spread for **+2.2 of ground luminance** —
+  the worst trade of anything tested. It is in the recommendation only because it is what lifts the
+  light theme, where the pigment change alone leaves too little.
+- **A coarser tile** (196px → 294px): +13% of spread at zero per-pixel cost, which is the most
+  efficient lever measured — and rejected anyway, because its features then grow past a glyph stem.
+  A grain a whole stem can sit inside stops averaging under text.
+- **Raising the light theme's opacity** to 0.05: +23% of spread for a third of the light theme's
+  entire remaining contrast margin (4.71 → 4.66). The light margin is the scarcest number on the
+  page.
+- **`mix-blend-mode: overlay`** for a free bipolar pigment: on a backdrop at luminance 0.007,
+  overlay resolves to `2·b·s` ≈ 0.014 — it does essentially nothing on this ground. Not rendered;
+  rejected on the blend formula.
+- **Two tiles, one per theme**, which would buy the light gain without the dark theme's luminance
+  lift: rejected on simplicity. It doubles the surface area of this project's known cross-engine
+  failure class to buy one number.
+
+#### 9. Two findings for PM to rule, neither a launch blocker
+
+- **§5's old contrast rule was unmeetable as written.** "Texture never lifts a stated contrast pair
+  below its table value" cannot be satisfied by any texture: the table values are the untextured
+  pairs, and the shipped grain and vignette both move them today. Rewritten in `page-shell.md` §5 as
+  a floor — 4.5:1 at the worst single pixel, vignette at its darkest, both themes — which is
+  checkable and which the shipped page passes.
+- **`--grain-alpha`'s name overstates what it is.** It is the layer's opacity; the tile's own
+  per-pixel alpha peaks at 0.78, so the effective peak is 0.78 × the token. `verify-shell`'s check
+  is titled `grain peak alpha capped at 8%` and reads the token, so it names a quantity it does not
+  measure. Stated in §5.1; no rename proposed, since a rename costs more than it buys.
+
+#### 10. Apple-quality bar
+
+*Would Apple ship this?* — Yes, for the recommended form. The change is three filter primitives and
+one token; it adds no asset, no request, no motion, no markup and no complexity to reason about; it
+is measured in both engines and both themes; and it is the smallest change that makes the ground
+read as a ground. The honest reservation is on the sheet rather than hidden: on the light theme even
+the stronger grain is a 5-level span, and it is capped there on purpose because the light ground has
+a third of the dark theme's headroom. A texture that reads equally on both themes is not available
+inside the contrast budget, and the budget outranks the texture.
+
 ### HO-045 — Developer: §2's narration arrives readable — the rail pages forward instead of pinning to the fold
 
 **From**: Developer · **Reviewers**: PM (`pending` — one founder-reported defect, closed),

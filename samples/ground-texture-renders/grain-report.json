@@ -1,0 +1,335 @@
+{
+  "engine": "Blink (headless Chrome, CDP), 1280×900, deviceScaleFactor 1",
+  "note": "Ratios are per-PIXEL WCAG against bare ground with the texture composited on it. No shipped runner measures this: both read background-color off the computed style, and .texture is a fixed sibling of the content, not an ancestor.",
+  "noise": {
+    "shipped tile (gamma 2.6)": {
+      "meanAlpha": 0.182,
+      "p50Alpha": 0.161,
+      "p99Alpha": 0.51,
+      "peakAlpha": 0.78,
+      "greyP01": 146.63,
+      "greyMedian": 187.59,
+      "greyP99": 219.3
+    },
+    "gamma 1.5": {
+      "meanAlpha": 0.36,
+      "p50Alpha": 0.349,
+      "p99Alpha": 0.678,
+      "peakAlpha": 0.867,
+      "greyP01": 147.63,
+      "greyMedian": 187.5,
+      "greyP99": 218.57
+    },
+    "bipolar (stretch 3 + gamma 1.5)": {
+      "meanAlpha": 0.36,
+      "p50Alpha": 0.349,
+      "p99Alpha": 0.678,
+      "peakAlpha": 0.867,
+      "greyP01": 0,
+      "greyMedian": 187.59,
+      "greyP99": 255
+    }
+  },
+  "variants": {
+    "shipped": {
+      "dark": {
+        "at": "0,48",
+        "mean": 20.57,
+        "stdDev": 1.47,
+        "min": 17.35,
+        "max": 28.28,
+        "p1": 18.28,
+        "p99": 25.35,
+        "inkWorst": 13.17,
+        "inkMean": 14.21,
+        "mutedWorst": 5.14,
+        "mutedMean": 5.55,
+        "dcShift": 2.3
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 210.8,
+        "stdDev": 0.76,
+        "min": 209.13,
+        "max": 212.41,
+        "p1": 209.41,
+        "p99": 212.34,
+        "inkWorst": 11.43,
+        "inkMean": 11.62,
+        "mutedWorst": 4.83,
+        "mutedMean": 4.91,
+        "dcShift": -0.38
+      }
+    },
+    "grainOff": {
+      "dark": {
+        "at": "0,48",
+        "mean": 18.27,
+        "stdDev": 0.09,
+        "min": 17.57,
+        "max": 18.28,
+        "p1": 17.57,
+        "p99": 18.28,
+        "inkWorst": 14.49,
+        "inkMean": 14.49,
+        "mutedWorst": 5.66,
+        "mutedMean": 5.66,
+        "dcShift": 0
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 211.18,
+        "stdDev": 0.62,
+        "min": 210.34,
+        "max": 212.34,
+        "p1": 210.34,
+        "p99": 212.34,
+        "inkWorst": 11.57,
+        "inkMean": 11.67,
+        "mutedWorst": 4.89,
+        "mutedMean": 4.93,
+        "dcShift": 0
+      }
+    },
+    "alpha12": {
+      "dark": {
+        "at": "0,48",
+        "mean": 21.71,
+        "stdDev": 2.17,
+        "min": 17.57,
+        "max": 32.35,
+        "p1": 18.28,
+        "p99": 28.35,
+        "inkWorst": 12.58,
+        "inkMean": 14.06,
+        "mutedWorst": 4.91,
+        "mutedMean": 5.49,
+        "dcShift": 3.44
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 210.47,
+        "stdDev": 0.81,
+        "min": 206.48,
+        "max": 212.48,
+        "p1": 208.41,
+        "p99": 212.34,
+        "inkWorst": 11.13,
+        "inkMean": 11.58,
+        "mutedWorst": 4.7,
+        "mutedMean": 4.89,
+        "dcShift": -0.71
+      }
+    },
+    "alpha16": {
+      "dark": {
+        "at": "0,48",
+        "mean": 22.85,
+        "stdDev": 2.85,
+        "min": 17.35,
+        "max": 37.35,
+        "p1": 18.35,
+        "p99": 31.35,
+        "inkWorst": 11.83,
+        "inkMean": 13.91,
+        "mutedWorst": 4.62,
+        "mutedMean": 5.43,
+        "dcShift": 4.58
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 210.32,
+        "stdDev": 0.92,
+        "min": 205.2,
+        "max": 212.48,
+        "p1": 207.48,
+        "p99": 212.34,
+        "inkWorst": 10.99,
+        "inkMean": 11.57,
+        "mutedWorst": 4.64,
+        "mutedMean": 4.89,
+        "dcShift": -0.86
+      }
+    },
+    "gamma16": {
+      "dark": {
+        "at": "0,48",
+        "mean": 22.49,
+        "stdDev": 1.76,
+        "min": 18.28,
+        "max": 29.35,
+        "p1": 19.28,
+        "p99": 27.35,
+        "inkWorst": 13.02,
+        "inkMean": 13.97,
+        "mutedWorst": 5.08,
+        "mutedMean": 5.45,
+        "dcShift": 4.22
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 210.6,
+        "stdDev": 0.7,
+        "min": 208.41,
+        "max": 212.41,
+        "p1": 209.34,
+        "p99": 212.41,
+        "inkWorst": 11.35,
+        "inkMean": 11.6,
+        "mutedWorst": 4.79,
+        "mutedMean": 4.9,
+        "dcShift": -0.58
+      }
+    },
+    "gamma12": {
+      "dark": {
+        "at": "0,48",
+        "mean": 23.77,
+        "stdDev": 1.77,
+        "min": 18.57,
+        "max": 30.35,
+        "p1": 20.28,
+        "p99": 28.35,
+        "inkWorst": 12.88,
+        "inkMean": 13.8,
+        "mutedWorst": 5.03,
+        "mutedMean": 5.39,
+        "dcShift": 5.5
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 210.56,
+        "stdDev": 0.68,
+        "min": 208.41,
+        "max": 213.13,
+        "p1": 209.34,
+        "p99": 212.34,
+        "inkWorst": 11.35,
+        "inkMean": 11.59,
+        "mutedWorst": 4.79,
+        "mutedMean": 4.9,
+        "dcShift": -0.62
+      }
+    },
+    "stretch26": {
+      "dark": {
+        "at": "0,48",
+        "mean": 20.46,
+        "stdDev": 1.69,
+        "min": 17.35,
+        "max": 29.28,
+        "p1": 17.35,
+        "p99": 25.35,
+        "inkWorst": 13.03,
+        "inkMean": 14.22,
+        "mutedWorst": 5.09,
+        "mutedMean": 5.55,
+        "dcShift": 2.19
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 210.74,
+        "stdDev": 0.86,
+        "min": 205.41,
+        "max": 213.13,
+        "p1": 208.41,
+        "p99": 212.41,
+        "inkWorst": 11.01,
+        "inkMean": 11.61,
+        "mutedWorst": 4.65,
+        "mutedMean": 4.91,
+        "dcShift": -0.44
+      }
+    },
+    "bipolar": {
+      "dark": {
+        "at": "0,48",
+        "mean": 22.53,
+        "stdDev": 2.34,
+        "min": 16.57,
+        "max": 31.35,
+        "p1": 17.35,
+        "p99": 28.35,
+        "inkWorst": 12.73,
+        "inkMean": 13.96,
+        "mutedWorst": 4.97,
+        "mutedMean": 5.45,
+        "dcShift": 4.26
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 210.48,
+        "stdDev": 1.05,
+        "min": 204.41,
+        "max": 213.34,
+        "p1": 207.34,
+        "p99": 212.41,
+        "inkWorst": 10.9,
+        "inkMean": 11.58,
+        "mutedWorst": 4.6,
+        "mutedMean": 4.89,
+        "dcShift": -0.7
+      }
+    },
+    "bipolarA12": {
+      "dark": {
+        "at": "0,48",
+        "mean": 24.7,
+        "stdDev": 3.4,
+        "min": 16.35,
+        "max": 37.35,
+        "p1": 17.35,
+        "p99": 33.35,
+        "inkWorst": 11.83,
+        "inkMean": 13.66,
+        "mutedWorst": 4.62,
+        "mutedMean": 5.33,
+        "dcShift": 6.43
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 209.62,
+        "stdDev": 2.58,
+        "min": 192.48,
+        "max": 215.48,
+        "p1": 200.41,
+        "p99": 214.2,
+        "inkWorst": 9.63,
+        "inkMean": 11.49,
+        "mutedWorst": 4.07,
+        "mutedMean": 4.85,
+        "dcShift": -1.56
+      }
+    },
+    "coarse": {
+      "dark": {
+        "at": "0,48",
+        "mean": 20.57,
+        "stdDev": 1.45,
+        "min": 17.35,
+        "max": 27.35,
+        "p1": 18.28,
+        "p99": 25.28,
+        "inkWorst": 13.31,
+        "inkMean": 14.21,
+        "mutedWorst": 5.2,
+        "mutedMean": 5.55,
+        "dcShift": 2.3
+      },
+      "light": {
+        "at": "0,48",
+        "mean": 210.79,
+        "stdDev": 0.76,
+        "min": 208.41,
+        "max": 212.41,
+        "p1": 209.41,
+        "p99": 212.34,
+        "inkWorst": 11.35,
+        "inkMean": 11.62,
+        "mutedWorst": 4.79,
+        "mutedMean": 4.91,
+        "dcShift": -0.39
+      }
+    }
+  }
+}

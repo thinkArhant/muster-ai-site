@@ -1,0 +1,1010 @@
+{
+  "engine": "Blink (headless Chrome, CDP), 1280×900",
+  "unit": "spread and luminance per CSS pixel; the 2× render is box-averaged 2×2 first",
+  "patch": {
+    "1x": {
+      "dark": {
+        "x": 0,
+        "y": 0,
+        "cssSize": 96
+      },
+      "light": {
+        "x": 0,
+        "y": 0,
+        "cssSize": 96
+      }
+    },
+    "2x": {
+      "dark": {
+        "x": 0,
+        "y": 48,
+        "cssSize": 96
+      },
+      "light": {
+        "x": 0,
+        "y": 48,
+        "cssSize": 96
+      }
+    }
+  },
+  "spread": {
+    "1x": {
+      "off": {
+        "dark": {
+          "mean": 19.55,
+          "sd": 2.65,
+          "min": 19.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.33,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.6
+        },
+        "light": {
+          "mean": 215.01,
+          "sd": 3.16,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 12.12,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.12
+        }
+      },
+      "shipped": {
+        "dark": {
+          "mean": 20.87,
+          "sd": 3.03,
+          "min": 19.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.17,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.53
+        },
+        "light": {
+          "mean": 214.82,
+          "sd": 3.16,
+          "min": 184.26,
+          "max": 216.34,
+          "inkWorst": 8.82,
+          "inkMean": 12.09,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.11
+        }
+      },
+      "scale294": {
+        "dark": {
+          "mean": 20.87,
+          "sd": 3.03,
+          "min": 19.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.17,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.53
+        },
+        "light": {
+          "mean": 214.81,
+          "sd": 3.16,
+          "min": 184.26,
+          "max": 216.34,
+          "inkWorst": 8.82,
+          "inkMean": 12.09,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.11
+        }
+      },
+      "a12": {
+        "dark": {
+          "mean": 21.46,
+          "sd": 3.47,
+          "min": 19.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.09,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.5
+        },
+        "light": {
+          "mean": 214.8,
+          "sd": 3.16,
+          "min": 184.26,
+          "max": 216.34,
+          "inkWorst": 8.82,
+          "inkMean": 12.09,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.11
+        }
+      },
+      "a16": {
+        "dark": {
+          "mean": 22.04,
+          "sd": 4.03,
+          "min": 19.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.01,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.47
+        },
+        "light": {
+          "mean": 214.78,
+          "sd": 3.16,
+          "min": 184.26,
+          "max": 216.34,
+          "inkWorst": 8.82,
+          "inkMean": 12.09,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.11
+        }
+      },
+      "gamma15": {
+        "dark": {
+          "mean": 21.96,
+          "sd": 3.6,
+          "min": 19.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.02,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.48
+        },
+        "light": {
+          "mean": 214.8,
+          "sd": 3.16,
+          "min": 184.26,
+          "max": 216.41,
+          "inkWorst": 8.82,
+          "inkMean": 12.09,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.11
+        }
+      },
+      "stretch3": {
+        "dark": {
+          "mean": 20.82,
+          "sd": 3.07,
+          "min": 18.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.17,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.53
+        },
+        "light": {
+          "mean": 214.79,
+          "sd": 3.17,
+          "min": 184.26,
+          "max": 216.34,
+          "inkWorst": 8.82,
+          "inkMean": 12.09,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.11
+        }
+      },
+      "bipolar": {
+        "dark": {
+          "mean": 21.85,
+          "sd": 3.7,
+          "min": 18.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.04,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.48
+        },
+        "light": {
+          "mean": 214.75,
+          "sd": 3.21,
+          "min": 184.26,
+          "max": 216.41,
+          "inkWorst": 8.82,
+          "inkMean": 12.09,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.11
+        }
+      },
+      "PROPOSED": {
+        "dark": {
+          "mean": 22.7,
+          "sd": 4.55,
+          "min": 18.28,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 13.92,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.43
+        },
+        "light": {
+          "mean": 214.72,
+          "sd": 3.24,
+          "min": 184.26,
+          "max": 217.13,
+          "inkWorst": 8.82,
+          "inkMean": 12.08,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.1
+        }
+      },
+      "proposedFine": {
+        "dark": {
+          "mean": 22.7,
+          "sd": 4.55,
+          "min": 17.57,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 13.92,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.43
+        },
+        "light": {
+          "mean": 214.73,
+          "sd": 3.24,
+          "min": 184.26,
+          "max": 216.41,
+          "inkWorst": 8.82,
+          "inkMean": 12.08,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.1
+        }
+      },
+      "hotter": {
+        "dark": {
+          "mean": 24.17,
+          "sd": 6.12,
+          "min": 17.35,
+          "max": 48.28,
+          "inkWorst": 10.19,
+          "inkMean": 13.71,
+          "mutedWorst": 3.98,
+          "mutedMean": 5.35
+        },
+        "light": {
+          "mean": 214.51,
+          "sd": 3.36,
+          "min": 184.26,
+          "max": 217.48,
+          "inkWorst": 8.82,
+          "inkMean": 12.06,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.09
+        }
+      }
+    },
+    "2x": {
+      "off": {
+        "dark": {
+          "mean": 19.28,
+          "sd": 0,
+          "min": 19.28,
+          "max": 19.28,
+          "inkWorst": 14.37,
+          "inkMean": 14.37,
+          "mutedWorst": 5.61,
+          "mutedMean": 5.61
+        },
+        "light": {
+          "mean": 215.34,
+          "sd": 0,
+          "min": 215.34,
+          "max": 215.34,
+          "inkWorst": 12.15,
+          "inkMean": 12.15,
+          "mutedWorst": 5.13,
+          "mutedMean": 5.13
+        }
+      },
+      "shipped": {
+        "dark": {
+          "mean": 21.91,
+          "sd": 1.12,
+          "min": 19.28,
+          "max": 26.82,
+          "inkWorst": 13.38,
+          "inkMean": 14.04,
+          "mutedWorst": 5.22,
+          "mutedMean": 5.48
+        },
+        "light": {
+          "mean": 214.94,
+          "sd": 0.26,
+          "min": 213.91,
+          "max": 215.86,
+          "inkWorst": 11.98,
+          "inkMean": 12.1,
+          "mutedWorst": 5.06,
+          "mutedMean": 5.11
+        }
+      },
+      "scale294": {
+        "dark": {
+          "mean": 21.9,
+          "sd": 1.26,
+          "min": 19.28,
+          "max": 28.28,
+          "inkWorst": 13.17,
+          "inkMean": 14.04,
+          "mutedWorst": 5.14,
+          "mutedMean": 5.48
+        },
+        "light": {
+          "mean": 214.94,
+          "sd": 0.27,
+          "min": 214.11,
+          "max": 215.87,
+          "inkWorst": 12.01,
+          "inkMean": 12.1,
+          "mutedWorst": 5.07,
+          "mutedMean": 5.11
+        }
+      },
+      "a12": {
+        "dark": {
+          "mean": 23.09,
+          "sd": 1.62,
+          "min": 19.28,
+          "max": 30.8,
+          "inkWorst": 12.81,
+          "inkMean": 13.89,
+          "mutedWorst": 5,
+          "mutedMean": 5.42
+        },
+        "light": {
+          "mean": 214.91,
+          "sd": 0.28,
+          "min": 213.62,
+          "max": 215.86,
+          "inkWorst": 11.95,
+          "inkMean": 12.1,
+          "mutedWorst": 5.05,
+          "mutedMean": 5.11
+        }
+      },
+      "a16": {
+        "dark": {
+          "mean": 24.25,
+          "sd": 2.22,
+          "min": 19.28,
+          "max": 34.87,
+          "inkWorst": 12.21,
+          "inkMean": 13.73,
+          "mutedWorst": 4.77,
+          "mutedMean": 5.36
+        },
+        "light": {
+          "mean": 214.85,
+          "sd": 0.32,
+          "min": 213.14,
+          "max": 216.09,
+          "inkWorst": 11.89,
+          "inkMean": 12.09,
+          "mutedWorst": 5.02,
+          "mutedMean": 5.11
+        }
+      },
+      "gamma15": {
+        "dark": {
+          "mean": 24.09,
+          "sd": 1.26,
+          "min": 20.03,
+          "max": 29.03,
+          "inkWorst": 13.07,
+          "inkMean": 13.76,
+          "mutedWorst": 5.1,
+          "mutedMean": 5.37
+        },
+        "light": {
+          "mean": 214.91,
+          "sd": 0.29,
+          "min": 213.87,
+          "max": 216.09,
+          "inkWorst": 11.98,
+          "inkMean": 12.1,
+          "mutedWorst": 5.06,
+          "mutedMean": 5.11
+        }
+      },
+      "stretch3": {
+        "dark": {
+          "mean": 21.8,
+          "sd": 1.27,
+          "min": 19.07,
+          "max": 27.09,
+          "inkWorst": 13.35,
+          "inkMean": 14.06,
+          "mutedWorst": 5.21,
+          "mutedMean": 5.49
+        },
+        "light": {
+          "mean": 214.88,
+          "sd": 0.4,
+          "min": 212.36,
+          "max": 216.11,
+          "inkWorst": 11.8,
+          "inkMean": 12.1,
+          "mutedWorst": 4.99,
+          "mutedMean": 5.11
+        }
+      },
+      "bipolar": {
+        "dark": {
+          "mean": 23.85,
+          "sd": 1.72,
+          "min": 18.57,
+          "max": 30.28,
+          "inkWorst": 12.89,
+          "inkMean": 13.79,
+          "mutedWorst": 5.03,
+          "mutedMean": 5.38
+        },
+        "light": {
+          "mean": 214.8,
+          "sd": 0.65,
+          "min": 211.36,
+          "max": 216.36,
+          "inkWorst": 11.69,
+          "inkMean": 12.09,
+          "mutedWorst": 4.94,
+          "mutedMean": 5.11
+        }
+      },
+      "PROPOSED": {
+        "dark": {
+          "mean": 25.56,
+          "sd": 2.82,
+          "min": 18.28,
+          "max": 36.82,
+          "inkWorst": 11.91,
+          "inkMean": 13.55,
+          "mutedWorst": 4.65,
+          "mutedMean": 5.29
+        },
+        "light": {
+          "mean": 214.76,
+          "sd": 0.9,
+          "min": 208.89,
+          "max": 216.41,
+          "inkWorst": 11.4,
+          "inkMean": 12.08,
+          "mutedWorst": 4.82,
+          "mutedMean": 5.1
+        }
+      },
+      "proposedFine": {
+        "dark": {
+          "mean": 25.55,
+          "sd": 2.49,
+          "min": 18.32,
+          "max": 34.6,
+          "inkWorst": 12.25,
+          "inkMean": 13.55,
+          "mutedWorst": 4.78,
+          "mutedMean": 5.29
+        },
+        "light": {
+          "mean": 214.75,
+          "sd": 0.8,
+          "min": 209.64,
+          "max": 216.39,
+          "inkWorst": 11.49,
+          "inkMean": 12.08,
+          "mutedWorst": 4.85,
+          "mutedMean": 5.1
+        }
+      },
+      "hotter": {
+        "dark": {
+          "mean": 28.5,
+          "sd": 4.13,
+          "min": 17.41,
+          "max": 44.41,
+          "inkWorst": 10.77,
+          "inkMean": 13.13,
+          "mutedWorst": 4.2,
+          "mutedMean": 5.13
+        },
+        "light": {
+          "mean": 214.33,
+          "sd": 1.4,
+          "min": 205.2,
+          "max": 217.36,
+          "inkWorst": 10.99,
+          "inkMean": 12.03,
+          "mutedWorst": 4.64,
+          "mutedMean": 5.08
+        }
+      }
+    }
+  },
+  "contrast": {
+    "1x": {
+      "off": {
+        "dark": {
+          "mean": 19.04,
+          "sd": 2.76,
+          "min": 17.57,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.4,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.62
+        },
+        "light": {
+          "mean": 212.74,
+          "sd": 3.71,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.85,
+          "mutedWorst": 3.73,
+          "mutedMean": 5.01
+        }
+      },
+      "shipped": {
+        "dark": {
+          "mean": 20.11,
+          "sd": 2.85,
+          "min": 17.35,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.27,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.57
+        },
+        "light": {
+          "mean": 212.56,
+          "sd": 3.82,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.83,
+          "mutedWorst": 3.73,
+          "mutedMean": 5
+        }
+      },
+      "scale294": {
+        "dark": {
+          "mean": 20.11,
+          "sd": 2.85,
+          "min": 17.35,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.27,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.57
+        },
+        "light": {
+          "mean": 212.56,
+          "sd": 3.82,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.83,
+          "mutedWorst": 3.73,
+          "mutedMean": 5
+        }
+      },
+      "a12": {
+        "dark": {
+          "mean": 20.68,
+          "sd": 3.18,
+          "min": 17.57,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.19,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.54
+        },
+        "light": {
+          "mean": 212.53,
+          "sd": 3.84,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.83,
+          "mutedWorst": 3.73,
+          "mutedMean": 5
+        }
+      },
+      "a16": {
+        "dark": {
+          "mean": 21.26,
+          "sd": 3.62,
+          "min": 17.35,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.11,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.51
+        },
+        "light": {
+          "mean": 212.49,
+          "sd": 3.86,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.82,
+          "mutedWorst": 3.73,
+          "mutedMean": 4.99
+        }
+      },
+      "gamma15": {
+        "dark": {
+          "mean": 21.25,
+          "sd": 3.26,
+          "min": 18.35,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.12,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.51
+        },
+        "light": {
+          "mean": 212.48,
+          "sd": 3.86,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.82,
+          "mutedWorst": 3.73,
+          "mutedMean": 4.99
+        }
+      },
+      "stretch3": {
+        "dark": {
+          "mean": 20.05,
+          "sd": 2.9,
+          "min": 17.35,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.27,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.57
+        },
+        "light": {
+          "mean": 212.54,
+          "sd": 3.85,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.83,
+          "mutedWorst": 3.73,
+          "mutedMean": 5
+        }
+      },
+      "bipolar": {
+        "dark": {
+          "mean": 21.13,
+          "sd": 3.37,
+          "min": 16.57,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.13,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.52
+        },
+        "light": {
+          "mean": 212.43,
+          "sd": 3.93,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.82,
+          "mutedWorst": 3.73,
+          "mutedMean": 4.99
+        }
+      },
+      "PROPOSED": {
+        "dark": {
+          "mean": 21.95,
+          "sd": 4.02,
+          "min": 16.35,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.02,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.47
+        },
+        "light": {
+          "mean": 212.42,
+          "sd": 3.96,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.81,
+          "mutedWorst": 3.73,
+          "mutedMean": 4.99
+        }
+      },
+      "proposedFine": {
+        "dark": {
+          "mean": 21.95,
+          "sd": 4.02,
+          "min": 16.35,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 14.02,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.47
+        },
+        "light": {
+          "mean": 212.42,
+          "sd": 3.96,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.81,
+          "mutedWorst": 3.73,
+          "mutedMean": 4.99
+        }
+      },
+      "hotter": {
+        "dark": {
+          "mean": 23.25,
+          "sd": 5.34,
+          "min": 16.35,
+          "max": 45.42,
+          "inkWorst": 10.6,
+          "inkMean": 13.84,
+          "mutedWorst": 4.14,
+          "mutedMean": 5.4
+        },
+        "light": {
+          "mean": 212.24,
+          "sd": 4.17,
+          "min": 184.26,
+          "max": 215.34,
+          "inkWorst": 8.82,
+          "inkMean": 11.79,
+          "mutedWorst": 3.73,
+          "mutedMean": 4.98
+        }
+      }
+    },
+    "2x": {
+      "off": {
+        "dark": {
+          "mean": 18.27,
+          "sd": 0.09,
+          "min": 17.57,
+          "max": 18.28,
+          "inkWorst": 14.49,
+          "inkMean": 14.49,
+          "mutedWorst": 5.66,
+          "mutedMean": 5.66
+        },
+        "light": {
+          "mean": 211.18,
+          "sd": 0.62,
+          "min": 210.34,
+          "max": 212.34,
+          "inkWorst": 11.57,
+          "inkMean": 11.67,
+          "mutedWorst": 4.89,
+          "mutedMean": 4.93
+        }
+      },
+      "shipped": {
+        "dark": {
+          "mean": 20.57,
+          "sd": 1.09,
+          "min": 17.66,
+          "max": 25.59,
+          "inkWorst": 13.55,
+          "inkMean": 14.21,
+          "mutedWorst": 5.29,
+          "mutedMean": 5.55
+        },
+        "light": {
+          "mean": 210.79,
+          "sd": 0.64,
+          "min": 209.09,
+          "max": 212.39,
+          "inkWorst": 11.42,
+          "inkMean": 11.62,
+          "mutedWorst": 4.83,
+          "mutedMean": 4.91
+        }
+      },
+      "scale294": {
+        "dark": {
+          "mean": 20.57,
+          "sd": 1.22,
+          "min": 17.66,
+          "max": 26.59,
+          "inkWorst": 13.42,
+          "inkMean": 14.21,
+          "mutedWorst": 5.24,
+          "mutedMean": 5.55
+        },
+        "light": {
+          "mean": 210.79,
+          "sd": 0.65,
+          "min": 209.16,
+          "max": 212.36,
+          "inkWorst": 11.43,
+          "inkMean": 11.62,
+          "mutedWorst": 4.83,
+          "mutedMean": 4.91
+        }
+      },
+      "a12": {
+        "dark": {
+          "mean": 21.71,
+          "sd": 1.61,
+          "min": 18.07,
+          "max": 28.66,
+          "inkWorst": 13.12,
+          "inkMean": 14.07,
+          "mutedWorst": 5.12,
+          "mutedMean": 5.49
+        },
+        "light": {
+          "mean": 210.71,
+          "sd": 0.62,
+          "min": 208.91,
+          "max": 212.39,
+          "inkWorst": 11.4,
+          "inkMean": 11.61,
+          "mutedWorst": 4.82,
+          "mutedMean": 4.9
+        }
+      },
+      "a16": {
+        "dark": {
+          "mean": 22.84,
+          "sd": 2.13,
+          "min": 18.26,
+          "max": 32.89,
+          "inkWorst": 12.5,
+          "inkMean": 13.92,
+          "mutedWorst": 4.88,
+          "mutedMean": 5.43
+        },
+        "light": {
+          "mean": 210.61,
+          "sd": 0.61,
+          "min": 208.41,
+          "max": 212.37,
+          "inkWorst": 11.35,
+          "inkMean": 11.6,
+          "mutedWorst": 4.79,
+          "mutedMean": 4.9
+        }
+      },
+      "gamma15": {
+        "dark": {
+          "mean": 22.77,
+          "sd": 1.34,
+          "min": 18.67,
+          "max": 27.6,
+          "inkWorst": 13.27,
+          "inkMean": 13.93,
+          "mutedWorst": 5.18,
+          "mutedMean": 5.44
+        },
+        "light": {
+          "mean": 210.59,
+          "sd": 0.57,
+          "min": 209.07,
+          "max": 212.39,
+          "inkWorst": 11.42,
+          "inkMean": 11.6,
+          "mutedWorst": 4.83,
+          "mutedMean": 4.9
+        }
+      },
+      "stretch3": {
+        "dark": {
+          "mean": 20.46,
+          "sd": 1.24,
+          "min": 17.57,
+          "max": 25.85,
+          "inkWorst": 13.52,
+          "inkMean": 14.23,
+          "mutedWorst": 5.28,
+          "mutedMean": 5.55
+        },
+        "light": {
+          "mean": 210.73,
+          "sd": 0.71,
+          "min": 207.66,
+          "max": 212.41,
+          "inkWorst": 11.26,
+          "inkMean": 11.61,
+          "mutedWorst": 4.76,
+          "mutedMean": 4.91
+        }
+      },
+      "bipolar": {
+        "dark": {
+          "mean": 22.52,
+          "sd": 1.74,
+          "min": 17.35,
+          "max": 28.6,
+          "inkWorst": 13.13,
+          "inkMean": 13.96,
+          "mutedWorst": 5.13,
+          "mutedMean": 5.45
+        },
+        "light": {
+          "mean": 210.47,
+          "sd": 0.81,
+          "min": 206.57,
+          "max": 212.82,
+          "inkWorst": 11.14,
+          "inkMean": 11.58,
+          "mutedWorst": 4.71,
+          "mutedMean": 4.89
+        }
+      },
+      "PROPOSED": {
+        "dark": {
+          "mean": 24.17,
+          "sd": 2.63,
+          "min": 17.12,
+          "max": 34.16,
+          "inkWorst": 12.32,
+          "inkMean": 13.74,
+          "mutedWorst": 4.81,
+          "mutedMean": 5.36
+        },
+        "light": {
+          "mean": 210.44,
+          "sd": 1,
+          "min": 204.43,
+          "max": 213.32,
+          "inkWorst": 10.9,
+          "inkMean": 11.58,
+          "mutedWorst": 4.61,
+          "mutedMean": 4.89
+        }
+      },
+      "proposedFine": {
+        "dark": {
+          "mean": 24.15,
+          "sd": 2.32,
+          "min": 17.34,
+          "max": 32.19,
+          "inkWorst": 12.61,
+          "inkMean": 13.74,
+          "mutedWorst": 4.92,
+          "mutedMean": 5.37
+        },
+        "light": {
+          "mean": 210.43,
+          "sd": 0.92,
+          "min": 205.59,
+          "max": 213.25,
+          "inkWorst": 11.03,
+          "inkMean": 11.58,
+          "mutedWorst": 4.66,
+          "mutedMean": 4.89
+        }
+      },
+      "hotter": {
+        "dark": {
+          "mean": 26.81,
+          "sd": 3.8,
+          "min": 16.41,
+          "max": 41.64,
+          "inkWorst": 11.19,
+          "inkMean": 13.37,
+          "mutedWorst": 4.37,
+          "mutedMean": 5.22
+        },
+        "light": {
+          "mean": 210.12,
+          "sd": 1.49,
+          "min": 201.14,
+          "max": 213.8,
+          "inkWorst": 10.54,
+          "inkMean": 11.54,
+          "mutedWorst": 4.45,
+          "mutedMean": 4.88
+        }
+      }
+    }
+  }
+}

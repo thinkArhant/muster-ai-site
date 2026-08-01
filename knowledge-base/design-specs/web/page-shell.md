@@ -128,11 +128,94 @@ All spacing derives from a single rhythm token:
 
 ## 5. Texture
 
-Both layers CSS/SVG-generated, self-contained, `aria-hidden`, `pointer-events: none`, behind all content.
+Two layers, both **generated** — CSS gradients and one inline-SVG data URI, no image file and no
+fetching reference of any kind. Self-contained, `aria-hidden`, `pointer-events: none`, and behind all
+content at `z-index: -1`. Neither layer animates or repaints; the texture is not in the motion budget
+and never becomes a seat in it. Both drop out entirely under `forced-colors`.
 
-- **Grain**: subtle rugged noise over `--ground`. Peak per-pixel alpha ≤ 8% (dark) / ≤ 4% (light), biased faint with occasional grit, rendered at ~1.4× scale so it reads as tooth, not static. Implementation is the Developer's choice (SVG `feTurbulence` data-URI or painted canvas) — **cross-engine parity WebKit + Blink is required evidence either way** (inline-SVG/WebKit divergence is this project's known failure class).
-- **Top vignette**: a whisper — radial darkening from the top edge, black at ≤ 16% alpha (dark theme) and **≤ 5% alpha (light theme)**. The light cap is derived, not taste: at 16% over the light ground, `--muted` labels in the vignette zone would composite below 4.5:1 (≈3.6:1); at 5% they hold ≥4.5. QA should measure the worst-case composited pair in both themes.
-- Texture never carries information and never lifts a stated contrast pair below its table value.
+**What the texture can reach, and what it cannot.** Every card on this page is an opaque `--surface`,
+and the texture sits behind all of them. So the only text either layer composites with is text set
+directly on `--ground` — the headline and its caption, the scope and beat labels, the totals scope,
+the reading columns, the closing lead and the footer. Card text is shielded by construction, not by
+tuning: no texture value can move it. This is why the texture's whole contrast exposure is one short
+list of ground-level pairs rather than the page.
+
+**The contrast rule is a floor, stated as one number.** Texture must not take any composited pair
+below **4.5:1 at the worst single pixel**, both themes, measured with the vignette at its darkest.
+It is deliberately not phrased as "never moves a stated pair", because no texture can meet that: on a
+near-black ground every texture lightens, on the light ground every texture darkens, and §2.2's table
+values are the untextured pairs. Movement is expected; the floor is what holds. The two pairs that
+govern are `--ink` and `--muted` on `--ground`. **`--muted` on the light ground is the binding one**,
+with roughly a third of the dark theme's headroom — the light ground's own vignette has already spent
+part of it before the grain arrives.
+
+**That floor is not measurable from the computed style, and no page runner measures it.** Every
+contrast probe on this page resolves a background by walking ancestors for a `background-color`; the
+texture is a fixed *sibling* of the content, so both layers are invisible to all of them. A texture
+change can therefore pass every runner while moving real contrast. The floor is verified by rendering
+and per-pixel arithmetic — `samples/ground-texture-renders/measure-candidates.mjs` is the instrument,
+and it reports spread with the vignette off and worst-case contrast with the vignette at its darkest,
+because those are two different questions.
+
+### 5.1 Grain
+
+Rugged noise over `--ground`, biased faint with occasional grit. One `feTurbulence` tile of 140 user
+units painted into a 196px box — that ~1.4× upscale is what makes it read as **tooth rather than
+static**, and it does not vary. The layer's `--grain-alpha` multiplies the tile's own per-pixel alpha,
+which peaks at 0.78, so the effective peak is always below the token's value.
+
+**Coarsening the tile is available and is not taken.** At 294px it measures +13% of spread for no
+per-pixel cost, but its features then grow past the width of a glyph stem, and a grain that a whole
+stem can sit inside stops averaging under text. Tooth is a property of feature size as much as of
+alpha; 196px is the size that holds it.
+
+**Strength is judged on rendered pixels, in both themes, at a 2× raster** — the spread of a patch of
+bare ground per CSS pixel, which is what a reader on a 2× display actually receives. Standard
+deviation alone understates a noise; state the span of the patch beside it. A spread whose span is
+around two levels of 255 is below one step of 8-bit quantisation and is not a faint texture, it is an
+absent one.
+
+**Two pigments are specified; one ships, and the other is deleted from this section when it does.**
+Everything above holds for both.
+
+| | Current | Stronger |
+|---|---|---|
+| RGB transfer | none — one pale grey | `feFuncR/G/B type="linear" slope="3" intercept="-1"` — two-sided, light grit and dark grit |
+| Alpha curve | `feFuncA` gamma exponent `2.6` | exponent `1.5` |
+| `--grain-alpha` dark | `0.08` | `0.11` |
+| `--grain-alpha` light | `0.04` | `0.04` — unchanged |
+| Span of a ground patch, dark / light | 7.5 / 2.0 levels of 255 | 16.3 / 5.0 |
+| Worst composited pixel, `--muted` on ground, dark / light | 5.29 / 4.83 | 4.92 / 4.71 |
+| Rendered ground luminance, dark | 21.9 of 255 | 25.6 |
+
+The light theme's opacity does not move in either form, and that is measured rather than cautious:
+doubling it buys +23% of spread, where changing the pigment buys +150%. On a ground only ~28 levels
+from the pigment's own grey, opacity has almost nothing to scale.
+
+**The cost of the stronger form, stated because it is real**: on a near-black ground, making a grain
+visible *is* lightening the ground — the same variable, and no mechanism in reach separates them. The
+alpha curve is the worst of the available levers on that axis (+13% of spread for +2.2 of ground
+luminance) and is carried only because it is what lifts the light theme, where the pigment change
+alone leaves too little.
+
+**Cross-engine parity WebKit + Blink is required evidence, not a formality** — inline-SVG/WebKit
+divergence is this project's known failure class, and every pigment lever here is an SVG filter
+primitive. Two instrument traps belong with that requirement, because both have produced a wrong
+answer here: `qlmanage` scales a whole document into a fixed square frame, and downscaling
+box-averages a per-pixel noise back toward flat, so any WebKit render used as texture evidence must
+pin the document's height near the frame's; and `qlmanage` cannot be given a viewport, so **no WebKit
+evidence exists at any phone width** — phone figures are Blink's and say so.
+
+### 5.2 Top vignette
+
+A whisper — radial darkening from the top edge, black at **≤ 16% alpha (dark)** and **≤ 5% alpha
+(light)**. It is `position: fixed`, so its darkest band sits under the status bar at every scroll
+position and any ground-level text passes through it; the worst case is always vignette-at-maximum.
+
+The light cap is derived, not taste: at 16% over the light ground, `--muted` labels inside the
+vignette zone composite to ≈3.6:1; at 5% they hold above 4.5:1. That cap is the light ground's whole
+safety margin, which is why the grain's light-theme strength is set against what the vignette has
+already spent rather than against the untextured table value.
 
 ## 6. Surface rules
 
@@ -398,7 +481,7 @@ The direction reference (`design-specs/direction-reference.html`) was read for m
 
 **Designed here (the craft):** the scroll-landing system — `--scroll-pad` derived from the bar so any landing's rule never abuts the bar's rule — and the two-edges-one-axis alignment system (§7.2), each with its relationship assertions. Section snapping was designed here, judged by the founder on the rendered page, and removed (§7.1, DEC-057); the record of what it was stays in DEC-040. The reference has no scroll behaviour of any kind.
 
-**Taken from the reference as feel cues (re-derived here, own values):** the calm density and section rhythm · tag-above-kicker composition · terminal chrome with dot caps and label bar · end-tick rule construction · registration-mark sparseness · pulse-lamp concept (execution deliberately stronger, §10.2) · grain rendered as faint tooth rather than visible noise.
+**Taken from the reference as feel cues (re-derived here, own values):** the calm density and section rhythm · tag-above-kicker composition · terminal chrome with dot caps and label bar · end-tick rule construction · registration-mark sparseness · pulse-lamp concept (execution deliberately stronger, §10.2) · grain rendered as tooth rather than as visible noise. The reference paints its grain on a canvas, two-sided and at a mean alpha several times this page's; it is legitimate calibration for how rugged the ground is meant to read, and none of its values are a target. §5.1's are derived here and measured here.
 
 **Present in the reference and deliberately NOT inherited:**
 
