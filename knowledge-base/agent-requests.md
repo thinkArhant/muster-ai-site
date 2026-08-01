@@ -217,281 +217,32 @@ overlap was a property of the proposed form, not of the page "today"; HO-043's o
 became visible as the strip shrank"*) is the accurate half. The ruling is unaffected — the mark is
 gone either way, and the harness now fails if it returns.
 
-### HO-043 — UI/UX: §5's two-cell cards ruled, §1's two strip forms rendered for the founder, and the footer's line-break defect
-
-**From**: UI/UX · **Reviewers**: Developer (`accepted` — §5's cards, the footer's two nowrap units
-and form B all built as ruled and re-verified in both engines; one accuracy note on the mark/chip
-overlap and two documentation findings in HO-044, none of them a copy or design change), PM
-(`pending` — carries the contact sheet to the founder and records the pick)
-**Status**: open · **Filed**: 2026-07-31
-
-**Scope**: proposal renders + durable specs. No shipped file touched — `index.html`, `styles/*` and
-`tests/*` are untouched, verified by `git status`.
-
-#### 0. What the founder looks at
-
-**`samples/closing-round-renders/CONTACT-SHEET.png`** — 1520 × 1149 CSS px at 2×. One ask (§1's
-strip, A or B, both in situ under the headline and the formation, desktop and phone), and two things
-shown rather than asked (§5's rebuilt cards, the footer's sentence as it sets). UI/UX recommends B
-and says so on the sheet, labelled as a recommendation.
-
-Everything else in that directory is the evidence: `closing-round-a.html` / `closing-round-b.html`
-are the proposal pages (generated from `index.html` by `build-proposals.mjs`, so nothing outside the
-edits can drift), `closing-round-report.json` / `final-measure.json` / `footer-report.json` hold
-every measurement, `render-proposals.mjs` and `render-webkit.mjs` regenerate the renders in Blink
-and WebKit.
-
-#### 1. §5's cards — RULED, build as rendered
-
-Structure is unchanged from what ships; only the cell inventory changes. `.shipped__cell`'s
-three-row grid with the reserved sub-line row **stays exactly as written** — it is what keeps the
-two cards comparable now that their sub-lines fall in different cells.
-
-| | Card 1 `BODH · IDEA → LIVE` | Card 2 `THIS SITE · SPEC → LIVE` |
-|---|---|---|
-| Cell 1 | `OPERATOR ATTENTION` / `4.8 h` **rust**, `data-countup` | `OPERATOR ATTENTION` / `—` **ink**, `data-countup`, sub `measured at launch` |
-| Cell 2 | `SHIPPED` / `bodh.day` **rust**, no hook, sub `App Store + web` | `SHIPPED` / `THIS PAGE` **rust**, no hook |
-| Card caption | none | none — `.shipped__caption` retires from the markup |
-
-- **`bodh.day` and `THIS PAGE` render `--accent`**, the same as `4.8 h`. The value slot's colour is
-  the answered/unanswered channel, not a numeral/word distinction — full reasoning and the
-  contrast basis in `page-shell.md` §8.1. `.readout__value` already computes the accent, so this
-  needs no CSS: it needs the `--unmeasured` modifier **not** applied to them.
-- **`SHIPPED` values carry no `data-countup`.** A place is not a metric. The dash keeps its hook on
-  purpose (the engine's refusal to animate a digitless value stays a property of the page).
-- **Zero card-level captions on both cards**, one cell-level sub-line each, in different cells.
-- CSS to update: `sections.css`'s §5 comment block says "Three prose lines" and "the same four
-  keys" — both stale. The `--sub-row` reserve and everything else stay.
-
-#### 2. §1's strip — TWO FORMS, build only the one the founder picks
-
-Both are fully specified in `section-01-hero.md` §7.1, and **the unpicked form is deleted from that
-file in the same commit that builds the picked one** — the spec returns to one truth.
-
-**Form A** — head row unchanged; cells become `OPERATOR ATTENTION` → `—` (ink, sub-line
-`measured at launch` under the dash) and `SHIPPED` → `THIS PAGE` (rust). Two columns at
-≥ `--bp-wide` (`repeat(2, 1fr)`, not 3); stacked key/value rows below it with the sub-line spanning
-the row and **right-aligned with its value**, not the key. The strip-level `.remnant__caption`
-retires. Needs the small CSS block in `closing-round-a.html`'s `<style>` — copy it, don't re-derive
-it.
-
-**Form B** — the `<dl>` and the caption are deleted. What remains is the head row. **The
-bottom-right registration mark is deleted with them**: measured, it overlaps the `VERIFY` chip's
-border box at 1280, 375 and 320. One mark, top-left. No CSS change at all; markup only.
-
-Either way the `SHIPPED` value string is `THIS PAGE`, byte-identical to §5's.
-
-#### 3. The footer — one defect, one fix, and it is treatment not copy
-
-The final sentence sets **3 lines at 1280/1600, 5 at 430, 6 at 375, 7 at 320**. Untreated it breaks
-**`Kanwar / Sandhu`** across lines at 375 and 320, and at 1280 it breaks `never / invoked` inside the
-participation aside.
-
-Wrap both runs in style-only nowrap spans. Measured: **zero line cost at every width** (1280 stays 3
-lines at 96px; 375 stays 6 at 163.13px), and both breaks move onto phrase boundaries. `textContent`
-is unchanged, so `footer-copy.md`'s byte equality still passes — that is why this is a span and not
-a non-breaking space inside the string. `footer-layout.md` §2 and assertion 5 carry it.
-
-#### 4. Harness couplings this adds to HO-042's list
-
-HO-042's eleven are unchanged and still yours. These are additional:
-
-1. **`SHIPPED` values are accent, not unmeasured.** Any check asserting "every §5 value that is not
-   a numeral computes `--ink`" would be wrong now. The correct relationship: exactly one value in
-   card 2 computes `--ink`, and it is the em-dash.
-2. **Card comparability, as relationships** (`section-05-shipped.md` §4.4): equal card block-size;
-   the *n*th key and *n*th value equal block-start across the pair; each sub-line's offset below its
-   own value equal across the pair; card-level captions total zero. Never a literal height — 361.8
-   and 301.8 are today's renders, not the contract.
-3. **One column edge in the prose** (§4.3): all four `.shipped__line` compute equal inline-start and
-   equal width. This is the `64ch`-vs-weight defect's standing guard, and it now covers four lines.
-4. **The strip's marks** (`section-01-hero.md` assertion 8): exactly one registration mark in the
-   remnant, and no element inside the strip overlaps the chip's border box.
-5. **The footer's units** (`footer-layout.md` assertion 5): each nowrap run reports exactly one
-   client rect at 1280, 375 and 320.
-6. `qa-fullpage-sweep.mjs`'s `dashCells >= 4` — HO-042 item 9 already names this; note the count is
-   now **1**, and the three remaining em-dashes in §5 are prose punctuation.
-
-#### 5. What was measured, and what was judged
-
-**Measured** (Blink = headless Chrome via `tests/lib/cdp.mjs`; WebKit = `qlmanage`, no JS, no
-viewport control):
-
-| Finding | Engine · viewport |
-|---|---|
-| Card heights equal — 361.8px | Blink · 1280×700 and 1600×900, dark |
-| Card heights equal — 301.8px | Blink · 375×553 and 320×568, dark |
-| Corresponding keys/values on identical block-starts across the pair | Blink · all four viewports |
-| Each sub-line 42.0px below its own value, both cards | Blink · 1280×700 |
-| §5 block 674.3 → 361.8px; section 1151.55 → 891.94px | Blink · 1280×700 |
-| Four prose lines, one column edge at 685.31px, one 700 run, zero accent elements | Blink · 1280×700 |
-| Values 30px (desktop) / 24px (phone) — at or above the 24px AA-large floor for rust | Blink · all four |
-| Same composition, values, colours and alignment | WebKit · its own fixed scale, dark and light |
-| Reduced-motion and scripts-stripped render the same end frame | Blink · 1280×700 |
-| Strip 139.19px / hero 860.55px (A) · 52.19px / 773.55px (B) | Blink · 1280×700 |
-| Strip 203.48px / hero 1195.48px (A) · 80.98px / 1072.98px (B) | Blink · 375×553 |
-| The br registration mark overlaps the chip's border box | Blink · 1280, 375, 320 |
-| Alternative card composition costs 113.8px (475.6 vs 361.8) | Blink · 1280×700 |
-| Footer 3 / 5 / 6 / 7 lines; `Kanwar / Sandhu` splits at 375 and 320; both units cost zero lines | Blink · 1600, 1280, 430, 375, 320 |
-
-**Judged, not measured**: that two cells still read as an instrument; that the sub-line asymmetry
-reads as a matrix answered on a diagonal rather than as an omission; that a hostname and `THIS PAGE`
-at readout size read as values rather than headings; that form A's rust `THIS PAGE` competes with
-the headline's rust `AN AI`; that form B's bare (surface-less) variant reads as loose chrome.
-
-**No WebKit evidence exists at any phone width.** `qlmanage` is the only WebKit on this machine, it
-executes no JavaScript and renders at a fixed size regardless of the size requested. Every phone
-number above is Blink's and is labelled as such.
-
-**Would Apple ship this?** — Yes, for §5: the two-cell pair is a calmer instrument than the
-four-cell one, the alignment holds by construction rather than by luck, and the colour rule now says
-one thing instead of enumerating exceptions. For §1, yes for form B and **no as rendered for form A**
-— A duplicates §5's card one scroll above it and splits the hero's single rust statement, which is
-why the recommendation is B and why it is stated on the sheet rather than hidden in a caption.
-
-### HO-042 — Content: §5's cost posture in strings, the final footer sentence, and the site's economics published in VERIFY.md
-
-**From**: Content · **Reviewers**: UI/UX (`accepted` — every string composed and rendered in both
-engines; two treatment findings returned in HO-043, neither a copy change: `bodh.day` and
-`THIS PAGE` take the accent because the value slot's colour is the answered/unanswered channel, and
-the footer sentence needs two nowrap units because it splits the founder's name at 375 and 320),
-Developer (`accepted` — every string built verbatim and all eleven couplings re-based, including the
-`dashCells` finding; the parser now discovers the cell inventory instead of re-hard-coding it. Two
-findings returned in HO-044: a stray tool-call artifact at the end of `section-05-copy.md`, and
-`section-01-copy.md` §5 still specifying §1 strings that no longer ship), PM (`pending` —
-line-by-line copy-rules review)
-**Status**: open · **Filed**: 2026-07-31
-
-**Scope**: strings only. Three files written — `design-specs/web/section-05-copy.md`,
-`design-specs/web/footer-copy.md`, `VERIFY.md`. No markup, no CSS, no test file touched.
-
-#### 1. Every string that changed
-
-**§5 — prose. Four lines now, not three.** Lines 1, 3 and 4 are byte-unchanged; line 2 is new and
-sits between the Bodh identity line and the provenance line.
-
-```
-Bodh, idea to live: 9.3 hours of active build, $147 in AI tokens at API list price.
-```
-
-17 words against a ≤ 20 budget, script-measured. It renders at prose weight in ink — §5's single
-primary is still the provenance line, and §5's prose block still carries no accent-coloured
-element. Rationale for four lines over one merged line, and for naming Bodh twice, is in
-`section-05-copy.md` §3.2 and ruling 1.
-
-**§5 — cards. Two keys each, symmetrical.** `ACTIVE BUILD`, `COMMIT-DAYS` and `COST · API LIST` are
-gone from both cards; commit-days appear nowhere on the page after this.
-
-| Slot | Card 1 | Card 2 |
-|---|---|---|
-| Card label | `BODH · IDEA → LIVE` | `THIS SITE · SPEC → LIVE` |
-| Key 1 | `OPERATOR ATTENTION` | `OPERATOR ATTENTION` |
-| Value 1 | `4.8 h` | `—` |
-| Sub-line 1 | (none) | `measured at launch` |
-| Key 2 | `SHIPPED` | `SHIPPED` |
-| Value 2 | `bodh.day` | `THIS PAGE` |
-| Sub-line 2 | `App Store + web` | (none) |
-
-Two rulings inside that table that Developer and QA need as one answer, not two:
-
-- **`measured at launch` attaches to the dash, not to the card.** Card 2 carries one unmeasured
-  value beside one measured one, so a card-level caption would say the `SHIPPED` answer is
-  unmeasured too. Both cards therefore have **zero** card-level captions and **one** cell-level
-  sub-line each, in different cells.
-- **`THIS PAGE` is uppercase, in every seat.** Readout values take no CSS transform, so the copy
-  file's string is what renders. §1's remnant already ships `THIS PAGE`; if it keeps a `SHIPPED`
-  cell it renders the same string byte-identically. Its twin `bodh.day` stays lowercase because a
-  hostname is a literal a reader may type — the asymmetry is ruled, not drift
-  (`section-05-copy.md` ruling 6).
-
-**Footer — the closing sentence, founder-ruled and final.** Byte-exact, 35 words script-measured
-against a ≤ 40 ceiling:
-
-```
-Specced, written, and reviewed by Muster's AI team — 5 of 8 agents, the other three never invoked, 1 operator — on a framework designed and built by Kanwar Sandhu, solo, shipping his own products with it.
-```
-
-The A/B/C candidate structure is retired from `footer-copy.md`; the ruling is made. The receipts
-row and the contact link are untouched.
-
-**`VERIFY.md`** gains one section between the scope table and the receipts: *"What this site has
-cost so far — a floor, and not the THIS SITE row"*, plus a *"The rate, with its inputs"*
-sub-section. It publishes $594 / 51 step-sessions / ~27.3 driver-hours, the tier split, the
-under-10% waste share, and the $21.8/hr rate against the wave's $23.2/hr — every figure quoted
-from the committed record, none re-derived. The three-scope table is untouched and THIS SITE stays
-dashed.
-
-#### 2. The scope guard, and one accuracy note that needs a founder answer
-
-The published economics are **driver-log scope** — what the committed autonomous step-sessions
-cost. VERIFY.md labels them a floor twice, up front, and states plainly that nothing in the
-section answers *spec → live*. The dashes are not quietly filled.
-
-**The accuracy note**: the tree today carries more `.metrics` lines than the snapshot those
-figures were read from, so a reader who sums the committed files gets a larger number than $594.
-VERIFY.md says so in the section's own preamble rather than leaving the reader to find it. Whether
-a fresh snapshot replaces these figures at launch is a founder call — logged in Founder Decisions.
-
-#### 3. Harness couplings this breaks — all in `tests/`, all Developer's to re-base
-
-`qa-fullpage-sweep.mjs` **45/45** and `qa-independent-audit.mjs` **108/108** are green right now,
-both re-run after the writes. `verify-shell.mjs` **does not go red — it aborts**, at
-`tests/verify-shell.mjs:2129`, before any check runs. That is designed (copy leads the build) but
-it is a hard abort rather than a set of reds, so it is stated first:
-
-1. **`verify-shell.mjs` §5 copy parser, lines ~2116–2138 — CRASHES.** Two causes, both live.
-   (a) It finds the prose by `/^## 3\. The three prose lines/`; the heading now reads **four**, so
-   `at` is `-1` and `prose` parses empty. (b) It hard-reads `Key 1..4` / `Value 1..4`; rows 3 and 4
-   no longer exist, so `cellOf(undefined, col)` throws. Fix shape: match the heading on
-   `/^## 3\. The \w+ prose lines/`, walk `Key N` until the row is absent, and treat a cell with no
-   backticked run as `null` — the table's `(none)` slots are authored for exactly that.
-2. **`verify-shell.mjs`: "§5 ships the three prose lines verbatim"** — `prose.length === 3` and
-   `lines.length === 3` both re-base to **4**.
-3. **"§5 renders two cards and only two"** — `shipped__line` count 3 → **4**, and
-   `cells.length === 4` → **2**.
-4. **"§5's four BODH figures are byte-equal to the seed's Measured data table"** — `SEED_KEYS` now
-   maps `OPERATOR ATTENTION` → `Operator attention` and `SHIPPED` → `Shipped` only. The `SHIPPED`
-   assertion must reconstitute the seed cell rather than compare the value alone:
-   `value + " — " + sub === seed.value` gives `bodh.day — App Store + web`, byte-exact.
-5. **"§5 carries the commit-day window the seed states"** — retires. Its replacement is the
-   `App Store + web` sub-line under card 1's `SHIPPED`; the "exactly one cell carries a sub-line
-   per card" property survives and is worth keeping as the re-based form.
-6. **"§5 unmeasured values are ink em-dashes with one card-level sub-line"** — re-bases hard:
-   `cards[1].caption` is now `null`, `captions === 0` on **both** cards, and the
-   `measured at launch` string is asserted as the sub-line of card 2's `OPERATOR ATTENTION` cell.
-7. **"§5 is the page's only site for 9.3 h, $147 and 4.8 h"** — keeps its counts, changes its
-   evidence: `9.3 h` and `$147` are now substrings of §5's prose, not cell values. `"9.3 hours"`
-   contains `"9.3 h"`, so `siteOf` still finds exactly one of each; worth a comment so a later
-   reader does not think the check went stale.
-8. **§5's count-up a11y block, lines ~2440–2495** — §5 now has **one** counting cell (`4.8 h`).
-   `ax5Names.includes("9.3 h")` / `includes("$147")` and `settled.text === "9.3 h"` all re-base to
-   the surviving cell; `s05Copy.cards[0].values.every(...)` in the roll check re-bases to two
-   values, one of which (`bodh.day`) never counts.
-9. **`qa-fullpage-sweep.mjs` "§5's THIS SITE card is four em-dashes" (`dashCells >= 4`)** — this
-   one **will still pass, for the wrong reason**, and that is the finding. After the rebuild §5
-   holds exactly four em-dashes: one dash cell plus three in prose (`Bodh — `, the provenance
-   line's, `This page — `). The check would then measure the section's punctuation, not its dash
-   cell. Re-base it to count `.readout__value--unmeasured` cells in card 2 and assert **1**.
-10. **`verify-shell.mjs` footer sentence check, ~line 3505** — string equality re-bases
-    automatically from `footer-copy.md`; no code change needed. Any hard-coded **35** word-count
-    assertion Developer adds should be measured with the file's stated convention
-    (whitespace-delimited tokens containing a letter or digit — em-dashes count zero).
-11. **`index.html` §5 markup** — the section's comment block and cell structure carry the
-    four-key shape; the `data-countup` attribute leaves the `9.3 h` and `$147` cells with them.
-
-#### 4. Open for the round-2 and round-3 owners
-
-- **UI/UX**: `verify-shell.mjs` aborts until Developer re-bases it — `qa-fullpage-sweep.mjs` and
-  `qa-independent-audit.mjs` both run clean and are the usable baseline for the proposal round.
-- **UI/UX**: §1's remnant strip still carries `ACTIVE BUILD` and `COST · API LIST` keys against a
-  §5 that has neither. Whichever way the remnant is ruled (re-key to match, or slim to the chip),
-  its `SHIPPED` value string is `THIS PAGE` — that one is settled here so it is not re-decided.
-- **Developer**: §5's prose figures must not take the accent. Rust and the readout size are the
-  instrument treatment; the harness already asserts zero accent-coloured elements in §5's prose
-  block and that assertion should stay exactly as it is.
-
 ## Resolved (Last 10)
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
+
+- 2026-07-31 — HO-043 (UI/UX): **accepted, no revision.** Every ruling was chosen from a rendered
+  proposed state and each names its engine and viewport, which is the standard this project asks for
+  and does not always get. Three things earn the acceptance beyond the rulings themselves: the
+  two-cell card was *measured* rather than assumed safe (card heights equal at 361.8px, sub-lines on a
+  shared reserved track at 42.0px, so the diagonal asymmetry reads as a matrix answered rather than as
+  an omission — contradicting this brief's premise that it would need fixing); the alternative
+  composition was disqualified on measurement, not taste (475.6px against 361.8px); and the `THIS PAGE`
+  colour ruling checked its own consistency argument and reported that it did not survive — §1 rendered
+  that string in ink because a spec once flattened all three strip values, never as a ruling about the
+  string. Two defects were found that nobody asked it to look for: the registration mark overlapping
+  the chip's border box, and the footer breaking the founder's name across lines at 375 and 320. The
+  contact sheet earned the founder's verdict in one sitting, which was its whole job.
+
+- 2026-07-31 — HO-042 (Content): **accepted, no revision.** The two prose defects PM ruled were built
+  as ruled, and the form Content chose over PM's draft is better than the draft: naming Bodh in the
+  measured line rather than opening bare — because the nearest antecedent above it is *its website
+  wave*, the one scope those figures are not — removes the page's most dangerous ambiguity for one
+  repeated word, and `Bodh, idea to live:` matches the card label verbatim so prose and card bind
+  without a sentence saying so. VERIFY.md's economics landed with the scope trap handled: the driver
+  figures are labelled a floor, twice, and cannot be read as filling the page's dashes. The handoff's
+  eleven-item coupling list was accurate and saved Developer a rediscovery pass, and the one item it
+  flagged as a *finding* rather than a re-base — the four-em-dash check that would have passed for the
+  wrong reason after the rebuild — is exactly the class of blindness this round was hunting.
 
 - 2026-07-31 — HO-041 (QA): **accepted, no revision.** The re-run's worth is not its three green counts —
   PM reproduced all of them cold anyway (**295/295 + 27/27**, **108/108**, **43/43**) — it is **plant 11**,

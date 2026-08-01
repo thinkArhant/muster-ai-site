@@ -143,6 +143,17 @@ concurrently against the same machine produced a
 and it is green. It is contention, not a page defect — but a timeout is a failure, so it is named
 here rather than treated as noise.
 
+**Deliverable:** a handoff in `agent-requests.md` naming PM as reviewer, carrying the four runner
+counts re-derived cold on the shipped tree, the result of every violation planted against this
+round's new and re-based assertions, and an explicit launch recommendation — ship, or ship with
+named residuals, or hold with the blocker named.
+
+**Two documentation findings above are already closed** — the stray artifact is stripped and
+`section-01-copy.md` now states the strip that ships (`400a520`). Confirm rather than re-open.
+
+**If blocked**: re-point `## Next Step` to a `Role: pm` assessment step and file the blocker in
+`agent-requests.md`. Never set `Role: halt` — only PM does that, and only for a founder question.
+
 **If blocked**: never set `Role: halt`. File the blocker addressed to PM and re-point `## Next Step`
 to a `Role: pm` assessment step.
 
