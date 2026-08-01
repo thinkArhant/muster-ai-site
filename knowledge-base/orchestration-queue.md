@@ -49,31 +49,11 @@ THIS SITE metrics remain dashes until the founder supplies a snapshot (seed rule
 **The eight role names** are settled and need no ruling — PM · Developer · UI/UX · QA · Content ·
 Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 
-- [2026-07-31] [PM]: **The final gate is live — two things are asked, and one of them is a number.**
-  All ten re-gate findings are closed, reviewed and ruled; the packet is at the bottom of
-  `wave-review.md`. What is left: **pick 1–4 for F-R1** (§2's overnight wave — option 3 recommended,
-  and the reasoning says plainly why the founder's own shape is right but early), and **the three
-  phone checks**, of which §2's full 48-second playback is the last hard launch blocker. Also stated
-  rather than asked: VERIFY's receipt and the §1 chip are RULED to re-point to the live file and §5
-  to lose one `with Muster` — both build after the verdict, neither is on the page yet, and a PM stress test found that a fabricated receipt SHA passes
-  every runner if the copy file agrees with it. See DEC-061 and the Next Step halt block below.
-
-- [2026-07-31] [UI/UX]: **The batched render look is ready — one pick, on one image.** Open
-  `samples/closing-round-renders/CONTACT-SHEET.png`. **Asked, one thing**: §1's THIS SITE strip,
-  **A** (re-keyed to §5's two questions) or **B** (slimmed to the VERIFY chip). Both are shown in
-  situ under the headline and the formation, at 1280 and at 375, and both were re-rendered in
-  WebKit. **UI/UX recommends B**, and the sheet says so as a recommendation, not a ruling: A prints
-  the same two keys and the same two values as §5's THIS SITE card one scroll above it, and puts a
-  second rust readout under the headline's rust `AN AI`. B is also 87px shorter at desktop, which
-  brings the whole hero — the `curl` included — inside a 774px window. **Shown, not asked** on the
-  same sheet: §5's rebuilt two-cell cards, and the footer's final sentence as it sets. Developer
-  builds only the picked form; the losing form is deleted from `section-01-hero.md` §7.1 in the
-  same commit.
-
-<!-- Resolved 2026-08-01 — The grain pick is consumed: the founder ruled COARSE 0.18 (DEC-067),
-     Developer built HO-047 §4's delta and deleted the losing form from `page-shell.md` §5.1 in the
-     same commit (HO-048). All four runners green on the built tree, nothing re-based; composited
-     contrast re-measured on the build (5.14 dark / 4.82 light against the 4.5 floor). -->
+<!-- Resolved 2026-08-01 — The final gate and the render look are both consumed. F-R1 closed as
+     option 4 (DEC-062); all three phone checks passed, closing the last hard launch blocker
+     (DEC-063). §1's strip ruled option B (DEC-064); §5's two-cell cards, the footer's re-ruled
+     sentence and the two phone bugs all shipped and were re-verified cold by PM. DEC-061's ruled
+     items shipped in 42470b3. The terminal sweep is accepted (DEC-068) and the build is cleared. -->
 
 
 - [2026-07-31] [Content]: **VERIFY.md now publishes the site's economics — do the figures get a
@@ -108,37 +88,56 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-08-01 PM REVIEW — the terminal sweep is filed, three handoffs to close, launch merge next
+### 2026-08-01 THE LAUNCH MERGE — history preserved, then the founder's click-check
 
 ```
-Role: pm
+Role: halt
 
-QA's terminal sweep is filed as HO-049 in `agent-requests.md`. It closes HO-044, HO-045 and
-HO-048 (all `pending` on QA) and recommends **SHIP, with two named non-blocking residuals**.
+The build is cleared. QA's terminal sweep is accepted with no revision (DEC-068), and with it every
+handoff in the closing round. All four runners are green cold on the shipped tree, re-derived by PM
+after QA's harness fix landed. The ledger is reconciled to 4 active lines and all three lints are
+green. Nothing is open to build, and no agent has work left.
 
-Read HO-049 in full before ruling. It carries: all four runner counts re-derived cold, twice,
-serial (308/308 · 27/27 · 108/108 · 45/45, unchanged before/after one fix); a fixed and proven
-harness bug (`tests/lib/cdp.mjs`'s unref'd send deadline — isolated repro plus a full-suite
-re-run, both attached); six independent plants against this round's assertions (none re-reading
-Developer's own plant list) with a verdict on each; a correction to this brief's own "neither
-copy spec is parsed" claim (five of six are, only `section-01-copy.md` is not); an independent
-per-pixel re-measurement of the texture's composited contrast; and one stale ledger note (the
-receipts' `refExists` widening already shipped in `42470b3`, never struck from "Upcoming" below).
+TWO THINGS REMAIN, AND NEITHER IS AN AGENT'S TO DO.
 
-THE REVIEW. Same standard as every prior gate in this sprint: re-derive rather than read.
-Re-run the four runners cold (serially — concurrent runs on this machine produce a false CDP
-timeout, per the standing note). Spot-check at least one of QA's six plants rather than trusting
-the printed counts. Confirm `git status` is clean except `tests/lib/cdp.mjs` and this handoff.
+1 — THE MERGE, WITH HISTORY PRESERVED. Merge this branch to `main` with a real merge commit, NOT a
+squash. Three of the footer's four receipts are pinned to commit SHAs on this branch; a squash
+collapses that history and 404s all three silently, for every reader, with no harness able to see
+it. `blob/main/VERIFY.md` survives either strategy — that is the second reason VERIFY is not
+pinned — but the other three do not. If a squash is preferred for any reason, the three pinned
+receipts must be re-pinned to post-merge SHAs BEFORE deploy, and the sweep's pinned-receipt check
+re-run to confirm each path still exists at its new commit.
 
-THEN RULE, explicitly:
-1. Accept or revise HO-049 (and, by its closing, HO-044/HO-045/HO-048).
-2. Rule on QA's two named residuals: `section-01-copy.md` staying unparsed, and the three
-   texture-blind contrast checks — accept as documented risk, or open a follow-up item.
-3. Strike the stale "Upcoming" bullet below (the receipts widening is already shipped).
-4. Reconcile `agent-requests.md` — `muster-requests-lint.sh` is red at ~405 active lines against
-   a 300 budget; sweep HO-044/045/048/049 to Resolved once accepted.
+2 — THE FOUNDER'S VERIFY CLICK-CHECK, AFTER THE PUSH. `blob/main/VERIFY.md` 404s today, by
+construction: `main` is ~110 commits behind and the link resolves only once the merge lands. Click
+all four footer receipts plus the §1 chip on the live page. Only a real fetch proves reachability,
+which is why no runner stands in for this and why it is the last step rather than an earlier one.
 
-IF SHIPPING: proceed to the launch merge (DEC-063 §5, `## Upcoming` below) — history preserved,
+ALSO FOUNDER-ONLY, AND STILL OPEN: the THIS SITE telemetry snapshot. No agent measures this build
+(seed rule 4, A-002), so §5's THIS SITE card carries an em-dash under `OPERATOR ATTENTION` with
+`measured at launch` beneath it until the founder supplies a number. The page is honest as it
+stands — a dash is a claim about what will be measured, never a placeholder — so this gates the
+telemetry claim, not the merge.
+
+TWO ACCEPTED RESIDUALS, recorded so nobody re-discovers them as defects (DEC-068):
+
+- No contrast check can see the texture. Both probes resolve a background by walking ancestors and
+  `.texture` is a fixed sibling. PROVEN by planting `--grain-alpha: 0.90` — the sweep returned
+  45/45 with both contrast checks green. The bound: the alpha TOKEN is guarded (verify-shell caps
+  8% dark / 4% light), so what is exposed is a change that passes the cap while degrading real
+  contrast. Today's ratios clear the floor on two independent measurements.
+- `section-01-copy.md` is the one copy spec no harness parses, and the one that drifted. Accepted
+  on its small surface; every §1 string is asserted against the page elsewhere.
+
+**Deliverable:** the merge pushed with history intact, the four receipts and the §1 chip click-checked
+green on the live page by the founder, and any 404 filed as a blocker before deploy.
+
+IF BLOCKED: this step is already `Role: halt` because the remaining work is the founder's. An agent
+resuming here for any other reason must not set `Role: halt` itself — file the blocker addressed to
+PM and re-point `## Next Step` to a `Role: pm` assessment step.
+```
+
+## Upcoming` below) — history preserved,
 not squashed, so the three pinned receipts in the footer don't 404. The founder's VERIFY
 click-check is the step after that, and it is the one thing no runner can stand in for.
 
@@ -155,14 +154,9 @@ the question in `## Founder Decisions` above.
 2. **The founder's VERIFY click-check on the live page** — the one thing no runner can stand in
    for, because only a real fetch proves reachability.
 
-**Pre-loaded for the step after the verdict** (recorded so a resume-spawned PM does not rediscover
-them; they are NOT queue steps and add no scope):
-- §5's attribution line drops `with Muster` (DEC-061, F-R8 item 12) — Content amends
-  `section-05-copy.md`, Developer swaps the string.
-- VERIFY's footer receipt and the §1 chip re-point to `blob/main/VERIFY.md` (DEC-061) — one edit,
-  two seats, and the harness fails if only one moves.
-- The sweep's `refExists` SHA check widens from the §1 chip to all four pinned receipts
-  (`pre-launch-checklist.md`, hard, gated at launch).
+3. **The founder's THIS SITE telemetry snapshot** — founder-only work, no agent involvement
+   (A-002, seed rule 4). §5's `OPERATOR ATTENTION` dash on the THIS SITE card is what it fills.
+   Hard, gated at launch, and the one remaining blocker no agent can close.
 
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->

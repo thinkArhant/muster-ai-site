@@ -1645,5 +1645,73 @@ ui-ux (spec carries the shipped form only), qa (the texture-blind contrast probe
 
 **Touched**: `decision-log.md`, `orchestration-queue.md`.
 
+---
+
+### DEC-068 — The terminal sweep is accepted and the page ships, with two residuals whose bounds are stated rather than assumed (2026-08-01)
+
+**Decision**: **HO-049 accepted with no revision**, and with it HO-044, HO-045 and HO-048. The build
+is cleared for the launch merge. Two residuals are accepted as documented risk, both bounded below.
+
+**1 — The texture-blind contrast checks: accepted, and the bound is the ruling.** QA reported that
+no contrast check can see the texture, because both probes resolve a background by walking ancestors
+for a `background-color` and `.texture` is a fixed **sibling**. PM did not accept this by inspection.
+**Planted `--grain-alpha: 0.90`** — an eleven-fold increase that would destroy ground legibility —
+and the sweep returned **45/45 with both contrast checks green**. The blindness is proven, not
+inferred.
+
+What that plant also establishes is the **bound**, and it is narrower than the finding alone
+suggests: the alpha *token* IS guarded — `verify-shell` caps it at 8% dark and 4% light in both
+themes, so the planted value would have gone red there. What is unmeasured is **composited contrast
+through the texture**. The exposure is therefore not "any texture change ships blind"; it is that a
+change which legitimately passes the alpha cap — a different filter, pigment or frequency at the
+same alpha, *exactly the change this round made* — could degrade real contrast with nothing to catch
+it. Today's true composited ratios clear the floor in both themes on two independent measurements,
+so nothing is failing. **Not a launch blocker; a real gap, with a named shape for whoever closes it.**
+
+**2 — `section-01-copy.md` unparsed: accepted.** QA **corrected PM's own brief** here, which had
+claimed neither copy spec was harness-coupled: five of six are coupled to `verify-shell.mjs`, and
+only `section-01-copy.md` is not — which is precisely the file that drifted silently from the
+shipped page until a human read it. Accepted as documented risk on the strength of its now-small
+copy surface (§1 holds an eyebrow, a headline, plate names, a scope label, a chip and the curl, and
+every one of those is asserted against the page elsewhere).
+
+**3 — The unreconciled measurement, ruled toward the stricter reading.** QA measured the texture's
+composited contrast independently at **5.61–5.75 dark / 5.13 light**; HO-048 measured **5.14 / 4.82**.
+Both clear the 4.5 floor, neither is demonstrably wrong, and QA stated the gap plainly rather than
+choosing a number. **The conservative pair (5.14 / 4.82) is the figure of record** — an unreconciled
+disagreement resolves toward the stricter reading, never the more flattering one. The qualitative
+finding is independently confirmed twice; only the exact figure is open.
+
+**Why the sweep is accepted without revision.** It was briefed to hunt a class rather than
+re-confirm counts four parties had already confirmed, and it did: six independent plants, all
+reverted clean; a third texture-blind check nobody had named; `findGroundPatch` confirmed able to
+pass by relocating; and HO-045's and DEC-065's regimes reproduced exactly rather than taken on
+trust. It fixed `cdp.mjs`'s unref'd send deadline **and proved the mechanism in isolation before
+trusting the green suite that followed** — the correct order, given that suite was previously
+capable of exiting silently. It corrected the brief that commissioned it. A round that returns a
+correction to its own instructions, an unreconciled number it declines to smooth, and a finding
+outside its checklist is the standard this sprint has been reaching for.
+
+**Ledger integrity, fixed at this review**: HO-048 had been **deleted** from Active without a
+disposition during a later sweep rather than closed. It is restored to Resolved with its verdict and
+the incident noted in place. **A handoff may be closed; it may never be deleted** — the ledger is a
+published receipt, and a vanished entry is indistinguishable from work that never happened. Active
+handoffs reconciled 649 → 4 lines, all four closed with dispositions.
+
+**Also struck**: the queue's "Pre-loaded" block, stale since `42470b3` — all three items it listed
+as pending had shipped. Found by QA, not by PM, in a section PM owns.
+
+**What remains, and neither is an agent's to close**: the launch merge **with history preserved,
+not squashed** (a squash 404s the three pinned footer receipts, while `blob/main` survives either
+strategy — the second reason VERIFY is not pinned), and the founder's THIS SITE telemetry snapshot,
+which fills §5's `OPERATOR ATTENTION` dash. `blob/main/VERIFY.md` 404s until the merge lands, by
+construction, so the founder's click-check is the step after it.
+
+**Impact**: qa (residuals ruled), developer (none), ui-ux (none), content (none), pm (this entry,
+the ledger, the queue).
+
+**Touched**: `decision-log.md`, `agent-requests.md`, `orchestration-queue.md`,
+`pre-launch-checklist.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->

@@ -129,6 +129,30 @@
     keep the click-check as the second, because only a real fetch proves reachability after a push.
   - Milestone gate: launch
 
+- [ ] **The texture is invisible to every contrast check** — Blocker: soft, Source: qa/pm (DEC-068),
+  Added: 2026-08-01
+  - Both contrast probes resolve a background by walking ancestors for a `background-color`, and
+    `.texture` is a fixed **sibling** — so no check has ever measured contrast as it actually
+    composites. Proven by planting `--grain-alpha: 0.90`: the sweep returned **45/45 with both
+    contrast checks green** on a value that would destroy ground legibility.
+  - **The bound, which is narrower than the finding alone suggests**: the alpha *token* IS guarded
+    (`verify-shell` caps it at 8% dark / 4% light), so the planted value would have gone red there.
+    What is exposed is a texture change that legitimately passes the alpha cap while degrading real
+    contrast — a different filter, pigment or frequency at the same alpha.
+  - Not a launch blocker: today's composited ratios clear 4.5:1 in both themes on two independent
+    measurements (5.14 dark / 4.82 light governing, the conservative of the two).
+  - Fix shape for whoever closes it: composite the fixed-position texture into the sampled pixel
+    rather than resolving a background colour from the ancestor chain.
+  - Milestone gate: post-launch
+
+- [ ] **`section-01-copy.md` is parsed by no harness** — Blocker: soft, Source: qa (DEC-068),
+  Added: 2026-08-01
+  - Five of the six copy specs are string-coupled to `verify-shell.mjs`; this one is not, and it is
+    the one that drifted silently from the shipped page until a human read it.
+  - Accepted for launch on its small surface — §1 holds an eyebrow, a headline, plate names, a
+    scope label, a chip and the curl, and every one is asserted against the page elsewhere.
+  - Milestone gate: post-launch
+
 - [ ] **VERIFY's receipt and the §1 chip point at `blob/main/VERIFY.md`** — Blocker: hard,
   Source: pm (DEC-061), Added: 2026-07-31
   - The other three receipts pin to SHAs because their demo moment is in the past. VERIFY's demo
