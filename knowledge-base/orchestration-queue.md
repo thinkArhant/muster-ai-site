@@ -108,122 +108,42 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-07-31 THE TERMINAL QA SWEEP — the last gate before the launch merge
+### 2026-08-01 PM REVIEW — the terminal sweep is filed, three handoffs to close, launch merge next
 
 ```
-Role: qa
+Role: pm
 
-Round 3 of 3 is built and committed (HO-044). Everything DEC-062 through DEC-064 ruled is on the
-page: §5's four prose lines and two-cell cards, §1 slimmed to the scope label and the chip with one
-top-left mark, the footer's re-ruled sentence with its two nowrap units, and the two phone bugs
-closed with an assertion each. Nothing is open to build.
+QA's terminal sweep is filed as HO-049 in `agent-requests.md`. It closes HO-044, HO-045 and
+HO-048 (all `pending` on QA) and recommends **SHIP, with two named non-blocking residuals**.
 
-Read first: `knowledge-base/agent-requests.md` HO-044 — every file changed, every assertion added
-or re-based, and eighteen plants with what each turned red.
+Read HO-049 in full before ruling. It carries: all four runner counts re-derived cold, twice,
+serial (308/308 · 27/27 · 108/108 · 45/45, unchanged before/after one fix); a fixed and proven
+harness bug (`tests/lib/cdp.mjs`'s unref'd send deadline — isolated repro plus a full-suite
+re-run, both attached); six independent plants against this round's assertions (none re-reading
+Developer's own plant list) with a verdict on each; a correction to this brief's own "neither
+copy spec is parsed" claim (five of six are, only `section-01-copy.md` is not); an independent
+per-pixel re-measurement of the texture's composited contrast; and one stale ledger note (the
+receipts' `refExists` widening already shipped in `42470b3`, never struck from "Upcoming" below).
 
-THE STEP. Run the terminal sweep DEC-062 decision 5 traded the per-wave re-runs for. Developer
-reports all four runners green on the shipped tree with `git status` clean — verify-shell 304/304 ·
-verify-webkit 27/27 · qa-independent-audit 108/108 · qa-fullpage-sweep 45/45 — so reproducing those
-counts cold is the FLOOR, not the deliverable. The deliverable is judgment about what the counts do
-not cover.
+THE REVIEW. Same standard as every prior gate in this sprint: re-derive rather than read.
+Re-run the four runners cold (serially — concurrent runs on this machine produce a false CDP
+timeout, per the standing note). Spot-check at least one of QA's six plants rather than trusting
+the printed counts. Confirm `git status` is clean except `tests/lib/cdp.mjs` and this handoff.
 
-WORTH YOUR ATTENTION, stated so it is not rediscovered:
+THEN RULE, explicitly:
+1. Accept or revise HO-049 (and, by its closing, HO-044/HO-045/HO-048).
+2. Rule on QA's two named residuals: `section-01-copy.md` staying unparsed, and the three
+   texture-blind contrast checks — accept as documented risk, or open a follow-up item.
+3. Strike the stale "Upcoming" bullet below (the receipts widening is already shipped).
+4. Reconcile `agent-requests.md` — `muster-requests-lint.sh` is red at ~405 active lines against
+   a 300 budget; sweep HO-044/045/048/049 to Resolved once accepted.
 
-- Three couplings this round found by running rather than by reading, and one of them was a check
-  going BLIND rather than red: the sweep's contrast probe skipped selectors it could not find, so
-  retiring §1's cells silently dropped a surface from a check that still claimed to measure it.
-  Hunt the same shape elsewhere — a check that cannot fail is worse than no check.
-- Two behaviours have no WebKit evidence in any condition: §4's track end and §2's replay are
-  JavaScript, and `qlmanage` runs none. Every phone figure in HO-044 is Blink's and labelled so.
-- §4's indicator bug was neither hypothesis DEC-063 recorded — the cause was a visibility TIE from
-  1600px up, broken by document order, so the last segment could never light on a wide screen at
-  any scroll position. DEC-065 corrects the record. Verify the fix at 1600 and above, not only at
-  1280, or the regression is invisible to you exactly as it was to every prior harness.
-- One accuracy note on HO-043/DEC-064, disclosed rather than smoothed: the mark/chip overlap is
-  real on the single-row strip (3.13px², measured) but did NOT exist on the strip as it shipped
-  before this round — the mark sat 147.67px below the chip. The ruling is unaffected.
-- The two documentation findings HO-044 left open are already CLOSED (commit `400a520`): the stray
-  artifact is stripped and `section-01-copy.md` now states the strip that ships. Confirm, do not
-  re-open. Note that neither file is parsed by any harness, which is why the drift was silent —
-  that class of gap is worth a look.
+IF SHIPPING: proceed to the launch merge (DEC-063 §5, `## Upcoming` below) — history preserved,
+not squashed, so the three pinned receipts in the footer don't 404. The founder's VERIFY
+click-check is the step after that, and it is the one thing no runner can stand in for.
 
-OPERATIONAL NOTE, disclosed rather than left to be rediscovered: running two runners concurrently
-against the same machine produced a `CDP timeout: Runtime.evaluate did not reply within 180000 ms`
-once during this round. Re-run serially and it is green. It is contention, not a page defect — but
-a timeout is a failure, so it is named rather than treated as noise. Run the runners SERIALLY.
-
-**Deliverable:** a handoff in `agent-requests.md` naming PM as reviewer, carrying the four runner counts
-re-derived cold on the shipped tree, the result of every violation you plant against this round's
-new and re-based assertions, and an explicit launch recommendation — ship, ship with named
-residuals, or hold with the blocker named. State what you MEASURED versus what you judged.
-
-AMENDED 2026-07-31 — THE TREE MOVED UNDER THIS STEP. A founder-reported §2 defect was fixed after
-this brief was written (HO-045, `7c574b9`): the narration rail pinned each new entry's bottom to
-its own bottom edge, so explanations arrived flush on the fold. Read HO-045 before the sweep. Three
-things change for you:
-
-- **The floor counts are now 308/308 · 27/27 · 108/108 · 45/45.** verify-shell gained four checks
-  and lost none.
-- **The blind-check hunt has a fresh specimen.** A containment-only assertion on the rail passes on
-  4 rows of 40 while the founder's defect survives — the assertion that catches it is resting
-  CLEARANCE, and the difference is the 350ms reveal transform. Same shape as the contrast probe
-  that went blind: a check measuring the wrong moment is a check that cannot fail.
-- **A pre-existing harness hang is now reproduced on `HEAD`**, in a clean worktree: verify-shell
-  exits 13 with "unsettled top-level await" at the find-in-page probe, intermittently, because
-  `cdp.mjs` unrefs its own send deadline. A run that exits 13 is a stalled transport, not a green
-  suite and not a page defect — re-run it, and count the re-run, not the abort.
-
-AMENDED 2026-08-01 — THE TREE MOVED AGAIN. The founder ruled the ground grain coarse (DEC-067) and
-Developer built it (HO-048): `baseFrequency 0.18`, 280u tile at 392px — one declaration in
-`styles/base.css`, the losing form deleted from `page-shell.md` §5.1. Read HO-048 before the sweep.
-The floor counts are UNCHANGED — 308/308 · 27/27 · 108/108 · 45/45, nothing re-based, because no
-harness literal names the frequency. Which is the point for your blind-check hunt: **no shipped
-runner can see the texture at all** (both contrast probes walk ancestors for a `background-color`;
-`.texture` is a fixed sibling) — that gap is ruled yours in DEC-066/067. The composited floor was
-re-measured per-pixel on the built tree (worst `--muted`-on-ground 5.14 dark / 4.82 light, floor
-4.5), and no WebKit evidence exists for the texture at any phone width.
-
-PM AMENDMENT 2026-08-01 — THE PATTERN IS THE ASSIGNMENT, NOT THE THREE FIXES.
-
-Four separate checks in this closing round were found unable to fail. That is no longer a run of bad
-luck; it is a class, and naming it is the highest-value thing this step can do:
-
-1. The sweep's contrast probe skipped selectors it could not resolve (`if (!el) continue`), so
-   retiring a surface silently dropped it from a check still claiming to measure it. **Blind.**
-2. Both contrast probes resolve a background by walking ancestors, and `.texture` is a fixed
-   sibling — so **no runner has ever measured the texture**, and the sweep prints 5.13:1 for a pair
-   compositing at 4.83. Ruled yours in DEC-066/067.
-3. `findGroundPatch` scans until a patch fits, so `bare ground renders at the locked value` can pass
-   by **relocating** rather than by being true.
-4. A containment-only assertion on §2's rail measured the wrong moment — settled rather than during
-   the 350ms reveal — and would have passed on 36 of 40 rows while the founder's defect survived.
-
-Common shape: **a check whose failure mode is silence.** Not a wrong threshold — an absent
-measurement wearing a green label. Hunt that shape across the whole harness; it is worth more than
-re-confirming counts four specialists have already confirmed. For each one you find, say whether it
-ever protected anything.
-
-Two calls that are yours to make, both stated so they are not assumed:
-
-- **`cdp.mjs` unrefs its own send deadline** (`tests/lib/cdp.mjs`, in `send()`), so a stalled call can
-  exit the process instead of rejecting with the method named — defeating the promise in that
-  function's own comment, in exactly the case the deadline exists for. `clearTimeout` already fires
-  on both settle paths, so the unref buys nothing. It is test infrastructure and therefore yours:
-  fix it and say so, or rule it out of scope for launch and say why. **The gate's own
-  failure-reporting path should not be the broken thing.**
-- **Neither copy spec is parsed by any harness**, which is why `section-01-copy.md` drifted from the
-  shipped page silently until a human read it. Judge whether that class needs a check before launch
-  or is accepted as a documentation risk.
-
-LEDGER STATE, so you do not read it as rot: `muster-requests-lint.sh` is red at ~405 active lines
-against a 300 budget. HO-044, HO-045 and HO-048 are **legitimately open pending this sweep** —
-PM reviewed and swept everything closable (HO-042, HO-043, HO-046, HO-047) and declined to fake
-green by deleting live content. Your sweep is what closes the remaining three; PM reconciles at the
-review immediately after.
-
-IF BLOCKED: never set `Role: halt` — only PM does that, and only for a founder question. File the
-blocker addressed to PM in `agent-requests.md` and re-point `## Next Step` to a `Role: pm`
-assessment step.
+IF BLOCKED on a founder question: this is the one case where `Role: halt` is correct — record
+the question in `## Founder Decisions` above.
 ```
 
 ## Upcoming
@@ -247,6 +167,25 @@ them; they are NOT queue steps and add no scope):
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-08-01 — The terminal QA sweep (HO-049). All four counts re-derived cold, twice, serial:
+  **308/308 · 27/27 · 108/108 · 45/45**, before and after one fix. **`cdp.mjs`'s unref'd send
+  deadline is FIXED and proven** — an isolated repro shows the exact mechanism (unref'd timer +
+  stalled call → silent exit 13, vs. a proper "CDP timeout" rejection once ref'd), then the full
+  suite re-run green post-fix. **Six independent plants**, each different from the round's own:
+  the contrast probe's blind-selector fix confirmed live; a texture-composited-contrast plant
+  (SVG gamma, not `--grain-alpha`, which is guarded) passed every contrast check AND the ground
+  patch check by relocating — proving three separate contrast-shaped checks (two DOM walks, one
+  algebraic) are all blind to `.texture`; a sharper version of the same plant correctly failed,
+  bounding the blind range; the narration-rail bottom-pin plant reproduced HO-045's own count
+  exactly (4/40 vs 24/40); the §4 indicator plant reproduced DEC-065's regime exactly (fails only
+  at 1600, not 1280). **Ruling on copy specs corrects the brief**: 5 of 6 copy specs ARE parsed
+  (only `section-01-copy.md` is not) — judged an accepted risk, not a blocker. **Texture contrast
+  independently re-measured per-pixel**: 5.61–5.75 dark / 5.13 light, both clear 4.5, numbers
+  don't fully reconcile with HO-048's table but both clear with margin. One stale ledger note
+  found (`refExists` widening already shipped in `42470b3`, "Upcoming" bullet never removed).
+  **Recommendation: SHIP**, with two named non-blocking residuals (§1's copy spec, the
+  texture-blind contrast checks). Closes HO-044, HO-045, HO-048 for PM's review.
 
 - 2026-08-01 — Founder pick built: Developer ships the coarse ground grain (HO-048, DEC-067) —
   `baseFrequency 0.18` / 5 octaves, 280u tile at 392px, one declaration in `styles/base.css`, built
@@ -396,16 +335,3 @@ them; they are NOT queue steps and add no scope):
   3 seats, the indicator contributing zero. **Awaiting PM at the re-gate review step; PM must rule
   VERIFY's provisional pin and reconcile `agent-requests.md` (lint red, 365 active lines vs 300).**
 
-- 2026-07-30 — Step: Developer re-gate build round (HO-040). Every ruling ships and all three
-  runners are green here on the shipped tree — suite GREEN both engines 295/295 + 27/27, audit
-  108/108, sweep **43/42→43/43**. The four receipts stop pointing at a moving target: `queue`
-  pins the plan at 16 queued steps, `handoffs` the ledger at 11 open entries carrying both entry
-  types, `decision log` current depth, `VERIFY` the last frozen state — **provisional, and
-  flagged**, since its criterion names a launch state that does not exist yet. Six violations
-  planted and reverted; five went red on the right check and **the sixth found a real gap** —
-  stripping `is-active` from the markup broke nothing, because the observer restores it before
-  any harness looks, so a page shipping four dead segments passed every rendered check. The sweep
-  now asserts that guarantee in the source. §5's ruling also surfaced a live defect: weighting the
-  paragraph resolved its `64ch` 8.7% wider than its neighbours' and broke the column, so the
-  emphasis rides a run instead. **Awaiting QA (HO-041) and PM review; PM must rule VERIFY's
-  provisional pin and carry the squash-merge reachability caveat to `pre-launch-checklist.md`.**

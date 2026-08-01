@@ -10,7 +10,241 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-### HO-048 — Developer: the ground grain ships coarse — built from HO-047's delta, verified rather than trusted
+### HO-049 — QA: the terminal sweep — four counts re-derived, one harness bug fixed, and the pattern named across the checks that were never able to fail
+
+**From**: QA · **Reviewers**: PM (`pending` — closes HO-044, HO-045, HO-048)
+**Status**: open · **Filed**: 2026-08-01
+
+**Commit**: `qa: the harness stops silently exiting on a stalled CDP call`
+
+#### 1. The floor, re-derived cold, serial, twice
+
+Ran all four runners cold on the shipped tree at `28e0542` (the state four prior parties had
+already confirmed), then again after the one fix below, both times serially per the standing
+contention note:
+
+| Runner | Before fix | After fix |
+|---|---|---|
+| `verify-shell.mjs` (Blink) | 308/308 | 308/308 |
+| `verify-webkit.mjs` (WebKit) | 27/27 | 27/27 |
+| `qa-independent-audit.mjs` | 108/108 | 108/108 |
+| `qa-fullpage-sweep.mjs` | 45/45 | 45/45 |
+
+Reproducing this is the floor, not the deliverable, per the brief — it is recorded once, cleanly,
+and the rest of this handoff is the judgment work the counts don't cover.
+
+#### 2. Ruling 1 — `cdp.mjs`'s unref'd deadline: FIXED, and the fix is proven, not asserted
+
+**Fixed.** `tests/lib/cdp.mjs`'s `send()` no longer calls `timer.unref?.()` on its own deadline
+timer. One-line change (plus a comment). `clearTimeout` already fires on both settle paths
+(resolve and reject), so a ref'd timer leaks nothing — it only ever outlives the promise for the
+`timeoutMs` it exists to bound. This is test infrastructure, and the brief is right that the
+gate's own failure-reporting path should not be the broken thing.
+
+**Why the unref was wrong, proven in isolation before it was proven on the harness.** The bug
+report (exit 13, "unsettled top-level await," intermittent, at the find-in-page probe) is a race
+that is not cheap to force on the real 180s CDP deadline. So the mechanism was isolated instead of
+chased: a minimal script (`scratchpad/repro-unref.mjs`, not shipped) awaits, at top level, a
+`Promise` whose only settlement path is a `setTimeout` — the exact shape of the pending map entry
+in `send()`. Run twice, changing nothing but the `unref` call:
+
+| Mode | Result |
+|---|---|
+| `timer.unref()` (as shipped) | `Warning: Detected unsettled top-level await` — **exit code 13**, no error message, the promise never gets to reject |
+| no `unref()` (the fix) | timer fires at its deadline, **rejects with `CDP timeout: Runtime.evaluate did not reply within 300 ms`**, exit code 1 |
+
+This is deterministic and instant (no flakiness, no real CDP needed) because it isolates the exact
+mechanism: an unref'd timer cannot hold the event loop open on its own, and if nothing else is
+running when the stalled call is the only pending work, Node reaches "nothing left to do" and exits
+*before* the timer ever fires — silently, exactly in the case the deadline exists to report loudly.
+
+**Proof on the real harness, not just the isolate.** Full suite re-run after the fix, serial:
+**308/308 · 27/27 · 108/108 · 45/45**, all four unchanged from before. `git status` clean except
+`tests/lib/cdp.mjs`; no other file touched. I did not additionally chase whether the fix eliminates
+every occurrence of exit 13 in the wild — the race is intermittent by nature and this session's
+several dozen runner invocations produced zero exit-13s post-fix, which is consistent with the fix
+but is not a guarantee against a future, differently-timed race hitting the same 180s deadline.
+
+**One related timer, named but out of scope.** `connect()`'s handshake timeout (`cdp.mjs` line
+~104) has the identical `timer.unref?.()` shape, one function up. It is not the one reported or
+reproduced, and the brief scopes the fix to `send()`. Left alone here; worth the same one-line fix
+in a future pass, named so it isn't rediscovered as a surprise.
+
+#### 3. Ruling 2 — copy specs and the harness: the brief's framing overstates the gap, corrected
+
+The brief states "neither copy spec is parsed by any harness." **That is not what the repo shows.**
+Of the six `design-specs/web/*-copy.md` files:
+
+| File | Parsed by a harness? |
+|---|---|
+| `section-01-copy.md` | **No** — the one that actually drifted (HO-044 finding, since fixed in prose only) |
+| `section-03-copy.md` | Yes — `verify-shell.mjs` `copyFile()` |
+| `section-04-copy.md` | Yes — `verify-shell.mjs` `copyFile()` |
+| `section-05-copy.md` | Yes — `verify-shell.mjs` `copyFile()`, the cell-count parser HO-044 built |
+| `section-06-copy.md` | Yes — `verify-shell.mjs` reads it directly (`readFileSync`, not the `copyFile()` helper, which is why a `copyFile()`-only grep misses it) and diffs the lead line and both commands byte-exact |
+| `footer-copy.md` | Yes — `verify-shell.mjs` `copyFile()`, the footer's sentence and receipt labels |
+
+**Five of six are coupled to the harness and would go red on drift.** The real gap is exactly one
+file — `section-01-copy.md` — and it is the file that actually drifted, which is why the pattern
+this brief is hunting felt bigger than it is. My judgment: this is a documented, accepted risk, not
+a launch blocker. §1's copy surface is now two strings (`THIS SITE · SPEC → LIVE`, `VERIFY ⎘`), the
+smallest surface on the page and one that just went through a human-caught-and-fixed cycle; adding
+a `readFileSync` coupling for it (mirroring §6's pattern above, which already proves the technique
+costs little) is a cheap post-launch improvement, not something worth holding the merge for. Stated
+so the correction doesn't get lost: **the class is real (one unparsed spec did drift silently) but
+its blast radius is one file, not "neither."**
+
+#### 4. The silent-failure hunt — four named specimens, each independently reproduced, with a verdict
+
+Every specimen below was **run, not read** — planted on the committed tree, watched, and reverted;
+`git status` clean between every plant and clean now.
+
+**(a) The sweep's contrast probe skipping unresolved selectors — FIXED, verdict: never protected
+anything before HO-044, now genuinely does.** Independently re-planted (renamed `.remnant__scope`
+to `.remnant__scope--renamed` in `index.html`, not HO-044's own plant) and re-ran the sweep:
+
+```
+FAIL  contrast ≥ 4.5:1 for body and label text, dark theme
+      ... #hero .remnant__scope ABSENT — probe found nothing ...
+FAIL  contrast ≥ 4.5:1 for body and label text, light theme
+      ... #hero .remnant__scope ABSENT — probe found nothing ...
+```
+43/45. Confirmed working as shipped. Reverted, clean.
+
+**(b) Both contrast probes are blind to `.texture` — CONFIRMED live, not just read in the code;
+verdict: never protected anything, still doesn't, and I found a THIRD instance.** Reading
+`qa-fullpage-sweep.mjs`'s `bgOf()` and `qa-independent-audit.mjs`'s `backdrop()` both confirm the
+ancestor-walk-for-`background-color` shape DEC-066/067 named. There is also a **third**,
+unnamed-until-now: `verify-shell.mjs`'s "vignette floor keeps labels >= 4.5:1" check computes
+contrast **algebraically** from the SEED hex constants and `--vignette-alpha` alone — it accounts
+for the vignette wash but has no grain term at all, so it is exactly as blind to `.texture__grain`
+as the other two, by a completely different mechanism (constants and arithmetic vs. a DOM walk).
+
+Proven, not just reasoned about: planted a change to `.texture__grain`'s SVG data URI (gamma
+exponent 2.6 → 1.0 — a real visual change, verified: `stdDev 4.212, range 18.282-108.797` against
+a clean baseline of a few luminance levels, and it visibly shifts the composited page) that touches
+**no CSS custom property any check reads** (`--grain-alpha` is guarded, `<=` 0.08/0.04 — the SVG's
+internal alpha curve is not guarded at all). Result: **all 308 `verify-shell` checks passed,
+including both "vignette floor" contrast checks and "bare ground renders at the locked value,"
+and all 45 sweep checks passed, including both DOM contrast checks.** A substantively different
+composited page, three-for-three green on every contrast-shaped check that exists.
+
+**(c) `findGroundPatch` can pass by relocating — CONFIRMED, with a nuance the brief's framing
+doesn't carry.** Same plant as (b), gamma 1.0: `verify-shell`'s "bare ground renders at the locked
+value" **passed**, but at a different location than any un-planted run — `patch at 320,0 mean
+21.561 vs expected 19.282` (within the 2.5 tolerance, coincidentally, on a page whose grain layer
+had just been substantially altered). This is the exact "relocating" failure mode HO-046 named. **A
+sharper, more extreme version of the same plant (gamma 0.3) instead made the check correctly FAIL**
+(`no patch within tolerance` — the alteration was severe enough that no 96×96 window anywhere in
+the scanned band matched) — so the check is not *never* capable of failing, it has a blind range in
+between "unchanged" and "severe," and a real defect landing inside that range would relocate and
+pass. Verdict: **it has protected against gross regressions and would not protect against a subtle
+one** — which is the same shape as (b), one register down.
+
+**(d) The narration rail's containment-vs-clearance gap — CONFIRMED, and it is CLOSED (HO-045),
+not open.** Independently reverted `followRail()` in `scripts/replay.js` to the pre-fix bottom-pin
+formula (`rail.scrollTop = active.offsetTop + active.offsetHeight - rail.clientHeight`) — a
+different plant than HO-045's own, same defect class — and ran `verify-shell`:
+
+```
+FAIL  §2 the narration rail keeps the ACTIVE entry whole, at every slot
+      1280×900 sp4b ... 1280×900 sp8 ... 1600×900 sp4b ... 1600×900 sp8   [4 of 40 rows]
+FAIL  §2 the active entry arrives with rail beneath it, never flush on the fold
+      [24 of 40 slots arrive flush]
+```
+**Exactly reproducing HO-045's own count**: a pure containment check would have caught 4 of 40
+rows and missed the founder-reported defect on the other 36; the resting-clearance check the round
+actually shipped catches 24 of 40. Reverted, clean. Verdict: **this is not a residual gap — the
+shipped assertion is the fix, and it is now the check that owns the guarantee, verified by an
+independent plant rather than accepted from the handoff.**
+
+**(e) Stale ledger note, found while checking the receipts, not asked for.** The queue's "Upcoming"
+section carries a pre-loaded item: *"The sweep's `refExists` SHA check widens from the §1 chip to
+all four pinned receipts... not a queue step yet."* **It already has.** `qa-fullpage-sweep.mjs`
+currently resolves `[chipHref, ...footerReceipts]` and checks all three pinned receipts (queue,
+handoffs, decision log) plus both VERIFY seats — confirmed on this run's own printed evidence: `3
+pinned receipt(s) — orchestration-queue.md@... agent-requests.md@... decision-log.md@...`, all
+`commit/path present at ref`. This widening happened in `42470b3` (pre-dating HO-044), and the
+"Upcoming" bullet was never removed. Not a defect — a ledger bookkeeping note for PM.
+
+**(f) §4's indicator, verified at 1600px and above — CONFIRMED covered, not a gap.** Independently
+reverted `resting()` in `scripts/sheet-indicator.js` to the pre-DEC-065 shape (no end-of-track
+special case, "most visible, ties broken by document order" only) and ran `verify-shell`:
+
+```
+FAIL  §4 (d2) at the track's end the LAST segment is the lit one — including where the last two sheets are both whole
+      1280px: sheets 0/0/76/100% visible at the end (1 whole), segment 4 of 4 lit, 1 active ·
+      1600px: sheets 0/0/100/100% visible at the end (2 whole), segment 3 of 4 lit, 1 active
+```
+307/308 — exactly one check fails, and it fails **only** at 1600 (segment 3 lit, wrong); at 1280
+the same reverted code still reports the correct segment 4, because no visibility tie exists at
+that width. This reproduces DEC-065's regime exactly and independently: a check that only asserted
+at 1280 would have shipped this exact regression invisibly. The shipped assertion tests both
+widths, so this is a confirmed-covered case, not a residual gap. Reverted, clean.
+
+#### 5. The texture's composited contrast — measured independently, per-pixel, not accepted from HO-048
+
+Wrote a standalone measurement (`scratchpad/qa-texture-contrast.mjs`, not shipped) rather than
+reading HO-048's table: launches its own Chrome instance, screenshots the built page full-page in
+each theme, finds a genuine bare-ground patch near the vignette's peak (low local variance, same
+guard `findGroundPatch` uses) rather than any pixel in the frame, and computes true WCAG contrast
+between the rendered `--muted` foreground and the darkest/lightest pixel in that patch.
+
+**Result: dark 5.61–5.75:1, light 5.13:1 — both clear the 4.5 floor**, confirming HO-048's
+conclusion. **The exact numbers differ from HO-048's table (5.14 dark / 4.82 light)** — mine reads
+looser in both themes. I did not fully reconcile the gap; the likely cause is methodology (my scan
+is restricted to the top 160px band and a 24×24 low-variance patch search, not necessarily the
+same worst-case location or luminance formula HO-048's script used) rather than either number being
+wrong, since both independently clear the floor with room. Stated as a residual rather than
+smoothed over: **the qualitative finding (floor holds, comfortably, in both themes) is confirmed
+independently; the exact figure is not reconciled between the two measurements.**
+
+#### 6. What has no evidence, restated so it isn't re-asked
+
+**No WebKit evidence exists, at any phone width, for**: §2's replay (rail follow, both-pane
+rewind), §4's track-end state, or the texture's composited contrast. `qlmanage` is the only WebKit
+on this machine — it runs no JavaScript and renders at a fixed ~1024² regardless of the viewport
+requested. Every number in this handoff and in HO-044/045/048 for those three surfaces is Blink's,
+labelled as such upstream and restated as such here rather than left to be assumed covered.
+
+#### 7. Measured versus judged
+
+**Measured**: all four runner counts, twice; the isolated `unref` reproduction (exit code and
+message, both modes); every plant's exact pass/fail counts and printed evidence; the independent
+per-pixel composited contrast in both themes; the receipt check's current live output (3 pinned +
+2 VERIFY seats); `muster-requests-lint.sh`'s current line count (405, unchanged, expected).
+
+**Judged**: that the `unref` fix is correct and sufficient for launch (the mechanism proof is
+airtight; the wild intermittency is not fully eliminated-and-proven, only consistent with fix);
+that `section-01-copy.md`'s remaining gap is an accepted risk rather than a blocker; that the
+`findGroundPatch` and `.texture` contrast gaps are real but non-blocking, because every real
+(non-planted) build this sprint has cleared the floor with margin and nothing in this round moved
+the actual shipped grain past what HO-048 measured.
+
+#### 8. Launch recommendation
+
+**Ship, with two named residuals, neither blocking.**
+
+1. **`section-01-copy.md` stays unparsed by any harness** (§3 above) — the smallest copy surface on
+   the page, just fixed by hand, worth a cheap post-launch coupling, not worth holding the merge.
+2. **No runner can see `.texture`'s effect on contrast** (§4b/c above) — three independent blind
+   spots (two DOM walks, one algebraic check), all confirmed live rather than assumed from the
+   decision log. The floor holds today by direct per-pixel measurement (§5), with margin, in both
+   themes. This is a standing harness gap, not a page defect, and it is exactly as DEC-066/067
+   scoped it: routed to QA, not gating launch, because the true ratios clear the floor before and
+   after every round that touched the texture.
+
+The one item that WAS capable of blocking — a launch gate whose own failure-reporting path could
+silently exit instead of reporting a hang — **is fixed and proven** (§2). Nothing else found this
+sweep rises to a blocker: the narration-rail gap is closed (not open), the indicator's 1600px
+regime is correctly covered by the shipped assertion (verified by an independent revert-and-replant
+that reproduces DEC-065's exact number: 4/40 fails at 1280 alone would have been invisible, my
+plant fails only at 1600, matching the regime), and the receipts check is wider than the ledger
+currently credits it for.
+
+---
+
+
 
 **From**: Developer · **Reviewers**: QA (`pending` — the terminal sweep runs on this tree; the
 texture-blind contrast probe routed to that step is unchanged by this build),

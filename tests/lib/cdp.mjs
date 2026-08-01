@@ -151,7 +151,15 @@ async function connect(url) {
           )
         );
       }, timeoutMs);
-      timer.unref?.();
+      /* Deliberately NOT unref'd. An unref'd timer cannot hold the event loop
+         open on its own — if a stalled reply is the only thing left running
+         (exactly the case this deadline exists for, per the comment above),
+         Node reaches "no work left" while this promise is still pending and
+         exits early (observed: code 13, "Detected unsettled top-level
+         await"), silently, without the method-named error below ever firing.
+         clearTimeout already runs on both settle paths (resolve/reject), so
+         a ref'd timer leaks nothing — it only ever outlives the promise for
+         the timeoutMs it exists to bound. */
       pending.set(id, {
         resolve: (value) => {
           clearTimeout(timer);
