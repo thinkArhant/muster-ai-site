@@ -153,58 +153,74 @@ part of it before the grain arrives.
 contrast probe on this page resolves a background by walking ancestors for a `background-color`; the
 texture is a fixed *sibling* of the content, so both layers are invisible to all of them. A texture
 change can therefore pass every runner while moving real contrast. The floor is verified by rendering
-and per-pixel arithmetic — `samples/ground-texture-renders/measure-candidates.mjs` is the instrument,
-and it reports spread with the vignette off and worst-case contrast with the vignette at its darkest,
-because those are two different questions.
+and per-pixel arithmetic — `samples/ground-texture-coarse/measure-coarse.mjs` is the instrument of
+record, and it reports spread with the vignette off, worst-case contrast with the vignette at its
+darkest, and feature size as autocorrelation length, because those are three different questions.
 
 ### 5.1 Grain
 
-Rugged noise over `--ground`, biased faint with occasional grit. One `feTurbulence` tile of 140 user
-units painted into a 196px box — that ~1.4× upscale is what makes it read as **tooth rather than
-static**, and it does not vary. The layer's `--grain-alpha` multiplies the tile's own per-pixel alpha,
-which peaks at 0.78, so the effective peak is always below the token's value.
+Rugged noise over `--ground`, biased faint with occasional grit: one `feTurbulence` fractalNoise
+tile, desaturated, its alpha biased low by a gamma curve (exponent 2.6), painted at a ~1.4× upscale.
+The layer's `--grain-alpha` (0.08 dark / 0.04 light) multiplies the tile's own per-pixel alpha, which
+peaks at 0.78, so the effective peak is always below the token's value.
 
-**Coarsening the tile is available and is not taken.** At 294px it measures +13% of spread for no
-per-pixel cost, but its features then grow past the width of a glyph stem, and a grain that a whole
-stem can sit inside stops averaging under text. Tooth is a property of feature size as much as of
-alpha; 196px is the size that holds it.
+**Ruggedness is a feature-size property, not an intensity property, and feature size is measured, not
+judged** — the autocorrelation length of a bare-ground patch, per CSS pixel at a 2× raster (spread
+and span are stated beside it; a span near two levels of 255 is below one step of 8-bit quantisation
+and is an absent texture, not a faint one). A grain whose features measure ~1px is box-averaged by a
+2× display into a uniform veil that no amount of alpha makes rugged; material tooth — canvas, paper,
+worn metal — has features around 3–6px with clumpy structure. `baseFrequency` sets the feature size
+and is the one lever that buys perceptibility at near-zero contrast cost. Intensity levers (layer
+opacity, a two-sided pigment, a lifted alpha curve) each measure worse: they spend contrast or ground
+luminance for spread that stays below the perceptual threshold while the features stay at 1px.
 
-**Strength is judged on rendered pixels, in both themes, at a 2× raster** — the spread of a patch of
-bare ground per CSS pixel, which is what a reader on a 2× display actually receives. Standard
-deviation alone understates a noise; state the span of the patch beside it. A spread whose span is
-around two levels of 255 is below one step of 8-bit quantisation and is not a faint texture, it is an
-absent one.
+**Two frequency forms are specified; one ships, and the other is deleted from this section when it
+does.** They differ in frequency, octaves and tile only — same pigment, same alpha curve, same
+`--grain-alpha` in both themes, both vignettes untouched:
 
-**Two pigments are specified; one ships, and the other is deleted from this section when it does.**
-Everything above holds for both.
-
-| | Current | Stronger |
+| | Current | Coarse |
 |---|---|---|
-| RGB transfer | none — one pale grey | `feFuncR/G/B type="linear" slope="3" intercept="-1"` — two-sided, light grit and dark grit |
-| Alpha curve | `feFuncA` gamma exponent `2.6` | exponent `1.5` |
-| `--grain-alpha` dark | `0.08` | `0.11` |
-| `--grain-alpha` light | `0.04` | `0.04` — unchanged |
-| Span of a ground patch, dark / light | 7.5 / 2.0 levels of 255 | 16.3 / 5.0 |
-| Worst composited pixel, `--muted` on ground, dark / light | 5.29 / 4.83 | 4.92 / 4.71 |
-| Rendered ground luminance, dark | 21.9 of 255 | 25.6 |
+| `baseFrequency` / `numOctaves` | `0.9` / `4` | `0.18` / `5` |
+| tile / painted box | 140 user units / 196px | 280 user units / 392px |
+| feature size, dark (autocorr length at 2×) | 1px — a veil | 5px — the canvas-tooth band |
+| spread / span of a ground patch, dark | 1.12 / 7.5 levels of 255 | 1.42 / 10.75 |
+| spread / span, light | 0.26 / 2.0 | 0.34 / 2.5 |
+| worst composited px, `--muted` on ground, dark / light | 5.29 / 4.83 | 5.14 / 4.82 |
+| rendered ground luminance, dark | 20.57 of 255 | 20.58 |
 
-The light theme's opacity does not move in either form, and that is measured rather than cautious:
-doubling it buys +23% of spread, where changing the pigment buys +150%. On a ground only ~28 levels
-from the pigment's own grey, opacity has almost nothing to scale.
+**The tile is sized by its repeat, and the upscale does not vary.** The tile carries at least ~50
+base-frequency periods per side so the repeat cannot be caught by eye (140u × 0.9 = 126 periods;
+280u × 0.18 = 50) — a coarse grain in a small tile tiles visibly. The ~1.4× painted upscale is the
+established tooth character and holds in both forms. Verified at full viewport: no visible repeat.
 
-**The cost of the stronger form, stated because it is real**: on a near-black ground, making a grain
-visible *is* lightening the ground — the same variable, and no mechanism in reach separates them. The
-alpha curve is the worst of the available levers on that axis (+13% of spread for +2.2 of ground
-luminance) and is carried only because it is what lifts the light theme, where the pigment change
-alone leaves too little.
+**The glyph-stem guard is scoped to card surfaces, not the ground.** A feature wider than a glyph
+stem was the wrong rejection line for the ground layer: physical paper tooth is far coarser than the
+type printed on it, and the only type on bare ground is sparse labels plus §3's reading column, which
+is covered by the floor above. The guards that bind the ground grain are the 4.5:1 worst-pixel floor,
+the light vignette's 5% cap, and the no-visible-repeat rule.
+
+**The light theme has no perceptible grain in any frequency form, and that is recorded as a property
+rather than tuned away.** The pigment sits ~28 levels from the light ground, and at the locked 0.04
+alpha the span never exceeds ~2.5 levels of 255 regardless of frequency. Making it perceptible
+requires a two-sided pigment or more alpha, and both spend the light theme's contrast margin — the
+scarcest number on the page — for sub-threshold gain. The light ground ships as near-invisible tooth
+by ruling, not by accident.
+
+**Rejected forms, on measurement or judgement**: `baseFrequency 0.09` (8px features read as staining
+and uneven backlight rather than tooth — the point where texture becomes a reportable defect); a
+two-layer build of fine veil plus sparse coarse grit (the grit's crushed alpha curve lands below
+perception and the composite is indistinguishable from the fine veil alone — spread 1.18 against
+1.12); and every intensity lever, per the feature-size rule above.
 
 **Cross-engine parity WebKit + Blink is required evidence, not a formality** — inline-SVG/WebKit
-divergence is this project's known failure class, and every pigment lever here is an SVG filter
-primitive. Two instrument traps belong with that requirement, because both have produced a wrong
-answer here: `qlmanage` scales a whole document into a fixed square frame, and downscaling
-box-averages a per-pixel noise back toward flat, so any WebKit render used as texture evidence must
-pin the document's height near the frame's; and `qlmanage` cannot be given a viewport, so **no WebKit
-evidence exists at any phone width** — phone figures are Blink's and say so.
+divergence is this project's known failure class, and every grain lever here is an SVG filter
+primitive. WebKit applies both frequency forms: in-engine feature size moves 2px → 6px and spread
+×1.21 for the coarse form, the same direction as Blink. Two instrument traps belong with that
+requirement, because both have produced a wrong answer here: `qlmanage` scales a whole document into
+a fixed square frame, and downscaling box-averages a per-pixel noise back toward flat, so any WebKit
+render used as texture evidence must pin the document's height near the frame's; and `qlmanage`
+cannot be given a viewport, so **no WebKit evidence exists at any phone width** — phone figures are
+Blink's and say so.
 
 ### 5.2 Top vignette
 

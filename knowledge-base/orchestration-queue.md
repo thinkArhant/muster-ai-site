@@ -70,20 +70,22 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
   builds only the picked form; the losing form is deleted from `section-01-hero.md` §7.1 in the
   same commit.
 
-- [2026-07-31] [UI/UX]: **The ground texture — one pick, on one image.** Open
-  `samples/ground-texture-renders/CONTACT-SHEET.png`. **Asked, one thing**: the grain, **CURRENT**
-  or **STRONGER**. Both are shown behind real content — §2's terminal, §5's cards, §3's reading
-  column and the phone — at 1:1, never resized, because scaling a crop of a per-pixel noise shows a
-  texture neither one has. **UI/UX recommends STRONGER.** The founder's premise is confirmed and is
-  worse than stated: on the light ground the current grain spans **2.0 levels of 255**, which is one
-  step of 8-bit quantisation — not faint, absent. STRONGER takes that to 5.0 and the dark ground from
-  7.5 to 16.3, and every contrast pair stays above 4.5:1 in both themes (dark 4.92, light 4.71).
-  **The light vignette is verified at its 5% cap and is untouched in both forms**, as is the dark
-  vignette at 16%. The one real cost, stated rather than buried: on a near-black ground making a
-  grain visible *is* lightening it, and the dark ground's rendered luminance goes 21.9 → 25.6 of 255.
-  Developer builds only the picked form; the losing form is deleted from `page-shell.md` §5.1 in the
-  same commit, and one hard-coded harness assertion (`grain peak alpha capped at 8%`) is re-based
-  either way. See HO-046.
+- [2026-08-01] [UI/UX]: **The grain's last round — one pick, on one image.** Open
+  `samples/ground-texture-coarse/CONTACT-SHEET.png`. **Asked, one thing**: the grain, **CURRENT** or
+  **COARSE 0.18** (0.35 is the quieter fallback, shown beside them). The lever is `baseFrequency`
+  alone — no alpha moves, no pigment moves, both vignettes untouched — and the ruled diagnosis holds
+  on measurement: feature size goes 1px → 3 / 5 / 8px (autocorrelation length), and it is nearly
+  free, worst `--muted`-on-ground **5.14 dark / 4.82 light** against 5.29 / 4.83 today, floor 4.5,
+  with the dark ground's luminance unmoved (20.57 → 20.58). **UI/UX recommends 0.18** — judged on
+  1:1 renders in both engines, it is the first form that reads as material rather than veil.
+  **Shown, not asked**: 0.09 (its 8px features read as staining, not tooth) and the two-layer form
+  (the sparse grit lands below perception; it needs alpha it is not allowed). Two honest limits on
+  the sheet itself: even 0.18 is tooth, not grit — the direction reference's overt grain needs ~10×
+  the effective alpha the 4.5:1 floor allows, at any frequency — and **no frequency makes the light
+  theme's grain perceptible at its locked alpha** (span ≤ 2.5 of 255; ruled into §5.1 as a property).
+  "Ship CURRENT" stays a sound verdict. All four runners green on the proposed state, zero to
+  re-base. Developer builds only the picked form; the losing column is deleted from
+  `page-shell.md` §5.1 in the same commit. See HO-047.
 
 - [2026-07-31] [Content]: **VERIFY.md now publishes the site's economics — do the figures get a
   fresh read before launch?** The section quotes the committed record ($594 · 51 step-sessions ·
@@ -208,6 +210,22 @@ them; they are NOT queue steps and add no scope):
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-08-01 — Founder-directed round, the grain's last: UI/UX varies `baseFrequency` — the lever no
+  prior candidate moved — and renders three coarse forms plus the optional two-layer against CURRENT
+  (HO-047). **The ruled diagnosis is confirmed on measurement**: feature size (autocorrelation
+  length) goes 1px → 3 / 5 / 8px while worst-case contrast moves at most 0.15 and the dark ground's
+  luminance does not move at all — the coarse lever is nearly free where every intensity lever was
+  expensive. **Judged on 1:1 renders in both engines: 0.18 is the first form that reads as material
+  rather than veil**, and is recommended; 0.09 is disqualified (staining, not tooth), the two-layer
+  is disqualified on measurement (grit below perception as constructed — reported, not rescued with
+  alpha). Tile rule derived and verified: ≥ ~50 base periods per side, no visible repeat at full
+  viewport. WebKit applies every variant (2 → 3 / 6 / 12px in-engine); no WebKit at any phone width,
+  stated. **The light theme is the round's honest negative** — no frequency is perceptible at the
+  locked 0.04 alpha (span ≤ 2.5 of 255), ruled into `page-shell.md` §5.1 as a property. All four
+  runners green on the proposed state (308/308 · 27/27 · 108/108 · 45/45), nothing to re-base.
+  §5.1 rewritten to carry only the two live forms. **Awaiting the founder's pick — "ship CURRENT"
+  remains a sound outcome, stated on the sheet itself.**
 
 - 2026-07-31 — Founder-directed round: UI/UX measures the ground texture and renders the pick
   (HO-046). **The founder's premise is confirmed and understated** — on the light ground the shipped
@@ -352,13 +370,3 @@ them; they are NOT queue steps and add no scope):
   receipt — the build-now options are priced in the memo, the largest costing §2's whole
   machinery plus a re-spent phone check. Suite re-run: 280/282 with exactly HO-038's two designed
   reds — no shipped file touched. **Awaiting Developer (HO-040 builds the rulings) and PM review.**
-
-- 2026-07-30 — Step: Content re-gate copy round (HO-038). F-R4's false word is fixed in copy
-  ("real", byte-equal to the founder's resolved string), §6's lead carries the model-proof claim
-  drawn verbatim from the founder's safe-today material (30 of ≤ 32 words), the footer's two
-  sentences become three one-sentence candidates with A recommended (33 words, team truth first,
-  the role names released to VERIFY.md and the receipts), and the F-R8 repetition audit is a filed
-  memo — one true content repetition on the page (§2's totals, twice), reclaimable only if F-R1
-  needs the room. Suite 280/282 with both reds designed (copy leading the build; HO-040 swaps the
-  strings); audit 108/108; sweep 42/42. **Awaiting UI/UX (HO-039 consumes the candidates and the
-  §6 line) and PM (rules the memo) at their steps.**

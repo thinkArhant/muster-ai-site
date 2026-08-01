@@ -10,10 +10,132 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-047 — UI/UX: ruggedness is a feature-size property, measured — a coarse grain is rendered beside the current one for the founder's last texture pick
+
+**From**: UI/UX · **Reviewers**: Founder (`pending` — the pick: CURRENT or COARSE 0.18),
+Developer (`pending` — builds the picked form; exact delta in §4 below),
+PM (`pending` — review)
+**Status**: open · **Filed**: 2026-08-01
+
+**Contact sheet**: `samples/ground-texture-coarse/CONTACT-SHEET.png`
+**No shipped file was touched.** Proposals are generated from `index.html`
+(`samples/ground-texture-coarse/build-proposals.mjs` → `samples/groundc-*.html`); the runners were
+run against a temporarily-applied delta and the tree was reverted before this was filed.
+
+#### 1. The round, and the one lever it varies
+
+`baseFrequency` — held at `0.9` in every prior candidate — is the only thing that moves. Alphas stay
+at the shipped 0.08 dark / 0.04 light, the pigment stays the shipped pale grey, the alpha curve stays
+gamma 2.6, both vignettes untouched. Three variants against CURRENT, plus the optional two-layer:
+
+| | bf / octaves | tile / box | feat. dark (2×) | spread dark | `--muted` worst d / l | ground lum. dark |
+|---|---|---|---|---|---|---|
+| CURRENT | 0.9 / 4 | 140u / 196px | **1px** | 1.12 (span 7.5) | 5.29 / 4.83 | 20.57 |
+| COARSE 0.35 | 0.35 / 4 | 140u / 196px | **3px** | 1.35 (10.75) | 5.18 / 4.83 | 20.56 |
+| **COARSE 0.18** | 0.18 / 5 | 280u / 392px | **5px** | 1.42 (10.75) | 5.14 / 4.82 | 20.58 |
+| COARSE 0.09 | 0.09 / 5 | 560u / 784px | **8px** | 1.53 (10) | 5.17 / 4.83 | 20.67 |
+| TWO-LAYER | 0.9+0.18 | both | 2px | 1.18 (8) | 5.28 / 4.83 | 20.70 |
+
+Floor 4.5:1, worst single composited pixel, vignette at its darkest, both themes — **every variant
+clears it with ≥ 0.6 dark / ≥ 0.32 light of margin.** The coarse lever is nearly free where the
+intensity levers were expensive: worst-case `--muted` moves at most 0.15, and the dark ground's
+luminance does not move (20.57 → 20.58, where the rejected route cost +3.7). Tile sizes follow from
+the frequency by one rule: ≥ ~50 base-frequency periods per side so a coarse grain cannot tile
+visibly (verified at full viewport — no visible repeat), with the shipped ~1.4× paint upscale
+unchanged.
+
+#### 2. MEASURED versus JUDGED — the question actually asked
+
+**Measured**: everything in the table; feature size as autocorrelation length (the number the
+hypothesis stands on: 1px → 3 / 5 / 8px); WebKit applying every variant's filter in-engine (feature
+size 2 → 3 / 6 / 12px, spread ×1.16 / ×1.21 / ×1.36, same direction as Blink); light-theme span
+≤ 2.5 of 255 in every variant, both engines.
+
+**Judged, looking at 1:1 renders**: **0.18 is the first form that is perceptibly a material rather
+than a veil** — visible clumpy tooth on the dark ground at arm's length, in both engines, and it
+still reads calm behind content. 0.35 is real but quieter: fine tooth a reader notices only when
+looking at the ground. **0.09 is disqualified**: its 8px features read as staining and uneven
+backlight, not tooth — the point where texture becomes a defect a reader would report. **TWO-LAYER
+is disqualified on measurement**: as constructed (grit at gamma 4 × amplitude 0.6) the grit lands
+below perception and the composite is CURRENT again — no alpha was raised to save it, per the
+round's rule; that it needs alpha to work is reported here instead.
+
+**The recommendation is COARSE 0.18**, with 0.35 the named fallback if it reads too coarse in
+person. And the honest ceiling, stated plainly: even 0.18 is a quiet texture. Within the 4.5:1
+floor, no overt grit exists on this page in any form — if that is what the direction reference's
+feel calls for, it is not reachable (§5 below), and **"ship CURRENT" remains a sound outcome**; the
+page does not stand on this layer.
+
+#### 3. The light theme's honest result
+
+No frequency makes this grain perceptible on the light ground: the pigment sits ~28 levels from the
+ground, and the locked 0.04 alpha leaves a span of at most ~2.5 levels of 255 at any feature size.
+Feature size fixes the dark theme; light's limit is pigment distance, and the pigment and alpha axes
+lost their round already. Ruled into `page-shell.md` §5.1 as a property, not a defect: the light
+ground ships as near-invisible tooth in every form, including the recommended one.
+
+#### 4. THE EXACT DELTA TO BUILD — one declaration, one file
+
+**`styles/base.css`**, `.texture__grain` only. **Tokens untouched — no alpha moves in any form.**
+
+If **COARSE 0.18** is picked, three substring changes inside the one `background-image` declaration,
+plus the size line:
+
+- `width='140' height='140'` → `width='280' height='280'` (both occurrences: the `svg` element and
+  the `rect`)
+- `baseFrequency='0.9' numOctaves='4'` → `baseFrequency='0.18' numOctaves='5'`
+- `background-size: 196px 196px; /* 140px tile at ~1.4x */` →
+  `background-size: 392px 392px; /* 280px tile at ~1.4x */`
+
+If **COARSE 0.35**: one substring change only — `baseFrequency='0.9'` → `baseFrequency='0.35'`
+(octaves, tile and box stay as shipped; 140u × 0.35 = 49 periods still clears the repeat rule).
+
+If **CURRENT**: nothing in the styles. Either way the losing column is deleted from
+`page-shell.md` §5.1 in the same commit, and the section's numbers already match this table.
+
+#### 5. Runners, cross-engine, and what contradicts the brief
+
+**All four runners green on the proposed 0.18 state, run serially: 308/308 · 27/27 · 108/108 ·
+45/45 — zero red.** Unlike the alpha round there is no token to re-base: no harness literal names
+the frequency, and `grain peak alpha capped at 8%` reads a token no variant touches. The standing
+caveat stands: no shipped runner can see any of this (both contrast probes walk ancestors for a
+`background-color`; `.texture` is a fixed sibling) — every number here is from
+`samples/ground-texture-coarse/measure-coarse.mjs`, per-pixel.
+
+WebKit: pinned-height `qlmanage` renders per variant, statistics read as in-engine ratios only, and
+**no WebKit evidence exists at any phone width** — the sheet's phone band is Blink's and is
+labelled so. On light, WebKit needed a vignette-off pass to see the grain at all (the vignette's own
+wash dominates the patch otherwise); it confirms Blink — quantisation-level in every variant.
+
+Three things measured that the brief did not predict:
+
+- **Measured spread barely moves (×1.27 dark for 0.18) while perceptibility moves decisively** —
+  the round's premise (spread and ruggedness are different quantities) is confirmed from the other
+  side: the win shows up in autocorrelation length, not sd.
+- **The direction reference's own grain is fine-featured, not coarse** — canvas-painted ~1.4px
+  speckle, bipolar 228/14 pigment, at roughly an order of magnitude more effective alpha than the
+  4.5:1 floor allows on this palette. Its ruggedness is an intensity property. Calibrating against
+  it: the reference's overt grain is unreachable inside the contrast budget at ANY frequency, which
+  is why "perceptible tooth" (0.18) and not "the reference's grain" is the honest best available.
+- **The 1× rows of the instrument are polluted and are not quoted**: the flat-patch scan strides
+  2 device px and steps over the status bar's 1-device-px hairline at 1×, so the 1× "patch" spans
+  the bar. The 2× rows — the unit that matters — find their patch below it. Instrument limitation,
+  noted so nobody reads the 1× rows as evidence.
+
+#### 6. Apple-quality bar
+
+*Would Apple ship this?* — Yes, for the recommended form: it is one changed declaration, no new
+asset, no request, no motion, no token, no markup; it makes an intended texture actually perceptible
+at a measured cost of almost nothing; and it was chosen by looking at 1:1 renders in both engines,
+not by the biggest number. The reservation is on the sheet in plain words: it is tooth, not grit,
+and the light theme keeps its near-invisible veil — both are the contrast budget's price, and the
+budget outranks the texture.
+
 ### HO-046 — UI/UX: the ground texture is measured, and a stronger grain is rendered beside the current one for the founder's pick
 
-**From**: UI/UX · **Reviewers**: Founder (`pending` — the pick),
-Developer (`pending` — builds the picked form; exact delta in §5 below),
+**From**: UI/UX · **Reviewers**: Founder (`done` — STRONGER **rejected**: it spends contrast on a
+change below the perceptual threshold; the feature-size round it directed is HO-047),
+Developer (`superseded` — no STRONGER build; HO-047 §4 carries the live delta),
 PM (`pending` — one spec-level finding to rule, §7)
 **Status**: open · **Filed**: 2026-07-31
 
