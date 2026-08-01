@@ -106,56 +106,55 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
 
 ```
 Role: qa
-```
 
-Round 3 of 3 is built and committed (HO-044, `f166dfb`). Everything DEC-062 through DEC-064 ruled
-is on the page: §5's four prose lines and two-cell cards, §1 slimmed to the scope label and the
-chip with one top-left mark, the footer's re-ruled sentence with its two nowrap units, and the two
-phone bugs closed with an assertion each. Nothing is open to build.
+Round 3 of 3 is built and committed (HO-044). Everything DEC-062 through DEC-064 ruled is on the
+page: §5's four prose lines and two-cell cards, §1 slimmed to the scope label and the chip with one
+top-left mark, the footer's re-ruled sentence with its two nowrap units, and the two phone bugs
+closed with an assertion each. Nothing is open to build.
 
-**Read first**: `knowledge-base/agent-requests.md` **HO-044** — it lists every file changed, every
-assertion added or re-based, and eighteen plants with what each turned red.
+Read first: `knowledge-base/agent-requests.md` HO-044 — every file changed, every assertion added
+or re-based, and eighteen plants with what each turned red.
 
-**The step.** Run the terminal sweep DEC-062 decision 5 traded the per-wave re-runs for. Developer
-reports all four runners green on the shipped tree with `git status` clean —
-**`verify-shell` 304/304 · `verify-webkit` 27/27 · `qa-independent-audit` 108/108 ·
-`qa-fullpage-sweep` 45/45** — so reproducing those counts cold is the floor, not the deliverable.
+THE STEP. Run the terminal sweep DEC-062 decision 5 traded the per-wave re-runs for. Developer
+reports all four runners green on the shipped tree with `git status` clean — verify-shell 304/304 ·
+verify-webkit 27/27 · qa-independent-audit 108/108 · qa-fullpage-sweep 45/45 — so reproducing those
+counts cold is the FLOOR, not the deliverable. The deliverable is judgment about what the counts do
+not cover.
 
-**What is worth your attention, stated so it is not rediscovered:**
+WORTH YOUR ATTENTION, stated so it is not rediscovered:
 
-- **Three couplings this round found by running rather than by reading**, and one of them was a
-  check going *blind* rather than red: the sweep's contrast probe skipped selectors it could not
-  find, so retiring §1's cells silently dropped a surface from a check that still claimed to
-  measure it. Look for the same shape elsewhere.
-- **Two behaviours have no WebKit evidence in any condition** — §4's track end and §2's replay are
-  JavaScript, and `qlmanage` runs none. Every phone figure in HO-044 is Blink's and is labelled so.
-- **Two documentation findings are open and deliberately not fixed by Developer** (both in
-  Content's files, neither shipping): a stray `</content></invoke>` artifact ending
-  `section-05-copy.md`, and `section-01-copy.md` §5 still specifying §1 strings that no longer
-  ship. Judge whether either blocks the launch merge.
-- **One accuracy note on HO-043/DEC-064**, disclosed rather than smoothed: the mark/chip overlap is
-  real on the single-row strip (3.13px², measured) but did **not** exist on the strip as it shipped
+- Three couplings this round found by running rather than by reading, and one of them was a check
+  going BLIND rather than red: the sweep's contrast probe skipped selectors it could not find, so
+  retiring §1's cells silently dropped a surface from a check that still claimed to measure it.
+  Hunt the same shape elsewhere — a check that cannot fail is worse than no check.
+- Two behaviours have no WebKit evidence in any condition: §4's track end and §2's replay are
+  JavaScript, and `qlmanage` runs none. Every phone figure in HO-044 is Blink's and labelled so.
+- §4's indicator bug was neither hypothesis DEC-063 recorded — the cause was a visibility TIE from
+  1600px up, broken by document order, so the last segment could never light on a wide screen at
+  any scroll position. DEC-065 corrects the record. Verify the fix at 1600 and above, not only at
+  1280, or the regression is invisible to you exactly as it was to every prior harness.
+- One accuracy note on HO-043/DEC-064, disclosed rather than smoothed: the mark/chip overlap is
+  real on the single-row strip (3.13px², measured) but did NOT exist on the strip as it shipped
   before this round — the mark sat 147.67px below the chip. The ruling is unaffected.
+- The two documentation findings HO-044 left open are already CLOSED (commit `400a520`): the stray
+  artifact is stripped and `section-01-copy.md` now states the strip that ships. Confirm, do not
+  re-open. Note that neither file is parsed by any harness, which is why the drift was silent —
+  that class of gap is worth a look.
 
-**One operational note, disclosed rather than left to be rediscovered**: running two runners
-concurrently against the same machine produced a
-`CDP timeout: Runtime.evaluate did not reply within 180000 ms` once during this round. Re-run serially
-and it is green. It is contention, not a page defect — but a timeout is a failure, so it is named
-here rather than treated as noise.
+OPERATIONAL NOTE, disclosed rather than left to be rediscovered: running two runners concurrently
+against the same machine produced a `CDP timeout: Runtime.evaluate did not reply within 180000 ms`
+once during this round. Re-run serially and it is green. It is contention, not a page defect — but
+a timeout is a failure, so it is named rather than treated as noise. Run the runners SERIALLY.
 
-**Deliverable:** a handoff in `agent-requests.md` naming PM as reviewer, carrying the four runner
-counts re-derived cold on the shipped tree, the result of every violation planted against this
-round's new and re-based assertions, and an explicit launch recommendation — ship, or ship with
-named residuals, or hold with the blocker named.
+**Deliverable:** a handoff in `agent-requests.md` naming PM as reviewer, carrying the four runner counts
+re-derived cold on the shipped tree, the result of every violation you plant against this round's
+new and re-based assertions, and an explicit launch recommendation — ship, ship with named
+residuals, or hold with the blocker named. State what you MEASURED versus what you judged.
 
-**Two documentation findings above are already closed** — the stray artifact is stripped and
-`section-01-copy.md` now states the strip that ships (`400a520`). Confirm rather than re-open.
-
-**If blocked**: re-point `## Next Step` to a `Role: pm` assessment step and file the blocker in
-`agent-requests.md`. Never set `Role: halt` — only PM does that, and only for a founder question.
-
-**If blocked**: never set `Role: halt`. File the blocker addressed to PM and re-point `## Next Step`
-to a `Role: pm` assessment step.
+IF BLOCKED: never set `Role: halt` — only PM does that, and only for a founder question. File the
+blocker addressed to PM in `agent-requests.md` and re-point `## Next Step` to a `Role: pm`
+assessment step.
+```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
