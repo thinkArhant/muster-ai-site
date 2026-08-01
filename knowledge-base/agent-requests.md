@@ -10,10 +10,64 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-048 — Developer: the ground grain ships coarse — built from HO-047's delta, verified rather than trusted
+
+**From**: Developer · **Reviewers**: QA (`pending` — the terminal sweep runs on this tree; the
+texture-blind contrast probe routed to that step is unchanged by this build),
+PM (`pending` — review against HO-047 and DEC-067)
+**Status**: open · **Filed**: 2026-08-01
+
+**Commit**: `developer: the dark ground reads as material — the grain ships coarse`
+
+#### 1. What shipped
+
+`styles/base.css`, `.texture__grain` only — HO-047 §4's COARSE 0.18 delta exactly: tile 140→280 user
+units (both `svg` and `rect`), `baseFrequency 0.18` / `numOctaves 5`, `background-size 392px`. No
+token moved, no alpha moved, both vignettes untouched. `page-shell.md` §5.1 now carries the shipped
+form only: the two-form table is gone, the feature-size rationale and the measured guard stay, the
+frequency's two bounds are stated as durable properties, and the rejected-candidate record stays in
+the decision log where it already is.
+
+**Transcription verified, not assumed**: the built data-URI was decoded and every attribute checked
+(280/280 both seats, 0.18/5, `saturate 0`, gamma 2.6, no `feFuncR/G/B`, one `feTurbulence`), and the
+full URI is **byte-identical** to the `f018` variant `build-proposals.mjs` generated and UI/UX
+measured — so the numbers in HO-047's table are numbers about this exact declaration.
+
+#### 2. Runners on the BUILT page, serial
+
+**verify-shell 308/308 · verify-webkit 27/27 · qa-independent-audit 108/108 · qa-fullpage-sweep
+45/45 — zero red, nothing re-based.** UI/UX's "nothing to re-base" is confirmed two ways: a repo
+grep finds no harness literal naming the frequency, tile, or paint box (`grainSize` is printed as
+evidence, never asserted), and both alpha checks read the untouched token — `grain peak alpha capped
+at 8% (dark)` passes as it stood.
+
+#### 3. Measured on the built page (not read off HO-047)
+
+Per-pixel, 2× box-averaged to CSS pixels, patch found with both layers off and reused:
+
+- **Dark**: grain alone sd 1.42 / span 10.75 / feature size **5px**; shipped composite worst pixel,
+  vignette at darkest — ink 13.17:1, `--muted` **5.14:1** (floor 4.5). Ground mean 20.58.
+- **Light**: grain alone sd 0.34 / span **2.5 of 255** (the ruled near-invisible property); shipped
+  composite worst pixel — ink 11.40:1, `--muted` **4.82:1**. All four values reproduce HO-047's
+  table exactly.
+- **WebKit, pinned-height `qlmanage`, in-engine only**: dark grain off sd 0 → grain alone sd 1.41 at
+  feature size **6px** — the coarse filter applies in WebKit and at coarse scale, matching UI/UX's
+  f018 figure. Light grain alone sd 0.49 at 2px, quantisation-level as ruled; the shipped-light
+  statistic is dominated by the vignette wash, which is why the grain-alone pass exists.
+- 1:1 dark render looked at: clumpy tooth, calm behind content, no visible repeat.
+
+#### 4. Standing gaps, restated so green is not misread
+
+No shipped runner can see any of this — both contrast probes walk ancestors for a
+`background-color` and `.texture` is a fixed sibling; every ratio above is from per-pixel
+measurement, and that instrument gap is QA's at the terminal step, not widened here. **No WebKit
+evidence exists at any phone width** (`qlmanage` takes no viewport); phone rendering of this grain
+is Blink's only. Nothing measured contradicts HO-047 or the build brief.
+
 ### HO-047 — UI/UX: ruggedness is a feature-size property, measured — a coarse grain is rendered beside the current one for the founder's last texture pick
 
-**From**: UI/UX · **Reviewers**: Founder (`pending` — the pick: CURRENT or COARSE 0.18),
-Developer (`pending` — builds the picked form; exact delta in §4 below),
+**From**: UI/UX · **Reviewers**: Founder (`done` — COARSE 0.18 picked, DEC-067),
+Developer (`done` — built as §4 states, verified byte-identical to the measured f018 variant; HO-048),
 PM (`pending` — review)
 **Status**: open · **Filed**: 2026-08-01
 

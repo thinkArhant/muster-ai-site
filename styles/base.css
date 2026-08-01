@@ -41,9 +41,11 @@ body {
 
 /* --------------------------------------------------------------------------
    Texture — two generated layers, behind all content, information-free.
-   Grain: fractal noise biased faint by an alpha gamma curve, so it reads as
-   tooth rather than static. Peak per-pixel alpha is capped by --grain-alpha
-   (8% dark / 4% light) because the layer's opacity multiplies the source.
+   Grain: coarse fractal noise biased faint by an alpha gamma curve, so it
+   reads as material tooth rather than static — feature size (~5px), not
+   intensity, is what makes it perceptible. Peak per-pixel alpha is capped by
+   --grain-alpha (8% dark / 4% light) because the layer's opacity multiplies
+   the source.
    -------------------------------------------------------------------------- */
 
 .texture {
@@ -57,9 +59,9 @@ body {
   position: absolute;
   inset: 0;
   opacity: var(--grain-alpha);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='gamma' exponent='2.6' amplitude='1' offset='0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.18' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='gamma' exponent='2.6' amplitude='1' offset='0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23g)'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 196px 196px; /* 140px tile at ~1.4x */
+  background-size: 392px 392px; /* 280px tile at ~1.4x */
 }
 
 .texture__vignette {

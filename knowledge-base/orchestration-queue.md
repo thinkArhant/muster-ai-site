@@ -70,22 +70,11 @@ Marketing · Legal · Research. They live in `copy-rules.md` → scope table.
   builds only the picked form; the losing form is deleted from `section-01-hero.md` §7.1 in the
   same commit.
 
-- [2026-08-01] [UI/UX]: **The grain's last round — one pick, on one image.** Open
-  `samples/ground-texture-coarse/CONTACT-SHEET.png`. **Asked, one thing**: the grain, **CURRENT** or
-  **COARSE 0.18** (0.35 is the quieter fallback, shown beside them). The lever is `baseFrequency`
-  alone — no alpha moves, no pigment moves, both vignettes untouched — and the ruled diagnosis holds
-  on measurement: feature size goes 1px → 3 / 5 / 8px (autocorrelation length), and it is nearly
-  free, worst `--muted`-on-ground **5.14 dark / 4.82 light** against 5.29 / 4.83 today, floor 4.5,
-  with the dark ground's luminance unmoved (20.57 → 20.58). **UI/UX recommends 0.18** — judged on
-  1:1 renders in both engines, it is the first form that reads as material rather than veil.
-  **Shown, not asked**: 0.09 (its 8px features read as staining, not tooth) and the two-layer form
-  (the sparse grit lands below perception; it needs alpha it is not allowed). Two honest limits on
-  the sheet itself: even 0.18 is tooth, not grit — the direction reference's overt grain needs ~10×
-  the effective alpha the 4.5:1 floor allows, at any frequency — and **no frequency makes the light
-  theme's grain perceptible at its locked alpha** (span ≤ 2.5 of 255; ruled into §5.1 as a property).
-  "Ship CURRENT" stays a sound verdict. All four runners green on the proposed state, zero to
-  re-base. Developer builds only the picked form; the losing column is deleted from
-  `page-shell.md` §5.1 in the same commit. See HO-047.
+<!-- Resolved 2026-08-01 — The grain pick is consumed: the founder ruled COARSE 0.18 (DEC-067),
+     Developer built HO-047 §4's delta and deleted the losing form from `page-shell.md` §5.1 in the
+     same commit (HO-048). All four runners green on the built tree, nothing re-based; composited
+     contrast re-measured on the build (5.14 dark / 4.82 light against the 4.5 floor). -->
+
 
 - [2026-07-31] [Content]: **VERIFY.md now publishes the site's economics — do the figures get a
   fresh read before launch?** The section quotes the committed record ($594 · 51 step-sessions ·
@@ -184,6 +173,16 @@ things change for you:
   `cdp.mjs` unrefs its own send deadline. A run that exits 13 is a stalled transport, not a green
   suite and not a page defect — re-run it, and count the re-run, not the abort.
 
+AMENDED 2026-08-01 — THE TREE MOVED AGAIN. The founder ruled the ground grain coarse (DEC-067) and
+Developer built it (HO-048): `baseFrequency 0.18`, 280u tile at 392px — one declaration in
+`styles/base.css`, the losing form deleted from `page-shell.md` §5.1. Read HO-048 before the sweep.
+The floor counts are UNCHANGED — 308/308 · 27/27 · 108/108 · 45/45, nothing re-based, because no
+harness literal names the frequency. Which is the point for your blind-check hunt: **no shipped
+runner can see the texture at all** (both contrast probes walk ancestors for a `background-color`;
+`.texture` is a fixed sibling) — that gap is ruled yours in DEC-066/067. The composited floor was
+re-measured per-pixel on the built tree (worst `--muted`-on-ground 5.14 dark / 4.82 light, floor
+4.5), and no WebKit evidence exists for the texture at any phone width.
+
 IF BLOCKED: never set `Role: halt` — only PM does that, and only for a founder question. File the
 blocker addressed to PM in `agent-requests.md` and re-point `## Next Step` to a `Role: pm`
 assessment step.
@@ -210,6 +209,20 @@ them; they are NOT queue steps and add no scope):
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-08-01 — Founder pick built: Developer ships the coarse ground grain (HO-048, DEC-067) —
+  `baseFrequency 0.18` / 5 octaves, 280u tile at 392px, one declaration in `styles/base.css`, built
+  from HO-047 §4's stated delta and **verified byte-identical to the f018 variant UI/UX measured**,
+  with the decoded data-URI checked attribute by attribute (no `feFuncR/G/B`, gamma 2.6, saturate 0
+  — nothing but frequency, octaves and tile moved). `page-shell.md` §5.1 rewritten to the shipped
+  form only; the rejected-candidate record stays in the decision log. **All four runners green on
+  the built tree, serial: 308/308 · 27/27 · 108/108 · 45/45 — nothing re-based, confirmed by grep
+  (no harness literal names the frequency) rather than assumed.** Composited contrast re-measured
+  per-pixel on the build, both themes: worst `--muted`-on-ground **5.14 dark / 4.82 light** against
+  the 4.5 floor, reproducing HO-047's table exactly; WebKit confirmed applying the coarse filter
+  in-engine (grain-off sd 0 → sd 1.41 at 6px feature size, pinned-height renders). Light stays
+  quantisation-level as ruled. No WebKit at any phone width, stated. **Awaiting QA's terminal sweep
+  and PM review.**
 
 - 2026-08-01 — Founder-directed round, the grain's last: UI/UX varies `baseFrequency` — the lever no
   prior candidate moved — and renders three coarse forms plus the optional two-layer against CURRENT
@@ -358,15 +371,3 @@ them; they are NOT queue steps and add no scope):
   paragraph resolved its `64ch` 8.7% wider than its neighbours' and broke the column, so the
   emphasis rides a run instead. **Awaiting QA (HO-041) and PM review; PM must rule VERIFY's
   provisional pin and carry the squash-merge reachability caveat to `pre-launch-checklist.md`.**
-
-- 2026-07-30 — Step: UI/UX re-gate design round (HO-039, DEC-060). All five rulings chosen from
-  renders in both engines: the header lockup ships at brand scale — 18px word, 9 × 13.5 mark, the
-  founder's artwork-as-`<img>` weighed and rejected at ~1.08:1 on the light ground, and `--bar-h`
-  stays 48px so nothing derived from the bar moves; §4 gains a four-segment, rail-aligned,
-  zero-motion indicator and retires the misaligned scrollbar-gauge; §3's hook and §5's provenance
-  line take ink bold at 700 (the lead-scale §5 candidate rendered and rejected); the footer
-  composes as four blocks at lead scale with the boundary separator added (candidate A confirmed
-  from renders). The F-R1 §2-overnight consult recommends showing the wave at launch with its
-  receipt — the build-now options are priced in the memo, the largest costing §2's whole
-  machinery plus a re-spent phone check. Suite re-run: 280/282 with exactly HO-038's two designed
-  reds — no shipped file touched. **Awaiting Developer (HO-040 builds the rulings) and PM review.**
