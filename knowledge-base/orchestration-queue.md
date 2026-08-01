@@ -151,6 +151,22 @@ re-derived cold on the shipped tree, the result of every violation you plant aga
 new and re-based assertions, and an explicit launch recommendation — ship, ship with named
 residuals, or hold with the blocker named. State what you MEASURED versus what you judged.
 
+AMENDED 2026-07-31 — THE TREE MOVED UNDER THIS STEP. A founder-reported §2 defect was fixed after
+this brief was written (HO-045, `7c574b9`): the narration rail pinned each new entry's bottom to
+its own bottom edge, so explanations arrived flush on the fold. Read HO-045 before the sweep. Three
+things change for you:
+
+- **The floor counts are now 308/308 · 27/27 · 108/108 · 45/45.** verify-shell gained four checks
+  and lost none.
+- **The blind-check hunt has a fresh specimen.** A containment-only assertion on the rail passes on
+  4 rows of 40 while the founder's defect survives — the assertion that catches it is resting
+  CLEARANCE, and the difference is the 350ms reveal transform. Same shape as the contrast probe
+  that went blind: a check measuring the wrong moment is a check that cannot fail.
+- **A pre-existing harness hang is now reproduced on `HEAD`**, in a clean worktree: verify-shell
+  exits 13 with "unsettled top-level await" at the find-in-page probe, intermittently, because
+  `cdp.mjs` unrefs its own send deadline. A run that exits 13 is a stalled transport, not a green
+  suite and not a page defect — re-run it, and count the re-run, not the abort.
+
 IF BLOCKED: never set `Role: halt` — only PM does that, and only for a founder question. File the
 blocker addressed to PM in `agent-requests.md` and re-point `## Next Step` to a `Role: pm`
 assessment step.
@@ -177,6 +193,24 @@ them; they are NOT queue steps and add no scope):
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-07-31 — Developer closes the founder's §2 rail defect (HO-045, `7c574b9`). The rail put each
+  new entry's **bottom** on its own bottom edge, so every explanation arrived flush on the fold —
+  **8 of 10 slots**, reproduced under live playback at 1280 and 1600 before anything was touched. It
+  now **pages forward and lands the entry's top**, holds still while the entry already fits, clamps
+  at the end of the list, and never travels backwards under a reader who has scrolled ahead.
+  **All four runners green — 308/308 · 27/27 · 108/108 · 45/45.** The brief's diagnosis is corrected
+  on measurement: the +3–5px overflow in its table is the `--reveal` transform, not a resting clip,
+  so a containment check alone catches **4 rows of 40** and would have passed while the defect
+  survived — the assertion that names the founder's complaint is **resting clearance**, red at
+  **24 of 40**. Four checks added, none deleted; `restart()`'s rewind assertion untouched and still
+  green. Three findings the brief did not carry: `section-02-replay.md` §10 claimed the rail should
+  not need to scroll (it scrolls at every wide width, corrected); **`--bp-wide` is the true worst
+  case** at 9.2px of margin and no runner was looking at it; and a **pre-existing harness hang
+  reproduced on `HEAD` in a clean worktree** — `cdp.mjs` unrefs its own deadline, so a stalled call
+  exits 13 instead of reporting the timeout its comment promises. **No WebKit evidence exists for
+  this behaviour in any condition** — `qlmanage` runs no JavaScript. **Awaiting QA's terminal sweep
+  and PM review.**
 
 - 2026-07-31 — Closing round 3 of 3: Developer builds every ruling and closes both phone bugs
   (HO-044, `f166dfb`). All four runners green on the shipped tree with the tree clean —
@@ -312,16 +346,4 @@ them; they are NOT queue steps and add no scope):
   — the page is right, the files are amended, neither is a launch blocker. `muster-requests-lint.sh`
   back to green (360 active lines to 6). **The re-gate is live: the founder's phone is the only
   instrument left, and one of its three checks closes a hard launch blocker.**
-
-- 2026-07-30 — Step: QA scoped re-run on the fix round (HO-037). **Every acceptance criterion
-  passes and nothing adjacent broke** — all three runners re-run here (suite GREEN both engines
-  282/282 + 27/27, audit 108/108, sweep 42/42), no shipped file touched. Both alignment assertions
-  watched to fail on their own plant (the formation reproduces the founder's finding at −173.81px;
-  the footer check prints `(center)` where `(start)` belongs), the network guard re-proven red on a
-  planted fetching reference with all nine `<a href>` navigations still permitted, the footer's 13
-  string checks parsed out of `footer-copy.md` rather than retyped, the five-role participation
-  re-derived from `git log`, and cross-engine measured per engine on all three touched surfaces —
-  WebKit puts the hub 0.5px off the render axis and shows §4's cut on the frame edge with the dead
-  strip gone. **Awaiting PM review at the fix-round review step; OBS-017 asks PM to rule
-  `footer-copy.md` §3's lowercase-labels sentence against the shipped uppercase transform.**
 

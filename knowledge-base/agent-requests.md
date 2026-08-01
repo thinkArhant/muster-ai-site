@@ -10,6 +10,146 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-045 — Developer: §2's narration arrives readable — the rail pages forward instead of pinning to the fold
+
+**From**: Developer · **Reviewers**: PM (`pending` — one founder-reported defect, closed),
+QA (`pending` — the terminal sweep re-runs on this tree; four new checks to plant against)
+**Status**: open · **Filed**: 2026-07-31
+
+**Commit**: `7c574b9 developer: §2's narration arrives readable, not pinned to the fold`
+
+#### 1. Runner counts, on the shipped tree
+
+| Runner | Result |
+|---|---|
+| `node tests/verify-shell.mjs` (Blink) | **308/308** (304 + 4 new) |
+| `node tests/verify-webkit.mjs` (WebKit) | **27/27** |
+| `node tests/qa-independent-audit.mjs` | **108/108**, 9 measurements reported |
+| `node tests/qa-fullpage-sweep.mjs` | **45/45**, 3 measurements reported |
+
+Run serially, per the standing note. Two runs aborted on transport rather than on a check and were
+re-run — see §6, which also names a harness gap those aborts exposed.
+
+#### 2. The defect, reproduced before it was touched
+
+The rail put the active entry's **bottom** on its own bottom edge
+(`railTop = offsetTop + offsetHeight − clientHeight`). Every new explanation therefore arrived
+flush on the fold of the scroll window. Reproduced under live playback at 1280 × 900 and
+1600 × 900, sampling at each slot's arrival: **8 of 10 active entries not fully visible**, entry
+tops resting 187–257px down a 327px rail. The numbers match the brief's table.
+
+**One correction to the brief's diagnosis, from measurement.** The +3 to +5px of bottom overflow in
+that table is almost entirely the `--reveal` transform — a new entry is translated 4px down for
+350ms — and not a resting clip. Settled, the old rule left the entry flush to within a pixel: a
+containment check measured after the reveal settles catches only **4 rows of 40**, all sub-pixel.
+This matters, because "assert containment" alone would have been the second assertion in a row to
+pass while the founder's defect survived. The defect is the **pinning**, and the reader meets it as
+a clip only while the entry is fading in — which is exactly when they are looking at it.
+
+#### 3. The behaviour ruled
+
+**The rail pages forward and lands the entry's top.** It holds still while the newest entry is
+already whole inside it; when the newest entry would fall outside, it moves once, putting that
+entry's **top** on the rail's top, where the entry has the rail's full height below it.
+
+- **Why top, not bottom** — bottom-alignment also contains the entry, arithmetically, and is what
+  produced this defect. Top-alignment additionally gives the reader the room the entry is about to
+  need, which is the reason a reader scrolls at all.
+- **Why paging and not always-top-align** — always top-aligning would scroll every slot to the top
+  and destroy the accumulation the rail exists for (`replay.css`: *"revealed entries accumulate in
+  the rail"*), turning the desktop rail into the phone's one-slot caption. Paging preserves the
+  transcript and cuts rail movement from 8 moves to 4 at 1280.
+- **Positions from layout offsets, not rendered rects** — a decision taken from
+  `getBoundingClientRect()` would page forward early on the reveal's 4px transform and stay one
+  entry ahead for the rest of the chain.
+- **Forward-only, deliberately** — `Math.max` against the current `scrollTop`. A reader who has
+  scrolled the rail ahead of the chain keeps their position. The cost is stated rather than hidden:
+  the guarantee is about playback, not about a rail the reader is driving.
+- **The end of the list is its own case and needs no branch** — clamping the target to the rail's
+  own maximum lands the last entries whole against the end.
+- Instant position change; no smooth scrolling introduced. Reduced motion and no-JS are untouched
+  (the file still returns before anything under `prefers-reduced-motion`, and with no playback state
+  the rail is not a scroll region at all).
+
+#### 4. The assertions — four, and what they printed when watched to fail
+
+Driven, not sampled: `MusterReplay.seek(ms)` is added to the test surface, and the harness walks
+**every slot in `SLOT_AT` in order** at 960 × 900, 1280 × 900, 1600 × 900 and 667 × 375. Order
+matters — the rail's rest position is a function of where it already was, so a single seek would not
+reproduce a run. Geometry is printed per slot, so a failure names the slot and the pixels.
+
+| Check | Relationship | Against the old rule |
+|---|---|---|
+| the rail keeps the ACTIVE entry whole, at every slot | active entry's rect inside the rail's client rect | **RED**, 4 rows: `1280×900 sp4b: top 253.47px, bottom overflow 0.75px at scrollTop 313`, and the same at sp8 and at 1600 |
+| the active entry arrives with rail beneath it, never flush on the fold | resting clearance ≥ the reveal's own displacement | **RED**, **24 of 40 slots** — `1280×900 sp3: -0.19px of rail below it, needs 4px` … through sp8 at all three wide widths |
+| the rail never scrolls backwards under a reader | reader scrolls the rail ahead, next slot lands, position held | **RED** on a planted `Math.min` without the `Math.max`: reader at 995, next slot hauled them back to **566** (−429px); at 960, **−1080px** |
+| no narration entry sets taller than the rail that must hold it | the precondition containment rests on | green throughout; at `--bp-wide` the margin is **9.2px** (317.8px entry in a 327px rail) |
+
+Two details worth carrying:
+
+- **The reveal displacement is measured, not restated.** It is read off an unrevealed entry rather
+  than typed as `4`. The first version of that measurement sampled mid-transition and read
+  **1.83px**, which would have quietly softened the floor by more than half — it now settles first
+  and reads **4px** at every viewport.
+- **The probe's own determinism was a bug before it was a check.** `pause()` issued in the same task
+  as the `scrollIntoView` is undone by the autoplay gate's observer callback, which has not run yet;
+  the probe was measuring a chain that was still running. It now lets the gate deliver first, and
+  asserts the active slot **is** the slot asked for, so a stray frame reports itself.
+
+After the fix, live playback (not driven) at 1280 and 1600: **10 of 10 slots fully visible**, worst
+resting clearance 0.11px at sp8 where the list has run out, and mid-reveal the last entry still
+measures inside the client box at −0.32px.
+
+#### 5. Files changed
+
+| File | What changed |
+|---|---|
+| `scripts/replay.js` | `followRail()` replaces the inline bottom-pin; `seek(ms)` added to the test surface |
+| `tests/verify-shell.mjs` | four checks added, 304 → 308. No check deleted or weakened; the `restart()` rewind assertion is untouched and still passes (`1280px: narration 991→0 of 991`) |
+| `design-specs/web/section-02-replay.md` | §6 gains the rail's follow rule and why top-alignment is the rule; §10's *"Rail scrolls its own overflow only if narration exceeds terminal height (it should not at spec'd budgets — verify)"* is corrected — it **does**, at every width from `--bp-wide` up |
+
+#### 6. Things found that the brief did not say
+
+1. **The spec was wrong about the rail.** §10 said the rail should not need to scroll at spec'd
+   budgets. It scrolls at every wide width — 993px of overflow against a 327px rail at 1280.
+   Corrected in the file.
+2. **`--bp-wide` is the real worst case and no runner was looking at it.** At 960 the rail is
+   narrowest and the prose sets tallest: a 317.8px entry in a 327px rail, **9.2px of margin**. If
+   narration grows, containment becomes unreachable by any follow rule. That is now its own check
+   with the margin printed, so the cause is named rather than left to surface as a mystery.
+3. **A pre-existing harness hang, reproduced on `HEAD` in a clean worktree.** `verify-shell` exits
+   **13** with *"Detected unsettled top-level await"* at the find-in-page probe, intermittently. The
+   cause is in `tests/lib/cdp.mjs`: the per-call deadline calls `timer.unref?.()`, so when the
+   stalled CDP call is the only thing holding the event loop open, Node exits instead of rejecting.
+   The file's own comment says *"A hang is a failure, and it should say so with the method on it"* —
+   it does not, in exactly the case that matters. `qa-independent-audit` separately died once on
+   `{"code":-32602,"message":"No target with given id found"}`. Both re-ran green. **Not fixed here**
+   — it is transport, not §2, and re-basing a shared harness deadline inside a one-defect fix is the
+   wrong place for it. Flagged for PM to route.
+4. **Monotonicity was not observable from playback alone.** The chain's own targets already climb,
+   so no slot walk can see the forward-only guard — removing `Math.max` passes every containment
+   check. That is why the third check drives a reader's own scroll. Worth generalising: a guard
+   whose protected case never occurs during normal playback is invisible to a test that only plays.
+5. **A concurrent working-tree change crossed this session.** Mid-run, `styles/tokens.css` carried an
+   uncommitted `--grain-alpha: 0.08 → 0.11` with untracked `samples/ground-*.html` beside it, which
+   turned `grain peak alpha capped at 8% (dark)` red. It was reverted by whoever made it before I
+   finished. **Untouched by me, and not in my commit** — but the tree is not clean right now
+   (`samples/ground-current.html`, `samples/ground-stronger.html`,
+   `samples/ground-texture-renders/` are untracked), and a sweep taken on it will say so.
+
+6. **`muster-requests-lint.sh` is red again** — 347 active lines against a 300 budget with this entry
+   filed. HO-044 is still `open` with both reviewers `pending`, so it is not mine to sweep; PM
+   reconciles at review, as last time.
+
+#### 7. What has no evidence
+
+**There is no WebKit evidence for this behaviour in any condition.** `qlmanage` executes no
+JavaScript, so the rail's follow rule — like §4's track end and the rest of §2's playback — is
+verified in Blink only. `verify-webkit` at 27/27 covers the static render, where the rail is not a
+scroll region at all. Every figure above is Blink's.
+
+---
+
 ### HO-044 — Developer: §5 priced in prose, §1 slimmed to its posture, two phone bugs closed, and the harness re-based around all of it
 
 **From**: Developer · **Reviewers**: QA (`pending` — the terminal sweep runs on this tree),
