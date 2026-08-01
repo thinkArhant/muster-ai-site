@@ -1589,5 +1589,61 @@ pm (this entry).
 
 **Touched**: `decision-log.md`, `orchestration-queue.md`.
 
+---
+
+### DEC-067 — The ground grain ships coarse at `baseFrequency` 0.18, and the metric that found it was not the one being measured (2026-08-01)
+
+**Decision**: **COARSE 0.18 ships** — `baseFrequency: 0.18`, `numOctaves: 5`, a 280-unit tile at a
+392px paint box. Nothing else about the texture moves: alphas stay 0.08 dark / 0.04 light, both
+vignettes stay 0.16 / 0.05, the pigment stays the shipped pale grey, and `feFuncA` keeps its 2.6
+gamma. Founder ruling from renders, with 0.35 named as the quieter fallback and ship-CURRENT stated
+on the sheet as sound.
+
+**The lever was nearly free, which is what settles it.** Worst-case composited `--muted`-on-ground
+moves 5.29 → 5.14 dark and 4.83 → 4.82 light against a 4.5 floor, and the dark ground's own
+luminance does not move at all (20.57 → 20.58 of 255). The rejected alpha route bought less
+perceptible change for **+3.7** levels of ground luminance and a third of the light theme's margin.
+Feature size delivers what intensity could not, and at roughly no cost.
+
+**The measurement finding, which outlives this decision: standard deviation was the wrong metric.**
+Measured grain spread rises only ×1.27 between the shipped form and the one that ships now, while
+perceptibility changes decisively. The quantity that tracks what a reader sees is **autocorrelation
+length — feature size — not spread.** Two rounds chased spread and produced changes nobody could
+see; the round that varied feature size found the answer while barely moving the number the earlier
+rounds were optimising. A metric that fails to move when the thing it proxies for moves is not a
+weak metric, it is the wrong one.
+
+**Two honest limits, recorded because they bound what the page can claim about its own ground:**
+
+1. **This is a dark-theme fix.** No frequency makes the grain perceptible on the light ground —
+   every variant leaves it at a span of ≤ 2.5 levels of 255 at the locked 0.04 alpha. The light
+   theme's limit is pigment distance at that alpha, and that axis was rejected on contrast cost.
+   The light ground carries tooth for a reader who looks for it and nothing for one who does not.
+2. **The brand's own reference texture is not reachable inside the contrast floor.** The direction
+   reference's grain is *fine*-featured (~1.4px) at roughly **ten times** our effective alpha — its
+   ruggedness is an intensity property. What ships reads as matte field-manual paper, never as the
+   reference's gunmetal grit, and no frequency closes that gap at 4.5:1. The reference remains a
+   feel reference, which is what it was always scoped as.
+
+**Rejected on the evidence**: 0.09 (8px features read as staining and uneven backlight — the point
+where texture stops being material and becomes a defect a reader would report), and the two-layer
+form (a sparse coarse grit under a fine veil, which as constructed lands below perception at sd
+1.18 against 1.12 — it would need alpha the round was not permitted to spend).
+
+**Unusually, nothing re-bases**: no token value moves and no harness literal names the frequency, so
+the `grain peak alpha capped at 8%` assertion holds untouched. **This is confirmed on the built page
+rather than assumed** — and the confirmation matters little either way, because no shipped runner
+can see the texture at all (contrast probes resolve a background by walking ancestors; `.texture` is
+a fixed sibling). Every ratio in this entry was measured per-pixel for the decision, not read off a
+runner. That gap is QA's at the terminal step.
+
+**Model override**: this round and its build ran on `fable` at the founder's direction, against
+DEC-062 decision 5's bar on it. Recorded so the log does not contradict itself.
+
+**Impact**: developer (builds the pick, retires the losing form from `page-shell.md` §5.1),
+ui-ux (spec carries the shipped form only), qa (the texture-blind contrast probe), pm (this entry).
+
+**Touched**: `decision-log.md`, `orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
