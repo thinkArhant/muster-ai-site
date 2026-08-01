@@ -277,5 +277,3 @@ its method; the page states measured inputs and nothing derived from them.
   data). `muster.build` does not appear.
 - **`brand-guidelines.md` §5** — no banned adjective, no exclamation mark, no "coming soon", no
   superlative, no growth hype.
-</content>
-</invoke>

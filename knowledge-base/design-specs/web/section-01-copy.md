@@ -5,26 +5,31 @@
 Developer (builds the strings verbatim), PM (reviews line by line against the copy rules), QA
 (announced-string and scope checks)
 **Sources**: every factual claim traces to `product-spec-seed.md` (founder-authored, read-only) or a
-founder gate ruling recorded in `decision-log.md` (DEC-045, DEC-046), cited per string below. Copy is
-governed by `agent-skills/content/copy-rules.md` and the banned-word list in `brand-guidelines.md` §5.
+founder ruling recorded in `decision-log.md`, cited per string below. Copy is governed by
+`agent-skills/content/copy-rules.md` and the banned-word list in `brand-guidelines.md` §5.
 
 ---
 
 ## 1. Rules this file is written under
 
 - **Product voice throughout.** §1 is not one of the two permitted first-person places.
-- **§1 carries no Bodh material** (DEC-046): no Bodh numeral, no Bodh label, no Bodh corpus line. The
-  page's whole-product numbers live in §5. The only measurement scope present in §1 is THIS SITE, and
-  it renders as dashes (*spec → live*).
-- **§1's inventory** (DEC-045, DEC-046): eyebrow · headline · formation + caption above the fold; the
-  THIS SITE readout remnant and the curl below it. Nothing else — no subline, no measured line, no
-  terminal. §2 is the page's only terminal.
+- **§1 carries no Bodh material**: no Bodh numeral, no Bodh label, no Bodh corpus line. The page's
+  whole-product numbers live in §5.
+- **§1 states no metric at all** — measured or unmeasured. THIS SITE is the only measurement scope
+  named here, and §1 names the scope without stating a value for it. See §5 of this file for why.
+- **§1's inventory**: eyebrow · headline · formation + caption above the fold; the THIS SITE strip
+  and the curl below it. Nothing else — no subline, no measured line, no terminal. §2 is the page's
+  only terminal.
+- **Strings are recorded here as authored, not as rendered.** The page's mono label treatment sets
+  `.t-label` and `.t-micro` runs in tracked uppercase, so several of the strings below reach the
+  reader in a case they are not written in. What ships in the markup is the string exactly as this
+  file writes it.
 - **Word counting convention**: words are whitespace-delimited tokens containing at least one letter or
   digit; numerals and compounds count as one word each; standalone punctuation and separators (`·`,
   `→`, an em-dash between spaces) count as zero. Counts below are script-measured, not eyeballed.
 - **Locked strings are verified by equality**, not budgeted as prose — the headline, the eight role
-  names, the readout labels and values, the curl, and the eyebrow may not vary, and a budget on a
-  string that may not vary is an assertion that cannot fail.
+  names, the scope label, the chip, the curl, and the eyebrow may not vary, and a budget on a string
+  that may not vary is an assertion that cannot fail.
 
 ## 2. The headline — settled, locked
 
@@ -89,37 +94,44 @@ role appears twice, and the visual reads true to the architecture — PM coordin
 execute.
 
 - Hub plate: `PM`
-- Bus-bar plates: `DEVELOPER · UI/UX · QA · CONTENT · MARKETING · LEGAL · RESEARCH`
-- Caption (5 words): `8 AI AGENTS · 1 OPERATOR`
+- Bus-bar plates: `Developer` · `UI/UX` · `QA` · `Content` · `Marketing` · `Legal` · `Research`
+- Caption (5 words): `8 AI agents · 1 operator`
 
 | Claim | Source |
 |---|---|
 | The eight role names | `copy-rules.md` scope table (the enumeration's single home) |
-| 8 AI agents, 1 operator | Seed rule 8 ("8 agents, 1 operator"); R8's attribution shape, uppercase as a label |
+| 8 AI agents, 1 operator | Seed rule 8 ("8 agents, 1 operator"); R8's attribution shape, set as a label |
 
 The caption is the hero's only statement of the 8/1 fact — §1 has no subline, so the caption does that
-work alone.
+work alone. It is a **roster** label and R8 permits it only because the formation diagram it sits under
+is the roster; the count of roles that actually ran this build is the footer's sentence, and the two
+never collide because each names its scope.
 
-## 5. The build readout — THIS SITE remnant
+## 5. The THIS SITE strip
 
-One scope row (THIS SITE), dashes with their caption, and the `VERIFY ⎘` chip. Whether it renders as a
-one-row readout or as something smaller is the hero spec's ruling; these are the strings whichever
-form ships:
+Two strings and one link. §1 names the scope this site will be measured over, and states nothing
+about the measurement.
 
 | Element | String |
 |---|---|
-| Label | `THIS SITE · SPEC → LIVE` |
-| Values | `—` · `—` · `THIS PAGE` |
-| Caption | `measured at launch` |
-| Cell labels | `ACTIVE BUILD` · `COST · API LIST` · `SHIPPED` |
-| Chip | `VERIFY ⎘` |
+| Scope label | `THIS SITE · SPEC → LIVE` |
+| Chip, visible text | `VERIFY ⎘` |
+| Chip, accessible name | `Verify these numbers — VERIFY.md` |
 
-- Dashes are R4's rendering of an unmeasured metric — never a placeholder value, and they never
-  animate. The caption `measured at launch` rides with the dashes.
-- `COST · API LIST` carries R3's framing into the cell label so the value, once measured, is never
-  read as subscription spend.
-- Chip: visible text `VERIFY ⎘`. Suggested accessible name: `Verify these numbers — VERIFY.md`;
-  the hero spec rules the final name and the `href`.
+- **The strip carries no cell, no value, no dash and no launch promise.** An unmeasured value reads
+  as a promise only beside a measured twin; alone at the top of the page it reads as a gap in the
+  page's evidence, which is the opposite of what a dash is for. The twin lives in §5 of the page,
+  where the one dash sits beside `4.8 h` and `bodh.day` and two figures in prose — so
+  `measured at launch` occurs exactly once on the page, and not here.
+- **The scope label stays.** It is the page's first scope declaration, and it costs nothing to keep
+  honest: *spec → live* is a statement about the span this site will be measured over, not about a
+  result. It is also what stops a reader from carrying §5's BODH figures back up to the hero.
+- **The chip is §1's only interactive element and the page's proof link.** Its `href` is the same
+  string as the footer's `VERIFY` receipt, byte-for-byte (`footer-copy.md` §3) — one link in two
+  seats, and a drift between them is a 404 on the page's own evidence.
+- **The strip is the section's only R4 surface, and it satisfies R4 by stating nothing.** R4 governs
+  how an unmeasured metric renders; §1 renders none, so no placeholder, estimate or stand-in can
+  arise here by construction.
 
 ## 6. The curl (one string, byte-identical everywhere it appears)
 
@@ -133,9 +145,11 @@ alone; the blinking cursor belongs to the §6 curl, which owns the page's only c
 ## 7. Verification statement
 
 The numerals in §1 are `v4` (eyebrow, verbatim from seed §1) and `8` · `1` (caption, seed rule 8).
-No Bodh numeral, label, or corpus line appears anywhere in the section (DEC-046); the wave totals
-(~64 min, $24.73) appear nowhere in §1 copy. No number is rounded or given precision its source
-lacks. No banned adjective, no exclamation mark, no "proven," no human-cost baseline, no second CTA.
-First person appears nowhere. Unmeasured metrics render as dashes with `measured at launch`. The
-announced headline string contains no struck text. The curl was verified by string equality against
-`copy-rules.md`, not by fetching.
+No Bodh numeral, label, or corpus line appears anywhere in the section; the wave totals (~64 min,
+$24.73) appear nowhere in §1 copy. No number is rounded or given precision its source lacks. §1
+states no build metric, measured or unmeasured — it names the THIS SITE scope, links the method,
+and leaves every value to §5, so R4 has nothing to render and no dash appears in the section. The
+one team claim is a roster label seated on the roster diagram, which is the single place R8 permits
+it. No banned adjective, no exclamation mark, no "proven," no human-cost baseline, no second CTA.
+First person appears nowhere. The announced headline string contains no struck text. The curl was
+verified by string equality against `copy-rules.md`, not by fetching.
