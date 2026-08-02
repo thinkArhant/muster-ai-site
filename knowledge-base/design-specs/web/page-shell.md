@@ -332,6 +332,11 @@ yet, and nothing else.**
 | Answered | `--accent`, `--text-readout`, mono, tabular | optional qualifier, `--text-micro` `--muted` |
 | Not answered yet | `--ink` em-dash, same size and face | `measured at launch`, `--text-micro` `--muted` |
 
+Every readout value the page currently renders is answered — no cell exercises the unanswered
+state, and `measured at launch` appears nowhere on the page. The state stays specified because the
+channel is the rule: the card a future product adds renders it, and its engine behaviour is held by
+the count-up harness fixture rather than by any page cell.
+
 Three consequences, each of them the reason the rule is stated as a channel rather than as a list
 of which cells are rust:
 
@@ -425,14 +430,13 @@ Appears in the status bar and as the terminal live indicator. **Clearly alive at
 Readout metric values count from 0 to their exact value over `--countup-duration`, ease-out cubic, triggered once per page load at ≥55% cell visibility. Scope: §5's shipped-with cards — the page's only counting cells. §1's remnant never animates (`section-01-hero.md` §7), and the replay section's totals strip is deliberately static (see `section-02-replay.md` §7, annotation 7). The count-up engine's `aria-live` posture is decided and verified against §5's real cells.
 
 **The engine is pointed only at metric values.** A `SHIPPED` cell answers with a place, not a
-measurement, and takes no count-up hook at all. The one unanswered value keeps its hook deliberately
-— the engine's refusal to animate a value carrying no digits is then a property of the shipped page
-rather than of a fixture.
+measurement, and takes no count-up hook at all. Both `OPERATOR ATTENTION` cells carry the hook and
+count — every metric value on the page is measured, so every hook rolls to a real number.
 
 - **Decimals roll as decimals**: 9.3 animates 0.0 → 9.3 with one decimal place preserved throughout; the final frame renders the exact source string.
 - Tabular numerals; the cell is sized by its final value — zero layout shift.
 - Digits are flat `--accent`. No gradient, no glow — a tinted number reads as marketing, a flat one reads as measured.
-- Dashes (unmeasured metrics) never animate.
+- Dashes (unmeasured metrics) never animate — an engine rule, held by the count-up harness fixture; no page cell renders one.
 - Reduced motion: final values render immediately.
 
 ### 10.3 Curl cursor (permitted extra)

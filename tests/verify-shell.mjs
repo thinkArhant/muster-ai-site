@@ -1181,12 +1181,11 @@ try {
   /* --- 8. remnant honesty ---
 
      The strip is posture, not measurement: the scope label and the chip, and
-     no readout of any kind. §5 owns every value and the page's one dash,
-     because an unmeasured value only reads as a promise beside its measured
-     twin — so `measured at launch` occurs exactly once on the page, and not
-     here. This replaces the two-ink-dashes assertion the cell form carried:
-     the strip cannot be honest about a value it no longer states, and what
-     has to hold now is that it states none. */
+     no readout of any kind. §5 owns every value, each one measured beside its
+     own scope label — no dash and no launch promise exists anywhere for the
+     strip to restate. What has to hold here is that it states no value at
+     all, and that neither the dash nor `measured at launch` ever re-enters
+     through this seat. */
   check("§1 remnant is the scope label and the chip — no readout, no dash, no launch promise",
     heroWide.remnantReadouts === 0 &&
       !heroWide.remnantText.includes("—") &&
@@ -2442,7 +2441,8 @@ try {
          and §5's counting cells are the reason the question comes up at all. */
       liveRegions: [...document.querySelectorAll("[aria-live], [role=status], [role=alert], [role=log], [role=timer], [role=marquee], [aria-atomic]")]
         .map((el) => (el.className || el.tagName) + "[" + (el.getAttribute("aria-live") || el.getAttribute("role")) + "]"),
-      sites: { activeBuild: siteOf("9.3"), cost: siteOf("$147"), attention: siteOf("4.8 h") },
+      sites: { activeBuild: siteOf("9.3"), cost: siteOf("$147"), attention: siteOf("4.8 h"), siteAttention: siteOf("7.5 h") },
+      unmeasuredModifiers: section.querySelectorAll(".readout__value--unmeasured").length,
       /* Wave-scope figures must not appear in §5 (copy file §1, R5). */
       waveScope: ["~64", "289", "$24.73"].filter((n) => section.textContent.includes(n)),
       sectionText: section.textContent.replace(/\\s+/g, " ").trim(),
@@ -2515,18 +2515,22 @@ try {
       return Boolean(seed) && seedCell(cell) === seed.value;
     }),
     bodhCells.map((c) => `${c.key} ${JSON.stringify(seedCell(c))} vs seed ${JSON.stringify(seedFor(c.key)?.value)}`).join(" · "));
-  /* One sub-line per card, and it hangs on the value it qualifies rather than
-     on the card. The two cards carry theirs in DIFFERENT cells, which is the
-     matrix answered on a diagonal §5's composition rests on — so the property
-     asserted is "exactly one, and it belongs to the cell the copy file
-     attaches it to", never a position. */
-  check("§5 each card carries exactly one cell-level sub-line, on the cell the deliverable attaches it to",
+  /* Sub-lines, authored-vs-rendered: each cell renders exactly the sub-line
+     the copy file attaches to it and nothing more. The section carries ONE —
+     card 1's qualifier on the seed's own Shipped cell; card 2 carries none,
+     an authored asymmetry, not an omission. The two literal `1`s are the
+     vacuity guard: if the copy parser ever returned an empty inventory AND
+     the page rendered no sub-line, the per-cell comparison alone would pass
+     over nothing — these clauses pin the current authored truth so that
+     state goes red instead. */
+  check("§5 sub-lines are the copy file's, cell for cell — one in the section, on card 1's SHIPPED cell",
     s05.cards.every((card, i) => {
       const authored = s05Copy.cards[i].subs;
       return card.cells.filter((c) => c.subs.length).length === authored.filter(Boolean).length &&
         card.cells.every((c, j) => c.subs.join("") === (authored[j] || ""));
     }) &&
-      s05.cards.every((card) => card.cells.filter((c) => c.subs.length).length === 1),
+      s05Copy.cards.flatMap((c) => c.subs).filter(Boolean).length === 1 &&
+      s05.cards.flatMap((c) => c.cells).filter((c) => c.subs.length).length === 1,
     s05.cards.map((card, i) => `card ${i + 1}: ${JSON.stringify(card.cells.map((c) => c.subs[0] ?? null))} against ${JSON.stringify(s05Copy.cards[i].subs)}`).join(" · "));
   /* The primary-site rule: §1 gave up its readout at Gate A, so each of these
      figures now has exactly one home and this is it. A second rendering
@@ -2537,45 +2541,46 @@ try {
      counted as they are written in the prose, and `4.8 h` as the cell writes
      it. A second rendering in any format is still exactly one hit too many —
      which is the point of counting the figure rather than a formatting of it. */
-  check("§5 is the page's only site for 9.3, $147 and 4.8 h — one rendering each",
-    ["activeBuild", "cost", "attention"].every((k) =>
+  check("§5 is the page's only site for 9.3, $147, 4.8 h and 7.5 h — one rendering each",
+    ["activeBuild", "cost", "attention", "siteAttention"].every((k) =>
       s05.sites[k].count === 1 && s05.sites[k].sections.join("") === "shipped-with-muster"),
     Object.entries(s05.sites).map(([k, v]) => `${k} ${JSON.stringify(v.needle)} ×${v.count} in [${v.sections.join(",")}]`).join(" · "));
   check("§5 mixes no scope: no wave-scope figure appears in the section",
     s05.waveScope.length === 0, s05.waveScope.join(", ") || "no ~64 / 289 / $24.73");
 
-  /* --- §5: answered is rust, unanswered is ink and says so ---
+  /* --- §5: every value is answered, and the treatment says so ---
      The value slot's colour is the answered/unanswered channel, not a
      numeral/word distinction: a hostname and a place-name are answers and set
-     in accent beside `4.8 h`. So the relationship asserted is the split
-     itself — every value the deliverable answers computes the accent, and the
-     one value it does not is the em-dash, in ink. A rust dash, or an ink
-     `bodh.day`, fails here. */
+     in accent beside `4.8 h` and `7.5 h`. §5 now has one state on the page —
+     every key in both cards is answered — so every value computes the accent
+     at the readout size, tabular. A dash, an unmeasured modifier, an ink
+     value or a launch promise anywhere in the section is a claim the copy
+     file no longer makes, and each fails here by name rather than vanishing
+     from a filtered list. */
   const siteCells = s05.cards[1].cells;
   const allCells = [...bodhCells, ...siteCells];
-  const dashCells = allCells.filter((c) => c.value === "—");
-  const answered = allCells.filter((c) => c.value !== "—");
-  check("§5 answered values are flat rust at the readout size, tabular",
-    answered.length === allCells.length - 1 &&
-      answered.every((c) => c.colour === s05.accentRgb && c.tabular.includes("tabular-nums") &&
+  check("§5 every value is answered: flat rust at the readout size, tabular, all four cells",
+    allCells.length === s05Copy.slots * 2 &&
+      allCells.every((c) => c.colour === s05.accentRgb && c.tabular.includes("tabular-nums") &&
         parseFloat(c.fontSize) >= 24),
-    answered.map((c) => `${c.value} ${c.colour} ${c.fontSize} ${c.tabular}`).join(" · "));
-  check("§5 carries exactly one unanswered value — an ink em-dash, with `measured at launch` under it and no card-level caption",
-    dashCells.length === 1 && dashCells[0].colour === s05.inkRgb &&
-      dashCells[0].value === s05Copy.cards[1].values[0] &&
-      dashCells[0].subs.join("") === s05Copy.cards[1].subs[0] &&
+    allCells.map((c) => `${c.value} ${c.colour} ${c.fontSize} ${c.tabular}`).join(" · "));
+  check("§5 renders no unmeasured value: no em-dash cell, no unmeasured modifier, no launch promise, no card-level caption",
+    allCells.every((c) => c.value !== "—") &&
+      s05.unmeasuredModifiers === 0 &&
+      !/measured at launch/i.test(s05.sectionText) &&
       s05.cards.every((c) => c.captions === 0 && c.caption === null),
-    `${dashCells.length} dash(es) in ${dashCells.map((c) => c.colour).join("/")} · sub ${JSON.stringify(dashCells.map((c) => c.subs))} · card-level captions ${s05.cards.map((c) => c.captions).join("+")}`);
-  check("§5 the dash never animates: the engine sees it and refuses",
-    dashCells.every((c) => c.state === "static" && c.animation === "none" && parseFloat(c.transition) === 0 && c.ariaHidden === null),
-    dashCells.map((c) => `${c.state}/${c.animation}`).join(" · "));
-  /* A place is not a metric: the SHIPPED values carry no count-up hook at all,
-     which is a different guarantee from the dash's (the dash keeps its hook so
-     the engine's refusal stays a property of the page). */
-  check("§5's counting cells are the deliverable's measured ones and nothing else",
-    allCells.filter((c) => c.state !== "no-engine").length === 2 &&
-      bodhCells.filter((c) => c.state !== "no-engine").map((c) => c.value).join("") === "4.8 h" &&
-      siteCells.filter((c) => c.state !== "no-engine").map((c) => c.value).join("") === "—",
+    `values ${JSON.stringify(allCells.map((c) => c.value))} · ${s05.unmeasuredModifiers} unmeasured modifier(s) · card-level captions ${s05.cards.map((c) => c.captions).join("+")}`);
+  /* A place is not a metric: the SHIPPED values carry no count-up hook at
+     all, and both metric values do. The counting inventory is the copy
+     file's digit-bearing values, derived rather than restated — the dash's
+     engine-refusal property is held by the count-up fixture below, since no
+     page cell renders a dash for the engine to refuse. */
+  const countingValues = s05Copy.cards.map((c) => c.values.filter((v) => /\d/.test(v)));
+  check("§5's counting cells are the deliverable's metric values and nothing else",
+    allCells.filter((c) => c.state !== "no-engine").length === countingValues.flat().length &&
+      countingValues.flat().length === 2 &&
+      s05.cards.every((card, i) =>
+        card.cells.filter((c) => c.state !== "no-engine").map((c) => c.value).join("|") === countingValues[i].join("|")),
     allCells.map((c) => `${c.key}/${c.value}: ${c.state}`).join(" · "));
   check("§5 declares no motion of its own — the count-up is the section's whole inventory",
     s05.moving.length === 0, s05.moving.join(" | ") || "no animation, no transition");
@@ -2594,18 +2599,20 @@ try {
     s05.cards[0].cells.every((cell, i) => Math.abs(cell.height - s05.cards[1].cells[i].height) < 0.5) &&
       (!s05.wide || s05.cards[0].cells.every((cell, i) => Math.abs(cell.top - s05.cards[1].cells[i].top) < 0.5)),
     s05.cards[0].cells.map((c, i) => `${c.key}: ${c.height}px @${c.top} vs ${s05.cards[1].cells[i].height}px @${s05.cards[1].cells[i].top}`).join(" · "));
-  /* The pair is comparable, stated as the four relationships it is and never
-     as a literal height. The sub-line clause is the one the diagonal needs:
-     the two sub-lines sit in different cells, so what must match across the
-     pair is each one's HANG below its own value. */
+  /* The pair is comparable, stated as relationships and never as a literal
+     height. The sub-line sits on ONE side of the pair now, which makes the
+     reserved sub-line row the thing under test: equal card block-size and
+     level rows DESPITE the one-sided sub-line is a property only the reserve
+     can produce. Card 1's single hang is measured so the reserve is proven
+     occupied on one side and empty on the other, not merely absent from
+     both. */
   const s05Drops = s05.cards.map((c) => c.cells.map((cell) => cell.subDrop).filter((d) => d !== null));
-  check("§5 the pair is comparable — equal card block-size, corresponding rows level, sub-lines hung alike",
+  check("§5 the pair is comparable — equal card block-size, corresponding rows level, with the sub-line on one side only",
     Math.abs(s05.cards[0].blockSize - s05.cards[1].blockSize) < 0.5 &&
       (!s05.wide || (s05.cards[0].cells.every((cell, i) => Math.abs(cell.keyTop - s05.cards[1].cells[i].keyTop) < 0.5) &&
         s05.cards[0].cells.every((cell, i) => Math.abs(cell.valueTop - s05.cards[1].cells[i].valueTop) < 0.5))) &&
-      s05Drops.every((d) => d.length === 1) &&
-      Math.abs(s05Drops[0][0] - s05Drops[1][0]) < 0.5,
-    `cards ${s05.cards.map((c) => c.blockSize).join(" vs ")}px · sub-line hangs ${s05Drops.map((d) => d.join(",")).join(" vs ")}px · ` +
+      s05Drops[0].length === 1 && s05Drops[1].length === 0 && s05Drops[0][0] > 0,
+    `cards ${s05.cards.map((c) => c.blockSize).join(" vs ")}px · sub-line hangs ${s05Drops.map((d) => d.join(",") || "none").join(" vs ")} · ` +
       `key tops ${s05.cards.map((c) => c.cells.map((x) => x.keyTop).join("/")).join(" vs ")}`);
   check("§5 every key sets on one line at desktop, which is what the shared cell size assumes",
     s05.cards.every((c) => c.cells.every((cell) => cell.keyLines === 1)),
@@ -2640,8 +2647,7 @@ try {
       walk(root);
       return out.replace(/\\s+/g, " ").trim();
     };
-    const cards = document.querySelectorAll(".shipped__card");
-    const targets = [...cards[0].querySelectorAll("[data-countup]")];
+    const targets = [...document.querySelectorAll("#shipped-with-muster [data-countup]")];
     const cells = targets.map((t) => t.closest(".shipped__cell"));
     document.querySelector(".shipped").scrollIntoView({ block: "center" });
     const seen = [];
@@ -2663,10 +2669,11 @@ try {
   })()`);
   evidence.s05Roll = roll;
 
-  /* §5 has ONE counting cell now, and the roll is read off the cells that
-     actually carry the hook rather than off every value in the card — a value
-     with no hook is not a failed count-up, it is a place. */
-  const s05Counting = s05Copy.cards[0].values.filter((v) => /\d/.test(v));
+  /* §5 has TWO counting cells — one per card, in document order — and the
+     roll is read off the cells that actually carry the hook rather than off
+     every value in the cards: a value with no hook is not a failed count-up,
+     it is a place. */
+  const s05Counting = s05Copy.cards.flatMap((c) => c.values.filter((v) => /\d/.test(v)));
   check("§5 counts up on the real page: every counting cell fires and lands on its exact string",
     roll.states.length === s05Counting.length && roll.states.every((s) => s === "done") &&
       roll.landed.join("|") === s05Counting.join("|") &&
@@ -2683,15 +2690,18 @@ try {
     s05.liveRegions.length === 0, s05.liveRegions.join(", ") || "none");
 
   /* --- §5: the same claim, read out of the accessibility tree instead of
-     computed from the DOM. The roll is re-run deliberately slowly so the
-     tree is fetched while a wrong number is on screen; the tree must not
-     contain it. --- */
+     computed from the DOM. BOTH rolls are re-run deliberately slowly so the
+     tree is fetched while a wrong number is on screen in each cell; the tree
+     must contain both measured values and no intermediate. --- */
   const midVisible = await page.eval(`(() => {
-    const el = document.querySelector("#shipped-with-muster [data-countup]");
-    el.removeAttribute("data-countup-state");
-    window.__axSpec = MusterCountUp.parse(${JSON.stringify(s05Counting[0])});
-    MusterCountUp.run(el, window.__axSpec, 9000);
-    return el.textContent;
+    const els = [...document.querySelectorAll("#shipped-with-muster [data-countup]")];
+    window.__axSpecs = els.map((el, i) => {
+      el.removeAttribute("data-countup-state");
+      const spec = MusterCountUp.parse(${JSON.stringify(s05Counting)}[i]);
+      MusterCountUp.run(el, spec, 9000);
+      return spec;
+    });
+    return els.map((el) => el.textContent);
   })()`);
   const axTree5 = await page.call("Accessibility.getFullAXTree");
   const ax5 = (axTree5.nodes || []).filter((n) => n.ignored !== true);
@@ -2701,18 +2711,19 @@ try {
   const axLive = ax5.filter((n) => (n.properties || []).some((p) => p.name === "live" && p.value?.value && p.value.value !== "off"))
     .map((n) => `${n.role?.value}:${(n.name?.value || "").slice(0, 24)}`);
   const settled = await page.eval(`(() => {
-    const el = document.querySelector("#shipped-with-muster [data-countup]");
-    MusterCountUp.settle(el, window.__axSpec);
-    return { text: el.textContent, hidden: el.getAttribute("aria-hidden"), standIns: document.querySelectorAll(".a11y-value").length };
+    const els = [...document.querySelectorAll("#shipped-with-muster [data-countup]")];
+    els.forEach((el, i) => MusterCountUp.settle(el, window.__axSpecs[i]));
+    return { texts: els.map((el) => el.textContent), hidden: els.map((el) => el.getAttribute("aria-hidden")),
+             standIns: document.querySelectorAll(".a11y-value").length };
   })()`);
   evidence.s05Ax = { midVisible, rollingNamesInTree: axRolling, live: axLive, settled };
 
-  check("§5 mid-roll: the accessibility tree carries the measured value and no intermediate one",
+  check("§5 mid-roll: the accessibility tree carries both measured values and no intermediate one",
     s05Counting.every((v) => ax5Names.includes(v)) &&
       axRolling.every((n) => s05Counting.includes(n)) && axLive.length === 0,
     `visible ${JSON.stringify(midVisible)} while the tree carries ${JSON.stringify([...new Set(axRolling)])} against ${JSON.stringify(s05Counting)} · ${axLive.length} live region(s)`);
-  check("§5 settles back to the authored string with the tree left clean",
-    settled.text === s05Counting[0] && settled.hidden === null && settled.standIns === 0,
+  check("§5 settles back to the authored strings with the tree left clean",
+    settled.texts.join("|") === s05Counting.join("|") && settled.hidden.every((h) => h === null) && settled.standIns === 0,
     JSON.stringify(settled));
 
   /* --- §5 under reduced motion: the exact values, immediately, and no
@@ -2727,24 +2738,26 @@ try {
       s05Still.cards.every((card) => card.cells.every((c) => c.state === "static" || c.state === "no-engine")) &&
       s05Still.standIns === 0 && s05Still.cards.every((card) => card.cells.every((c) => c.ariaHidden === null)),
     `${s05Still.cards.map((card) => card.cells.map((c) => c.state).join("/")).join(" · ")} · ${JSON.stringify(s05Still.cards.map((card) => card.cells.map((c) => c.value)))}`);
-  /* The dash is inert on the reduced path too — its own animation and
-     transition, not the section's, so a motion token landing on the value
-     class alone still fails here. */
-  check("§5 the dash stays inert with motion reduced: no animation, no transition",
-    s05Still.cards[1].cells.filter((c) => c.value === "—").every((c) =>
-      c.animation === "none" && parseFloat(c.transition) === 0 && c.state === "static"),
-    s05Still.cards[1].cells.filter((c) => c.value === "—").map((c) => `${c.state} ${c.animation}/${c.transition}`).join(" · "));
+  /* The no-unmeasured claim holds on the reduced path too, cell by cell —
+     every value is its authored measured string with no motion left on the
+     value class. A dash re-entering through the reduced path alone would
+     fail here rather than only on the default path. */
+  check("§5's reduced path renders no em-dash value, and every value class is motionless",
+    s05Still.cards.flatMap((c) => c.cells).every((c) => c.value !== "—") &&
+      s05Still.cards.flatMap((c) => c.cells).every((c) =>
+        c.animation === "none" && parseFloat(c.transition) === 0),
+    s05Still.cards.map((card) => card.cells.map((c) => `${JSON.stringify(c.value)} ${c.animation}/${c.transition}`).join(" · ")).join(" | "));
 
   /* --- §5 in light theme and across the phone widths --- */
   await page.setMedia({ colorScheme: "light", reducedMotion: "no-preference" });
   await page.goto(PAGE_URL);
   const s05Light = await page.eval(SHIPPED);
   evidence.s05Light = s05Light;
-  check("§5 holds the rust/ink split in the light theme too",
+  check("§5 holds the all-answered accent treatment in the light theme too",
     [...s05Light.cards[0].cells, ...s05Light.cards[1].cells].every((c) =>
-      c.colour === (c.value === "—" ? s05Light.inkRgb : s05Light.accentRgb)) &&
+      c.colour === s05Light.accentRgb && c.value !== "—") &&
       s05Light.cards.every((card, i) => card.cells.every((c, j) => c.value === s05.cards[i].cells[j].value)),
-    `answered ${s05Light.cards[0].cells[0].colour} (accent ${s05Light.accentRgb}) · unanswered ${s05Light.cards[1].cells[0].colour} (ink ${s05Light.inkRgb})`);
+    `values ${JSON.stringify(s05Light.cards.map((card) => card.cells.map((c) => c.value)))} all in accent ${s05Light.accentRgb}`);
 
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });
   const s05Narrow = {};

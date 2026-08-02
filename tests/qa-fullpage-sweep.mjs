@@ -161,27 +161,30 @@ const BANNED_WORDS = [
   "cutting-edge", "10x", "effortless", "magical", "supercharge"
 ];
 
-/* Whole-product figures. Each must appear exactly once on the page, in §5.
+/* Single-site figures. Each must appear exactly once on the page, in §5.
 
-   Matched as the FIGURE rather than as one formatting of it: two of the three
-   render inside a sentence (`9.3 hours`, `$147 in AI tokens`) and one in a
-   cell (`4.8 h`), and a check pinned to a single spelling would go quietly
-   blind the moment a figure moved between the two — matching nothing, and
-   passing while it did. Each pattern accepts any rendering of its figure, so a
-   SECOND rendering anywhere, in any format, is still one hit too many. */
+   Matched as the FIGURE rather than as one formatting of it: two of the four
+   render inside a sentence (`9.3 hours`, `$147 in AI tokens`) and two in
+   cells (`4.8 h`, `7.5 h`), and a check pinned to a single spelling would go
+   quietly blind the moment a figure moved between the two — matching nothing,
+   and passing while it did. Each pattern accepts any rendering of its figure,
+   so a SECOND rendering anywhere, in any format, is still one hit too many. */
 const WHOLE_PRODUCT = [
   { figure: "9.3 h", re: /9\.3\s*(?:h\b|hours?\b|hrs?\b)/gi },
   { figure: "$147", re: /\$\s?147\b/g },
-  { figure: "4.8 h", re: /4\.8\s*(?:h\b|hours?\b|hrs?\b)/gi }
+  { figure: "4.8 h", re: /4\.8\s*(?:h\b|hours?\b|hrs?\b)/gi },
+  { figure: "7.5 h", re: /7\.5\s*(?:h\b|hours?\b|hrs?\b)/gi }
 ];
-/* §5's one counting cell, from the seed's Measured data (Operator attention).
-   Stated here rather than read off the page: this runner's whole value is that
-   it re-derives what the page should say instead of echoing it. */
-const COUNTING_CELL = "4.8 h";
+/* §5's two counting cells — Operator attention in both scopes: BODH's from
+   the seed's Measured data, THIS SITE's from the founder-run meter
+   (7h 30m in decimal hours, an exact conversion). Stated here rather than
+   read off the page: this runner's whole value is that it re-derives what the
+   page should say instead of echoing it. Document order: BODH card first. */
+const COUNTING_CELLS = ["4.8 h", "7.5 h"];
 /* Wave-scope figures. §1 and §5 must carry none of them. */
 const WAVE = ["~64", "289", "$24.73"];
 
-function copyMatrix(sections, verifyText, chrome, dashCell) {
+function copyMatrix(sections, verifyText, chrome, siteCard) {
   /* The matrix runs over everything a reader sees, not over `main` alone: the
      status bar and the footer are page copy too, and the footer is the last
      thing the eye lands on after the curl. */
@@ -238,31 +241,35 @@ function copyMatrix(sections, verifyText, chrome, dashCell) {
     missing.length === 0, missing.length ? `missing: ${missing.join(" | ")}` : labels.join(" · "));
 
   const s5 = sections["shipped-with-muster"];
-  /* Counting em-dashes in §5's TEXT would measure the section's punctuation
-     rather than its dash cell — §5's prose carries three of them, so a text
-     count reaches four whatever the cards do and passes for a reason unrelated
-     to what it claims. The dash cell is counted as an ELEMENT: the values
-     carrying the unmeasured modifier, inside the THIS SITE card. */
-  const dashCells = dashCell.count;
+  /* THIS SITE is measured, and the flip is asserted part by part so a partial
+     regression fails by name: no cell wears the unmeasured modifier, no card
+     value renders an em-dash, the attention cell states the metered figure,
+     and `measured at launch` qualifies nothing anywhere — it would be false
+     beside a measured value, and no other cell needs it. Counted as ELEMENTS
+     where elements are the claim: §5's prose legitimately spells em-dashes of
+     its own, so a text count would measure punctuation. */
   const parts = {
     "§5 carries the THIS SITE scope label": /THIS SITE · SPEC → LIVE/.test(s5),
-    "the THIS SITE card was found by its scope label": dashCell.cardFound,
-    "§5's THIS SITE card carries exactly one unmeasured value": dashCells === 1,
-    "and it renders an em-dash": dashCell.text === "—",
-    /* `.t-micro` sets the sub-line in tracked uppercase, so the rendered string
-       is what innerText reports — matched case-insensitively on purpose. */
-    "§5 says `measured at launch`": /measured at launch/i.test(s5),
-    /* §1 makes no unmeasured claim at all: the promise belongs beside the
-       measured twin that makes it read as a promise, and that is in §5. It
-       occurs ONCE on the page. */
-    "§1 makes no unmeasured claim": !/measured at launch/i.test(sections.hero) && !sections.hero.includes("—"),
-    "`measured at launch` occurs exactly once page-wide": (pageText.match(/measured at launch/gi) || []).length === 1,
-    "no THIS SITE cell carries a numeral": !/THIS SITE · SPEC → LIVE[\s\S]*?(\d)/.test(s5.split("BODH")[0] === s5 ? s5 : s5.slice(s5.indexOf("THIS SITE")))
+    "the THIS SITE card was found by its scope label": siteCard.cardFound,
+    "no cell in either card wears the unmeasured modifier": siteCard.unmeasured === 0,
+    "no card value renders an em-dash": siteCard.dashValues === 0,
+    "the THIS SITE attention cell states the metered figure": siteCard.attention === "7.5 h",
+    "the THIS SITE card carries no sub-line": siteCard.subs === 0,
+    "`measured at launch` appears nowhere page-wide": (pageText.match(/measured at launch/gi) || []).length === 0,
+    /* §1 still makes no unmeasured claim — and states no value at all. */
+    "§1 makes no unmeasured claim": !/measured at launch/i.test(sections.hero) && !sections.hero.includes("—")
   };
-  check("THIS SITE is still dashed, with `measured at launch` beside it (R4)",
+  check("THIS SITE is measured: the card states 7.5 h and the page carries no unmeasured claim (R4 renders nothing)",
     Object.values(parts).every(Boolean),
     Object.entries(parts).map(([k, v]) => `${v ? "✓" : "✗"} ${k}`).join(" · ") +
-      ` — ${dashCells} unmeasured value(s) in the THIS SITE card, ${(s5.match(/—/g) || []).length} em-dashes in §5's text`);
+      ` — attention reads ${JSON.stringify(siteCard.attention)}, ${(s5.match(/—/g) || []).length} em-dashes in §5's prose`);
+  /* The meter's other two figures live in VERIFY.md beside the method that
+     defines them, and stay off the page (copy file §4.2: commit-days appear
+     nowhere on the page; the card prints attention alone). */
+  check("the meter's active-build and commit-day figures stay off the page, in VERIFY.md",
+    !/42h\s*24m/.test(pageText) && !/commit[- ]day/i.test(pageText) &&
+      /42h 24m/.test(verifyText) && /commit-day/i.test(verifyText),
+    "page clean of `42h 24m` and commit-days; VERIFY.md carries both");
 
   check("the curl is byte-equal to R12's verified form in §1, §6 and VERIFY.md",
     (html.match(new RegExp(R12.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length === 2 &&
@@ -273,20 +280,27 @@ function copyMatrix(sections, verifyText, chrome, dashCell) {
      singles it out because a scope slip there is read by the exact skeptic the
      file exists for. */
   const vScopes = ["BODH", "BODH SPRINT-4 WEBSITE WAVE", "THIS SITE"];
-  check("VERIFY.md states the three scopes separately, THIS SITE dashed (DEC-050)",
+  const thisSiteRow = verifyText.split("\n").find((l) => l.includes("**THIS SITE**")) ?? "";
+  check("VERIFY.md states the three scopes separately, THIS SITE measured (DEC-050)",
     vScopes.every((s) => verifyText.includes(s)) &&
-      /\|\s*\*\*THIS SITE\*\*\s*\|[^|]*\|\s*—/.test(verifyText),
-    "three-row scope table present; THIS SITE row's measured column is an em-dash");
+      /7\.5 h operator attention/.test(thisSiteRow) &&
+      /42h 24m active build/.test(thisSiteRow) &&
+      /9 commit-days/.test(thisSiteRow),
+    `three-row scope table present; THIS SITE row: "${thisSiteRow.trim()}"`);
 
   const aggregate = /\b(total|combined|altogether|across all)\b[^.\n]{0,40}(9\.3|147|24\.73|64)/i.test(verifyText);
   check("VERIFY.md states no cross-scope aggregate",
     !aggregate, "no total/combined figure spans two scopes");
 
-  const thisSiteRow = verifyText.split("\n").find((l) => l.includes("**THIS SITE**")) ?? "";
-  check("VERIFY.md makes no unmeasured claim about THIS SITE",
-    !/[\d$]/.test(thisSiteRow.split("|").slice(2).join("|")) &&
-      /THIS SITE's column stays\s+dashed/.test(verifyText.replace(/\s+/g, " ")),
-    `row: "${thisSiteRow.trim()}" — no numeral past the scope column, and the file states the column stays dashed until a snapshot lands`);
+  /* The THIS SITE figures are meter-only: the row carries no cost figure (the
+     meter run's cost total was incomplete and is published nowhere), and the
+     file states both the provenance and the exact format conversion, so the
+     figure cannot be read as estimated or derived. */
+  check("VERIFY.md's THIS SITE figures are meter-only, with provenance and the exact conversion stated",
+    !thisSiteRow.includes("$") &&
+      /one\s+founder-run pass of the meter/.test(verifyText.replace(/\s+/g, " ")) &&
+      /7h 30m\s+is 7\.5 h exactly/.test(verifyText.replace(/\s+/g, " ")),
+    `row: "${thisSiteRow.trim()}" — no cost figure in the row; provenance and the 7h 30m = 7.5 h conversion stated`);
 
   check("VERIFY.md's roster line is not stated as this build's participation",
     /roster, not the\s+participation in any one build/.test(verifyText.replace(/\s+/g, " ")) ||
@@ -346,18 +360,27 @@ async function run() {
       placeholders: [...document.querySelectorAll("[data-shell-placeholder]")].map(e => e.innerText.replace(/\\s+/g, " ").trim())
     }))()`);
     evidence.chrome = chrome;
-    /* The dash cell as an ELEMENT, in the card that owns it — read here so the
-       copy matrix can assert the cell rather than count punctuation. The card
-       is found by its scope label, not by its position. */
-    const dashCell = await page.eval(`(() => {
-      const card = [...document.querySelectorAll(".shipped__card")]
-        .find((c) => /THIS SITE/.test((c.querySelector(".shipped__scope") || {}).textContent || ""));
-      const cells = card ? [...card.querySelectorAll(".readout__value--unmeasured")] : [];
-      return { count: cells.length, text: cells.map((c) => c.textContent.trim()).join("|"),
-               cardFound: Boolean(card) };
+    /* The THIS SITE card read as ELEMENTS, so the copy matrix can assert the
+       cells rather than count punctuation. The card is found by its scope
+       label, not by its position; the modifier and dash counts sweep BOTH
+       cards, because a dash reappearing anywhere is the regression. Read at
+       the top of the page, before any count-up can fire. */
+    const siteCard = await page.eval(`(() => {
+      const cards = [...document.querySelectorAll(".shipped__card")];
+      const card = cards.find((c) => /THIS SITE/.test((c.querySelector(".shipped__scope") || {}).textContent || ""));
+      const values = cards.flatMap((c) => [...c.querySelectorAll(".readout__value")]);
+      const att = card ? [...card.querySelectorAll(".shipped__cell")]
+        .find((cell) => /OPERATOR ATTENTION/.test((cell.querySelector(".readout__key") || {}).textContent || "")) : null;
+      return {
+        cardFound: Boolean(card),
+        unmeasured: document.querySelectorAll(".readout__value--unmeasured").length,
+        dashValues: values.filter((v) => v.textContent.trim() === "—").length,
+        attention: att ? att.querySelector(".readout__value").textContent.replace(/\\s+/g, " ").trim() : null,
+        subs: card ? card.querySelectorAll(".readout__sub").length : -1
+      };
     })()`);
-    evidence.dashCell = dashCell;
-    copyMatrix(sections, verify, chrome, dashCell);
+    evidence.siteCard = siteCard;
+    copyMatrix(sections, verify, chrome, siteCard);
 
     /* Reported, never asserted: a shell placeholder is a state the page passes
        through, and the last string a reader meets after the curl deserves a
@@ -434,11 +457,11 @@ async function run() {
        terminal — which is what the budget calls one. */
     const loopingSeatKinds = [...new Set(motion.loopingSeats.map((s) => (s.includes("pulse") ? "pulse" : s.includes("cursor") ? "cursor" : s)))];
     /* The count-up's seat count is the page's, read off the page: §5's cards
-       carry one hook per cell that states a metric — the measured one, and the
-       dash that keeps its hook so the engine's refusal to animate a digitless
-       value stays a property of the page. A place is not a metric and carries
-       none. What the budget asserts is the ELEMENT, not how many cells it is
-       seated in, so the count is asserted as "at least one and only in §5". */
+       carry one hook per cell that states a metric — both OPERATOR ATTENTION
+       cells, each of which rolls to its measured value. A place is not a
+       metric and carries none. What the budget asserts is the ELEMENT, not
+       how many cells it is seated in, so the count is asserted as "at least
+       one and only in §5". */
     check("the live motion inventory on the built page is the budget exactly: the pulse motif, the count-up, the §6 cursor",
       loopingSeatKinds.length === 2 && loopingSeatKinds.includes("pulse") && loopingSeatKinds.includes("cursor") &&
         motion.cursors === 1 && motion.lamps === 2 &&
@@ -457,73 +480,76 @@ async function run() {
 
     /* ---- the counting cells during playback: what is SEEN vs what is ANNOUNCED ---- */
     const roll = await page.eval(`(async () => {
-      /* The counting cell, found by the hook rather than by position: §5's
-         first cell is not guaranteed to be the one that counts, and a check
-         that assumed it would silently start measuring a different cell. */
-      const span = document.querySelector("#shipped-with-muster .shipped__cell [data-countup]:not(.readout__value--unmeasured [data-countup])");
-      const cell = span.closest(".shipped__cell");
-      const seen = new Set(), announced = new Set();
+      /* Every counting cell, found by the hook rather than by position: §5
+         carries two, in document order, and a check pinned to one of them
+         would silently stop measuring the other. */
+      const spans = [...document.querySelectorAll("#shipped-with-muster .shipped__cell [data-countup]")];
+      const cells = spans.map((s) => s.closest(".shipped__cell"));
+      const seen = spans.map(() => new Set());
+      const announced = spans.map(() => new Set());
       /* The announced string of the cell = its text with aria-hidden subtrees
          removed. That is what a screen reader assembles, and it is the thing the
          posture claims never lies. */
-      const accessibleText = (el) => [...el.querySelectorAll("*")].concat([el])
-        .filter(n => n.getAttribute && n.getAttribute("aria-hidden") === "true")
-        .reduce((acc, hidden) => acc, null) === null
-          ? (function walk(n) {
-              if (n.nodeType === 3) return n.nodeValue;
-              if (n.nodeType !== 1) return "";
-              if (n.getAttribute("aria-hidden") === "true") return "";
-              return [...n.childNodes].map(walk).join("");
-            })(el).replace(/\\s+/g, " ").trim()
-          : "";
+      const accessibleText = (el) => (function walk(n) {
+            if (n.nodeType === 3) return n.nodeValue;
+            if (n.nodeType !== 1) return "";
+            if (n.getAttribute("aria-hidden") === "true") return "";
+            return [...n.childNodes].map(walk).join("");
+          })(el).replace(/\\s+/g, " ").trim();
       let stop = false;
       const sample = () => {
-        seen.add(span.textContent);
-        announced.add(accessibleText(cell));
+        spans.forEach((s, i) => { seen[i].add(s.textContent); announced[i].add(accessibleText(cells[i])); });
         if (!stop) requestAnimationFrame(sample);
       };
       requestAnimationFrame(sample);
       document.getElementById("shipped-with-muster").scrollIntoView();
       await new Promise(r => setTimeout(r, 2200));
       stop = true;
-      return {
-        seen: [...seen], announced: [...announced],
-        state: span.getAttribute("data-countup-state"),
-        settled: span.textContent
-      };
+      return spans.map((s, i) => ({
+        seen: [...seen[i]], announced: [...announced[i]],
+        state: s.getAttribute("data-countup-state"),
+        settled: s.textContent
+      }));
     })()`);
     evidence.roll = roll;
-    const announcedValues = roll.announced.filter(Boolean);
-    check("the counting cell takes many visible states and exactly one announced state, verified during playback",
-      roll.seen.length > 10 && announcedValues.length === 1 && announcedValues[0].includes(COUNTING_CELL) &&
-        roll.state === "done" && roll.settled === COUNTING_CELL,
-      `${roll.seen.length} distinct visible strings, ${announcedValues.length} announced: "${announcedValues.join('" | "')}" · settles "${roll.settled}" against the seed's ${COUNTING_CELL} (state ${roll.state})`);
+    check("every counting cell takes many visible states and exactly one announced state, verified during playback",
+      roll.length === COUNTING_CELLS.length &&
+        roll.every((r, i) => {
+          const a = r.announced.filter(Boolean);
+          return r.seen.length > 10 && a.length === 1 && a[0].includes(COUNTING_CELLS[i]) &&
+            r.state === "done" && r.settled === COUNTING_CELLS[i];
+        }),
+      roll.map((r, i) => `${COUNTING_CELLS[i]}: ${r.seen.length} visible strings, ` +
+        `${r.announced.filter(Boolean).length} announced "${r.announced.filter(Boolean).join('" | "')}", ` +
+        `settles "${r.settled}" (${r.state})`).join(" · "));
 
-    /* Mid-roll, from the AX tree rather than from the DOM. */
+    /* Mid-roll, from the AX tree rather than from the DOM — both cells. */
     await page.goto(PAGE);
     const midRoll = await page.eval(`(async () => {
       document.getElementById("shipped-with-muster").scrollIntoView();
       await new Promise(r => requestAnimationFrame(() => setTimeout(r, 350)));
-      const span = document.querySelector("#shipped-with-muster .readout__value:not(.readout__value--unmeasured) [data-countup]");
-      return { visible: span.textContent, state: span.getAttribute("data-countup-state") };
+      return [...document.querySelectorAll("#shipped-with-muster .readout__value [data-countup]")]
+        .map((s) => ({ visible: s.textContent, state: s.getAttribute("data-countup-state") }));
     })()`);
     const fullAx = await page.call("Accessibility.getFullAXTree");
     const axStrings = fullAx.nodes.map((n) => n.name?.value).filter(Boolean);
-    /* Any name that reads as a bare figure and is not the settled one is an
-       intermediate the tree should never have carried. The prose figures are
-       inside sentences, so they never present as a bare figure — which is
+    /* Any name that reads as a bare figure and is not one of the settled ones
+       is an intermediate the tree should never have carried. The prose figures
+       are inside sentences, so they never present as a bare figure — which is
        exactly why this pattern still catches a rolling digit. */
     const axHasIntermediate = axStrings.some((s) => /^\$?\d[\d.,]* ?h?$/.test(s.trim()) &&
-      s.trim() !== COUNTING_CELL);
+      !COUNTING_CELLS.includes(s.trim()));
     const liveProps = fullAx.nodes.filter((n) => (n.properties || []).some((p) => p.name === "live" && p.value?.value && p.value.value !== "off"));
     /* The prose figures have to be IN the tree too — a count-up shroud that
        swallowed the sentence carrying them would otherwise pass here. */
     const axProse = ["9.3 hours", "$147"].filter((s) => axStrings.some((n) => n.includes(s)));
-    evidence.midRoll = { ...midRoll, axHasCell: axStrings.includes(COUNTING_CELL), axProse, liveNodes: liveProps.length };
-    check("mid-roll the accessibility tree carries the measured values and no intermediate, with no live node",
-      midRoll.state === "running" && axStrings.includes(COUNTING_CELL) && axProse.length === 2 &&
+    evidence.midRoll = { rolls: midRoll, axHasCells: COUNTING_CELLS.map((v) => axStrings.includes(v)), axProse, liveNodes: liveProps.length };
+    check("mid-roll the accessibility tree carries both measured values and no intermediate, with no live node",
+      midRoll.length === COUNTING_CELLS.length && midRoll.every((m) => m.state === "running") &&
+        COUNTING_CELLS.every((v) => axStrings.includes(v)) && axProse.length === 2 &&
         !axHasIntermediate && liveProps.length === 0,
-      `visible "${midRoll.visible}" (state ${midRoll.state}) while the AX tree reads ${COUNTING_CELL} and the prose ${axProse.join(" / ") || "— NEITHER"}; ` +
+      `visible ${JSON.stringify(midRoll.map((m) => m.visible))} (states ${midRoll.map((m) => m.state).join("/")}) while the AX tree reads ` +
+        `${JSON.stringify(COUNTING_CELLS.filter((v) => axStrings.includes(v)))} and the prose ${axProse.join(" / ") || "— NEITHER"}; ` +
         `${liveProps.length} nodes with a live property`);
 
     /* ---- reader paths: keyboard paging ----

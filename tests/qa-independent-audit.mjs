@@ -505,18 +505,18 @@ try {
   check("full-ink rule: no muted prose", dark.mutedProse.length === 0, dark.mutedProse.join(" | ") || "every p/li is --ink");
   /* The other side of that exclusion: readout values are held to §8 and to
      §2.3's 24px accent floor, which is a harder rule than the one they left. */
-  /* And the page carries exactly ONE unanswered value. That is the relationship
-     the dash's whole meaning rests on: an unmeasured value reads as a promise
-     only beside its measured twin, so a second dash anywhere — or a dash with
-     no answered value on the same instrument — is a different claim. */
-  check("every readout value is flat accent (or an ink dash) at or above the 24px accent floor, tabular",
+  /* And the page carries NO unanswered value: every readout key on the page
+     is answered, so a dash anywhere — or a cell wearing the unmeasured
+     modifier, whatever its content — is a claim the page no longer makes and
+     fails here by name. Both the content (an em-dash) and the class (the
+     modifier) are swept, so the two cannot disagree silently either. */
+  check("every readout value is flat accent at or above the 24px accent floor, tabular, and none is unmeasured",
     dark.readoutValues.length > 0 &&
-      dark.readoutValues.filter((v) => v.unmeasured).length === 1 &&
+      dark.readoutValues.filter((v) => v.unmeasured || v.modifier).length === 0 &&
       dark.readoutValues.every((v) => v.size >= 24 && /tabular-nums/.test(v.tabular) &&
-        v.unmeasured === v.modifier &&
-        v.colour === (v.unmeasured ? dark.inkHex : dark.accentHex)),
-    dark.readoutValues.map((v) => `${JSON.stringify(v.text)} ${v.colour} @${v.size}px${v.unmeasured === v.modifier ? "" : " ← content and modifier disagree"}`).join(" · ") +
-      ` — ${dark.readoutValues.filter((v) => v.unmeasured).length} unanswered of ${dark.readoutValues.length}` || "no readout values on the page");
+        v.colour === dark.accentHex),
+    dark.readoutValues.map((v) => `${JSON.stringify(v.text)} ${v.colour} @${v.size}px`).join(" · ") +
+      ` — ${dark.readoutValues.filter((v) => v.unmeasured || v.modifier).length} unanswered of ${dark.readoutValues.length}, zero expected` || "no readout values on the page");
   check("no rust sets small text except the two glyphs the specs exempt as graphical marks",
     dark.smallRust.length === 0 && dark.graphicalRust.length === 2 &&
       !dark.graphicalRust.some((g) => /UNMARKED/.test(g)),
@@ -632,9 +632,9 @@ try {
   check("light theme also passes the full-ink, small-rust and readout-value rules",
     light.mutedProse.length === 0 && light.smallRust.length === 0 && light.graphicalRust.length === 2 &&
       light.readoutValues.length === dark.readoutValues.length &&
-      light.readoutValues.filter((v) => v.unmeasured).length === 1 &&
-      light.readoutValues.every((v) => v.size >= 24 && v.colour === (v.unmeasured ? light.inkHex : light.accentHex)),
-    `mutedProse ${light.mutedProse.length}, informational smallRust ${light.smallRust.length}, graphical ${light.graphicalRust.length}, readout values ${light.readoutValues.length} (${light.readoutValues.filter((v) => v.unmeasured).length} unmeasured, in ${light.inkHex})`);
+      light.readoutValues.filter((v) => v.unmeasured || v.modifier).length === 0 &&
+      light.readoutValues.every((v) => v.size >= 24 && v.colour === light.accentHex),
+    `mutedProse ${light.mutedProse.length}, informational smallRust ${light.smallRust.length}, graphical ${light.graphicalRust.length}, readout values ${light.readoutValues.length} (${light.readoutValues.filter((v) => v.unmeasured || v.modifier).length} unmeasured, zero expected)`);
 
   /* ---------- keyboard: real Tab, real :focus-visible ---------- */
   await page.setMedia({ colorScheme: "dark", reducedMotion: "no-preference" });

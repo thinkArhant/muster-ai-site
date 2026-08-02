@@ -87,56 +87,61 @@ _None open._
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-08-01 THE TELEMETRY BUILD — §5's last dash becomes `7.5 h`, round 2 of 2
+### 2026-08-01 PM REVIEW — the telemetry round, then re-issue the launch merge
 
 ```
-Role: developer
+Role: pm
 
-The founder's telemetry snapshot is taken and Content has shipped the strings (HO-050): §5's THIS
-SITE card reads `OPERATOR ATTENTION 7.5 h` with NO sub-line — `measured at launch` now appears
-NOWHERE on the page — and VERIFY.md's THIS SITE row carries `7.5 h operator attention · 42h 24m
-active build · 9 commit-days` with the why extended into the existing "hours are the whole of the
-difference" bullet. Copy files and VERIFY.md are final; the page is not yet rebuilt.
+Review the telemetry round: HO-050 (Content, copy + VERIFY.md) and HO-051 (Developer, the build).
+The page's last dash is measured — §5's THIS SITE card reads `OPERATOR ATTENTION 7.5 h`, no
+sub-line, `measured at launch` nowhere on the page. All four runners green cold and serial on the
+shipped tree: 307/307 · 27/27 · 108/108 · 47/47 (verify-shell retires one check whose subject
+cannot exist — the fixture holds the property; the sweep adds two). Five plants, each red on its
+owner, reverted clean; HO-051 names every re-based check and the one coupling HO-050 missed
+(verify-webkit's ink-dash check).
 
-BUILD: update index.html's §5 THIS SITE card to the copy file's §4.1 table exactly — value `7.5 h`
-in the answered treatment (accent, tabular, readout size, like its twin `4.8 h`), the
-`--unmeasured` modifier and the sub-line gone, the §5 HTML comments rewritten to current truth.
-NO other page string moves. `7.5 h` renders byte-identically everywhere it appears.
+PM cascade still open per HO-050 item 18 + HO-051's "For PM": section-01-hero.md /
+section-01-copy.md "exactly once" claims (not harness-coupled), product-spec.md / copy-rules.md /
+agent-context scope tables, foundational-assumptions A-002 notes, pre-launch-checklist's THIS SITE
+lines. The telemetry snapshot is committed at telemetry/2026-08-01-meter.md with its unpriced-cost
+warning.
 
-RE-BASE the harness around the dash-to-measured flip — HO-050 enumerates 18 couplings across
-qa-fullpage-sweep.mjs (incl. the two designed reds on VERIFY.md's row, the R4 dash check, the
-WHOLE_PRODUCT list), verify-shell.mjs (the §5 dash/sub-line/counting-cell/single-site checks) and
-qa-independent-audit.mjs (both themes' unmeasured-count rules). Assert relationships, not values;
-plant each new assertion red before trusting it. Also align page-shell.md §8/§10.3 and
-section-01-hero.md's "exactly once" claims to "nowhere on the page".
+Then re-issue the launch merge step (Role: halt, founder-only, history preserved per DEC-063 §5).
 
-DO NOT: publish any cost figure from the meter run, print `42h 24m` / `9 commit-days` / any wave
-numeral on the page, derive any rate or difference between 4.8 h and 7.5 h, or touch VERIFY.md's
-$594 floor section.
-
-Deliverable: page byte-equal to the copy file, all four runners green cold and serial on the
-shipped tree, handoff filed for QA/PM naming every re-based check.
-
-IF BLOCKED: file the blocker addressed to PM and re-point `## Next Step` to a `Role: pm`
-assessment step. Never set `Role: halt`.
+IF BLOCKED: record the question in Founder Decisions per the matrix.
 ```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-1. **PM review of the telemetry round** (HO-050 + the Developer build), then re-issue the launch
-   merge step.
-2. **The launch merge, history preserved** (DEC-063 §5) — `Role: halt`, founder-only. A squash
+1. **The launch merge, history preserved** (DEC-063 §5) — `Role: halt`, founder-only. A squash
    merge collapses this branch and 404s the three pinned receipts in the footer; `blob/main`
    survives either strategy, which is the second reason VERIFY is not pinned. Two accepted
    residuals stand recorded (DEC-068): the texture-blind contrast checks, and `section-01-copy.md`
    as the one unparsed copy spec.
-3. **The founder's VERIFY click-check on the live page** — the one thing no runner can stand in
+2. **The founder's VERIFY click-check on the live page** — the one thing no runner can stand in
    for, because only a real fetch proves reachability.
 
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-08-01 — Telemetry round 2 of 2: Developer ships the measured cell (HO-051). §5's THIS SITE
+  card reads `OPERATOR ATTENTION 7.5 h` — accent, tabular, counting, byte-equal to the copy file —
+  with the `--unmeasured` modifier and `measured at launch` sub-line gone; the phrase appears
+  nowhere on the page, and the THIS SITE card carries zero sub-lines by authored asymmetry. The
+  founder's meter output is committed verbatim at `telemetry/2026-08-01-meter.md` wrapped in its
+  unpriced-cost warning ($365.92 is Fable-only, NOT this build's cost, published nowhere). **All
+  four runners green cold and serial, twice: 307/307 · 27/27 · 108/108 · 47/47** — verify-shell
+  retires exactly one check whose subject cannot exist (the fixture holds the dash-refusal
+  property), the sweep adds two (the measured VERIFY row; meter figures stay off the page).
+  **Five plants, each red on its owner, reverted clean** — including the vacuity plant, where an
+  emptied sub-line inventory produced a vacuous per-cell match and the check still went red on its
+  inventory guards. A 15th–18th coupling HO-050 did not list was found by reading:
+  verify-webkit's §5 check REQUIRED an ink dash and was re-based to zero-ink. Count-up a11y
+  verified on the real cell: 66 visible states, one announced state, AX tree carries `7.5 h` and
+  no intermediate mid-roll; no WebKit count-up evidence exists in any condition (qlmanage runs no
+  JS), stated. **Awaiting PM review.**
 
 - 2026-08-01 — Telemetry round 1 of 2: Content quotes the founder's meter and ships the strings
   (HO-050). §5's THIS SITE card: `OPERATOR ATTENTION` `—` → **`7.5 h`** (`7h 30m` in decimal
@@ -287,29 +292,3 @@ assessment step. Never set `Role: halt`.
   floor twice, with the rate and its inputs — and the THIS SITE dashes are untouched. Sweep 45/45,
   audit 108/108; **`verify-shell.mjs` aborts at its §5 copy parser, which is designed and is
   round 3's first fix** — eleven couplings enumerated in HO-042. **Awaiting UI/UX (round 2).**
-
-- 2026-07-31 — Step: PM re-gate review and the final gate packet (DEC-061). **All four handoffs
-  accepted with no revision**, and the acceptance is re-derived rather than read: all three runners
-  re-run cold by PM on the shipped tree (`scripts/test.sh` GREEN both engines 295/295 + 27/27, audit
-  exit 0 at 108/108, sweep exit 0 at 43/43), every changed surface rendered and looked at in **both**
-  engines, and the load-bearing numbers re-measured on the build rather than read off a handoff —
-  masthead 18px word · 9 × 13.5 mark (0.5em × 0.75em) with `--bar-h` unmoved at 48px, the indicator's
-  four segments at x 128 → 1152 with transition 0s and animation none on all four, §5's three lines
-  on one column edge at 685.31px each, footer `border-top: 0` with one 35-word sentence at lead
-  scale. All four pinned receipts **read at their SHAs**, not resolved as strings: queue at 16 queued
-  steps, handoffs at 11 entries in both types, decision log at current depth. **Three violations
-  planted by PM; two went red and the third is the finding** — a fabricated SHA written into the page
-  *and* its copy file together passes 295/295 and 43/43, because the `git cat-file` existence check
-  covers the §1 chip only. No shipped link is wrong today, and that coordinated edit is exactly what
-  the launch re-pin makes; it is now a hard `pre-launch-checklist.md` item with the fix named.
-  **DEC-061 rules three things**: F-R8's audit (eleven verdicts accepted; item 12 declined as
-  untested and re-ruled — §5 drops one `with Muster`, ruled not hand-applied), VERIFY's provisional
-  pin retired in favour of the live `blob/main` target (the founder's own criterion for that one file
-  is the launch state, and the pinned copy predated its own explanation), and F-R1 sent to the
-  founder as a pick with option 3 recommended. DEC-060's open PM cascade closed in
-  `brand-guidelines.md`. Ledger reconciled — HO-038's heading, clobbered when HO-039 was filed above
-  it, restored; four handoffs swept to Resolved; lint 519 active lines to 6.
-  **The final gate is live: one number and three phone checks, and one of the three closes the last
-  hard launch blocker.**
-
-

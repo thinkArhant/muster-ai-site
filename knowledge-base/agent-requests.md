@@ -10,6 +10,89 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### HO-051 — §5's last dash is measured: `7.5 h` ships, counting, in both engines
+- **From**: Developer
+- **To**: PM (review), QA (visibility)
+- **Date**: 2026-08-01
+- **Status**: open
+- **Deliverables**: `index.html`, `telemetry/2026-08-01-meter.md`, `tests/verify-shell.mjs`,
+  `tests/verify-webkit.mjs`, `tests/qa-independent-audit.mjs`, `tests/qa-fullpage-sweep.mjs`,
+  `knowledge-base/design-specs/web/page-shell.md`, `styles/sections.css`
+
+**Built.** §5's THIS SITE `OPERATOR ATTENTION` cell reads **`7.5 h`** — accent, tabular, readout
+size, `data-countup`, byte-equal to the copy file's §4.1 table — with the `--unmeasured` modifier
+and the `measured at launch` sub-line gone. The phrase now appears **nowhere on the page**; the
+THIS SITE card carries **zero** sub-lines (the section's one is card 1's `App Store + web`); no
+other page string moved. §5 comments and §1's remnant comment rewritten to current truth, as were
+`page-shell.md` §8.1/§10.2 (the unanswered-state treatment STANDS as a design-system rule, with a
+line stating no page cell exercises it) and `sections.css`'s remnant comment. VERIFY.md untouched,
+as filed by HO-050.
+
+**Runner counts, cold and serial on the shipped tree** (run twice — before and after the plants):
+`verify-shell` **307/307** · `verify-webkit` **27/27** · `qa-independent-audit` **108/108** ·
+`qa-fullpage-sweep` **47/47**, all exit 0. The floor moves 308→307 and 45→47, explained below.
+
+**Every re-based / retired assertion** (HO-050's items 1–14, plus one it did not list):
+- *sweep*: VERIFY row check re-based to the measured row's three figures; the "no unmeasured claim"
+  check re-based to **meter-only** (no `$` in the row + provenance + the 7h 30m = 7.5 h conversion
+  stated — the unpriced meter total can never enter); the R4 check re-based part-by-part (0
+  modifiers, 0 dash values, attention = `7.5 h`, 0 sub-lines, phrase count **=== 0** page-wide,
+  never vacuously); `WHOLE_PRODUCT` gains `7.5 h` as a fourth exactly-once figure; `COUNTING_CELL`
+  becomes `COUNTING_CELLS = ["4.8 h", "7.5 h"]` and the playback + mid-roll-AX checks now sample
+  BOTH cells. **Two checks added** (45→47): the measured row's figures, and "42h 24m / commit-days
+  stay off the page, in VERIFY.md".
+- *verify-shell*: "answered values" re-based to **all four** cells accent/tabular/≥24; "exactly one
+  unanswered value" re-based to "renders NO unmeasured value" (dash, modifier, phrase and caption
+  each fail by name); "counting cells" re-based to the copy file's digit-bearing values per card
+  (2, derived); sub-line check re-based to authored-vs-rendered per cell **plus two `=== 1`
+  inventory guards as the vacuity backstop**; "sub-lines hung alike" re-based to equal block-size +
+  level rows **with the hang on one side only** (the reserved sub-line row is now the thing under
+  test); reduced-motion and light-theme checks re-based to all-answered; both §5 AX rolls
+  (natural and slow) run on both cells; the single-site check extended to four figures.
+  **Retired: one check** — "the dash never animates" (its subject cannot exist on the page; the
+  engine-refusal property is held by the count-up fixture's four checks, unchanged). 308→307.
+- *audit*: both themes' readout rules re-based to **zero** unmeasured — and hardened: any dash OR
+  any modifier fails, so content and class can no longer disagree silently.
+- *verify-webkit* — **a 15th–18th coupling HO-050 did not list**: its §5 ink-dash check REQUIRED
+  `inkDashes > 0` and would have gone red on the correct build. Re-based to "no ink cluster in the
+  section, no rust dash, Blink's dash count agrees at 0".
+
+**Plants — five runs, every one red on its owner, all reverted (git status clean):**
+1. Full old cell restored (dash + modifier + sub-line) → verify-shell **296/307**, all 11 reds the
+   re-based §5 set. Note: the forced slow-roll AX check stayed green (it force-runs the engine on
+   whatever spans exist) — the natural-roll check owned that gap and went red.
+2. **The vacuity plant** — copy file's sub-line authored to `(none)` AND the page's sub-line
+   removed: the per-cell comparison reads `[null,null] against [null,null]` (a vacuous match) and
+   the check **still went red** on its inventory guards; the seed byte-equality and reserve checks
+   caught it independently. 304/307. This is the silent-failure class the round was hunting, red.
+3. Sweep bundle — page value drifted to `7.6 h`, VERIFY row corrupted (`42h 24m` out, `$365.92`
+   in), footer leaked `measured at launch` + `42h 24m` → **40/47**, all seven reds the owners.
+4. Modifier alone restored on the measured cell → audit **106/108** (both themes), the evidence
+   showing the class flipping a measured value's rendered colour to ink.
+5. Value painted ink → verify-webkit **25/27**, the check naming the four ink glyph clusters at
+   their coordinates in both themes.
+
+**Count-up a11y on the real cell**: natural roll — 66 distinct visible strings on the `7.5 h` cell
+while its announced text held exactly one state (`OPERATOR ATTENTION 7.5 h`); slow roll — visible
+`0.0 h` in both cells while the full AX tree carried `4.8 h` and `7.5 h` and **no intermediate**,
+zero live nodes; settle — authored strings, `aria-hidden` gone, zero stand-ins. **Standing limit,
+stated: there is no WebKit evidence for the count-up in any condition — `qlmanage` runs no
+JavaScript; its §5 render IS the no-JS path (authored text), verified as such.**
+
+**Telemetry**: the founder's meter output is committed **verbatim and complete** at
+`telemetry/2026-08-01-meter.md`, with the unpriced-cost warning wrapped around it: `$365.92` is
+Fable-only against 4,211 unpriced Opus calls, is NOT this build's cost, and is published nowhere on
+the page or in VERIFY.md. The $594 floor section stands untouched.
+
+**For PM** (nothing here blocks): (1) `section-01-hero.md` ~L244/~L423 and `section-01-copy.md`
+~L125 still say `measured at launch` occurs exactly once — **not load-bearing for any harness
+check** (the parsers read section-03/04/05/footer copy files only), so the edit is free. (2) The
+HO-050 item-18 cascade (product-spec/copy-rules/agent-context scope tables, A-002 notes,
+pre-launch-checklist lines) is untouched, as routed. (3) Cross-engine §5 renders looked at in both
+engines at 1280 dark; artifacts: `blink-dark-s05-1280.png`, `webkit-{dark,light}-s05.png`.
+
+- **Revision log**: —
+
 ### HO-050 — §5's THIS SITE card gets its measured number; VERIFY.md carries the why
 - **From**: Content
 - **To**: Developer (builds, round 2), PM (review)

@@ -431,14 +431,14 @@ try {
          worth the render, and both are colour, which is the one thing a
          rasteriser can be asked directly.
 
-         A measured value is rust. An unmeasured one is an INK em-dash, and
-         the difference is the page's whole posture about its own numbers: a
-         dash painted rust reads as a metric that happens to be zero. With the
-         prose lines hidden, every remaining ink pixel in the section belongs
-         to one of the four dashes — keys, scope labels and the caption are all
-         muted, the measured values are accent, the rules are hair — so "four
-         ink clusters, all dash-shaped, and no accent one among them" is a
-         complete statement about the section rather than a spot check. --- */
+         Every value in §5 is measured, and a measured value is rust. With
+         the prose lines hidden there is nothing left in the section that may
+         paint ink at all — keys, scope labels and the sub-line are muted,
+         the values are accent, the rules are hair — so "zero ink clusters,
+         and no accent dash among the values" is a complete statement about
+         the section rather than a spot check. An ink cluster here is either
+         a dash that came back or a value that lost its treatment; a dash
+         painted rust would read as a metric that happens to be zero. --- */
   const clustersIn = (image, matches, floor) => {
     const hits = new Set();
     for (let y = 0; y < image.height; y++) {
@@ -486,9 +486,9 @@ try {
 
   /* The Blink run's own count of §5's unanswered values, when its report is
      present. Read rather than restated: how many dashes §5 carries is a
-     product decision that has changed once already, and the claim this file
-     uniquely owns is that WebKit paints them the SAME — in ink, never rust —
-     not how many there are. */
+     product decision that has changed more than once, and the claim this
+     file uniquely owns is that WebKit paints the same inventory Blink saw —
+     currently none — not what that inventory is. */
   const blinkReportPath = join(ARTIFACTS, "blink-report.json");
   const blinkRun = existsSync(blinkReportPath) ? JSON.parse(readFileSync(blinkReportPath, "utf8")) : null;
   const blinkDashes = blinkRun?.evidence?.s05Wide
@@ -516,7 +516,6 @@ try {
     const isDash = (b) => b.w >= 4 * b.h && b.w >= 6 && b.h <= 8;
     const inkClusters = clustersIn(withS5, (c) => nearest(c) === "ink", 8);
     const accentClusters = clustersIn(withS5, (c) => nearest(c) === "accent", 8);
-    const inkDashes = inkClusters.filter(isDash);
     const accentDashes = accentClusters.filter(isDash);
 
     evidence[theme + "S05"] = {
@@ -537,15 +536,17 @@ try {
       accentClusters.length >= 4 && accentDashes.length === 0,
       `${accentClusters.length} rust clusters, ${accentClusters.reduce((n, b) => n + b.n, 0)} px of accent ink — the authored strings, since QuickLook ran no count-up`
     );
-    /* The whole ink/rust split, as three relationships: every ink cluster in
-       the cards is dash-shaped, there is at least one, and no dash is rust.
-       The count itself is Blink's, compared rather than restated. */
+    /* The whole answered-everywhere claim, as three relationships: the
+       section paints NO ink cluster with the prose hidden, no rust cluster
+       is dash-shaped, and Blink's own dash-cell count — read from its
+       report, never restated — agrees at zero. A dash re-entering shows up
+       here as the ink cluster it would rasterise to. */
     check(
-      `WebKit renders §5's unanswered value as an ink em-dash, never rust (${theme})`,
-      inkDashes.length > 0 && inkClusters.length === inkDashes.length && accentDashes.length === 0 &&
-        (blinkDashes === null || inkDashes.length === blinkDashes),
-      `${inkClusters.length} ink cluster(s) in the section, ${inkDashes.length} of them dash-shaped: ${inkDashes.map((b) => b.w + "×" + b.h).join(", ") || "none"} · rust dashes ${accentDashes.length} · ` +
-        (blinkDashes === null ? "no Blink report to compare the count against" : `Blink counted ${blinkDashes}`)
+      `WebKit renders §5 with every value answered — no ink cluster, no rust dash (${theme})`,
+      inkClusters.length === 0 && accentDashes.length === 0 &&
+        (blinkDashes === null || blinkDashes === 0),
+      `${inkClusters.length} ink cluster(s) in the section${inkClusters.length ? ": " + inkClusters.map((b) => b.w + "×" + b.h + "@" + b.l + "," + b.t).join(", ") : ""} · rust dashes ${accentDashes.length} · ` +
+        (blinkDashes === null ? "no Blink report to compare the count against" : `Blink counted ${blinkDashes} dash cell(s)`)
     );
   }
 
