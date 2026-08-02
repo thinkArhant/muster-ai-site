@@ -10,186 +10,35 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
-### HO-051 — §5's last dash is measured: `7.5 h` ships, counting, in both engines
-- **From**: Developer
-- **To**: PM (review), QA (visibility)
-- **Date**: 2026-08-01
-- **Status**: open
-- **Deliverables**: `index.html`, `telemetry/2026-08-01-meter.md`, `tests/verify-shell.mjs`,
-  `tests/verify-webkit.mjs`, `tests/qa-independent-audit.mjs`, `tests/qa-fullpage-sweep.mjs`,
-  `knowledge-base/design-specs/web/page-shell.md`, `styles/sections.css`
-
-**Built.** §5's THIS SITE `OPERATOR ATTENTION` cell reads **`7.5 h`** — accent, tabular, readout
-size, `data-countup`, byte-equal to the copy file's §4.1 table — with the `--unmeasured` modifier
-and the `measured at launch` sub-line gone. The phrase now appears **nowhere on the page**; the
-THIS SITE card carries **zero** sub-lines (the section's one is card 1's `App Store + web`); no
-other page string moved. §5 comments and §1's remnant comment rewritten to current truth, as were
-`page-shell.md` §8.1/§10.2 (the unanswered-state treatment STANDS as a design-system rule, with a
-line stating no page cell exercises it) and `sections.css`'s remnant comment. VERIFY.md untouched,
-as filed by HO-050.
-
-**Runner counts, cold and serial on the shipped tree** (run twice — before and after the plants):
-`verify-shell` **307/307** · `verify-webkit` **27/27** · `qa-independent-audit` **108/108** ·
-`qa-fullpage-sweep` **47/47**, all exit 0. The floor moves 308→307 and 45→47, explained below.
-
-**Every re-based / retired assertion** (HO-050's items 1–14, plus one it did not list):
-- *sweep*: VERIFY row check re-based to the measured row's three figures; the "no unmeasured claim"
-  check re-based to **meter-only** (no `$` in the row + provenance + the 7h 30m = 7.5 h conversion
-  stated — the unpriced meter total can never enter); the R4 check re-based part-by-part (0
-  modifiers, 0 dash values, attention = `7.5 h`, 0 sub-lines, phrase count **=== 0** page-wide,
-  never vacuously); `WHOLE_PRODUCT` gains `7.5 h` as a fourth exactly-once figure; `COUNTING_CELL`
-  becomes `COUNTING_CELLS = ["4.8 h", "7.5 h"]` and the playback + mid-roll-AX checks now sample
-  BOTH cells. **Two checks added** (45→47): the measured row's figures, and "42h 24m / commit-days
-  stay off the page, in VERIFY.md".
-- *verify-shell*: "answered values" re-based to **all four** cells accent/tabular/≥24; "exactly one
-  unanswered value" re-based to "renders NO unmeasured value" (dash, modifier, phrase and caption
-  each fail by name); "counting cells" re-based to the copy file's digit-bearing values per card
-  (2, derived); sub-line check re-based to authored-vs-rendered per cell **plus two `=== 1`
-  inventory guards as the vacuity backstop**; "sub-lines hung alike" re-based to equal block-size +
-  level rows **with the hang on one side only** (the reserved sub-line row is now the thing under
-  test); reduced-motion and light-theme checks re-based to all-answered; both §5 AX rolls
-  (natural and slow) run on both cells; the single-site check extended to four figures.
-  **Retired: one check** — "the dash never animates" (its subject cannot exist on the page; the
-  engine-refusal property is held by the count-up fixture's four checks, unchanged). 308→307.
-- *audit*: both themes' readout rules re-based to **zero** unmeasured — and hardened: any dash OR
-  any modifier fails, so content and class can no longer disagree silently.
-- *verify-webkit* — **a 15th–18th coupling HO-050 did not list**: its §5 ink-dash check REQUIRED
-  `inkDashes > 0` and would have gone red on the correct build. Re-based to "no ink cluster in the
-  section, no rust dash, Blink's dash count agrees at 0".
-
-**Plants — five runs, every one red on its owner, all reverted (git status clean):**
-1. Full old cell restored (dash + modifier + sub-line) → verify-shell **296/307**, all 11 reds the
-   re-based §5 set. Note: the forced slow-roll AX check stayed green (it force-runs the engine on
-   whatever spans exist) — the natural-roll check owned that gap and went red.
-2. **The vacuity plant** — copy file's sub-line authored to `(none)` AND the page's sub-line
-   removed: the per-cell comparison reads `[null,null] against [null,null]` (a vacuous match) and
-   the check **still went red** on its inventory guards; the seed byte-equality and reserve checks
-   caught it independently. 304/307. This is the silent-failure class the round was hunting, red.
-3. Sweep bundle — page value drifted to `7.6 h`, VERIFY row corrupted (`42h 24m` out, `$365.92`
-   in), footer leaked `measured at launch` + `42h 24m` → **40/47**, all seven reds the owners.
-4. Modifier alone restored on the measured cell → audit **106/108** (both themes), the evidence
-   showing the class flipping a measured value's rendered colour to ink.
-5. Value painted ink → verify-webkit **25/27**, the check naming the four ink glyph clusters at
-   their coordinates in both themes.
-
-**Count-up a11y on the real cell**: natural roll — 66 distinct visible strings on the `7.5 h` cell
-while its announced text held exactly one state (`OPERATOR ATTENTION 7.5 h`); slow roll — visible
-`0.0 h` in both cells while the full AX tree carried `4.8 h` and `7.5 h` and **no intermediate**,
-zero live nodes; settle — authored strings, `aria-hidden` gone, zero stand-ins. **Standing limit,
-stated: there is no WebKit evidence for the count-up in any condition — `qlmanage` runs no
-JavaScript; its §5 render IS the no-JS path (authored text), verified as such.**
-
-**Telemetry**: the founder's meter output is committed **verbatim and complete** at
-`telemetry/2026-08-01-meter.md`, with the unpriced-cost warning wrapped around it: `$365.92` is
-Fable-only against 4,211 unpriced Opus calls, is NOT this build's cost, and is published nowhere on
-the page or in VERIFY.md. The $594 floor section stands untouched.
-
-**For PM** (nothing here blocks): (1) `section-01-hero.md` ~L244/~L423 and `section-01-copy.md`
-~L125 still say `measured at launch` occurs exactly once — **not load-bearing for any harness
-check** (the parsers read section-03/04/05/footer copy files only), so the edit is free. (2) The
-HO-050 item-18 cascade (product-spec/copy-rules/agent-context scope tables, A-002 notes,
-pre-launch-checklist lines) is untouched, as routed. (3) Cross-engine §5 renders looked at in both
-engines at 1280 dark; artifacts: `blink-dark-s05-1280.png`, `webkit-{dark,light}-s05.png`.
-
-- **Revision log**: —
-
-### HO-050 — §5's THIS SITE card gets its measured number; VERIFY.md carries the why
-- **From**: Content
-- **To**: Developer (builds, round 2), PM (review)
-- **Date**: 2026-08-01
-- **Status**: open
-- **Deliverables**: `knowledge-base/design-specs/web/section-05-copy.md`, `VERIFY.md`
-
-**The measurement, quoted, never re-derived.** The founder ran the meter once over both project
-paths: `operator attention 7h 30m` (115 typed prompts), `active build 42h 24m`, `git commit-days 9`.
-The card value is **`7.5 h`** — `7h 30m` in decimal hours, an exact conversion, byte-matching the
-format of Bodh's `4.8 h` under the same key. **No cost figure from this run is published anywhere**
-(the run's model pricing was incomplete); VERIFY.md's existing $594 floor stands exactly as written.
-
-**Card strings that changed (§4.1, the page-equality surface):**
-- Card 2 (`THIS SITE · SPEC → LIVE`) · Value 1 (`OPERATOR ATTENTION`): `—` → **`7.5 h`**
-- Card 2 · Sub-line 1: `measured at launch` → **(none)**
-- Every other string in both cards is unchanged. All four prose lines are unchanged.
-- Consequence stated in the copy file: **`measured at launch` now appears nowhere on the page** —
-  it occurred exactly once, on this cell. Card 2 now carries **zero** sub-lines; the section's one
-  sub-line is card 1's `App Store + web`, and that asymmetry is authored.
-- `7.5 h` must render identically everywhere it appears: one measurement, one rendering. It joins
-  `9.3 h`, `$147`, `4.8 h` as a single-site figure with §5 as the site.
-
-**Spec prose rewritten to current truth** (copy file §1 rules, §4 preamble, §4.2 rationale, ruling
-5, §6 verification statement): THIS SITE is measured, spec → live, same instrument and definition
-as Bodh's `4.8 h`; R4 has nothing to render in §5; the scope labels alone keep the two figures
-from being read as one comparison. §5 still prints no wave-scope numeral and no derived
-rate/ratio/difference — the cells sit side by side and the reader does the arithmetic.
-
-**VERIFY.md changes:**
-- Scope-table THIS SITE row: `— · measured at launch` → `7.5 h operator attention · 42h 24m active
-  build · 9 commit-days`. The paragraph under the table states the provenance (one founder-run
-  pass of the meter, same definition as Bodh's 4.8 h) and the format conversion (7h 30m = 7.5 h
-  exactly).
-- The floor section's framing no longer describes the row as dashed/pending; the $594 table, the
-  floor reasons and the rate paragraph are untouched.
-- **The why lives in the existing "hours are the whole of the difference" bullet, extended** — one
-  explanation, not two: the page took more of the operator than the product it exhibits; Bodh is a
-  landing page plus a single-screen iOS app, this page carries more and more of it is fact-driven
-  (§2's replay reproduced from the build log, §4's decision sheets, the verification apparatus).
-
-**Harness couplings Developer must re-base in round 2** — the dash-to-measured flip is the largest
-assertion change in the round:
-
-*`tests/qa-fullpage-sweep.mjs`* (2 red NOW, by design — VERIFY.md leads the check):
-1. "VERIFY.md states the three scopes separately, THIS SITE dashed" (~L276) — the em-dash row regex
-   asserts the old truth; re-base to the measured row.
-2. "VERIFY.md makes no unmeasured claim about THIS SITE" (~L285) — both clauses (no numeral in the
-   row; the "column stays dashed" phrase) assert the old truth.
-3. "THIS SITE is still dashed, with `measured at launch` beside it (R4)" (~L246–265) — green today,
-   dies at the rebuild: every part flips (`--unmeasured` cell count 0, no em-dash element, no
-   `measured at launch` in §5 or page-wide, and `7.5` puts a numeral in the THIS SITE card).
-4. `WHOLE_PRODUCT` (~L172) — add `7.5 h` as a fourth exactly-once-in-§5 figure.
-5. `COUNTING_CELL` (~L180, `"4.8 h"`) and the playback announce checks — if `7.5 h` takes a
-   count-up hook, the counting-cell inventory becomes two.
-
-*`tests/verify-shell.mjs`* (currently red at its §5 copy-parse checks against the unbuilt page —
-designed; these re-base with the build):
-6. "exactly one unanswered value — ink em-dash with `measured at launch` under it" (~L2563) —
-   premise dead; zero dash cells after the build.
-7. "answered values are flat rust at the readout size, tabular" (~L2558) — `allCells.length - 1`
-   becomes all four; `7.5 h` renders accent/tabular like its twin.
-8. "the dash never animates" (~L2569) — no dash cell on the page; the engine-refusal property
-   stays proven by the count-up fixture (~L692), which needs no change.
-9. "counting cells are the deliverable's measured ones" (~L2575) — the site cell's counted value
-   `—` becomes `7.5 h`; whether it rolls is a build ruling (symmetry with `4.8 h` suggests yes).
-10. "each card carries exactly one cell-level sub-line" (~L2523) — card 2 will carry zero; the
-    authored-vs-rendered comparison survives, the `=== 1` per-card clause does not.
-11. "sub-lines hung alike" (~L2602) — card 2 has no drop to compare; the equal-card-height and
-    key-alignment clauses should hold via the reserved sub-line row and must be re-verified.
-12. "only site for 9.3, $147 and 4.8 h" (~L2540) — extend to four figures per the copy file.
-
-*`tests/qa-independent-audit.mjs`*:
-13. Dark theme readout rule (~L509–519): `unmeasured count === 1` and unmeasured→ink colour split —
-    becomes zero unmeasured, all values accent.
-14. Light theme twin (~L635).
-
-*Non-test surfaces to align in round 2:*
-15. `index.html` §5 comments narrate the dash and the sub-line diagonal — rewrite to current truth.
-16. `page-shell.md` §8 (unmeasured-value treatment rows, ~L333/341/347) and §10.3 (~L435) — the
-    treatment may stand as a design-system rule, but any sentence claiming §5 renders a dash goes.
-17. `section-01-hero.md` ~L244 and ~L423 state `measured at launch` occurs exactly once on the
-    page, in §5 — must become "nowhere on the page" (UI/UX-owned; PM to route).
-18. PM cascade at review: `product-spec.md` scope table, `copy-rules.md` scope table + R4 wording,
-    `agent-context/*.md` scope tables, `foundational-assumptions.md` A-002 notes,
-    `pre-launch-checklist.md` "THIS SITE measured numbers replace dashes" item (attention cell now
-    has its number; the checklist's sweep-matrix line also says "THIS SITE dashed").
-
-**Runner state on this commit**: sweep run cold, serial — **43/45**, the two reds are items 1–2
-above and are designed; every page-based check green because the page is untouched. Copy leads the
-build.
-
-- **Revision log**: —
-
 ## Resolved (Last 10)
 
+- 2026-08-01 — HO-051 (Developer): **accepted, no revision — the last build, and it did not coast.**
+  `7.5 h` ships counting, in both engines, and the round's hardest part was handled honestly: when a
+  cell stops being unmeasured, several assertions lose their subject, and a check that passes because
+  its subject vanished is the silent-failure class this sprint found five times. **One check was
+  retired outright** — *the dash never animates*, which can no longer exist on the page — and the
+  property re-homed on the count-up fixture rather than left as a green line about nothing. Its
+  **vacuity plant is the round's best work**: emptying the sub-line inventory on both sides produced a
+  vacuously matching comparison, and the check **still went red** on its inventory guards, with seed
+  byte-equality catching it independently. Five plants, each red on its owner, tree clean between.
+  It also **found a coupling Content's list missed** — `verify-webkit`'s §5 check *required* an ink
+  dash and would have gone red on the correct build. Counts move for stated reasons: verify-shell
+  308→307 (one retirement), sweep 45→47 (two additions covering the measured VERIFY row and keeping
+  `42h 24m`/commit-days off the page). No WebKit evidence for the count-up in any condition, stated.
+
+
+- 2026-08-01 — HO-050 (Content): **accepted, no revision — and it refused a bad instruction.**
+  PM's brief passed the founder's phrase *"48-second build chain"* straight through; Content declined
+  to write it, because the chain ran ~64 minutes and 48s is the playback compression — verbatim would
+  have been a wall-clock claim on the one file that exists to prevent them. It wrote the accurate form
+  instead. Second conservative call: the meter reports both *7 distinct active days* and *9
+  commit-days*, and it published only commit-days — git-checkable and VERIFY's own stated method —
+  rather than print two day-counts it could not reconcile without re-deriving. The why landed as an
+  extension of the existing *"hours are the whole of the difference"* passage rather than as a second
+  explanation, with no defence and no reader instruction, exactly as ruled. Its eighteen-item coupling
+  list saved Developer a rediscovery pass and missed one item, which Developer found by running.
 <!-- One-liner summaries. Cap at 10 entries; trim oldest when adding. -->
+
 
 
 - 2026-08-01 — HO-049 (QA): **accepted, no revision. SHIP, with two named residuals.** The step was
@@ -206,6 +55,7 @@ build.
   conservative pair governs**. Unreconciled measurement is a residual, not a blocker.
 
 
+
 - 2026-08-01 — HO-048 (Developer): **accepted, no revision.** The grain ships coarse at
   `baseFrequency 0.18`, and the one silent failure mode available here was closed by construction:
   the built data-URI was decoded attribute by attribute **and** checked byte-identical to the
@@ -214,6 +64,7 @@ build.
   frequency, tile or paint box), and re-measured composited contrast itself knowing no runner can
   see the texture. *Ledger note: this entry was dropped from Active without a disposition during a
   later sweep and is restored here — a handoff may be closed, never deleted.*
+
 
 
 - 2026-08-01 — HO-045 (Developer): **accepted, no revision — it corrected the brief it was given.**
@@ -226,6 +77,7 @@ build.
   including one planting a reader's own scroll to prove the rail never hauls them backwards.
 
 
+
 - 2026-08-01 — HO-044 (Developer): **accepted, no revision.** Built every DEC-062/063/064 ruling and
   re-based eleven harness couplings around them. **Both bug hypotheses in its brief were wrong and it
   measured rather than accepted them**: §4's indicator failed on a visibility *tie* broken by document
@@ -234,6 +86,7 @@ build.
   only. Eighteen plants, each watched red on the check that owns it. Its most valuable find was a
   check going **blind rather than red**: the sweep's contrast probe skipped selectors it could not
   resolve, so retiring a surface silently dropped it from a check still claiming to measure it.
+
 
 
 - 2026-08-01 — HO-047 (UI/UX): **accepted, no revision — the round that found the answer.** It was
@@ -250,6 +103,7 @@ build.
   the light theme, making the pick a dark-theme fix rather than letting it read as a whole-page win.
 
 
+
 - 2026-08-01 — HO-046 (UI/UX): **accepted, and its rejected recommendation was the right work.**
   The founder rejected STRONGER, but the round earned that outcome: it measured the shipped grain at
   **2.0 levels of 255 on the light ground** — one step of 8-bit quantisation, so not faint but
@@ -261,6 +115,7 @@ build.
   prints 5.13:1 for a pair compositing at 4.83 — and `findGroundPatch` **can pass by relocating**,
   scanning until a patch fits rather than failing. It also caught its own first WebKit answer being
   wrong before shipping it: `qlmanage` box-averaged the noise into a false ×1.01.
+
 
 
 - 2026-07-31 — HO-043 (UI/UX): **accepted, no revision.** Every ruling was chosen from a rendered
@@ -277,6 +132,7 @@ build.
   contact sheet earned the founder's verdict in one sitting, which was its whole job.
 
 
+
 - 2026-07-31 — HO-042 (Content): **accepted, no revision.** The two prose defects PM ruled were built
   as ruled, and the form Content chose over PM's draft is better than the draft: naming Bodh in the
   measured line rather than opening bare — because the nearest antecedent above it is *its website
@@ -288,18 +144,4 @@ build.
   flagged as a *finding* rather than a re-base — the four-em-dash check that would have passed for the
   wrong reason after the rebuild — is exactly the class of blindness this round was hunting.
 
-
-- 2026-07-31 — HO-041 (QA): **accepted, no revision.** The re-run's worth is not its three green counts —
-  PM reproduced all of them cold anyway (**295/295 + 27/27**, **108/108**, **43/43**) — it is **plant 11**,
-  the plant that did *not* go red and was reported as such. Lighting a second segment in the markup turns
-  nothing red in `verify-shell.mjs`, because the observer repairs the state before any rendered check
-  looks; rather than quietly dropping the plant, the handoff names the division that makes it safe
-  (**source truth in the sweep, rendered truth in the shell**) and proves the rendered half genuinely
-  falsifiable from CSS. A round that reports a negative result and then shows why it is not a hole is the
-  standard this sprint has been trying to reach. Two disclosures earn the same credit: a
-  `\b`-escaping bug that made the forward-promise matcher return zero hits for **every** word — the
-  blind-by-construction class, caught by self-testing against a known-present word — and two plants first
-  aimed at the runner that does not own the assertion, re-run against the one that does. The cross-engine
-  claim is scoped honestly: masthead **scale** is asserted in Blink only, and the handoff says so instead
-  of letting 27/27 imply otherwise.
 

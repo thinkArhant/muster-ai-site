@@ -87,28 +87,47 @@ _None open._
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-08-01 PM REVIEW — the telemetry round, then re-issue the launch merge
+### 2026-08-01 THE LAUNCH MERGE — history preserved, then the founder's click-check
 
 ```
-Role: pm
+Role: halt
 
-Review the telemetry round: HO-050 (Content, copy + VERIFY.md) and HO-051 (Developer, the build).
-The page's last dash is measured — §5's THIS SITE card reads `OPERATOR ATTENTION 7.5 h`, no
-sub-line, `measured at launch` nowhere on the page. All four runners green cold and serial on the
-shipped tree: 307/307 · 27/27 · 108/108 · 47/47 (verify-shell retires one check whose subject
-cannot exist — the fixture holds the property; the sweep adds two). Five plants, each red on its
-owner, reverted clean; HO-051 names every re-based check and the one coupling HO-050 missed
-(verify-webkit's ink-dash check).
+The sprint is complete. Every ruling from DEC-061 through DEC-069 is built and verified, the last
+unmeasured value on the page is now a measured number, the ledger is closed with dispositions, and
+all three lints are green. No agent has work left.
 
-PM cascade still open per HO-050 item 18 + HO-051's "For PM": section-01-hero.md /
-section-01-copy.md "exactly once" claims (not harness-coupled), product-spec.md / copy-rules.md /
-agent-context scope tables, foundational-assumptions A-002 notes, pre-launch-checklist's THIS SITE
-lines. The telemetry snapshot is committed at telemetry/2026-08-01-meter.md with its unpriced-cost
-warning.
+WHAT THE FOUNDER DOES, AND NOTHING ELSE REMAINS.
 
-Then re-issue the launch merge step (Role: halt, founder-only, history preserved per DEC-063 §5).
+1 — MERGE WITH A MERGE COMMIT. NOT A SQUASH. Three of the footer's four receipts are pinned to
+commit SHAs on this branch. A squash collapses that history and 404s all three silently, for every
+reader, with nothing in the harness able to detect it — the sweep checks that each path exists at
+its own commit, which stays true locally while the public link dies. `blob/main/VERIFY.md` survives
+either strategy; the other three do not. If a squash is unavoidable, re-pin all three to post-merge
+SHAs BEFORE deploy and re-run `qa-fullpage-sweep.mjs`'s pinned-receipt check.
 
-IF BLOCKED: record the question in Founder Decisions per the matrix.
+2 — CLICK-CHECK THE RECEIPTS ON THE LIVE PAGE, AFTER THE PUSH. All four footer receipts plus §1's
+`VERIFY ⎘` chip. `blob/main/VERIFY.md` 404s until the merge lands, by construction — `main` is 132
+commits behind this branch. Only a real fetch proves reachability, which is why no runner stands in
+for this and why it is the last step rather than an earlier one.
+
+3 — DEPLOY CONFIG, tracked soft: serve the page's own files rather than the repo root, so
+`knowledge-base/`, `tests/` and `muster/` do not publish alongside the site.
+
+TWO ACCEPTED RESIDUALS, recorded so they are not rediscovered as defects (DEC-068):
+
+- No contrast check can see the texture — both probes walk ancestors for a `background-color` and
+  `.texture` is a fixed sibling. Proven by planting `--grain-alpha: 0.90`, which returned 45/45 with
+  both contrast checks green. The alpha token IS guarded, so the exposure is a texture change that
+  passes the cap while degrading real contrast. Today's ratios clear the floor twice over.
+- `section-01-copy.md` is the one copy spec no harness parses, and the one that drifted. Accepted on
+  its small surface; every §1 string is asserted against the page elsewhere.
+
+**Deliverable:** the merge pushed with history intact, the four receipts and the §1 chip click-checked
+green on the live page, and any 404 filed as a blocker before deploy.
+
+IF BLOCKED: this step is `Role: halt` because the remaining work is the founder's. An agent resuming
+here for any other reason must not set `Role: halt` itself — file the blocker addressed to PM and
+re-point `## Next Step` to a `Role: pm` assessment step.
 ```
 
 ## Upcoming

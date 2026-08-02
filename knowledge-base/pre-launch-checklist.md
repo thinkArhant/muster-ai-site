@@ -21,23 +21,30 @@
     cross-scope aggregate, the curl byte-equal to the page's, and the `8 AI agents · 1 operator` line
     qualified as roster size rather than this build's participation.
 
-- [ ] **THIS SITE measured numbers replace dashes** — Blocker: hard, Source: pm, Added: 2026-07-24
-  - The dual build readout ships dashes ("measured at launch") until real numbers exist. Per seed
-    rule 4 these are never placeholder values, and per the project's telemetry practice the snapshots
-    are founder-supplied — no agent generates them.
-  - At launch: commit the founder's final telemetry snapshot and fill the THIS SITE column, scope-labelled
-    *spec → live* per rule 5 so it is never conflated with BODH's *idea → live*.
-  - Milestone gate: launch
+- [x] **THIS SITE measured numbers replace dashes** — RESOLVED 2026-08-01, Source: pm, Added: 2026-07-24
+  - The founder ran `muster-meter.py` once over both project paths and the snapshot is committed at
+    `telemetry/2026-08-01-meter.md`. §5's THIS SITE card reads **`7.5 h`** under `OPERATOR ATTENTION`
+    — `7h 30m` converted exactly to decimal hours, matching the format of BODH's `4.8 h` in the same
+    card because the two cells sit under one key.
+  - Comparable by construction: the same instrument and the same definition produced both figures —
+    the meter's operator-attention metric is gap-capped time over human-typed prompts only.
+  - `measured at launch` now renders nowhere on the page, and §5 carries no unmeasured value.
+  - **No cost figure from that run is published.** `claude-opus-5` returned `UNPRICED`, so the run's
+    `$365.92` covers Fable only against 4,211 unpriced Opus calls. The snapshot file carries that
+    warning; `VERIFY.md`'s driver-log floor is untouched and remains the site's published cost
+    material.
 
-- [ ] **The footer ships real copy, not the shell placeholder** — Blocker: hard, Source: pm, Added: 2026-07-29
-  - `Provenance line and links ship with their own spec.` currently renders as the last string a cold
-    reader meets after the curl. No sprint step ever owned footer copy. See DEC-054.
-  - `product-spec-seed.md` → Footer specifies the content in full — authorship line,
-    `thinkArhant@gmail.com`, GitHub profile, and links to repo · queue · handoffs · decision log ·
-    VERIFY. No design question is open; this needs Content for voice and Developer for the build.
-  - Blocked on the Gate B ruling for the seed's "8 agents, 1 operator" line: five roles built this
-    page, so that line cannot be transcribed as written (R7 bars inflating a founder-supplied passage).
-  - Milestone gate: launch
+- [x] **The footer ships real copy, not the shell placeholder** — RESOLVED 2026-08-01, Source: pm, Added: 2026-07-29
+  - The placeholder is gone. The footer ships four blocks: one closing sentence, the six-link
+    receipts row, and the GitHub profile as the contact path. No email renders anywhere on the page.
+  - The sentence states true participation rather than the seed's roster line, which five roles
+    could not have been transcribed into: *"Specced, written, and reviewed by Muster's AI team — 5
+    of 8 agents, the other three never invoked, 1 operator — on a framework designed and built by
+    Kanwar Sandhu, solo, shipping his own products with it."* Its authorship clause is scoped to the
+    **framework**, which is the claim that is true of it.
+  - Asserted, not eyeballed: the string is parsed out of `footer-copy.md` and compared byte-for-byte
+    against the page, the participation count is re-derived from `git log`, and two nowrap units keep
+    the founder's name whole at 375 and 320.
 
 - [x] **Curl command copy-paste-verified against the live repo** — RESOLVED 2026-07-29, Source: qa, Added: 2026-07-24
   - Seed rule 12 (real URLs only) and §6. The command must be run and confirmed working, not assumed.
@@ -153,12 +160,11 @@
     scope label, a chip and the curl, and every one is asserted against the page elsewhere.
   - Milestone gate: post-launch
 
-- [ ] **VERIFY's receipt and the §1 chip point at `blob/main/VERIFY.md`** — Blocker: hard,
+- [x] **VERIFY's receipt and the §1 chip point at `blob/main/VERIFY.md`** — RESOLVED 2026-07-31,
   Source: pm (DEC-061), Added: 2026-07-31
+  - Both seats moved together and are asserted byte-equal, so the harness goes red if only one moves.
   - The other three receipts pin to SHAs because their demo moment is in the past. VERIFY's demo
-    moment is the launch state, which `main` is by construction — so it is a live link, and it
-    needs no re-pin step that a later session could forget. `blob/main` also survives a squash
-    merge, unlike the three pinned links above.
-  - The chip and the footer receipt are asserted byte-equal; both move in one edit or the harness
-    goes red. Resolve at the build step following the founder's final verdict.
-  - Milestone gate: launch
+    moment is the launch state, which `main` is by construction — a live link needs no re-pin step a
+    later session could forget, and `blob/main` survives a squash where the pinned three do not.
+  - Whether it resolves on github.com after the push is tracked by the receipt-permalinks item above,
+    which is the founder's click-check; nothing local can prove reachability.

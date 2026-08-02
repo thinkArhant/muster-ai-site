@@ -1713,5 +1713,65 @@ the ledger, the queue).
 **Touched**: `decision-log.md`, `agent-requests.md`, `orchestration-queue.md`,
 `pre-launch-checklist.md`.
 
+---
+
+### DEC-069 — The last dash becomes a number: `7.5 h` ships, and VERIFY.md carries why it is larger than the product's (2026-08-01)
+
+**Decision**: §5's THIS SITE card ships **`7.5 h`** under `OPERATOR ATTENTION`, the page's last
+unmeasured value. `measured at launch` now renders nowhere. The explanation lives in `VERIFY.md`,
+one click from the chip, not on the card.
+
+**The measurement.** The founder ran `muster-meter.py` once over both project paths — an explicit
+override of this project's standing rule that no agent measures this build, and of the founder's own
+earlier instruction; PM declined to run it unprompted and handed over the command, and the founder
+then directed PM to run it. Snapshot committed at `telemetry/2026-08-01-meter.md`. Operator
+attention **7h 30m**, rendered `7.5 h` — an exact conversion to decimal hours, matching the format
+of BODH's `4.8 h` because the two cells sit under one key and a format fork between them would be a
+scope tell. Also measured, and published in `VERIFY.md` rather than on the card: **42h 24m** active
+build, **9** commit-days.
+
+**Comparable by construction, which is the whole reason the number is usable.** The meter defines
+operator attention as gap-capped time over human-typed prompts only, and it is the same instrument
+and same definition that produced Bodh's `4.8 h`. A stopwatch reading of desk time would have been
+a different quantity wearing the same key.
+
+**The uncomfortable adjacency, ruled rather than avoided.** `THIS SITE 7.5 h` sits beside
+`BODH 4.8 h`, so the page tells a reader that this one-page site took **more operator attention than
+the shipped product it exhibits**. The founder ruled it ships, on the reasoning that Bodh is a
+landing page plus a single-screen iOS app while this page carries more, and more of it is
+fact-driven — §2's replay, §4's decision sheets, and the verification apparatus behind every claim.
+The page prints no ratio, rate or baseline (DEC-062 d3 reaffirmed), so the two figures sit side by
+side and the reader does their own arithmetic. **The explanation is `VERIFY.md`'s**, extended from
+its existing account of the hours rather than opened as a second one — no defence, no apology, no
+instruction about what a reader should conclude.
+
+**What is NOT published, and must not become so.** The meter returned `claude-opus-5` as `UNPRICED`,
+so its `$365.92` total covers Fable alone against 4,211 unpriced Opus calls. **It is not this
+build's cost and appears nowhere on the page or in `VERIFY.md`.** The snapshot file carries that
+warning in its own text so a later reader cannot mistake the partial for a total. `VERIFY.md`'s
+driver-log floor stands untouched as the site's published cost material.
+
+**The assertion problem this created, and how it was handled.** When a structurally unmeasured cell
+becomes measured, several checks lose their subject — and a check that passes because its subject
+vanished is the silent-failure class this sprint has now found five times. One check was **retired
+outright** (*the dash never animates*, which can no longer exist on the page) with the property
+re-homed on the count-up fixture; the rest were re-based against live subjects. The round's
+strongest evidence is its **vacuity plant**: emptying the sub-line inventory on both sides produced
+a vacuously matching comparison, and the check still went red on its inventory guards. Counts move
+for stated reasons — verify-shell 308→307 for the retirement, sweep 45→47 for two additions
+covering the measured VERIFY row and keeping `42h 24m` off the page.
+
+**Two corrections earned during the round, both against PM's own brief**: Content declined to write
+the founder's phrase *"48-second build chain"*, because the chain ran ~64 minutes and 48s is the
+playback compression — verbatim would have been a wall-clock claim on the one file that exists to
+prevent them. And Developer found a coupling Content's eighteen-item list missed: `verify-webkit`'s
+§5 check *required* an ink dash and would have gone red on the correct build.
+
+**Impact**: content, developer, qa (none — verified before this round), pm (this entry, the ledger,
+the checklist).
+
+**Touched**: `decision-log.md`, `agent-requests.md`, `pre-launch-checklist.md`,
+`orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
