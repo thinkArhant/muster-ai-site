@@ -1,0 +1,27 @@
+{
+  // Cloudflare Workers Static Assets. This project deploys with
+  // `npx wrangler deploy`, which takes what it publishes from THIS file — not
+  // from a dashboard field. Without it, wrangler has no assets directory and
+  // the whole repository root is served: CLAUDE.md, knowledge-base/, tests/ and
+  // the muster/ submodule alongside the page.
+  //
+  // `directory` is the one line that matters. tools/build-dist.sh assembles
+  // dist/ as exactly the site — index.html, six stylesheets, three page
+  // scripts, and _headers — and refuses to build if a local reference in
+  // index.html has no file in the output or if a stray non-site path reaches
+  // it. So the deploy publishes the site, and only the site.
+  //
+  // _headers is consumed by Static Assets from inside the assets directory,
+  // which is why the build copies it there. It carries the CSP that enforces
+  // the page's zero-external-request claim in the browser.
+  //
+  // There is no `main`: this site has no server-side Worker. It is static
+  // files, which is the whole product claim.
+
+  "name": "muster-ai-site",
+  "compatibility_date": "2026-08-01",
+
+  "assets": {
+    "directory": "./dist"
+  }
+}
