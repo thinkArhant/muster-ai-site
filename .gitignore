@@ -7,3 +7,8 @@
 .claude/.muster-last-role
 .muster-sprint-logs/*.jsonl
 knowledge-base/.muster-bind-log
+
+# Development gate renders — contact sheets, proposal states and cross-engine crops.
+# Kept on disk as working evidence; not published. The rulings they informed, with
+# their measured basis, live in knowledge-base/decision-log.md.
+samples/
