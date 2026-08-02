@@ -12,3 +12,6 @@ knowledge-base/.muster-bind-log
 # Kept on disk as working evidence; not published. The rulings they informed, with
 # their measured basis, live in knowledge-base/decision-log.md.
 samples/
+
+# Build output — regenerate with tools/build-dist.sh
+dist/
