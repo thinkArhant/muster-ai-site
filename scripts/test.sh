@@ -18,16 +18,16 @@ LOG="$LOGDIR/run-$(date +%Y%m%d-%H%M%S).log"
 ls -1t "$LOGDIR"/run-*.log 2>/dev/null | tail -n +11 | xargs rm -f 2>/dev/null  # keep last 10
 
 run_suite(){
-  # REPLACE with this project's full-suite command (examples in the header).
-  echo "test.sh is not configured yet — set run_suite() for this project's stack." >&2
-  return 2
+  # Both engines, in order: the WebKit harness compares its grain measurement
+  # against the Blink report, so Blink runs first. A Blink-only pass is not a pass.
+  node tests/verify-shell.mjs 2>&1 || return 1
+  node tests/verify-webkit.mjs 2>&1 || return 1
 }
 
 summarize_failures(){
-  # Default failure extraction — covers common runner shapes; tighten to YOUR runner's exact
-  # output for a sharper summary. Prints at most 20 lines, with file:line where the runner
-  # provides it.
-  grep -nE "FAIL|✗|✘|failed|error[: ]" "$LOG" 2>/dev/null | head -20
+  # The harnesses print one PASS/FAIL line per check, with the measured value as
+  # the detail — the failing lines are the whole summary.
+  grep -nE "^FAIL|checks passed|Error" "$LOG" 2>/dev/null | head -20
 }
 
 run_suite > "$LOG" 2>&1

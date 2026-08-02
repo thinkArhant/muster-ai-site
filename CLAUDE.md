@@ -13,7 +13,7 @@ Route on `.populated` (JSON: `onboarded_at`, `onboarding_complete_at`, `agents.<
 - File missing/invalid → halt: *"Muster setup incomplete. Run `scripts/setup-existing-project.sh --resume` or `scripts/setup-project.sh <name>` at repo root."*
 <!-- END BOOTSTRAP -->
 
-# [Project Name]
+# Muster website
 
 ## Muster Framework
 
@@ -25,18 +25,21 @@ Authoritative rules, role binding, agent protocols: `muster/CLAUDE.md`. System g
 
 ## Product Information
 
-**Product**: [Name] — "[Tagline]"
-[2-3 sentence product description]
+**Product**: Muster website — anchor headline available: "Ship a product. Without a team."
 
-- **Platforms / surfaces**: [iOS / Android / Web / Backend / Desktop / CLI / library / etc.]
-- **Tech stack**: [Languages, frameworks, key dependencies]
-- **Target user**: [Brief persona description]
-- **Monetization**: [Model — free / freemium / subscription / paid / other / not yet]
-- **Team model**: [Solo founder + AI agents / Small team + AI agents]
+The public one-page website for Muster, the open-source multi-agent product framework for Claude Code (`github.com/thinkArhant/muster-ai`). It shows what Muster is, how it works, and demonstrates with measured data and real build artifacts that one person plus a governed AI team ships real products. It ends in a single `curl`.
+
+- **Platforms / surfaces**: Web — one static page
+- **Tech stack**: static HTML/CSS + minimal vanilla JS. No framework, no build system, no webfonts, zero external requests at runtime
+- **Target user**: the skeptical technical cold reader — a founder or builder who gives the page a five-second skim and discounts unverified claims by default
+- **Monetization**: none. MIT-licensed open source; nothing is sold. One conversion event: copying the `curl`
+- **Team model**: Solo founder + AI agents
 
 See `knowledge-base/product-spec.md` for full spec, `knowledge-base/brand-guidelines.md` for brand, `knowledge-base/current-sprint.md` for sprint status.
 
 <!-- Add shared UI library, design system, or other cross-cutting technical details below if they affect multiple agents. -->
+
+**The page is an exhibit of what it describes.** It is built with Muster, by Muster's AI team, and says so — its repo, queue, handoffs, decision log, and build telemetry are public. A sloppy page refutes the product. Read `knowledge-base/foundational-assumptions.md` before any deliverable; A-001 through A-009 bind every role.
 
 ## Project-Specific Rules
 
@@ -45,3 +48,17 @@ See `knowledge-base/product-spec.md` for full spec, `knowledge-base/brand-guidel
      Format each as current-truth ("Rule X (this project): ..." / "[Preference]: ..."). No archaeology.
      Examples: "Rule 9 (this project): shared UI components go through design-system review";
      "Package manager: pnpm"; "Testing: new endpoints require integration + unit tests". -->
+
+**Founder-authored source files are read-only to every agent**: `knowledge-base/product-spec-seed.md`, `knowledge-base/bodh-sprint4-corpus.md`, `knowledge-base/design-specs/direction-reference.html`. Quote, verify, and build from them; never edit, reformat, extend, or regenerate them. The founder announces when a new one lands — don't poll for it. QA treats a modification as a blocking finding.
+
+**No agent measures this build**: never run `muster/scripts/muster-meter.py`. Build telemetry snapshots are founder-supplied and committed at milestones. Steps needing a metric read a committed snapshot.
+
+**No invented numbers, ever**: an unmeasured metric renders as a dash with "measured at launch," never a placeholder. Three measurement scopes exist and are never conflated — see `knowledge-base/product-spec.md` §8. Copy claims are governed by `knowledge-base/agent-skills/content/copy-rules.md`.
+
+**Zero external network requests at runtime** is a published product claim, not a preference. It outranks instrumentation: the page carries no analytics, which makes its own funnel metrics unmeasurable client-side. That collision resolves in favour of the constraint.
+
+**Cross-engine verification is mandatory**, not optional: WebKit **and** Blink at every visual milestone. Inline-SVG/WebKit divergence is a known failure class here. A Chrome-only pass is not a pass.
+
+**`.gitignore` is correct as written**: `.muster-sprint-logs/*.jsonl` excludes only the bulky transcripts; `.metrics` files and run logs in that directory already commit. Do not "fix" it.
+
+**`design-specs/direction-reference.html` never ships** — it is a feel reference for mood, density, and rhythm. Its markup, class names, and measurements are not a build target.

@@ -1,0 +1,626 @@
+/* ==========================================================================
+   §2 — the two-layer annotated replay.
+
+   Three states, and the default one is the one that needs no JavaScript:
+
+     no [data-state]      the complete annotated transcript. This is what a
+                          reader with JS off, or with reduced motion on, gets —
+                          twelve log lines, ten narration entries, the totals
+                          strip, all of it. Nothing here is a degraded subset.
+     [data-state=idle]    same DOM, lines and entries at zero opacity, waiting
+     [data-state=playing] the reveal schedule runs (scripts/replay.js)
+     [data-state=end]     everything revealed, controls offer a replay
+
+   Reveal is opacity + a 4px rise, never display/visibility and never DOM
+   insertion, so the transcript is one continuous read for assistive tech
+   whatever the state (replay spec §11).
+
+   Mobile-first, because mobile is the harder layout: the terminal is texture
+   there and the narration is the payload, so the terminal is what gives up
+   height when the viewport runs out (replay spec §7.1).
+   ========================================================================== */
+
+/* No `--line-box` constant lives here. A single row height stopped being a
+   single number the moment the log's leading split across --bp-wide: below it a
+   row is --text-terminal × --lead-micro and an entry is two of them plus a
+   separator, above it a row and an entry are the same box. Anything that needs
+   the entry box or the entry pitch measures them (scripts/replay.js). */
+.replay {
+  --card-lines: 6;
+}
+
+/* --------------------------------------------------------------------------
+   The playback core — beat indicator, terminal, narration card, totals.
+   Sized to fit the visual viewport under the sticky status bar while playback
+   runs, so both layers are on screen together for the whole chain. In the
+   complete-transcript state it is unconstrained: there is no playback to keep
+   in frame, and clipping a static transcript would lose content.
+   -------------------------------------------------------------------------- */
+
+.replay__core {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  padding-block-end: var(--gap-hairline); /* bottom clearance in the §7.1 budget */
+}
+
+.replay[data-state="idle"] .replay__core,
+.replay[data-state="playing"] .replay__core {
+  max-block-size: calc(100dvh - var(--bar-h));
+}
+
+.replay__beat {
+  flex: none;
+}
+
+/* On a phone the two layers are one column of the core's flex context, so the
+   wrapper steps out of the box tree entirely. */
+.replay__layers {
+  display: contents;
+}
+
+/* --------------------------------------------------------------------------
+   Terminal
+   -------------------------------------------------------------------------- */
+
+.terminal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  flex: 1 1 auto;
+  margin-block-start: var(--gap-hairline);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+}
+
+.terminal__chrome {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-hairline);
+  padding: var(--gap-hairline);
+  border-block-end: 1px solid var(--hair);
+}
+
+.terminal__label,
+.terminal__live {
+  margin: 0;
+}
+
+/* The honesty label is always visible. Below --bp-wide the run's name drops and
+   the required sentence stays whole — and its tracking tightens, because the
+   §7.1 budget prices the chrome bar at one micro line and the label at 0.14em
+   would wrap to two at 375px. The label is chrome, not a reading passage. */
+.terminal__label-prefix {
+  display: none;
+}
+
+.terminal__label {
+  letter-spacing: 0.02em;
+}
+
+.terminal__live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-hairline);
+  flex: none;
+}
+
+/* The log is the terminal's scroll region, and on one axis only: lines soft-wrap
+   rather than running off the right edge, so there is no horizontal scroll left
+   to reach. Overflow stays `auto` on both axes rather than `hidden` on one —
+   hiding it would conceal an overflow bug instead of failing on it, and the
+   harness asserts scrollWidth against clientWidth at every phone width. */
+.log {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  margin: 0;
+  /* The three values of §9.2's left-edge system, each reachable from exactly
+     one place. R1 is the mark's distance from its own card — the one relationship
+     both layers share, and 12px is only its value; R2 is the mark's clearance
+     from the text, the largest half-column the 37-column floor holds; the 2px
+     between them is the mark itself. The log's inline-start padding opens the
+     room all three occupy, which is what takes the mark out of the text flow:
+     the line's padding box is then fixed by the log, so the hanging indent can
+     be set to anything without moving the mark a pixel. That independence is
+     the whole fix — the collision at L4 and L9 existed because the mark and the
+     indent were the same CSS value. */
+  --mark-inset: var(--gap-hairline);   /* R1 — mark to card   */
+  --mark-width: 2px;                   /*      the mark itself */
+  --mark-clear: 0.5ch;                 /* R2 — mark to text   */
+  /* Vertical padding is the §7.1 budget's `terminal body padding` row.
+     The inline-end stays 0: it is a wrap edge (R5), and every pixel taken there
+     is a pixel that can push a corpus line to a third row. */
+  padding-block: var(--gap-hairline);
+  padding-inline-start: calc(var(--mark-inset) + var(--mark-width) + var(--mark-clear));
+  padding-inline-end: 0;
+  list-style: none;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-terminal);
+  /* Below --bp-wide an entry is two rows, so one leading value cannot both
+     separate rows inside an entry and separate one entry from the next — it
+     gives identical whitespace on either side of an entry boundary and eight
+     rows read as eight things. Rows take --lead-micro here and the entry
+     boundary takes --gap-hairline below; above --bp-wide an entry is one row
+     and --lead-terminal already IS the separation (page-shell.md type scale). */
+  line-height: var(--lead-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+/* `pre-wrap`, not `pre`: it keeps the corpus's own inter-column padding exactly
+   while permitting a break at a space. A soft wrap inserts no character and
+   removes none, so the rendered text still diffs byte-clean — which is why it,
+   and not truncation, is what pays for a phone that never scrolls sideways.
+   The 1ch hanging indent starts a continuation row one character in from its
+   entry's own text edge. It does not carry the grouping on its own — at ~7.8px
+   it confirms what the entry separator below states — which is why the two are
+   asserted as separate properties in the harness. `break-word` is a backstop
+   only: the longest corpus token is 18 characters against a floor of 36
+   continuation columns, so it never fires.
+
+   The indent is deliberately NOT a sixth relationship of the left edge: it is
+   independent of all five, and it carries no `border-inline-start` beside it.
+   With no border in the flow the line's rendered width IS the first row's
+   available width, which is why §7 names two widths rather than three. */
+.log__line {
+  display: block;
+  position: relative;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  padding-inline-start: 1ch;
+  text-indent: -1ch;
+}
+
+/* R1 and R2, drawn. `inset-inline-start` resolves against the line's PADDING
+   box, which the log's padding has already placed at inset + width + clear from
+   the card; stepping back by width + clear lands the mark at inset exactly. It
+   is empty and aria-hidden, so it adds no character to the line and the
+   byte-clean corpus diff is untouched — and it exists on L4 and L9 only. */
+.log__mark {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(-1 * (var(--mark-width) + var(--mark-clear)));
+  inline-size: var(--mark-width);
+  background-color: var(--accent);
+}
+
+/* The entry boundary. Only the gaps BETWEEN entries are spent, so a window of
+   N entries costs N boxes and N−1 separators — which is what makes the split
+   self-funding: three entries occupy 141.0px against the 148.2px the same three
+   cost at a uniform --lead-terminal. */
+.log__line + .log__line {
+  margin-block-start: var(--gap-hairline);
+}
+
+.log__stamp {
+  color: var(--muted);
+}
+
+.log__token {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Rust as a graphical mark only — the fact it flags is carried in ink at AA. */
+.log__glyph {
+  color: var(--accent);
+}
+
+/* The terminal state. Large enough that rust clears AA-large, which is what
+   lets the shipped artifact be the one line in the log that is not ink. */
+.log__line--state {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.log__line--state .log__detail {
+  color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Narration — a fixed-height caption card on a phone, a rail on a wide screen.
+   Full ink in both: this is the layer that is meant to be read.
+   -------------------------------------------------------------------------- */
+
+.narration {
+  flex: none;
+  position: relative;
+  margin-block-start: var(--gap-flow);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: var(--gap-hairline);
+}
+
+.narration__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.narration__entry {
+  display: block;
+  border-inline-start: 2px solid transparent;
+  padding-inline-start: var(--gap-hairline);
+}
+
+.narration__entry + .narration__entry {
+  margin-block-start: var(--gap-flow);
+}
+
+.narration__tag {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: var(--lead-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--track-micro);
+  color: var(--muted);
+}
+
+.narration__text {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--lead-body);
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------------------
+   Chain totals — static by design. These are evidence in a log context, and a
+   number that counts up reads as marketing where a flat one reads as measured.
+   Being evidence rather than a layer is also why it lives outside the core on a
+   phone: the two-layer guarantee is about the terminal and the narration, and
+   the 45.0px this buys back is what the soft wrap spends.
+   Value scale is per-viewport: at --text-readout a single value line is 24px,
+   which alone would bust the phone height budget, so below --bp-wide the strip
+   is two --text-micro lines. Tracking, not the copy, is the lever that keeps
+   the value line from wrapping to a third: at 0.14em the 43-character string
+   measures ~350px against ~327px of content width at 375px; at 0.02em it sets
+   ~295px and clears it.
+   -------------------------------------------------------------------------- */
+
+.totals {
+  flex: none;
+  margin-block-start: var(--gap-hairline);
+}
+
+.totals__value,
+.totals__scope {
+  display: block;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.totals__value {
+  font-size: var(--text-micro);
+  line-height: var(--lead-micro);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.totals__scope {
+  font-size: var(--text-micro);
+  line-height: var(--lead-micro);
+  letter-spacing: var(--track-micro);
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   Controls — built by JS, so they exist only when there is playback to control.
+   -------------------------------------------------------------------------- */
+
+.replay__controls:empty {
+  display: none;
+}
+
+.replay__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-flow);
+  margin-block-start: var(--gap-flow);
+}
+
+.control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5ch;
+  min-block-size: 44px;
+  padding-inline: var(--gap-flow);
+  background-color: transparent;
+  border: 1px solid var(--hair);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.control:hover {
+  border-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Playback states
+   -------------------------------------------------------------------------- */
+
+.replay[data-state] .log__line,
+.replay[data-state] .narration__entry {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--reveal), transform var(--reveal);
+}
+
+.replay[data-state] .log__line[data-revealed] {
+  opacity: 1;
+  transform: none;
+}
+
+/* On a phone the card holds one entry at a time and never reflows between
+   slots, so entries stack in place. They stay in the DOM and in reading order;
+   only their opacity changes. */
+.replay[data-state="idle"] .narration__list,
+.replay[data-state="playing"] .narration__list {
+  position: relative;
+  block-size: calc(var(--card-lines) * var(--text-body) * var(--lead-body));
+}
+
+.replay[data-state="idle"] .narration__entry,
+.replay[data-state="playing"] .narration__entry {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  margin-block-start: 0;
+}
+
+.replay[data-state="idle"] .narration__entry[data-active],
+.replay[data-state="playing"] .narration__entry[data-active] {
+  opacity: 1;
+  transform: none;
+}
+
+/* The phone card carries no beat tag: the indicator above the terminal already
+   names the beat, and the card's six lines are budgeted for narration. */
+.replay[data-state="idle"] .narration__tag,
+.replay[data-state="playing"] .narration__tag {
+  display: none;
+}
+
+.replay[data-state="end"] .log__line,
+.replay[data-state="end"] .narration__entry {
+  opacity: 1;
+  transform: none;
+}
+
+.narration__entry[data-active] {
+  border-inline-start-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Landscape phone — the one place the stacked layout cannot hold. Rotated,
+   Safari's toolbars leave roughly 331px of visual viewport against a fixed
+   core of 379.4px, so stacking overflows before a single log line is placed.
+   Narration-first survives the rotation as a priority; the stacking does not.
+
+   The column split is set by the wrap rule, not by a rank: the terminal takes
+   the wider column because width is the only thing that decides whether a log
+   line reads without a sideways gesture, whereas narration set narrower simply
+   runs taller — and height is what landscape has to spare. The card is budgeted
+   for seven lines here rather than six for exactly that reason.
+
+   This is an orientation query, not a second page-chrome breakpoint: --bp-wide
+   remains the only one.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 59.999rem) and (orientation: landscape) and (max-height: 30rem) {
+  .replay__core {
+    display: grid;
+    /* The terminal's floor is the wrap rule: §7.1's 37-column floor is what the
+       column may not cross, and the 55/41 split is sized to deliver 40 — the
+       margin above the floor is the point of the split, because landscape is
+       where the toolbars vary most. The narration takes the rest and runs
+       taller, which is what landscape has to spare. */
+    grid-template-columns: minmax(0, 55fr) minmax(0, 41fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: var(--gap-flow);
+  }
+
+  /* A definite height, not just a ceiling. The two columns are independent
+     here, so with an auto height the row would size to the terminal's content
+     and hand the narration whatever the terminal happened to leave. The card is
+     the payload: it takes the whole column and the terminal's slack goes to it. */
+  .replay[data-state="idle"] .replay__core,
+  .replay[data-state="playing"] .replay__core {
+    block-size: calc(100dvh - var(--bar-h));
+  }
+
+  .replay__beat {
+    grid-column: 1 / -1;
+  }
+
+  .terminal {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .narration {
+    grid-column: 2;
+    grid-row: 2;
+    margin-block-start: var(--gap-hairline);
+  }
+
+  /* The card fills its column instead of holding a fixed line count, and
+     scrolls its own overflow where the column is shorter than the longest slot.
+     Measured rather than derived: the column sets ~26 characters here, not the
+     ~29 the budget assumed, and the worst slot runs to 9 lines. A card fixed at
+     the budgeted seven would spill it off the bottom. Height is still constant
+     across slots — it is the column's, not the copy's — so the card does not
+     reflow between slots. */
+  .replay[data-state] .narration__list {
+    position: absolute;
+    inset: var(--gap-hairline);
+    block-size: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Wide layout — two columns, terminal left, narration rail right.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 60rem) {
+  /* The bottom clearance is a phone budget row — there is nothing below the
+     fold to clear here, and the totals strip carries its own --gap-block. */
+  .replay__core {
+    padding-block-end: 0;
+  }
+
+  /* A desktop entry is one row, so --lead-terminal already separates entries
+     and no boundary gap is added. The accent gutter is unchanged across this
+     breakpoint: the mark's whole footprint is the log's inline-start padding at
+     every viewport, so the first character sits at the same distance from the
+     terminal's inner edge here as it does on a phone, and the desktop column
+     count follows from that one number rather than from a second rule. */
+  .log {
+    line-height: var(--lead-terminal);
+  }
+
+  .log__line + .log__line {
+    margin-block-start: 0;
+  }
+
+  .replay__layers {
+    display: grid;
+    /* The terminal column carries a floor, and the rail is what yields to it.
+       L3 is 74 characters and sets ~599px at --text-terminal including the
+       line's own inset; below that floor a corpus line would need horizontal
+       scroll on a desktop, which the section's fidelity guarantee does not
+       accept. So the terminal is given 38.5rem before the rail takes anything,
+       and the rail's 22rem is a ceiling it reaches once the page is wide —
+       ~33ch of prose at 1280px and up, narrower between there and --bp-wide.
+       A rail expressed literally as 36 sans `ch` resolves to ~385px here and
+       would take the terminal under the floor at every width. */
+    grid-template-columns: minmax(min(100%, 38.5rem), 1fr) minmax(0, 22rem);
+    gap: var(--gap-block);
+    align-items: start;
+    margin-block-start: var(--gap-hairline);
+  }
+
+  /* While playback runs the rail is a scroll region matched to the terminal's
+     height. With no playback state at all — no JS — both columns simply take
+     their content height and the whole transcript flows. */
+  .replay[data-state] .narration {
+    align-self: stretch;
+  }
+
+  /* All twelve lines fit; the terminal takes its content height and nothing
+     moves as lines reveal, because every line occupies its space from load. */
+  .terminal {
+    margin-block-start: 0;
+    flex: none;
+  }
+
+  /* The rail's inline-start padding drops to --gap-hairline so the active
+     entry's 2px bar sits 12px in from the card's inner edge — the same distance
+     the terminal's key-beat tick sits from its own card (§9.1, one rule for both
+     layers). The entry's own padding takes the difference, so the prose sits
+     where it sat and the rail measure is unchanged; only the bar moves. */
+  .narration {
+    margin-block-start: 0;
+    padding: var(--gap-flow);
+    padding-inline-start: var(--gap-hairline);
+  }
+
+  .narration__entry {
+    padding-inline-start: var(--gap-flow);
+  }
+
+  /* The rail is taller than the terminal at spec'd budgets, so it scrolls its
+     own overflow against the terminal's height instead of setting the row's.
+     Only while there is a playback state: the static transcript flows.
+
+     The inline-start inset is the card's padding restated, and it has to be:
+     this list is absolutely positioned against the card's PADDING box, so while
+     any playback state is present it — not `.narration`'s padding — is what
+     decides where the accent bar lands. Setting the padding alone would fix the
+     no-JS transcript and leave the bar at 24px for the entire live chain. */
+  .replay[data-state] .narration__list {
+    position: absolute;
+    inset: var(--gap-flow);
+    inset-inline-start: var(--gap-hairline);
+    block-size: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .replay[data-state] .narration__entry {
+    position: static;
+    margin-block-start: 0;
+  }
+
+  .replay[data-state] .narration__entry + .narration__entry {
+    margin-block-start: var(--gap-flow);
+  }
+
+  .replay[data-state] .narration__tag {
+    display: block;
+  }
+
+  /* Revealed entries accumulate in the rail and stay full ink. */
+  .replay[data-state] .narration__entry[data-revealed] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .terminal__label-prefix {
+    display: inline;
+  }
+
+  .terminal__label {
+    letter-spacing: var(--track-micro);
+  }
+
+  .totals {
+    margin-block-start: var(--gap-block);
+  }
+
+  .totals__value {
+    font-size: var(--text-readout);
+    line-height: var(--lead-readout);
+    letter-spacing: 0;
+    color: var(--accent);
+  }
+
+  .totals__scope {
+    margin-block-start: var(--gap-hairline);
+  }
+
+  .replay__controls {
+    justify-content: flex-end;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — the complete transcript, immediately. The script never
+   starts playback here; this is the belt to that braces, and it also means a
+   reader who flips the preference mid-page is not left with hidden lines.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .replay .log__line,
+  .replay .narration__entry {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

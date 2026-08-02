@@ -3,14 +3,14 @@
   "onboarded_at": null,
   "onboarding_complete_at": null,
   "agents": {
-    "developer": null,
-    "ui-ux": null,
-    "content": null,
-    "qa": null,
+    "developer": "2026-07-24T21:40:00Z",
+    "ui-ux": "2026-07-24T21:40:00Z",
+    "content": "2026-07-24T21:40:00Z",
+    "qa": "2026-07-24T21:40:00Z",
     "research": null,
     "marketing": null,
     "legal": null,
-    "pm": null
+    "pm": "2026-07-24T20:56:00Z"
   },
   "lock": null
 }

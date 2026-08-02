@@ -1,0 +1,286 @@
+/* ==========================================================================
+   CHROME — skip link, status bar, section rules and stencil tags, footer
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Skip link — first focusable element on the page.
+   -------------------------------------------------------------------------- */
+
+.skip-link {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 100;
+  transform: translateY(-150%);
+  background-color: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--hair);
+  padding: var(--gap-hairline) var(--gap-flow);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   Status bar — sticky, fully opaque, hairline-ruled. No glass: no blur, no
+   translucency over content. --bar-h total including its rule (border-box) —
+   the same token the page's scroll padding is derived from, so the padding
+   cannot drift from the bar it clears.
+   -------------------------------------------------------------------------- */
+
+.statusbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+  block-size: var(--bar-h);
+  background-color: var(--ground);
+  border-block-end: 1px solid var(--hair);
+}
+
+.statusbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-flow);
+  block-size: 100%;
+}
+
+/* Baseline, not centre: the pennant's bottom edge sits ON the wordmark's
+   baseline, so its top overhangs the cap height by ~0.6px and it reads as a
+   marker set against the line rather than a bullet floating in it. An empty
+   flex item has no text baseline, so the engine synthesises one from the box —
+   which is the one construction here with real WebKit divergence risk, and is
+   why the mark's bottom edge is verified against the baseline in both engines
+   (brand-seats.md §2, §11). */
+/* Brand scale, the page's one such seat: 1.125rem. Every other measurement in
+   the lockup derives from this declaration — the mark is 0.5em × 0.75em of it,
+   the underscore is 1ch of it, the letter-space is 0.18em of it — so the
+   masthead scales from one number and nothing has to be re-tuned beside it.
+   The bar does NOT follow: --bar-h stays 3rem, and the hero fold arithmetic,
+   §2's phone visibility budget and --scroll-pad all derive from the bar. */
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink);
+}
+
+/* The pennant. A clip-path on a plain box rather than an SVG: the seats it
+   replaces were background-color boxes, which is why they have never had a
+   cross-engine problem, and this keeps that property — no new file, no request,
+   and the inline-SVG/WebKit divergence class avoided rather than tested for.
+   81.79% is 575/703, the authored notch apex, expressed as a percentage so the
+   silhouette is identical at every seat size. Painted with `background-color`
+   and never `color`: the small-rust-text audit collects elements whose `color`
+   resolves to the accent, and a mark painted with `color` would join that set
+   and be failed as sub-AA text. */
+.brand__mark,
+.tag__mark,
+.rule__mark {
+  flex: none;
+  background-color: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 81.79%, 0 100%);
+}
+
+/* Punctuation scale — the five section tags and the footer boundary. It stays
+   at 6 × 9 while the header grows: once the masthead teaches the silhouette,
+   small reads as the logo rather than as a stray glyph, and 9px is the section
+   rule's own end-tick height, so rule and mark share one vertical measure. */
+.tag__mark,
+.rule__mark {
+  inline-size: 6px;
+  block-size: 9px;
+}
+
+/* Brand scale, derived rather than declared: 0.5em × 0.75em carries the shipped
+   6/12 × 9/12 proportions up, so one ratio governs every seat and the wordmark's
+   font-size is the only number in the lockup. */
+.brand__mark {
+  inline-size: 0.5em;
+  block-size: 0.75em;
+}
+
+.brand__mark,
+.tag__mark {
+  align-self: baseline;
+}
+
+.brand__word {
+  white-space: nowrap;
+}
+
+/* Drawn, not typed. A literal `_` sets at ~1px in the mono fallback stack —
+   hairline weight, not accent-mark weight — and both its thickness and its
+   depth below the baseline are decided by whichever face resolves, so the
+   lockup would differ on every platform. Drawn, the bar is 2px everywhere (the
+   page's single accent-mark weight, the same 2px as the key-beat mark and the
+   narration bar) and only its POSITION comes from the font, via the baseline,
+   which every face has. Its 1ch length tracks the resolved face's character
+   width, so it stays one character position wide whatever font wins.
+
+   Offset with relative positioning rather than a negative bottom margin: the
+   shift must not enter the line box, and the shell's spacing rule is one-sided.
+   Static — it never blinks. The curl cursor owns the only blink on the page and
+   a live underscore would be a fourth motion element (page-shell.md §10). */
+.brand__rule {
+  display: inline-block;
+  inline-size: 1ch;
+  block-size: 2px;
+  vertical-align: baseline;
+  position: relative;
+  inset-block-start: 3px;
+  background-color: var(--accent);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-hairline);
+}
+
+/* Rust never carries the state alone — the word is the second channel. */
+.status__word {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   Section rule with machined end-ticks + stencil tag.
+
+   The rule spans the viewport; the tag sits on the container's content edge
+   and breaks the line, with a 9x1px perpendicular tick at each of its ends.
+   The construction is decorative and hidden from assistive tech — the <h2>
+   inside it is the real heading.
+   -------------------------------------------------------------------------- */
+
+.rule {
+  display: grid;
+  grid-template-columns:
+    calc(var(--gutter) + max(0px, (100% - var(--page-max)) / 2))
+    auto
+    1fr;
+  align-items: center;
+  inline-size: 100%;
+}
+
+.rule__line {
+  block-size: 1px;
+  background-color: var(--hair);
+}
+
+.rule__tag {
+  display: inline-flex;
+  align-items: center;
+}
+
+.rule__tick {
+  inline-size: 1px;
+  block-size: 9px;
+  flex: none;
+  background-color: var(--hair);
+}
+
+/* Baseline for the same reason as the lockup — and the load-bearing constraint
+   here is that .tag's rendered block size must NOT change when the square
+   becomes a pennant. Baseline alignment inside a flex line can grow the line
+   box, and this construction is vertically centred in a grid row, so a single
+   pixel of growth would shift all five section tags off their rules at once.
+   The 9px mark clears the 12px label's ascent, so the line box is unchanged —
+   asserted, not assumed (brand-seats.md §11). */
+.tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gap-hairline);
+  padding-inline: var(--gap-hairline);
+  white-space: nowrap;
+  font-weight: 400;
+}
+
+/* The footer boundary: the section-rule construction minus the label. The
+   pennant seats between the two end-ticks at the same --gap-hairline the tag's
+   own padding gives it on a section rule, so the two boundaries are the same
+   assembly at the same spacing. Centred rather than baseline-aligned, because
+   there is no text here to synthesise a baseline from — the construction whose
+   WebKit divergence risk brand-seats.md §11 names. */
+.rule--boundary .rule__tag {
+  gap: var(--gap-hairline);
+}
+
+/* --------------------------------------------------------------------------
+   Footer — the closing signature.
+
+   Four blocks, every one hanging on the rail: no counterweight, nothing
+   centred, no lockup. The closing sentence is prose at LEAD scale and full ink,
+   capped at the 64ch column — a capped block still STARTS on the rail. At body
+   scale it read as fine print; at lead it reads as the page's last deliberate
+   sentence. The receipts row is chrome and takes the micro label family, like
+   every other mono row on the page.
+
+   No border-block-start: the boundary separator above IS this boundary's rule,
+   and a plain border under it would be two stacked lines at one edge.
+   -------------------------------------------------------------------------- */
+
+.pagefoot {
+  padding-block: 0 var(--gap-block);
+}
+
+.pagefoot__inner {
+  margin-block-start: var(--gap-block);
+}
+
+.pagefoot__inner > * + * {
+  margin-block-start: var(--gap-flow);
+}
+
+/* Two runs in the closing sentence are one token to a reader even though they
+   are two to a line-breaker: the founder's name, and `never invoked`. Style
+   only — the element contributes no text of its own, so the announced string
+   and the byte equality against the copy file are untouched. This is the same
+   mechanism the headline's phrase units and §3's sentence spans use. */
+.pagefoot__unit {
+  white-space: nowrap;
+}
+
+/* The receipts belong WITH the sentence — they are its evidence — so they sit
+   at --gap-flow above and the contact link opens its own block below. */
+.pagefoot__contact {
+  margin-block-start: var(--gap-block);
+}
+
+/* Separators drawn rather than typed, and hung off the END of each label so a
+   wrap puts a whole label at the head of the new line — the eyebrow's
+   construction. `content: "·" / ""` renders the glyph with an empty
+   alternative text, so it never enters a link's accessible name. */
+.pagefoot__receipts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.7ch;
+  padding: 0;
+  list-style: none;
+}
+
+.pagefoot__receipts > li {
+  white-space: nowrap;
+}
+
+.pagefoot__receipts > li:not(:last-child)::after {
+  content: "·";
+  content: "·" / "";
+  padding-inline-start: 0.7ch;
+}

@@ -1,0 +1,158 @@
+/* ==========================================================================
+   TOKENS
+
+   The only file in this codebase permitted to contain a raw hex value.
+   Anywhere else, a hex literal is a defect.
+
+   Two tiers:
+     - Primitives (--pal-*): the twelve locked palette values. Each appears
+       exactly once. Nothing outside this file may reference a primitive.
+     - Semantic tokens (--ground, --surface, --ink, --muted, --hair, --accent):
+       the only colour names any rule, spec, or component may use.
+
+   A thirteenth colour is a deviation requiring written justification.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark light;
+
+  /* --- Palette primitives — dark (primary) --- */
+  --pal-dark-ground:  #13140D;
+  --pal-dark-surface: #1B1D13;
+  --pal-dark-ink:     #E6E3D3;
+  --pal-dark-muted:   #8C9075;
+  --pal-dark-hair:    #2C2F22;
+  --pal-dark-accent:  #C05A32;
+
+  /* --- Palette primitives — light (olive field canvas) --- */
+  --pal-light-ground:  #DBD8C6;
+  --pal-light-surface: #E7E4D4;
+  --pal-light-ink:     #191B10;
+  --pal-light-muted:   #55583F;
+  --pal-light-hair:    #BDB9A3;
+  --pal-light-accent:  #A0451F;
+
+  /* --- Semantic tokens — dark is default and primary --- */
+  --ground:  var(--pal-dark-ground);
+  --surface: var(--pal-dark-surface);
+  --ink:     var(--pal-dark-ink);
+  --muted:   var(--pal-dark-muted);
+  --hair:    var(--pal-dark-hair);
+  --accent:  var(--pal-dark-accent);
+
+  /* --- Texture pigment — pure black at low alpha. Texture, not palette. ---
+     Vignette light cap is derived, not taste: at 16% over the light ground a
+     --muted label inside the vignette zone composites to ~3.6:1. At 5% it holds
+     above 4.5:1. */
+  --vignette-alpha: 0.16;
+  --grain-alpha: 0.08;
+
+  /* --- Derived tints — states of the accent, not new colours ---
+     Resolved against whichever theme is in force, because both sides of the
+     mix are themselves tokens. */
+  --accent-selection: color-mix(in srgb, var(--accent) 30%, var(--ground));
+  --accent-wash: color-mix(in srgb, var(--accent) 12%, transparent);
+
+  /* --- Type --- */
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* The floor is a measured value, not a taste value: 1.75rem (28px) is the
+     largest floor at which the settled headline sets on whole-phrase lines at
+     320-390px with no overflow inside an unbreakable phrase. A 2.4rem floor
+     sets a 14-character display line at 360px and overflows 320px mid-phrase.
+     Slope and ceiling are the seed's; rendered size is identical above
+     ~431px, so the floor governs phones only.
+     The relationship this floor exists for is asserted in verify-shell.mjs
+     (the headline sets without overflow at 320px), never the literal value. */
+  --text-display: clamp(1.75rem, 6.5vw, 4.25rem);
+  --lead-display: 1.05;
+  --text-kicker: clamp(1.5rem, 3.5vw, 2.25rem);
+  --lead-kicker: 1.3;
+  --text-lead: clamp(1.0625rem, 1.9vw, 1.25rem);
+  --lead-lead: 1.6;
+  --text-body: 1.0625rem;
+  --lead-body: 1.7;
+  --text-label: 0.75rem;
+  --lead-label: 1.4;
+  --text-micro: 0.6875rem;
+  --lead-micro: 1.5;
+  --text-terminal: 0.8125rem;
+  --lead-terminal: 1.9;
+  --text-readout: clamp(1.5rem, 3vw, 1.875rem);
+  --lead-readout: 1;
+
+  --track-display: 0.01em;
+  --track-label: 0.18em;
+  --track-micro: 0.14em;
+
+  /* --- Spacing — one rhythm token, applied one-sided --- */
+  --rhythm: 1.5rem;
+  --gap-hairline: calc(var(--rhythm) / 2);
+  --gap-flow: var(--rhythm);
+  --gap-block: calc(var(--rhythm) * 2);
+  --gap-major: calc(var(--rhythm) * 3);
+  --gap-section: clamp(calc(var(--rhythm) * 4), 14vh, calc(var(--rhythm) * 7));
+
+  /* --- Layout --- */
+  --page-max: 72rem;
+  --read-max: 64ch;
+  --gutter: clamp(1.5rem, 5vw, 4rem);
+  --bp-wide: 60rem;
+
+  /* The sticky status bar's height, and the scroll padding derived from it.
+     Tokens because the bar's block-size, the playback core's ceiling and this
+     padding are the same measurement three times over; the bar takes
+     `block-size: var(--bar-h)` so they cannot drift. The padding is the bar
+     PLUS one rhythm: exactly the bar height would park a section's own hairline
+     rule 7.89px under the bar's rule and read as an accidental double rule. The
+     harness asserts the derivation, never the 72. */
+  --bar-h: 3rem;
+  --scroll-pad: calc(var(--bar-h) + var(--rhythm));
+
+  /* --- Motion --- */
+  --pulse-period: 2.2s;
+  --cursor-period: 1.15s;
+  --countup-duration: 1.2s;
+  --reveal: 350ms ease-out;
+}
+
+/* Light theme by system preference. */
+@media (prefers-color-scheme: light) {
+  :root {
+    --ground:  var(--pal-light-ground);
+    --surface: var(--pal-light-surface);
+    --ink:     var(--pal-light-ink);
+    --muted:   var(--pal-light-muted);
+    --hair:    var(--pal-light-hair);
+    --accent:  var(--pal-light-accent);
+    --vignette-alpha: 0.05;
+    --grain-alpha: 0.04;
+  }
+}
+
+/* Explicit override wins over the system preference. No UI sets this — it is
+   the escape hatch that lets a theme be forced for verification. */
+:root[data-theme="light"] {
+  --ground:  var(--pal-light-ground);
+  --surface: var(--pal-light-surface);
+  --ink:     var(--pal-light-ink);
+  --muted:   var(--pal-light-muted);
+  --hair:    var(--pal-light-hair);
+  --accent:  var(--pal-light-accent);
+  --vignette-alpha: 0.05;
+  --grain-alpha: 0.04;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --ground:  var(--pal-dark-ground);
+  --surface: var(--pal-dark-surface);
+  --ink:     var(--pal-dark-ink);
+  --muted:   var(--pal-dark-muted);
+  --hair:    var(--pal-dark-hair);
+  --accent:  var(--pal-dark-accent);
+  --vignette-alpha: 0.16;
+  --grain-alpha: 0.08;
+  color-scheme: dark;
+}

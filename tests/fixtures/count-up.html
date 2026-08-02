@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>count-up engine fixture</title>
+<link rel="stylesheet" href="../../styles/tokens.css">
+<link rel="stylesheet" href="../../styles/base.css">
+<link rel="stylesheet" href="../../styles/motifs.css">
+<style>
+  /* Fixture-only: push the readouts below the fold so the 55%-visibility
+     trigger is exercised rather than assumed. */
+  .spacer { block-size: 200vh; }
+</style>
+</head>
+<body>
+<div class="spacer"></div>
+
+<div class="readout" id="cell-decimal">
+  <span class="readout__key">Active build</span>
+  <span class="readout__value" data-countup id="decimal">9.3</span>
+  <span class="readout__sub">hours</span>
+</div>
+
+<div class="readout" id="cell-integer">
+  <span class="readout__key">Token cost</span>
+  <span class="readout__value" data-countup id="integer">$147</span>
+</div>
+
+<div class="readout" id="cell-grouped">
+  <span class="readout__key">Grouped</span>
+  <span class="readout__value" data-countup id="grouped">1,234</span>
+</div>
+
+<div class="readout" id="cell-dash">
+  <span class="readout__key">This site</span>
+  <span class="readout__value readout__value--unmeasured" data-countup id="dash">—</span>
+  <span class="readout__sub">measured at launch</span>
+</div>
+
+<script>
+  /* Sample every frame so a layout shift during the roll cannot hide. */
+  window.__samples = { decimal: [], texts: [] };
+  (function sample() {
+    var el = document.getElementById("decimal");
+    if (el) {
+      window.__samples.decimal.push(el.getBoundingClientRect().width);
+      window.__samples.texts.push(el.textContent);
+    }
+    if (window.__samples.decimal.length < 400) requestAnimationFrame(sample);
+  })();
+</script>
+<script src="../../scripts/count-up.js" defer></script>
+</body>
+</html>

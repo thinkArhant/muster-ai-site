@@ -1,0 +1,642 @@
+/* ==========================================================================
+   SECTIONS — §1 the sparse hero, §3 the insight, §4 the decisions,
+   §5 shipped with Muster, §6 get started.
+
+   Spacing is one-sided here as everywhere: every gap is a margin-block-start
+   on the following element. A margin-bottom in this codebase is a defect.
+
+   Nothing in this file animates. The page's motion inventory is two live
+   elements — the OPERATIONAL pulse and §5's count-up — plus §6's curl cursor;
+   the pulse and the cursor are styled and gated in motifs.css, and the
+   count-up is JS (scripts/count-up.js), which gates itself. §5 therefore
+   holds the second seat without a single declaration here. §4's snap settle
+   is the user agent finishing the reader's own gesture, not an element
+   animation, and it is off under reduced motion.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   §1.1 Eyebrow — four facts, separators drawn rather than typed.
+
+   `content: "·" / ""` gives the glyph an empty alternative text, so it renders
+   and is not announced. Engines without the alt-text syntax drop that
+   declaration as invalid and fall back to the plain one above it, which still
+   renders. The separator hangs off the END of its fact rather than the start
+   of the next, so a wrap puts a whole fact at the head of the new line.
+   -------------------------------------------------------------------------- */
+
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.7ch;
+  padding: 0;
+  list-style: none;
+}
+
+.eyebrow > li {
+  white-space: nowrap;
+}
+
+.eyebrow > li:not(:last-child)::after {
+  content: "·";
+  content: "·" / "";
+  padding-inline-start: 0.7ch;
+}
+
+/* --------------------------------------------------------------------------
+   §1.2 Headline — the edit mark.
+
+   The strike is an edit mark, not a hairline: 0.06em resolves to ~1.7px at
+   the display floor and ~4px at the ceiling. Both treated phrases are nowrap
+   so a line break can never land inside the removal or its replacement.
+   Colour affects no layout — the measured line counts hold whatever the spans
+   are painted.
+   -------------------------------------------------------------------------- */
+
+.hero__title {
+  margin-block-start: var(--gap-hairline);
+}
+
+.h1__cut {
+  color: var(--ink);
+  text-decoration: line-through;
+  text-decoration-thickness: 0.06em;
+  white-space: nowrap;
+}
+
+.h1__accent {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   §1.3 The formation — hub over a bus-bar carrying seven specialists.
+
+   Phone first: hub on top, a spine down the inline-start edge at the page's
+   12px mark seat, a 24px stem from spine to each plate. The spine ends at the
+   LAST plate's stem line rather than trailing past it — one derived value,
+   --plate-block, is what lets it do that. It runs through the phone fold
+   deliberately: the cut ladder is the section's only scroll cue.
+
+   Wide: the diagram spans the container, so bus = plate row = container content
+   width and the hub's centre IS the page's axis — the midpoint of the rail and
+   the rail-end (page-shell.md §7.2). An intrinsic-width block centres the hub
+   on nothing: it lands ~174px inside the axis the headline and the THIS SITE
+   strip share, which is the one composition the alignment system bans. Plate 1
+   still starts on the rail, so the reading edge is kept and the centred gesture
+   gets a page-true axis; the plate gaps take the spread, which is what makes
+   the formation read as the section's centrepiece rather than a packed cluster.
+   -------------------------------------------------------------------------- */
+
+.formation {
+  margin-block-start: var(--gap-block);
+
+  /* label line box + block padding both sides + both hairline borders */
+  --plate-block: calc(
+    var(--text-label) * var(--lead-label) + 2 * (var(--rhythm) / 3) + 2px
+  );
+}
+
+.formation__diagram {
+  position: relative;
+  inline-size: fit-content;
+}
+
+/* Distinction is never colour alone: position (seated above the bus), DOM
+   order (first), weight 700, and the accent border all carry it. */
+.formation__hub {
+  display: inline-block;
+  position: relative;
+  background-color: var(--surface);
+  border: 1px solid var(--accent);
+  padding: calc(var(--rhythm) / 3) var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink);
+}
+
+.formation__plates {
+  position: relative;
+  padding: 0;
+  list-style: none;
+}
+
+.formation__plates > li {
+  position: relative;
+  inline-size: max-content;
+  margin-inline-start: calc(var(--gap-hairline) + var(--rhythm));
+  margin-block-start: var(--gap-hairline);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: calc(var(--rhythm) / 3) var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink);
+}
+
+/* The spine. Ends half a plate short of the list's bottom edge — which is the
+   last plate's stem line — so the ladder terminates machined rather than
+   trailing past Research. */
+.formation__plates::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: var(--gap-hairline);
+  inset-block-start: -1px;
+  inset-block-end: calc(var(--plate-block) / 2);
+  border-inline-start: 1px solid var(--hair);
+}
+
+/* The stem from spine to plate, at the plate's vertical centre. */
+.formation__plates > li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(-1 * var(--rhythm));
+  inset-block-start: 50%;
+  inline-size: var(--rhythm);
+  border-block-start: 1px solid var(--hair);
+}
+
+.formation__bus {
+  display: none;
+}
+
+.formation__caption {
+  margin-block-start: var(--gap-flow);
+}
+
+/* Wide: the hub sits centred over a bus-bar that spans exactly the plate
+   row's width — which is the container's content width, so the hub's centre is
+   the page's axis. The shell's registration marks sit at both bus ends, which
+   are the rail and the rail-end. */
+@media (min-width: 60rem) {
+  .formation__plates::before {
+    display: none;
+  }
+
+  /* The diagram spans the container: the axis the hub centres on is then the
+     page's, not the block's own. Relationship, not a figure — the width comes
+     from the container, so it follows --page-max and --gutter. */
+  .formation__diagram {
+    inline-size: 100%;
+  }
+
+  .formation__hub {
+    inset-inline-start: 50%;
+    translate: -50% 0;
+  }
+
+  /* hub → bus stem */
+  .formation__hub::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 50%;
+    inset-block-start: 100%;
+    block-size: var(--gap-hairline);
+    border-inline-start: 1px solid var(--hair);
+  }
+
+  .formation__bus {
+    display: block;
+    position: relative;
+    margin-block-start: var(--gap-hairline);
+    border-block-start: 1px solid var(--hair);
+  }
+
+  .formation__bus::before,
+  .formation__bus::after {
+    content: "+";
+    position: absolute;
+    inset-block-start: -0.85em;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    line-height: 1;
+    color: var(--muted);
+  }
+
+  .formation__bus::before {
+    inset-inline-start: -2px;
+  }
+
+  .formation__bus::after {
+    inset-inline-end: -2px;
+  }
+
+  /* The gaps flex, the plates do not: plate 1's inline-start edge is the rail
+     and plate 7's inline-end edge is the rail-end, and --gap-hairline is the
+     floor the distribution can never close below. */
+  .formation__plates {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--gap-hairline);
+    padding-block-start: var(--gap-hairline);
+  }
+
+  .formation__plates > li {
+    margin: 0;
+  }
+
+  /* bus → plate stem */
+  .formation__plates > li::before {
+    inset-inline-start: 50%;
+    inset-block-start: calc(-1 * var(--gap-hairline));
+    inline-size: 0;
+    block-size: var(--gap-hairline);
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--hair);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   §1.4 THIS SITE remnant — the instrument motif at its smallest honest size:
+   one row, carrying the scope label and the VERIFY chip.
+
+   --gap-major above it is the section's one idea-group seam: claim and team
+   above, receipts and command below.
+
+   The strip states posture, not measurement — §5 owns every value, each one
+   measured beside its own scope label. There is no cell construction here to
+   style.
+   -------------------------------------------------------------------------- */
+
+.remnant {
+  position: relative;
+  margin-block-start: var(--gap-major);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: var(--gap-hairline);
+}
+
+.remnant__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--gap-hairline);
+}
+
+/* A scope label never breaks mid-phrase. Below ~390px the head wraps instead
+   and the chip drops to its own right-aligned row. */
+.remnant__scope {
+  white-space: nowrap;
+}
+
+.remnant__head .chip {
+  margin-inline-start: auto;
+}
+
+/* --------------------------------------------------------------------------
+   §1.5 / §6 The curl card — one treatment, two instances.
+
+   §6's adds the cursor and nothing else. `overflow-wrap: anywhere` because the
+   command is one ~85-character token: it soft-wraps rather than scrolling the
+   page sideways, and selection still yields the exact string.
+   -------------------------------------------------------------------------- */
+
+.curl {
+  margin-block-start: var(--gap-block);
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: var(--text-terminal);
+  line-height: var(--lead-terminal);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.curl .cursor {
+  margin-inline-start: 0.5ch;
+}
+
+/* --------------------------------------------------------------------------
+   §3 — the insight. A kicker and one paragraph, nothing else.
+
+   The kicker is sans at kicker scale in the reading weight. Bold sans at this
+   scale is §4's title voice and only §4's — one bold face at one size is what
+   makes the four decision titles recognizable as a person speaking.
+   -------------------------------------------------------------------------- */
+
+/* Wrap-preferred, not unbreakable: a sentence that fits the column stays
+   whole, a sentence wider than the column wraps inside itself rather than
+   overflowing. Without this the break lands mid-sentence. */
+.kicker__s {
+  display: inline-block;
+}
+
+.insight__para {
+  margin-block-start: var(--gap-flow);
+}
+
+/* --------------------------------------------------------------------------
+   §4 — the decisions. Four spec-sheets: title, stamp, four labelled rows.
+
+   Phone first — the sheets stack, each roughly a screen. At --bp-wide the
+   list becomes a horizontal paged track so four ideas share one desktop screen.
+
+   The paging affordance is three channels and no scroll machinery — no
+   buttons, no click targets, nothing that moves the track for the reader.
+   (1) The cut lands on the PHYSICAL SCREEN EDGE: the track's scrollport
+   bleeds out to the viewport while its content keeps the rail, so the next
+   sheet runs off the screen the way section rules already do. Cut at the
+   container edge instead, it left a dead strip of bare ground between the
+   crop and the screen, and read as "something broke". (2) The SHEET n OF 4
+   ordinal on each meta line — the only channel that does not depend on the
+   viewport's width, and the one that carries the phone stack. (3) The
+   indicator: four segments under the track, spanning rail → rail-end. It
+   succeeds a styled-scrollbar gauge that failed on its own terms — overlay
+   scrollbars are hidden by default, so the signal was absent for most
+   readers, and where classic scrollbars render the bar ran edge-to-edge and
+   read misaligned with the sheets it was reporting on.
+   -------------------------------------------------------------------------- */
+
+.sheets {
+  /* Sheet-scoped, not global. --sheet-pad is load-bearing on the track: at
+     --gap-block the track measures ~48px taller and its bottom crosses the
+     desktop fold, so the value is part of the one-screen budget. */
+  --sheet-pad: var(--gap-flow);
+  --sheet-label-col: 6rem;
+  --sheet-w: 40rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sheet {
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: var(--sheet-pad);
+}
+
+.sheet + .sheet {
+  margin-block-start: var(--gap-major);
+}
+
+/* The founder's voice renders in the reading face; the machine grammar around
+   it stays mono and tracked. That contrast IS "a person wrote this, the
+   instrument recorded it". */
+.sheet__title {
+  font-family: var(--font-sans);
+  font-size: var(--text-kicker);
+  line-height: var(--lead-kicker);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* The meta line: the stamp opens it, the ordinal closes it — the counterweight
+   pattern, on an existing line rather than as a floated block. It occupies the
+   stamp's own line box, so the ordinal costs no height at desktop. It wraps:
+   where stamp + ordinal exceed the line (the phone widths), the ordinal takes
+   its own right-aligned line rather than colliding. */
+.sheet__meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--gap-hairline);
+  margin-block-start: var(--gap-hairline);
+}
+
+.sheet__stamp {
+  display: block;
+}
+
+.sheet__ordinal {
+  margin-inline-start: auto;
+  white-space: nowrap;
+}
+
+.sheet__rows {
+  margin-block-start: var(--gap-flow);
+}
+
+/* Single column below --bp-wide: the label column disappears rather than
+   compresses. A 96px column at 320px would leave ~21ch of prose beside it. */
+.sheet__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sheet__row dd {
+  margin-block-start: calc(var(--rhythm) / 4);
+  max-inline-size: var(--read-max);
+}
+
+.sheet__row + .sheet__row {
+  margin-block-start: var(--gap-hairline);
+  border-block-start: 1px solid var(--hair);
+  padding-block-start: var(--gap-hairline);
+}
+
+/* The mechanism emphasis: rust as a graphical mark only. --ink on --accent
+   fails every body floor, so the fact is carried in ink at AA (weight, and
+   the last-row position) and the accent is the flag beside it. The mark is
+   painted with background-color and never with color — the small-rust-text
+   sweep is keyed on computed colour, and a mark painted with colour would
+   join that set and fail. */
+.sheet__row--mech {
+  position: relative;
+}
+
+.sheet__row--mech::before {
+  content: "";
+  position: absolute;
+  /* Token-derived, so a padding change moves the mark's room, not its 12px
+     seat from the card's inner edge — the accent-mark idiom's third seat. */
+  inset-inline-start: calc(var(--gap-hairline) - var(--sheet-pad));
+  inline-size: 2px;
+  inset-block: var(--gap-hairline) 0;
+  background-color: var(--accent);
+}
+
+.sheet__row--mech dt {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+@media (min-width: 60rem) {
+  .sheets {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--sheet-w);
+    gap: var(--gap-flow);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+
+    /* The rail's own distance from the viewport edge, derived from the page's
+       tokens and applied three ways so the geometry cannot shear: pull the
+       scrollport out to the screen, pad the content back onto the rail, and
+       land the snap on the same line.
+
+       A percentage is wrong here twice, and silently: padding percentages
+       resolve against the containing block but scroll-padding percentages
+       against the SCROLLPORT, and the mismatch lets the track's own snap pull
+       sheet 1 to the viewport edge on first layout. min() clamps the case
+       where the viewport is narrower than --page-max, so the bleed is never
+       negative and never leaks page-level horizontal scroll. */
+    --track-bleed: calc((100vw - min(var(--page-max), 100vw)) / 2 + var(--gutter));
+    margin-inline: calc(-1 * var(--track-bleed));
+    padding-inline: var(--track-bleed);
+    scroll-padding-inline-start: var(--track-bleed);
+
+    /* The native scrollbar retires with the gauge: two position channels
+       under one track, one of them misaligned, is the state the indicator
+       replaces. */
+    scrollbar-width: none;
+  }
+
+  .sheet {
+    scroll-snap-align: start;
+  }
+
+  .sheet + .sheet {
+    margin-block-start: 0;
+  }
+
+  .sheet__row {
+    grid-template-columns: var(--sheet-label-col) minmax(0, var(--read-max));
+    column-gap: var(--gap-flow);
+  }
+
+  /* Optically aligns the mono cap-height with the sans ascender across the
+     column gap. */
+  .sheet__row dt {
+    padding-block-start: 0.15rem;
+  }
+
+  .sheet__row dd {
+    margin-block-start: 0;
+  }
+}
+
+/* The indicator — the paged counterpart of SHEET n OF 4. It lives INSIDE the
+   container while the track bleeds past it, which is the whole point: the row
+   spans rail → rail-end, the same two edges a resting sheet composes to, so
+   it reads aligned with the sheets rather than with the screen.
+
+   Desktop only. Below --bp-wide the track un-tracks and there is no position
+   to report — the ordinals carry the stack on their own.
+
+   Segments are 2px: the page's single accent-mark weight, the same stroke
+   .sheet__row--mech::before paints. The harness binds the two — if either
+   moves alone, the check goes red.
+
+   Nothing here transitions and nothing animates. State is a class the
+   observer toggles, so the change is a repaint, not motion, and the page's
+   motion budget is untouched in both paths. */
+.sheets-indicator {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .sheets-indicator {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: var(--gap-flow);
+    margin-block-start: var(--gap-hairline);
+  }
+
+  /* --hair is the page's rule weight: the inactive segments read as the rule
+     they are, and the one accent segment is the only rust in the row. Painted
+     with background-color and never with color — the small-rust-text sweep is
+     keyed on computed colour. */
+  .sheets-indicator__seg {
+    block-size: 2px;
+    background-color: var(--hair);
+  }
+
+  .sheets-indicator__seg.is-active {
+    background-color: var(--accent);
+  }
+}
+
+/* The track's snap is a post-gesture user-agent glide, so it goes off for a
+   reader who asked for less motion. Paging by plain scroll is unaffected, and
+   the cut, the ordinal and the indicator all stand — the indicator behaves
+   identically in both paths, because nothing about it ever moved. */
+@media (min-width: 60rem) and (prefers-reduced-motion: reduce) {
+  .sheets {
+    scroll-snap-type: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   §5 — shipped with Muster. Four prose lines, then two readout cards.
+
+   The section's argument is a side-by-side read: same two keys, same order,
+   one scope each. So every cell is the same three tracks — key, value,
+   sub-line — and the sub-line's track is reserved whether or not that cell
+   has one. Each card carries exactly one sub-line and they fall in DIFFERENT
+   cells; without the reserve the pair would go ragged from the second row
+   down and the comparison the section exists to make would be reading across
+   a step. The harness asserts the alignment, not the figure.
+   -------------------------------------------------------------------------- */
+
+.shipped__line + .shipped__line {
+  margin-block-start: var(--gap-flow);
+}
+
+/* §5's primary line takes no rule at all: the weight is carried by a <b>
+   spanning the sentence, which is the shell's in-passage emphasis route.
+   That is not a style preference — it is the only form that keeps all four
+   lines on ONE column edge. `--read-max` is 64ch, and `ch` is the advance of
+   the element's own "0": weight the <p> itself and its 64ch resolves ~8.7%
+   wider than its neighbours', so the primary line hangs past them and §5's
+   prose block goes ragged. Bold the run instead and the paragraph's own
+   font — and therefore the column — is untouched. */
+
+.shipped {
+  display: grid;
+  gap: var(--gap-flow);
+  margin-block-start: var(--gap-major);
+}
+
+/* A scope label never breaks mid-phrase — the same rule §1's remnant holds
+   its own to, and the reason both cards state their scope on one line. */
+.shipped__scope {
+  white-space: nowrap;
+}
+
+.shipped__cells {
+  margin-block-start: var(--gap-flow);
+}
+
+/* --sub-row is the micro line box plus the gap a sub-line hangs at — both
+   read off the tokens, so a type-scale change moves the reserve with it. */
+.shipped__cell {
+  --sub-row: calc(var(--text-micro) * var(--lead-micro) + var(--gap-hairline));
+  display: grid;
+  grid-template-rows: auto auto minmax(var(--sub-row), auto);
+}
+
+.shipped__cell + .shipped__cell {
+  margin-block-start: var(--gap-flow);
+  border-block-start: 1px solid var(--hair);
+  padding-block-start: var(--gap-flow);
+}
+
+/* Wide: the two scopes stand side by side, which is the comparison. */
+@media (min-width: 60rem) {
+  .shipped {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* --------------------------------------------------------------------------
+   §6 — get started. The lead line, the two commands, one link.
+   -------------------------------------------------------------------------- */
+
+.getstarted__then {
+  margin-block-start: var(--gap-hairline);
+}
+
+.getstarted__link {
+  margin-block-start: var(--gap-block);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lead-label);
+  letter-spacing: var(--track-label);
+}

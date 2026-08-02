@@ -1,0 +1,225 @@
+/* ==========================================================================
+   MOTIFS — pulse lamp, instrument surfaces, registration marks, readout
+   cells, chips, curl cursor.
+
+   Complete animation inventory of the shell (every one has an explicit
+   reduced-motion path at the foot of this file):
+     pulse-ring   — OPERATIONAL lamp, expanding ring x2
+     pulse-core   — OPERATIONAL lamp, core brightness
+     cursor-blink — curl cursor
+   Scroll-triggered count-up is JS (scripts/count-up.js) and gates itself.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   OPERATIONAL pulse — status bar and terminal live indicator.
+   Clearly alive at a glance: solid core that never drops below 85%, plus two
+   rings a half-period apart so the lamp is never still.
+   -------------------------------------------------------------------------- */
+
+.pulse {
+  position: relative;
+  display: inline-block;
+  inline-size: 8px;
+  block-size: 8px;
+  flex: none;
+}
+
+.pulse__core {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: var(--accent);
+  opacity: 1;
+  animation: pulse-core var(--pulse-period) ease-in-out infinite;
+}
+
+/* Rings expand from the core edge (r=4px) to r=12px — scale 3 on an 8px box. */
+.pulse::before,
+.pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  animation: pulse-ring var(--pulse-period) linear infinite;
+}
+
+.pulse::after {
+  animation-delay: calc(var(--pulse-period) / -2);
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-core {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Curl cursor
+   -------------------------------------------------------------------------- */
+
+.cursor {
+  display: inline-block;
+  inline-size: 8px;
+  block-size: 17px;
+  vertical-align: text-bottom;
+  background-color: var(--accent);
+  animation: cursor-blink var(--cursor-period) steps(1) infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  49.999% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Instrument surface + registration marks.
+   Sharp corners, opaque surface, hairline border. No shadow — elevation is
+   the border and the surface value shift.
+   -------------------------------------------------------------------------- */
+
+/* The inset steps fluidly between the two rhythm multiples rather than at a
+   breakpoint: --gap-block (48px) once the page is wide, --gap-flow (24px) on a
+   phone, and no cliff at --bp-wide. A flat 48px would spend 96px of a 320px
+   card's width on padding — a third of the surface, and the prose column that
+   is left reads at about 23 characters. The clamp resolves to 24px at 375px
+   and to exactly 48px at 960px (--bp-wide). */
+.instrument {
+  position: relative;
+  background-color: var(--surface);
+  border: 1px solid var(--hair);
+  padding: clamp(var(--gap-flow), 0.539rem + 4.1vw, var(--gap-block));
+}
+
+.regmark {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: 1;
+  color: var(--muted);
+  user-select: none;
+}
+
+.regmark--tl {
+  inset-block-start: 6px;
+  inset-inline-start: 6px;
+}
+
+.regmark--br {
+  inset-block-end: 6px;
+  inset-inline-end: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   Instrument readout cell.
+   A measured value is flat rust, tabular, at the readout size — never tinted,
+   never glowing. An unmeasured one is an ink em-dash and says so.
+
+   The cell carries no surface of its own: it is seated on `.instrument`
+   above, which is what a readout card IS. Repeating the surface, border and
+   inset here would give a cell inside a card two frames and two sources of
+   truth for one inset.
+   -------------------------------------------------------------------------- */
+
+/* Key and sub-line are micro type and take it from .t-micro on the element,
+   like every other micro run on the page; what belongs here is only what the
+   cell adds to it. A second copy of the type scale is a second place for it
+   to drift. */
+.readout__key {
+  display: block;
+}
+
+.readout__value {
+  display: block;
+  margin-block-start: var(--gap-hairline);
+  font-family: var(--font-mono);
+  font-size: var(--text-readout);
+  line-height: var(--lead-readout);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+/* Ink, never accent: an unmeasured value is a claim about what will be
+   measured, not a metric. */
+.readout__value--unmeasured {
+  color: var(--ink);
+}
+
+.readout__sub {
+  display: block;
+  margin-block-start: var(--gap-hairline);
+}
+
+/* --------------------------------------------------------------------------
+   Chip — rust text at this size would fail AA, so emphasis is carried by the
+   border and the glyph while the word stays ink.
+   -------------------------------------------------------------------------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5ch;
+  border: 1px solid var(--hair);
+  padding: 0.35em 0.75em;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: var(--lead-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--track-micro);
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.chip--emphasis {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.chip__glyph {
+  color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — every animated element renders its complete state, not a
+   degraded one. The lamp stays lit and labelled; the cursor stays solid.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse::before,
+  .pulse::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .pulse__core {
+    animation: none;
+    opacity: 1;
+  }
+
+  .cursor {
+    animation: none;
+    opacity: 1;
+  }
+}
