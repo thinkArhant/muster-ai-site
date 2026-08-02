@@ -109,13 +109,15 @@
     watched to go red with the shroud removed.
 
 - [ ] **Deploy serves only the page's own files** — Blocker: soft, Source: developer, Added: 2026-07-25
-  - Cloudflare Pages deploying the repo root would publish `knowledge-base/`, `tests/`, `muster/`, and
-    `scripts/test.sh` alongside the page. The repo is public by design so nothing leaks, but the
-    deployed site should still be the site — a 404-able `tests/artifacts/` is noise on an exhibit whose
-    argument is restraint.
+  - Deploying the repo root would publish `knowledge-base/`, `tests/`, `muster/` and `scripts/test.sh`
+    alongside the page. The repo is public by design so nothing leaks, but the deployed site should be
+    the site — a 404-able `tests/` is noise on an exhibit whose argument is restraint.
+  - **Materially reduced**: the gate renders are untracked and gitignored, taking the repo tree from
+    52.9 MB to 2.1 MB. What would still publish wrongly is text, not weight.
   - Resolve at the deploy step: either a build output directory containing `index.html`, `styles/`,
-    `scripts/*.js`, and the verification artifacts the page links to, or an exclusion list. Note that
-    `scripts/` holds both shipped page JS and the project's test runner.
+    `scripts/*.js`, `VERIFY.md` and the artifacts the page links to, or an exclusion list. Note that
+    `scripts/` holds both shipped page JS and the project's test runner, so it cannot be included or
+    excluded wholesale.
   - Milestone gate: launch
 
 - [ ] **The four receipt permalinks resolve on github.com after the final push** — Blocker: hard,
