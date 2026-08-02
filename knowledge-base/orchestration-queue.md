@@ -87,63 +87,57 @@ _None open._
 <!-- The single next agent invocation. Copy the ENTIRE code block (including `Role: <agent>` at the top) and paste as one message in Claude Code. -->
 <!-- Autonomous hard-block signal: PM sets `Role: halt` here (and records the question in `## Founder Decisions`) when it has assessed a block as needing a founder answer. Specialists never set `Role: halt` themselves. The autonomous loop stops on `Role: halt`. Sprint completion is detected by the ABSENCE of a fenced code block under Next Step. A block that has a fence but no `Role:` line defaults to `pm`. -->
 
-### 2026-08-01 THE LAUNCH MERGE — history preserved, then the founder's click-check
+<!-- Resolved 2026-08-01 — THE LAUNCH IS CONSUMED: the merge landed with history intact and the
+     site is live at https://muster.works. The two Upcoming items (merge, VERIFY click-check) are
+     done. Post-launch work begins below: the share-card round, founder-approved. -->
+
+### 2026-08-01 OG IMAGE ROUND 2 of 2 — Developer builds the generator and the meta tags (HO-052, DEC-070)
 
 ```
-Role: halt
+Role: developer
 
-The sprint is complete. Every ruling from DEC-061 through DEC-069 is built and verified, the last
-unmeasured value on the page is now a measured number, the ledger is closed with dispositions, and
-all three lints are green. No agent has work left.
+The live page shares as a bare text link — no Open Graph tags exist. UI/UX has ruled the preview
+image (HO-052 in agent-requests.md carries the exact spec; DEC-070 the rationale). Build:
 
-WHAT THE FOUNDER DOES, AND NOTHING ELSE REMAINS.
+1 — A deterministic generator (suggest `tools/make-og.mjs`, using `tests/lib/cdp.mjs`): shipped
+index.html via file://, viewport 1000×525 CSS at deviceScaleFactor 1.2, dark scheme,
+prefers-reduced-motion emulated (the page's own static path — no mid-roll count-up frame can
+exist), document.fonts.ready + rAF + ~150ms settle, full-viewport JPEG q90 → og.jpg, 1200×630,
+~88 KB. Assert the frame's relationships after render (h1 spans single-fragment, caption bottom
+< 525, remnant top > 525) rather than trusting the crop blind.
 
-1 — MERGE WITH A MERGE COMMIT. NOT A SQUASH. Three of the footer's four receipts are pinned to
-commit SHAs on this branch. A squash collapses that history and 404s all three silently, for every
-reader, with nothing in the harness able to detect it — the sweep checks that each path exists at
-its own commit, which stays true locally while the public link dies. `blob/main/VERIFY.md` survives
-either strategy; the other three do not. If a squash is unavoidable, re-pin all three to post-merge
-SHAs BEFORE deploy and re-run `qa-fullpage-sweep.mjs`'s pinned-receipt check.
+2 — Head tags: og:image https://muster.works/og.jpg (absolute), og:image:width 1200,
+og:image:height 630, og:image:type image/jpeg, og:url https://muster.works/ (founder-approved),
+og:title, og:description, og:image:alt, twitter:card summary_large_image. Title/description/alt
+STRINGS are Content's — file a request if Content has not supplied them; do not author copy.
 
-2 — CLICK-CHECK THE RECEIPTS ON THE LIVE PAGE, AFTER THE PUSH. All four footer receipts plus §1's
-`VERIFY ⎘` chip. `blob/main/VERIFY.md` 404s until the merge lands, by construction — `main` is 132
-commits behind this branch. Only a real fetch proves reachability, which is why no runner stands in
-for this and why it is the last step rather than an earlier one.
+3 — Couplings (full list in HO-052): build-dist.sh must copy og.jpg into dist/ and its
+missing-reference check greps only (href|src)= — extend it for the meta content URL; grep
+DEC-034's URL guard before assuming an inert meta URL passes; CSP unchanged (img-src 'self'
+covers it); re-run all four runners serially and re-base any check that asserts head inventory.
 
-3 — DEPLOY CONFIG, tracked soft: serve the page's own files rather than the repo root, so
-`knowledge-base/`, `tests/` and `muster/` do not publish alongside the site.
-
-TWO ACCEPTED RESIDUALS, recorded so they are not rediscovered as defects (DEC-068):
-
-- No contrast check can see the texture — both probes walk ancestors for a `background-color` and
-  `.texture` is a fixed sibling. Proven by planting `--grain-alpha: 0.90`, which returned 45/45 with
-  both contrast checks green. The alpha token IS guarded, so the exposure is a texture change that
-  passes the cap while degrading real contrast. Today's ratios clear the floor twice over.
-- `section-01-copy.md` is the one copy spec no harness parses, and the one that drifted. Accepted on
-  its small surface; every §1 string is asserted against the page elsewhere.
-
-**Deliverable:** the merge pushed with history intact, the four receipts and the §1 chip click-checked
-green on the live page, and any 404 filed as a blocker before deploy.
-
-IF BLOCKED: this step is `Role: halt` because the remaining work is the founder's. An agent resuming
-here for any other reason must not set `Role: halt` itself — file the blocker addressed to PM and
-re-point `## Next Step` to a `Role: pm` assessment step.
+IF BLOCKED: file the blocker addressed to PM and re-point ## Next Step to a Role: pm assessment
+step. Never set Role: halt.
 ```
 
 ## Upcoming
 <!-- Ordered sequence of remaining steps for this sprint. -->
 
-1. **The launch merge, history preserved** (DEC-063 §5) — `Role: halt`, founder-only. A squash
-   merge collapses this branch and 404s the three pinned receipts in the footer; `blob/main`
-   survives either strategy, which is the second reason VERIFY is not pinned. Two accepted
-   residuals stand recorded (DEC-068): the texture-blind contrast checks, and `section-01-copy.md`
-   as the one unparsed copy spec.
-2. **The founder's VERIFY click-check on the live page** — the one thing no runner can stand in
-   for, because only a real fetch proves reachability.
+1. **Founder's card check on the live page** after round 2 deploys — paste https://muster.works
+   into iMessage and Slack, judge the real unfurl against the sheet's simulated cards. No runner
+   stands in for a real unfurler fetch.
 
 ## Done (Last 10)
 <!-- Completed steps, newest at the top. Growth rules: Done keeps max 10 entries (trim oldest on overflow). PM clears Done entirely at each new sprint. -->
 <!-- Format: - [DATE] [Agent]: [One-line summary] -->
+
+- 2026-08-01 — OG image round 1 of 2: UI/UX rules the share card (HO-052, DEC-070). The preview is
+  a real render of the shipped page: first screen zoomed 1.2× (viewport 1000×525 at DSF 1.2 →
+  1200×630), dark, JPEG q90 at 88,021 bytes measured. Judged from 300px downscales, not full size —
+  the headline reads at 19.5px card-equivalent, the through-the-curl crop is the rendered mush
+  proof, the grain measurably does not carry (sd 1.37→1.10), and 2× was rejected at 855 KB for zero
+  display gain. Contact sheet at `samples/og/sheet.html` (gitignored). **Awaiting the founder's
+  look and Developer (round 2).**
 
 - 2026-08-01 — Telemetry round 2 of 2: Developer ships the measured cell (HO-051). §5's THIS SITE
   card reads `OPERATOR ATTENTION 7.5 h` — accent, tabular, counting, byte-equal to the copy file —
@@ -298,16 +292,3 @@ re-point `## Next Step` to a `Role: pm` assessment step.
   `Kanwar / Sandhu`** across lines at 375 and 320 — fixed with two nowrap units that cost zero
   lines at every measured width. Sweep 45/45, audit 108/108, no shipped file touched.
   **Awaiting the founder's batched render look, then Developer (round 3).**
-
-- 2026-07-31 — Closing round 1 of 3: Content writes the cost posture into strings (HO-042). §5 runs
-  four prose lines — Bodh's price lands as `Bodh, idea to live: 9.3 hours of active build, $147 in
-  AI tokens at API list price.` (17 of ≤ 20 words), the scope sentence survives, and the API-list
-  framing travels with the figure rather than dying with the key that carried it. Both §5 cards
-  re-key to `OPERATOR ATTENTION` + `SHIPPED`, symmetrical, no cost cell on either side;
-  `measured at launch` moves onto the dash it qualifies, since `SHIPPED · THIS PAGE` is measured.
-  `THIS PAGE` ruled uppercase in every seat, `bodh.day` ruled lowercase, asymmetry stated. The
-  footer's final sentence ships byte-exact at 35 of ≤ 40 words and the candidate structure retires.
-  `VERIFY.md` publishes the site's economics as a measurement report — driver-log scope, labelled a
-  floor twice, with the rate and its inputs — and the THIS SITE dashes are untouched. Sweep 45/45,
-  audit 108/108; **`verify-shell.mjs` aborts at its §5 copy parser, which is designed and is
-  round 3's first fix** — eleven couplings enumerated in HO-042. **Awaiting UI/UX (round 2).**

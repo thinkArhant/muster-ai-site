@@ -10,6 +10,65 @@ _None._
 ## Active Handoffs
 <!-- Entries with Status: open, in-review, or needs-revision -->
 
+### 2026-08-01 HO-052 — OG preview image ruled: the render spec Developer builds from (round 1 of 2)
+**Type:** handoff
+**Producer:** UI/UX
+**Deliverable:** this entry (the render spec) + contact sheet at `samples/og/sheet.html` (gitignored — absolute path: `/Users/kanwarsandhu/Desktop/TA-muster-ai-site/samples/og/sheet.html`; candidate renders and the throwaway scripts sit beside it)
+**Status:** in-review
+**Reviewers:**
+- [ ] Developer — pending (builds the generator + meta tags, round 2)
+- [ ] PM — pending
+
+**The ruling (DEC-070), exact and buildable:**
+
+1. **Crop**: headless Blink (the harness's own `tests/lib/cdp.mjs` path), shipped `index.html` via
+   `file://`, **viewport 1000 × 525 CSS px, `deviceScaleFactor: 1.2`, `mobile: false`**, scroll 0,
+   full-viewport capture, **no clip rect** → output exactly **1200 × 630**. In frame: status bar,
+   eyebrow, headline (strike + rust edit whole — both spans single-fragment at this width), full
+   formation, `8 AI AGENTS · 1 OPERATOR` caption, 32.6px air below it. Remnant/VERIFY/curl are
+   deliberately out of frame (mush at card size — proven on the sheet, candidate F).
+2. **Theme**: dark — `Emulation.setEmulatedMedia` `prefers-color-scheme: dark`.
+3. **Deterministic state**: emulate **`prefers-reduced-motion: reduce`** — the page's own complete
+   static path (pulse solid core, §5 count-up final values so no mid-roll figure can ever be framed,
+   cursor solid). Wait `document.fonts.ready` + rAF + ~150ms before capture. Chrome flags as the
+   harness: `--force-color-profile=srgb --disable-lcd-text --hide-scrollbars`.
+4. **Format / DPR / bytes**: **JPEG quality 90 → 88,021 bytes measured** (`Page.captureScreenshot
+   {format:"jpeg", quality:90}`). 1×, never 2× (2× PNG measured 855 KB for zero display gain). PNG
+   fallback if the founder rejects JPEG at the sheet: same frame, 301,706 bytes — at the ~300 KB line.
+5. **Meta geometry** (strings themselves are Content's): `og:image` **absolute**
+   `https://muster.works/og.jpg` · `og:image:width 1200` · `og:image:height 630` ·
+   `og:image:type image/jpeg` · `og:url https://muster.works/` (founder-approved) ·
+   `twitter:card summary_large_image`. An `og:image:alt` slot is required — Content writes the
+   string; it should describe the render (the edited headline + the formation), not say "screenshot".
+
+**Couplings found by reading, for round 2:**
+- `tools/build-dist.sh` must copy the image into `dist/` — and its missing-reference check greps
+  only `(href|src)=`, so a `content=` meta URL is invisible to it; extend the check or the image
+  can 404 silently after a refactor.
+- DEC-034's URL guard permits inert URLs and bans fetching references — a `<meta content>` is
+  inert, but grep the guard's actual pattern before assuming it passes.
+- CSP needs no change (`img-src 'self'` already covers it; unfurlers fetch server-side and are not
+  governed by the page's CSP). Zero-runtime-request claim untouched — assert the page still makes
+  zero fetches with the tags present.
+- Generator determinism is **per-machine**: system-mono glyph metrics differ across OSes, so the
+  line composition ruled here (headline 2 lines at 1000px) is measured on macOS SF Mono/Menlo. The
+  generator should assert the frame's load-bearing relationships after render — h1 spans
+  single-fragment, caption bottom < 525, remnant top > 525 — rather than trusting the crop blind.
+- This ships the repo's **first binary asset** (the favicon is a data URI precisely to avoid one).
+  Priced and accepted in DEC-070 at 88 KB; `og:image` cannot be a data URI — unfurlers won't parse it.
+
+**Sheet contents** (founder rules in one look): five crops dark, two light, each at full size +
+500px + 300px inside simulated light/dark message-card chrome; JPEG-vs-PNG full-size pair; byte
+table; grain-carry measurement. Recommendation named on the sheet: **C dark, JPEG q90**.
+
+**Would Apple ship this?** Yes — the card is the product's five-second verdict at message-bubble
+size: one readable claim, one recognizable structure, nothing that turns to noise at 4× downscale.
+The simpler alternative (full first screen, no zoom) was rendered and reads worse where cards are
+actually seen.
+
+**Revision log:**
+- 2026-08-01: Filed after rendering 9 candidates + downscales; recommendation judged at 300px.
+
 ## Resolved (Last 10)
 
 - 2026-08-01 — HO-051 (Developer): **accepted, no revision — the last build, and it did not coast.**

@@ -1773,5 +1773,48 @@ the checklist).
 **Touched**: `decision-log.md`, `agent-requests.md`, `pre-launch-checklist.md`,
 `orchestration-queue.md`.
 
+### DEC-070 — The share card is the page itself: first-screen crop at 1.2×, dark, JPEG — ruled from downscaled renders, not full-size ones (2026-08-01)
+
+**Decision**: the site's Open Graph image is a **real render of the shipped `index.html`** — the
+founder's constraint, and the product's own argument applied to its preview: composed artwork would
+be the one unverifiable claim on a page built against them. The ruled frame: **viewport 1000 × 525
+CSS px at deviceScaleFactor 1.2, dark theme, full-viewport capture → 1200 × 630** (the OG standard),
+holding the status bar, eyebrow, headline, the full formation and the 8/1 caption, with 32.6px of
+air under the caption. **JPEG quality 90 — 88,021 bytes measured** against 301,706 for the identical
+PNG frame. UI/UX ruled per the founder's delegation; the founder judges from the contact sheet.
+
+**The deciding criterion was legibility at 300px, not composition at 1200.** An iMessage/Slack card
+renders ~300px wide — a 4× downscale. Every candidate was rendered, downscaled to 300 and 500px, and
+judged there. At the 1.2× zoom the headline lands at 78 device px → 19.5px in the bubble, and the
+strike + rust edit both survive; the un-zoomed first screen (14.6px equivalent) reads worse and its
+extra content — the THIS SITE strip — is furniture at that size. The crop that reaches the curl was
+rendered and is the round's mush proof: the curl and VERIFY chip become unreadable texture while the
+headline shrinks to pay for them — the texture round's failure class, detail that averages away at
+display size. The formation's plate names sit at the legibility edge (3.6px at card width) and are
+carried by the diagram's shape, not their glyphs; that is accepted and stated.
+
+**Theme dark, ruled against both client chromes**: the olive light card sits close to light-mode
+bubble grey and its edge goes soft; the dark card holds a hard edge on both chromes and is the
+brand-primary theme. **DPR 1×**: the 2× probe measured 855,234 bytes for zero display gain — no
+client renders the card above ~600px. **The grain does not carry and that is recorded**: bare-ground
+sd 1.37/span 9.0 at full size falls to sd 1.10/span 6.8 at 300px — numerically present, perceptually
+flat, consistent with DEC-067's arm's-length ruling (a 4× downscale is the opposite of arm's length).
+
+**Determinism is the page's own reduced-motion path, not hand-parking**: `prefers-reduced-motion`
+emulation renders the pulse solid, count-up values final (never mid-roll — a card showing a rolling
+figure would be a false claim), cursor solid; fonts settled before capture. The render is
+Blink-only by design — the artifact is a PNG/JPEG, not a rendered page, so cross-engine does not
+apply (the one deliberate carve-out from the standing rule).
+
+**What this ends, priced**: the repo's zero-binary-assets streak. `og:image` must be a fetchable
+URL — data: URIs do not unfurl — so a real file ships, at 88 KB. The page itself never fetches it
+(a `<meta content>` is inert; unfurlers fetch server-side), so A-004's zero-runtime-request claim
+and the CSP are untouched.
+
+**Impact**: developer (HO-052 — builds the generator and meta tags, round 2), content (og:image:alt
+and og:title/description strings), qa (guard re-bases enumerated in HO-052), pm (review).
+
+**Touched**: `decision-log.md`, `agent-requests.md`, `orchestration-queue.md`.
+
 ## Archive Reference
 <!-- Older decisions archived in decision-log-archive.md -->
