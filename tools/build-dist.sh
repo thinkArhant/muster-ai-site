@@ -29,6 +29,10 @@ for f in count-up replay sheet-indicator; do
   cp "scripts/$f.js" "$OUT/scripts/"
 done
 
+# Host config. `_headers` carries the CSP that enforces the zero-external-request
+# claim in the browser; it is not served to readers, it is consumed by the host.
+cp _headers "$OUT/"
+
 # Every local reference in the page must exist in the output. This is the check
 # that matters: a stylesheet added to index.html and not to this script would
 # otherwise deploy as a silently unstyled page.

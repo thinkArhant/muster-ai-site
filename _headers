@@ -1,0 +1,29 @@
+# Cloudflare Pages headers. Copied into dist/ by tools/build-dist.sh.
+#
+# The CSP is the page's zero-external-requests claim, enforced by the browser
+# rather than asserted in prose. The page has no inline script, no inline style
+# and no style attribute, so nothing here needs 'unsafe-inline' — a CSP this
+# strict is only available because the page was built without them.
+#
+# `default-src 'none'` means anything not named below is refused outright. The
+# named exceptions are exactly what the page loads: its own stylesheets, its own
+# three scripts, and the data: URI favicon. github.com links are <a href>
+# navigations, not fetches, and navigation is not governed by these directives.
+#
+# If a future change adds a webfont, an analytics tag or a CDN asset, the
+# browser will block it and the page will visibly break. That is the intent:
+# the constraint should fail loudly rather than erode quietly.
+
+/*
+  Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Cross-Origin-Opener-Policy: same-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+
+# No asset here is content-hashed, so nothing may be cached past a deploy: a
+# stale stylesheet against fresh markup is a broken page, and this site ships
+# few enough bytes that revalidation costs nothing. ETags make the repeat visit
+# a 304, not a re-download.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
