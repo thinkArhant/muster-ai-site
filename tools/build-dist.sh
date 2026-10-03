@@ -33,6 +33,11 @@ done
 # claim in the browser; it is not served to readers, it is consumed by the host.
 cp _headers "$OUT/"
 
+# The unfurl card. og:image must be a fetchable URL — unfurlers do not parse
+# data: URIs — so this is the one binary the site ships. Regenerate with
+# `node tools/make-og.mjs`; the page itself never fetches it.
+cp og.jpg "$OUT/"
+
 # Every local reference in the page must exist in the output. This is the check
 # that matters: a stylesheet added to index.html and not to this script would
 # otherwise deploy as a silently unstyled page.
@@ -42,6 +47,18 @@ while read -r ref; do
 done < <(grep -oE '(href|src)="[^"]*"' index.html \
          | sed -E 's/^(href|src)="//; s/"$//' \
          | grep -vE '^(https?:|data:|#|mailto:)')
+
+# Meta content= URLs are invisible to the href/src grep above, and the unfurl
+# card's URL is absolute by necessity — so map every on-origin content URL back
+# to a path and require it in the output. Without this, og.jpg going stale
+# after a refactor would 404 silently: no browser ever fetches it, only
+# unfurlers do, and nothing on the page would look broken.
+while read -r ref; do
+  path="${ref#https://muster.works/}"
+  [ -z "$path" ] && continue   # og:url names the page itself
+  [ -f "$OUT/$path" ] || { echo "MISSING in dist: $path (meta content URL)"; missing=1; }
+done < <(grep -oE 'content="https://muster\.works/[^"]*"' index.html \
+         | sed -E 's/^content="//; s/"$//')
 
 # Nothing that is not the site may reach the output.
 for stray in test.sh VERIFY.md knowledge-base tests muster tools samples telemetry; do

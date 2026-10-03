@@ -768,6 +768,14 @@ try {
           const name = attr[1].toLowerCase();
           const tag = (before.match(/<([a-zA-Z][\w-]*)(?![^<]*>)/) || [])[1]?.toLowerCase();
           if (name === "href" && tag === "a") { inertRefs.push(`${site} <a href> (reader navigation)`); continue; }
+          /* A URL in <meta content> is inert metadata — the engine never
+             resolves it; unfurl crawlers fetch it server-side, outside this
+             page's runtime. Deliberately this narrow: the one meta that CAN
+             navigate, http-equiv refresh, never reaches this allowance —
+             its URL sits after `url=` inside the content value, so the
+             attribute match reads `url`, not `content`, and it still lands
+             in fetchingRefs as `meta[url]`. */
+          if (name === "content" && tag === "meta") { inertRefs.push(`${site} <meta content> (unfurl metadata)`); continue; }
           fetchingRefs.push(`${site} ${tag || "?"}[${name}]`);
           continue;
         }
@@ -784,6 +792,42 @@ try {
   }
   evidence.shippedUrls = { fetching: fetchingRefs, inert: inertRefs };
   check("no fetching http(s) reference in any shipped file", fetchingRefs.length === 0, fetchingRefs.join(", ") || `none — ${inertRefs.length} inert: ${inertRefs.join(", ") || "none"}`);
+
+  /* The unfurl block is inventory-complete and self-consistent. Relationships,
+     not values: the card's declared geometry is read back off the committed
+     image's own start-of-frame marker, the image URL names a file that really
+     ships at the site root, and the og strings restate the page's own title
+     and description byte-equal. Three separate drifts — a card regenerated at
+     new geometry without the meta following, a renamed or missing image file,
+     a retitled page whose og copy stays behind — each fail here by name. */
+  const indexText = readFileSync(join(ROOT, "index.html"), "utf8");
+  const metaTags = {};
+  for (const m of indexText.matchAll(/<meta (?:property|name)="([^"]+)" content="([^"]*)"/g)) metaTags[m[1]] = m[2];
+  const OG_KEYS = ["og:type", "og:url", "og:site_name", "og:title", "og:description", "og:image", "og:image:width", "og:image:height", "og:image:type", "og:image:alt", "twitter:card"];
+  const missingOg = OG_KEYS.filter((k) => !(k in metaTags));
+  const SITE_ORIGIN = "https://muster.works/";
+  const ogImageRel = (metaTags["og:image"] || "").startsWith(SITE_ORIGIN) ? metaTags["og:image"].slice(SITE_ORIGIN.length) : null;
+  const jpegSof = (buf) => {
+    if (!buf || buf[0] !== 0xff || buf[1] !== 0xd8) return null;
+    let i = 2;
+    while (i < buf.length - 9) {
+      if (buf[i] !== 0xff) return null;
+      const marker = buf[i + 1];
+      if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc)
+        return { h: buf.readUInt16BE(i + 5), w: buf.readUInt16BE(i + 7) };
+      i += 2 + buf.readUInt16BE(i + 2);
+    }
+    return null;
+  };
+  const ogDims = ogImageRel && existsSync(join(ROOT, ogImageRel)) ? jpegSof(readFileSync(join(ROOT, ogImageRel))) : null;
+  evidence.unfurl = { meta: metaTags["og:image"], file: ogImageRel, dims: ogDims, missing: missingOg };
+  check("unfurl card: the declared geometry is the committed JPEG's own, and the image URL names a file that ships",
+    Boolean(ogDims) && String(ogDims.w) === metaTags["og:image:width"] && String(ogDims.h) === metaTags["og:image:height"] && metaTags["og:image:type"] === "image/jpeg",
+    ogDims ? `${ogImageRel}: ${ogDims.w} × ${ogDims.h} vs declared ${metaTags["og:image:width"]} × ${metaTags["og:image:height"]}, ${metaTags["og:image:type"]}` : `og:image ${metaTags["og:image"] || "missing"} — not an on-origin JPEG that exists`);
+  const pageTitle = (indexText.match(/<title>([^<]*)<\/title>/) || [])[1];
+  check("unfurl meta: inventory complete, og strings restate the page's own title and description byte-equal",
+    missingOg.length === 0 && metaTags["og:title"] === pageTitle && metaTags["og:description"] === metaTags["description"] && metaTags["og:url"] === SITE_ORIGIN && metaTags["twitter:card"] === "summary_large_image",
+    missingOg.length ? `missing: ${missingOg.join(", ")}` : `11 keys; title ${metaTags["og:title"] === pageTitle ? "byte-equal" : "DIFFERS"}, description ${metaTags["og:description"] === metaTags["description"] ? "byte-equal" : "DIFFERS"}`);
 
   /* No raw email ships anywhere — founder ruling, amending his own seed's
      footer spec: a published address is scraper bait, and the GitHub profile
@@ -802,7 +846,40 @@ try {
   check("no email address in any shipped file — the GitHub profile is the contact path",
     emailHits.length === 0, emailHits.join(", ") || "none");
   check("raw hex appears only in the token block", hexHits.length === 0, hexHits.join(", ") || "none");
-  check("no build-system artifacts", !existsSync(join(ROOT, "package.json")) && !existsSync(join(ROOT, "node_modules")) && !existsSync(join(ROOT, "dist")), "no package.json / node_modules / dist");
+  /* "No build system" is a published claim, and this asserts the property
+     rather than a proxy for it. No `package.json` and no `node_modules` is the
+     first half: nothing here is assembled from dependencies.
+
+     The second half is the half that matters, and it replaces an older test
+     for the mere existence of a `dist/` directory. A deploy step exists now —
+     it selects which authored files are published, because the repository
+     carries far more than the site — but selection is not a build. The
+     distinction is byte-identity: every file that ships must be exactly the
+     file that was authored, so a reader viewing source sees what is in the
+     repository. A directory name never proved that; this does. Transpiling,
+     bundling or minifying into `dist/` fails here by name, which is the
+     failure the claim is really about. */
+  const distDir = join(ROOT, "dist");
+  const transformed = [];
+  if (existsSync(distDir)) {
+    const walk = (rel) => {
+      for (const entry of readdirSync(join(distDir, rel), { withFileTypes: true })) {
+        const next = rel ? `${rel}/${entry.name}` : entry.name;
+        if (entry.isDirectory()) { walk(next); continue; }
+        /* `_headers` is host configuration, not a page file: it has no
+           authored counterpart to differ from and never reaches a reader. */
+        if (next === "_headers") continue;
+        const source = join(ROOT, next);
+        if (!existsSync(source)) { transformed.push(`${next} (no authored source)`); continue; }
+        if (!readFileSync(join(distDir, next)).equals(readFileSync(source))) transformed.push(`${next} (differs from source)`);
+      }
+    };
+    walk("");
+  }
+  check("no build system: nothing is assembled from dependencies, and every published file is byte-identical to its source",
+    !existsSync(join(ROOT, "package.json")) && !existsSync(join(ROOT, "node_modules")) && transformed.length === 0,
+    `no package.json / node_modules · ` +
+      (existsSync(distDir) ? (transformed.length ? `TRANSFORMED: ${transformed.join(", ")}` : `dist/ present, every file byte-equal to source`) : "no dist/ built"));
   const cssText = shipped.filter((f) => f.endsWith(".css")).map((f) => readFileSync(join(ROOT, f), "utf8")).join("\n");
   check("no margin-bottom in shell CSS (one-sided spacing)", !/margin-bottom\s*:|margin-block-end\s*:/.test(cssText), "none");
 
